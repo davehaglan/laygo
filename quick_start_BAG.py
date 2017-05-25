@@ -22,7 +22,7 @@
 #
 ########################################################################################################################
 
-"""Quick start for gds flow - nand generator"""
+"""Quick start for bag flow - nand generator"""
 import laygo
 import numpy as np
 #initialize
