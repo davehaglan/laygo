@@ -1,58 +1,92 @@
-# NAND gate generation and GDS export tutorial
+# NAND gate generation and BAG export tutorial
 
 This tutorial contains instructions to generate a NAND gate layout and
-export it to a GDS file. You can simply run this tutorial by running
-[quick_start_GDS.py](../../../quick_start_GDS.py), but we recommend
-users to go through the entire tutorial steps, reading this documents
-and running commends, to get a better idea of the laygo flow.
+export it to OA database through
+[BAG](https://github.com/pkerichang/BAG_framework) framework. You can
+simply run this tutorial by setting up BAG for
+[freePDK45 technology](https://github.com/ucb-art/BAG2_freePDK45)
+and running [quick_start_BAG.py](../../../quick_start_BAG.py), but we
+recommend users to go through the entire tutorial steps, reading this
+document and running commands step by step, to get a better idea of the
+laygo flow.
 
-## Setup
+## Setup and running
 Run following commands below to install laygo and load.
 
-1. Clone laygo repo
+1. Download freePDK45 PDK from https://www.eda.ncsu.edu/wiki/FreePDK45:Contents
+Make sure you can launch virtuoso and make a layout using the PDK.
+For BWRC users, freePDK45 is installed in
+```/tools/projects/eeis/BAG_2.0/pdk_files/freePDK45/NCSU-FreePDK45-1.4/```
+and all configurations are set to point the path.
+
+2. Clone BAG2_freePDK45 repo.
+
     ```
-    $ git clone git@github.com:ucb-art/laygo.git
-    ```
-2. Launch ipython (or bag)
-    ```
-    $ ipython
-    ```
-3. In ipython, import laygo and numpy
-    ```python
-    import laygo
-    import numpy as np
+    $ git clone git@github.com:ucb-art/BAG2_freePDK45.git
     ```
 
+3. The BAG2_freePDK45 repo has 2 submodules in it: BAG_framework and
+laygo. Let's update the submodules. Move into the BAG_freePDK45
+directory and type this:
+
+    ```
+    $ git submodule init
+    $ git submodule update
+    ```
+
+4. Open **.cshrc**, **bag_config.yaml** file, and check if all path
+variables are set correctly. For BWRC users, all variables are set
+correctly so skip this step.
+
+5. Source .cshrc, launch virtuoso. Check if you can see all libraries
+listed below.
+
+    ![lib](images/laygo_bag_lib.png)
+
+    type ```load "start_bag.il"``` in CIW to load skill APIs for bag.
+
+6. Launch bag, by typing this:
+
+    ```
+    $ start_bag.sh
+    ```
+
+7. Launch the generator script, by typing this in python console.
+
+    ```python
+    run laygo/quick_start_BAG.py
+    ```
+
+    You should see the generated nand gate layout in
+    laygo_working/nand_test, which looks like this
+
+    ![nand](images/laygo_bag_nand.png)
+
 ## Initialize GridLayoutGenerator
-Run the following commands to initialize GridLayoutGenerator, the main
+Let's take a look into the detail of generater to get a better
+understanding on it. Open laygo/quick_start_BAG.py
+Following commands to initialize GridLayoutGenerator, the main
 generator object that contains all template and grid based layout
 generation functions.
 
 ```python
 #initialize
 laygen = laygo.GridLayoutGenerator(config_file="./labs/laygo_config.yaml")
-laygen.use_phantom = True #for abstract generation. False when generating a real layout.
 ```
-
-Note that **use_phantom** tag is set to **True**, which means you are
-exporting to a phantom cell. This option is useful for the GDS flow,
-because in many cases you are not exporting the whole hierarchy to a
-single GDS file. This option allows users to display the layout and
-debug without exporting primitive templates.
 
 ## Load template and grid database
 The provide technology setup uses *laygo_faketech_microtemplates_dense*
 for primitive template library name. All primitive template and grid
-information are stored in [labs/laygo_faketech_microtemplates_dense_templates.yaml](../../../labs/laygo_faketech_microtemplates_dense_templates.yaml),
-[labs/laygo_faketech_microtemplates_dense_grids.yaml](../../../labs/laygo_faketech_microtemplates_dense_grids.yaml)
+information are stored in [freePDK45_microtemplates_dense_templates.yaml](freePDK45_microtemplates_dense_templates.yaml),
+[freePDK45_microtemplates_dense_grids.yaml](freePDK45_microtemplates_dense_grids.yaml)
 and the files need to be loaded before actual layout generation steps.
 Run following commands for the database loading.
 
 ```python
-#load template and grid
-utemplib = 'laygo_faketech_microtemplates_dense' #device template library name
-laygen.load_template(filename='./labs/'+utemplib+'_templates.yaml', libname=utemplib)
-laygen.load_grid(filename='./labs/'+utemplib+'_grids.yaml', libname=utemplib)
+#template and grid load
+utemplib = 'freePDK45_microtemplates_dense' #device template library name
+laygen.load_template(filename=utemplib+'_templates.yaml', libname=utemplib)
+laygen.load_grid(filename=utemplib+'_grids.yaml', libname=utemplib)
 laygen.templates.sel_library(utemplib)
 laygen.grids.sel_library(utemplib)
 ```
@@ -69,24 +103,24 @@ laygen.grids.display()
 Or you can specify template (or grid name) to display, like this.
 
 ```python
-laygen.templates.display(libname='laygo_faketech_microtemplates_dense', templatename='nmos4_fast_center_nf2')
-laygen.grids.display(libname='laygo_faketech_microtemplates_dense', gridname='route_M1_M2_basic')
+laygen.templates.display(libname='freePDK45_microtemplates_dense', templatename='nmos4_fast_center_nf2')
+laygen.grids.display(libname='freePDK45_microtemplates_dense', gridname='route_M1_M2_basic')
 ```
 
 Then you can see the specified template and grid information, as shown
 below.
 
 ```
-Display lib:laygo_faketech_microtemplates_dense, template:nmos4_fast_center_nf2
-[Library]laygo_faketech_microtemplates_dense
+Display lib:freePDK45_microtemplates_dense, template:nmos4_fast_center_nf2
+[Library]freePDK45_microtemplates_dense
  [Template]nmos4_fast_center_nf2
  xy:[[0.0, 0.0], [0.4, 0.9]] pins:{'S0': {'netname': 'S0', 'layer': ['M1', 'pin'], 'xy': array([[-0.05,  0.2 ],
        [ 0.05,  0.5 ]])}, 'S1': {'netname': 'S1', 'layer': ['M1', 'pin'], 'xy': array([[ 0.35,  0.2 ],
        [ 0.45,  0.5 ]])}, 'D0': {'netname': 'D0', 'layer': ['M1', 'pin'], 'xy': array([[ 0.15,  0.2 ],
        [ 0.25,  0.5 ]])}, 'G0': {'netname': 'G0', 'layer': ['M1', 'pin'], 'xy': array([[ 0.125,  0.625],
        [ 0.275,  0.775]])}}
-Display lib:laygo_faketech_microtemplates_dense, grid:route_M1_M2_basic
-[Library]laygo_faketech_microtemplates_dense
+Display lib:freePDK45_microtemplates_dense, grid:route_M1_M2_basic
+[Library]freePDK45_microtemplates_dense
  [Grid]route_M1_M2_basic
   route_M1_M2_basic width:0.2 height:0.2 xgrid:[ 0.] ygrid:[ 0.] xwidth:[ 0.1] ywidth:[ 0.1] viamap:{via_M1_M2_0: [0, 0] }
 ```
@@ -98,7 +132,7 @@ make a nand gate cell.
 
 ```python
 # library creation
-laygen.add_library('laygo_test')
+laygen.add_library('laygo_working')
 # cell generation
 laygen.add_cell('nand_test')
 ```
@@ -110,7 +144,7 @@ create anything yet).
 
 ```
 Display
-[Library]laygo_test
+[Library]laygo_working
  [Cell]nand_test
 ```
 
@@ -156,14 +190,14 @@ boundary geometries for NMOS/PMOS devices.
 
 The resulting layout placement should look like this.
 
-![placement](images/placement.png)
+![placement](images/laygo_bag_nand_placement.png)
 
 If you want to display the layout, run the following command and open
-**output.gds** file. Note that actual NMOS/PMOS shapes are not shown
+**laygo/nand_test**. Note that actual NMOS/PMOS shapes are not shown
 because they are abstracted.
 
 ```python
-laygen.export_GDS('output.gds', cellname='nand_test', layermapfile="./labs/laygo_faketech.layermap")
+laygen.export_BAG(prj, array_delimiter=['[', ']'])
 ```
 
 Instead of the single cell placements, multiple cells can be placed by
@@ -193,9 +227,10 @@ ra0 = laygen.route(None, laygen.layers['metal'][3], xy0=[0, 0], xy1=[0, 2], grid
    refpinname0='G0', refinstname1=prow[4].name, refpinname1='G0', via0=[[0, 0]], endstyle0="extend", endstyle1="extend")
 ```
 
-The generated routing pattern should look like this:
+The generated routing pattern should look like this (if you run
+**export_BAG**):
 
-![route a](images/route0.png)
+![placement](images/laygo_bag_nand_route.png)
 
 Note that **refinstname** and **refpinname** are used to describe instance
 and pin related geometries for the routing, and **via0** and **via1**
@@ -246,10 +281,6 @@ rvss=laygen.route(None, laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0
                   refinstname0=nrow[0].name, refinstname1=nrow[5].name)
 ```
 
-After finishing the route, your layout will look like this:
-
-![route](images/route1.png)
-
 ## Pin creation
 **GridLayoutGenerator.pin** function creates a pin and paste it to the
 generated layout. The function gets xy as arguments for pin coordinates,
@@ -266,15 +297,15 @@ laygen.pin(name='VDD', layer=laygen.layers['pin'][1], xy=laygen.get_rect_xy(rvdd
 laygen.pin(name='VSS', layer=laygen.layers['pin'][1], xy=laygen.get_rect_xy(rvss.name, rg_m1m2), gridname=rg_m1m2)
 ```
 
-## GDS export
+## Export to BAG
 Running the following command will give a final layout exported in GDS
 format.
 
 ```
 # GDS export
-laygen.export_GDS('output.gds', cellname='nand_test', layermapfile="./labs/laygo_faketech.layermap")
+laygen.export_BAG(prj, array_delimiter=['[', ']'])
 ```
 
 The resulting layout will look like this.
 
-![route a](images/laygo_quickstart.png)
+![route a](images/laygo_bag_nand.png)

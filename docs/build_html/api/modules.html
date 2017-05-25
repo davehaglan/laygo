@@ -35,7 +35,7 @@
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="laygo_documentation 1.0 documentation" href="../index.html"/>
         <link rel="next" title="laygo package" href="laygo.html"/>
-        <link rel="prev" title="NAND gate generation and GDS export tutorial" href="../tutorial/tutorial.html"/> 
+        <link rel="prev" title="NAND gate generation and BAG export tutorial" href="../tutorial/tutorial_BAG.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -74,15 +74,28 @@
 <li class="toctree-l2"><a class="reference internal" href="../README/README.html#license">License</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial.html">Tutorial</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial.html#setup">Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial.html#load-template-and-grid-database">Load template and grid database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial.html#library-and-cell-creation">Library and cell creation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial.html#cell-placements">Cell placements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial.html#signal-routing">Signal routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial.html#power-routing">Power routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial.html#pin-creation">Pin creation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial_GDS.html">Tutorial (GDS flow)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#pin-creation">Pin creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#gds-export">GDS export</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial_BAG.html">Tutorial (BAG flow)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#setup-and-running">Setup and running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#pin-creation">Pin creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#export-to-bag">Export to BAG</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API documentation</a><ul>
@@ -139,24 +152,24 @@
 <li class="toctree-l4"><a class="reference internal" href="laygo.labs.html#laygo-labs-lab2-b-gridlayoutgenerator-layoutexercise-module">laygo.labs.lab2_b_gridlayoutgenerator_layoutexercise module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="laygo.labs.html#laygo-labs-lab2-c-gridlayoutgenerator-logictemplate-module">laygo.labs.lab2_c_gridlayoutgenerator_logictemplate module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="laygo.labs.html#laygo-labs-lab2-d-gridlayoutgenerator-layoutexercise-2-module">laygo.labs.lab2_d_gridlayoutgenerator_layoutexercise_2 module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="laygo.labs.html#module-laygo.labs">Module contents</a></li>
+<li class="toctree-l4"><a class="reference internal" href="laygo.labs.html#module-contents">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="laygo.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#module-laygo.BaseLayoutGenerator">laygo.BaseLayoutGenerator module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#module-laygo.GDSIO">laygo.GDSIO module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#module-laygo.GDSIOHelper">laygo.GDSIOHelper module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#module-laygo.GridDB">laygo.GridDB module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#module-laygo.GridLayoutGenerator">laygo.GridLayoutGenerator module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#module-laygo.GridLayoutGeneratorHelper">laygo.GridLayoutGeneratorHelper module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#module-laygo.GridObject">laygo.GridObject module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#module-laygo.LayoutDB">laygo.LayoutDB module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#module-laygo.LayoutIO">laygo.LayoutIO module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#module-laygo.LayoutObject">laygo.LayoutObject module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#module-laygo.TemplateDB">laygo.TemplateDB module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#module-laygo.TemplateObject">laygo.TemplateObject module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-baselayoutgenerator-module">laygo.BaseLayoutGenerator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-gdsio-module">laygo.GDSIO module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-gdsiohelper-module">laygo.GDSIOHelper module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-griddb-module">laygo.GridDB module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-gridlayoutgenerator-module">laygo.GridLayoutGenerator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-gridlayoutgeneratorhelper-module">laygo.GridLayoutGeneratorHelper module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-gridobject-module">laygo.GridObject module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-layoutdb-module">laygo.LayoutDB module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-layoutio-module">laygo.LayoutIO module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-layoutobject-module">laygo.LayoutObject module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-templatedb-module">laygo.TemplateDB module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-templateobject-module">laygo.TemplateObject module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-quick-start-gds-module">laygo.quick_start_GDS module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="laygo.html#module-contents">Module contents</a></li>
 </ul>
@@ -174,7 +187,7 @@
         <a href="laygo.html" class="btn btn-neutral float-right" title="laygo package">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../tutorial/tutorial.html" class="btn btn-neutral" title="NAND gate generation and GDS export tutorial"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../tutorial/tutorial_BAG.html" class="btn btn-neutral" title="NAND gate generation and BAG export tutorial"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

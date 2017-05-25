@@ -12,7 +12,8 @@ Contents:
    :maxdepth: 2
 
    Introduction <README/README>
-   Tutorial <tutorial/tutorial>
+   Tutorial (GDS flow) <tutorial/tutorial_GDS>
+   Tutorial (BAG flow) <tutorial/tutorial_BAG>
    API documentation <api/modules>
 
 

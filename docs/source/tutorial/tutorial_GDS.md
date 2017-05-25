@@ -3,8 +3,9 @@
 This tutorial contains instructions to generate a NAND gate layout and
 export it to a GDS file. You can simply run this tutorial by running
 [quick_start_GDS.py](../../../quick_start_GDS.py), but we recommend
-users to go through the entire tutorial steps, reading this documents
-and running commends, to get a better idea of the laygo flow.
+users to go through the entire tutorial steps, reading this document
+and running commands step by step, to get a better idea of the laygo
+flow.
 
 ## Setup
 Run following commands below to install laygo and load.
@@ -266,6 +267,7 @@ laygen.pin(name='VDD', layer=laygen.layers['pin'][1], xy=laygen.get_rect_xy(rvdd
 laygen.pin(name='VSS', layer=laygen.layers['pin'][1], xy=laygen.get_rect_xy(rvss.name, rg_m1m2), gridname=rg_m1m2)
 ```
 
+## GDS export
 Running the following command will give a final layout exported in GDS
 format.
 
