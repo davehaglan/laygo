@@ -27,7 +27,6 @@ import laygo
 import numpy as np
 #initialize
 laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
-laygen.use_phantom = True #for abstract generation. False when generating a real layout.
 #template and grid load
 utemplib = 'freePDK45_microtemplates_dense' #device template library name
 laygen.load_template(filename=utemplib+'_templates.yaml', libname=utemplib)
