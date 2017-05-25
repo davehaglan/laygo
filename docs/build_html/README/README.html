@@ -1,0 +1,269 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>LAYGO - LAYout with Gridded Objects &mdash; laygo_documentation 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="laygo_documentation 1.0 documentation" href="../index.html"/>
+        <link rel="next" title="NAND gate generation and GDS export tutorial" href="../tutorial/tutorial.html"/>
+        <link rel="prev" title="Welcome to laygo_documentation’s documentation!" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../index.html" class="fa fa-home"> laygo_documentation</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation-and-quick-start">Installation and Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-labs">Example Labs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-generators">Example Generators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial.html#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial.html#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial.html#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial.html#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial.html#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial.html#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial.html#pin-creation">Pin creation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/laygo.html">laygo package</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">laygo_documentation</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>LAYGO - LAYout with Gridded Objects</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/README/README.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="laygo-layout-with-gridded-objects">
+<span id="laygo-layout-with-gridded-objects"></span><h1>LAYGO - LAYout with Gridded Objects<a class="headerlink" href="#laygo-layout-with-gridded-objects" title="Permalink to this headline">¶</a></h1>
+<p>Laygo is an add-on to <a class="reference external" href="https://github.com/pkerichang/BAG_framework">BAG2</a>
+framework for layout generation, written by
+<a class="reference external" href="jdhan&#64;eecs.berkeley.edu">Jaeduk Han</a> and licensed under the BSD license.
+With laygo, primitive layout parameters are abstracted as templates and
+grids, and the layout job can be done without dealing with complex
+design rules.
+Layout process is abstracted and scripted in python, and with the help
+of BAG API, laygo provides higher productivity and process portability
+than conventional custom IC design flows.</p>
+<p><img alt="laygo" src="../_images/laygo_concept.png" /></p>
+<div class="section" id="installation-and-quick-start">
+<span id="installation-and-quick-start"></span><h2>Installation and Quick Start<a class="headerlink" href="#installation-and-quick-start" title="Permalink to this headline">¶</a></h2>
+<ol>
+<li><p class="first">Install BAG2 (not necessary if the GDS flow is used)</p>
+</li>
+<li><p class="first">Clone laygo repo</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git@github.com:ucb-art/laygo.git
+</pre></div>
+</div>
+</li>
+<li><p class="first">Prepare following technology setup files.</p>
+<ul class="simple">
+<li><strong>laygo_config.yaml</strong> - contains general technology information.
+Example can be found here:
+<a class="reference external" href="../../../labs/laygo_config.yaml">labs/laygo_config.yaml</a></li>
+<li><strong>(technology_name).layermap</strong> - layer mapping file for the GDS flow.
+Usually this file can be found in your PDK library.
+If the BAG flow is used, this file is not required.
+Example can be found here:
+<a class="reference external" href="../../../labs/laygo_faketech.layermap">labs/laygo_faketech.layermap</a></li>
+<li><strong>primitive template and grid database</strong> : laygo keeps template and
+grid information in yaml files. Files can be provided under NDA or
+constructed by users from handcrafted or generated GDS/OA.
+Examples can be found here:
+<a class="reference external" href="../../../labs/laygo_faketech_microtemplates_dense_templates.yaml">labs/laygo_faketech_microtemplates_dense_templates.yaml</a>,
+<a class="reference external" href="../../../labs/laygo_faketech_microtemplates_dense_grids.yaml">labs/laygo_faketech_microtemplates_dense_grids.yaml</a></li>
+</ul>
+<p>Those files can be provided to BWRC users (under proper NDA), as a
+form of git repository. Laygo has default technology setup files for
+the GDS flow (laygo_faketech).</p>
+</li>
+<li><p class="first">Launch ipython and run the tutorial script
+<a class="reference external" href="../../../quick_start_GDS.py">quick_start_GDS.py</a>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ start_bag.py    (or ipython)
+&gt; run quick_start_GDS.py
+</pre></div>
+</div>
+<p>It will create a nand gate layout and save it to output.gds.</p>
+<p><img alt="qs_nand" src="../_images/laygo_quickstart.png" /></p>
+<p><a class="reference external" href="http://www.klayout.de/">KLayout</a> was used for gds display. Detailed
+explaination on tutorials can be found here:</p>
+</li>
+<li><p class="first">Go over lab materials in <a class="reference external" href="../../../labs/">labs/</a>. Detailed instructions
+can be found in <a class="reference external" href="docs/labs.md">lab readme</a></p>
+</li>
+</ol>
+</div>
+<div class="section" id="example-labs">
+<span id="example-labs"></span><h2>Example Labs<a class="headerlink" href="#example-labs" title="Permalink to this headline">¶</a></h2>
+<p>Various lab modules are provided to guide the layout generation
+procedure. Users are strongly recommended to finish all lab modules
+before working on their designs. Labs modules can be found <a class="reference external" href="docs/labs.md">here</a></p>
+</div>
+<div class="section" id="example-generators">
+<span id="example-generators"></span><h2>Example Generators<a class="headerlink" href="#example-generators" title="Permalink to this headline">¶</a></h2>
+<p>Example generaters can be found <a class="reference external" href="docs/generators.md">here</a></p>
+</div>
+<div class="section" id="license">
+<span id="license"></span><h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>This project is licensed under the BSD License - check the
+<a class="reference external" href="LICENSE">LICENSE</a> file for details</p>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../tutorial/tutorial.html" class="btn btn-neutral float-right" title="NAND gate generation and GDS export tutorial">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral" title="Welcome to laygo_documentation’s documentation!"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Jaeduk Han.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
