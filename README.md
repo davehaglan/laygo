@@ -53,6 +53,10 @@ than conventional custom IC design flows.
 5. Go over lab materials in [labs/](../../../labs/). Detailed instructions
 can be found in [lab readme](docs/labs.md)
 
+## Documentations
+You can find detailed documentation on the laygo API
+[here](docs/build_html/index.html)
+
 ## Example Labs
 Various lab modules are provided to guide the layout generation
 procedure. Users are strongly recommended to finish all lab modules
