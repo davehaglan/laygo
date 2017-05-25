@@ -368,7 +368,7 @@ class BaseLayoutGenerator():
         -------
 
         """
-        db=LayoutIO.import_BAG(prj=prj, libname=libname, cellname=cellname, yamlfile=yamlfile, res=self.db._res)
+        db=LayoutIO.import_BAG(prj=prj, libname=libname, cellname=cellname, yamlfile=yamlfile, res=self.db.res)
         if append==True:
             self.db.merge(db)
         return db
