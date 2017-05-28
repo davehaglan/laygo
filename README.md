@@ -40,7 +40,8 @@ than conventional custom IC design flows.
 4. Launch ipython and run the tutorial script
     [quick_start_GDS.py](../../../quick_start_GDS.py).
     ```
-    $ start_bag.py    (or ipython)
+    $ start_bag.sh    (or ipython)
+    > cd laygo
     > run quick_start_GDS.py
     ```
     It will create a nand gate layout and save it to output.gds.
@@ -51,12 +52,12 @@ than conventional custom IC design flows.
     explaination on tutorials can be found here:
 
 5. Go over lab materials in [labs/](../../../labs/). Detailed instructions
-can be found in [lab readme](docs/labs.md)
+can be found in [lab readme](docs/labs.md).
 
 ## Documentations
 You can find detailed documentations on the laygo API here:
 [docs/build_html/index.html](docs/build_html/index.html)
-(Open it after cloning the repo the get the correct page layout)
+(Open it after cloning the repo the get the correct page layout.)
 
 ## Example Labs
 Various lab modules are provided to guide the layout generation
@@ -64,8 +65,8 @@ procedure. Users are strongly recommended to finish all lab modules
 before working on their designs. Labs modules can be found [here](docs/labs.md)
 
 ## Example Generators
-Example generaters can be found [here](docs/generators.md)
+Example generaters can be found [here](docs/generators.md).
 
 ## License
 This project is licensed under the BSD License - check the
-[LICENSE](LICENSE) file for details
+[LICENSE](LICENSE) file for details.
