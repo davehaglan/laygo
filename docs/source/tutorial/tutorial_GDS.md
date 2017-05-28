@@ -31,7 +31,7 @@ generation functions.
 
 ```python
 #initialize
-laygen = laygo.GridLayoutGenerator(config_file="./labs/laygo_config.yaml")
+laygen = laygo.GridLayoutGenerator(config_file="./laygo/labs/laygo_config.yaml")
 laygen.use_phantom = True #for abstract generation. False when generating a real layout.
 ```
 
@@ -52,8 +52,8 @@ Run following commands for the database loading.
 ```python
 #load template and grid
 utemplib = 'laygo_faketech_microtemplates_dense' #device template library name
-laygen.load_template(filename='./labs/'+utemplib+'_templates.yaml', libname=utemplib)
-laygen.load_grid(filename='./labs/'+utemplib+'_grids.yaml', libname=utemplib)
+laygen.load_template(filename='./laygo/labs/'+utemplib+'_templates.yaml', libname=utemplib)
+laygen.load_grid(filename='./laygo/labs/'+utemplib+'_grids.yaml', libname=utemplib)
 laygen.templates.sel_library(utemplib)
 laygen.grids.sel_library(utemplib)
 ```
@@ -164,7 +164,7 @@ If you want to display the layout, run the following command and open
 because they are abstracted.
 
 ```python
-laygen.export_GDS('output.gds', cellname='nand_test', layermapfile="./labs/laygo_faketech.layermap")
+laygen.export_GDS('output.gds', cellname='nand_test', layermapfile="./laygo/labs/laygo_faketech.layermap")
 ```
 
 Instead of the single cell placements, multiple cells can be placed by
@@ -273,7 +273,7 @@ format.
 
 ```
 # GDS export
-laygen.export_GDS('output.gds', cellname='nand_test', layermapfile="./labs/laygo_faketech.layermap")
+laygen.export_GDS('output.gds', cellname='nand_test', layermapfile="./laygo/labs/laygo_faketech.layermap")
 ```
 
 The resulting layout will look like this.

@@ -69,6 +69,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../README/README.html">Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../README/README.html#installation-and-quick-start">Installation and Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../README/README.html#documentations">Documentations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../README/README.html#example-labs">Example Labs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../README/README.html#example-generators">Example Generators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../README/README.html#license">License</a></li>
@@ -173,7 +174,7 @@ flow.</p>
 generator object that contains all template and grid based layout
 generation functions.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#initialize</span>
-<span class="n">laygen</span> <span class="o">=</span> <span class="n">laygo</span><span class="o">.</span><span class="n">GridLayoutGenerator</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="s2">&quot;./labs/laygo_config.yaml&quot;</span><span class="p">)</span>
+<span class="n">laygen</span> <span class="o">=</span> <span class="n">laygo</span><span class="o">.</span><span class="n">GridLayoutGenerator</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="s2">&quot;./laygo/labs/laygo_config.yaml&quot;</span><span class="p">)</span>
 <span class="n">laygen</span><span class="o">.</span><span class="n">use_phantom</span> <span class="o">=</span> <span class="bp">True</span> <span class="c1">#for abstract generation. False when generating a real layout.</span>
 </pre></div>
 </div>
@@ -193,8 +194,8 @@ and the files need to be loaded before actual layout generation steps.
 Run following commands for the database loading.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#load template and grid</span>
 <span class="n">utemplib</span> <span class="o">=</span> <span class="s1">&#39;laygo_faketech_microtemplates_dense&#39;</span> <span class="c1">#device template library name</span>
-<span class="n">laygen</span><span class="o">.</span><span class="n">load_template</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;./labs/&#39;</span><span class="o">+</span><span class="n">utemplib</span><span class="o">+</span><span class="s1">&#39;_templates.yaml&#39;</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">utemplib</span><span class="p">)</span>
-<span class="n">laygen</span><span class="o">.</span><span class="n">load_grid</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;./labs/&#39;</span><span class="o">+</span><span class="n">utemplib</span><span class="o">+</span><span class="s1">&#39;_grids.yaml&#39;</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">utemplib</span><span class="p">)</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">load_template</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;./laygo/labs/&#39;</span><span class="o">+</span><span class="n">utemplib</span><span class="o">+</span><span class="s1">&#39;_templates.yaml&#39;</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">utemplib</span><span class="p">)</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">load_grid</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;./laygo/labs/&#39;</span><span class="o">+</span><span class="n">utemplib</span><span class="o">+</span><span class="s1">&#39;_grids.yaml&#39;</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">utemplib</span><span class="p">)</span>
 <span class="n">laygen</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">sel_library</span><span class="p">(</span><span class="n">utemplib</span><span class="p">)</span>
 <span class="n">laygen</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">sel_library</span><span class="p">(</span><span class="n">utemplib</span><span class="p">)</span>
 </pre></div>
@@ -292,7 +293,7 @@ boundary geometries for NMOS/PMOS devices.</p>
 <p>If you want to display the layout, run the following command and open
 <strong>output.gds</strong> file. Note that actual NMOS/PMOS shapes are not shown
 because they are abstracted.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">laygen</span><span class="o">.</span><span class="n">export_GDS</span><span class="p">(</span><span class="s1">&#39;output.gds&#39;</span><span class="p">,</span> <span class="n">cellname</span><span class="o">=</span><span class="s1">&#39;nand_test&#39;</span><span class="p">,</span> <span class="n">layermapfile</span><span class="o">=</span><span class="s2">&quot;./labs/laygo_faketech.layermap&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">laygen</span><span class="o">.</span><span class="n">export_GDS</span><span class="p">(</span><span class="s1">&#39;output.gds&#39;</span><span class="p">,</span> <span class="n">cellname</span><span class="o">=</span><span class="s1">&#39;nand_test&#39;</span><span class="p">,</span> <span class="n">layermapfile</span><span class="o">=</span><span class="s2">&quot;./laygo/labs/laygo_faketech.layermap&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Instead of the single cell placements, multiple cells can be placed by
@@ -391,7 +392,7 @@ following commands.</p>
 <p>Running the following command will give a final layout exported in GDS
 format.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># GDS export</span>
-<span class="n">laygen</span><span class="o">.</span><span class="n">export_GDS</span><span class="p">(</span><span class="s1">&#39;output.gds&#39;</span><span class="p">,</span> <span class="n">cellname</span><span class="o">=</span><span class="s1">&#39;nand_test&#39;</span><span class="p">,</span> <span class="n">layermapfile</span><span class="o">=</span><span class="s2">&quot;./labs/laygo_faketech.layermap&quot;</span><span class="p">)</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">export_GDS</span><span class="p">(</span><span class="s1">&#39;output.gds&#39;</span><span class="p">,</span> <span class="n">cellname</span><span class="o">=</span><span class="s1">&#39;nand_test&#39;</span><span class="p">,</span> <span class="n">layermapfile</span><span class="o">=</span><span class="s2">&quot;./laygo/labs/laygo_faketech.layermap&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The resulting layout will look like this.</p>
