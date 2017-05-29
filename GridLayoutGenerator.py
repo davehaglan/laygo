@@ -723,7 +723,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         by1, by2 = sorted(xy[:,1].tolist())
         ll = np.array([bx1, by1])  # lower-left
         ur = np.array([bx2, by2])  # upper-right
-        xy_phy=self._route_generate_box_from_abscoord(xy0=xy[0,:], xy1=xy[1,:], gridname0=gridname)
+        xy_phy, xy_phy_center=self._route_generate_box_from_abscoord(xy0=xy[0,:], xy1=xy[1,:], gridname0=gridname)
         if base_layer==None: base_layer=[layer[0], 'drawing'] #this is not a good way?
         self.db.add_rect(None, xy=xy_phy, layer=base_layer)
         return self.db.add_pin(name=name, netname=netname, xy=xy_phy, layer=layer)
