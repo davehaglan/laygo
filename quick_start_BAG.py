@@ -28,13 +28,13 @@ import numpy as np
 #initialize
 laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
 #template and grid load
-utemplib = 'freePDK45_microtemplates_dense' #device template library name
+utemplib = laygen.tech+'_microtemplates_dense' #device template library name
 laygen.load_template(filename=utemplib+'_templates.yaml', libname=utemplib)
 laygen.load_grid(filename=utemplib+'_grids.yaml', libname=utemplib)
 laygen.templates.sel_library(utemplib)
 laygen.grids.sel_library(utemplib)
-laygen.templates.display(libname='freePDK45_microtemplates_dense', templatename='nmos4_fast_center_nf2')
-laygen.grids.display(libname='freePDK45_microtemplates_dense', gridname='route_M1_M2_basic')
+laygen.templates.display(libname=laygen.tech+'_microtemplates_dense', templatename='nmos4_fast_center_nf2')
+laygen.grids.display(libname=laygen.tech+'_microtemplates_dense', gridname='route_M1_M2_basic')
 # library creation
 laygen.add_library('laygo_working')
 # cell generation
