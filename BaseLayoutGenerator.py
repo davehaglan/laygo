@@ -41,7 +41,6 @@ __status__ = "Prototype"
 
 from . import LayoutIO
 from .LayoutDB import *
-from .LayoutObject import * 
 import numpy as np
 
 class BaseLayoutGenerator():
@@ -217,7 +216,7 @@ class BaseLayoutGenerator():
             array spacing parameter
         transform : str
             transform parameter
-        template : TemplateObject
+        template : laygo.TemplateObject.TemplateObject
             template handle
 
         Returns
@@ -299,7 +298,7 @@ class BaseLayoutGenerator():
 
         Parameters
         ----------
-        db : LayoutDB
+        db : laygo.LayoutDB.LayoutDB
             Layout db object
         libname : str
             name of library to be exported

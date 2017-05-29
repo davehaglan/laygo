@@ -281,7 +281,7 @@ class LayoutDB():
             array spacing parameter
         transform : str
             transform parameter
-        template : TemplateObject
+        template : laygo.TemplateObject.TemplateObject
             template handle
 
         Returns

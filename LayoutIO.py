@@ -120,7 +120,7 @@ def export_GDS(db, libname, cellname, filename, layermapfile="default.layermap",
 
     Parameters
     ----------
-    db : LayoutDB
+    db : laygo.LayoutDB.LayoutDB
         design database
     libname : str
         name of library to be exported
@@ -130,20 +130,16 @@ def export_GDS(db, libname, cellname, filename, layermapfile="default.layermap",
         output filename
     layermapfile : str
         layermap filename
-        example) default.layermap
-            #technology layer information
-            #layername layerpurpose stream# datatype
-            text        drawing 100 0
-            prBoundary  drawing 101 0
-            metal1      drawing 50  0
-            metal1      pin     50  10
-            metal2      drawing 51  0
-            metal2      pin     51  10
-    physical_unit :
-    logical_unit :
-    pin_label_height : pin label height
-    pin_annotate_layer : pin annotate layer name (used when pinname is different from netname)
-    text_height : text height
+    physical_unit : float
+        GDS physical unit
+    logical_unit : float
+        GDS logical unit
+    pin_label_height : float
+        pin label height
+    pin_annotate_layer : float
+        pin annotate layer name (used when pinname is different from netname)
+    text_height : float
+        text height
     """
     layermap = _load_layermap(layermapfile)  # load layermap information
 
@@ -230,7 +226,7 @@ def export_BAG(db, libname, cellname, prj, array_delimiter=['[', ']'], via_tech=
 
     Parameters
     ----------
-    db : LayoutDB
+    db : laygo.LayoutDB.LayoutDB
         Layout db object
     libname : str
         name of library to be exported
@@ -312,7 +308,7 @@ def export_yaml(db, libname, cellname, filename):
 
         Parameters
         ----------
-        db : LayoutDB
+        db : laygo.LayoutDB.LayoutDB
             design database
         libname : str
             name of library to be exported

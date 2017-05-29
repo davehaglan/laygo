@@ -32,13 +32,9 @@ from .BaseLayoutGenerator import *
 from .TemplateDB import *
 from .GridDB import *
 import numpy as np 
-#from BaseLayoutGenerator import BaseLayoutGenerator
-#from TemplateDB import *
-#from GridDB import *
 import logging
 
 #TODO: support path routing
-#TODO:
 
 class GridLayoutGenerator(BaseLayoutGenerator):
     """Grid layout generator class
