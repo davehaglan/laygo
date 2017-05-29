@@ -120,8 +120,12 @@ class GridDB():
                     vm_dict=dict()
                     for vmn, vm in s['viamap'].items():
                         vm_dict[vmn]=np.array(vm) #convert to np.array
-                    self.add_route_grid(name=sn,libname=ln,xy=np.array([s['xy0'], s['xy1']]),xgrid=np.array(s['xgrid']),
-                                        ygrid=np.array(s['ygrid']),xwidth=np.array(s['xwidth']),ywidth=np.array(s['ywidth']),
+                    if not 'xlayer' in s: s['xlayer'] = []
+                    if not 'ylayer' in s: s['ylayer'] = []
+                    self.add_route_grid(name=sn, libname=ln, xy=np.array([s['xy0'], s['xy1']]),
+                                        xgrid=np.array(s['xgrid']), ygrid=np.array(s['ygrid']),
+                                        xwidth=np.array(s['xwidth']), ywidth=np.array(s['ywidth']),
+                                        xlayer=s['xlayer'], ylayer=s['ylayer'],
                                         viamap=vm_dict)
 
     def merge(self, db):
@@ -139,8 +143,8 @@ class GridDB():
                 if s.type=='placement':
                     self.add_placement_grid(name=sn,libname=ln,xy=s.xy)
                 if s.type=='route':
-                    self.add_route_grid(name=sn,libname=ln, xy=s.xy,xgrid=s._xgrid, ygrid=s._ygrid, xwidth=s._xwidth,
-                                        ywidth=s._ywidth, viamap=s._viamap)
+                    self.add_route_grid(name=sn,libname=ln, xy=s.xy,xgrid=s.xgrid, ygrid=s.ygrid, xwidth=s.xwidth,
+                                        ywidth=s.ywidth, xlayer=s.xlayer, ylayer=s.ylayer, viamap=s.viamap)
 
     # library and grid related functions
     def add_library(self, name):
@@ -172,7 +176,7 @@ class GridDB():
         return s
 
     def add_route_grid(self, name, libname=None, xy=np.array([0, 0]), xgrid=np.array([]), ygrid=np.array([]),
-                       xwidth=np.array([]), ywidth=np.array([]), viamap=None):
+                       xwidth=np.array([]), ywidth=np.array([]), xlayer=[], ylayer=[], viamap=None):
         """
         Add a route grid to the specified library
 
@@ -185,11 +189,11 @@ class GridDB():
         """
         if libname == None: libname = self.plib
         s = RouteGrid(name=name, libname=libname, xy=xy, xgrid=xgrid, ygrid=ygrid, xwidth=xwidth, ywidth=ywidth,
-                      viamap=viamap)
+                      xlayer=xlayer, ylayer=ylayer, viamap=viamap)
         self.grids[libname][name] = s
         logging.debug('AddRouteGrid: name:' + name + ' xy:' + str(xy.tolist())
-                      + ' xgrid:' + str(xgrid.tolist()) + ' xwidth:' + str(xwidth.tolist())
-                      + ' ygrid:' + str(ygrid.tolist()) + ' ywidth:' + str(ywidth.tolist()))
+                      + ' xgrid:' + str(xgrid.tolist()) + ' xwidth:' + str(xwidth.tolist()) + ' xlayer:' + str(xlayer)
+                      + ' ygrid:' + str(ygrid.tolist()) + ' ywidth:' + str(ywidth.tolist()) + ' ylayer:' + str(ylayer))
         return s
 
     def sel_library(self, libname):
@@ -232,6 +236,12 @@ class GridDB():
     #route grid function
     def get_route_width_xy(self, gridname, xy):
         return self.grids[self.plib][gridname].get_route_width_xy(xy)
+
+    def get_route_xlayer_xy(self, gridname, xy):
+        return self.grids[self.plib][gridname].get_route_xlayer_xy(xy)
+
+    def get_route_ylayer_xy(self, gridname, xy):
+        return self.grids[self.plib][gridname].get_route_ylayer_xy(xy)
 
     #via functions
     def get_vianame(self, gridname, xy):

@@ -73,45 +73,43 @@ prow = laygen.relplace(name=None, templatename=['pmos4_fast_boundary', 'pmos4_fa
                        gridname='placement_basic', refinstname=nrow[0].name, direction=['top']+['left']*6, transform='MX')
 
 #a
-laygen.route(None, laygen.layers['metal'][1], xy0=[0, 0], xy1=[0, 0], gridname0=rg_m1m2,
-             refinstname0=nrow[4].name, refpinname0='G0', via0=[[0, 0]], refinstname1=nrow[4].name, refpinname1='G0')
-laygen.route(None, laygen.layers['metal'][2], xy0=[-2, 0], xy1=[0, 0], gridname0=rg_m1m2,
-             refinstname0=prow[4].name, refpinname0='G0', refinstname1=prow[4].name, refpinname1='G0')
-ra0 = laygen.route(None, laygen.layers['metal'][3], xy0=[0, 0], xy1=[0, 2], gridname0=rg_m2m3,refinstname0=prow[4].name,
-   refpinname0='G0', refinstname1=prow[4].name, refpinname1='G0', via0=[[0, 0]], endstyle0="extend", endstyle1="extend")
+laygen.route(None, xy0=[0, 0], xy1=[0, 0], gridname0=rg_m1m2, refinstname0=nrow[4].name, refpinname0='G0',
+             via0=[[0, 0]], refinstname1=prow[4].name, refpinname1='G0')
+laygen.route(None, xy0=[-2, 0], xy1=[0, 0], gridname0=rg_m1m2, refinstname0=prow[4].name, refpinname0='G0',
+             refinstname1=prow[4].name, refpinname1='G0')
+ra0 = laygen.route(None, xy0=[0, 0], xy1=[0, 2], gridname0=rg_m2m3,refinstname0=prow[4].name, refpinname0='G0',
+                   refinstname1=prow[4].name, refpinname1='G0', via0=[[0, 0]], endstyle0="extend", endstyle1="extend")
 # b
-laygen.route(None, laygen.layers['metal'][1], xy0=[0, 0], xy1=[0, 0], gridname0=rg_m1m2, refinstname0=nrow[1].name,
-             refpinname0='G0', via0=[[0, 0]], refinstname1=prow[1].name, refpinname1='G0')
-laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=[2, 0], gridname0=rg_m1m2,
-             refinstname0=nrow[1].name, refpinname0='G0', refinstname1=nrow[1].name, refpinname1='G0')
-rb0 = laygen.route(None, laygen.layers['metal'][3], xy0=[0, 0], xy1=[0, 2], gridname0=rg_m2m3,refinstname0=nrow[1].name,
-   refpinname0='G0', refinstname1=nrow[1].name, refpinname1='G0', via0=[[0, 0]], endstyle0="extend", endstyle1="extend")
+laygen.route(None, xy0=[0, 0], xy1=[0, 0], gridname0=rg_m1m2, refinstname0=nrow[1].name, refpinname0='G0',
+             via0=[[0, 0]], refinstname1=prow[1].name, refpinname1='G0')
+laygen.route(None, xy0=np.array([0, 0]), xy1=[2, 0], gridname0=rg_m1m2, refinstname0=nrow[1].name, refpinname0='G0',
+             refinstname1=nrow[1].name, refpinname1='G0')
+rb0 = laygen.route(None, xy0=[0, 0], xy1=[0, 2], gridname0=rg_m2m3,refinstname0=nrow[1].name, refpinname0='G0',
+                   refinstname1=nrow[1].name, refpinname1='G0', via0=[[0, 0]], endstyle0="extend", endstyle1="extend")
 #internal connections
-laygen.route(None, laygen.layers['metal'][2], xy0=[0, 1], xy1=[0, 1], gridname0=rg_m1m2, refinstname0=nrow[1].name,
-             refpinname0='D0', refinstname1=nrow[4].name, refpinname1='S1', via0=[[0, 0]], via1=[[-2, 0], [0, 0]])
+laygen.route(None, xy0=[0, 1], xy1=[0, 1], gridname0=rg_m1m2, refinstname0=nrow[1].name, refpinname0='D0',
+             refinstname1=nrow[4].name, refpinname1='S1', via0=[[0, 0]], via1=[[-2, 0], [0, 0]])
 #output
-laygen.route(None, laygen.layers['metal'][2], xy0=[0, 1], xy1=[1, 1], gridname0=rg_m1m2, refinstname0=prow[1].name,
-             refpinname0='D0', refinstname1=prow[4].name, refpinname1='D0', via0=[[0, 0]], via1=[[-1, 0]])
-laygen.route(None, laygen.layers['metal'][2], xy0=[-1, 0], xy1=[1, 0], gridname0=rg_m1m2, refinstname0=nrow[4].name,
-             refpinname0='D0', refinstname1=nrow[4].name, refpinname1='D0', via0=[[1, 0]])
-ro0 = laygen.route(None, laygen.layers['metal'][3], xy0=[1, 0], xy1=[1, 1], gridname0=rg_m2m3,refinstname0=nrow[4].name,
-                   refpinname0='D0', via0=[[0, 0]], refinstname1=prow[4].name, refpinname1='D0', via1=[[0, 0]])
+laygen.route(None, xy0=[0, 1], xy1=[1, 1], gridname0=rg_m1m2, refinstname0=prow[1].name, refpinname0='D0',
+             refinstname1=prow[4].name, refpinname1='D0', via0=[[0, 0]], via1=[[-1, 0]])
+laygen.route(None, xy0=[-1, 0], xy1=[1, 0], gridname0=rg_m1m2, refinstname0=nrow[4].name, refpinname0='D0',
+             refinstname1=nrow[4].name, refpinname1='D0', via0=[[1, 0]])
+ro0 = laygen.route(None, xy0=[1, 0], xy1=[1, 1], gridname0=rg_m2m3,refinstname0=nrow[4].name, refpinname0='D0',
+                   via0=[[0, 0]], refinstname1=prow[4].name, refpinname1='D0', via1=[[0, 0]])
 
 # power and ground vertical route
 for s in ['S0', 'S1']:
     xy_s0 = laygen.get_template_pin_coord(nrow[1].cellname, s, rg_m1m2)[0, :]
-    laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0 * np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
-                 refinstname0=nrow[1].name, via0=[[0, 0]], refinstname1=nrow[1].name)
-    laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0 * np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
-                 refinstname0=prow[1].name, via0=[[0, 0]], refinstname1=prow[1].name)
-    laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0 * np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
-                 refinstname0=prow[4].name, via0=[[0, 0]], refinstname1=prow[4].name)
+    laygen.route(None, xy0=xy_s0 * np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2, refinstname0=nrow[1].name,
+                 via0=[[0, 0]], refinstname1=nrow[1].name)
+    laygen.route(None, xy0=xy_s0 * np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2, refinstname0=prow[1].name,
+                 via0=[[0, 0]], refinstname1=prow[1].name)
+    laygen.route(None, xy0=xy_s0 * np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2, refinstname0=prow[4].name,
+                 via0=[[0, 0]], refinstname1=prow[4].name)
 # power and ground rails
 xy = laygen.get_template_size(nrow[5].cellname, rg_m1m2) * np.array([1, 0])
-rvdd=laygen.route(None, laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,
-                  refinstname0=prow[0].name, refinstname1=prow[5].name)
-rvss=laygen.route(None, laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,
-                  refinstname0=nrow[0].name, refinstname1=nrow[5].name)
+rvdd=laygen.route(None, xy0=[0, 0], xy1=xy, gridname0=rg_m1m2, refinstname0=prow[0].name, refinstname1=prow[5].name)
+rvss=laygen.route(None, xy0=[0, 0], xy1=xy, gridname0=rg_m1m2, refinstname0=nrow[0].name, refinstname1=nrow[5].name)
 
 # pins
 laygen.pin(name='A', layer=laygen.layers['pin'][3], xy=laygen.get_rect_xy(ra0.name, rg_m2m3), gridname=rg_m2m3)

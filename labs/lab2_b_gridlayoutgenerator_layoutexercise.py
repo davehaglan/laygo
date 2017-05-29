@@ -45,7 +45,7 @@ laygen.load_grid(filename=laygen.tech+'_microtemplates_dense_grids.yaml', libnam
 laygen.sel_template_library(utemplib)
 laygen.sel_grid_library(utemplib)
 #laygen.templates.display()
-#laygen.grids.display()
+laygen.grids.display()
 
 mycell = '_generate_example_3'
 pg = 'placement_basic' #placement grid
@@ -61,8 +61,7 @@ in4=laygen.relplace(name=None, templatename='nmos4_fast_center_nf2', gridname=pg
 in5=laygen.relplace(name=None, templatename='nmos4_fast_center_nf1_right', gridname=pg, refinstname=in4.name)
 in6=laygen.relplace(name=None, templatename='nmos4_fast_boundary', gridname=pg, refinstname=in5.name)
 in7=laygen.relplace(name=None, templatename='nmos4_fast_right', gridname=pg, refinstname=in6.name)
-ip0=laygen.relplace(name=None, templatename='pmos4_fast_left', gridname=pg, refinstname=in0.name, direction='top',
-                    transform='MX')
+ip0=laygen.relplace(name=None, templatename='pmos4_fast_left', gridname=pg, refinstname=in0.name, direction='top', transform='MX')
 ip1=laygen.relplace(name=None, templatename='pmos4_fast_tap', gridname=pg, refinstname=ip0.name, transform='MX')
 ip2=laygen.relplace(name=None, templatename='pmos4_fast_boundary', gridname=pg, refinstname=ip1.name, transform='MX')
 ip3=laygen.relplace(name=None, templatename='pmos4_fast_center_nf2', gridname=pg, refinstname=ip2.name, transform='MX')
@@ -71,12 +70,12 @@ ip5=laygen.relplace(name=None, templatename='pmos4_fast_center_nf1_right', gridn
 ip6=laygen.relplace(name=None, templatename='pmos4_fast_boundary', gridname=pg, refinstname=ip5.name, transform='MX')
 ip7=laygen.relplace(name=None, templatename='pmos4_fast_right', gridname=pg, refinstname=ip6.name, transform='MX')
 #route on grid
-laygen.route(name=None, layer=metal[2], xy0=np.array([15, 3]), xy1=np.array([17, 3]), gridname0='route_M1_M2_mos')
+laygen.route(name=None, xy0=np.array([15, 3]), xy1=np.array([17, 3]), gridname0='route_M1_M2_mos')
 #route on grid with refererence instances
-laygen.route(name=None, layer=metal[2], xy0=np.array([1, 3]), xy1=np.array([3, 3]), gridname0='route_M1_M2_mos',
+laygen.route(name=None, xy0=np.array([1, 3]), xy1=np.array([3, 3]), gridname0='route_M1_M2_mos',
              refinstname0=ip3.name, refinstname1=ip3.name)
 #route on grid with pin references
-laygen.route(name=None, layer=metal[1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0='route_M1_M2_mos',
+laygen.route(name=None, xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0='route_M1_M2_mos',
              refinstname0=in3.name, refpinname0='G0', refinstname1=ip3.name, refpinname1='G0')
 #via placement on grid
 laygen.via(name=None, xy=np.array([15, 3]), gridname='route_M1_M2_mos')
@@ -86,20 +85,18 @@ laygen.via(name=None, xy=np.array([1, 3]), gridname='route_M1_M2_mos', refinstna
 laygen.via(name=None, xy=np.array([0, 0]), refinstname=in4.name, refpinname='G0', gridname='route_M1_M2_mos')
 laygen.via(name=None, xy=np.array([0, 0]), refinstname=ip4.name, refpinname='G0', gridname='route_M1_M2_mos')
 #route with automatic via placements (via0, via1)
-laygen.route(name=None, layer=metal[2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0='route_M1_M2_mos',
+laygen.route(name=None, xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0='route_M1_M2_mos',
              refinstname0=in3.name, refpinname0='S0', refinstname1=in3.name, refpinname1='S1',
              via0=np.array([[0, 0]]), via1=np.array([[0, 0]]))
-laygen.route(name=None, layer=metal[2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0='route_M1_M2_mos',
+laygen.route(name=None, xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0='route_M1_M2_mos',
              refinstname0=ip3.name, refpinname0='S0', refinstname1=ip4.name, refpinname1='S1',
              via0=np.array([[0, 0], [2, 0]]), via1=np.array([[0, 0]]))
 #horizontal-vertical route
-laygen.route_hv(layerh=metal[2], layerv=metal[3], xy0=[0, 1], xy1=[0, 1], gridname0='route_M2_M3_mos',
-                refinstname0=in3.name, refpinname0='D0', refinstname1=ip5.name, refpinname1='D0', via0=[[0, 0]],
-                via1=[[0, 0]])
-laygen.route_vh(layerh=metal[2], layerv=metal[3], xy0=[0, 0], xy1=[0, 1], gridname0='route_M2_M3_cmos',
-                refinstname0=in3.name, refpinname0='S0', refinstname1=ip4.name, refpinname1='D0', via0=[[0, 0]],
-                via1=[[0, 0]])
-laygen.display()
+laygen.route_hv(xy0=[0, 1], xy1=[0, 1], gridname0='route_M2_M3_mos', refinstname0=in3.name, refpinname0='D0',
+                refinstname1=ip5.name, refpinname1='D0', via0=[[0, 0]], via1=[[0, 0]])
+laygen.route_vh(xy0=[0, 0], xy1=[0, 1], gridname0='route_M2_M3_cmos', refinstname0=in3.name, refpinname0='S0',
+                refinstname1=ip4.name, refpinname1='D0', via0=[[0, 0]], via1=[[0, 0]])
+#laygen.display()
 
 #bag export, if bag does not exist, gds export
 import imp

@@ -36,8 +36,8 @@ class GridObject():
     name=None
     libname=None
     xy = np.array([0, 0]) # Cooridinate
-    _xgrid=np.array([])
-    _ygrid=np.array([])
+    xgrid=np.array([])
+    ygrid=np.array([])
     max_resolution=10 #maximum resolution to handle floating point numbers
 
     @property
@@ -55,8 +55,8 @@ class GridObject():
         self.name = name
         self.libname=libname
         self.xy=xy
-        self._xgrid=_xgrid
-        self._ygrid=_ygrid
+        self.xgrid=_xgrid
+        self.ygrid=_ygrid
 
     def display(self):
         """Display object information"""
@@ -69,10 +69,10 @@ class GridObject():
         export_dict={'type':self.type,
                      'xy0':np.around(self.xy[0,:], decimals=self.max_resolution).tolist(),
                      'xy1':np.around(self.xy[1,:], decimals=self.max_resolution).tolist()}
-        if not self._xgrid.tolist()==[]:
-            export_dict['xgrid']=np.around(self._xgrid, decimals=self.max_resolution).tolist()
-        if not self._ygrid.tolist()==[]:
-            export_dict['ygrid']=np.around(self._ygrid, decimals=self.max_resolution).tolist()
+        if not self.xgrid.tolist()==[]:
+            export_dict['xgrid']=np.around(self.xgrid, decimals=self.max_resolution).tolist()
+        if not self.ygrid.tolist()==[]:
+            export_dict['ygrid']=np.around(self.ygrid, decimals=self.max_resolution).tolist()
         return export_dict
 
     def _add_grid(self, grid, v):
@@ -81,16 +81,16 @@ class GridObject():
         return grid
 
     def add_xgrid(self, x):
-        self._xgrid=self._add_grid(self._xgrid, x)
+        self.xgrid=self._add_grid(self.xgrid, x)
 
     def add_ygrid(self, y):
-        self._ygrid=self._add_grid(self._ygrid, y)
+        self.ygrid=self._add_grid(self.ygrid, y)
 
     def get_xgrid(self):
-        return self._xgrid
+        return self.xgrid
 
     def get_ygrid(self):
-        return self._ygrid
+        return self.ygrid
 
     def _get_absgrid_coord(self, v, grid, size):
         # notation
@@ -111,10 +111,10 @@ class GridObject():
         return np.add(np.multiply(quo,size), np.take(grid,mod))
 
     def get_absgrid_coord_x(self, x):
-        return self._get_absgrid_coord(x, self._xgrid, self.width).astype(int)
+        return self._get_absgrid_coord(x, self.xgrid, self.width).astype(int)
 
     def get_absgrid_coord_y(self, y):
-        return self._get_absgrid_coord(y, self._ygrid, self.height).astype(int)
+        return self._get_absgrid_coord(y, self.ygrid, self.height).astype(int)
 
     def get_absgrid_coord_xy(self, xy):
         _xy=np.vstack((self.get_absgrid_coord_x(xy.T[0]), self.get_absgrid_coord_y(xy.T[1]))).T
@@ -146,10 +146,10 @@ class GridObject():
         return(np.vstack((_xy0, _xy1)))
 
     def get_phygrid_coord_x(self, x):
-        return self._get_phygrid_coord(x, self._xgrid, self.width)
+        return self._get_phygrid_coord(x, self.xgrid, self.width)
 
     def get_phygrid_coord_y(self, y):
-        return self._get_phygrid_coord(y, self._ygrid, self.height)
+        return self._get_phygrid_coord(y, self.ygrid, self.height)
 
     def get_phygrid_coord_xy(self, xy):
         return np.vstack((self.get_phygrid_coord_x(xy.T[0]), self.get_phygrid_coord_y(xy.T[1]))).T
@@ -162,25 +162,29 @@ class PlacementGrid(GridObject):
 
 class RouteGrid(GridObject):
     """Routing grid class"""
-    type='route'
-    _xwidth=np.array([])
-    _ywidth=np.array([])
-    _viamap=dict()
+    type = 'route'
+    xwidth = np.array([])
+    ywidth = np.array([])
+    viamap = dict()
+    xlayer = None
+    ylayer = None
 
-    def __init__(self, name, libname, xy, xgrid, ygrid, xwidth, ywidth, viamap=None):
+    def __init__(self, name, libname, xy, xgrid, ygrid, xwidth, ywidth, xlayer=None, ylayer=None, viamap=None):
         """
         Constructor
 
 
         """
         self.name = name
-        self.libname=libname
-        self.xy=xy
-        self._xgrid=xgrid
-        self._ygrid=ygrid
-        self._xwidth=xwidth
-        self._ywidth=ywidth
-        self._viamap=viamap
+        self.libname = libname
+        self.xy = xy
+        self.xgrid = xgrid
+        self.ygrid = ygrid
+        self.xwidth = xwidth
+        self.ywidth = ywidth
+        self.xlayer = xlayer
+        self.ylayer = ylayer
+        self.viamap = viamap
 
     def _get_route_width(self, v, _width):
         """ get metal width """
@@ -190,21 +194,32 @@ class RouteGrid(GridObject):
         #    print(v, _width, mod)
         return _width[mod]
 
-    def get_xwidth(self): return self._xwidth
+    def _get_route_layer(self, v, _layer):
+        """ get metal width """
+        mod=np.mod(v, len(_layer))
+        return _layer[mod]
 
-    def get_ywidth(self): return self._ywidth
-
-    def get_viamap(self): return self._viamap
+    #def get_xwidth(self): return self.xwidth
+    #def get_ywidth(self): return self.ywidth
+    #def get_viamap(self): return self.viamap
 
     def get_route_width_xy(self, xy):
         """ get metal width vector"""
-        return np.array([self._get_route_width(xy[0], self._xwidth),
-                         self._get_route_width(xy[1], self._ywidth)])
+        return np.array([self._get_route_width(xy[0], self.xwidth),
+                         self._get_route_width(xy[1], self.ywidth)])
+
+    def get_route_xlayer_xy(self, xy):
+        """ get metal width vector"""
+        return self._get_route_layer(xy[0], self.xlayer)
+
+    def get_route_ylayer_xy(self, xy):
+        """ get metal width vector"""
+        return self._get_route_layer(xy[1], self.ylayer)
 
     def get_vianame(self, xy):
         """ get vianame"""
-        mod = np.array([np.mod(xy[0], self._xgrid.shape[0]), np.mod(xy[1], self._ygrid.shape[0])])
-        for vianame, viacoord in self._viamap.items():
+        mod = np.array([np.mod(xy[0], self.xgrid.shape[0]), np.mod(xy[1], self.ygrid.shape[0])])
+        for vianame, viacoord in self.viamap.items():
             if viacoord.ndim==1:
                 if np.array_equal(mod, viacoord): return vianame
             else:
@@ -216,40 +231,44 @@ class RouteGrid(GridObject):
         """Display object information"""
         display_str="  " + self.name + " width:" + str(np.around(self.width, decimals=self.max_resolution))\
                     + " height:" + str(np.around(self.height, decimals=self.max_resolution))\
-                    + " xgrid:" + str(np.around(self._xgrid, decimals=self.max_resolution))\
-                    + " ygrid:" + str(np.around(self._ygrid, decimals=self.max_resolution))\
-                    + " xwidth:" + str(np.around(self._xwidth, decimals=self.max_resolution))\
-                    + " ywidth:" + str(np.around(self._ywidth, decimals=self.max_resolution))\
+                    + " xgrid:" + str(np.around(self.xgrid, decimals=self.max_resolution))\
+                    + " ygrid:" + str(np.around(self.ygrid, decimals=self.max_resolution))\
+                    + " xwidth:" + str(np.around(self.xwidth, decimals=self.max_resolution))\
+                    + " ywidth:" + str(np.around(self.ywidth, decimals=self.max_resolution))\
+                    + " xlayer:" + str(self.xlayer)\
+                    + " ylayer:" + str(self.ylayer)\
                     + " viamap:{"
-        for vm_name, vm in self._viamap.items():
+        for vm_name, vm in self.viamap.items():
             display_str+=vm_name + ": " + str(vm.tolist()) + " "
         display_str+="}"
         print(display_str)
 
     def export_dict(self):
         export_dict=GridObject.export_dict(self)
-        export_dict['xwidth'] = np.around(self._xwidth, decimals=self.max_resolution).tolist()
-        export_dict['ywidth'] = np.around(self._ywidth, decimals=self.max_resolution).tolist()
+        export_dict['xwidth'] = np.around(self.xwidth, decimals=self.max_resolution).tolist()
+        export_dict['ywidth'] = np.around(self.ywidth, decimals=self.max_resolution).tolist()
+        export_dict['xlayer'] = self.xlayer
+        export_dict['ylayer'] = self.ylayer
         export_dict['viamap'] = dict()
-        for vn, v in self._viamap.items():
+        for vn, v in self.viamap.items():
             export_dict['viamap'][vn]=[]
             for _v in v:
                 export_dict['viamap'][vn].append(_v.tolist())
         return export_dict
 
     def update_viamap(self, viamap):
-        self._viamap=viamap
+        self.viamap=viamap
 
 if __name__ == '__main__':
     lgrid=GridObject()
     print('LayoutGrid test')
-    lgrid._xgrid = np.array([0.2, 0.4, 0.6])
-    lgrid._ygrid = np.array([0, 0.4, 0.9, 1.2, 2, 3])
+    lgrid.xgrid = np.array([0.2, 0.4, 0.6])
+    lgrid.ygrid = np.array([0, 0.4, 0.9, 1.2, 2, 3])
     lgrid.width = 1.2
     lgrid.height = 3.2
     phycoord = np.array([[-0.2, -0.2], [0, 2], [4,2.2], [0.5, 1.5], [1.3, 3.6], [8,2.3]])
-    print("  xgrid:"+str(lgrid._xgrid)+" width:"+str(lgrid.width))
-    print("  ygrid:"+str(lgrid._ygrid)+" height:"+str(lgrid.height))
+    print("  xgrid:" + str(lgrid.xgrid) + " width:" + str(lgrid.width))
+    print("  ygrid:" + str(lgrid.ygrid) + " height:" + str(lgrid.height))
     print('physical grid to abstract grid')
     print("  input:"+str(phycoord.tolist()))
     abscoord=lgrid.get_absgrid_coord_xy(phycoord)

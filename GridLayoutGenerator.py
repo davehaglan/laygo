@@ -327,7 +327,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         return inst
 
     # Route functions
-    def route(self, name, layer, xy0, xy1, gridname0, gridname1=None, direction='omni',
+    def route(self, name, layer=None, xy0=None, xy1=None, gridname0=None, gridname1=None, direction='omni',
               refinstname0=None, refinstname1=None, refinstindex0=np.array([0, 0]), refinstindex1=np.array([0, 0]),
               refpinname0=None, refpinname1=None, offset0=np.array([0,0]), offset1=None,
               transform0='R0', transform1=None, endstyle0="truncate", endstyle1="truncate",
@@ -339,7 +339,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         ----------
         name : str
             Route name. If None, the name will be automatically assigned by genid.
-        layer : [str, str]
+        layer : [str, str], optional
             Routing layer [name, purpose].
         xy0 : np.array([int, int])
             xy coordinate for start point.
@@ -392,6 +392,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         -------
         Rect object
         """
+        # exception handling
+        if xy0 is None: raise ValueError('GridLayoutGenerator.route - specify xy0')
+        if xy1 is None: raise ValueError('GridLayoutGenerator.route - specify xy1')
+        if gridname0 is None: raise ValueError('GridLayoutGenerator.route - specify gridname0')
         # preprocessing arguments
         xy0 = np.asarray(xy0)
         xy1 = np.asarray(xy1)
@@ -457,6 +461,12 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             for vofst in via1:
                 self.via(None, xy1+vofst, gridname1, offset=offset1, refinstname=refinstname1, refinstindex=refinstindex1,
                          refpinname=refpinname1, transform=transform1, overwrite_xy_phy=xy1_phy_center) #overwrite xy coordinate to handle direction matrix (xy1+vofst does not reflect direction matrix in via function)
+        #layer handling
+        if layer is None:
+            if xy0_phy_center[0] == xy1_phy_center[0]:
+                layer = self.grids.get_route_xlayer_xy(gridname0, _xy0)
+            else:
+                layer = self.grids.get_route_ylayer_xy(gridname0, _xy0)
         return self.add_rect(name, np.vstack((xy0_phy, xy1_phy)), layer, netname)
 
 
@@ -509,7 +519,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         md=self.Md(direction)
         xy1_phy=np.dot(xy1_phy - xy0_phy, md.T) + xy0_phy #adjust xy1_phy to fix routing direction
         if not (xy0_phy==xy1_phy).all(): #xy0_phy and xy1_phy should not be the same
-            #generating a rect object by extending in normal directions by width/2 (routing width follows grid0)
+            #generating a rect object by extending in normal directions by width/2 (grid0 is used for route width)
             vwidth_direction=np.dot((xy1_phy - xy0_phy)/np.linalg.norm(xy1_phy - xy0_phy), self.Mt('MXY').T)
             vwidth_norm=0.5*self.grids.get_route_width_xy(gridname0, xy0)
             vwidth=vwidth_direction*vwidth_norm
@@ -531,7 +541,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         return np.vstack((_xy0_phy, _xy1_phy)), np.vstack((_xy0_phy_center, _xy1_phy_center))
 
     #advanced route functions
-    def route_vh(self, layerv, layerh, xy0, xy1, gridname=None, gridname0=None, gridname1=None,
+    def route_vh(self, layerv=None, layerh=None, xy0=None, xy1=None, gridname=None, gridname0=None, gridname1=None,
                  refinstname0=None, refinstname1=None, refinstindex0=np.array([0, 0]), refinstindex1=np.array([0, 0]),
                  refpinname0=None, refpinname1=None, via0=None, via1=None):
         """
@@ -603,7 +613,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         rv0 = self.route(None, layerv, xy0=np.array([_xy0[0], _xy1[1]]), xy1=_xy0, gridname0=gridname0, via1=via0, via0=[[0, 0]])
         return [rv0, rh0]
 
-    def route_hv(self, layerh, layerv, xy0, xy1, gridname=None, gridname0=None, gridname1=None,
+    def route_hv(self, layerh=None, layerv=None, xy0=None, xy1=None, gridname=None, gridname0=None, gridname1=None,
                  refinstname0=None, refinstname1=None, refinstindex0=np.array([0, 0]), refinstindex1=np.array([0, 0]),
                  refpinname0=None, refpinname1=None, endstyle0=['truncate', 'truncate'],
                  endstyle1=['truncate', 'truncate'], via0=None, via1=None):
@@ -963,8 +973,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             elif sn.startswith(routegrid_prefix): #route grid
                 xgrid=[]
                 xwidth=[]
+                xlayer=[]
                 ygrid=[]
                 ywidth=[]
+                ylayer=[]
                 for r in s['rects'].values():
                     if r.layer==layer_boundary: #boundary layer
                         bx1, bx2 = sorted(r.xy[:,0].tolist()) #need to be changed..
@@ -976,9 +988,11 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                         if r.width>r.height: # x-direction
                             ygrid.append(r.cy)
                             ywidth.append(r.height)
+                            ylayer.append(r.layer)
                         else: # y-direction
                             xgrid.append(r.cx)
                             xwidth.append(r.width)
+                            xlayer.append(r.layer)
                 xg = np.vstack((np.array(xgrid), np.array(xwidth)))
                 yg = np.vstack((np.array(ygrid), np.array(ywidth)))
                 xg = xg.T[xg.T[:, 0].argsort()].T  # sort
@@ -987,7 +1001,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 xwidth=xg[1,:];ywidth=yg[1,:]
                 #print(sn, str(np.around(xg, decimals=10).tolist()), str(np.around(yg, decimals=10).tolist()))
                 gdb.add_route_grid(name=sn, libname=libname, xy=bnd, xgrid=xgrid, ygrid=ygrid, xwidth=xwidth,
-                                   ywidth=ywidth, viamap=None)
+                                   ywidth=ywidth, xlayer=xlayer, ylayer=ylayer, viamap=None)
                 #via load
                 viamap=dict()
                 gdb.sel_library(libname)
