@@ -73,8 +73,8 @@ prow = laygen.relplace(name=None, templatename=['pmos4_fast_boundary', 'pmos4_fa
                        gridname='placement_basic', refinstname=nrow[0].name, direction=['top']+['left']*6, transform='MX')
 
 #a
-laygen.route(None, xy0=[0, 0], xy1=[0, 0], gridname0=rg_m1m2, refinstname0=nrow[4].name, refpinname0='G0',
-             via0=[[0, 0]], refinstname1=prow[4].name, refpinname1='G0')
+laygen.route(None, xy0=[0, 0], xy1=[0, 0], gridname0=rg_m1m2, refinstname0=prow[4].name, refpinname0='G0',
+             via0=[[0, 0]], refinstname1=nrow[4].name, refpinname1='G0')
 laygen.route(None, xy0=[-2, 0], xy1=[0, 0], gridname0=rg_m1m2, refinstname0=prow[4].name, refpinname0='G0',
              refinstname1=prow[4].name, refpinname1='G0')
 ra0 = laygen.route(None, xy0=[0, 0], xy1=[0, 2], gridname0=rg_m2m3,refinstname0=prow[4].name, refpinname0='G0',
