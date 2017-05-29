@@ -22,8 +22,7 @@
 #
 ########################################################################################################################
 
-"""BaseLayoutGenerator
-
+"""
 The BaseLayoutGenerator module implements classes to generate full-custom layout on physical grid. It allows designers
 to describe layout generation scripts in Python language and automate the layout process. BaseLayoutGenerator is not
 capable of handling any abstracted grid/template parameters, so all parameters should be given in real numbers
@@ -33,15 +32,6 @@ Example
 For layout export, type below command in ipython console.
 
     $ run laygo/labs/lab1_a_baselayoutgenerator_export.py
-
-
-Notes
------
-    Notes will be included here.
-
-Attributes
-----------
-Attibutes will be included here.
 """
 
 __author__ = "Jaeduk Han"
@@ -284,19 +274,14 @@ class BaseLayoutGenerator():
             output filename
         layermapfile : str
             layermap filename
-            example) default.layermap
-                #technology layer information
-                #layername layerpurpose stream# datatype
-                text        drawing 100 0
-                prBoundary  drawing 101 0
-                metal1      drawing 50  0
-                metal1      pin     50  10
-                metal2      drawing 51  0
-                metal2      pin     51  10
-        physical_unit :
-        logical_unit :
-        pin_label_height : pin label height
-        text_height : text height
+        physical_unit : float
+            physical unit for GDS export
+        logical_unit : float
+            logical unit for GDS export
+        pin_label_height : float
+            pin label height
+        text_height : float
+            text height
         """
         if libname==None: libname=self.db.plib
         if cellname==None: cellname=self.db.pcell
