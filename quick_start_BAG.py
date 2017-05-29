@@ -122,4 +122,4 @@ laygen.display()
 #laygen.export_GDS('output.gds', cellname='nand_test', layermapfile="./labs/laygo_faketech.layermap")
 import bag
 prj = bag.BagProject()
-laygen.export_BAG(prj, array_delimiter=['[', ']'])
+laygen.export_BAG(prj)

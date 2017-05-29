@@ -185,13 +185,13 @@ a 180-degree rotated L shaped route, stacked from M1 to M3, for one of
 the nand gate input.
 
 ```python
-# a
-r0 = laygen.route(None, laygen.layers['metal'][1], xy0=[0, 0], xy1=[0, 0], gridname0=rg_m1m2,
-             refinstname0=nrow[4].name, refpinname0='G0', via0=[[0, 0]], refinstname1=nrow[4].name, refpinname1='G0')
-r1 = laygen.route(None, laygen.layers['metal'][2], xy0=[-2, 0], xy1=[0, 0], gridname0=rg_m1m2,
-             refinstname0=prow[4].name, refpinname0='G0', refinstname1=prow[4].name, refpinname1='G0')
-ra0 = laygen.route(None, laygen.layers['metal'][3], xy0=[0, 0], xy1=[0, 2], gridname0=rg_m2m3,refinstname0=prow[4].name,
-   refpinname0='G0', refinstname1=prow[4].name, refpinname1='G0', via0=[[0, 0]], endstyle0="extend", endstyle1="extend")
+#a
+laygen.route(None, xy0=[0, 0], xy1=[0, 0], gridname0=rg_m1m2, refinstname0=prow[4].name, refpinname0='G0',
+             via0=[[0, 0]], refinstname1=nrow[4].name, refpinname1='G0')
+laygen.route(None, xy0=[-2, 0], xy1=[0, 0], gridname0=rg_m1m2, refinstname0=prow[4].name, refpinname0='G0',
+             refinstname1=prow[4].name, refpinname1='G0')
+ra0 = laygen.route(None, xy0=[0, 0], xy1=[0, 2], gridname0=rg_m2m3,refinstname0=prow[4].name, refpinname0='G0',
+                   refinstname1=prow[4].name, refpinname1='G0', via0=[[0, 0]], endstyle0="extend", endstyle1="extend")
 ```
 
 The generated routing pattern should look like this:
