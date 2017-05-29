@@ -4,7 +4,8 @@ This tutorial contains instructions to generate a NAND gate layout and
 export it to OA database through
 [BAG](https://github.com/pkerichang/BAG_framework) framework. You can
 simply run this tutorial by setting up BAG for
-[freePDK45 technology](https://github.com/ucb-art/BAG2_freePDK45)
+[freePDK45 technology](https://github.com/ucb-art/BAG2_freePDK45) or
+[cadence generic PDK for finfet and multi patterned technology](https://support.cadence.com)
 and running [quick_start_BAG.py](../../../quick_start_BAG.py), but we
 recommend users to go through the entire tutorial steps, reading this
 document and running commands step by step, to get a better idea of the
@@ -19,15 +20,25 @@ For BWRC users, freePDK45 is installed in
 ```/tools/projects/eeis/BAG_2.0/pdk_files/freePDK45/NCSU-FreePDK45-1.4/```
 and all configurations are set to point the path.
 
+    * For cadence generic PDK, you can get the PDK file from
+    [Cadence support](https://support.cadence.com). For BWRC users,
+    PDK is installed in ```/tools/cadence/GPDK/cds_ff_mpt_v_0.3/```.
+
 2. Clone BAG2_freePDK45 repo.
 
     ```
     $ git clone git@github.com:ucb-art/BAG2_freePDK45.git
     ```
 
-3. The BAG2_freePDK45 repo has 2 submodules in it: BAG_framework and
+    * For cadence generic PDK, close BAG2_cds_ff_mpt repo.
+    ```
+    $ git clone git@github.com:ucb-art/BAG2_cds_ff_mpt.git
+    ```
+
+
+3. The technology setup repo has 2 submodules in it: BAG_framework and
 laygo. Let's update the submodules. Move into the BAG_freePDK45
-directory and type this:
+(or BAG2_cds_ff_mpt) directory and type this:
 
     ```
     $ git submodule init
@@ -59,9 +70,13 @@ listed below.
     ```
 
     You should see the generated nand gate layout in
-    laygo_working/nand_test, which looks like this
+    laygo_working/nand_test, which looks like this.
 
     ![nand](images/laygo_bag_nand.png)
+
+    For cds_ff_mpt technology, the layout should look like this.
+
+    ![nand](images/laygo_bag_nand_cds.png)
 
 ## Initialize GridLayoutGenerator
 Let's take a look into the detail of generater to get a better

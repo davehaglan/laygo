@@ -144,7 +144,8 @@
 export it to OA database through
 <a class="reference external" href="https://github.com/pkerichang/BAG_framework">BAG</a> framework. You can
 simply run this tutorial by setting up BAG for
-<a class="reference external" href="https://github.com/ucb-art/BAG2_freePDK45">freePDK45 technology</a>
+<a class="reference external" href="https://github.com/ucb-art/BAG2_freePDK45">freePDK45 technology</a> or
+<a class="reference external" href="https://support.cadence.com">cadence generic PDK for finfet and multi patterned technology</a>
 and running <a class="reference external" href="../../../quick_start_BAG.py">quick_start_BAG.py</a>, but we
 recommend users to go through the entire tutorial steps, reading this
 document and running commands step by step, to get a better idea of the
@@ -158,17 +159,31 @@ Make sure you can launch virtuoso and make a layout using the PDK.
 For BWRC users, freePDK45 is installed in
 <code class="docutils literal"><span class="pre">/tools/projects/eeis/BAG_2.0/pdk_files/freePDK45/NCSU-FreePDK45-1.4/</span></code>
 and all configurations are set to point the path.</p>
+<ul class="simple">
+<li>For cadence generic PDK, you can get the PDK file from
+<a class="reference external" href="https://support.cadence.com">Cadence support</a>. For BWRC users,
+PDK is installed in <code class="docutils literal"><span class="pre">/tools/cadence/GPDK/cds_ff_mpt_v_0.3/</span></code>.</li>
+</ul>
 </li>
 <li><p class="first">Clone BAG2_freePDK45 repo.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git@github.com:ucb-art/BAG2_freePDK45.git
 </pre></div>
 </div>
+<ul class="simple">
+<li>For cadence generic PDK, close BAG2_cds_ff_mpt repo.</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git@github.com:ucb-art/BAG2_cds_ff_mpt.git
+</pre></div>
+</div>
 </li>
-<li><p class="first">The BAG2_freePDK45 repo has 2 submodules in it: BAG_framework and
+</ol>
+<ol>
+<li><p class="first">The technology setup repo has 2 submodules in it: BAG_framework and
 laygo. Let&#8217;s update the submodules. Move into the BAG_freePDK45
-directory and type this:</p>
+(or BAG2_cds_ff_mpt) directory and type this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ git submodule init
 $ git submodule update
+$ git submodule foreach git pull origin master
 </pre></div>
 </div>
 </li>
@@ -191,8 +206,10 @@ listed below.</p>
 </pre></div>
 </div>
 <p>You should see the generated nand gate layout in
-laygo_working/nand_test, which looks like this</p>
+laygo_working/nand_test, which looks like this.</p>
 <p><img alt="nand" src="../_images/laygo_bag_nand.png" /></p>
+<p>For cds_ff_mpt technology, the layout should look like this.</p>
+<p><img alt="nand" src="../_images/laygo_bag_nand_cds.png" /></p>
 </li>
 </ol>
 </div>
