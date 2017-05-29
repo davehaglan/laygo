@@ -32,6 +32,7 @@ directory and type this:
     ```
     $ git submodule init
     $ git submodule update
+    $ git submodule foreach git pull origin master
     ```
 
 4. Open **.cshrc**, **bag_config.yaml** file, and check if all path
