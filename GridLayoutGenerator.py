@@ -274,7 +274,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                               template_libname=template_libname, shape=shape, spacing=spacing, transform=transform)
 
     def via(self, name, xy, gridname, offset=np.array([0, 0]), refinstname=None, refinstindex=np.array([0, 0]),
-            refpinname=None, transform='R0'):
+            refpinname=None, transform='R0', overwrite_xy_phy=None):
         """
         Place a via on grid
 
@@ -296,6 +296,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             Reference pin of refinstname for reference point of xy. If None, the origin of refinstname0 is used.
         transform : str ('R0', 'MX', 'MY'), optional
             Transform parameter for grid. Overwritten by transform of refinstname if not specified.
+        overwrite_xy_phy : None or np.array([float, float]), optional
+            If specified, final xy physical coordinates are overwritten by the argument.
         """
         # preprocessing arguments
         xy = np.asarray(xy)
@@ -312,7 +314,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 xy=xy+pin_xy_abs
             transform=refinst.transform #overwrite transform variable
         vianame = self.grids.get_vianame(gridname, xy)
-        xy_phy=np.dot(self.grids.get_phygrid_coord_xy(gridname, xy), self.Mt(transform).T)+offset
+        if overwrite_xy_phy is None:
+            xy_phy=np.dot(self.grids.get_phygrid_coord_xy(gridname, xy), self.Mt(transform).T)+offset
+        else:
+            xy_phy=overwrite_xy_phy
         inst=self.add_inst(name=name, libname=self.grids.plib, cellname=vianame, xy=xy_phy, transform=transform)
         if self.use_phantom==True:
             size=self.grids.get_route_width_xy(gridname, xy)
@@ -427,12 +432,15 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 _xy1=xy1+pin_xy1_abs
             transform1=refinst1.transform # overwrite transform variable
         # get physical grid coordinates
-        xy_phy=self._route_generate_box_from_abscoord(xy0=_xy0, xy1=_xy1, gridname0=gridname0, gridname1=gridname1,
+        xy_phy, xy_phy_center=self._route_generate_box_from_abscoord(xy0=_xy0, xy1=_xy1, gridname0=gridname0, gridname1=gridname1,
                                                       direction=direction, offset0=_offset0, offset1=_offset1,
                                                       transform0=transform0, transform1=transform1,
                                                       endstyle0=endstyle0, endstyle1=endstyle1)
         xy0_phy=xy_phy[0,:]; xy1_phy=xy_phy[1,:]
+        xy0_phy_center=xy_phy_center[0,:]; xy1_phy_center=xy_phy_center[1,:]
         # optional via placements
+        #xy0_phy=np.dot(self.grids.get_phygrid_coord_xy(gridname0, xy0), self.Mt(transform0).T)+offset0
+        #xy1_phy=np.dot(self.grids.get_phygrid_coord_xy(gridname1, xy1), self.Mt(transform1).T)+offset1
         if addvia0==True:
             print("[WARNING] addvia0 option in GridLayoutGenerator.route will be deprecated. Use via0=[[0, 0]] instead")
             self.via(None, xy0, gridname0, offset=offset0, refinstname=refinstname0, refinstindex=refinstindex0,
@@ -448,7 +456,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         if not via1 is None:
             for vofst in via1:
                 self.via(None, xy1+vofst, gridname1, offset=offset1, refinstname=refinstname1, refinstindex=refinstindex1,
-                         refpinname=refpinname1, transform=transform1)
+                         refpinname=refpinname1, transform=transform1, overwrite_xy_phy=xy1_phy_center) #overwrite xy coordinate to handle direction matrix (xy1+vofst does not reflect direction matrix in via function)
         return self.add_rect(name, np.vstack((xy0_phy, xy1_phy)), layer, netname)
 
 
@@ -516,9 +524,11 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 vextend_direction = (xy1_phy - xy0_phy) / np.linalg.norm(xy1_phy - xy0_phy)
                 vextend_norm = 0.5 * self.grids.get_route_width_xy(gridname0, xy0)
                 vextend1 = vextend_direction * vextend_norm
-            xy0_phy = xy0_phy - vwidth - vextend0
-            xy1_phy = xy1_phy + vwidth + vextend1
-        return np.vstack((xy0_phy, xy1_phy))
+            _xy0_phy_center = xy0_phy
+            _xy1_phy_center = xy1_phy
+            _xy0_phy = xy0_phy - vwidth - vextend0
+            _xy1_phy = xy1_phy + vwidth + vextend1
+        return np.vstack((_xy0_phy, _xy1_phy)), np.vstack((_xy0_phy_center, _xy1_phy_center))
 
     #advanced route functions
     def route_vh(self, layerv, layerh, xy0, xy1, gridname=None, gridname0=None, gridname1=None,
@@ -563,7 +573,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         xy0=np.asarray(xy0)
         xy1=np.asarray(xy1)
         if not gridname is None:
-            print("gridname in GridLayoutGenerator.route_hv will be deprecated. Use gridname0 instead")
+            print("gridname in GridLayoutGenerator.route_vh will be deprecated. Use gridname0 instead")
             gridname0=gridname
             gridname1=gridname
         if gridname1 is None:
@@ -606,30 +616,38 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             gridname1=gridname
         if gridname1 is None:
             gridname1=gridname0
-        if not refinstname0 is None:
-            if not refpinname0 is None:
-                _xy0 = self.get_inst_pin_coord(name=refinstname0, pinname=refpinname0, gridname=gridname0,
-                                               index=refinstindex0, sort=False)[0] + \
-                                               np.dot(xy0, self.Mt(self.get_inst(refinstname0).transform).T)
-            else:
-                _xy0 = self.get_inst_xy(name=refinstname0, gridname=gridname0, index=refinstindex0) + \
-                                        np.dot(xy0, self.Mt(self.get_inst(refinstname0).transform).T)
-        else:
-             _xy0 = xy0
-        if not refinstname1 is None:
-            if not refpinname1 is None:
-                _xy1 = self.get_inst_pin_coord(name=refinstname1, pinname=refpinname1, gridname=gridname1,
-                                               index=refinstindex1, sort=False)[0] + \
-                                               np.dot(xy1, self.Mt(self.get_inst(refinstname1).transform).T)
-            else:
-                _xy1 = self.get_inst_xy(name=refinstname1, gridname=gridname1, index=refinstindex1) + \
-                                        np.dot(xy1, self.Mt(self.get_inst(refinstname1).transform).T)
-        else:
-            _xy1 = xy1
-        rh0=self.route(None, layerh, xy0=_xy0 , xy1=np.array([_xy1[0], _xy0[1]]), gridname0=gridname0,
-                       endstyle0=endstyle0[0], endstyle1=endstyle1[0], via0=via0, via1=[[0, 0]])
-        rv0=self.route(None, layerv, xy0=np.array([_xy1[0], _xy0[1]]), xy1=_xy1, gridname0=gridname1,
-                       endstyle0=endstyle0[1], endstyle1=endstyle1[1], via1=via1)
+        rh0=self.route(name=None, layer=layerh, xy0=xy0, xy1=xy1, direction='x', gridname0=gridname0,
+             refinstname0=refinstname0, refinstindex0=refinstindex0, refpinname0=refpinname0, 
+             refinstname1=refinstname1, refinstindex1=refinstindex1, refpinname1=refpinname1,
+             via0=via0, via1=np.array([[0, 0]]))
+        rv0=self.route(name=None, layer=layerv, xy0=xy1, xy1=xy0, direction='y', gridname0=gridname1,
+             refinstname0=refinstname1, refinstindex0=refinstindex1, refpinname0=refpinname1, 
+             refinstname1=refinstname0, refinstindex1=refinstindex0, refpinname1=refpinname0,
+             via0=via0) 
+        #if not refinstname0 is None:
+        #    if not refpinname0 is None:
+        #        _xy0 = self.get_inst_pin_coord(name=refinstname0, pinname=refpinname0, gridname=gridname0,
+        #                                       index=refinstindex0, sort=False)[0] + \
+        #                                       np.dot(xy0, self.Mt(self.get_inst(refinstname0).transform).T)
+        #    else:
+        #        _xy0 = self.get_inst_xy(name=refinstname0, gridname=gridname0, index=refinstindex0) + \
+        #                                np.dot(xy0, self.Mt(self.get_inst(refinstname0).transform).T)
+        #else:
+        #     _xy0 = xy0
+        #if not refinstname1 is None:
+        #    if not refpinname1 is None:
+        #        _xy1 = self.get_inst_pin_coord(name=refinstname1, pinname=refpinname1, gridname=gridname1,
+        #                                       index=refinstindex1, sort=False)[0] + \
+        #                                       np.dot(xy1, self.Mt(self.get_inst(refinstname1).transform).T)
+        #    else:
+        #        _xy1 = self.get_inst_xy(name=refinstname1, gridname=gridname1, index=refinstindex1) + \
+        #                                np.dot(xy1, self.Mt(self.get_inst(refinstname1).transform).T)
+        #else:
+        #    _xy1 = xy1
+        #rh0=self.route(None, layerh, xy0=_xy0 , xy1=np.array([_xy1[0], _xy0[1]]), gridname0=gridname0,
+        #               endstyle0=endstyle0[0], endstyle1=endstyle1[0], via0=via0, via1=[[0, 0]])
+        #rv0=self.route(None, layerv, xy0=np.array([_xy1[0], _xy0[1]]), xy1=_xy1, gridname0=gridname1,
+        #               endstyle0=endstyle0[1], endstyle1=endstyle1[1], via1=via1)
         return [rh0, rv0]
 
     def route_vhv(self, layerv0, layerh, xy0, xy1, track_y, gridname, layerv1=None, gridname1=None, extendl=0, extendr=0):

@@ -308,7 +308,7 @@ class BaseLayoutGenerator():
                             physical_unit=physical_unit, logical_unit=logical_unit, pin_label_height=pin_label_height,
                             text_height=text_height)
 
-    def export_BAG(self, prj, array_delimiter=['[',']'], via_tech='cdsDefTechLib'):
+    def export_BAG(self, prj, libname=None, cellname=None, array_delimiter=['[',']'], via_tech='cdsDefTechLib'):
         """
         Export specified cell(s) to BagProject object
 
@@ -327,7 +327,9 @@ class BaseLayoutGenerator():
         via_tech : str
             via technology entry for BagProject. Not being used currently because instances are used for via connections
         """
-        LayoutIO.export_BAG(self.db, self.db.plib, self.db.pcell, prj, array_delimiter=array_delimiter, via_tech=via_tech)
+        if libname==None: libname=self.db.plib
+        if cellname==None: cellname=self.db.pcell
+        LayoutIO.export_BAG(self.db, libname, cellname, prj, array_delimiter=array_delimiter, via_tech=via_tech)
 
     def import_GDS(self, filename, layermapfile="default.layermap", instance_libname=None, append=True):
         """
