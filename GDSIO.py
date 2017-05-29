@@ -28,15 +28,7 @@ The GDSIO module implements classes and functions to export/import full-custom l
 
 Example
 -------
-Refer to the bottom part of codes for example.
-
-Notes
------
-    Notes will be included here.
-
-Attributes
-----------
-Attibutes will be included here.
+Refer to the bottom part of GDSIO.py for example.
 """
 
 __author__ = "Eric Jan"

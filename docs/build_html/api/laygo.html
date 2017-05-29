@@ -163,22 +163,20 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 <dt id="laygo.BaseLayoutGenerator.BaseLayoutGenerator">
 <em class="property">class </em><code class="descclassname">laygo.BaseLayoutGenerator.</code><code class="descname">BaseLayoutGenerator</code><span class="sig-paren">(</span><em>res=0.005</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<dl class="docutils">
-<dt>The BaseLayoutGenerator class implements functions and variables for full-custom layout generations on physical</dt>
-<dd>grids</dd>
-</dl>
+<p>The BaseLayoutGenerator class implements functions and variables for full-custom layout generations on physical
+grids</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>msg</strong> (<em>float</em>) &#8211; Physical grid resolution</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>res</strong> (<em>float</em>) &#8211; physical grid resolution</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_cell">
 <code class="descname">add_cell</code><span class="sig-paren">(</span><em>name</em>, <em>libname=None</em>, <em>select=True</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_cell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a cell to DB (in specified libname)</p>
+<dd><p>Create a cell to work on</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -186,7 +184,7 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>name</strong> (<em>str</em>) &#8211; cellname</li>
 <li><strong>libname</strong> (<em>str, optional</em>) &#8211; library name. If None, current selected library name is used</li>
-<li><strong>select</strong> (<em>bool</em>) &#8211; if True, automatically select the cell to work on after creation</li>
+<li><strong>select</strong> (<em>bool, optional</em>) &#8211; if True, automatically select the cell to work on after creation</li>
 </ul>
 </td>
 </tr>
@@ -197,7 +195,7 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 <dl class="method">
 <dt id="laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_inst">
 <code class="descname">add_inst</code><span class="sig-paren">(</span><em>name</em>, <em>libname</em>, <em>cellname</em>, <em>xy=None</em>, <em>shape=array([1</em>, <em>1])</em>, <em>spacing=array([0</em>, <em>0])</em>, <em>transform='R0'</em>, <em>template=None</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_inst" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add an instance to the specified library and cell (_plib, _pstr)</p>
+<dd><p>Add an instance to specified coordinate</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -214,10 +212,10 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">created Instance object</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">instance object</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#laygo.LayoutObject.Instance" title="laygo.LayoutObject.Instance">laygo.LayoutObject.Instance</a></p>
 </td>
 </tr>
 </tbody>
@@ -227,14 +225,14 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 <dl class="method">
 <dt id="laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_library">
 <code class="descname">add_library</code><span class="sig-paren">(</span><em>name</em>, <em>select=True</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_library" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a library to DB</p>
+<dd><p>Create a library to work on</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>name</strong> (<em>str</em>) &#8211; library name</li>
-<li><strong>select</strong> (<em>bool</em>) &#8211; if True, automatically select the library to work on after creation</li>
+<li><strong>select</strong> (<em>bool, optional</em>) &#8211; if True, automatically select the library to work on after creation</li>
 </ul>
 </td>
 </tr>
@@ -245,7 +243,7 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 <dl class="method">
 <dt id="laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_pin">
 <code class="descname">add_pin</code><span class="sig-paren">(</span><em>name</em>, <em>netname</em>, <em>xy</em>, <em>layer</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_pin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a pin to selected cell</p>
+<dd><p>Add a pin to specified region</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -253,15 +251,15 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>name</strong> (<em>str</em>) &#8211; pin object name</li>
 <li><strong>netname</strong> (<em>str</em>) &#8211; net name</li>
-<li><strong>xy</strong> (<em>[float, float]</em>) &#8211; xy coordinate</li>
-<li><strong>layer</strong> (<em>[layername, purpose]</em>) &#8211; layer name an purpose</li>
+<li><strong>xy</strong> (<em>np.array([[float, float], [float, float]])</em>) &#8211; xy coordinates</li>
+<li><strong>layer</strong> (<em>[str, str]</em>) &#8211; layer name and purpose</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">created Pin object</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">pin object</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#laygo.LayoutObject.Pin" title="laygo.LayoutObject.Pin">laygo.LayoutObject.Pin</a></p>
 </td>
 </tr>
 </tbody>
@@ -271,21 +269,22 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 <dl class="method">
 <dt id="laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_rect">
 <code class="descname">add_rect</code><span class="sig-paren">(</span><em>name</em>, <em>xy</em>, <em>layer</em>, <em>netname=None</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_rect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a rect to selected cell</p>
+<dd><p>Add a rect to selected region</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>name</strong> (<em>str</em>) &#8211; rect name</li>
-<li><strong>layer</strong> (<em>[layername, purpose]</em>) &#8211; layer name an purpose</li>
+<li><strong>xy</strong> (<em>np.array([[float, float], [float, float]])</em>) &#8211; xy coordinates</li>
+<li><strong>layer</strong> (<em>[str, str]</em>) &#8211; layer name an purpose</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">created Rect object</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">rect object</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#laygo.LayoutObject.Rect" title="laygo.LayoutObject.Rect">laygo.LayoutObject.Rect</a></p>
 </td>
 </tr>
 </tbody>
@@ -295,7 +294,7 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 <dl class="method">
 <dt id="laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_text">
 <code class="descname">add_text</code><span class="sig-paren">(</span><em>name</em>, <em>text</em>, <em>xy</em>, <em>layer</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_text" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a pin to selected cell</p>
+<dd><p>Add a text to specified coordinate</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -308,10 +307,10 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">created Text object</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">text object</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#laygo.LayoutObject.Text" title="laygo.LayoutObject.Text">laygo.LayoutObject.Text</a></p>
 </td>
 </tr>
 </tbody>
@@ -321,7 +320,8 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 <dl class="attribute">
 <dt id="laygo.BaseLayoutGenerator.BaseLayoutGenerator.db">
 <code class="descname">db</code><em class="property"> = &lt;laygo.LayoutDB.LayoutDB object&gt;</em><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator.db" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>laygo.LayoutDB.LayoutDB</em> &#8211; layout database</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="laygo.BaseLayoutGenerator.BaseLayoutGenerator.display">
@@ -332,8 +332,8 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>libname</strong> (<em>library name</em>) &#8211; </li>
-<li><strong>cellname</strong> (<em>cell name</em>) &#8211; </li>
+<li><strong>libname</strong> (<em>str, optional</em>) &#8211; library name</li>
+<li><strong>cellname</strong> (<em>str, optional</em>) &#8211; cell name</li>
 </ul>
 </td>
 </tr>
@@ -388,29 +388,73 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 <dl class="method">
 <dt id="laygo.BaseLayoutGenerator.BaseLayoutGenerator.get_inst">
 <code class="descname">get_inst</code><span class="sig-paren">(</span><em>name=None</em>, <em>libname=None</em>, <em>index=array([0</em>, <em>0])</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator.get_inst" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get instance object
-:param name: instance name, if none, all instance is returned
-:type name: str
-:param libname: libname. if None, self.db._plib is used
-:type libname: str</p>
+<dd><p>Get the handle of specified instance object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str, optional</em>) &#8211; instance name, if None, all instances are returned</li>
+<li><strong>libname</strong> (<em>str, optional</em>) &#8211; libname. if None, self.db._plib is used</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Instance object pointer</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#laygo.LayoutObject.Instance" title="laygo.LayoutObject.Instance">laygo.LayoutObject.Instance</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="laygo.BaseLayoutGenerator.BaseLayoutGenerator.get_pin">
 <code class="descname">get_pin</code><span class="sig-paren">(</span><em>name</em>, <em>libname=None</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator.get_pin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get pin object
-:param name:
-:param libname: libname. if None, self.db._plib is used
-:type libname: str</p>
+<dd><p>Get the handle of speficied pin object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; pin name</li>
+<li><strong>libname</strong> (<em>str, optional</em>) &#8211; libname. if None, self.db._plib is used</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Pin object pointer</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#laygo.LayoutObject.Pin" title="laygo.LayoutObject.Pin">laygo.LayoutObject.Pin</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="laygo.BaseLayoutGenerator.BaseLayoutGenerator.get_rect">
 <code class="descname">get_rect</code><span class="sig-paren">(</span><em>name</em>, <em>libname=None</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator.get_rect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get rect object
-:param name:
-:param libname: libname. if None, self.db._plib is used
-:type libname: str</p>
+<dd><p>Get the handle of specified rect object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; rect name</li>
+<li><strong>libname</strong> (<em>str</em>) &#8211; libname. if None, self.db._plib is used</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Rect object pointer</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#laygo.LayoutObject.Rect" title="laygo.LayoutObject.Rect">laygo.LayoutObject.Rect</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -421,12 +465,18 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>prj</strong> (<em>BagProject</em>) &#8211; bag object to export</li>
 <li><strong>libname</strong> (<em>str</em>) &#8211; name of library to be exported</li>
 <li><strong>cellname</strong> (<em>list or str</em>) &#8211; name of cells to be exported</li>
 <li><strong>yamlfile</strong> (<em>str</em>) &#8211; scratch yaml file path</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Imported layout database</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#laygo.LayoutDB.LayoutDB" title="laygo.LayoutDB.LayoutDB">laygo.LayoutDB.LayoutDB</a></p>
 </td>
 </tr>
 </tbody>
@@ -441,11 +491,17 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>filename</strong> (<em>gds filename</em>) &#8211; </li>
 <li><strong>layermapfile</strong> (<em>layermap filename</em>) &#8211; </li>
 <li><strong>instance_libname</strong> (<em>library name of instantiated structure</em>) &#8211; </li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Imported layout database</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#laygo.LayoutDB.LayoutDB" title="laygo.LayoutDB.LayoutDB">laygo.LayoutDB.LayoutDB</a></p>
 </td>
 </tr>
 </tbody>
@@ -455,7 +511,7 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 <dl class="attribute">
 <dt id="laygo.BaseLayoutGenerator.BaseLayoutGenerator.res">
 <code class="descname">res</code><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator.res" title="Permalink to this definition">¶</a></dt>
-<dd><p>Physical resolution</p>
+<dd><p><em>float</em> &#8211; physical resolution</p>
 </dd></dl>
 
 <dl class="method">
@@ -494,14 +550,7 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 <p>GDSIO</p>
 <p>The GDSIO module implements classes and functions to export/import full-custom layout in GDSII format.</p>
 <p class="rubric">Example</p>
-<p>Refer to the bottom part of codes for example.</p>
-<p class="rubric">Notes</p>
-<p>Notes will be included here.</p>
-<dl class="attribute">
-<dt>
-<code class="descname">Attibutes will be included here.</code></dt>
-<dd></dd></dl>
-
+<p>Refer to the bottom part of GDSIO.py for example.</p>
 <dl class="class">
 <dt id="laygo.GDSIO.Boundary">
 <em class="property">class </em><code class="descclassname">laygo.GDSIO.</code><code class="descname">Boundary</code><span class="sig-paren">(</span><em>layer</em>, <em>dataType</em>, <em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.GDSIO.Boundary" title="Permalink to this definition">¶</a></dt>
@@ -528,7 +577,7 @@ capable of handling any abstracted grid/template parameters, so all parameters s
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <dl class="attribute">
 <dt id="laygo.GDSIO.Element.possible_transform_parameters">
-<code class="descname">possible_transform_parameters</code><em class="property"> = {'R180': (0, 180), 'MY': (32768, 180), 'MX': (32768, 0), 'R90': (0, 90), 'R270': (0, 270), 'R0': (None, None)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="descname">possible_transform_parameters</code><em class="property"> = {'R0': (None, None), 'R270': (0, 270), 'R90': (0, 90), 'R180': (0, 180), 'MY': (32768, 180), 'MX': (32768, 0)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1282,7 +1331,7 @@ if None, return all pin coordinates of specified instance in dict format</li>
 
 <dl class="attribute">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.layers">
-<code class="descname">layers</code><em class="property"> = {'metal': [], 'prbnd': [], 'pin': [], 'text': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">layers</code><em class="property"> = {'text': [], 'pin': [], 'metal': [], 'prbnd': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

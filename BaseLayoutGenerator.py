@@ -44,24 +44,27 @@ from .LayoutDB import *
 import numpy as np
 
 class BaseLayoutGenerator():
-    """The BaseLayoutGenerator class implements functions and variables for full-custom layout generations on physical
-     grids
+    """
+    The BaseLayoutGenerator class implements functions and variables for full-custom layout generations on physical
+    grids
 
     Parameters
     ----------
-    msg : float
-        Physical grid resolution
+    res : float
+        physical grid resolution
     """
-    db = LayoutDB() # Layout database
+
+    db = LayoutDB()
+    """laygo.LayoutDB.LayoutDB: layout database"""
 
     @property
     def res(self):
-        """Physical resolution"""
+        """float: physical resolution"""
         return self.db.res
     
     @res.setter
     def res(self, value):
-        """Physical resolution"""
+        """float: physical resolution"""
         self.db.res=value
 
     def __init__(self, res=0.005):
@@ -75,21 +78,23 @@ class BaseLayoutGenerator():
 
         Parameters
         ----------
-        libname : library name
-        cellname : cell name
+        libname : str, optional
+            library name
+        cellname : str, optional
+            cell name
         """
         self.db.display(libname, cellname)
 
     # library and cell related functions
     def add_library(self, name, select=True):
         """
-        Add a library to DB
+        Create a library to work on
 
         Parameters
         ----------
         name : str
             library name
-        select : bool
+        select : bool, optional
             if True, automatically select the library to work on after creation
         """
         self.db.add_library(name)
@@ -98,7 +103,7 @@ class BaseLayoutGenerator():
 
     def add_cell(self, name, libname=None, select=True):
         """
-        Add a cell to DB (in specified libname)
+        Create a cell to work on
 
         Parameters
         ----------
@@ -106,7 +111,7 @@ class BaseLayoutGenerator():
             cellname
         libname : str, optional
             library name. If None, current selected library name is used
-        select : bool
+        select : bool, optional
             if True, automatically select the cell to work on after creation
         """
         self.db.add_cell(name, libname)
@@ -138,24 +143,27 @@ class BaseLayoutGenerator():
     # geometry related functions
     def add_rect(self, name, xy, layer, netname=None):
         """
-        Add a rect to selected cell
+        Add a rect to selected region
 
         Parameters
         ----------
         name : str
             rect name
-        layer : [layername, purpose]
+        xy : np.array([[float, float], [float, float]])
+            xy coordinates
+        layer : [str, str]
             layer name an purpose
 
         Returns
         -------
-        rect object
+        laygo.LayoutObject.Rect
+            created Rect object
         """
         return self.db.add_rect(name, xy, layer, netname)
 
     def add_pin(self, name, netname, xy, layer):
         """
-        Add a pin to selected cell
+        Add a pin to specified region
 
         Parameters
         ----------
@@ -163,20 +171,21 @@ class BaseLayoutGenerator():
             pin object name
         netname : str
             net name
-        xy : [float, float]
-            xy coordinate
-        layer : [layername, purpose]
-            layer name an purpose
+        xy : np.array([[float, float], [float, float]])
+            xy coordinates
+        layer : [str, str]
+            layer name and purpose
 
         Returns
         -------
-        pin object
+        laygo.LayoutObject.Pin
+            created Pin object
         """
         return self.db.add_pin(name, netname, xy, layer)
 
     def add_text(self, name, text, xy, layer):
         """
-        Add a pin to selected cell
+        Add a text to specified coordinate
 
         Parameters
         ----------
@@ -191,14 +200,15 @@ class BaseLayoutGenerator():
 
         Returns
         -------
-        text object
+        laygo.LayoutObject.Text
+            created Text object
         """
         return self.db.add_text(name, text, xy, layer)
 
     def add_inst(self, name, libname, cellname, xy=None, shape=np.array([1, 1]), spacing=np.array([0, 0]),
                  transform='R0', template=None):
         """
-        Add an instance to the specified library and cell (_plib, _pstr)
+        Add an instance to specified coordinate
 
         Parameters
         ----------
@@ -221,42 +231,63 @@ class BaseLayoutGenerator():
 
         Returns
         -------
-        instance object
+        laygo.LayoutObject.Instance
+            created Instance object
         """
         return self.db.add_inst(name, libname, cellname, xy, shape, spacing, transform, template)
 
     # access functions
     def get_rect(self, name, libname=None):
         """
-        Get rect object
+        Get the handle of specified rect object
+
         Parameters
         ----------
-        name :
+        name : str
+            rect name
         libname : str
-         libname. if None, self.db._plib is used
+            libname. if None, self.db._plib is used
+
+        Returns
+        -------
+        laygo.LayoutObject.Rect
+            Rect object pointer
         """
         return self.db.get_rect(name, libname)
 
     def get_inst(self, name=None, libname=None, index=np.array([0, 0])):
         """
-        Get instance object
+        Get the handle of specified instance object
+
         Parameters
         ----------
-        name : str
-         instance name, if none, all instance is returned
-        libname : str
-         libname. if None, self.db._plib is used
+        name : str, optional
+            instance name, if None, all instances are returned
+        libname : str, optional
+            libname. if None, self.db._plib is used
+
+        Returns
+        -------
+        laygo.LayoutObject.Instance
+            Instance object pointer
         """
         return self.db.get_inst(name, libname, index)
 
     def get_pin(self, name, libname=None):
         """
-        Get pin object
+        Get the handle of speficied pin object
+
         Parameters
         ----------
-        name :
-        libname : str
-         libname. if None, self.db._plib is used
+        name : str
+            pin name
+        libname : str, optional
+            libname. if None, self.db._plib is used
+
+        Returns
+        -------
+        laygo.LayoutObject.Pin
+            Pin object pointer
         """
         return self.db.get_pin(name, libname)
 
@@ -327,7 +358,8 @@ class BaseLayoutGenerator():
 
         Returns
         -------
-
+        laygo.LayoutDB.LayoutDB
+            Imported layout database
         """
         db=LayoutIO.import_GDS(filename=filename, layermapfile=layermapfile, instance_libname=instance_libname,
                                res=self.res)
@@ -352,7 +384,8 @@ class BaseLayoutGenerator():
 
         Returns
         -------
-
+        laygo.LayoutDB.LayoutDB
+            Imported layout database
         """
         db=LayoutIO.import_BAG(prj=prj, libname=libname, cellname=cellname, yamlfile=yamlfile, res=self.db.res)
         if append==True:
