@@ -455,8 +455,13 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                          refpinname=refpinname0, transform=transform0)
         if not via1 is None:
             for vofst in via1:
+                #self.via(None, xy1+vofst, gridname1, offset=offset1, refinstname=refinstname1, refinstindex=refinstindex1,
+                #         refpinname=refpinname1, transform=transform1, overwrite_xy_phy=xy1_phy_center)
+                ##overwrite xy coordinate to handle direction matrix (xy1+vofst does not reflect direction matrix in via function)
                 self.via(None, xy1+vofst, gridname1, offset=offset1, refinstname=refinstname1, refinstindex=refinstindex1,
-                         refpinname=refpinname1, transform=transform1, overwrite_xy_phy=xy1_phy_center) #overwrite xy coordinate to handle direction matrix (xy1+vofst does not reflect direction matrix in via function)
+                    refpinname=refpinname1, transform=transform1)
+
+
         #layer handling
         if layer is None:
             if xy0_phy_center[0] == xy1_phy_center[0]:

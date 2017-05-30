@@ -73,39 +73,44 @@ del key, value
 # pack functions
 # 	length of the packed data + 4(4 hex digits)		+	 the tag from _MAP(4 hex digits)	+	actual packed data
 def pack_data(tag, data):
+    """data packing function"""
     if _MAP[tag][1]==1: #bits
-        return pack_bits(_MAP[tag], data)
+        return _pack_bits(_MAP[tag], data)
     elif _MAP[tag][1]==2: #short
-        return pack_short(_MAP[tag], data)
+        return _pack_short(_MAP[tag], data)
     elif _MAP[tag][1]==3: #int
-        return pack_int(_MAP[tag], data)
+        return _pack_int(_MAP[tag], data)
     elif _MAP[tag][1]==5: #double
-        return pack_double(_MAP[tag], data)
+        return _pack_double(_MAP[tag], data)
     elif _MAP[tag][1]==6: #text
-        return pack_text(_MAP[tag], data)
+        return _pack_text(_MAP[tag], data)
 
-def pack_double(tag, data):
+def _pack_double(tag, data):
+    """pack to double"""
     if type(data) == list:
         s = struct.pack('>{0}Q'.format(len(data)), *[_real_to_int(d) for d in data])
     else:
         s = struct.pack('>{0}Q'.format(1), _real_to_int(data))
     return struct.pack('>{0}H'.format(1), len(s) + 4) + tag + s
 
-def pack_short(tag, data):
+def _pack_short(tag, data):
+    """pack to short"""
     if type(data) == list:
         s = struct.pack('>{0}h'.format(len(data)), *data)
     else:
         s = struct.pack('>{0}h'.format(1), data)
     return struct.pack('>{0}H'.format(1), len(s) + 4) + tag + s
 
-def pack_int(tag, data):
+def _pack_int(tag, data):
+    """pack to int"""
     if type(data) == list:
         s = struct.pack('>{0}l'.format(len(data)), *data)
     else:
         s = struct.pack('>{0}l'.format(1), data)
     return struct.pack('>{0}H'.format(1), len(s) + 4) + tag + s
 
-def pack_bits(tag, data):
+def _pack_bits(tag, data):
+    """pack to bits"""
     if type(data) == list:
         s = struct.pack('>{0}H'.format(len(data)), *data)
     else:
@@ -113,7 +118,8 @@ def pack_bits(tag, data):
     # s = struct.pack('>H', data)
     return struct.pack('>{0}H'.format(1), len(s) + 4) + tag + s
 
-def pack_text(tag, data):
+def _pack_text(tag, data):
+    """pack to text"""
     if type(data) != bytes:
         data = str.encode(data)
     if len(data) % 2 == 1:
@@ -121,19 +127,22 @@ def pack_text(tag, data):
     return struct.pack('>{0}H'.format(1), len(data) + 4) + tag + data
 
 def pack_bgn(tag):
+    """pack for begin statement"""
     return struct.pack('>{0}H'.format(1), 28) + _MAP[tag] + struct.pack('>{0}H'.format(12), *[0 for x in range(12)])
 
 def pack_no_data(tag):
+    """pack for no data entry"""
     return struct.pack('>{0}H'.format(1), 4) + _MAP[tag]
 
 def pack_optional(tag, data, stream):
+    """optional packing function"""
     if data == None:
         return
     return stream.write(pack_data(tag, data))
 
 #gds import function
 def readout(stream):
-    """ gds import function and construct a dictionary"""
+    """gds import function to construct a dictionary"""
     rdict=dict()
     rlist=[]
     header = True
@@ -284,11 +293,11 @@ def _real_to_int(d):
         exponent = floor(exponent) + 1
     d = d / (16 ** exponent)
 
-    mantissa = getMantissa(d)
+    mantissa = _getMantissa(d)
 
     return sign | (int(exponent) + 64) << 56 | mantissa #updated for Python2 compatibility
 
-def getMantissa(d):
+def _getMantissa(d):
     mantissa = ""
     for _ in range(56):
         d = d * 2

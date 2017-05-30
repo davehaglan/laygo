@@ -9,7 +9,7 @@ Welcome to laygo's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
 
    Introduction <README/README>
    Tutorial (GDS flow) <tutorial/tutorial_GDS>

@@ -22,9 +22,9 @@
 #
 ########################################################################################################################
 
-"""GDSIO
-
+"""
 The GDSIO module implements classes and functions to export/import full-custom layout in GDSII format.
+Implemented by Eric Jan
 
 Example
 -------
@@ -45,23 +45,22 @@ class Library:
 
     def __init__(self, version, name, physicalUnit, logicalUnit):
         """
-        initialize Library object
+        Initialize Library object
 
         Parameters
         ----------
         version : int
             GDSII file version. 5 is used for v5
-        name : byte string
-            Library name
+        name : str
+            library name
         physicalUnit : float
-            Physical resolution
+            physical resolution
         logicalUnit : float
-            Logical resolution
+            logical resolution
         """
         self.version = version
         self.name = name
         self.units = [logicalUnit, physicalUnit]
-        #self.structures = []
         self.structures = dict()
         assert physicalUnit > 0 and logicalUnit > 0
 
@@ -72,9 +71,8 @@ class Library:
         Parameters
         ----------
         stream : stream
-            File stream to be written
+            file stream to be written
         """
-        #print(pack_data("HEADER", self.version))
         stream.write(pack_data("HEADER", self.version))
         stream.write(pack_bgn("BGNLIB"))
         stream.write(pack_data("LIBNAME", self.name))
@@ -90,11 +88,12 @@ class Library:
         Parameters
         ----------
         name : str
-            Name of structure
+            name of structure
 
         Returns
         -------
-        structure object
+        laygo.GDSIO.Structure
+            created structure object
         """
         s=Structure(name)
         self.structures[name]=s
@@ -107,18 +106,19 @@ class Library:
         Parameters
         ----------
         strname : str
-            Structure name to insert the boundary object
+            structure name to insert the boundary object
         layer : int
-            Layer name of the boundary object
+            layer name of the boundary object
         dataType : int
-            Layer purpose of the boundary object
+            layer purpose of the boundary object
         points : 2xn integer array list
-            Point array of the boundary object
+            point array of the boundary object
             ex) [[x0, y0], [x1, x1], ..., [xn-1, yn-1], [x0, y0]]
 
         Returns
         -------
-        boundary object
+        laygo.GDSIO.Boundary
+            created boundary object
         """
         return self.structures[strname].add_boundary(layer, dataType, points)
 
@@ -129,17 +129,18 @@ class Library:
         Parameters
         ----------
         strname : str
-            Structure name to insert the instance
+            structure name to insert the instance
         cellname : str
-            Instance cellname
+            instance cellname
         xy : [int, int]
-            Instance cooridnate
+            instance cooridnate
         transform : str
-            Transform parameter
+            transform parameter
 
         Returns
         -------
-        instance object
+        laygo.GDSIO.Instance
+            created instance object
         """
         return self.structures[strname].add_instance(cellname, xy, transform)
 
@@ -150,21 +151,22 @@ class Library:
         Parameters
         ----------
         strname : str
-            Structure name to insert the instance
+            structure name to insert the instance
         cellname : str
-            Instance cellname
+            instance cellname
         n_col : int
-            Number of columns
+            number of columns
         n_row : int
-            Number of rows
+            number of rows
         xy : [int, int]
-            Instance coordinate
+            instance coordinate
         transform : str
-            Transform parameter
+            transform parameter
 
         Returns
         -------
-        instance array object
+        laygo.GDSIO.InstanceArray
+            instance array object
         """
         return self.structures[strname].add_instance_array(cellname, n_col, n_row, xy, transform)
 
@@ -175,21 +177,22 @@ class Library:
         Parameters
         ----------
         strname : str
-            Structure name to insert the text object
+            structure name to insert the text object
         layer : int
-            Layer name of the text object
+            layer name of the text object
         textType : int
-            Layer purpose of the text object
+            layer purpose of the text object
         xy : [int, int]
-            Text coordinate
+            text coordinate
         string : str
-            Text string
+            text string
         textHeight : int
-            Text height
+            text height
 
         Returns
         -------
-
+        laygo.GDSIO.Text
+            text object
         """
         return self.structures[strname].add_text(layer, textType, xy, string, textHeight)
 
@@ -202,8 +205,8 @@ class Structure(list):
 
         Parameters
         ----------
-        name : basestring
-            Structure name
+        name : str
+            structure name
         """
         list.__init__(self)
         self.name = name
@@ -216,7 +219,7 @@ class Structure(list):
         Parameters
         ----------
         stream : stream
-            File stream to be written
+            file stream to be written
         """
         stream.write(pack_bgn("BGNSTR"))
         stream.write(pack_data("STRNAME", self.name))
@@ -225,26 +228,111 @@ class Structure(list):
         stream.write(pack_no_data("ENDSTR"))
 
     def add_boundary(self, layer, dataType, points):
+        """
+        Add a boundary object to structure
+
+        Parameters
+        ----------
+        layer : int
+            layer name
+        dataType : int
+            layer purpose
+        points : list
+            layer coordinates
+
+        Examples
+        --------
+        add_boundary('test', 50, 0, [[1000, 1000], [1000, 0], [0, 0], [0, 1000], [1000, 1000]])
+
+        Returns
+        -------
+        laygo.GDSIO.Boundary
+            generated boundary object
+        """
         elem = Boundary(layer, dataType, points)
         self.elements.append(elem)
         return elem
 
     def add_instance(self, cellname, xy, transform='R0'):
+        """
+        Add an instance object to structure
+
+        Parameters
+        ----------
+        cellname : str
+            cell name
+        xy : [int, int]
+            xy coordinate
+        transform : str
+            transform parameter
+
+        Returns
+        -------
+        laygo.GDSIO.Instance
+            generated instance object
+        """
         elem = Instance(cellname, xy, transform)
         self.elements.append(elem)
         return elem
 
     def add_instance_array(self, cellname, n_col, n_row, xy, transform='R0'):
+        """
+        Add an instance array object to structure
+
+        Parameters
+        ----------
+        cellname : str
+            cell name
+        n_col : int
+            number of columns
+        n_row : int
+            number of rows
+        xy : [int, int]
+            xy coordinate
+        transform : str
+            transform parameter
+
+        Examples
+        --------
+        new_lib.add_instance_array('test2', 'test', 2, 3, [[3000, 3000], [3000 + 2 * 2000, 3000], [3000, 3000 + 3 * 3000]])
+
+        Returns
+        -------
+        laygo.GDSIO.InstanceArray
+            generated instance array object
+        """
         elem = InstanceArray(cellname, n_col, n_row, xy, transform)
         self.elements.append(elem)
         return elem
 
     def add_text(self, layer, textType, xy, string, textHeight=100):
+        """
+        Add a text object to structure
+
+        Parameters
+        ----------
+        layer : int
+            layer name
+        textType : int
+            layer purpose
+        xy : list
+            xy coordinate
+        string : str
+            text string
+        textHeight : int
+            text height
+
+        Returns
+        -------
+        laygo.GDSIO.Text
+            generated text object
+        """
         elem = Text(layer, textType, xy, string, textHeight)
         self.elements.append(elem)
         return elem
 
 class Element:
+    """Base class for GDSIO objects"""
     possible_transform_parameters = {'R0': (None, None),
                                      'R90': (0, 90),
                                      'R180': (0, 180),
@@ -252,11 +340,7 @@ class Element:
                                      'MX': (32768, 0),
                                      'MY': (32768, 180)
                                     }
-    # def __init__(self):
-    #     pass
-
-    # def export(self):
-    #     pass
+    """dict: transform parameter dictionary"""
 
     def set_transform_parameters(self, transform):
         """
@@ -265,12 +349,12 @@ class Element:
         Parameters
         ----------
         transform : str
-            transform parameter
-            'R0' : default, no transform
-            'R90' : rotate by 90-degree
-            'R180' : rotate by 180-degree
-            'R270' : rotate by 270-degree
-            'MX' : mirror across X axis
+            transform parameter,
+            'R0' : default, no transform,
+            'R90' : rotate by 90-degree,
+            'R180' : rotate by 180-degree,
+            'R270' : rotate by 270-degree,
+            'MX' : mirror across X axis,
             'MY' : mirror across Y axis
         """
         if transform not in self.possible_transform_parameters:
@@ -279,6 +363,7 @@ class Element:
 
 
 class Boundary (Element):
+    """Boundary object for GDSIO"""
 
     def __init__(self, layer, dataType, points):
         """
@@ -290,7 +375,7 @@ class Boundary (Element):
             Layer id
         dataType : int
             Layer purpose
-        points : array <- to be updated to numpy.array
+        points : list
             xy coordinates for Boundary object
         """
         if len(points) < 2:
@@ -324,6 +409,7 @@ class Boundary (Element):
 
 
 class Instance (Element):
+    """Instance object for GDSIO"""
 
     def __init__(self, sname, xy, transform='R0'):
         """
@@ -336,12 +422,12 @@ class Instance (Element):
         xy : array
             xy coordinate of Instance Object
         transform : str
-            transform parameter
-            'R0' : default, no transform
-            'R90' : rotate by 90-degree
-            'R180' : rotate by 180-degree
-            'R270' : rotate by 270-degree
-            'MX' : mirror across X axis
+            transform parameter,
+            'R0' : default, no transform,
+            'R90' : rotate by 90-degree,
+            'R180' : rotate by 180-degree,
+            'R270' : rotate by 270-degree,
+            'MX' : mirror across X axis,
             'MY' : mirror across Y axis
         """
         Element.__init__(self)
@@ -372,10 +458,12 @@ class Instance (Element):
 
 
 class InstanceArray (Element):
+    """InstanceArray object for GDSIO"""
 
     def __init__(self, sname, n_col, n_row, xy, transform='R0'):
         """
-        initialize Instance Array object
+        Initialize Instance Array object
+
         Parameters
         ----------
         sname : str
@@ -385,15 +473,15 @@ class InstanceArray (Element):
         n_row : int
             Number of rows
         xy : array
-            xy coordinates for InstanceArray Object
-            Should be organized as: [(x0, y0), (x0+n_col*sp_col, y_0), (x_0, y0+n_row*sp_row)]
+            xy coordinates for InstanceArray Object,
+            should be organized as: [(x0, y0), (x0+n_col*sp_col, y_0), (x_0, y0+n_row*sp_row)]
         transform : str
-            Transform parameter
-            'R0' : default, no transform
-            'R90' : rotate by 90-degree
-            'R180' : rotate by 180-degree
-            'R270' : rotate by 270-degree
-            'MX' : mirror across X axis
+            Transform parameter,
+            'R0' : default, no transform,
+            'R90' : rotate by 90-degree,
+            'R180' : rotate by 180-degree,
+            'R270' : rotate by 270-degree,
+            'MX' : mirror across X axis,
             'MY' : mirror across Y axis
         """
         l = len(xy)
@@ -434,10 +522,12 @@ class InstanceArray (Element):
 
 
 class Text (Element):
+    """Text object for GDSIO"""
 
     def __init__(self, layer, textType, xy, string, textHeight=100):
         """
-        initialize Text object
+        Initialize Text object
+
         Parameters
         ----------
         layer : int
