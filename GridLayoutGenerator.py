@@ -259,8 +259,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 ir = self.get_inst(refinstname)
                 tr = self.templates.get_template(ir.cellname, libname=ir.libname)
                 #get abstract grid coordinates
-                ir_xy_grid = self.grids.get_absgrid_coord_xy(gridname, ir.xy)
-                tr_size_grid = self.grids.get_absgrid_coord_xy(gridname, tr.size+(ir.shape-np.array([1,1]))*ir.spacing)
+                ir_xy_grid = self.get_absgrid_coord_xy(gridname, ir.xy)
+                tr_size_grid = self.get_absgrid_coord_xy(gridname, tr.size+(ir.shape-np.array([1,1]))*ir.spacing)
                 mtr = self.Mt(ir.transform)
                 mti = self.Mt(transform)
             md = self.Md(direction)
@@ -306,7 +306,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             offset = offset + refinst.xy + np.dot(refinst.spacing * refinstindex, self.Mt(refinst.transform).T)
             if not refpinname == None: #if pin reference is specified
                 pin_xy_phy=reftemplate.pins[refpinname]['xy']
-                pin_xy_abs=self.grids.get_absgrid_coord_region(gridname, pin_xy_phy[0], pin_xy_phy[1])[0,:]
+                pin_xy_abs=self.get_absgrid_coord_region(gridname, pin_xy_phy[0], pin_xy_phy[1])[0,:]
                 xy=xy+pin_xy_abs
             transform=refinst.transform #overwrite transform variable
         vianame = self.grids.get_vianame(gridname, xy)
@@ -458,10 +458,14 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 #self.via(None, xy1+vofst, gridname1, offset=offset1, refinstname=refinstname1, refinstindex=refinstindex1,
                 #         refpinname=refpinname1, transform=transform1, overwrite_xy_phy=xy1_phy_center)
                 ##overwrite xy coordinate to handle direction matrix (xy1+vofst does not reflect direction matrix in via function)
-                self.via(None, xy1+vofst, gridname1, offset=offset1, refinstname=refinstname1, refinstindex=refinstindex1,
-                    refpinname=refpinname1, transform=transform1)
-
-
+                if direction=='omni':
+                    self.via(None, xy1+vofst, gridname1, offset=offset1, refinstname=refinstname1, refinstindex=refinstindex1,
+                        refpinname=refpinname1, transform=transform1)
+                else:
+                    _xy1=self.get_absgrid_coord_xy(gridname=gridname1, xy=xy1_phy_center, refinstname=refinstname1,
+                                                    refinstindex=refinstindex1, refpinname=refpinname1)
+                    self.via(None, _xy1, gridname1, offset=offset1, refinstname=refinstname1, refinstindex=refinstindex1,
+                        refpinname=refpinname1, transform=transform1)
         #layer handling
         if layer is None:
             if xy0_phy_center[0] == xy1_phy_center[0]:
@@ -477,7 +481,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         Internal function for routing and pinning.
 
-        Generate a rectangular box from 2 points on abstracted grid.
+        Generate a rectangular box from 2 points on abstract grid.
         The thickness corresponds to the width parameter of gridname0
         
         Parameters
@@ -743,7 +747,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """generate a pin from a rect object"""
         if netname == None: netname = name
         xy=rect.xy
-        xy = self.grids.get_absgrid_coord_region(gridname, xy[0, :], xy[1, :])
+        xy = self.get_absgrid_coord_region(gridname, xy[0, :], xy[1, :])
         return self.pin(name, layer, xy, gridname, netname=netname)
 
     def create_boundary_pin_form_rect(self, rect, gridname, pinname, layer, size=4, direction='left', netname=None):
@@ -800,7 +804,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         np.array([int, int])
         """
         t = self.templates.get_template(name, libname=libname)
-        return self.grids.get_absgrid_coord_xy(gridname, t.size)
+        return self.get_absgrid_coord_xy(gridname, t.size)
 
     def get_inst_xy(self, name, gridname):
         """
@@ -818,7 +822,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         np.array([int, int])
         """
         i = self.get_inst(name)
-        return self.grids.get_absgrid_coord_xy(gridname, i.xy)
+        return self.get_absgrid_coord_xy(gridname, i.xy)
 
     def get_rect_xy(self, name, gridname, sort=False):
         """
@@ -836,10 +840,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             np.array([int, int])
         """
         r = self.get_rect(name)
-        xy=self.grids.get_absgrid_coord_region(gridname, r.xy[0,:], r.xy[1,:])
+        xy=self.get_absgrid_coord_region(gridname, r.xy[0,:], r.xy[1,:])
         if sort==True: xy=self.sort_rect_xy(xy)
         return xy
-        #return self.grids.get_absgrid_coord_xy(gridname, r.xy) #not always inside
+        #return self.get_absgrid_coord_xy(gridname, r.xy) #not always inside
 
     def get_pin_xy(self, name, gridname, sort=False):
         """
@@ -857,7 +861,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             np.array([int, int])
         """
         r = self.get_rect(name)
-        xy=self.grids.get_absgrid_coord_region(gridname, r.xy[0,:], r.xy[1,:])
+        xy=self.get_absgrid_coord_region(gridname, r.xy[0,:], r.xy[1,:])
         if sort==True: xy=self.sort_rect_xy(xy)
         return xy
 
@@ -881,7 +885,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         t = self.templates.get_template(name, libname=libname)
         pin_xy_phy = t.pins[pinname]['xy']
-        pin_xy_abs = self.grids.get_absgrid_coord_region(gridname, pin_xy_phy[0], pin_xy_phy[1])
+        pin_xy_abs = self.get_absgrid_coord_region(gridname, pin_xy_phy[0], pin_xy_phy[1])
         #pin_xy_abs[1,:] -= np.array([1, 1]) #remove offset to locate the shape in internal area
         return pin_xy_abs
 
@@ -925,8 +929,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 else:
                     xy0 = i.xy + np.dot(t.size * index + t.pins[pinname]['xy'][0, :], self.Mt(i.transform).T)
                     xy1 = i.xy + np.dot(t.size * index + t.pins[pinname]['xy'][1, :], self.Mt(i.transform).T)
-
-                    xy=self.grids.get_absgrid_coord_region(gridname, xy0[0], xy1[0])
+                    xy=self.get_absgrid_coord_region(gridname, xy0[0], xy1[0])
                     if sort == True: xy = self.sort_rect_xy(xy)
                     return xy
 
@@ -946,7 +949,45 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def get_grid(self, gridname):
         return self.grids.get_grid(gridname)
 
-    #template and grid related functions
+    def get_absgrid_coord_xy(self, gridname, xy, refinstname=None, refinstindex=np.array([0, 0]), refpinname=None):
+        """
+        convert physical coordinate to abstract coordinate
+
+        Parameters
+        ----------
+        gridname : str
+            abstract grid name
+        xy : np.array([float, float])
+            coordinate
+        refinstname : str, optional
+            referenence instance name
+        refinstname : np.array([int, int]), optional
+            referenence instance index
+        refpinname : str, optional
+            reference pin name
+
+        Returns
+        -------
+        np.array([int, int])
+            abstract coordinate
+        """
+        if not refinstname is None:
+            rinst = self.get_inst(name=refinstname, index=refinstindex)
+            if not refpinname is None:
+                pxy_ongrid = self.get_template_pin_coord(name=rinst.cellname, pinname=refpinname, gridname=gridname)[0]
+                pxy = self.grids.get_phygrid_coord_xy(gridname=gridname, xy=pxy_ongrid)[0]
+                rxy = rinst.xy[0] + np.dot(self.Mt(rinst.transform), pxy)
+            else:
+                rxy = rinst.xy[0]
+            _xy = np.dot(np.linalg.inv(self.Mt(rinst.transform)), xy - rxy)
+        else:
+            _xy = xy
+        return self.grids.get_absgrid_coord_xy(gridname=gridname, xy=_xy)
+
+    def get_absgrid_coord_region(self, gridname, xy0, xy1, refinstname=None, refpinname=None):
+        return self.grids.get_absgrid_coord_region(gridname=gridname, xy0=xy0, xy1=xy1)
+
+    #template and grid database related functions
     def construct_template_and_grid(self, db, libname, cellname=None,
                                     layer_boundary=['prBoundary', 'boundary'], layer_text=['text', 'drawing'],
                                     routegrid_prefix='route', placementgrid_prefix='placement', append=True):

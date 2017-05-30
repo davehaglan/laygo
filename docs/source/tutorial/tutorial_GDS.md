@@ -205,23 +205,23 @@ parameters are used to place via abut to the route objects.
 Running following commands will generate wire connections.
 
 ```python
-# b
-laygen.route(None, laygen.layers['metal'][1], xy0=[0, 0], xy1=[0, 0], gridname0=rg_m1m2, refinstname0=nrow[1].name,
-             refpinname0='G0', via0=[[0, 0]], refinstname1=prow[1].name, refpinname1='G0')
-laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=[2, 0], gridname0=rg_m1m2,
-             refinstname0=nrow[1].name, refpinname0='G0', refinstname1=nrow[1].name, refpinname1='G0')
-rb0 = laygen.route(None, laygen.layers['metal'][3], xy0=[0, 0], xy1=[0, 2], gridname0=rg_m2m3,refinstname0=nrow[1].name,
-   refpinname0='G0', refinstname1=nrow[1].name, refpinname1='G0', via0=[[0, 0]], endstyle0="extend", endstyle1="extend")
+#b
+laygen.route(None, xy0=[0, 0], xy1=[0, 0], gridname0=rg_m1m2, refinstname0=nrow[1].name, refpinname0='G0',
+             via0=[[0, 0]], refinstname1=prow[1].name, refpinname1='G0')
+laygen.route(None, xy0=np.array([0, 0]), xy1=[2, 0], gridname0=rg_m1m2, refinstname0=nrow[1].name, refpinname0='G0',
+             refinstname1=nrow[1].name, refpinname1='G0')
+rb0 = laygen.route(None, xy0=[0, 0], xy1=[0, 2], gridname0=rg_m2m3,refinstname0=nrow[1].name, refpinname0='G0',
+                   refinstname1=nrow[1].name, refpinname1='G0', via0=[[0, 0]], endstyle0="extend", endstyle1="extend")
 #internal connections
-laygen.route(None, laygen.layers['metal'][2], xy0=[0, 1], xy1=[0, 1], gridname0=rg_m1m2, refinstname0=nrow[1].name,
-             refpinname0='D0', refinstname1=nrow[4].name, refpinname1='S1', via0=[[0, 0]], via1=[[-2, 0], [0, 0]])
+laygen.route(None, xy0=[0, 1], xy1=[0, 1], gridname0=rg_m1m2, refinstname0=nrow[1].name, refpinname0='D0',
+             refinstname1=nrow[4].name, refpinname1='S1', via0=[[0, 0]], via1=[[-2, 0], [0, 0]])
 #output
-laygen.route(None, laygen.layers['metal'][2], xy0=[0, 1], xy1=[1, 1], gridname0=rg_m1m2, refinstname0=prow[1].name,
-             refpinname0='D0', refinstname1=prow[4].name, refpinname1='D0', via0=[[0, 0]], via1=[[-1, 0]])
-laygen.route(None, laygen.layers['metal'][2], xy0=[-1, 0], xy1=[1, 0], gridname0=rg_m1m2, refinstname0=nrow[4].name,
-             refpinname0='D0', refinstname1=nrow[4].name, refpinname1='D0', via0=[[1, 0]])
-ro0 = laygen.route(None, laygen.layers['metal'][3], xy0=[1, 0], xy1=[1, 1], gridname0=rg_m2m3,refinstname0=nrow[4].name,
-                   refpinname0='D0', via0=[[0, 0]], refinstname1=prow[4].name, refpinname1='D0', via1=[[0, 0]])
+laygen.route(None, xy0=[0, 1], xy1=[1, 1], gridname0=rg_m1m2, refinstname0=prow[1].name, refpinname0='D0',
+             refinstname1=prow[4].name, refpinname1='D0', via0=[[0, 0]], via1=[[-1, 0]])
+laygen.route(None, xy0=[-1, 0], xy1=[1, 0], gridname0=rg_m1m2, refinstname0=nrow[4].name, refpinname0='D0',
+             refinstname1=nrow[4].name, refpinname1='D0', via0=[[1, 0]])
+ro0 = laygen.route(None, xy0=[1, 0], xy1=[1, 1], gridname0=rg_m2m3,refinstname0=nrow[4].name, refpinname0='D0',
+                   via0=[[0, 0]], refinstname1=prow[4].name, refpinname1='D0', via1=[[0, 0]])
 ```
 
 
