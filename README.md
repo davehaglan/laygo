@@ -21,24 +21,24 @@ than conventional custom IC design flows.
 3. Prepare following technology setup files.
     * **laygo_config.yaml** - contains general technology information.
      Example can be found here:
-     [labs/laygo_config.yaml](../../../labs/laygo_config.yaml)
+     [labs/laygo_config.yaml](./labs/laygo_config.yaml)
     * **(technology_name).layermap** - layer mapping file for the GDS flow.
      Usually this file can be found in your PDK library.
      If the BAG flow is used, this file is not required.
      Example can be found here:
-     [labs/laygo_faketech.layermap](../../../labs/laygo_faketech.layermap)
+     [labs/laygo_faketech.layermap](./labs/laygo_faketech.layermap)
     * **primitive template and grid database** : laygo keeps template and
      grid information in yaml files. Files can be provided under NDA or
      constructed by users from handcrafted or generated GDS/OA.
      Examples can be found here:
-     [labs/laygo_faketech_microtemplates_dense_templates.yaml](../../../labs/laygo_faketech_microtemplates_dense_templates.yaml),
-     [labs/laygo_faketech_microtemplates_dense_grids.yaml](../../../labs/laygo_faketech_microtemplates_dense_grids.yaml)
+     [labs/laygo_faketech_microtemplates_dense_templates.yaml](./labs/laygo_faketech_microtemplates_dense_templates.yaml),
+     [labs/laygo_faketech_microtemplates_dense_grids.yaml](./labs/laygo_faketech_microtemplates_dense_grids.yaml)
 
     Those files can be provided to BWRC users (under proper NDA), as a
     form of git repository. Laygo has default technology setup files for
     the GDS flow (laygo_faketech).
 4. Launch ipython and run the tutorial script
-    [quick_start_GDS.py](../../../quick_start_GDS.py).
+    [quick_start_GDS.py](./quick_start_GDS.py).
     ```
     $ start_bag.sh    (or ipython)
     > cd laygo
@@ -51,7 +51,7 @@ than conventional custom IC design flows.
     [KLayout](http://www.klayout.de/) was used for gds display. Detailed
     explaination on tutorials can be found here:
 
-5. Go over lab materials in [labs/](../../../labs/). Detailed instructions
+5. Go over lab materials in [labs/](./labs/). Detailed instructions
 can be found in [lab readme](docs/labs.md).
 
 ## Documentations
