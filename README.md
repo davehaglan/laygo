@@ -62,10 +62,10 @@ You can find detailed documentations on the laygo API here:
 ## Example Labs
 Various lab modules are provided to guide the layout generation
 procedure. Users are strongly recommended to finish all lab modules
-before working on their designs. Labs modules can be found [here](docs/labs.md)
+before working on their designs. Labs modules can be found [here](docs/build_html/labs.html)
 
 ## Example Generators
-Example generaters can be found [here](docs/generators.md).
+Example generaters can be found [here](docs/build_html/generators.html).
 
 ## License
 This project is licensed under the BSD License - check the

@@ -92,9 +92,9 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def Md(self, direction):
         """Get direction/projection matrix"""
         if direction== 'left':
-            return np.array([[1, 0], [0, 0]])
-        if direction== 'right':
             return np.array([[-1, 0], [0, 0]])
+        if direction== 'right':
+            return np.array([[1, 0], [0, 0]])
         if direction== 'top':
             return np.array([[0, 0], [0, 1]])
         if direction== 'bottom':
@@ -174,7 +174,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         return inst
 
-    def relplace(self, name, templatename, gridname, refinstname=None, direction='left', xy=np.array([0, 0]),
+    def relplace(self, name, templatename, gridname, refinstname=None, direction='right', xy=np.array([0, 0]),
                  offset=np.array([0, 0]), template_libname=None, shape=np.array([1, 1]), spacing=None, transform='R0'):
         """
         Place an instance on abstract grid, bound from a reference object. If the reference object is not specified,
@@ -193,7 +193,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         refinstname : str, ooptional
             Reference instance name, if None, [0, 0] is used for the reference point.
         direction : str, optional
-            Direction of placement, bound from from refinstname.
+            Direction of placement, bound from refinstname.
         offset : np.array([float, float]), optional
             Offset in physical coordinate.
         shape : np.array([int, int]), optional

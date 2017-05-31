@@ -71,7 +71,7 @@ if __name__ == '__main__':
                            gridname='placement_basic')
     prow = laygen.relplace(name=None, templatename=['pmos4_fast_boundary', 'pmos4_fast_center_nf2', 'pmos4_fast_boundary',
                                                     'pmos4_fast_boundary', 'pmos4_fast_center_nf2', 'pmos4_fast_boundary'],
-                           gridname='placement_basic', refinstname=nrow[0].name, direction=['top']+['left']*6, transform='MX')
+                           gridname='placement_basic', refinstname=nrow[0].name, direction=['top']+['right']*6, transform='MX')
 
     #a
     laygen.route(None, xy0=[0, 0], xy1=[0, 0], gridname0=rg_m1m2, refinstname0=prow[4].name, refpinname0='G0',
