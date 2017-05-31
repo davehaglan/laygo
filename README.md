@@ -49,7 +49,9 @@ than conventional custom IC design flows.
     ![qs_nand](images/laygo_quickstart.png)
 
     [KLayout](http://www.klayout.de/) was used for gds display. Detailed
-    explaination on tutorials can be found here:
+    explaination on tutorials can be found
+    [here](docs/source/tutorial/tutorial_GDS.md).
+    For tutorial with BAG, refer to [this](docs/source/tutorial/tutorial_BAG.md)
 
 5. Go over lab materials in [labs/](./labs/). Detailed instructions
 can be found in [lab readme](docs/labs.md).
