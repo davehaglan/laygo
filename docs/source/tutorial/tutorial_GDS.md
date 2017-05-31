@@ -179,7 +179,7 @@ prow = laygen.relplace(name=None, templatename=['pmos4_fast_boundary', 'pmos4_fa
                        gridname='placement_basic', refinstname=nrow[0].name, direction=['top']+['left']*6, transform='MX')
 ```
 
-The **replace** function has several useful arguments, explained below:
+The **relplace** function has several useful arguments, explained below:
 
     1. **shape** parameter sets the array dimension, for mosaic
     placements. (eg. shape=[2, 3] will create a 2x3 dimensional array)
@@ -188,7 +188,13 @@ The **replace** function has several useful arguments, explained below:
     template.
     3. **direction** parameters sets the direction where the object
     placed from (with respect to the reference instance). For example,
-    refinstname=X, direction='
+    refinstname=X, direction='top' will place the new instance on top of
+    instance X. Possible values are **left**, **right**, **top**, and
+    **bottom**.
+    4. **transform** parameter sets the transform parameter. Possible
+    values are **R0**, **R180**, **MX**, **MY**, and **MXY**.
+
+Refer to the API documentation for details.
 
 ## Signal routing
 Routing can be done by calling **route** commands. This routine creates

@@ -579,7 +579,7 @@ Implemented by Eric Jan</p>
 <p>Base class for GDSIO objects</p>
 <dl class="attribute">
 <dt id="laygo.GDSIO.Element.possible_transform_parameters">
-<code class="descname">possible_transform_parameters</code><em class="property"> = {'MY': (32768, 180), 'MX': (32768, 0), 'R0': (None, None), 'R90': (0, 90), 'R270': (0, 270), 'R180': (0, 180)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="descname">possible_transform_parameters</code><em class="property"> = {'R270': (0, 270), 'MY': (32768, 180), 'R90': (0, 90), 'R0': (None, None), 'MX': (32768, 0), 'R180': (0, 180)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; transform parameter dictionary</p>
 </dd></dl>
 
@@ -1445,7 +1445,7 @@ if None, return all pin coordinates of specified instance in dict format</li>
 
 <dl class="attribute">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.layers">
-<code class="descname">layers</code><em class="property"> = {'pin': [], 'text': [], 'metal': [], 'prbnd': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">layers</code><em class="property"> = {'text': [], 'pin': [], 'prbnd': [], 'metal': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1523,7 +1523,7 @@ if None, return all pin coordinates of specified instance in dict format</li>
 
 <dl class="method">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.relplace">
-<code class="descname">relplace</code><span class="sig-paren">(</span><em>name</em>, <em>templatename</em>, <em>gridname</em>, <em>refinstname=None</em>, <em>direction='left'</em>, <em>xy=array([0</em>, <em>0])</em>, <em>offset=array([0</em>, <em>0])</em>, <em>template_libname=None</em>, <em>shape=array([1</em>, <em>1])</em>, <em>spacing=None</em>, <em>transform='R0'</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.relplace" title="Permalink to this definition">¶</a></dt>
+<code class="descname">relplace</code><span class="sig-paren">(</span><em>name</em>, <em>templatename</em>, <em>gridname</em>, <em>refinstname=None</em>, <em>direction='right'</em>, <em>xy=array([0</em>, <em>0])</em>, <em>offset=array([0</em>, <em>0])</em>, <em>template_libname=None</em>, <em>shape=array([1</em>, <em>1])</em>, <em>spacing=None</em>, <em>transform='R0'</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.relplace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Place an instance on abstract grid, bound from a reference object. If the reference object is not specified,
 the absolate origin is used as the reference point.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1536,7 +1536,7 @@ the absolate origin is used as the reference point.</p>
 <li><strong>gridname</strong> (<em>str</em>) &#8211; Grid name for the instance placement.</li>
 <li><strong>xy</strong> (<em>np.array([x, y]), optional</em>) &#8211; Placement coordinate on the grid, specified by gridname. If not specified, [0, 0] is used.</li>
 <li><strong>refinstname</strong> (<em>str, ooptional</em>) &#8211; Reference instance name, if None, [0, 0] is used for the reference point.</li>
-<li><strong>direction</strong> (<em>str, optional</em>) &#8211; Direction of placement, bound from from refinstname.</li>
+<li><strong>direction</strong> (<em>str, optional</em>) &#8211; Direction of placement, bound from refinstname.</li>
 <li><strong>offset</strong> (<em>np.array([float, float]), optional</em>) &#8211; Offset in physical coordinate.</li>
 <li><strong>shape</strong> (<em>np.array([int, int]), optional</em>) &#8211; Array dimension of the instance. If not specified, [1, 1] is used.</li>
 <li><strong>spacing</strong> (<em>np.array([int, int])</em>) &#8211; Array spacing parameter for the instance. If none, the size of the instance of is used.</li>
