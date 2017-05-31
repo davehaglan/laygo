@@ -67,12 +67,12 @@
           
           
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../README/README.html">Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../README/README.html#installation-and-quick-start">Installation and Quick Start</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../README/README.html#documentations">Documentations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../README/README.html#example-labs">Example Labs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../README/README.html#example-generators">Example Generators</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../README/README.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#installation-and-quick-start">Installation and Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#documentations">Documentations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#example-labs">Example Labs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#example-generators">Example Generators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#license">License</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial_GDS.html">Tutorial (GDS flow)</a><ul>
@@ -579,7 +579,7 @@ Implemented by Eric Jan</p>
 <p>Base class for GDSIO objects</p>
 <dl class="attribute">
 <dt id="laygo.GDSIO.Element.possible_transform_parameters">
-<code class="descname">possible_transform_parameters</code><em class="property"> = {'MX': (32768, 0), 'R90': (0, 90), 'R0': (None, None), 'R180': (0, 180), 'R270': (0, 270), 'MY': (32768, 180)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="descname">possible_transform_parameters</code><em class="property"> = {'MX': (32768, 0), 'R270': (0, 270), 'MY': (32768, 180), 'R0': (None, None), 'R90': (0, 90), 'R180': (0, 180)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; transform parameter dictionary</p>
 </dd></dl>
 
@@ -1445,7 +1445,7 @@ if None, return all pin coordinates of specified instance in dict format</li>
 
 <dl class="attribute">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.layers">
-<code class="descname">layers</code><em class="property"> = {'prbnd': [], 'text': [], 'metal': [], 'pin': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">layers</code><em class="property"> = {'text': [], 'pin': [], 'metal': [], 'prbnd': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

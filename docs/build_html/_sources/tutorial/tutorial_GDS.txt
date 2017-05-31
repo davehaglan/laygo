@@ -176,7 +176,7 @@ nrow = laygen.relplace(name=None, templatename=['nmos4_fast_boundary', 'nmos4_fa
                        gridname='placement_basic')
 prow = laygen.relplace(name=None, templatename=['pmos4_fast_boundary', 'pmos4_fast_center_nf2', 'pmos4_fast_boundary',
                                                 'pmos4_fast_boundary', 'pmos4_fast_center_nf2', 'pmos4_fast_boundary'],
-                       gridname='placement_basic', refinstname=nrow[0].name, direction=['top']+['left']*6, transform='MX')
+                       gridname='placement_basic', refinstname=nrow[0].name, direction=['top']+['right']*6, transform='MX')
 ```
 
 The **relplace** function has several useful arguments, explained below:
