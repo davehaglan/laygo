@@ -1,0 +1,1 @@
+# primitive template construction guide

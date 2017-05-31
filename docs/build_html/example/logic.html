@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>laygo &mdash; laygo_documentation 1.0 documentation</title>
+  <title>logic family generator example &mdash; laygo_documentation 1.0 documentation</title>
   
 
   
@@ -34,8 +34,8 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="laygo_documentation 1.0 documentation" href="../index.html"/>
-        <link rel="next" title="laygo package" href="laygo.html"/>
-        <link rel="prev" title="laygo setup for new technologies" href="../tech/tech.html"/> 
+        <link rel="next" title="serdes example" href="serdes.html"/>
+        <link rel="prev" title="primitive template construction guide" href="prim.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -100,13 +100,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture/architecture.html">Architecture (to be updated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../example/prim.html">Primitive template guidelines (to be updated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../example/logic.html">Generator example - logic family (to be updated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../example/serdes.html">Generator example - serdes (to be updated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../example/adc_sar.html">Generator example - sar adc (to be updated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prim.html">Primitive template guidelines (to be updated)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Generator example - logic family (to be updated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="serdes.html">Generator example - serdes (to be updated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adc_sar.html">Generator example - sar adc (to be updated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tech/tech.html">Technology setup (to be updated)</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">API documentation (incomplete)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html">laygo package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API documentation (incomplete)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/laygo.html">laygo package</a></li>
 </ul>
 </li>
 </ul>
@@ -133,10 +133,10 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-    <li>laygo</li>
+    <li>logic family generator example</li>
       <li class="wy-breadcrumbs-aside">
         
-          <a href="../_sources/api/modules.txt" rel="nofollow"> View page source</a>
+          <a href="../_sources/example/logic.txt" rel="nofollow"> View page source</a>
         
       </li>
   </ul>
@@ -144,33 +144,8 @@
 </div>
           <div role="main" class="document">
             
-  <div class="section" id="laygo">
-<h1>laygo<a class="headerlink" href="#laygo" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="laygo.html">laygo package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#subpackages">Subpackages</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-baselayoutgenerator-module">laygo.BaseLayoutGenerator module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-gdsio-module">laygo.GDSIO module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-gdsiohelper-module">laygo.GDSIOHelper module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-griddb-module">laygo.GridDB module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-gridlayoutgenerator-module">laygo.GridLayoutGenerator module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-gridlayoutgeneratorhelper-module">laygo.GridLayoutGeneratorHelper module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-gridobject-module">laygo.GridObject module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-layoutdb-module">laygo.LayoutDB module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-layoutio-module">laygo.LayoutIO module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-layoutobject-module">laygo.LayoutObject module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-templatedb-module">laygo.TemplateDB module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-templateobject-module">laygo.TemplateObject module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#laygo-quick-start-gds-module">laygo.quick_start_GDS module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="laygo.html#module-contents">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</div>
+  <div class="section" id="logic-family-generator-example">
+<span id="logic-family-generator-example"></span><h1>logic family generator example<a class="headerlink" href="#logic-family-generator-example" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -179,10 +154,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="laygo.html" class="btn btn-neutral float-right" title="laygo package">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="serdes.html" class="btn btn-neutral float-right" title="serdes example">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../tech/tech.html" class="btn btn-neutral" title="laygo setup for new technologies"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="prim.html" class="btn btn-neutral" title="primitive template construction guide"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
