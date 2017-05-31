@@ -11,7 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 4
 
-   Introduction <README/README>
+   Introduction <introduction/introduction>
    Tutorial (GDS flow) <tutorial/tutorial_GDS>
    Tutorial (BAG flow) <tutorial/tutorial_BAG>
    API documentation <api/modules>
