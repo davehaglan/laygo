@@ -240,8 +240,8 @@ placed from (with respect to the reference instance). For example,
 refinstname=X, direction='top' will place the new instance on top of
 instance X. Possible values are **left**, **right**, **top**, and
 **bottom**.
-4. **transform** parameter sets the transform parameter. Possible
-values are **R0**, **R180**, **MX**, **MY**, and **MXY**.
+4. **transform** parameter sets the transformation of the instance.
+Possible values are **R0**, **R180**, **MX**, **MY**, and **MXY**.
 
 Refer to the API documentation for details.
 
