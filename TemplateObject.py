@@ -32,17 +32,25 @@ import numpy as np
 
 class TemplateObject():
     """Layout object class"""
-    name = None  # Object name
-    xy = np.array([0, 0]) # Coordinate
+    name = None
+    """str: template name"""
+    xy = np.array([[0, 0], [0, 0]])
+    """np.array([[float, float], [float, float]]): template bBox"""
 
     @property
-    def height(self): return abs(self.xy[0][1]-self.xy[1][1])
+    def height(self):
+        """float: template height"""
+        return abs(self.xy[0][1]-self.xy[1][1])
 
     @property
-    def width(self): return abs(self.xy[0][0]-self.xy[1][0])
+    def width(self):
+        """float: template width"""
+        return abs(self.xy[0][0]-self.xy[1][0])
 
     @property
-    def size(self): return np.array([self.width, self.height])
+    def size(self):
+        """np.array([float, float]): template size"""
+        return np.array([self.width, self.height])
 
     def __init__(self, name, xy, pins):
         """

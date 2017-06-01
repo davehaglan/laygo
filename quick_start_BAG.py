@@ -104,7 +104,7 @@ if __name__ == '__main__':
 
     # power and ground vertical route
     for s in ['S0', 'S1']:
-        xy_s0 = laygen.get_template_pin_coord(nrow[1].cellname, s, rg_m1m2)[0, :]
+        xy_s0 = laygen.get_template_pin_xy(nrow[1].cellname, s, rg_m1m2)[0, :]
         laygen.route(None, xy0=xy_s0 * np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
                      refinstname0=nrow[1].name, via0=[[0, 0]], refinstname1=nrow[1].name)
         laygen.route(None, xy0=xy_s0 * np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,

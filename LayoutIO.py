@@ -22,7 +22,10 @@
 #
 ########################################################################################################################
 
-'''Layout IO class. Import/export to skill, gds, yaml, image'''
+"""
+The LayoutIO module implements interfaces for layout import and export. It supports BAG and GDS IO.
+"""
+
 __author__ = "Jaeduk Han"
 __maintainer__ = "Jaeduk Han"
 __email__ = "jdhan@eecs.berkeley.edu"
@@ -57,7 +60,7 @@ def _load_layermap(layermapfile):
 
     Returns
     -------
-    layermap : dict
+    dict
         constructed layermap information
 
     """
@@ -86,8 +89,8 @@ def _get_layer_from_layermap(layermap, layerid):
         layermap id
     Returns
     -------
-    [str, str] : layer name and purpose
-
+    [str, str]
+        layer name and purpose
     """
     for layer_name, layer in layermap.items():
         for layer_purpose, layer in layer.items():
@@ -105,7 +108,8 @@ def _get_bBox(xy):
         array of coordinates
     Returns
     -------
-    np.2darray : bounding box array
+    np.2darray
+        bounding box array
     """
     a = np.zeros((2, 2))
     a[0, :] = np.min(xy, axis=0)
@@ -130,15 +134,15 @@ def export_GDS(db, libname, cellname, filename, layermapfile="default.layermap",
         output filename
     layermapfile : str
         layermap filename
-    physical_unit : float
+    physical_unit : float, optional
         GDS physical unit
-    logical_unit : float
+    logical_unit : float, optional
         GDS logical unit
-    pin_label_height : float
+    pin_label_height : float, optional
         pin label height
-    pin_annotate_layer : float
+    pin_annotate_layer : [str, str], optional
         pin annotate layer name (used when pinname is different from netname)
-    text_height : float
+    text_height : float, optional
         text height
     """
     layermap = _load_layermap(layermapfile)  # load layermap information
@@ -222,7 +226,7 @@ def export_GDS(db, libname, cellname, filename, layermapfile="default.layermap",
 
 def export_BAG(db, libname, cellname, prj, array_delimiter=['[', ']'], via_tech='cdsDefTechLib'):
     """
-    Export specified cell(s) to BagProject object
+    Export specified cell(s) to BagProject
 
     Parameters
     ----------
@@ -239,7 +243,7 @@ def export_BAG(db, libname, cellname, prj, array_delimiter=['[', ']'], via_tech=
     via_tech : str
         via technology entry for BagProject. Not being used currently because instances are used for via connections
     """
-    #TODO: add library creation function (see below)
+    #TODO: create library if not exist (using the BAG function below)
     #create_or_erase_library(lib_name tech_lib lib_path erase "tttg")
     dsn = db.design
     if isinstance(cellname, str): cellname = [cellname]  # convert to a list for iteration
@@ -303,7 +307,7 @@ def export_BAG(db, libname, cellname, prj, array_delimiter=['[', ']'], via_tech=
 
 def export_yaml(db, libname, cellname, filename):
     """
-        Export specified cell(s) to a yaml file
+        (Not implemented) Export specified cell(s) to a yaml file
         All information shown in db.display() will be saved
 
         Parameters
@@ -334,7 +338,8 @@ def import_GDS(filename=None, layermapfile="default.layermap", instance_libname=
 
     Returns
     -------
-    layoutDB : imported layout information
+    laygo.layoutDB.layoutDB
+        imported layout information
     """
     layermap = _load_layermap(layermapfile)  # load layermap information
     res_exp = int(log10(1 / res) + 1) #rounding resolution
@@ -399,7 +404,8 @@ def import_BAG(prj, libname, cellname=None, yamlfile="import_BAG_scratch.yaml", 
 
     Returns
     -------
-    layoutDB : imported layout information
+    laygo.layoutDB.layoutDB
+        imported layout information
     """
     if cellname==None: #importing all cells
         prj.impl_db._eval_skill("get_cell_list(\"" + libname + "\" \"" + yamlfile + "\")")
@@ -445,7 +451,7 @@ def import_BAG(prj, libname, cellname=None, yamlfile="import_BAG_scratch.yaml", 
 
 def import_yaml(filename):
     """
-        Import layout information from a yaml file
+        (Not implemented) Import layout information from a yaml file
 
         Parameters
         ----------

@@ -494,7 +494,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             reftemplate0=self.templates.get_template(refinst0.cellname, libname=refinst0.libname)
             _offset0=offset0+refinst0.xy+np.dot(refinst0.spacing*refinstindex0, self.Mt(refinst0.transform).T)
             if not refpinname0 == None: # if pin reference is specified
-                pin_xy0_abs=self.get_template_pin_coord(reftemplate0.name, refpinname0, gridname0, libname=refinst0.libname)[0,:]
+                pin_xy0_abs=self.get_template_pin_xy(reftemplate0.name, refpinname0, gridname0, libname=refinst0.libname)[0,:]
                 _xy0=xy0+pin_xy0_abs
             transform0=refinst0.transform # overwrite transform variable
         if not refinstname1 == None:
@@ -502,7 +502,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             reftemplate1=self.templates.get_template(refinst1.cellname, libname=refinst1.libname)
             _offset1=offset1+refinst1.xy+np.dot(refinst1.spacing*refinstindex1, self.Mt(refinst1.transform).T)
             if not refpinname1 == None: # if pin reference is specified
-                pin_xy1_abs = self.get_template_pin_coord(reftemplate1.name, refpinname1, gridname1, libname=refinst1.libname)[0, :]
+                pin_xy1_abs = self.get_template_pin_xy(reftemplate1.name, refpinname1, gridname1, libname=refinst1.libname)[0, :]
                 _xy1=xy1+pin_xy1_abs
             transform1=refinst1.transform # overwrite transform variable
         # get physical grid coordinates
@@ -1154,7 +1154,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
     def get_template_pin_coord(self, name, pinname, gridname, libname=None):
         """use get_template_pin_xy instead"""
-        self.get_template_pin_coord(name, pinname, gridname, libname)
+        return self.get_template_pin_xy(name, pinname, gridname, libname)
     def get_template_pin_xy(self, name, pinname, gridname, libname=None):
         """
         get xy cooridnate of a template pin in abstract coordinate

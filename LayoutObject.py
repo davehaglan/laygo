@@ -22,24 +22,31 @@
 #
 ########################################################################################################################
 
-'''Layout Object Class'''
+"""
+The LayoutObject module implements classes for various layout objects.
+"""
+
 __author__ = "Jaeduk Han"
 __maintainer__ = "Jaeduk Han"
 __email__ = "jdhan@eecs.berkeley.edu"
 __status__ = "Prototype"
 
 import numpy as np
-from math import log10
-import logging
+#from math import log10
+#import logging
 
 class LayoutObject():
     """Layout object class"""
-    name = None  # Object name
-    res = 0.005  # Physical grid resolution
-    _xy = np.array([0, 0])  # Coordinate
+    name = None
+    """str: Object name"""
+    res = 0.005
+    """float: Physical grid resolution"""
+    _xy = np.array([0, 0])
+    """[float, float]: Object location"""
     def get_xy(self): return self._xy
     def set_xy(self, value): self._xy = self.trim(np.asarray(value))
     xy = property(get_xy, set_xy)
+    """[float, float]: Object location"""
 
     def __init__(self, name, res, xy):
         """
@@ -70,8 +77,8 @@ class LayoutObject():
 
         Returns
         -------
-        x : np.ndarray or float
-            trimmed cooridnates
+        np.ndarray or float
+            trimmed cooridnate values
 
         """
         return np.round(np.asarray(x) / self.res) * self.res
@@ -84,25 +91,39 @@ class LayoutObject():
 class Rect(LayoutObject):
     """Rect object class"""
     layer=None
+    """[str, str]: Rect layer"""
     netname=None
+    """str: net name"""
 
     @property
-    def height(self): return abs(self.xy[0][1]-self.xy[1][1])
+    def height(self):
+        """float: height of Rect"""
+        return abs(self.xy[0][1]-self.xy[1][1])
 
     @property
-    def width(self): return abs(self.xy[0][0]-self.xy[1][0])
+    def width(self):
+        """float: width of Rect"""
+        return abs(self.xy[0][0]-self.xy[1][0])
 
     @property
-    def size(self): return np.hstack((self.width, self.height))
+    def size(self):
+        """[float, float]: [width, height] of Rect"""
+        return np.hstack((self.width, self.height))
 
     @property
-    def cx(self): return 0.5*(self.xy[0][0]+self.xy[1][0])
+    def cx(self):
+        """float: x-center of Rect"""
+        return 0.5*(self.xy[0][0]+self.xy[1][0])
 
     @property
-    def cy(self): return 0.5*(self.xy[0][1]+self.xy[1][1])
+    def cy(self):
+        """float: y-center of Rect"""
+        return 0.5*(self.xy[0][1]+self.xy[1][1])
 
     @property
-    def center(self): return np.hstack((self.cx, self.cy))
+    def center(self):
+        """[float, float]: center coordinate of Rect"""
+        return np.hstack((self.cx, self.cy))
 
     def __init__(self, name, res, xy, layer, netname):
         """
@@ -135,8 +156,10 @@ class Rect(LayoutObject):
 
 class Pin(LayoutObject):
     """Pin object class"""
-    layer=None      #pin layer information
-    netname=None    #netname
+    layer=None
+    """[str, str]: Pin layer"""
+    netname=None
+    """str: net name"""
 
     def __init__(self, name, res, xy, netname, layer):
         """
@@ -166,8 +189,10 @@ class Pin(LayoutObject):
 
 class Text(LayoutObject):
     """Text object class"""
-    layer = None  # text layer information
-    text=None     # text body
+    layer = None
+    """[str, str]: Text layer"""
+    text=None
+    """str: text body"""
 
     def __init__(self, name, res, xy, layer, text):
         """
@@ -199,17 +224,25 @@ class Text(LayoutObject):
 class Instance(LayoutObject):
     """Instance object class"""
     libname=None
+    """str: library name"""
     cellname=None
-    shape = np.array([1, 1])  # Array shape
-    _spacing = np.array([0, 0])  # Array spacing (actually this is a pitch, but I just followed other tool's converntions)
+    """str: cell name"""
+    shape = np.array([1, 1])
+    """np.array([int, int]): array shape"""
+    _spacing = np.array([0, 0])
+    """Array spacing (actually this is a pitch, but I just GDS's notations)"""
     def get_spacing(self): return self._spacing
     def set_spacing(self, value): self._spacing = self.trim(np.asarray(value))
     spacing = property(get_spacing, set_spacing)
+    """Array spacing (actually this is a pitch, but I just GDS's notations)"""
     transform='R0'
+    """str: transform parameter"""
     template=None
+    """str: original template name"""
 
     @property
     def bbox(self):
+        """[[float, float], [float, float]]: instance bounding box in physical coordinate"""
         i = self
         t = self.template
         if t == None: #no template

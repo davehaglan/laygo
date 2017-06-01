@@ -41,8 +41,10 @@ class GridDB():
     """
     layout grid database management class
     """
-    grids = None  # grid design dictionary
-    plib = None  # Current design handle
+    grids = None
+    """dict: grid dictionary"""
+    plib = None
+    """str: current library handle"""
 
     def __init__(self):
         """

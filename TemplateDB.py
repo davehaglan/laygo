@@ -22,7 +22,10 @@
 #
 ########################################################################################################################
 
-'''Template Database'''
+"""
+The TemplateDB module/class implements template database management functions for GridBaseLayoutGenerator module.
+"""
+
 __author__ = "Jaeduk Han"
 __maintainer__ = "Jaeduk Han"
 __email__ = "jdhan@eecs.berkeley.edu"
@@ -36,14 +39,14 @@ class TemplateDB():
     """
     layout template database class
     """
-    templates = dict()  # Template design dictionary
-    plib = None  # Current design handle
+    templates = dict()
+    """dict: template dictionary"""
+    plib = None
+    """str: current library handle"""
 
     def __init__(self):
         """
         Constructor
-
-
         """
         self.templates = dict()
 
@@ -54,8 +57,10 @@ class TemplateDB():
 
         Parameters
         ----------
-        libname :
-        templatename :
+        libname : str, optional
+            library name. If None, all libraries are displayed
+        templatename : str, optional
+            template name. If None, all templates are displayed
         """
         if libname == None:
             libstr = ""
@@ -81,7 +86,9 @@ class TemplateDB():
         Parameters
         ----------
         filename : str
-        libname : str
+            yaml file name
+        libname : str, optional
+            library name to be exported
         """
         if libname == None:
             libstr = ""
@@ -103,6 +110,16 @@ class TemplateDB():
             yaml.dump(export_dict, stream)
 
     def import_yaml(self, filename, libname=None):
+        """
+        Import template database from an external yaml file
+
+        Parameters
+        ----------
+        filename : str
+            yaml file name
+        libname : str, optional
+            library name to be exported
+        """
         with open(filename, 'r') as stream:
             ydict = yaml.load(stream)
         logging.debug('Import template')
@@ -124,6 +141,7 @@ class TemplateDB():
     def merge(self, db):
         """
         Merge a GridDB object to self.db
+
         Parameters
         ----------
         db : TemplateDB
@@ -147,7 +165,7 @@ class TemplateDB():
         """
         self.templates[name] = dict()
 
-    def add_template(self, name, libname=None, xy=0, pins=dict()):
+    def add_template(self, name, libname=None, xy=np.array([[0, 0], [0, 0]]), pins=dict()):
         """
         Add a template to the specified library
 
@@ -155,8 +173,12 @@ class TemplateDB():
         ----------
         name : str
             templatename
-        libname :
+        libname : str, optional
             library name (if None, self.plib is used)
+        xy : np.array([[float, float], [float, float]]), optional
+            template bounding box coordinates
+        pins : dict, optional
+            pin dictionary
         """
         if libname == None: libname = self._plib
         if not libname in self.templates:
@@ -178,6 +200,21 @@ class TemplateDB():
         self.plib = libname
 
     def get_template(self, templatename, libname=None):
+        """
+        Get a handle of template object
+
+        Parameters
+        ----------
+        templatename : str
+            template name
+        libname : str
+            library name. If None. laygo.TemplateDB.plib is used
+
+        Returns
+        -------
+        laygo.TemplateObject.TemplateObject
+            template object
+        """
         if libname==None: libname=self.plib
         if not templatename in self.templates[libname].keys(): #template is not in the library,
             raise KeyError(templatename+" template is not in "+libname+'. Check corresponding yaml file')
