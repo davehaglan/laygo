@@ -104,7 +104,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../example/serdes.html">Generator example - serdes (to be updated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../example/adc_sar.html">Generator example - sar adc (to be updated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tech/tech.html">Technology setup guidelines (to be updated)</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API documentation (incomplete)</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">laygo package</a></li>
 </ul>
 </li>
@@ -584,7 +584,7 @@ Implemented by Eric Jan</p>
 <p>Base class for GDSIO objects</p>
 <dl class="attribute">
 <dt id="laygo.GDSIO.Element.possible_transform_parameters">
-<code class="descname">possible_transform_parameters</code><em class="property"> = {'MY': (32768, 180), 'R90': (0, 90), 'R0': (None, None), 'R270': (0, 270), 'MX': (32768, 0), 'R180': (0, 180)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="descname">possible_transform_parameters</code><em class="property"> = {'R270': (0, 270), 'MY': (32768, 180), 'R90': (0, 90), 'R0': (None, None), 'MX': (32768, 0), 'R180': (0, 180)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; transform parameter dictionary</p>
 </dd></dl>
 
@@ -1432,7 +1432,8 @@ ex) [[x0, y0], [x1, x1], ..., [xn-1, yn-1], [x0, y0]]</li>
 <dl class="attribute">
 <dt id="laygo.GridDB.GridDB.grids">
 <code class="descname">grids</code><em class="property"> = None</em><a class="headerlink" href="#laygo.GridDB.GridDB.grids" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>dict</em> &#8211; grid dictionary</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="laygo.GridDB.GridDB.import_yaml">
@@ -1463,7 +1464,8 @@ GridDB.export_yaml function.</p>
 <dl class="attribute">
 <dt id="laygo.GridDB.GridDB.plib">
 <code class="descname">plib</code><em class="property"> = None</em><a class="headerlink" href="#laygo.GridDB.GridDB.plib" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>str</em> &#8211; current library handle</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="laygo.GridDB.GridDB.sel_library">
@@ -1932,7 +1934,7 @@ if None, return all pin coordinates of specified instance in dict format</li>
 
 <dl class="attribute">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.layers">
-<code class="descname">layers</code><em class="property"> = {'prbnd': [], 'metal': [], 'pin': [], 'text': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">layers</code><em class="property"> = {'prbnd': [], 'text': [], 'metal': [], 'pin': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; layer dictionary</p>
 </dd></dl>
 
@@ -3271,11 +3273,11 @@ design dict contains all layout objects (instances, rects, pins, ...), instantia
 </div>
 <div class="section" id="module-laygo.LayoutIO">
 <span id="laygo-layoutio-module"></span><h2>laygo.LayoutIO module<a class="headerlink" href="#module-laygo.LayoutIO" title="Permalink to this headline">¶</a></h2>
-<p>Layout IO class. Import/export to skill, gds, yaml, image</p>
+<p>The LayoutIO module implements interfaces for layout import and export. It supports BAG and GDS IO.</p>
 <dl class="function">
 <dt id="laygo.LayoutIO.export_BAG">
 <code class="descclassname">laygo.LayoutIO.</code><code class="descname">export_BAG</code><span class="sig-paren">(</span><em>db, libname, cellname, prj, array_delimiter=['[', ']'], via_tech='cdsDefTechLib'</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.LayoutIO.export_BAG" title="Permalink to this definition">¶</a></dt>
-<dd><p>Export specified cell(s) to BagProject object</p>
+<dd><p>Export specified cell(s) to BagProject</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -3308,11 +3310,11 @@ design dict contains all layout objects (instances, rects, pins, ...), instantia
 <li><strong>cellname</strong> (<em>list or str</em>) &#8211; name of cells to be exported</li>
 <li><strong>filename</strong> (<em>str</em>) &#8211; output filename</li>
 <li><strong>layermapfile</strong> (<em>str</em>) &#8211; layermap filename</li>
-<li><strong>physical_unit</strong> (<em>float</em>) &#8211; GDS physical unit</li>
-<li><strong>logical_unit</strong> (<em>float</em>) &#8211; GDS logical unit</li>
-<li><strong>pin_label_height</strong> (<em>float</em>) &#8211; pin label height</li>
-<li><strong>pin_annotate_layer</strong> (<em>float</em>) &#8211; pin annotate layer name (used when pinname is different from netname)</li>
-<li><strong>text_height</strong> (<em>float</em>) &#8211; text height</li>
+<li><strong>physical_unit</strong> (<em>float, optional</em>) &#8211; GDS physical unit</li>
+<li><strong>logical_unit</strong> (<em>float, optional</em>) &#8211; GDS logical unit</li>
+<li><strong>pin_label_height</strong> (<em>float, optional</em>) &#8211; pin label height</li>
+<li><strong>pin_annotate_layer</strong> (<em>[str, str], optional</em>) &#8211; pin annotate layer name (used when pinname is different from netname)</li>
+<li><strong>text_height</strong> (<em>float, optional</em>) &#8211; text height</li>
 </ul>
 </td>
 </tr>
@@ -3323,7 +3325,7 @@ design dict contains all layout objects (instances, rects, pins, ...), instantia
 <dl class="function">
 <dt id="laygo.LayoutIO.export_yaml">
 <code class="descclassname">laygo.LayoutIO.</code><code class="descname">export_yaml</code><span class="sig-paren">(</span><em>db</em>, <em>libname</em>, <em>cellname</em>, <em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.LayoutIO.export_yaml" title="Permalink to this definition">¶</a></dt>
-<dd><p>Export specified cell(s) to a yaml file
+<dd><p>(Not implemented) Export specified cell(s) to a yaml file
 All information shown in db.display() will be saved</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -3357,10 +3359,10 @@ All information shown in db.display() will be saved</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>layoutDB</strong></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">imported layout information</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">imported layout information</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">laygo.layoutDB.layoutDB</p>
 </td>
 </tr>
 </tbody>
@@ -3383,10 +3385,10 @@ All information shown in db.display() will be saved</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>layoutDB</strong></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">imported layout information</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">imported layout information</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">laygo.layoutDB.layoutDB</p>
 </td>
 </tr>
 </tbody>
@@ -3396,7 +3398,7 @@ All information shown in db.display() will be saved</p>
 <dl class="function">
 <dt id="laygo.LayoutIO.import_yaml">
 <code class="descclassname">laygo.LayoutIO.</code><code class="descname">import_yaml</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.LayoutIO.import_yaml" title="Permalink to this definition">¶</a></dt>
-<dd><p>Import layout information from a yaml file</p>
+<dd><p>(Not implemented) Import layout information from a yaml file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -3414,7 +3416,7 @@ All information shown in db.display() will be saved</p>
 </div>
 <div class="section" id="module-laygo.LayoutObject">
 <span id="laygo-layoutobject-module"></span><h2>laygo.LayoutObject module<a class="headerlink" href="#module-laygo.LayoutObject" title="Permalink to this headline">¶</a></h2>
-<p>Layout Object Class</p>
+<p>The LayoutObject module implements classes for various layout objects.</p>
 <dl class="class">
 <dt id="laygo.LayoutObject.Instance">
 <em class="property">class </em><code class="descclassname">laygo.LayoutObject.</code><code class="descname">Instance</code><span class="sig-paren">(</span><em>name</em>, <em>res</em>, <em>xy</em>, <em>libname</em>, <em>cellname</em>, <em>shape=array([1</em>, <em>1])</em>, <em>spacing=array([0</em>, <em>0])</em>, <em>transform='R0'</em>, <em>template=None</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.LayoutObject.Instance" title="Permalink to this definition">¶</a></dt>
@@ -3423,12 +3425,14 @@ All information shown in db.display() will be saved</p>
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Instance.bbox">
 <code class="descname">bbox</code><a class="headerlink" href="#laygo.LayoutObject.Instance.bbox" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>[[float, float], [float, float]]</em> &#8211; instance bounding box in physical coordinate</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Instance.cellname">
 <code class="descname">cellname</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Instance.cellname" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>str</em> &#8211; cell name</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="laygo.LayoutObject.Instance.display">
@@ -3444,7 +3448,8 @@ All information shown in db.display() will be saved</p>
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Instance.libname">
 <code class="descname">libname</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Instance.libname" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>str</em> &#8211; library name</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="laygo.LayoutObject.Instance.set_spacing">
@@ -3454,22 +3459,26 @@ All information shown in db.display() will be saved</p>
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Instance.shape">
 <code class="descname">shape</code><em class="property"> = array([1, 1])</em><a class="headerlink" href="#laygo.LayoutObject.Instance.shape" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>np.array([int, int])</em> &#8211; array shape</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Instance.spacing">
 <code class="descname">spacing</code><a class="headerlink" href="#laygo.LayoutObject.Instance.spacing" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Array spacing (actually this is a pitch, but I just GDS&#8217;s notations)</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Instance.template">
 <code class="descname">template</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Instance.template" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>str</em> &#8211; original template name</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Instance.transform">
 <code class="descname">transform</code><em class="property"> = 'R0'</em><a class="headerlink" href="#laygo.LayoutObject.Instance.transform" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>str</em> &#8211; transform parameter</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -3492,12 +3501,14 @@ All information shown in db.display() will be saved</p>
 <dl class="attribute">
 <dt id="laygo.LayoutObject.LayoutObject.name">
 <code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.LayoutObject.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>str</em> &#8211; Object name</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.LayoutObject.LayoutObject.res">
 <code class="descname">res</code><em class="property"> = 0.005</em><a class="headerlink" href="#laygo.LayoutObject.LayoutObject.res" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>float</em> &#8211; Physical grid resolution</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="laygo.LayoutObject.LayoutObject.set_xy">
@@ -3514,7 +3525,7 @@ All information shown in db.display() will be saved</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<em>np.ndarray or float</em>) &#8211; number of list to be trimmed</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>x</strong> &#8211; trimmed cooridnates</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">trimmed cooridnate values</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray or float</td>
 </tr>
@@ -3525,7 +3536,8 @@ All information shown in db.display() will be saved</p>
 <dl class="attribute">
 <dt id="laygo.LayoutObject.LayoutObject.xy">
 <code class="descname">xy</code><a class="headerlink" href="#laygo.LayoutObject.LayoutObject.xy" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>[float, float]</em> &#8211; Object location</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -3543,12 +3555,14 @@ All information shown in db.display() will be saved</p>
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Pin.layer">
 <code class="descname">layer</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Pin.layer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>[str, str]</em> &#8211; Pin layer</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Pin.netname">
 <code class="descname">netname</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Pin.netname" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>str</em> &#8211; net name</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -3560,17 +3574,20 @@ All information shown in db.display() will be saved</p>
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Rect.center">
 <code class="descname">center</code><a class="headerlink" href="#laygo.LayoutObject.Rect.center" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>[float, float]</em> &#8211; center coordinate of Rect</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Rect.cx">
 <code class="descname">cx</code><a class="headerlink" href="#laygo.LayoutObject.Rect.cx" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>float</em> &#8211; x-center of Rect</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Rect.cy">
 <code class="descname">cy</code><a class="headerlink" href="#laygo.LayoutObject.Rect.cy" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>float</em> &#8211; y-center of Rect</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="laygo.LayoutObject.Rect.display">
@@ -3581,27 +3598,32 @@ All information shown in db.display() will be saved</p>
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Rect.height">
 <code class="descname">height</code><a class="headerlink" href="#laygo.LayoutObject.Rect.height" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>float</em> &#8211; height of Rect</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Rect.layer">
 <code class="descname">layer</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Rect.layer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>[str, str]</em> &#8211; Rect layer</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Rect.netname">
 <code class="descname">netname</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Rect.netname" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>str</em> &#8211; net name</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Rect.size">
 <code class="descname">size</code><a class="headerlink" href="#laygo.LayoutObject.Rect.size" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>[float, float]</em> &#8211; [width, height] of Rect</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Rect.width">
 <code class="descname">width</code><a class="headerlink" href="#laygo.LayoutObject.Rect.width" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>float</em> &#8211; width of Rect</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -3619,19 +3641,21 @@ All information shown in db.display() will be saved</p>
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Text.layer">
 <code class="descname">layer</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Text.layer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>[str, str]</em> &#8211; Text layer</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Text.text">
 <code class="descname">text</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Text.text" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>str</em> &#8211; text body</p>
+</dd></dl>
 
 </dd></dl>
 
 </div>
 <div class="section" id="module-laygo.TemplateDB">
 <span id="laygo-templatedb-module"></span><h2>laygo.TemplateDB module<a class="headerlink" href="#module-laygo.TemplateDB" title="Permalink to this headline">¶</a></h2>
-<p>Template Database</p>
+<p>The TemplateDB module/class implements template database management functions for GridBaseLayoutGenerator module.</p>
 <dl class="class">
 <dt id="laygo.TemplateDB.TemplateDB">
 <em class="property">class </em><code class="descclassname">laygo.TemplateDB.</code><code class="descname">TemplateDB</code><a class="headerlink" href="#laygo.TemplateDB.TemplateDB" title="Permalink to this definition">¶</a></dt>
@@ -3653,7 +3677,7 @@ All information shown in db.display() will be saved</p>
 
 <dl class="method">
 <dt id="laygo.TemplateDB.TemplateDB.add_template">
-<code class="descname">add_template</code><span class="sig-paren">(</span><em>name</em>, <em>libname=None</em>, <em>xy=0</em>, <em>pins={}</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.TemplateDB.TemplateDB.add_template" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_template</code><span class="sig-paren">(</span><em>name, libname=None, xy=array([[0, 0],        [0, 0]]), pins={}</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.TemplateDB.TemplateDB.add_template" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a template to the specified library</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -3661,7 +3685,9 @@ All information shown in db.display() will be saved</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>name</strong> (<em>str</em>) &#8211; templatename</li>
-<li><strong>libname</strong> &#8211; library name (if None, self.plib is used)</li>
+<li><strong>libname</strong> (<em>str, optional</em>) &#8211; library name (if None, self.plib is used)</li>
+<li><strong>xy</strong> (<em>np.array([[float, float], [float, float]]), optional</em>) &#8211; template bounding box coordinates</li>
+<li><strong>pins</strong> (<em>dict, optional</em>) &#8211; pin dictionary</li>
 </ul>
 </td>
 </tr>
@@ -3678,8 +3704,8 @@ All information shown in db.display() will be saved</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>libname</strong> &#8211; </li>
-<li><strong>templatename</strong> &#8211; </li>
+<li><strong>libname</strong> (<em>str, optional</em>) &#8211; library name. If None, all libraries are displayed</li>
+<li><strong>templatename</strong> (<em>str, optional</em>) &#8211; template name. If None, all templates are displayed</li>
 </ul>
 </td>
 </tr>
@@ -3696,8 +3722,8 @@ All information shown in db.display() will be saved</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filename</strong> (<em>str</em>) &#8211; </li>
-<li><strong>libname</strong> (<em>str</em>) &#8211; </li>
+<li><strong>filename</strong> (<em>str</em>) &#8211; yaml file name</li>
+<li><strong>libname</strong> (<em>str, optional</em>) &#8211; library name to be exported</li>
 </ul>
 </td>
 </tr>
@@ -3708,25 +3734,64 @@ All information shown in db.display() will be saved</p>
 <dl class="method">
 <dt id="laygo.TemplateDB.TemplateDB.get_template">
 <code class="descname">get_template</code><span class="sig-paren">(</span><em>templatename</em>, <em>libname=None</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.TemplateDB.TemplateDB.get_template" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get a handle of template object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>templatename</strong> (<em>str</em>) &#8211; template name</li>
+<li><strong>libname</strong> (<em>str</em>) &#8211; library name. If None. laygo.TemplateDB.plib is used</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">template object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#laygo.TemplateObject.TemplateObject" title="laygo.TemplateObject.TemplateObject">laygo.TemplateObject.TemplateObject</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="laygo.TemplateDB.TemplateDB.import_yaml">
 <code class="descname">import_yaml</code><span class="sig-paren">(</span><em>filename</em>, <em>libname=None</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.TemplateDB.TemplateDB.import_yaml" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Import template database from an external yaml file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> (<em>str</em>) &#8211; yaml file name</li>
+<li><strong>libname</strong> (<em>str, optional</em>) &#8211; library name to be exported</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="laygo.TemplateDB.TemplateDB.merge">
 <code class="descname">merge</code><span class="sig-paren">(</span><em>db</em><span class="sig-paren">)</span><a class="headerlink" href="#laygo.TemplateDB.TemplateDB.merge" title="Permalink to this definition">¶</a></dt>
-<dd><p>Merge a GridDB object to self.db
-:param db:
-:type db: TemplateDB</p>
+<dd><p>Merge a GridDB object to self.db</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>db</strong> (<a class="reference internal" href="#module-laygo.TemplateDB" title="laygo.TemplateDB"><em>TemplateDB</em></a>) &#8211; </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.TemplateDB.TemplateDB.plib">
 <code class="descname">plib</code><em class="property"> = None</em><a class="headerlink" href="#laygo.TemplateDB.TemplateDB.plib" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>str</em> &#8211; current library handle</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="laygo.TemplateDB.TemplateDB.sel_library">
@@ -3745,7 +3810,8 @@ All information shown in db.display() will be saved</p>
 <dl class="attribute">
 <dt id="laygo.TemplateDB.TemplateDB.templates">
 <code class="descname">templates</code><em class="property"> = {}</em><a class="headerlink" href="#laygo.TemplateDB.TemplateDB.templates" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>dict</em> &#8211; template dictionary</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -3773,27 +3839,32 @@ All information shown in db.display() will be saved</p>
 <dl class="attribute">
 <dt id="laygo.TemplateObject.TemplateObject.height">
 <code class="descname">height</code><a class="headerlink" href="#laygo.TemplateObject.TemplateObject.height" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>float</em> &#8211; template height</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.TemplateObject.TemplateObject.name">
 <code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#laygo.TemplateObject.TemplateObject.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>str</em> &#8211; template name</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.TemplateObject.TemplateObject.size">
 <code class="descname">size</code><a class="headerlink" href="#laygo.TemplateObject.TemplateObject.size" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>np.array([float, float])</em> &#8211; template size</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.TemplateObject.TemplateObject.width">
 <code class="descname">width</code><a class="headerlink" href="#laygo.TemplateObject.TemplateObject.width" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><em>float</em> &#8211; template width</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.TemplateObject.TemplateObject.xy">
-<code class="descname">xy</code><em class="property"> = array([0, 0])</em><a class="headerlink" href="#laygo.TemplateObject.TemplateObject.xy" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">xy</code><em class="property"> = array([[0, 0],        [0, 0]])</em><a class="headerlink" href="#laygo.TemplateObject.TemplateObject.xy" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>np.array([[float, float], [float, float]])</em> &#8211; template bBox</p>
+</dd></dl>
 
 </dd></dl>
 

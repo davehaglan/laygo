@@ -19,7 +19,7 @@ Contents:
    Generator example - serdes (to be updated) <example/serdes>
    Generator example - sar adc (to be updated) <example/adc_sar>
    Technology setup guidelines (to be updated) <tech/tech>
-   API documentation (incomplete) <api/modules>
+   API documentation <api/modules>
 
 
 Indices and tables
