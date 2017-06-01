@@ -22,7 +22,12 @@
 #
 ########################################################################################################################
 
-"""Quick start for gds flow - nand generator"""
+"""Quick start script for bag flow - nand gate layout generator"""
+__author__ = "Jaeduk Han"
+__maintainer__ = "Jaeduk Han"
+__email__ = "jdhan@eecs.berkeley.edu"
+__status__ = "Prototype"
+
 if __name__ == '__main__':
     import laygo
     import numpy as np

@@ -14,12 +14,11 @@ Contents:
    Introduction <introduction/introduction>
    Tutorial (GDS flow) <tutorial/tutorial_GDS>
    Tutorial (BAG flow) <tutorial/tutorial_BAG>
-   Architecture (to be updated) <architecture/architecture>
-   Primitive template guidelines (to be updated) <example/prim>
+   Architecture <architecture/architecture>
    Generator example - logic family (to be updated) <example/logic>
    Generator example - serdes (to be updated) <example/serdes>
    Generator example - sar adc (to be updated) <example/adc_sar>
-   Technology setup (to be updated) <tech/tech>
+   Technology setup guidelines (to be updated) <tech/tech>
    API documentation (incomplete) <api/modules>
 
 

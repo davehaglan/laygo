@@ -22,7 +22,11 @@
 #
 ########################################################################################################################
 
-'''Grid Object'''
+"""
+The GridObject module and class implements a object that contains grid information for placement and route. It also
+provides useful functions for coordinate conversion between physical and abstract grids.
+"""
+
 __author__ = "Jaeduk Han"
 __maintainer__ = "Jaeduk Han"
 __email__ = "jdhan@eecs.berkeley.edu"
@@ -31,26 +35,35 @@ __status__ = "Prototype"
 import numpy as np
 
 class GridObject():
-    """Layout abstracted grid class"""
+    """Layout abstract grid class"""
     type="native"
+    """str: type of grid. can be 'native', 'route', 'placement'"""
     name=None
+    """str: name of grid"""
     libname=None
-    xy = np.array([0, 0]) # Cooridinate
+    """str: library name of grid"""
+    xy = np.array([0, 0]) # Coordinate
+    """np.array([float, float]): size of grid"""
     xgrid=np.array([])
+    """np.array([float, float, ...]): x coordinates of grid"""
     ygrid=np.array([])
-    max_resolution=10 #maximum resolution to handle floating point numbers
+    """np.array([float, float, ...]): y coordinates of grid"""
+    max_resolution=10
+    """int: maximum resolution to handle floating point numbers"""
 
     @property
-    def height(self): return abs(self.xy[0][1]-self.xy[1][1])
+    def height(self):
+        """float: height of grid"""
+        return abs(self.xy[0][1]-self.xy[1][1])
 
     @property
-    def width(self): return abs(self.xy[0][0]-self.xy[1][0])
+    def width(self):
+        """float: width of grid"""
+        return abs(self.xy[0][0]-self.xy[1][0])
 
     def __init__(self, name, libname, xy, _xgrid=np.array([0]), _ygrid=np.array([0])):
         """
         Constructor
-
-
         """
         self.name = name
         self.libname=libname
@@ -59,13 +72,21 @@ class GridObject():
         self.ygrid=_ygrid
 
     def display(self):
-        """Display object information"""
-        #print("  " + self.name + " xy:" +str(np.around(self.xy, decimals=self.max_resolution).tolist()))
+        """
+        Display grid information
+        """
         print("  " + self.name + " width:" + str(np.around(self.width, decimals=self.max_resolution))
                                + " height:" + str(np.around(self.height, decimals=self.max_resolution)))
 
     def export_dict(self):
-        """Export object information"""
+        """
+        Export object information in dict format
+
+        Returns
+        -------
+        dict
+            grid information in dict format
+        """
         export_dict={'type':self.type,
                      'xy0':np.around(self.xy[0,:], decimals=self.max_resolution).tolist(),
                      'xy1':np.around(self.xy[1,:], decimals=self.max_resolution).tolist()}
@@ -76,27 +97,82 @@ class GridObject():
         return export_dict
 
     def _add_grid(self, grid, v):
+        """
+        add a grid coordinate
+
+        Parameters
+        ----------
+        grid : np.array
+            grid array
+        v : float
+            value
+
+        Returns
+        -------
+        np.array
+            updated grid array
+        """
         grid.append(v)
         grid.sort()
         return grid
 
     def add_xgrid(self, x):
+        """
+        add a coordinate value to grid in x direction
+
+        Parameters
+        ----------
+        x : float
+            value to be added
+        """
         self.xgrid=self._add_grid(self.xgrid, x)
 
     def add_ygrid(self, y):
+        """
+        add a coordinate value to grid in y direction
+
+        Parameters
+        ----------
+        y : float
+            value to be added
+        """
         self.ygrid=self._add_grid(self.ygrid, y)
 
     def get_xgrid(self):
+        """use laygo.GridObject.GridObject.xgrid instead"""
         return self.xgrid
 
     def get_ygrid(self):
+        """use laygo.GridObject.GridObject.ygrid instead"""
         return self.ygrid
 
-    def _get_absgrid_coord(self, v, grid, size):
-        # notation
+    #abstract to physical conversion functions
+    def _get_absgrid_coord(self, v, grid, size, method='ceil'):
+        """
+        Convert physical value to abstract value on grid. Since physical values are continuous and grid values are
+        discrete, boundary conditions are need to be defined for the conversion.
+        Default (and only supported in the current version) converting method is ceil, which is described as follows:
         #   physical grid: 0----grid0----grid1----grid2----...----gridN---size
         # abstracted grid: 0  0   0    1   1    2   2           N   N   N+1
-        # This matches well with stacking grids
+        The ceiling method works well with stacked grids. For example, in the example, phyical values ranging from
+        (larger than) GridN to (equal to) gridN+1 (grid0 of the second stack) will be converted to N+1.
+
+        Parameters
+        ----------
+        v : float
+            grid value
+        grid : np.array
+            grid array
+        size : float
+            grid size
+        method : str, optional
+            converting method
+
+        Returns
+        -------
+        int
+            abstract grid value
+        """
         quo=np.floor(np.divide(v, size))
         mod=v-quo*size #mod=np.mod(v, size) not working well
         mod_ongrid=np.searchsorted(grid+1e-10, mod) #add 1e-10 to handle floating point precision errors
@@ -105,23 +181,74 @@ class GridObject():
         #      ' abs:' + str(np.add(np.multiply(quo,grid.shape[0]), mod_ongrid).tolist()))
         return np.add(np.multiply(quo,grid.shape[0]), mod_ongrid)
 
-    def _get_phygrid_coord(self, v, grid, size):
-        quo=np.floor(np.divide(v, grid.shape[0]))
-        mod = np.mod(v, grid.shape[0]) #mod = v - quo * grid.shape[0]
-        return np.add(np.multiply(quo,size), np.take(grid,mod))
+    def get_absgrid_coord_x(self, x): return self.get_absgrid_x(x)
+    def get_absgrid_x(self, x):
+        """
+        Convert a physical x coordinate to a corresponding value in abstract grid
 
-    def get_absgrid_coord_x(self, x):
+        Parameters
+        ----------
+        x : float
+            value
+
+        Returns
+        -------
+        int
+            converted value
+        """
         return self._get_absgrid_coord(x, self.xgrid, self.width).astype(int)
 
-    def get_absgrid_coord_y(self, y):
+    def get_absgrid_coord_y(self, y): return self.get_absgrid_y(y)
+    def get_absgrid_y(self, y):
+        """
+        Convert a physical y coordinate to a corresponding value in abstract grid
+
+        Parameters
+        ----------
+        y : float
+            value
+
+        Returns
+        -------
+        int
+            converted value
+        """
         return self._get_absgrid_coord(y, self.ygrid, self.height).astype(int)
 
-    def get_absgrid_coord_xy(self, xy):
-        _xy=np.vstack((self.get_absgrid_coord_x(xy.T[0]), self.get_absgrid_coord_y(xy.T[1]))).T
+    def get_absgrid_coord_xy(self, xy): return self.get_absgrid_xy(xy)
+    def get_absgrid_xy(self, xy):
+        """
+        Convert a physical xy coordinate to a corresponding vector in abstract grid
+
+        Parameters
+        ----------
+        xy : np.array([float, float])
+
+        Returns
+        -------
+        np.array([int, int])
+        """
+        _xy=np.vstack((self.get_absgrid_x(xy.T[0]), self.get_absgrid_y(xy.T[1]))).T
         if _xy.shape[0]==1: return _xy[0]
         else: return _xy
 
-    def get_absgrid_coord_region(self, xy0, xy1):
+    def get_absgrid_coord_region(self, xy0, xy1): return self.get_absgrid_region(xy0, xy1)
+    def get_absgrid_region(self, xy0, xy1):
+        """
+        Convert a physical regin to a corresponding region in abstract grid
+
+        Parameters
+        ----------
+        xy0 : np.array([float, float])
+            first coordinate
+        xy1 : np.array([float, float])
+            second coordinate
+
+        Returns
+        -------
+        np.array([[int, int], [int, int]])
+            converted coordinate
+        """
         _xy0 = np.vstack((self.get_absgrid_coord_x(xy0.T[0]), self.get_absgrid_coord_y(xy0.T[1]))).T
         _xy1 = np.vstack((self.get_absgrid_coord_x(xy1.T[0]), self.get_absgrid_coord_y(xy1.T[1]))).T
         if _xy0.shape[0] == 1: _xy0 = _xy0[0]
@@ -145,35 +272,108 @@ class GridObject():
 
         return(np.vstack((_xy0, _xy1)))
 
-    def get_phygrid_coord_x(self, x):
+    # physical to abstract conversion functions
+    def _get_phygrid_coord(self, v, grid, size):
+        """
+        Internal function for abstract to physical coordinate conversions
+
+        Parameters
+        ----------
+        v : int
+            value in abstract coordinate
+        grid : np.array
+            grid array
+        size : float
+            grid size
+
+        Returns
+        -------
+        float
+            value in physical coordinate
+        """
+        quo = np.floor(np.divide(v, grid.shape[0]))
+        mod = np.mod(v, grid.shape[0])  # mod = v - quo * grid.shape[0]
+        return np.add(np.multiply(quo, size), np.take(grid, mod))
+
+    def get_phygrid_coord_x(self, x): return self.get_phygrid_x(x)
+    def get_phygrid_x(self, x):
+        """
+        Get the physical value of a abstract x coordinate
+
+        Parameters
+        ----------
+        x : int
+            abstract coordinate value
+
+        Returns
+        -------
+        float
+            physical coordinate value
+        """
         return self._get_phygrid_coord(x, self.xgrid, self.width)
 
-    def get_phygrid_coord_y(self, y):
+    def get_phygrid_coord_y(self, y): return self.get_phygrid_y(y)
+    def get_phygrid_y(self, y):
+        """
+        Get the physical value of a abstract y coordinate
+
+        Parameters
+        ----------
+        y : int
+            abstract coordinate value
+
+        Returns
+        -------
+        float
+            physical coordinate value
+        """
         return self._get_phygrid_coord(y, self.ygrid, self.height)
 
-    def get_phygrid_coord_xy(self, xy):
+    def get_phygrid_coord_xy(self, xy): return self.get_phygrid_xy(xy)
+    def get_phygrid_xy(self, xy):
+        """
+        Get the physical value of a abstract vector
+
+        Parameters
+        ----------
+        xy : np.array([int, int])
+            abstract coordinate vector
+
+        Returns
+        -------
+        np.array([float, float])
+            physical coordinate vector
+        """
         return np.vstack((self.get_phygrid_coord_x(xy.T[0]), self.get_phygrid_coord_y(xy.T[1]))).T
 
 
 class PlacementGrid(GridObject):
-    """Placement grid class"""
+    """
+    Placement grid class
+    """
     type = 'placement'
 
 
 class RouteGrid(GridObject):
-    """Routing grid class"""
+    """
+    Routing grid class
+    """
     type = 'route'
+    """str: type of grid. can be 'native', 'route', 'placement'"""
     xwidth = np.array([])
+    """np.array: width of xgrid"""
     ywidth = np.array([])
+    """np.array: width of ygrid"""
     viamap = dict()
+    """dict: via map information"""
     xlayer = None
+    """list: layer of xgrid"""
     ylayer = None
+    """list: layer of ygrid"""
 
     def __init__(self, name, libname, xy, xgrid, ygrid, xwidth, ywidth, xlayer=None, ylayer=None, viamap=None):
         """
         Constructor
-
-
         """
         self.name = name
         self.libname = libname
@@ -187,7 +387,21 @@ class RouteGrid(GridObject):
         self.viamap = viamap
 
     def _get_route_width(self, v, _width):
-        """ get metal width """
+        """
+        Get metal width
+
+        Parameters
+        ----------
+        v : int
+            value
+        _width : np.array
+            width vector
+
+        Returns
+        -------
+        float
+            route width
+        """
         #quo=np.floor(np.divide(v, self._width.shape[0]))
         mod=np.mod(v, _width.shape[0])
         #if not isinstance(mod, int):
@@ -195,7 +409,21 @@ class RouteGrid(GridObject):
         return _width[mod]
 
     def _get_route_layer(self, v, _layer):
-        """ get metal width """
+        """
+        Get metal layer
+
+        Parameters
+        ----------
+        v : int
+            index value
+        _layer : list
+            layer list
+
+        Returns
+        -------
+        [str, str]
+            route layer
+        """
         mod=np.mod(v, len(_layer))
         return _layer[mod]
 
@@ -204,20 +432,68 @@ class RouteGrid(GridObject):
     #def get_viamap(self): return self.viamap
 
     def get_route_width_xy(self, xy):
-        """ get metal width vector"""
+        """
+        Get metal width vector
+
+        Parameters
+        ----------
+        xy : np.array([int, int])
+            coordinate
+
+        Returns
+        -------
+        np.array([float, float])
+            route width vector ([xgrid, ygrid])
+        """
         return np.array([self._get_route_width(xy[0], self.xwidth),
                          self._get_route_width(xy[1], self.ywidth)])
 
     def get_route_xlayer_xy(self, xy):
-        """ get metal width vector"""
+        """
+        Get route layer in xgrid direction (vertical)
+
+        Parameters
+        ----------
+        xy : np.array([int, int])
+            coordinate
+
+        Returns
+        -------
+        [str, str]
+            route layer information
+        """
         return self._get_route_layer(xy[0], self.xlayer)
 
     def get_route_ylayer_xy(self, xy):
-        """ get metal width vector"""
+        """
+        Get route layer in ygrid direction (horizontal)
+
+        Parameters
+        ----------
+        xy : np.array([int, int])
+            coordinate
+
+        Returns
+        -------
+        [str, str]
+            route layer information
+        """
         return self._get_route_layer(xy[1], self.ylayer)
 
     def get_vianame(self, xy):
-        """ get vianame"""
+        """
+        Get the name of via on xy
+
+        Parameters
+        ----------
+        xy : np.array([int, int])
+            coordinate
+
+        Returns
+        -------
+        str
+            cellname of via
+        """
         mod = np.array([np.mod(xy[0], self.xgrid.shape[0]), np.mod(xy[1], self.ygrid.shape[0])])
         for vianame, viacoord in self.viamap.items():
             if viacoord.ndim==1:
@@ -228,7 +504,9 @@ class RouteGrid(GridObject):
                         return vianame
 
     def display(self):
-        """Display object information"""
+        """
+        Display RouteGrid information
+        """
         display_str="  " + self.name + " width:" + str(np.around(self.width, decimals=self.max_resolution))\
                     + " height:" + str(np.around(self.height, decimals=self.max_resolution))\
                     + " xgrid:" + str(np.around(self.xgrid, decimals=self.max_resolution))\
@@ -244,6 +522,14 @@ class RouteGrid(GridObject):
         print(display_str)
 
     def export_dict(self):
+        """
+        Export grid information in dict format
+
+        Returns
+        -------
+        dict
+            Grid information
+        """
         export_dict=GridObject.export_dict(self)
         export_dict['xwidth'] = np.around(self.xwidth, decimals=self.max_resolution).tolist()
         export_dict['ywidth'] = np.around(self.ywidth, decimals=self.max_resolution).tolist()
@@ -257,6 +543,7 @@ class RouteGrid(GridObject):
         return export_dict
 
     def update_viamap(self, viamap):
+        """use laygo.GridObject.RouteGrid.viamap instead"""
         self.viamap=viamap
 
 if __name__ == '__main__':

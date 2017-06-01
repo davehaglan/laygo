@@ -98,12 +98,11 @@
 <li class="toctree-l2"><a class="reference internal" href="tutorial/tutorial_BAG.html#export-to-bag">Export to BAG</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="architecture/architecture.html">Architecture (to be updated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="example/prim.html">Primitive template guidelines (to be updated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example/logic.html">Generator example - logic family (to be updated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example/serdes.html">Generator example - serdes (to be updated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example/adc_sar.html">Generator example - sar adc (to be updated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tech/tech.html">Technology setup (to be updated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tech/tech.html">Technology setup guidelines (to be updated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/modules.html">API documentation (incomplete)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/laygo.html">laygo package</a></li>
 </ul>
@@ -564,10 +563,6 @@
 
       <dd><dl>
         
-  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_absgrid_coord_region">(laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
-  </dt>
-
-        
   <dt><a href="api/laygo.html#laygo.GridObject.GridObject.get_absgrid_coord_region">(laygo.GridObject.GridObject method)</a>
   </dt>
 
@@ -588,10 +583,6 @@
 
       <dd><dl>
         
-  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_absgrid_coord_xy">(laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
-  </dt>
-
-        
   <dt><a href="api/laygo.html#laygo.GridObject.GridObject.get_absgrid_coord_xy">(laygo.GridObject.GridObject method)</a>
   </dt>
 
@@ -603,6 +594,54 @@
       <dd><dl>
         
   <dt><a href="api/laygo.html#laygo.GridObject.GridObject.get_absgrid_coord_y">(laygo.GridObject.GridObject method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/laygo.html#laygo.GridDB.GridDB.get_absgrid_region">get_absgrid_region() (laygo.GridDB.GridDB method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_absgrid_region">(laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
+  </dt>
+
+        
+  <dt><a href="api/laygo.html#laygo.GridObject.GridObject.get_absgrid_region">(laygo.GridObject.GridObject method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/laygo.html#laygo.GridDB.GridDB.get_absgrid_x">get_absgrid_x() (laygo.GridDB.GridDB method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/laygo.html#laygo.GridObject.GridObject.get_absgrid_x">(laygo.GridObject.GridObject method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/laygo.html#laygo.GridDB.GridDB.get_absgrid_xy">get_absgrid_xy() (laygo.GridDB.GridDB method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_absgrid_xy">(laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
+  </dt>
+
+        
+  <dt><a href="api/laygo.html#laygo.GridObject.GridObject.get_absgrid_xy">(laygo.GridObject.GridObject method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/laygo.html#laygo.GridDB.GridDB.get_absgrid_y">get_absgrid_y() (laygo.GridDB.GridDB method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/laygo.html#laygo.GridObject.GridObject.get_absgrid_y">(laygo.GridObject.GridObject method)</a>
   </dt>
 
       </dl></dd>
@@ -627,11 +666,19 @@
 
       </dl></dd>
       
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_bbox">get_inst_bbox() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
+  </dt>
+
+      
   <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_bbox_phygrid">get_inst_bbox_phygrid() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
   </dt>
 
       
   <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_pin_coord">get_inst_pin_coord() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
+  </dt>
+
+      
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_pin_xy">get_inst_pin_xy() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
   </dt>
 
       
@@ -648,6 +695,8 @@
   </dt>
 
       </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#laygo.GridDB.GridDB.get_phygrid_coord_xy">get_phygrid_coord_xy() (laygo.GridDB.GridDB method)</a>
   </dt>
@@ -658,8 +707,6 @@
   </dt>
 
       </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#laygo.GridDB.GridDB.get_phygrid_coord_y">get_phygrid_coord_y() (laygo.GridDB.GridDB method)</a>
   </dt>
@@ -667,6 +714,36 @@
       <dd><dl>
         
   <dt><a href="api/laygo.html#laygo.GridObject.GridObject.get_phygrid_coord_y">(laygo.GridObject.GridObject method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/laygo.html#laygo.GridDB.GridDB.get_phygrid_x">get_phygrid_x() (laygo.GridDB.GridDB method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/laygo.html#laygo.GridObject.GridObject.get_phygrid_x">(laygo.GridObject.GridObject method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/laygo.html#laygo.GridDB.GridDB.get_phygrid_xy">get_phygrid_xy() (laygo.GridDB.GridDB method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/laygo.html#laygo.GridObject.GridObject.get_phygrid_xy">(laygo.GridObject.GridObject method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/laygo.html#laygo.GridDB.GridDB.get_phygrid_y">get_phygrid_y() (laygo.GridDB.GridDB method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/laygo.html#laygo.GridObject.GridObject.get_phygrid_y">(laygo.GridObject.GridObject method)</a>
   </dt>
 
       </dl></dd>
@@ -696,6 +773,10 @@
       </dl></dd>
       
   <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_rect_xy">get_rect_xy() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
+  </dt>
+
+      
+  <dt><a href="api/laygo.html#laygo.GridDB.GridDB.get_route_layer_xy">get_route_layer_xy() (laygo.GridDB.GridDB method)</a>
   </dt>
 
       
@@ -738,6 +819,10 @@
 
       
   <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_pin_coord">get_template_pin_coord() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
+  </dt>
+
+      
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_pin_xy">get_template_pin_xy() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
   </dt>
 
       

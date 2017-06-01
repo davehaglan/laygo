@@ -22,34 +22,46 @@
 #
 ########################################################################################################################
 
-'''Base Layout Generator'''
+"""
+The LayoutDB module implements layout database. The core database is constructed in dict (LayoutDB.design), and the
+design dict contains all layout objects (instances, rects, pins, ...), instantiated as LayoutObject objects.
+"""
+
 __author__ = "Jaeduk Han"
 __maintainer__ = "Jaeduk Han"
 __email__ = "jdhan@eecs.berkeley.edu"
 __status__ = "Prototype"
 
-#from LayoutObject import *
 from .LayoutObject import *
 from math import log10
 import numpy as np
 
 class LayoutDB():
     """
-    layout database class
+    Layout database class
     """
-    design = dict()  # Layout design dictionary
-    plib = None  # Current library handle
-    pcell = None  # Current cell handle
-    res = 0.005  # physical grid resolution
+    design = dict()
+    """dict: core database"""
+    plib = None
+    """str: current library handle"""
+    pcell = None
+    """str: current cell handle"""
+    res = 0.005
+    """float: physical grid resolution"""
 
     @property
-    def res_exp(self): return int(log10(1/self.res)+1)
+    def res_exp(self):
+        """int: exponent of laygo.LayoutDB.LayoutDB.res"""
+        return int(log10(1/self.res)+1)
 
     def __init__(self, res=0.005):
         """
         Constructor
 
-
+        Parameters
+        ----------
+        res : float
+            physical resolution
         """
         self.design = dict()
         self.res = res
@@ -57,12 +69,14 @@ class LayoutDB():
     # aux functions
     def display(self, libname=None, cellname=None):
         """
-        Display design database
+        Display the design database
 
         Parameters
         ----------
-        libname :
-        cellname :
+        libname : str, optional
+            library name. If none, all libraries are displayed.
+        cellname : str, optional
+            cell name. If none, all cells are displayed.
         """
         if libname == None:
             libstr = ""
@@ -99,19 +113,23 @@ class LayoutDB():
 
     def genid(self, type='instance', pfix='I', sfix='', max_index=100000):
         """
-        Generate a unique id for objects
+        Generate a unique id (name) for objects
 
         Parameters
         ----------
         type : str
             object type (instance, rect, path..)
-        pfix : prefix
-        sfix : surfix
-        max_index : maximum index
+        pfix : str
+            prefix of the id
+        sfix : str
+            surfix of the id
+        max_index : int
+            maximum index
 
         Returns
         -------
-        object id
+        str
+            unique object id (name)
         """
         n = 0
         trig = 0
@@ -123,7 +141,7 @@ class LayoutDB():
                 trig = 1
             n = n + 1
         if n == max_index:
-            print('overflow')
+            print('laygo.LayoutDB.LayoutDB.genid - overflow')
         return id
 
     # library and cell related functions
@@ -135,8 +153,15 @@ class LayoutDB():
         ----------
         name : str
             library name
+
+        Returns
+        -------
+        dict
+            added library dictionary
         """
-        self.design[name] = dict()
+        l = dict()
+        self.design[name] = l
+        return l
 
     def add_cell(self, name, libname=None):
         """
@@ -145,9 +170,14 @@ class LayoutDB():
         Parameters
         ----------
         name : str
-            cellname
+            cell name
         libname :
             library name (if None, self.plib is used)
+
+        Returns
+        -------
+        dict
+            added cell dictionary
         """
         if libname == None: libname = self.plib
         s = {'instances': dict(), 'rects': dict(), 'vias': dict(),
@@ -186,15 +216,15 @@ class LayoutDB():
         ----------
         name : str
             rect name
-        xy : [[float, float], [float, float]]
+        xy : np.array([[float, float], [float, float]])
             xy coordinate
-        layer : [layername, purpose]
-            layer name an purpose
-
+        layer : [str, str]
+            layer name and purpose
 
         Returns
         -------
-        rect object
+        laygo.LayoutObject.Rect
+            added rect object
         """
         if name == None: name = self.genid(type='rect', pfix='R')
         xy = np.asarray(xy)
@@ -216,13 +246,13 @@ class LayoutDB():
             net name
         xy : [float, float]
             xy coordinate
-        layer : [layername, purpose]
-            layer name an purpose
-
+        layer : [str, str]
+            layer name and purpose
 
         Returns
         -------
-        pin object
+        laygo.LayoutObject.Pin
+            generated pin object
         """
         if name == None: name = self.genid(type='pin', pfix='P')
         xy = np.asarray(xy)
@@ -244,13 +274,13 @@ class LayoutDB():
             text string
         xy : [float, float]
             xy coordinate
-        layer : [layername, purpose]
-            layer name an purpose
-
+        layer : [str, str]
+            layer name and purpose
 
         Returns
         -------
-        text object
+        laygo.LayoutObject.Text
+            generated text object
         """
         if name == None: name = self.genid(type='text', pfix='T')
         xy = np.asarray(xy)
@@ -272,7 +302,7 @@ class LayoutDB():
         libname : str
             cell library name (not output library)
         cellname : str
-            cellname
+            cell name
         xy : np.array([float, float])
             xy coordinate
         shape : np.array([x0, y0])
@@ -286,7 +316,8 @@ class LayoutDB():
 
         Returns
         -------
-        instance object
+        laygo.LayoutObject.Instance
+            instance object
         """
         if name == None: name = self.genid(type='instance', pfix='I')
         xy = np.asarray(xy)
@@ -303,11 +334,17 @@ class LayoutDB():
     def get_rect(self, name, libname=None):
         """
         Get rect object
+
         Parameters
         ----------
-        name :
+        name : str
+            rect name
         libname : str
-         libname. if None, self.db._plib is used
+            libname. if None, self.db._plib is used
+
+        Returns
+        -------
+        laygo.LayoutObject.Rect
         """
         if libname==None: libname=self.plib
         return self.design[libname][self.pcell]['rects'][name]
@@ -315,12 +352,17 @@ class LayoutDB():
     def get_inst(self, name=None, libname=None, index=np.array([0, 0])):
         """
         Get instance object
+
         Parameters
         ----------
         name : str
-         instance name, if none, all instance is returned
+            instance name, if none, all instance is returned
         libname : str
-         libname. if None, self.db._plib is used
+            libname. if None, self.db._plib is used
+
+        Returns
+        -------
+        laygo.LayoutObject.Instancce
         """
         #TODO: implement index handling
         if libname==None: libname=self.plib
@@ -332,11 +374,17 @@ class LayoutDB():
     def get_pin(self, name, libname=None):
         """
         Get pin object
+
         Parameters
         ----------
-        name :
+        name : str
+            pin name
         libname : str
-         libname. if None, self.db._plib is used
+            libname. if None, self.db._plib is used
+
+        Returns
+        -------
+        laygo.LayoutObject.Pin
         """
         if libname==None: libname=self.plib
         return self.design[libname][self.pcell]['pins'][name]
@@ -344,9 +392,11 @@ class LayoutDB():
     def merge(self, db):
         """
         Merge a LayoutDB object to self.db
+
         Parameters
         ----------
-        db : LayoutDB
+        db : laygo.LayoutDB.LayoutDB
+            layout database to be merged to self.db
         """
         for ln, l in db.design.items():
             if not ln in self.design:
@@ -363,7 +413,6 @@ class LayoutDB():
                     self.add_inst(i.name, i.libname, i.cellname, i.xy, i.shape, i.spacing, i.transform)
                 for t in s['texts'].values():
                     self.add_text(t.name, t.text, t.xy, t.layer)
-        pass
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)

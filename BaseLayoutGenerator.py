@@ -46,7 +46,7 @@ import numpy as np
 class BaseLayoutGenerator():
     """
     The BaseLayoutGenerator class implements functions and variables for full-custom layout generations on physical
-    grids
+    grids.
 
     Parameters
     ----------
@@ -74,7 +74,7 @@ class BaseLayoutGenerator():
     # auxiliary functions
     def display(self, libname=None, cellname=None):
         """
-        Display DB information
+        Display DB information.
 
         Parameters
         ----------
@@ -88,7 +88,7 @@ class BaseLayoutGenerator():
     # library and cell related functions
     def add_library(self, name, select=True):
         """
-        Create a library to work on
+        Create a library to work on.
 
         Parameters
         ----------
@@ -103,16 +103,16 @@ class BaseLayoutGenerator():
 
     def add_cell(self, name, libname=None, select=True):
         """
-        Create a cell to work on
+        Create a cell to work on.
 
         Parameters
         ----------
         name : str
             cellname
         libname : str, optional
-            library name. If None, current selected library name is used
+            library name. If None, current selected library name is used.
         select : bool, optional
-            if True, automatically select the cell to work on after creation
+            if True, automatically select the cell to work on after creation.
         """
         self.db.add_cell(name, libname)
         if select is True:
@@ -120,7 +120,7 @@ class BaseLayoutGenerator():
 
     def sel_library(self, name):
         """
-        Select a library to work on
+        Select a library to work on.
 
         Parameters
         ----------
@@ -131,19 +131,19 @@ class BaseLayoutGenerator():
 
     def sel_cell(self, cellname):
         """
-        Select a cell to work on
+        Select a cell to work on.
 
         Parameters
         ----------
         cellname : str
-            cellname
+            cell name
         """
         self.db.sel_cell(cellname)
 
     # geometry related functions
     def add_rect(self, name, xy, layer, netname=None):
         """
-        Add a rect to selected region
+        Add a rect to selected region.
 
         Parameters
         ----------
@@ -163,7 +163,7 @@ class BaseLayoutGenerator():
 
     def add_pin(self, name, netname, xy, layer):
         """
-        Add a pin to specified region
+        Add a pin to specified region.
 
         Parameters
         ----------
@@ -185,7 +185,7 @@ class BaseLayoutGenerator():
 
     def add_text(self, name, text, xy, layer):
         """
-        Add a text to specified coordinate
+        Add a text to specified coordinate.
 
         Parameters
         ----------
@@ -208,7 +208,7 @@ class BaseLayoutGenerator():
     def add_inst(self, name, libname, cellname, xy=None, shape=np.array([1, 1]), spacing=np.array([0, 0]),
                  transform='R0', template=None):
         """
-        Add an instance to specified coordinate
+        Add an instance to specified coordinate.
 
         Parameters
         ----------
@@ -239,7 +239,7 @@ class BaseLayoutGenerator():
     # access functions
     def get_rect(self, name, libname=None):
         """
-        Get the handle of specified rect object
+        Get the handle of specified rect object.
 
         Parameters
         ----------
@@ -257,14 +257,14 @@ class BaseLayoutGenerator():
 
     def get_inst(self, name=None, libname=None, index=np.array([0, 0])):
         """
-        Get the handle of specified instance object
+        Get the handle of specified instance object.
 
         Parameters
         ----------
         name : str, optional
-            instance name, if None, all instances are returned
+            instance name, if None, all instances are returned.
         libname : str, optional
-            libname. if None, self.db._plib is used
+            libname. if None, self.db._plib is used.
 
         Returns
         -------
@@ -275,14 +275,14 @@ class BaseLayoutGenerator():
 
     def get_pin(self, name, libname=None):
         """
-        Get the handle of speficied pin object
+        Get the handle of speficied pin object.
 
         Parameters
         ----------
         name : str
             pin name
         libname : str, optional
-            libname. if None, self.db._plib is used
+            libname. if None, self.db._plib is used.
 
         Returns
         -------
@@ -296,7 +296,7 @@ class BaseLayoutGenerator():
                    logical_unit=0.001, pin_label_height=0.1, text_height=0.1, annotate_layer = ['text', 'drawing'],
                    annotate_height = 0.01):
         """
-        Export specified cell(s) to a GDS file
+        Export specified cell(s) to a GDS file.
 
         Parameters
         ----------
@@ -325,7 +325,7 @@ class BaseLayoutGenerator():
 
     def export_BAG(self, prj, libname=None, cellname=None, array_delimiter=['[',']'], via_tech='cdsDefTechLib'):
         """
-        Export specified cell(s) to BagProject object
+        Export specified cell(s) to BagProject object.
 
         Parameters
         ----------
@@ -338,9 +338,9 @@ class BaseLayoutGenerator():
         prj : BagProject
             bag object to export
         array_delimiter : list or str
-            array delimiter for multiple placements
+            array delimiter for multiple placements.
         via_tech : str
-            via technology entry for BagProject. Not being used currently because instances are used for via connections
+            via technology entry for BagProject. Not being used currently because instances are used for via connections.
         """
         if libname==None: libname=self.db.plib
         if cellname==None: cellname=self.db.pcell
@@ -348,7 +348,7 @@ class BaseLayoutGenerator():
 
     def import_GDS(self, filename, layermapfile="default.layermap", instance_libname=None, append=True):
         """
-        Import layout database from gds file
+        Import layout database from gds file.
 
         Parameters
         ----------
@@ -369,7 +369,7 @@ class BaseLayoutGenerator():
 
     def import_BAG(self, prj, libname, cellname=None, yamlfile="import_BAG_scratch.yaml", append=True):
         """
-        Import layout database from BagProject object
+        Import layout database from BagProject object.
 
         Parameters
         ----------
