@@ -3986,7 +3986,7 @@ if __name__ == '__main__':
                    origin=np.array([0, 0]), m=1, create_pin=True)
     laygen.templates.sel_library(utemplib)
     laygen.add_template_from_cell()
-
+    
     laygen.add_cell('latch_2ck_2x')
     laygen.sel_cell('latch_2ck_2x')
     laygen.templates.sel_library(workinglib)
@@ -4129,6 +4129,7 @@ if __name__ == '__main__':
     laygen.templates.sel_library(utemplib)
     laygen.add_template_from_cell()
 
+
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)
 
     #bag export, if bag does not exist, gds export
@@ -4155,6 +4156,7 @@ if __name__ == '__main__':
                  'ndsr_1x', 'ndsr_2x',
                  'mux2to1_1x', 'mux2to1_2x', 'mux2to1_4x', 'mux2to1_8x',
                  ]
+
     import imp
     try:
         imp.find_module('bag')

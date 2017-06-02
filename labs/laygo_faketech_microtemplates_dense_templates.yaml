@@ -13,8 +13,13 @@ laygo_faketech_microtemplates_dense:
       G0:
         layer: [M1, pin]
         netname: G0
-        xy0: [0.125, 0.625]
-        xy1: [0.275, 0.775]
+        xy0: [-0.075, 0.625]
+        xy1: [0.075, 0.775]
+      G1:
+        layer: [M1, pin]
+        netname: G1
+        xy0: [0.325, 0.625]
+        xy1: [0.475, 0.775]
       S0:
         layer: [M1, pin]
         netname: S0
@@ -123,6 +128,18 @@ laygo_faketech_microtemplates_dense:
     pins: {}
     xy0: [0.0, 0.0]
     xy1: [0.4, 0.9]
+  nmos4_fast_space_4x:
+    pins: {}
+    xy0: [0.0, 0.0]
+    xy1: [0.8, 0.9]
+  nmos4_fast_space_nf2:
+    pins: {}
+    xy0: [0.0, 0.0]
+    xy1: [0.4, 0.9]
+  nmos4_fast_space_nf4:
+    pins: {}
+    xy0: [0.0, 0.0]
+    xy1: [0.8, 0.9]
   nmos4_fast_tap:
     pins:
       TAP0:
@@ -130,7 +147,7 @@ laygo_faketech_microtemplates_dense:
         netname: VSS
         xy0: [0.55, 0.2]
         xy1: [0.65, 0.5]
-      TAP1:
+      VSS:
         layer: [M1, pin]
         netname: VSS
         xy0: [0.75, 0.2]
@@ -151,8 +168,13 @@ laygo_faketech_microtemplates_dense:
       G0:
         layer: [M1, pin]
         netname: G0
-        xy0: [0.125, 0.625]
-        xy1: [0.275, 0.775]
+        xy0: [-0.075, 0.625]
+        xy1: [0.075, 0.775]
+      G1:
+        layer: [M1, pin]
+        netname: G1
+        xy0: [0.325, 0.625]
+        xy1: [0.475, 0.775]
       S0:
         layer: [M1, pin]
         netname: S0
@@ -261,6 +283,18 @@ laygo_faketech_microtemplates_dense:
     pins: {}
     xy0: [0.0, 0.0]
     xy1: [0.4, 0.9]
+  pmos4_fast_space_4x:
+    pins: {}
+    xy0: [0.0, 0.0]
+    xy1: [0.8, 0.9]
+  pmos4_fast_space_nf2:
+    pins: {}
+    xy0: [0.0, 0.0]
+    xy1: [0.4, 0.9]
+  pmos4_fast_space_nf4:
+    pins: {}
+    xy0: [0.0, 0.0]
+    xy1: [0.8, 0.9]
   pmos4_fast_tap:
     pins:
       TAP0:
@@ -268,7 +302,7 @@ laygo_faketech_microtemplates_dense:
         netname: VSS
         xy0: [0.55, 0.2]
         xy1: [0.65, 0.5]
-      TAP1:
+      VSS:
         layer: [M1, pin]
         netname: VSS
         xy0: [0.75, 0.2]

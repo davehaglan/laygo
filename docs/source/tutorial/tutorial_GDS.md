@@ -24,6 +24,12 @@ Run following commands below to install laygo and load.
     import numpy as np
     ```
 
+>Note: if you just want to run
+[quick_start_GDS.py](../../../quick_start_GDS.py) (not copy & pasting
+codes in this document), you should first go into the laygo directory,
+by typing 'cd laygo', and type 'run 'quick_start_GDS.py' because all
+path variables in that file are based on the laygo directory.
+
 ## Initialize GridLayoutGenerator
 Run the following commands to initialize GridLayoutGenerator, the main
 generator object that contains all template and grid based layout

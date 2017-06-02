@@ -619,6 +619,11 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             _xy1_phy_center = xy1_phy
             _xy0_phy = xy0_phy - vwidth - vextend0
             _xy1_phy = xy1_phy + vwidth + vextend1
+        else: #2 coordinates match (-no routes)
+            _xy0_phy = xy0_phy
+            _xy1_phy = xy1_phy
+            _xy0_phy_center = xy0_phy
+            _xy1_phy_center = xy1_phy
         return np.vstack((_xy0_phy, _xy1_phy)), np.vstack((_xy0_phy_center, _xy1_phy_center))
 
     #advanced route functions
@@ -798,8 +803,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         '''
         return [rh0, rv0]
 
-    def route_vhv(self, layerv0, layerh, xy0, xy1, track_y, gridname=None, gridname0=None, layerv1=None, gridname1=None,
-                  extendl=0, extendr=0):
+    def route_vhv(self, layerv0, layerh, xy0, xy1, track_y, gridname0=None, layerv1=None, gridname1=None,
+                  extendl=0, extendr=0, gridname=None):
         """
         Vertical-horizontal-vertical route function
 
@@ -838,7 +843,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         if layerv1==None:
             layerv1=layerv0
         if not gridname is None:
-            print("gridname in GridLayoutGenerator.route_vh will be deprecated. Use gridname0 instead")
+            print("gridname in GridLayoutGenerator.route_vhv will be deprecated. Use gridname0 instead")
             gridname0 = gridname
         if gridname1 is None:
             gridname1 = gridname0
@@ -850,31 +855,31 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             xy1_0 = xy1[0] - extendl
 
         #resolve grid mismatch and do horizontal route
-        xy1_grid0=self.grids.get_phygrid_xy(gridname, xy1)[0]
+        xy1_grid0=self.grids.get_phygrid_xy(gridname0, xy1)[0]
         xy1_grid1=self.grids.get_phygrid_xy(gridname1, xy1)[0]
         if not xy1_grid0[0]==xy1_grid1[0]: #xy1[0] mismatch
             rh0 = self.route(None, layerh, xy0=np.array([xy0_0, track_y]), xy1=np.array([xy1_0, track_y]),
-                             gridname0=gridname, offset1=np.array([xy1_grid1[0] - xy1_grid0[0], 0]))
+                             gridname0=gridname0, offset1=np.array([xy1_grid1[0] - xy1_grid0[0], 0]))
         else:
             rh0 = self.route(None, layerh, xy0=np.array([xy0_0, track_y]), xy1=np.array([xy1_0, track_y]),
-                             gridname0=gridname)
+                             gridname0=gridname0)
         rv0=None;rv1=None
         if gridname==gridname1 and xy0[0]==xy1[0]: #no horozontal route/no via
             via0 = None
         else:
             via0 = [[0, 0]]
         if not track_y == xy0[1]:
-            rv0=self.route(None, layerv0, xy0=np.array([xy0[0], track_y]), xy1=xy0, gridname0=gridname, via0=via0)
+            rv0=self.route(None, layerv0, xy0=np.array([xy0[0], track_y]), xy1=xy0, gridname0=gridname0, via0=via0)
         else:
-            self.via(None, xy0, gridname=gridname)
+            self.via(None, xy0, gridname=gridname0)
         if not track_y == xy1[1]:
             rv1=self.route(None, layerv1, xy0=np.array([xy1[0], track_y]), xy1=xy1, gridname0=gridname1, via0=via0)
         else:
-            self.via(None, xy1, gridname=gridname)
+            self.via(None, xy1, gridname=gridname0)
         return [rv0, rh0, rv1]
 
-    def route_hvh(self, layerh0, layerv, xy0, xy1, track_x, gridname=None, gridname0=None, layerh1=None, gridname1=None,
-                  extendt=0, extendb=0):
+    def route_hvh(self, layerh0, layerv, xy0, xy1, track_x, gridname0=None, layerh1=None, gridname1=None,
+                  extendt=0, extendb=0, gridname=None):
         """
         Horizontal-vertical-horizontal route function
 
@@ -913,7 +918,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         if layerh1==None:
             layerh1=layerh0
         if not gridname is None:
-            print("gridname in GridLayoutGenerator.route_vh will be deprecated. Use gridname0 instead")
+            print("gridname in GridLayoutGenerator.route_hvh will be deprecated. Use gridname0 instead")
             gridname0 = gridname
         if gridname1 is None:
             gridname1 = gridname0
@@ -925,16 +930,16 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             xy1_0 = xy1[0] - extendb
 
         rv0 = self.route(None, layerv, xy0=np.array([track_x, xy0[1]]), xy1=np.array([track_x, xy1[1]]),
-                         gridname0=gridname)
+                         gridname0=gridname0)
         rh0 = None;rh1 = None
         if not track_x == xy0[0]:
-            rh0 = self.route(None, layerh0, xy0=xy0, xy1=np.array([track_x, xy0[1]]), gridname0=gridname, via1=[[0, 0]])
+            rh0 = self.route(None, layerh0, xy0=xy0, xy1=np.array([track_x, xy0[1]]), gridname0=gridname0, via1=[[0, 0]])
         else:
-            self.via(None, xy0, gridname=gridname)
+            self.via(None, xy0, gridname=gridname0)
         if not track_x == xy1[0]:
-            rh1 = self.route(None, layerh1, xy0=np.array([track_x, xy1[1]]), xy1=xy1, gridname0=gridname, via0=[[0, 0]])
+            rh1 = self.route(None, layerh1, xy0=np.array([track_x, xy1[1]]), xy1=xy1, gridname0=gridname0, via0=[[0, 0]])
         else:
-            self.via(None, xy1, gridname=gridname)
+            self.via(None, xy1, gridname=gridname0)
         return [rh0, rv0, rh1]
 
     #annotation
