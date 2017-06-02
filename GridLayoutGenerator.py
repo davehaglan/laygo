@@ -619,6 +619,11 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             _xy1_phy_center = xy1_phy
             _xy0_phy = xy0_phy - vwidth - vextend0
             _xy1_phy = xy1_phy + vwidth + vextend1
+        else: #2 coordinates match (-no routes)
+            _xy0_phy = xy0_phy
+            _xy1_phy = xy1_phy
+            _xy0_phy_center = xy0_phy
+            _xy1_phy_center = xy1_phy
         return np.vstack((_xy0_phy, _xy1_phy)), np.vstack((_xy0_phy_center, _xy1_phy_center))
 
     #advanced route functions
