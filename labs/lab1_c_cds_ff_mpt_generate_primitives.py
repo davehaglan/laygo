@@ -81,7 +81,6 @@ def construct_mosfet_structure(laygen, cpo = 0.2, prgrid = [0.2, 0.05], nf=2, h=
         for inst, xy in zip(instance_cellname_list, instance_xy_list):
             laygen.add_inst(None, workinglib, inst, xy=xy)
 
-
 with open("laygo_config.yaml", 'r') as stream:
     techdict = yaml.load(stream)
     tech = techdict['tech_lib']
