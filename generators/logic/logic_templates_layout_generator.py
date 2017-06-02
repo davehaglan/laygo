@@ -3321,7 +3321,7 @@ if __name__ == '__main__':
     rg_m3m4 = 'route_M3_M4_basic'
     rg_m1m2_pin = 'route_M1_M2_basic'
     rg_m2m3_pin = 'route_M2_M3_basic'
-    '''
+
     # cell generation
     laygen.add_cell('space_1x')
     laygen.sel_cell('space_1x')
@@ -3977,7 +3977,7 @@ if __name__ == '__main__':
                      devname_pmos_space='pmos4_fast_space',
                      m=8, create_pin=True)
     laygen.add_template_from_cell()
-    '''
+
     laygen.add_cell('latch_2ck_1x')
     laygen.sel_cell('latch_2ck_1x')
     laygen.templates.sel_library(workinglib)
@@ -3986,7 +3986,7 @@ if __name__ == '__main__':
                    origin=np.array([0, 0]), m=1, create_pin=True)
     laygen.templates.sel_library(utemplib)
     laygen.add_template_from_cell()
-    '''
+    
     laygen.add_cell('latch_2ck_2x')
     laygen.sel_cell('latch_2ck_2x')
     laygen.templates.sel_library(workinglib)
@@ -4128,7 +4128,7 @@ if __name__ == '__main__':
                    origin=np.array([0, 0]), m=2, create_pin=True)
     laygen.templates.sel_library(utemplib)
     laygen.add_template_from_cell()
-    '''
+
 
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)
 
@@ -4148,15 +4148,15 @@ if __name__ == '__main__':
                  'tinv_1x', 'tinv_small_1x', 'tinv_2x', 'tinv_4x', 'tinv_8x',
                  'nand_1x', 'nand_2x', 'nand_4x', 'nand_8x', 'nand_16x',
                  'nor_2x', 'nor_4x', 'nor_8x',
-                 #'latch_2ck_1x', 'latch_2ck_2x', 'latch_2ck_4x', 'latch_2ck_8x',
-                 #'latch_2ck_rstbh_2x', 'latch_2ck_rstbh_4x',
-                 #'dff_1x', 'dff_2x', 'dff_4x',
-                 #'dff_rsth_1x', 'dff_rsth_2x', 'dff_rsth_4x',
-                 #'oai22_1x', 'oai22_skewed_1x',
-                 #'ndsr_1x', 'ndsr_2x',
-                 #'mux2to1_1x', 'mux2to1_2x', 'mux2to1_4x', 'mux2to1_8x',
+                 'latch_2ck_1x', 'latch_2ck_2x', 'latch_2ck_4x', 'latch_2ck_8x',
+                 'latch_2ck_rstbh_2x', 'latch_2ck_rstbh_4x',
+                 'dff_1x', 'dff_2x', 'dff_4x',
+                 'dff_rsth_1x', 'dff_rsth_2x', 'dff_rsth_4x',
+                 'oai22_1x', 'oai22_skewed_1x',
+                 'ndsr_1x', 'ndsr_2x',
+                 'mux2to1_1x', 'mux2to1_2x', 'mux2to1_4x', 'mux2to1_8x',
                  ]
-    mycell_list=['latch_2ck_1x']
+
     import imp
     try:
         imp.find_module('bag')
