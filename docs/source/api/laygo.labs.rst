@@ -20,6 +20,14 @@ laygo.labs.lab1_b_baselayoutgenertor_import module
     :undoc-members:
     :show-inheritance:
 
+laygo.labs.lab1_c_cds_ff_mpt_generate_primitives module
+-------------------------------------------------------
+
+.. automodule:: laygo.labs.lab1_c_cds_ff_mpt_generate_primitives
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 laygo.labs.lab1_c_faketech_generate_primitives module
 -----------------------------------------------------
 

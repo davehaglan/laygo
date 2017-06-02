@@ -107,6 +107,14 @@ laygo.TemplateObject module
     :undoc-members:
     :show-inheritance:
 
+laygo.quick_start_BAG module
+----------------------------
+
+.. automodule:: laygo.quick_start_BAG
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 laygo.quick_start_GDS module
 ----------------------------
 

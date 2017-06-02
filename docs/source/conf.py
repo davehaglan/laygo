@@ -21,11 +21,19 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+# -- Autodoc configuration -----------------------------------------------------
+
+autoclass_content = 'class'
+
+autodoc_member_order = 'bysource'
+
+autodoc_default_flags = ['members']
+
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
-# needs_sphinx = '1.0'
+needs_sphinx = '1.2'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -33,6 +41,15 @@
 extensions = [
     'sphinx.ext.autodoc',
     'sphinxcontrib.napoleon',
+    'sphinx.ext.imgmath',
+    'sphinx.ext.doctest',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.todo',
+    'sphinx.ext.coverage',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.githubpages',
+    'sphinx.ext.autosummary',
+    'IPython.sphinxext.ipython_console_highlighting',
 ]
 
 #markdown support
@@ -42,6 +59,8 @@ source_parsers = {
    '.md': 'recommonmark.parser.CommonMarkParser',
 }
 
+# make numpydoc work with autosummary
+numpydoc_show_class_members = False
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
@@ -133,7 +152,6 @@ todo_include_todos = False
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
-#html_theme = 'classic'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -331,7 +349,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'laygo_documentation', 'laygo Documentation',
-     author, 'laygo_documentation', 'One line description of project.',
+     author, 'laygo_documentation', 'LAYout with Gridded Objects',
      'Miscellaneous'),
 ]
 
