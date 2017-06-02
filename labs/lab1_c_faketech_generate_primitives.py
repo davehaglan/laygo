@@ -77,6 +77,7 @@ def construct_mosfet_structure(laygen, cpo = 0.2, prgrid = [0.2, 0.05], nf=2, h=
             laygen.add_pin(n, gate_netname_list[i], xy_g, pin[1])
 
 
+
 with open("laygo_config.yaml", 'r') as stream:
     techdict = yaml.load(stream)
     tech = techdict['tech_lib']
