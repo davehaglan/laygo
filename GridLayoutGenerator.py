@@ -627,9 +627,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         return np.vstack((_xy0_phy, _xy1_phy)), np.vstack((_xy0_phy_center, _xy1_phy_center))
 
     #advanced route functions
-    def route_vh(self, layerv=None, layerh=None, xy0=None, xy1=None, gridname=None, gridname0=None, gridname1=None,
+    def route_vh(self, layerv=None, layerh=None, xy0=None, xy1=None, gridname0=None, gridname1=None,
                  refinstname0=None, refinstname1=None, refinstindex0=np.array([0, 0]), refinstindex1=np.array([0, 0]),
-                 refpinname0=None, refpinname1=None, via0=None, via1=None):
+                 refpinname0=None, refpinname1=None, endstyle0=['truncate', 'truncate'],
+                 endstyle1=['truncate', 'truncate'], via0=None, via1=None, gridname=None):
         """
         Vertical-horizontal route function
 
@@ -715,10 +716,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         '''
         return [rv0, rh0]
 
-    def route_hv(self, layerh=None, layerv=None, xy0=None, xy1=None, gridname=None, gridname0=None, gridname1=None,
+    def route_hv(self, layerh=None, layerv=None, xy0=None, xy1=None, gridname0=None, gridname1=None,
                  refinstname0=None, refinstname1=None, refinstindex0=np.array([0, 0]), refinstindex1=np.array([0, 0]),
                  refpinname0=None, refpinname1=None, endstyle0=['truncate', 'truncate'],
-                 endstyle1=['truncate', 'truncate'], via0=None, via1=None):
+                 endstyle1=['truncate', 'truncate'], via0=None, via1=None, gridname=None):
         """
         Horizontal-vertical route function
 
