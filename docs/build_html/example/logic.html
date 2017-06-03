@@ -34,7 +34,7 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="laygo_documentation 1.0 documentation" href="../index.html"/>
-        <link rel="next" title="serdes example" href="serdes.html"/>
+        <link rel="next" title="SERDES generator" href="serdes.html"/>
         <link rel="prev" title="Laygo architecture" href="../architecture/architecture.html"/> 
 
   
@@ -101,12 +101,16 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture/architecture.html">Architecture</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Generator example - logic family</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#running-instruction">Running instruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-and-launch">Installation and launch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#supported-logic-gate-types">Supported logic gate types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#schematic-templates">Schematic templates</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="serdes.html">Generator example - serdes (to be updated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="serdes.html">Generator example - serdes (to be updated)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="serdes.html#installation-and-launch">Installation and launch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serdes.html#parameterizations">Parameterizations</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="adc_sar.html">Generator example - sar adc (to be updated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tech/tech.html">Technology setup guidelines (to be updated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API documentation</a><ul>
@@ -154,10 +158,11 @@
 <p>This section describes how to generate logic gate layout templates,
 which are used for constructing custom digital cells.</p>
 <blockquote>
-<div>Note: the codes are lengthy and not cleaned up yet. Next version will
-be released soon.</div></blockquote>
-<div class="section" id="running-instruction">
-<span id="running-instruction"></span><h2>Running instruction<a class="headerlink" href="#running-instruction" title="Permalink to this headline">¶</a></h2>
+<div>Note: the codes are lengthy and not cleaned up yet. An improved
+version following the tutorial conventions (possibly with more
+abstracting functions) will be released soon.</div></blockquote>
+<div class="section" id="installation-and-launch">
+<span id="installation-and-launch"></span><h2>Installation and launch<a class="headerlink" href="#installation-and-launch" title="Permalink to this headline">¶</a></h2>
 <ol>
 <li><p class="first">Clone a proper tech repo. For cds_ff_mpt example type following
 commands.</p>
@@ -175,7 +180,7 @@ $ git submodule foreach git pull origin master
 example, for <strong>cds_ff_mpt</strong> technology, the library name will be
 <strong>cds_ff_mpt_logic_template</strong>.</p>
 </li>
-<li><p class="first">Run this command to generate logic layout.</p>
+<li><p class="first">Run this command to generate logic layouts.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">logic</span><span class="o">/</span><span class="n">logic_templates_layout_generator</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
@@ -227,7 +232,7 @@ generated.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="serdes.html" class="btn btn-neutral float-right" title="serdes example">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="serdes.html" class="btn btn-neutral float-right" title="SERDES generator">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../architecture/architecture.html" class="btn btn-neutral" title="Laygo architecture"><span class="fa fa-arrow-circle-left"></span> Previous</a>

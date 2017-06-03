@@ -9,7 +9,7 @@ which are used for constructing custom digital cells.
  version following the tutorial conventions (possibly with more 
 abstracting functions) will be released soon.
 
-## Running instruction
+## Installation and launch
 1. Clone a proper tech repo. For cds_ff_mpt example type following
 commands.
 
@@ -27,7 +27,7 @@ commands.
 example, for **cds_ff_mpt** technology, the library name will be
 **cds_ff_mpt_logic_template**.
 
-4. Run this command to generate logic layout.
+4. Run this command to generate logic layouts.
 
     ```python
     run laygo/generators/logic/logic_templates_layout_generator.py
