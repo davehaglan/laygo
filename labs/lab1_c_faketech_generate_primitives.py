@@ -454,7 +454,7 @@ for header in header_list:
     params['generate_sd_pins'] = False
     construct_mosfet_structure(laygen, **params)
 
-    mycell = header + '_space_nf2'  # space_2x
+    mycell = header + '_space_nf2'  # space_nf2
     mycells.append(mycell)
     laygen.add_cell(mycell)
     laygen.sel_cell(mycell)
@@ -464,7 +464,7 @@ for header in header_list:
     params['generate_sd_pins'] = False
     construct_mosfet_structure(laygen, **params)
 
-    mycell = header + '_space_nf4'  # space_4x
+    mycell = header + '_space_nf4'  # space_nf4
     mycells.append(mycell)
     laygen.add_cell(mycell)
     laygen.sel_cell(mycell)
