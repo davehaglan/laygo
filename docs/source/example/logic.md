@@ -22,8 +22,9 @@ commands.
 
 2. Set setting up files, run virtuoso and BAG.
 
-3. Create an empty library called **(tech)_logic_templates**. For
-example, the library name will be **cds_ff_mpt_logic_template**.
+3. Create an empty library called (tech)_logic_templates. For
+example, for **cds_ff_mpt** technology, the library name will be
+**cds_ff_mpt_logic_template**.
 
 4. Run this command to generate logic layout.
 
@@ -31,7 +32,7 @@ example, the library name will be **cds_ff_mpt_logic_template**.
     run laygo/generators/logic/logic_templates_layout_generator.py
     ```
 
-5. Open **(tech)_logic_templates** library and check if cells are
+5. Open (tech)_logic_templates library and check if cells are
 generated.
 
     ![logic_lib](images/logic_lib.png)
