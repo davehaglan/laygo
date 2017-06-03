@@ -67,15 +67,18 @@ def construct_mosfet_structure(laygen, cpo = 0.2, prgrid = [0.2, 0.05], nf=2, h=
             if not n==None:
                 xy_sd = np.array([[-wds_m1 / 2, ofysd_m1 - hds_m1 / 2], [wds_m1 / 2, ofysd_m1 + hds_m1 / 2]]) \
                        + np.array([i * cpo, 0])
-                laygen.add_rect(None, xy_sd, pin[1])
                 laygen.add_pin(n, sd_netname_list[i], xy_sd, pin[1])
+                if n != sd_netname_list[i]:
+                    laygen.add_pin(n+'_net', n, xy_sd, text)
     # gate pins
     if generate_gate_pins:
         for i, n in enumerate(gate_pinname_list):
             xy_g = np.array([[ofxg_m1 - wg_m1 / 2, ofyg_m1 - hg_m1 / 2], [ofxg_m1 + wg_m1 / 2, ofyg_m1 + hg_m1 / 2]]) \
                    + np.array([i*2*cpo, 0])
-            laygen.add_rect(None, xy_g, pin[1])
+            #laygen.add_rect(None, xy_g, pin[1])
             laygen.add_pin(n, gate_netname_list[i], xy_g, pin[1])
+            if not n == gate_netname_list[i]:
+                laygen.add_pin(n+'_net', n, xy_g, text)
     # instances
     if instance_cellname_list:
         for inst, xy in zip(instance_cellname_list, instance_xy_list):
@@ -504,6 +507,42 @@ for header in header_list:
     laygen.sel_cell(mycell)
     params = deepcopy(params_transistor_default)
     params['nf'] = 2  # number of fingers
+    params['generate_gate_pins'] = False
+    params['generate_sd_pins'] = False
+    params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*2 
+    params['instance_xy_list'] = [[0, 0], [params['cpo'], 0]]
+    construct_mosfet_structure(laygen, **params)
+
+    mycell = header + '_space_4x'  # space_4x
+    mycells.append(mycell)
+    laygen.add_cell(mycell)
+    laygen.sel_cell(mycell)
+    params = deepcopy(params_transistor_default)
+    params['nf'] = 4  # number of fingers
+    params['generate_gate_pins'] = False
+    params['generate_sd_pins'] = False
+    params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*2 
+    params['instance_xy_list'] = [[0, 0], [params['cpo'], 0]]
+    construct_mosfet_structure(laygen, **params)
+
+    mycell = header + '_space_nf2'  # space_nf2
+    mycells.append(mycell)
+    laygen.add_cell(mycell)
+    laygen.sel_cell(mycell)
+    params = deepcopy(params_transistor_default)
+    params['nf'] = 2  # number of fingers
+    params['generate_gate_pins'] = False
+    params['generate_sd_pins'] = False
+    params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*2 
+    params['instance_xy_list'] = [[0, 0], [params['cpo'], 0]]
+    construct_mosfet_structure(laygen, **params)
+
+    mycell = header + '_space_nf4'  # space_nf4
+    mycells.append(mycell)
+    laygen.add_cell(mycell)
+    laygen.sel_cell(mycell)
+    params = deepcopy(params_transistor_default)
+    params['nf'] = 4  # number of fingers
     params['generate_gate_pins'] = False
     params['generate_sd_pins'] = False
     params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*2 
