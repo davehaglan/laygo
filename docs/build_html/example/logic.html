@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>logic family generator example &mdash; laygo_documentation 1.0 documentation</title>
+  <title>Logic family generator &mdash; laygo_documentation 1.0 documentation</title>
   
 
   
@@ -100,7 +100,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture/architecture.html">Architecture</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Generator example - logic family (to be updated)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Generator example - logic family</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#running-instruction">Running instruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#supported-logic-gate-types">Supported logic gate types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#schematic-templates">Schematic templates</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="serdes.html">Generator example - serdes (to be updated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="adc_sar.html">Generator example - sar adc (to be updated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tech/tech.html">Technology setup guidelines (to be updated)</a></li>
@@ -132,7 +137,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-    <li>logic family generator example</li>
+    <li>Logic family generator</li>
       <li class="wy-breadcrumbs-aside">
         
           <a href="../_sources/example/logic.txt" rel="nofollow"> View page source</a>
@@ -143,8 +148,76 @@
 </div>
           <div role="main" class="document">
             
-  <div class="section" id="logic-family-generator-example">
-<span id="logic-family-generator-example"></span><h1>logic family generator example<a class="headerlink" href="#logic-family-generator-example" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="logic-family-generator">
+<span id="logic-family-generator"></span><h1>Logic family generator<a class="headerlink" href="#logic-family-generator" title="Permalink to this headline">¶</a></h1>
+<p><img alt="logic" src="../_images/logic.png" /></p>
+<p>This section describes how to generate logic gate layout templates,
+which are used for constructing custom digital cells.</p>
+<blockquote>
+<div>Note: the codes are lengthy and not cleaned up yet. Next version will
+be released soon.</div></blockquote>
+<div class="section" id="running-instruction">
+<span id="running-instruction"></span><h2>Running instruction<a class="headerlink" href="#running-instruction" title="Permalink to this headline">¶</a></h2>
+<ol>
+<li><p class="first">Clone a proper tech repo. For cds_ff_mpt example type following
+commands.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git@github.com:ucb-art/BAG2_cds_ff_mpt.git
+$ cd BAG2_cds_ff_mpt
+$ git submodule init
+$ git submodule update
+$ git submodule foreach git pull origin master
+</pre></div>
+</div>
+</li>
+<li><p class="first">Set setting up files, run virtuoso and BAG.</p>
+</li>
+<li><p class="first">Create an empty library called **(tech)_logic_templates**. For
+example, the library name will be <strong>cds_ff_mpt_logic_template</strong>.</p>
+</li>
+<li><p class="first">Run this command to generate logic layout.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">logic</span><span class="o">/</span><span class="n">logic_templates_layout_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Open **(tech)_logic_templates** library and check if cells are
+generated.</p>
+<p><img alt="logic_lib" src="../_images/logic_lib.png" /></p>
+</li>
+</ol>
+</div>
+<div class="section" id="supported-logic-gate-types">
+<span id="supported-logic-gate-types"></span><h2>Supported logic gate types<a class="headerlink" href="#supported-logic-gate-types" title="Permalink to this headline">¶</a></h2>
+<ol class="simple">
+<li>bcap : capacitors</li>
+<li>dcap : decoupling capacitors</li>
+<li>dff : D flip-flops</li>
+<li>dff_rsth : D flip-flops with reset high</li>
+<li>inv : inverters</li>
+<li>latch_2ck : D latches with differential clock input</li>
+<li>latch_2ck : D latches with differential clock input, with reset high</li>
+<li>mux2to1 : 2-to-1 muxes</li>
+<li>nand : nand gates</li>
+<li>ndsr : nand-type sr latches</li>
+<li>nor : nor gates</li>
+<li>nsw : nmos switches</li>
+<li>nsw_wovdd : nmos switches without VDD rail</li>
+<li>oai22 : 2-input oai gates</li>
+<li>space : fillers</li>
+<li>space_wovdd : fillers without VDD rail</li>
+<li>tap : tap cells</li>
+<li>tap_wovdd : tap cells without vdd rail</li>
+<li>tgate : transmission gates</li>
+<li>tie : tie cells</li>
+<li>tie_wovdd : tie cells without vdd rail</li>
+<li>tinv : tri-state inverters</li>
+<li>tinv_small : small tri-state inverters</li>
+</ol>
+</div>
+<div class="section" id="schematic-templates">
+<span id="schematic-templates"></span><h2>Schematic templates<a class="headerlink" href="#schematic-templates" title="Permalink to this headline">¶</a></h2>
+<p>Corresponding schematic templates can be found in:
+<strong>generators/logic/logic_templates</strong>.</p>
+</div>
 </div>
 
 

@@ -100,7 +100,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture/architecture.html">Architecture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../example/logic.html">Generator example - logic family (to be updated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/logic.html">Generator example - logic family</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../example/logic.html#running-instruction">Running instruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/logic.html#supported-logic-gate-types">Supported logic gate types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/logic.html#schematic-templates">Schematic templates</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../example/serdes.html">Generator example - serdes (to be updated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../example/adc_sar.html">Generator example - sar adc (to be updated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tech/tech.html">Technology setup guidelines (to be updated)</a></li>
@@ -846,7 +851,7 @@ ex) [[x0, y0], [x1, x1], ..., [xn-1, yn-1], [x0, y0]]</li>
 <p>Base class for GDSIO objects</p>
 <dl class="attribute">
 <dt id="laygo.GDSIO.Element.possible_transform_parameters">
-<code class="descname">possible_transform_parameters</code><em class="property"> = {'R90': (0, 90), 'R270': (0, 270), 'MX': (32768, 0), 'R0': (None, None), 'R180': (0, 180), 'MY': (32768, 180)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="descname">possible_transform_parameters</code><em class="property"> = {'R0': (None, None), 'R90': (0, 90), 'MY': (32768, 180), 'MX': (32768, 0), 'R270': (0, 270), 'R180': (0, 180)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; transform parameter dictionary</p>
 </dd></dl>
 
@@ -1531,7 +1536,7 @@ grids.</p>
 
 <dl class="attribute">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.layers">
-<code class="descname">layers</code><em class="property"> = {'prbnd': [], 'text': [], 'pin': [], 'metal': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">layers</code><em class="property"> = {'prbnd': [], 'metal': [], 'text': [], 'pin': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; layer dictionary</p>
 </dd></dl>
 
@@ -1827,7 +1832,7 @@ ex) if xy0 = [1, 2], xy1 = [1, 5], via1 = [0, 2] then a via will be placed at [1
 
 <dl class="method">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.route_vhv">
-<code class="descname">route_vhv</code><span class="sig-paren">(</span><em>layerv0</em>, <em>layerh</em>, <em>xy0</em>, <em>xy1</em>, <em>track_y</em>, <em>gridname=None</em>, <em>gridname0=None</em>, <em>layerv1=None</em>, <em>gridname1=None</em>, <em>extendl=0</em>, <em>extendr=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.route_vhv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.route_vhv" title="Permalink to this definition">¶</a></dt>
+<code class="descname">route_vhv</code><span class="sig-paren">(</span><em>layerv0</em>, <em>layerh</em>, <em>xy0</em>, <em>xy1</em>, <em>track_y</em>, <em>gridname0=None</em>, <em>layerv1=None</em>, <em>gridname1=None</em>, <em>extendl=0</em>, <em>extendr=0</em>, <em>gridname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.route_vhv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.route_vhv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Vertical-horizontal-vertical route function</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1860,7 +1865,7 @@ ex) if xy0 = [1, 2], xy1 = [1, 5], via1 = [0, 2] then a via will be placed at [1
 
 <dl class="method">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.route_hvh">
-<code class="descname">route_hvh</code><span class="sig-paren">(</span><em>layerh0</em>, <em>layerv</em>, <em>xy0</em>, <em>xy1</em>, <em>track_x</em>, <em>gridname=None</em>, <em>gridname0=None</em>, <em>layerh1=None</em>, <em>gridname1=None</em>, <em>extendt=0</em>, <em>extendb=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.route_hvh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.route_hvh" title="Permalink to this definition">¶</a></dt>
+<code class="descname">route_hvh</code><span class="sig-paren">(</span><em>layerh0</em>, <em>layerv</em>, <em>xy0</em>, <em>xy1</em>, <em>track_x</em>, <em>gridname0=None</em>, <em>layerh1=None</em>, <em>gridname1=None</em>, <em>extendt=0</em>, <em>extendb=0</em>, <em>gridname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.route_hvh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.route_hvh" title="Permalink to this definition">¶</a></dt>
 <dd><p>Horizontal-vertical-horizontal route function</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -3735,7 +3740,7 @@ All information shown in db.display() will be saved</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>db</strong> (<a class="reference internal" href="#laygo.TemplateDB.TemplateDB" title="laygo.TemplateDB.TemplateDB"><em>TemplateDB</em></a>) &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>db</strong> (<a class="reference internal" href="#module-laygo.TemplateDB" title="laygo.TemplateDB"><em>TemplateDB</em></a>) &#8211; </td>
 </tr>
 </tbody>
 </table>
