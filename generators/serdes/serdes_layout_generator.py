@@ -88,7 +88,6 @@ def generate_ser2to1_body(laygen, objectname_pfix, placement_grid, routing_grid_
     i1_o_xy = laygen.get_inst_pin_coord(i1.name, 'O', rg_m3m4)
 
     # internal route
-    print(laygen.layers['metal'], laygen.layers['metal'], i0_o_xy, i1_i0_xy, rg_m3m4)
     laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][3], i0_o_xy[0], i1_i0_xy[0], rg_m3m4)
     laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], iclk0_o_xy[0], i1_en1_xy[0], i0_clk_xy[0][1], rg_m3m4)
     laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], iclkb0_o_xy[0], i1_en0_xy[0], i0_clkb_xy[0][1], rg_m3m4)
@@ -101,48 +100,6 @@ def generate_ser2to1_body(laygen, objectname_pfix, placement_grid, routing_grid_
     laygen.pin('CLKB', laygen.layers['pin'][3], laygen.get_inst_pin_coord(iclkb0.name, 'I', rg_m3m4, sort=True), rg_m3m4)
 
     create_power_pin_from_inst(laygen, layer=laygen.layers['pin'][2], gridname=rg_m1m2, inst_left=iclk0, inst_right=i1)
-
-def generate_rstto1(laygen, objectname_pfix, placement_grid, routing_grid_m2m3, routing_grid_m3m4,
-                    origin=np.array([0, 0]), m=2):
-    """generate reset to 1 element"""
-    pg = placement_grid
-    rg_m2m3 = routing_grid_m2m3
-    rg_m3m4 = routing_grid_m3m4
-
-    # placement
-    i0 = laygen.place(
-        name = "I" + objectname_pfix + 'INV0',
-        templatename = "inv_" + str(m) + "x",
-        gridname = pg,
-        xy=origin
-    )
-    i1 = laygen.relplace(
-        name = "I" + objectname_pfix + 'ND0',
-        templatename = "nand_" + str(m) + "x",
-        gridname = pg,
-        refinstname = i0.name
-    )
-
-    # internal pins
-    i0_i_xy = laygen.get_inst_pin_coord(i0.name, 'I', rg_m3m4)
-    i0_o_xy = laygen.get_inst_pin_coord(i0.name, 'O', rg_m3m4)
-    i1_a_xy = laygen.get_inst_pin_coord(i1.name, 'A', rg_m3m4)
-    i1_b_xy = laygen.get_inst_pin_coord(i1.name, 'B', rg_m3m4)
-    i1_o_xy = laygen.get_inst_pin_coord(i1.name, 'O', rg_m3m4)
-
-    i0_o_xy_m2m3 = laygen.get_inst_pin_coord(i0.name, 'O', rg_m2m3)
-    i1_b_xy_m2m3 = laygen.get_inst_pin_coord(i1.name, 'B', rg_m2m3)
-
-    # internal route
-    laygen.route(None, laygen.layers['metal'][2], xy0=i0_o_xy_m2m3[1], xy1=i1_b_xy_m2m3[1], gridname0=rg_m2m3, addvia0=True, addvia1=True)
-
-    #pin
-    laygen.pin('RSTB', laygen.layers['pin'][3], laygen.get_inst_pin_coord(i1.name, 'A', rg_m3m4, sort=True), rg_m3m4)
-    laygen.pin('I', laygen.layers['pin'][3], laygen.get_inst_pin_coord(i0.name, 'I', rg_m3m4, sort=True), rg_m3m4)
-    laygen.pin('O', laygen.layers['pin'][3], laygen.get_inst_pin_coord(i1.name, 'O', rg_m3m4, sort=True), rg_m3m4)
-
-    #power pin
-    create_power_pin_from_inst(laygen, layer=laygen.layers['pin'][2], gridname=rg_m1m2, inst_left=i0, inst_right=i1)
 
 def generate_ser2to1(laygen, objectname_pfix, templib_logic, placement_grid, routing_grid_m3m4, devname_serbody,
                      origin=np.array([0, 0]), num_space_left=4, num_space_right=4):
@@ -223,8 +180,8 @@ def generate_ser2to1(laygen, objectname_pfix, templib_logic, placement_grid, rou
     #power pin
     create_power_pin_from_inst(laygen, layer=laygen.layers['pin'][2], gridname=rg_m1m2, inst_left=itap0, inst_right=itap1)
 
-def generate_ser_vstack(laygen, objectname_pfix, utemplib, placement_grid, routing_grid_m4m5, devname_serslice,
-                        origin=np.array([0, 0]), num_stages=3, radix=2):
+def generate_ser_vstack(laygen, objectname_pfix, templib_logic, placement_grid, routing_grid_m4m5, devname_serslice,
+                        origin=np.array([0, 0]), num_stages=3, radix=2, num_pwr=4):
     """generate vertically stacked serializer"""
 
     pg = placement_grid
@@ -233,7 +190,6 @@ def generate_ser_vstack(laygen, objectname_pfix, utemplib, placement_grid, routi
     input_size = radix ** num_stages
     size_ser2to1 = laygen.get_template_size(devname_serslice, pg)
     size_ser2to1_rg_m4m5 = laygen.get_template_size(devname_serslice, rg_m4m5)
-    size_pwrplug = laygen.get_template_size('pwrplug_M2_M3', pg, libname=utemplib)
     # placement
     iser = []
     y_ser = 0
@@ -248,23 +204,15 @@ def generate_ser_vstack(laygen, objectname_pfix, utemplib, placement_grid, routi
             if j%2==0:
                 iser.append(laygen.place("I" + objectname_pfix + 'SER_' + str(i) + '_' + str(j), devname_serslice, pg,
                                          xy=origin + np.array([xoffset, y_ser]), transform=transform_list[0]))
-                laygen.place("I" + objectname_pfix + 'PWRPLUG_' + str(i) + '_' + str(j) + 'L', 'pwrplug_M2_M3', pg,
-                             xy=origin + np.array([0, y_ser]), transform='R0', template_libname=utemplib)
-                laygen.place("I" + objectname_pfix + 'PWRPLUG_' + str(i) + '_' + str(j) + 'R', 'pwrplug_M2_M3', pg,
-                             xy=origin + np.array([size_ser2to1[0]-size_pwrplug[0], y_ser]), transform='R0', template_libname=utemplib)
             else:
                 iser.append(laygen.place("I" + objectname_pfix + 'SER_' + str(i) + '_' + str(j), devname_serslice, pg,
                                  xy=origin + np.array([xoffset, y_ser+size_ser2to1[1]]), transform=transform_list[1]))
-                laygen.place("I" + objectname_pfix + 'PWRPLUG_' + str(i) + '_' + str(j) + 'L', 'pwrplug_M2_M3', pg,
-                             xy=origin + np.array([0, y_ser+size_ser2to1[1]]), transform='MX', template_libname=utemplib)
-                laygen.place("I" + objectname_pfix + 'PWRPLUG_' + str(i) + '_' + str(j) + 'R', 'pwrplug_M2_M3', pg,
-                             xy=origin + np.array([size_ser2to1[0]-size_pwrplug[0], y_ser+size_ser2to1[1]]), transform='MX', template_libname=utemplib)
             y_ser += size_ser2to1[1]
 
     # input
     x0 = laygen.get_inst_pin_coord("I" + objectname_pfix + 'SER_0_0', 'I<0>', gridname=rg_m4m5, sort=True)[0][0]
     ri_list=[]
-    for j in range(input_size/2):
+    for j in range(int(input_size/2)):
         xyi0 = laygen.get_inst_pin_coord("I" + objectname_pfix + 'SER_0_' + str(j), 'I<0>', gridname=rg_m4m5)[0]
         rh0, ri0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], np.array([x0, xyi0[1]]), np.array([x0+2*j+1, 0]), rg_m4m5)
         ri_list.append(ri0)
@@ -282,12 +230,12 @@ def generate_ser_vstack(laygen, objectname_pfix, utemplib, placement_grid, routi
 
     #input pin creation
     for i in range(input_size):
-        laygen.create_boundary_pin_form_rect(ri_list[i], rg_m4m5, "I<" + str(ri_index_list[i]) + ">", laygen.layers['pin'][5], size=4, direction='bottom')
+        laygen.create_boundary_pin_form_rect(ri_list[i], rg_m4m5, "I<" + str(int(ri_index_list[i])) + ">", laygen.layers['pin'][5], size=4, direction='bottom')
 
     # internal datapath route
     for i in range(num_stages-1):
         x0 = laygen.get_inst_pin_coord("I" + objectname_pfix + 'SER_' + str(i) + '_0', 'O', gridname=rg_m4m5, sort=True)[0][0]
-        for j in range(radix ** (num_stages - i - 1)/2):
+        for j in range(int(radix ** (num_stages - i - 1)/2)):
             xyo0 = laygen.get_inst_pin_coord("I" + objectname_pfix + 'SER_' + str(i) + '_' + str(2*j), 'O', gridname=rg_m4m5)[0]
             xyi0 = laygen.get_inst_pin_coord("I" + objectname_pfix + 'SER_' + str(i+1) + '_' + str(j), 'I<0>', gridname=rg_m4m5)[0]
             laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5], xyo0, xyi0, x0+2*j+1, rg_m4m5)
@@ -324,8 +272,42 @@ def generate_ser_vstack(laygen, objectname_pfix, utemplib, placement_grid, routi
     y1 = laygen.get_inst_xy("I" + objectname_pfix + 'SER_' + str(num_stages-1) + '_0', gridname=rg_m4m5)[1]
     y1+=size_ser2to1_rg_m4m5[1]-1
     xyo0 = laygen.get_inst_pin_coord("I" + objectname_pfix + 'SER_' + str(num_stages-1) + '_0', 'O', gridname=rg_m4m5)[0]
-    ro0 = laygen.route(None, laygen.layers['metal'][5], xy0=xyo0, xy1=np.array([xyo0[0], y1]), gridname0=rg_m4m5, addvia0=True)
+    ro0 = laygen.route(None, laygen.layers['metal'][5], xy0=xyo0, xy1=np.array([xyo0[0], y1]), gridname0=rg_m4m5, via0=[[0, 0]])
     laygen.create_boundary_pin_form_rect(ro0, rg_m4m5, "O", laygen.layers['pin'][5], size=4, direction='top')
+    
+    #power rails
+    xypwrl0 = laygen.get_inst_pin_xy("I" + objectname_pfix + 'SER_0_0', 'VSS', gridname=rg_m2m3_thick_basic)[0]
+    xypwrr0 = laygen.get_inst_pin_xy("I" + objectname_pfix + 'SER_0_0', 'VSS', gridname=rg_m2m3_thick_basic)[1]
+    xypwrl1 = laygen.get_inst_pin_xy("I" + objectname_pfix + 'SER_' + str(num_stages-1) + '_0', 'VDD', gridname=rg_m2m3_thick_basic)[0]
+    xypwrr1 = laygen.get_inst_pin_xy("I" + objectname_pfix + 'SER_' + str(num_stages-1) + '_0', 'VDD', gridname=rg_m2m3_thick_basic)[1]
+    rvddhl=[]
+    rvsshl=[]
+    rvddhr=[]
+    rvsshr=[]
+    for i in range(num_pwr):
+        rvddhl.append(laygen.route(None, laygen.layers['metal'][3], xy0=xypwrl0+np.array([2*i, 0]), xy1=xypwrl1+np.array([2*i, 0]), gridname0=rg_m2m3_thick_basic))
+        rvsshl.append(laygen.route(None, laygen.layers['metal'][3], xy0=xypwrl0+np.array([2*i+1, 0]), xy1=xypwrl1+np.array([2*i+1, 0]), gridname0=rg_m2m3_thick_basic))
+        rvddhr.append(laygen.route(None, laygen.layers['metal'][3], xy0=xypwrr0-np.array([2*i, 0]), xy1=xypwrr1-np.array([2*i, 0]), gridname0=rg_m2m3_thick_basic))
+        rvsshr.append(laygen.route(None, laygen.layers['metal'][3], xy0=xypwrr0-np.array([2*i+1, 0]), xy1=xypwrr1-np.array([2*i+1, 0]), gridname0=rg_m2m3_thick_basic))
+        for j in range(num_stages):
+            for k in range(radix ** (num_stages - j - 1)-1):
+                xyvddvl0 = laygen.get_inst_pin_xy("I" + objectname_pfix + 'SER_' + str(j) + '_' + str(k), 
+                                                  'VDD', gridname=rg_m2m3_thick_basic)[0]
+                xyvddvr0 = laygen.get_inst_pin_xy("I" + objectname_pfix + 'SER_' + str(j) + '_' + str(k), 
+                                                  'VDD', gridname=rg_m2m3_thick_basic)[1]
+                xyvssvl0 = laygen.get_inst_pin_xy("I" + objectname_pfix + 'SER_' + str(j) + '_' + str(k), 
+                                                  'VSS', gridname=rg_m2m3_thick_basic)[0]
+                xyvssvr0 = laygen.get_inst_pin_xy("I" + objectname_pfix + 'SER_' + str(j) + '_' + str(k), 
+                                                  'VSS', gridname=rg_m2m3_thick_basic)[1]
+                if j%2==0:
+                    coeff=1
+                else:   
+                    coeff=-1
+                laygen.via(None, xyvddvl0+coeff*np.array([2*i, 0]), gridname=rg_m2m3_thick_basic)
+                laygen.via(None, xyvssvl0+coeff*np.array([2*i+1, 0]), gridname=rg_m2m3_thick_basic)
+                laygen.via(None, xyvddvr0-coeff*np.array([2*i, 0]), gridname=rg_m2m3_thick_basic)
+                laygen.via(None, xyvssvr0-coeff*np.array([2*i+1, 0]), gridname=rg_m2m3_thick_basic)
+
 
     #power pin
     rvdd0_pin_xy = laygen.get_inst_pin_coord("I" + objectname_pfix + 'SER_0_0', 'VDD', rg_m2m3)
@@ -403,6 +385,7 @@ if __name__ == '__main__':
     pg = 'placement_basic' #placement grid
     rg_m1m2 = 'route_M1_M2_cmos'
     rg_m2m3 = 'route_M2_M3_cmos'
+    rg_m2m3_thick_basic = 'route_M2_M3_thick_basic'
     rg_m3m4 = 'route_M3_M4_basic'
     rg_m4m5 = 'route_M4_M5_basic'
     rg_m5m6 = 'route_M5_M6_basic'
@@ -415,8 +398,8 @@ if __name__ == '__main__':
     ser_num_bits=8
     ser_num_stages=int(log(ser_num_bits, 2))
     # calculate routing track width
-    num_route=ser_num_bits + int(ser_num_stages/2+1)*2 + 1
-    num_space=int(laygen.get_grid(pg).width/laygen.get_grid(rg_m3m4).width*(num_route))-8
+    num_route=ser_num_bits*2 # + int(ser_num_stages/2+1)*2 + 1
+    num_space=int(laygen.get_grid(pg).width/laygen.get_grid(rg_m3m4).width*(num_route))
 
     # backend ser
     laygen.add_cell('ser2to1_body')
@@ -431,13 +414,6 @@ if __name__ == '__main__':
     generate_ser2to1(laygen, objectname_pfix='SER2TO1_', templib_logic=logictemplib, placement_grid=pg,
                      routing_grid_m3m4=rg_m3m4, devname_serbody='ser2to1_body', origin=np.array([0, 0]))
     laygen.templates.sel_library(logictemplib)
-    laygen.add_template_from_cell()
-
-    laygen.add_cell('rstto1')
-    laygen.sel_cell('rstto1')
-    generate_rstto1(laygen, objectname_pfix='RSTBTO1_', placement_grid=pg, routing_grid_m3m4=rg_m3m4,
-                    routing_grid_m2m3=rg_m1m2,
-                    origin=np.array([0, 0]), m=ser_m)
     laygen.add_template_from_cell()
 
     laygen.add_cell('ser' + str(ser_num_bits) + 'to1_ser2to1_body')
@@ -460,7 +436,7 @@ if __name__ == '__main__':
     laygen.add_cell('ser' + str(ser_num_bits) + 'to1')
     laygen.sel_cell('ser' + str(ser_num_bits) + 'to1')
     laygen.templates.sel_library(workinglib)
-    generate_ser_vstack(laygen, objectname_pfix='SER8TO1_', utemplib=utemplib, placement_grid=pg,
+    generate_ser_vstack(laygen, objectname_pfix='SER8TO1_', templib_logic=logictemplib, placement_grid=pg,
                         routing_grid_m4m5=rg_m4m5, devname_serslice='ser'+str(ser_num_bits) + 'to1_ser2to1',
                         origin=np.array([0, 0]), num_stages=ser_num_stages, radix=2)
     laygen.templates.sel_library(logictemplib)
@@ -472,7 +448,7 @@ if __name__ == '__main__':
     #laygen.save_template(filename=workinglib+'_templates.yaml', libname=workinglib)
 
     #bag export, if bag does not exist, gds export
-    mycell_list=['ser2to1_body', 'ser2to1', 'rstto1', 
+    mycell_list=['ser2to1_body', 'ser2to1',  
                  'ser' + str(ser_num_bits) + 'to1_ser2to1_body',
                  'ser' + str(ser_num_bits) + 'to1_ser2to1',
                  'ser' + str(ser_num_bits) + 'to1',

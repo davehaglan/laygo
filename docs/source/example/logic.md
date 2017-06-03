@@ -5,8 +5,9 @@
 This section describes how to generate logic gate layout templates,
 which are used for constructing custom digital cells.
 
->Note: the codes are lengthy and not cleaned up yet. Next version will
-be released soon.
+>Note: the codes are lengthy and not cleaned up yet. An improved 
+ version following the tutorial conventions (possibly with more 
+abstracting functions) will be released soon.
 
 ## Running instruction
 1. Clone a proper tech repo. For cds_ff_mpt example type following

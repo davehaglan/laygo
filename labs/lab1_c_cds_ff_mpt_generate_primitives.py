@@ -183,7 +183,7 @@ params_via = {
     'via_M4_M5_0': {
         'layer_vert': metal[5],
         'layer_hori': metal[4],
-        'layer_via' : via[5],
+        'layer_via' : via[4],
         'xwidth': 0.032,
         'ywidth': 0.032,
         'extend_x_hori': 0.04,
@@ -194,7 +194,7 @@ params_via = {
     'via_M4_M5_1': {
         'layer_vert': metal[5],
         'layer_hori': metal[4],
-        'layer_via' : via[5],
+        'layer_via' : via[4],
         'xwidth': 0.032,
         'ywidth': 0.032,
         'extend_x_hori': 0.04,
