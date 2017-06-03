@@ -1186,7 +1186,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
     def get_inst_pin_coord(self, name, pinname, gridname, index=np.array([0, 0]), sort=False):
         """use get_inst_pin_xy instead"""
-        self.get_inst_pin_xy(name, pinname, gridname, index, sort)
+        return self.get_inst_pin_xy(name, pinname, gridname, index, sort)
     def get_inst_pin_xy(self, name, pinname, gridname, index=np.array([0, 0]), sort=False):
         """
         Get xy coordinates of an instance pin in abstract coordinate
