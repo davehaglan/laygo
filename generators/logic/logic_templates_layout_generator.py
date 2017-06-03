@@ -3986,7 +3986,7 @@ if __name__ == '__main__':
                    origin=np.array([0, 0]), m=1, create_pin=True)
     laygen.templates.sel_library(utemplib)
     laygen.add_template_from_cell()
-    
+
     laygen.add_cell('latch_2ck_2x')
     laygen.sel_cell('latch_2ck_2x')
     laygen.templates.sel_library(workinglib)
