@@ -16,7 +16,7 @@ Contents:
    Tutorial (BAG flow) <tutorial/tutorial_BAG>
    Architecture <architecture/architecture>
    Generator example - logic family <example/logic>
-   Generator example - serdes (to be updated) <example/serdes>
+   Generator example - serdes <example/serdes>
    Generator example - sar adc (to be updated) <example/adc_sar>
    Technology setup guidelines (to be updated) <tech/tech>
    API documentation <api/modules>
