@@ -30,7 +30,7 @@ and all configurations are set to point the path.
     $ git clone git@github.com:ucb-art/BAG2_freePDK45.git
     ```
 
-    * For cadence generic PDK, close BAG2_cds_ff_mpt repo.
+    * For cadence generic PDK, clone BAG2_cds_ff_mpt repo.
     ```
     $ git clone git@github.com:ucb-art/BAG2_cds_ff_mpt.git
     ```
