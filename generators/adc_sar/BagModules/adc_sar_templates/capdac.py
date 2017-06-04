@@ -69,6 +69,31 @@ class adc_sar_templates__capdac(Module):
         term_list=[]
         for i in range(num_bit):
             in_pin = 'I<%d>'%i
+            term_list.append({'BOTTOM': in_pin})
+            m_cap = rdx_array[i]*c_m
+            if m_cap == 1:
+                name_list.append('I%d'%(i))
+            else:
+                name_list.append('I%d<%d:0>'%(i,rdx_array[i]*c_m-1))
+            #for j in range(rdx_array[i]*c_m):
+            #    term_list.append({'BOTTOM': in_pin})
+            #    name_list.append('I%d_%d'%(i,j))
+        self.array_instance('CDAC0', name_list, term_list=term_list)
+
+        name_list=[]
+        for i in range(c_m):
+            name_list.append('IC0_%d'%(i))
+        self.array_instance('C0', name_list)
+
+        self.rename_pin('I','I<%d:0>'%(num_bit-1))
+        '''
+        self.parameters['num_bit'] = num_bit
+        self.parameters['c_m'] = c_m
+        self.parameters['rdx_array'] = rdx_array
+        name_list=[]
+        term_list=[]
+        for i in range(num_bit):
+            in_pin = 'I<%d>'%i
             for j in range(rdx_array[i]*c_m):
                 term_list.append({'BOTTOM': in_pin})
                 name_list.append('I%d_%d'%(i,j))
@@ -80,6 +105,7 @@ class adc_sar_templates__capdac(Module):
         self.array_instance('C0', name_list)
 
         self.rename_pin('I','I<%d:0>'%(num_bit-1))
+        '''
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.
