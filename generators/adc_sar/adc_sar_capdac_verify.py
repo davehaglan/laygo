@@ -22,9 +22,9 @@ vl=0.0
 vcm=0.15
 per=1e-9
 
-verify_lvs = False
+verify_lvs = True
 extracted = False
-verify_tran = True
+verify_tran = False
 
 load_from_file=True
 yamlfile_spec="adc_sar_spec.yaml"
