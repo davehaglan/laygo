@@ -1,6 +1,6 @@
 lib_name: adc_sar_templates
 cell_name: sarafe_nsw
-pins: [ "INM", "OSM", "CLKB", "VDD", "VSS", "VREF<2:0>", "ENL0<2:0>", "ENL1<2:0>", "ENL2<2:0>", "ENL3<2:0>", "ENL4<2:0>", "ENL5<2:0>", "ENL6<2:0>", "ENR0<2:0>", "ENR1<2:0>", "ENR2<2:0>", "ENR3<2:0>", "ENR4<2:0>", "ENR5<2:0>", "ENR6<2:0>", "OUTM", "INP", "OSP", "ENL7<2:0>", "VOL<7:0>", "OUTP", "VOR<7:0>", "ENR7<2:0>" ]
+pins: [ "INM", "OSM", "CLKB", "VDD", "VSS", "VREF<2:0>", "ENL0<2:0>", "ENR0<2:0>", "OUTM", "INP", "OSP", "VOL", "OUTP", "VOR" ]
 instances:
   ICAPM0:
     lib_name: adc_sar_templates
@@ -8,7 +8,7 @@ instances:
     instpins:
       I:
         direction: input
-        net_name: "VOR_TEMP"
+        net_name: "VOR"
         num_bits: 1
       O:
         direction: inputOutput
@@ -24,7 +24,7 @@ instances:
     instpins:
       I:
         direction: input
-        net_name: "VOL_TEMP"
+        net_name: "VOL"
         num_bits: 1
       O:
         direction: inputOutput
@@ -84,105 +84,41 @@ instances:
         num_bits: 1
   ICDRVM0:
     lib_name: adc_sar_templates
-    cell_name: capdrv_nsw_array_8b
+    cell_name: capdrv_nsw_array
     instpins:
-      VO<7:0>:
+      VO:
         direction: inputOutput
-        net_name: "VOR<7:0>"
-        num_bits: 8
-      EN7<2:0>:
-        direction: input
-        net_name: "ENR7<2:0>"
-        num_bits: 3
-      VSS:
-        direction: inputOutput
-        net_name: "VSS"
+        net_name: "VOR"
         num_bits: 1
-      VDD:
-        direction: 
-        net_name: "VDD"
-        num_bits: 1
-      VREF<2:0>:
-        direction: inputOutput
-        net_name: "VREF<2:0>"
-        num_bits: 3
-      EN0<2:0>:
+      EN<2:0>:
         direction: input
         net_name: "ENR0<2:0>"
         num_bits: 3
-      EN1<2:0>:
-        direction: input
-        net_name: "ENR1<2:0>"
-        num_bits: 3
-      EN2<2:0>:
-        direction: input
-        net_name: "ENR2<2:0>"
-        num_bits: 3
-      EN3<2:0>:
-        direction: input
-        net_name: "ENR3<2:0>"
-        num_bits: 3
-      EN4<2:0>:
-        direction: input
-        net_name: "ENR4<2:0>"
-        num_bits: 3
-      EN5<2:0>:
-        direction: input
-        net_name: "ENR5<2:0>"
-        num_bits: 3
-      EN6<2:0>:
-        direction: input
-        net_name: "ENR6<2:0>"
-        num_bits: 3
-  ICDRVP0:
-    lib_name: adc_sar_templates
-    cell_name: capdrv_nsw_array_8b
-    instpins:
-      VO<7:0>:
-        direction: inputOutput
-        net_name: "VOL<7:0>"
-        num_bits: 8
-      EN7<2:0>:
-        direction: input
-        net_name: "ENL7<2:0>"
-        num_bits: 3
       VSS:
         direction: inputOutput
         net_name: "VSS"
-        num_bits: 1
-      VDD:
-        direction: 
-        net_name: "VDD"
         num_bits: 1
       VREF<2:0>:
         direction: inputOutput
         net_name: "VREF<2:0>"
         num_bits: 3
-      EN0<2:0>:
+  ICDRVP0:
+    lib_name: adc_sar_templates
+    cell_name: capdrv_nsw_array
+    instpins:
+      VO:
+        direction: inputOutput
+        net_name: "VOL"
+        num_bits: 1
+      EN<2:0>:
         direction: input
         net_name: "ENL0<2:0>"
         num_bits: 3
-      EN1<2:0>:
-        direction: input
-        net_name: "ENL1<2:0>"
-        num_bits: 3
-      EN2<2:0>:
-        direction: input
-        net_name: "ENL2<2:0>"
-        num_bits: 3
-      EN3<2:0>:
-        direction: input
-        net_name: "ENL3<2:0>"
-        num_bits: 3
-      EN4<2:0>:
-        direction: input
-        net_name: "ENL4<2:0>"
-        num_bits: 3
-      EN5<2:0>:
-        direction: input
-        net_name: "ENL5<2:0>"
-        num_bits: 3
-      EN6<2:0>:
-        direction: input
-        net_name: "ENL6<2:0>"
+      VSS:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      VREF<2:0>:
+        direction: inputOutput
+        net_name: "VREF<2:0>"
         num_bits: 3

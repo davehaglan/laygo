@@ -3,18 +3,29 @@
 import pprint
 
 import bag
+#from laygo import *
 import laygo
 import numpy as np
 import yaml
 
 lib_name = 'adc_sar_templates'
-cell_name = 'capdac'
+cell_name = 'salatch_pmos'
 impl_lib = 'adc_sar_generated'
+tb_lib = 'adc_sar_testbenches'
+tb_cell = 'salatch_pmos_tb_tran'
+tb_noise_cell = 'salatch_pmos_tb_trannoise'
+
 params = dict(
-    num_bits = 8,
-    c_m = 1,
-    rdx_array = [1, 2, 4, 8, 16, 32, 64, 128],
+    lch=16e-9,
+    pw=4,
+    nw=4,
+    m=8, #larger than 8, even number
+    m_rst=4,
+    m_rgnn=4,
+    m_buf=8,
+    device_intent='fast',
     )
+
 load_from_file=True
 yamlfile_spec="adc_sar_spec.yaml"
 yamlfile_size="adc_sar_size.yaml"
@@ -24,9 +35,11 @@ if load_from_file==True:
         specdict = yaml.load(stream)
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
-    params['num_bits']=specdict['n_bit']-1
-    params['c_m']=sizedict['capdac_c_m']
-    params['rdx_array']=specdict['rdx_array']
+    params['m']=sizedict['salatch_m']
+    params['m_rst']=sizedict['salatch_m_rst']
+    params['m_rgnn']=sizedict['salatch_m_rgnn']
+    params['m_buf']=sizedict['salatch_m_buf']
+
 
 print('creating BAG project')
 prj = bag.BagProject()

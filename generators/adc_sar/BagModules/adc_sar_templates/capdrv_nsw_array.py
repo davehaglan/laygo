@@ -33,12 +33,12 @@ import pkg_resources
 from bag.design import Module
 
 
-yaml_file = pkg_resources.resource_filename(__name__, os.path.join('netlist_info', 'capdac.yaml'))
+yaml_file = pkg_resources.resource_filename(__name__, os.path.join('netlist_info', 'capdrv_nsw_array.yaml'))
 
 
 # noinspection PyPep8Naming
-class adc_sar_templates__capdac(Module):
-    """Module for library adc_sar_templates cell capdac.
+class adc_sar_templates__capdrv_nsw_array(Module):
+    """Module for library adc_sar_templates cell capdrv_nsw_array.
 
     Fill in high level description here.
     """
@@ -46,7 +46,7 @@ class adc_sar_templates__capdac(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, num_bits, c_m, rdx_array):
+    def design(self, lch, pw, nw, num_bits, m_list, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -62,50 +62,30 @@ class adc_sar_templates__capdac(Module):
         restore_instance()
         array_instance()
         """
-        self.parameters['num_bits'] = num_bits
-        self.parameters['c_m'] = c_m
-        self.parameters['rdx_array'] = rdx_array
+        self.parameters['lch'] = lch
+        self.parameters['pw'] = pw
+        self.parameters['nw'] = nw
+        self.parameters['m_list'] = m_list
+        self.parameters['device_intent'] = device_intent
         name_list=[]
         term_list=[]
+        pin_en=''
         for i in range(num_bits):
-            in_pin = 'I<%d>'%i
-            term_list.append({'BOTTOM': in_pin})
-            m_cap = rdx_array[i]*c_m
-            if m_cap == 1:
-                name_list.append('I%d'%(i))
-            else:
-                name_list.append('I%d<%d:0>'%(i,rdx_array[i]*c_m-1))
-            #for j in range(rdx_array[i]*c_m):
-            #    term_list.append({'BOTTOM': in_pin})
-            #    name_list.append('I%d_%d'%(i,j))
-        self.array_instance('CDAC0', name_list, term_list=term_list)
+            term_en = 'EN%d<2:0>'%i
+            term_list.append({'EN<2:0>': term_en, 'VO':'VO<%d>'%(i)})
+            name_list.append('ICDRV%d'%(i))
+            pin_en=pin_en+term_en
+            if i<num_bits-1:
+                pin_en=pin_en+','
+        self.array_instance('ICDRV0', name_list, term_list=term_list)
 
-        name_list=[]
-        for i in range(c_m):
-            name_list.append('IC0_%d'%(i))
-        self.array_instance('C0', name_list)
+        for i in range(8):
+            self.instances['ICDRV0'][i].design(lch=lch, pw=pw, nw=nw, m=m_list[i], device_intent=device_intent)
 
-        self.rename_pin('I','I<%d:0>'%(num_bits-1))
-        '''
-        self.parameters['num_bit'] = num_bit
-        self.parameters['c_m'] = c_m
-        self.parameters['rdx_array'] = rdx_array
-        name_list=[]
-        term_list=[]
-        for i in range(num_bit):
-            in_pin = 'I<%d>'%i
-            for j in range(rdx_array[i]*c_m):
-                term_list.append({'BOTTOM': in_pin})
-                name_list.append('I%d_%d'%(i,j))
-        self.array_instance('CDAC0', name_list, term_list=term_list)
-
-        name_list=[]
-        for i in range(c_m):
-            name_list.append('IC0_%d'%(i))
-        self.array_instance('C0', name_list)
-
-        self.rename_pin('I','I<%d:0>'%(num_bit-1))
-        '''
+        self.rename_pin('EN<2:0>',pin_en)
+        self.rename_pin('VO','VO<%d:0>'%(num_bits-1))
+        #for i in range(8):
+        #    self.instances['ICDRV'+str(i)].design(lch=lch, pw=pw, nw=nw, m=m_list[i], device_intent=device_intent)
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

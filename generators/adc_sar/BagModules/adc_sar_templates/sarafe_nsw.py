@@ -46,7 +46,7 @@ class adc_sar_templates__sarafe_nsw(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, m_sa, m_rst_sa, m_rgnn_sa, m_buf_sa, m_drv_list, num_bit, c_m, rdx_array, device_intent='fast'):
+    def design(self, lch, pw, nw, m_sa, m_rst_sa, m_rgnn_sa, m_buf_sa, m_drv_list, num_bits, c_m, rdx_array, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -70,18 +70,35 @@ class adc_sar_templates__sarafe_nsw(Module):
         self.parameters['m_rgnn_sa'] = m_rgnn_sa
         self.parameters['m_buf_sa'] = m_buf_sa
         self.parameters['m_drv_list'] = m_drv_list
-        self.parameters['num_bit'] = num_bit
+        self.parameters['num_bits'] = num_bits
         self.parameters['c_m'] = c_m
         self.parameters['rdx_array'] = rdx_array
         self.parameters['device_intent'] = device_intent
         self.instances['ISA0'].design(lch=lch, pw=pw, nw=nw, m=m_sa, m_rst=m_rst_sa, m_rgnn=m_rgnn_sa, m_buf=m_buf_sa, device_intent=device_intent)
-        self.instances['ICDRVP0'].design(lch=lch, pw=pw, nw=nw, m_list=m_drv_list, device_intent=device_intent)
-        self.instances['ICDRVM0'].design(lch=lch, pw=pw, nw=nw, m_list=m_drv_list, device_intent=device_intent)
-        self.instances['ICAPP0'].design(num_bit=num_bit, c_m=c_m, rdx_array=rdx_array)
-        self.instances['ICAPM0'].design(num_bit=num_bit, c_m=c_m, rdx_array=rdx_array)
-        name_list=['ICAPP0']
-        term_list=[{'I<7:0>':'VOL<7:0>'}]
-        self.array_instance('ICAPP0', name_list, term_list=term_list)
+        self.instances['ICDRVP0'].design(lch=lch, pw=pw, nw=nw, num_bits=num_bits, m_list=m_drv_list, device_intent=device_intent)
+        self.instances['ICDRVM0'].design(lch=lch, pw=pw, nw=nw, num_bits=num_bits, m_list=m_drv_list, device_intent=device_intent)
+        self.instances['ICAPP0'].design(num_bits=num_bits, c_m=c_m, rdx_array=rdx_array)
+        self.instances['ICAPM0'].design(num_bits=num_bits, c_m=c_m, rdx_array=rdx_array)
+        #VOL/VOR
+        self.reconnect_instance_terminal(inst_name='ICAPP0', term_name='I', net_name='VOL<%d:0>'%(num_bits-1))
+        self.reconnect_instance_terminal(inst_name='ICAPM0', term_name='I', net_name='VOR<%d:0>'%(num_bits-1))
+        self.reconnect_instance_terminal(inst_name='ICDRVP0', term_name='VO', net_name='VOL<%d:0>'%(num_bits-1))
+        self.reconnect_instance_terminal(inst_name='ICDRVM0', term_name='VO', net_name='VOR<%d:0>'%(num_bits-1))
+        self.rename_pin('VOL', 'VOL<%d:0>'%(num_bits-1))
+        self.rename_pin('VOR', 'VOR<%d:0>'%(num_bits-1))
+        #EN
+        pin_enl=''
+        pin_enr=''
+        for i in range(num_bits):
+            pin_enl=pin_enl+'ENL%d<2:0>'%i
+            pin_enr=pin_enr+'ENR%d<2:0>'%i
+            if i<num_bits-1:
+                pin_enl=pin_enl+','
+                pin_enr=pin_enr+','
+        self.reconnect_instance_terminal(inst_name='ICDRVP0', term_name='EN<2:0>', net_name=pin_enl)
+        self.reconnect_instance_terminal(inst_name='ICDRVM0', term_name='EN<2:0>', net_name=pin_enr)
+        self.rename_pin('ENL0<2:0>', pin_enl)
+        self.rename_pin('ENR0<2:0>', pin_enr)
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

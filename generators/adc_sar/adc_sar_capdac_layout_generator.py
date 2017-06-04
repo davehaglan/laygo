@@ -269,10 +269,10 @@ if __name__ == '__main__':
     mycell_list = []
     #cap dac generation
     m_unit=2
-    m_vertical=np.array([1,2,4,8,16,28])
-    m_horizontal=np.array([53, 50])
     num_bits_vertical=6
     num_bits_horizontal=2
+    m_vertical=np.array([1,2,4,8,16,28])
+    m_horizontal=np.array([53, 50])
     num_space_top = 4+3
     num_space_bottom = 4
     num_space_left = 1
@@ -285,12 +285,15 @@ if __name__ == '__main__':
             specdict = yaml.load(stream)
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
-        num_bits_vertical=specdict['n_bit']-1-2
-        num_bits_horizontal=2
-        m_unit=sizedict['c_m']
-        m_vertical=specdict['rdx_array'][:-2]
-        m_horizontal[0]=specdict['rdx_array'][-2]
-        m_horizontal[1]=int(specdict['rdx_array'][-1]/2)
+        m_unit=sizedict['capdac_c_m']
+        num_bits_vertical=sizedict['capdac_num_bits_vertical']
+        num_bits_horizontal=sizedict['capdac_num_bits_horizontal']
+        #num_bits_vertical=specdict['n_bit']-1-2
+        #num_bits_horizontal=2
+        m_vertical=specdict['rdx_array'][:int(-1*(num_bits_horizontal))]
+        m_horizontal=specdict['rdx_array'][int(-1*(num_bits_horizontal)):]
+        for i, m in enumerate(m_horizontal):
+            m_horizontal[i]=int(m_horizontal[i]/(2**i))
         print(m_vertical, m_horizontal)
         #cell_name_aux=['sar_'+str(specdict['n_bit'])+'b_IAFE0_ICAPM0']
 
@@ -358,9 +361,9 @@ if __name__ == '__main__':
                                               ],
                     m_unit=m_unit,
                     num_bits_vertical=num_bits_vertical,
-                    m_vertical=np.array([1,2,4,8,16,28]),
+                    m_vertical=m_vertical,
                     num_bits_horizontal=num_bits_horizontal,
-                    m_horizontal=np.array([53, 50]),
+                    m_horizontal=m_horizontal,
                     num_space_left=num_space_left,
                     num_space_right=num_space_right,
                     num_space_top=num_space_top,

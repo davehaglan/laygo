@@ -2,13 +2,13 @@ lib_name: adc_sar_templates
 cell_name: sarret_wckbuf_9b
 pins: [ "VDD", "VSS", "OUT<8:0>", "IN<8:0>", "CLK", "CLKO" ]
 instances:
-  ICKBUF2:
+  ICKBUF0:
     lib_name: logic_templates
     cell_name: inv
     instpins:
       I:
         direction: input
-        net_name: "ICLK"
+        net_name: "CLK"
         num_bits: 1
       VSS:
         direction: inputOutput
@@ -20,7 +20,7 @@ instances:
         num_bits: 1
       O:
         direction: output
-        net_name: "net06"
+        net_name: "net2"
         num_bits: 1
   ICKBUF3:
     lib_name: logic_templates
@@ -42,13 +42,13 @@ instances:
         direction: output
         net_name: "CLKO"
         num_bits: 1
-  ICKBUF0:
+  ICKBUF2:
     lib_name: logic_templates
     cell_name: inv
     instpins:
       I:
         direction: input
-        net_name: "CLK"
+        net_name: "ICLK"
         num_bits: 1
       VSS:
         direction: inputOutput
@@ -60,7 +60,7 @@ instances:
         num_bits: 1
       O:
         direction: output
-        net_name: "net2"
+        net_name: "net06"
         num_bits: 1
   ICKBUF1:
     lib_name: logic_templates

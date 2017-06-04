@@ -524,8 +524,8 @@ def generate_tie(laygen, objectname_pfix,
     rvss0_pin_xy[1][1] = rvss0_pin_xy[1][1] + 1
 
     if create_pin == True:
-        laygen.pin(name='TIEVDD', layer=laygen.layers['pin'][3], xy=rvdd0_pin_xy, gridname=rg_m2m3_pin)
-        laygen.pin(name='TIEVSS', layer=laygen.layers['pin'][3], xy=rvss0_pin_xy, gridname=rg_m2m3_pin)
+        laygen.pin(name='TIEVDD', layer=laygen.layers['pin'][3], xy=rvdd0_pin_xy, gridname=rg_m2m3_pin, netname='VDD')
+        laygen.pin(name='TIEVSS', layer=laygen.layers['pin'][3], xy=rvss0_pin_xy, gridname=rg_m2m3_pin, netname='VSS')
 
         # power pin
         rvdd_pin_xy = laygen.get_rect_xy("R" + objectname_pfix + "VDD0", rg_m1m2)
@@ -640,8 +640,8 @@ def generate_tie_wovdd(laygen, objectname_pfix,
     rvss0_pin_xy[1][1] = rvss0_pin_xy[1][1] + 1
 
     if create_pin == True:
-        laygen.pin(name='TIEVSS2', layer=laygen.layers['pin'][3], xy=rvdd0_pin_xy, gridname=rg_m2m3_pin)
-        laygen.pin(name='TIEVSS', layer=laygen.layers['pin'][3], xy=rvss0_pin_xy, gridname=rg_m2m3_pin)
+        laygen.pin(name='TIEVSS2', layer=laygen.layers['pin'][3], xy=rvdd0_pin_xy, gridname=rg_m2m3_pin, netname='VSS')
+        laygen.pin(name='TIEVSS', layer=laygen.layers['pin'][3], xy=rvss0_pin_xy, gridname=rg_m2m3_pin, netname='VSS')
 
         # power pin
         rvdd_pin_xy = laygen.get_rect_xy("R" + objectname_pfix + "VSS1", rg_m1m2)

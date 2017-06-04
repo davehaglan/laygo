@@ -681,11 +681,11 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             gridname0 = gridname
         if gridname1 is None:
             gridname1 = gridname0
-        rv0 = self.route(name=None, layer=layerh, xy0=xy0, xy1=xy1, direction='y', gridname0=gridname0,
+        rv0 = self.route(name=None, layer=layerv, xy0=xy0, xy1=xy1, direction='y', gridname0=gridname0,
                          refinstname0=refinstname0, refinstindex0=refinstindex0, refpinname0=refpinname0,
                          refinstname1=refinstname1, refinstindex1=refinstindex1, refpinname1=refpinname1,
                          endstyle0=endstyle0[0], endstyle1=endstyle1[0], via0=via0, via1=np.array([[0, 0]]))
-        rh0 = self.route(name=None, layer=layerv, xy0=xy1, xy1=xy0, direction='x', gridname0=gridname1,
+        rh0 = self.route(name=None, layer=layerh, xy0=xy1, xy1=xy0, direction='x', gridname0=gridname1,
                          refinstname0=refinstname1, refinstindex0=refinstindex1, refpinname0=refpinname1,
                          refinstname1=refinstname0, refinstindex1=refinstindex0, refpinname1=refpinname0,
                          endstyle0=endstyle0[1], endstyle1=endstyle1[1], via0=via1)
