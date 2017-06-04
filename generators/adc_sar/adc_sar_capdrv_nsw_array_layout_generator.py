@@ -27,7 +27,7 @@
 import laygo
 import numpy as np
 #from logic_layout_generator import *
-from math import log
+from math import log, ceil
 import yaml
 import os
 #import logging;logging.basicConfig(level=logging.DEBUG)
@@ -92,7 +92,7 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
 
     rg_m2m3 = routing_grid_m2m3
     rg_m4m5 = routing_grid_m4m5
-    num_row=int(num_bits/num_bits_row)
+    num_row=ceil(num_bits/num_bits_row)
 
     tap_name='tap_wovdd'
     cdrv_name='capdrv_nsw_8x'
@@ -167,7 +167,7 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
     isp4x=[]
     isp2x=[]
     isp1x=[]
-
+    ispfill=[]
     for i in range(num_row):
         if i==0: 
             itapl.append(laygen.place(name = "I" + objectname_pfix + 'TAPL0', templatename = tap_name,
@@ -181,11 +181,34 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
                                    direction = 'top', template_libname=templib_logic))
         refi = itapl[-1].name
         for j in range(num_bits_row): #main driver
-            cdrv_name=cdrv_name_list[i*num_bits_row+j]
-            icdrv.append(laygen.relplace(name = "I" + objectname_pfix + 'CDRV'+str(i)+'_'+str(j), templatename = cdrv_name,
-                                   gridname = pg, refinstname = refi, transform=tf, 
-                                   template_libname=workinglib))
-            refi = icdrv[-1].name
+            if num_bits_row*i+j < num_bits:
+                cdrv_name=cdrv_name_list[i*num_bits_row+j]
+                icdrv.append(laygen.relplace(name = "I" + objectname_pfix + 'CDRV'+str(i)+'_'+str(j), templatename = cdrv_name,
+                                       gridname = pg, refinstname = refi, transform=tf, 
+                                       template_libname=workinglib))
+                refi = icdrv[-1].name
+            else: #cell filler
+                xfill0 = laygen.templates.get_template(cdrv_name_list[0], libname=workinglib).xy[1][0]
+                m_space_fill = int(round(xfill0 / laygen.templates.get_template(space_1x_name, libname=templib_logic).xy[1][0]))
+                m_space_fill_4x = int(m_space_fill / 4)
+                m_space_fill_2x = int((m_space_fill - m_space_fill_4x * 4) / 2)
+                m_space_fill_1x = int(m_space_fill - m_space_fill_4x * 4 - m_space_fill_2x * 2)
+                if not m_space_fill_4x==0:
+                    ispfill.append(laygen.relplace(name=None, templatename=space_4x_name,
+                                 shape = np.array([m_space_fill_4x, 1]), transform=tf, gridname=pg,
+                                 refinstname=refi, template_libname=templib_logic))
+                    refi = ispfill[-1].name
+                if not m_space_fill_2x==0:
+                    ispfill.append(laygen.relplace(name=None, templatename=space_2x_name,
+                                 shape = np.array([m_space_fill_2x, 1]), transform=tf, gridname=pg,
+                                 refinstname=refi, template_libname=templib_logic))
+                    refi = ispfill[-1].name
+                if not m_space_fill_1x==0:
+                    ispfill.append(laygen.relplace(name=None, templatename=space_1x_name,
+                                 shape=np.array([m_space_fill_1x, 1]), transform=tf, gridname=pg,
+                                 refinstname=refi, template_libname=templib_logic))
+                    refi = ispfill[-1].name
+        #row filler
         if not m_space_4x==0:
             isp4x.append(laygen.relplace(name="I" + objectname_pfix + 'SP4X'+str(i), templatename=space_4x_name,
                          shape = np.array([m_space_4x, 1]), transform=tf, gridname=pg,
@@ -214,20 +237,21 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
     icdrv_vo_xy=[]
     for i in range(num_row):
         for j in range(num_bits_row):
-            icdrv_en0_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'EN<0>', rg_m4m5))
-            icdrv_en1_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'EN<1>', rg_m4m5))
-            icdrv_en2_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'EN<2>', rg_m4m5))
-            icdrv_vref0_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'VREF<0>', rg_m4m5))
-            icdrv_vref1_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'VREF<1>', rg_m4m5))
-            icdrv_vref2_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'VREF<2>', rg_m4m5))
-            icdrv_vo_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'VO', rg_m4m5))
+            if num_bits_row*i+j < num_bits:
+                icdrv_en0_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'EN<0>', rg_m4m5))
+                icdrv_en1_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'EN<1>', rg_m4m5))
+                icdrv_en2_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'EN<2>', rg_m4m5))
+                icdrv_vref0_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'VREF<0>', rg_m4m5))
+                icdrv_vref1_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'VREF<1>', rg_m4m5))
+                icdrv_vref2_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'VREF<2>', rg_m4m5))
+                icdrv_vo_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'VO', rg_m4m5))
 
     # reference route coordinate
     x0 = icdrv_en0_xy[0][0][0]
     y0 = laygen.get_inst_xy(name=icdrv[0].name, gridname=rg_m4m5)[1]
     y1 = laygen.get_inst_xy(name=icdrv[-1].name, gridname=rg_m4m5)[1]
     if num_row%2==1:
-        y1 += laygen.get_template_size(name=icdrv[-1].cellname, gridname=rg_m4m5, libname=icdrv[-1].libname)
+        y1 += laygen.get_template_size(name=icdrv[-1].cellname, gridname=rg_m4m5, libname=icdrv[-1].libname)[1]
     # vref route
     rvref0=[]
     rvref1=[]
@@ -278,18 +302,19 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
     ren2 = []
     for i in range(num_row):
         for j in range(num_bits_row):
-            rh0, _ren0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                        icdrv_en0_xy[num_bits_row * i + j][0],
-                                        np.array([icdrv_en0_xy[num_bits_row * i + j][0][0] + i*3 + 3 + 12, y0]), rg_m4m5)
-            ren0.append(_ren0)
-            rh0, _ren1 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                        icdrv_en1_xy[num_bits_row * i + j][0],
-                                        np.array([icdrv_en1_xy[num_bits_row * i + j][0][0] + i*3 + 4 + 12, y0]), rg_m4m5)
-            ren1.append(_ren1)
-            rh0, _ren2 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                        icdrv_en2_xy[num_bits_row * i + j][0],
-                                        np.array([icdrv_en2_xy[num_bits_row * i + j][0][0] + i*3 + 5 + 12, y0]), rg_m4m5)
-            ren2.append(_ren2)
+            if num_bits_row*i+j < num_bits:
+                rh0, _ren0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
+                                             icdrv_en0_xy[num_bits_row * i + j][0],
+                                             np.array([icdrv_en0_xy[num_bits_row * i + j][0][0] + i*3 + 3 + 12, y0]), rg_m4m5)
+                ren0.append(_ren0)
+                rh0, _ren1 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
+                                             icdrv_en1_xy[num_bits_row * i + j][0],
+                                             np.array([icdrv_en1_xy[num_bits_row * i + j][0][0] + i*3 + 4 + 12, y0]), rg_m4m5)
+                ren1.append(_ren1)
+                rh0, _ren2 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
+                                             icdrv_en2_xy[num_bits_row * i + j][0],
+                                             np.array([icdrv_en2_xy[num_bits_row * i + j][0][0] + i*3 + 5 + 12, y0]), rg_m4m5)
+                ren2.append(_ren2)
     # vc0 route
     rh0, rvc0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                  icdrv_vref1_xy[0][0],
@@ -299,9 +324,10 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
     for k in range(num_output_routes):
         for i in range(num_row):
             for j in range(num_bits_row):
-                rh0, _rvo = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                            icdrv_vo_xy[num_bits_row * i + j][0],
-                                            np.array([icdrv_en0_xy[num_bits_row * i + j][0][0] + num_row*3 + 6 + i + 12 + k*num_row, y1]), rg_m4m5)
+                if num_bits_row*i+j < num_bits:
+                    rh0, _rvo = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
+                                                icdrv_vo_xy[num_bits_row * i + j][0],
+                                                np.array([icdrv_en0_xy[num_bits_row * i + j][0][0] + num_row*3 + 6 + i + 12 + k*num_row, y1]), rg_m4m5)
                 rvo.append(_rvo)
                 #output_pin
                 laygen.create_boundary_pin_form_rect(_rvo, rg_m4m5, "VO"+str(k)+"<"+str(i*num_bits_row+j)+">", laygen.layers['pin'][5], size=6, 
@@ -446,32 +472,21 @@ if __name__ == '__main__':
             specdict = yaml.load(stream)
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
-        num_bits_vertical=specdict['n_bit']-1-2
+        num_bits=specdict['n_bit']-1
+        num_bits_vertical=sizedict['capdac_num_bits_vertical']
+        num_bits_horizontal=sizedict['capdac_num_bits_horizontal']
         m_list=sizedict['capdrv_m_list']
-    for i, m in enumerate(m_list):
-        cdrv_name_list[i]='capdrv_nsw_'+str(m)+'x'
-
-    '''
-    yamlfile_system_input="adc_sar_dsn_system_input.yaml"
-    yamlfile_size="adc_sar_capdrv_nsw_array_output.yaml"
-    if load_from_file==True:
-        with open(yamlfile_system_input, 'r') as stream:
-            sysdict_i = yaml.load(stream)
-        cell_name='capdrv_nsw_array_'+str(sysdict_i['n_bit']-1)+'b'
-        with open(yamlfile_size, 'r') as stream:
-            sizedict = yaml.load(stream)
-    m_list=sizedict['m_list']
-    for i, m in enumerate(m_list):
-        cdrv_name_list[i]='capdrv_nsw_'+str(m)+'x'
-    '''
+        cdrv_name_list=[]
+        for i, m in enumerate(m_list):
+            cdrv_name_list.append('capdrv_nsw_'+str(m)+'x')
 
     print(cell_name+" generating")
     mycell_list.append(cell_name)
     laygen.add_cell(cell_name)
     laygen.sel_cell(cell_name)
     generate_capdrv_array(laygen, objectname_pfix='CA0', templib_logic=logictemplib, cdrv_name_list=cdrv_name_list,
-                          placement_grid=pg, routing_grid_m2m3=rg_m2m3, routing_grid_m4m5=rg_m4m5, num_bits=8,
-                          num_bits_row=2, num_output_routes=2, origin=np.array([0, 0]))
+                          placement_grid=pg, routing_grid_m2m3=rg_m2m3, routing_grid_m4m5=rg_m4m5, 
+                          num_bits=num_bits, num_bits_row=2, num_output_routes=2, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)

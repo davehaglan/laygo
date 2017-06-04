@@ -48,7 +48,7 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     rg_m6m7 = routing_grid_m6m7
 
     tap_name='tap'
-    cdrv_name='capdrv_nsw_array_'+str(num_bits)+'b'
+    cdrv_name='capdrv_nsw_array'
     #cdac_name='capdac_'+str(num_bits)+'b'
     cdac_name='capdac'
     sa_name='salatch_pmos'
@@ -238,8 +238,8 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     x1 = laygen.get_inst_xy(icdacr.name, rg_m3m4)[0] + 1
     xy0 = laygen.get_inst_pin_coord(isa.name, "INP", rg_m3m4, index=np.array([0, 0]), sort=True)[0]
     xy1 = laygen.get_inst_pin_coord(isa.name, "INM", rg_m3m4, index=np.array([0, 0]), sort=True)[0]
-    laygen.route(None, laygen.layers['metal'][4], xy0=np.array([x0, xy0[1]]), xy1=xy0, gridname0=rg_m3m4, addvia1=True)
-    laygen.route(None, laygen.layers['metal'][4], xy0=np.array([x1, xy1[1]]), xy1=xy1, gridname0=rg_m3m4, addvia1=True)
+    laygen.route(None, laygen.layers['metal'][4], xy0=np.array([x0, xy0[1]]), xy1=xy0, gridname0=rg_m3m4, via1=[[0, 0]])
+    laygen.route(None, laygen.layers['metal'][4], xy0=np.array([x1, xy1[1]]), xy1=xy1, gridname0=rg_m3m4, via1=[[0, 0]])
 
     #vdd/vss - route
     #cdrv_left_m4
@@ -498,6 +498,8 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']-1
+        m_sa=sizedict['salatch_m']
+        num_bits_vertical=sizedict['capdac_num_bits_vertical']
     #sarafe generation
     cellname='sarafe_nsw'
     print(cellname+" generating")
@@ -508,7 +510,8 @@ if __name__ == '__main__':
                     placement_grid=pg, routing_grid_m2m3_thick=rg_m2m3_thick, routing_grid_m3m4_thick=rg_m3m4_thick,
                     routing_grid_m4m5_thick=rg_m4m5_thick, routing_grid_m5m6=rg_m5m6, 
                     routing_grid_m5m6_basic_thick=rg_m5m6_basic_thick, routing_grid_m5m6_thick=rg_m5m6_thick,
-                    routing_grid_m6m7=rg_m6m7, num_bits=num_bits, num_cdrv_output_routes=2, m_sa=8,
+                    routing_grid_m6m7=rg_m6m7, num_bits=num_bits, num_bits_vertical=num_bits_vertical,
+                    num_cdrv_output_routes=2, m_sa=m_sa,
                     origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 

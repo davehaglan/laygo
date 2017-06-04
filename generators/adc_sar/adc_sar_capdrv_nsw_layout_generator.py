@@ -26,6 +26,7 @@
 """
 import laygo
 import numpy as np
+import yaml
 import os
 #import logging;logging.basicConfig(level=logging.DEBUG)
 
@@ -116,9 +117,6 @@ def generate_capdrv_nsw(laygen, objectname_pfix, templib_logic, placement_grid, 
         rv0, rvref0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i3_i_xy[0]+np.array([2*i, 0]), np.array([x0, y0 + 0]), rg_m3m4)
         rv0, rvref1 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i4_i_xy[0]+np.array([2*i, 0]), np.array([x0, y0 + 2]), rg_m3m4)
         rv0, rvref2 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i5_i_xy[0]+np.array([2*i, 0]), np.array([x0, y0 + 4]), rg_m3m4)
-        #rv0, rvref20 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i3_i_xy[0]+np.array([2*i, 0]), np.array([x0, y0 + 3]), rg_m3m4)
-        #rv0, rvref21 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i4_i_xy[0]+np.array([2*i, 0]), np.array([x0, y0 + 5]), rg_m3m4)
-        #rv0, rvref22 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i5_i_xy[0]+np.array([2*i, 0]), np.array([x0, y0 + 4]), rg_m3m4)
 
     #out
     for i in range(int(m/2)):
@@ -133,13 +131,9 @@ def generate_capdrv_nsw(laygen, objectname_pfix, templib_logic, placement_grid, 
     laygen.create_boundary_pin_form_rect(rvref0, rg_m3m4, "VREF<0>", laygen.layers['pin'][4], size=4, direction='left')
     laygen.create_boundary_pin_form_rect(rvref1, rg_m3m4, "VREF<1>", laygen.layers['pin'][4], size=4, direction='left')
     laygen.create_boundary_pin_form_rect(rvref2, rg_m3m4, "VREF<2>", laygen.layers['pin'][4], size=4, direction='left')
-    #laygen.create_boundary_pin_form_rect(rvref20, rg_m3m4, "VREF2<0>", laygen.layers['pin'][4], size=4, direction='left', netname="VREF<0>")
-    #laygen.create_boundary_pin_form_rect(rvref21, rg_m3m4, "VREF2<1>", laygen.layers['pin'][4], size=4, direction='left', netname="VREF<1>")
-    #laygen.create_boundary_pin_form_rect(rvref22, rg_m3m4, "VREF2<2>", laygen.layers['pin'][4], size=4, direction='left', netname="VREF<2>")
     laygen.create_boundary_pin_form_rect(rvo0, rg_m3m4, "VO", laygen.layers['pin'][4], size=4, direction='right')
 
     # power pin
-    #create_power_pin_from_inst(laygen, layer=laygen.layers['pin'][2], gridname=rg_m1m2, inst_left=it0, inst_right=refi)
     inst_left=it0
     inst_right=refi
     rvdd0_pin_xy = laygen.get_inst_pin_coord(inst_left.name, 'VSS1', rg_m1m2, sort=True)
@@ -196,6 +190,19 @@ if __name__ == '__main__':
 
     mycell_list = []
     m_list = [2,4,8]
+    m_space_offset = 0
+    #load from preset
+    load_from_file=True
+    yamlfile_spec="adc_sar_spec.yaml"
+    yamlfile_size="adc_sar_size.yaml"
+    if load_from_file==True:
+        with open(yamlfile_spec, 'r') as stream:
+            specdict = yaml.load(stream)
+        with open(yamlfile_size, 'r') as stream:
+            sizedict = yaml.load(stream)
+        m_list=list(set(sizedict['capdrv_m_list']))
+        m_space_offset=sizedict['capdrv_space_offset']
+    m_space_ref=max(m_list)
     #capdrv generation
     for m in m_list:
         cellname='capdrv_nsw_'+str(m)+'x'
@@ -204,20 +211,9 @@ if __name__ == '__main__':
         laygen.add_cell(cellname)
         laygen.sel_cell(cellname)
         generate_capdrv_nsw(laygen, objectname_pfix='CD0', templib_logic=logictemplib,
-                            placement_grid=pg, routing_grid_m3m4=rg_m3m4, m=m, m_space=3*(8-m), origin=np.array([0, 0]))
+                            placement_grid=pg, routing_grid_m3m4=rg_m3m4, m=m, m_space=3*(m_space_ref-m)+m_space_offset, origin=np.array([0, 0])) 
+                            #m_space multiplied by 3 because of 3 references
         laygen.add_template_from_cell()
-    #larger cells
-    m_list = [12, 16]
-    for m in m_list:
-        cellname='capdrv_nsw_'+str(m)+'x'
-        print(cellname+" generating")
-        mycell_list.append(cellname)
-        laygen.add_cell(cellname)
-        laygen.sel_cell(cellname)
-        generate_capdrv_nsw(laygen, objectname_pfix='CD0', templib_logic=logictemplib,
-                            placement_grid=pg, routing_grid_m3m4=rg_m3m4, m=m, m_space=0, origin=np.array([0, 0]))
-        laygen.add_template_from_cell()
-
 
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)
     #bag export, if bag does not exist, gds export

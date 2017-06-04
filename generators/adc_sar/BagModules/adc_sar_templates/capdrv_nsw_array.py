@@ -79,7 +79,7 @@ class adc_sar_templates__capdrv_nsw_array(Module):
                 pin_en=pin_en+','
         self.array_instance('ICDRV0', name_list, term_list=term_list)
 
-        for i in range(8):
+        for i in range(num_bits):
             self.instances['ICDRV0'][i].design(lch=lch, pw=pw, nw=nw, m=m_list[i], device_intent=device_intent)
 
         self.rename_pin('EN<2:0>',pin_en)
