@@ -245,18 +245,6 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     #cdrv_left_m4
     rvdd_cdrvl_m3=[]
     rvss_cdrvl_m3=[]
-    '''
-    for pn, p in pdict_m3m4_thick[icdrvl.name].items():
-        if pn.startswith('VDDR'):
-            rvdd_cdrvl_m3.append(p)
-        if pn.startswith('VSSR'):
-            rvss_cdrvl_m3.append(p)
-    input_rails_xy = [rvdd_cdrvl_m3, rvss_cdrvl_m3]
-    rvdd_cdrvl_m4, rvss_cdrvl_m4 = laygenhelper.generate_power_rails_from_rails_xy(laygen, routename_tag='_CDRVL_M4_', 
-                layer=laygen.layers['metal'][4], gridname=rg_m3m4_thick, netnames=['VDD', 'VSS'], direction='x', 
-                input_rails_xy=input_rails_xy, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=None,
-                offset_start_index=0, offset_end_index=0)
-    '''
     for pn, p in pdict_m3m4_thick[icdrvl.name].items():
         if pn.startswith('VSSR'):
             rvss_cdrvl_m3.append(p)
@@ -271,18 +259,6 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
          +laygen.get_template_size(name=icdrvr.cellname, gridname=rg_m3m4_thick, libname=workinglib)[0]
     rvdd_cdrvr_m3=[]
     rvss_cdrvr_m3=[]
-    '''
-    for pn, p in pdict_m3m4_thick[icdrvr.name].items():
-        if pn.startswith('VDDR'):
-            rvdd_cdrvr_m3.append(p)
-        if pn.startswith('VSSR'):
-            rvss_cdrvr_m3.append(p)
-    input_rails_xy = [rvdd_cdrvr_m3, rvss_cdrvr_m3]
-    rvdd_cdrvr_m4, rvss_cdrvr_m4 = laygenhelper.generate_power_rails_from_rails_xy(laygen, routename_tag='_CDRVR_M4_', 
-                layer=laygen.layers['metal'][4], gridname=rg_m3m4_thick, netnames=['VDD', 'VSS'], direction='x', 
-                input_rails_xy=input_rails_xy, generate_pin=False, overwrite_start_coord=None, overwrite_end_coord=x1, 
-                offset_start_index=0, offset_end_index=0)
-    '''
     for pn, p in pdict_m3m4_thick[icdrvr.name].items():
         if pn.startswith('VSSR'):
             rvss_cdrvr_m3.append(p)

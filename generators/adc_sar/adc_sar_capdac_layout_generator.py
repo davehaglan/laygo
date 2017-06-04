@@ -29,6 +29,7 @@ import laygo
 import numpy as np
 import os
 import yaml
+from math import ceil
 
 def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
                     devname_cap_body='momcap_center', devname_cap_dmy='momcap_dmy', 
@@ -48,6 +49,7 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
                     num_space_right=1,
                     num_space_top=1,
                     num_space_bottom=1,
+                    placement_resolution=[None, None],
                     origin=np.array([0, 0])):
 
     """
@@ -66,6 +68,8 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
     num_bits_vertical : number of bits in vertical diretion
     num_bits_horizontal : number of bits in horizontal direction
     num_col_space_right : number of dummy columns in right side
+    placement_resolution : [float, float], optional
+        Placemente resolution. Used when the capdac layout need to be aligned with other cells. Default valut is [None, None].
     origin : origin of instance
     """
     pg = placement_grid
@@ -193,21 +197,20 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
         #parallel connections
         for k in range(2**i):
             c_bot_xy3 = laygen.get_inst_pin_coord(c.name, 'BOTTOM', rg_m6m7, index=np.array([k, m*m_horizontal[i]-1]))[0]
-            laygen.route(None, laygen.layers['metal'][7], xy0=c_bot_xy3 + np.array([0, 0]), xy1=np.array([0, y0+2-2]), gridname0=rg_m6m7, direction='y')
-            laygen.route(None, laygen.layers['metal'][7], xy0=c_bot_xy3 + np.array([num_bits_vertical*2, 0]), xy1=np.array([num_bits_vertical*2, y0+2-2]), gridname0=rg_m6m7, direction='y')
+            laygen.route(None, laygen.layers['metal'][7], xy0=c_bot_xy3 + np.array([0, 0]), xy1=np.array([0, y0+1]), gridname0=rg_m6m7, direction='y')
+            laygen.route(None, laygen.layers['metal'][7], xy0=c_bot_xy3 + np.array([num_bits_vertical*2, 0]), xy1=np.array([num_bits_vertical*2, y0+1]), gridname0=rg_m6m7, direction='y')
             for j in range(m*m_horizontal[i]):
                 laygen.via(None, c_bot_xy2 + np.array([0, 0]), refinstname=c.name, refinstindex=np.array([k, j]), gridname=rg_m6m7)
                 laygen.via(None, c_bot_xy2 + np.array([num_bits_vertical*2, 0]), refinstname=c.name, refinstindex=np.array([k, j]), gridname=rg_m6m7)
         #col shorts
         if not i==0:
-            laygen.route(None, laygen.layers['metal'][6], xy0=np.array([c_bot_xy[0], y0+2-2]), xy1=np.array([c_bot_xy3[0]+num_bits_vertical*2, y0+2-2]), gridname0=rg_m6m7)
-            laygen.via(None, np.array([c_bot_xy[0], y0+2-2]), gridname=rg_m6m7)
-            laygen.via(None, np.array([c_bot_xy[0]+num_bits_vertical*2, y0+2-2]), gridname=rg_m6m7)
+            laygen.route(None, laygen.layers['metal'][6], xy0=np.array([c_bot_xy[0], y0+1]), xy1=np.array([c_bot_xy3[0]+num_bits_vertical*2, y0+1]), gridname0=rg_m6m7)
+            laygen.via(None, np.array([c_bot_xy[0], y0+1]), gridname=rg_m6m7)
+            laygen.via(None, np.array([c_bot_xy[0]+num_bits_vertical*2, y0+1]), gridname=rg_m6m7)
             for k in range(2**i):
                 c_bot_xy3 = laygen.get_inst_pin_coord(c.name, 'BOTTOM', rg_m6m7, index=np.array([k, m*2**num_bits_vertical-1]))[0]
-                laygen.via(None, np.array([c_bot_xy3[0], y0+2-2]), gridname=rg_m6m7)
-                laygen.via(None, np.array([c_bot_xy3[0]+num_bits_vertical*2, y0+2-2]), gridname=rg_m6m7)
- 
+                laygen.via(None, np.array([c_bot_xy3[0], y0+1]), gridname=rg_m6m7)
+                laygen.via(None, np.array([c_bot_xy3[0]+num_bits_vertical*2, y0+1]), gridname=rg_m6m7)
     #pins 
     laygen.create_boundary_pin_form_rect(rc0, rg_m6m7, "I_C0", laygen.layers['pin'][7], size=4, direction='bottom')
     for i, r in enumerate(rbot):
@@ -223,6 +226,13 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
             rtop = laygen.route(None, laygen.layers['metal'][6], xy0=c_top_xy[0], xy1=c_top_xy[1], gridname0=rg_m6m7)
             laygen.create_boundary_pin_form_rect(rtop, rg_m6m7, "O"+str(cnt), laygen.layers['pin'][6], size=4, direction='left', netname="O")
             cnt+=1
+    #grid alignment
+    xy0 = (laygen.get_inst_xy(name=ibndtr0.name)+laygen.get_template_xy(name=ibndtr0.cellname)*np.array([num_space_right, num_space_top]))[0]
+    if not placement_resolution[0] is None:
+        xy0[0] = ceil(xy0[0] / placement_resolution[0])*placement_resolution[0]
+    if not placement_resolution[1] is None:
+        xy0[1] = ceil(xy0[1] / placement_resolution[1])*placement_resolution[1]
+    laygen.add_rect(None, xy=np.vstack((np.array([0, 0]), xy0)), layer=laygen.layers['prbnd'])
 
 
 if __name__ == '__main__':
@@ -288,15 +298,13 @@ if __name__ == '__main__':
         m_unit=sizedict['capdac_c_m']
         num_bits_vertical=sizedict['capdac_num_bits_vertical']
         num_bits_horizontal=sizedict['capdac_num_bits_horizontal']
-        #num_bits_vertical=specdict['n_bit']-1-2
-        #num_bits_horizontal=2
         m_vertical=specdict['rdx_array'][:int(-1*(num_bits_horizontal))]
         m_horizontal=specdict['rdx_array'][int(-1*(num_bits_horizontal)):]
         for i, m in enumerate(m_horizontal):
             m_horizontal[i]=int(m_horizontal[i]/(2**i))
-        print(m_vertical, m_horizontal)
-        #cell_name_aux=['sar_'+str(specdict['n_bit'])+'b_IAFE0_ICAPM0']
+        #print(m_vertical, m_horizontal)
 
+    yres=laygen.get_template_size(name='nmos4_fast_center_nf2')[1]*2
 
     print(cell_name+" generating")
     mycell_list.append(cell_name)
@@ -368,6 +376,7 @@ if __name__ == '__main__':
                     num_space_right=num_space_right,
                     num_space_top=num_space_top,
                     num_space_bottom=num_space_bottom,
+                    placement_resolution=[None, yres],
                     origin=np.array([0, 0]))
     laygen.add_template_from_cell()
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)

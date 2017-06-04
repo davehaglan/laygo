@@ -1074,7 +1074,9 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         self.grids.sel_library(libname)
 
-    def get_template_size(self, name, gridname, libname=None):
+    def get_template_size(self, name, gridname=None, libname=None):
+        return self.get_template_xy(name=name, gridname=gridname, libname=libname)
+    def get_template_xy(self, name, gridname=None, libname=None):
         """
         get the size of a template in abstract coordinate
 
@@ -1082,8 +1084,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         ----------
         name : str
             template name
-        gridname : str
-            grid name
+        gridname : str, optional
+            grid name. If None, physical grid is used
+        libname : str, optional
+            library name. If None, GridLayoutGenerator.TemplateDB.TemplateDB.plib is uesd
 
         Returns
         -------
@@ -1091,9 +1095,12 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             size of template
         """
         t = self.templates.get_template(name, libname=libname)
-        return self.get_absgrid_xy(gridname, t.size)
+        if gridname is None:
+            return t.size
+        else:
+            return self.get_absgrid_xy(gridname, t.size)
 
-    def get_inst_xy(self, name, gridname):
+    def get_inst_xy(self, name, gridname=None):
         """
         Get xy coordinate values of an Instance object in abstract coordinate
 
@@ -1101,8 +1108,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         ----------
         name : str
             instance name
-        gridname : str
-            grid name
+        gridname : str, optional
+            grid name. If None, physical grid is used
 
         Returns
         -------
@@ -1110,7 +1117,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             xy coordinate of instance
         """
         i = self.get_inst(name)
-        return self.get_absgrid_xy(gridname, i.xy)
+        if gridname==None:
+            return i.xy
+        else:
+            return self.get_absgrid_xy(gridname, i.xy)
 
     def get_rect_xy(self, name, gridname, sort=False):
         """
