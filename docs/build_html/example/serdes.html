@@ -34,7 +34,7 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="laygo_documentation 1.0 documentation" href="../index.html"/>
-        <link rel="next" title="sar adc example" href="adc_sar.html"/>
+        <link rel="next" title="Time-interleaved SAR ADC generator" href="adc_sar.html"/>
         <link rel="prev" title="Logic family generator" href="logic.html"/> 
 
   
@@ -111,7 +111,21 @@
 <li class="toctree-l2"><a class="reference internal" href="#parameterizations">Parameterizations</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="adc_sar.html">Generator example - sar adc (to be updated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adc_sar.html">Generator example - sar adc (to be updated)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#setting-up-parameters">Setting up parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#tisaradc-architecture">TISARADC architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#subadc-frontend-layout-generation">SubADC frontend layout generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#subadc-backend-layout-generation">SubADC backend layout generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#subadc-switch-generation">SubADC switch generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#clocking-path-generation">Clocking path generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#retimer">Retimer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#bias">Bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#top">Top</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#contributors">Contributors</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../tech/tech.html">Technology setup guidelines (to be updated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../api/laygo.html">laygo package</a></li>
@@ -166,8 +180,9 @@ abstracting functions) will be released soon.</div></blockquote>
 <div class="section" id="installation-and-launch">
 <span id="installation-and-launch"></span><h2>Installation and launch<a class="headerlink" href="#installation-and-launch" title="Permalink to this headline">¶</a></h2>
 <ol>
-<li><p class="first">Clone a proper tech repo. For cds_ff_mpt example type following
-commands.</p>
+<li><p class="first">Set up BAG environment for the technology in use. This is usually
+done by cloning technology repo provided by BAG developers. For example,
+cds_ff_mpt environment can be set up by running following commands.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git@github.com:ucb-art/BAG2_cds_ff_mpt.git
 $ cd BAG2_cds_ff_mpt
 $ git submodule init
@@ -219,7 +234,7 @@ the increased serialization ratio.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="adc_sar.html" class="btn btn-neutral float-right" title="sar adc example">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="adc_sar.html" class="btn btn-neutral float-right" title="Time-interleaved SAR ADC generator">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="logic.html" class="btn btn-neutral" title="Logic family generator"><span class="fa fa-arrow-circle-left"></span> Previous</a>

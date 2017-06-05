@@ -111,7 +111,21 @@
 <li class="toctree-l2"><a class="reference internal" href="serdes.html#parameterizations">Parameterizations</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="adc_sar.html">Generator example - sar adc (to be updated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adc_sar.html">Generator example - sar adc (to be updated)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#setting-up-parameters">Setting up parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#tisaradc-architecture">TISARADC architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#subadc-frontend-layout-generation">SubADC frontend layout generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#subadc-backend-layout-generation">SubADC backend layout generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#subadc-switch-generation">SubADC switch generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#clocking-path-generation">Clocking path generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#retimer">Retimer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#bias">Bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#top">Top</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adc_sar.html#contributors">Contributors</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../tech/tech.html">Technology setup guidelines (to be updated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../api/laygo.html">laygo package</a></li>
@@ -176,11 +190,10 @@ $ git submodule foreach git pull origin master
 </li>
 <li><p class="first">Set setting up files, run virtuoso and BAG.</p>
 </li>
-<li><p class="first">Create an empty library called (tech)_logic_templates. For
-example, for <strong>cds_ff_mpt</strong> technology, the library name will be
+<li><p class="first">Run this command to generate logic layouts. The script will create
+logic layouts in (tech)_logic_templates library. For example, for
+<strong>cds_ff_mpt</strong> technology, the library name will be
 <strong>cds_ff_mpt_logic_template</strong>.</p>
-</li>
-<li><p class="first">Run this command to generate logic layouts.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">logic</span><span class="o">/</span><span class="n">logic_templates_layout_generator</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>

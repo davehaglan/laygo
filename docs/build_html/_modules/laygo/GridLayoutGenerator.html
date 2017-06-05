@@ -110,7 +110,21 @@
 <li class="toctree-l2"><a class="reference internal" href="../../example/serdes.html#parameterizations">Parameterizations</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../example/adc_sar.html">Generator example - sar adc (to be updated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example/adc_sar.html">Generator example - sar adc (to be updated)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../example/adc_sar.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/adc_sar.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/adc_sar.html#setting-up-parameters">Setting up parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/adc_sar.html#tisaradc-architecture">TISARADC architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/adc_sar.html#subadc-frontend-layout-generation">SubADC frontend layout generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/adc_sar.html#subadc-backend-layout-generation">SubADC backend layout generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/adc_sar.html#subadc-switch-generation">SubADC switch generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/adc_sar.html#clocking-path-generation">Clocking path generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/adc_sar.html#retimer">Retimer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/adc_sar.html#bias">Bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/adc_sar.html#top">Top</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/adc_sar.html#contributors">Contributors</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../tech/tech.html">Technology setup guidelines (to be updated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">API documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../api/laygo.html">laygo package</a></li>
@@ -835,11 +849,11 @@
             <span class="n">gridname0</span> <span class="o">=</span> <span class="n">gridname</span>
         <span class="k">if</span> <span class="n">gridname1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">gridname1</span> <span class="o">=</span> <span class="n">gridname0</span>
-        <span class="n">rv0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">layerh</span><span class="p">,</span> <span class="n">xy0</span><span class="o">=</span><span class="n">xy0</span><span class="p">,</span> <span class="n">xy1</span><span class="o">=</span><span class="n">xy1</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">gridname0</span><span class="p">,</span>
+        <span class="n">rv0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">layerv</span><span class="p">,</span> <span class="n">xy0</span><span class="o">=</span><span class="n">xy0</span><span class="p">,</span> <span class="n">xy1</span><span class="o">=</span><span class="n">xy1</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">gridname0</span><span class="p">,</span>
                          <span class="n">refinstname0</span><span class="o">=</span><span class="n">refinstname0</span><span class="p">,</span> <span class="n">refinstindex0</span><span class="o">=</span><span class="n">refinstindex0</span><span class="p">,</span> <span class="n">refpinname0</span><span class="o">=</span><span class="n">refpinname0</span><span class="p">,</span>
                          <span class="n">refinstname1</span><span class="o">=</span><span class="n">refinstname1</span><span class="p">,</span> <span class="n">refinstindex1</span><span class="o">=</span><span class="n">refinstindex1</span><span class="p">,</span> <span class="n">refpinname1</span><span class="o">=</span><span class="n">refpinname1</span><span class="p">,</span>
                          <span class="n">endstyle0</span><span class="o">=</span><span class="n">endstyle0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">endstyle1</span><span class="o">=</span><span class="n">endstyle1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">via0</span><span class="o">=</span><span class="n">via0</span><span class="p">,</span> <span class="n">via1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]))</span>
-        <span class="n">rh0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">layerv</span><span class="p">,</span> <span class="n">xy0</span><span class="o">=</span><span class="n">xy1</span><span class="p">,</span> <span class="n">xy1</span><span class="o">=</span><span class="n">xy0</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">gridname1</span><span class="p">,</span>
+        <span class="n">rh0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">layerh</span><span class="p">,</span> <span class="n">xy0</span><span class="o">=</span><span class="n">xy1</span><span class="p">,</span> <span class="n">xy1</span><span class="o">=</span><span class="n">xy0</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">gridname1</span><span class="p">,</span>
                          <span class="n">refinstname0</span><span class="o">=</span><span class="n">refinstname1</span><span class="p">,</span> <span class="n">refinstindex0</span><span class="o">=</span><span class="n">refinstindex1</span><span class="p">,</span> <span class="n">refpinname0</span><span class="o">=</span><span class="n">refpinname1</span><span class="p">,</span>
                          <span class="n">refinstname1</span><span class="o">=</span><span class="n">refinstname0</span><span class="p">,</span> <span class="n">refinstindex1</span><span class="o">=</span><span class="n">refinstindex0</span><span class="p">,</span> <span class="n">refpinname1</span><span class="o">=</span><span class="n">refpinname0</span><span class="p">,</span>
                          <span class="n">endstyle0</span><span class="o">=</span><span class="n">endstyle0</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">endstyle1</span><span class="o">=</span><span class="n">endstyle1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">via0</span><span class="o">=</span><span class="n">via1</span><span class="p">)</span>
@@ -1228,7 +1242,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">sel_library</span><span class="p">(</span><span class="n">libname</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridLayoutGenerator.get_template_size"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_template_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="GridLayoutGenerator.get_template_size"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_template_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_template_xy</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="n">gridname</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">libname</span><span class="p">)</span></div>
+<div class="viewcode-block" id="GridLayoutGenerator.get_template_xy"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_xy">[docs]</a>    <span class="k">def</span> <span class="nf">get_template_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        get the size of a template in abstract coordinate</span>
 
@@ -1236,8 +1252,10 @@
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            template name</span>
-<span class="sd">        gridname : str</span>
-<span class="sd">            grid name</span>
+<span class="sd">        gridname : str, optional</span>
+<span class="sd">            grid name. If None, physical grid is used</span>
+<span class="sd">        libname : str, optional</span>
+<span class="sd">            library name. If None, GridLayoutGenerator.TemplateDB.TemplateDB.plib is uesd</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1245,9 +1263,12 @@
 <span class="sd">            size of template</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">libname</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_absgrid_xy</span><span class="p">(</span><span class="n">gridname</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">size</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">gridname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_absgrid_xy</span><span class="p">(</span><span class="n">gridname</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">size</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridLayoutGenerator.get_inst_xy"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_xy">[docs]</a>    <span class="k">def</span> <span class="nf">get_inst_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">gridname</span><span class="p">):</span>
+<div class="viewcode-block" id="GridLayoutGenerator.get_inst_xy"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_xy">[docs]</a>    <span class="k">def</span> <span class="nf">get_inst_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get xy coordinate values of an Instance object in abstract coordinate</span>
 
@@ -1255,8 +1276,8 @@
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            instance name</span>
-<span class="sd">        gridname : str</span>
-<span class="sd">            grid name</span>
+<span class="sd">        gridname : str, optional</span>
+<span class="sd">            grid name. If None, physical grid is used</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1264,7 +1285,10 @@
 <span class="sd">            xy coordinate of instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_inst</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_absgrid_xy</span><span class="p">(</span><span class="n">gridname</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">xy</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">gridname</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">xy</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_absgrid_xy</span><span class="p">(</span><span class="n">gridname</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">xy</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GridLayoutGenerator.get_rect_xy"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_rect_xy">[docs]</a>    <span class="k">def</span> <span class="nf">get_rect_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

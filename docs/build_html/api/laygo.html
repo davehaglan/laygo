@@ -111,7 +111,21 @@
 <li class="toctree-l2"><a class="reference internal" href="../example/serdes.html#parameterizations">Parameterizations</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../example/adc_sar.html">Generator example - sar adc (to be updated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/adc_sar.html">Generator example - sar adc (to be updated)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../example/adc_sar.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/adc_sar.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/adc_sar.html#setting-up-parameters">Setting up parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/adc_sar.html#tisaradc-architecture">TISARADC architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/adc_sar.html#subadc-frontend-layout-generation">SubADC frontend layout generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/adc_sar.html#subadc-backend-layout-generation">SubADC backend layout generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/adc_sar.html#subadc-switch-generation">SubADC switch generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/adc_sar.html#clocking-path-generation">Clocking path generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/adc_sar.html#retimer">Retimer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/adc_sar.html#bias">Bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/adc_sar.html#top">Top</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/adc_sar.html#contributors">Contributors</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../tech/tech.html">Technology setup guidelines (to be updated)</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">API documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">laygo package</a></li>
@@ -855,7 +869,7 @@ ex) [[x0, y0], [x1, x1], ..., [xn-1, yn-1], [x0, y0]]</li>
 <p>Base class for GDSIO objects</p>
 <dl class="attribute">
 <dt id="laygo.GDSIO.Element.possible_transform_parameters">
-<code class="descname">possible_transform_parameters</code><em class="property"> = {'R0': (None, None), 'MY': (32768, 180), 'R90': (0, 90), 'R180': (0, 180), 'MX': (32768, 0), 'R270': (0, 270)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="descname">possible_transform_parameters</code><em class="property"> = {'R90': (0, 90), 'MY': (32768, 180), 'R270': (0, 270), 'R180': (0, 180), 'MX': (32768, 0), 'R0': (None, None)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; transform parameter dictionary</p>
 </dd></dl>
 
@@ -1540,7 +1554,7 @@ grids.</p>
 
 <dl class="attribute">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.layers">
-<code class="descname">layers</code><em class="property"> = {'pin': [], 'text': [], 'metal': [], 'prbnd': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">layers</code><em class="property"> = {'text': [], 'prbnd': [], 'metal': [], 'pin': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; layer dictionary</p>
 </dd></dl>
 
@@ -2024,7 +2038,12 @@ ex) if xy0 = [1, 2], xy1 = [1, 5], via1 = [0, 2] then a via will be placed at [1
 
 <dl class="method">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_size">
-<code class="descname">get_template_size</code><span class="sig-paren">(</span><em>name</em>, <em>gridname</em>, <em>libname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_template_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_size" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_template_size</code><span class="sig-paren">(</span><em>name</em>, <em>gridname=None</em>, <em>libname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_template_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_xy">
+<code class="descname">get_template_xy</code><span class="sig-paren">(</span><em>name</em>, <em>gridname=None</em>, <em>libname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_template_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_xy" title="Permalink to this definition">¶</a></dt>
 <dd><p>get the size of a template in abstract coordinate</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2032,7 +2051,8 @@ ex) if xy0 = [1, 2], xy1 = [1, 5], via1 = [0, 2] then a via will be placed at [1
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>name</strong> (<em>str</em>) &#8211; template name</li>
-<li><strong>gridname</strong> (<em>str</em>) &#8211; grid name</li>
+<li><strong>gridname</strong> (<em>str, optional</em>) &#8211; grid name. If None, physical grid is used</li>
+<li><strong>libname</strong> (<em>str, optional</em>) &#8211; library name. If None, GridLayoutGenerator.TemplateDB.TemplateDB.plib is uesd</li>
 </ul>
 </td>
 </tr>
@@ -2048,7 +2068,7 @@ ex) if xy0 = [1, 2], xy1 = [1, 5], via1 = [0, 2] then a via will be placed at [1
 
 <dl class="method">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_xy">
-<code class="descname">get_inst_xy</code><span class="sig-paren">(</span><em>name</em>, <em>gridname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_inst_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_xy" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_inst_xy</code><span class="sig-paren">(</span><em>name</em>, <em>gridname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_inst_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_xy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get xy coordinate values of an Instance object in abstract coordinate</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2056,7 +2076,7 @@ ex) if xy0 = [1, 2], xy1 = [1, 5], via1 = [0, 2] then a via will be placed at [1
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>name</strong> (<em>str</em>) &#8211; instance name</li>
-<li><strong>gridname</strong> (<em>str</em>) &#8211; grid name</li>
+<li><strong>gridname</strong> (<em>str, optional</em>) &#8211; grid name. If None, physical grid is used</li>
 </ul>
 </td>
 </tr>

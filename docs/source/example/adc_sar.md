@@ -1,21 +1,21 @@
-# Time interleaved SAR ADC generator
+# Time-interleaved SAR ADC generator
 
-This section describes how to generate a SAR ADC schematic / layout
-using BAG and laygo.
+This section describes how to generate a time-interleaved SAR ADC
+schematic and layout using BAG and laygo.
 
 ## Overview
 
 Time Interleaved Successive Approximation ADC (TISARADC) is a popular
-way of implementing moderate precision (4-12 bits) ADCs that operate at
-higher sampling rates that single SAR ADCs can achieve. As an example of
- automated analog and mixed signal circuits generation flow, the entire
- flow of TISARADC generation is explained in this document.
+way of implementing a moderate precision (4-12 bits) ADC that operates
+at higher sampling rates than single SAR ADCs can achieve. As an example
+ of demonstrating the automated analog and mixed signal circuits
+ generation flow, the entire TISARADC generator is explained here.
 
 ## Installation
 
-1. Set up a BAG/laygo working directory for the technology in use.
-For example, cds_ff_mpt environment can be set up by running following
-commands.
+1. Set up a BAG/laygo working directory for the your technology.
+For example, cds_ff_mpt environment can be set up by running the
+following commands.
 
     ```
     $ git clone git@github.com:ucb-art/BAG2_cds_ff_mpt.git
@@ -25,8 +25,9 @@ commands.
     $ git submodule foreach git pull origin master
     ```
 
-    > Note: for BWRC users, comprehensive repos for following
-    technologies are provided under NDA.
+    > Note: for BWRC users, comprehensive working environments are
+    provided under proper NDAs for certain technologies. Use the
+    following repos.
 
     > 1. **tsmcN16**: [git@bwrcrepo.eecs.berkeley.edu:jdhan/TISARADC_TSMC16FFC.git](git@bwrcrepo.eecs.berkeley.edu:jdhan/TISARADC_TSMC16FFC.git)
     > 2. **tsmcN28**:
@@ -34,12 +35,13 @@ commands.
 2. Run virtuoso and BAG.
 
 3. In the IPython interpreter, type the following command to construct
+the template and grid database.
 
     ```
     run laygo/labs/lab2_a_gridlayoutgenerator_constructtemplate.py
     ```
 
-4. Run the following command to construct the logic gate template
+4. Run the following command to generate the logic gate template
 library. The library name will be (technology_name)_logic_templates.
 
     ```
@@ -49,72 +51,85 @@ library. The library name will be (technology_name)_logic_templates.
 ## Setting up parameters
 
 ADC schematic and layout are constructed based on spec/size parameters
-defined in 2 configuration files in yaml format (adc_sar_spec.yaml,
-adc_sar_size.yaml).
+defined in 2 configuration files in **YAML** format
+(**adc_sar_spec.yaml, adc_sar_size.yaml**).
 
 Following parameters are defined in the configuration files:
 
 1. adc_sar_spec.yaml
 
-    * temp: nominal temperature
-    * temp_min: minimum temperature
-    * temp_max: maximum temperature
-    * v_in: nominal input swing (single ended)
-    * v_in_max: maximum input swing
-    * v_in_cm: nominal inpuut common mode
-    * n_bit: number of output bits
-    * n_bit_cal: number of output bits after digital calibration
-    * fsamp: effective sampling rate
-    * n_interleave: interleaving ratio
-    * c_unit: minimum unit capacitance of CDAC
-    * c_ground: grounded parasitic capacitance of c_unit
-    * c_delta: maximum capacitance mismatch of c_unit (normalized by
+    * **temp**: nominal temperature
+    * **temp_min**: minimum temperature
+    * **temp_max**: maximum temperature
+    * **v_in**: nominal input swing (single ended)
+    * **v_in_max**: maximum input swing
+    * **v_in_cm**: nominal inpuut common mode
+    * **n_bit**: number of output bits
+    * **n_bit_cal**: number of output bits after digital calibration
+    * **fsamp**: effective sampling rate
+    * **n_interleave**: interleaving ratio
+    * **c_unit**: minimum unit capacitance of CDAC
+    * **c_ground**: grounded parasitic capacitance of c_unit
+    * **c_delta**: maximum capacitance mismatch of c_unit (normalized by
     c_unit)
-    * n_bit_samp_noise: standard deviation of sampling noise (in bits)
-    * n_bit_samp_settle: maximum sampler settling error in bits
-    * n_bit_comp_noise: standard deviation of comparator noise in bits
-    * rdx_array: CDAC radix array
-    * rdx_enob: Target ENOB after calibration
-    * cycle_comp: Comparator timing budget in cycle
-    * cycle_logic: Logic timing budget in cycle
-    * cycle_dac: DAC timing budget in cycle
-    * vdd: nominal supply voltage
-    * vdd_min: minimum supply voltage
-    * vdd_max: maximum supply voltage
+    * **n_bit_samp_noise**: standard deviation of sampling noise (in bits)
+    * **n_bit_samp_settle**: maximum sampler settling error in bits
+    * **n_bit_comp_noise**: standard deviation of comparator noise in bits
+    * **rdx_array**: CDAC radix array
+    * **rdx_enob**: Target ENOB after calibration
+    * **cycle_comp**: Comparator timing budget in cycle
+    * **cycle_logic**: Logic timing budget in cycle
+    * **cycle_dac**: DAC timing budget in cycle
+    * **vdd**: nominal supply voltage
+    * **vdd_min**: minimum supply voltage
+    * **vdd_max**: maximum supply voltage
 
 2. adc_sar_size.yaml
-    * capdac_c_m: multiplier of CDAC unit capacitor
-    * capdac_num_bits_vertical: CDAC number of bits in vertical
+    * **capdac_c_m**: multiplier of CDAC unit capacitor
+    * **capdac_num_bits_vertical**: CDAC number of bits in vertical
     direction
-    * capdac_num_bits_horizontal: CDAC number of bits in horizontal
+    * **capdac_num_bits_horizontal**: CDAC number of bits in horizontal
     direction
-    * capdrv_m_list: cap driver multiplier list
-    * capdrv_space_offset: cap driver spacing parameter, for routing
-    * salatch_m: strongArm latch sizing
-    * salatch_m_buf: strongArm latch output buffer sizing
-    * salatch_m_rgnn: strongArm latch regenerative latch sizing
-    * salatch_m_rst: strongArm latch reset device sizing
-    * sarclkgen_m: strongArm latch clock generator sizing
-    * sarclkgen_fo: strongArm latch clock generator fanout
-    * sarret_m: strongArm latch output retimer sizing
-    * sarret_fo: strongArm latch output retimer fanout
-    * sarfsm_m: SAR FSM sizing
-    * sarlogic_m: SAR logic sizing
-    * dcap2_m:
-    * num_space_samp:
-    * num_space_sar:
+    * **capdrv_m_list**: cap driver multiplier list
+    * **capdrv_space_offset**: cap driver spacing parameter, for routing
+    * **salatch_m**: strongArm latch sizing
+    * **salatch_m_buf**: strongArm latch output buffer sizing
+    * **salatch_m_rgnn**: strongArm latch regenerative latch sizing
+    * **salatch_m_rst**: strongArm latch reset device sizing
+    * **sarclkgen_m**: strongArm latch clock generator sizing
+    * **sarclkgen_fo**: strongArm latch clock generator fanout
+    * **sarret_m**: strongArm latch output retimer sizing
+    * **sarret_fo**: strongArm latch output retimer fanout
+    * **sarfsm_m**: SAR FSM sizing
+    * **sarlogic_m**: SAR logic sizing
+    * **dcap2_m**:
+    * **num_space_samp**:
+    * **num_space_sar**:
 
 For the starting point, following preset files are provided. They are
 not 100% finalized, but will serve well for initializations.
 
-    1. adc_sar_spec(size)_craft.yaml : 9.6GS/s, 9bit ADC with digital
-    calibration.
-    2. adc_sar_spec(size)_11b.yaml : GS/s, 11bit ADC with digital
-    calibration.
-    2. adc_sar_spec(size)_6b.yaml : 2GS/s, 6bit ADC with radix-2
-    constellation.
+* **adc_sar_spec(size)_craft.yaml** : 9.6GS/s, 9bit ADC with digital
+calibration.
+* **adc_sar_spec(size)_11b.yaml** : GS/s, 11bit ADC with digital
+calibration.
+* **adc_sar_spec(size)_6b.yaml** : 2GS/s, 6bit ADC with radix-2
+constellation.
 
 ## TISARADC architecture
+
+TISARADC is composed of 4 parts in the top level: ADC core, clock
+generator, output retimer and biasing.
+
+* The **ADC core** performs the actual conversion operation. It is
+composed of multi-phased sampling frontend and N subADC that
+converts the actual ADC operation at (sampling_rate/N), where N is
+the interleaving ratio.
+* The **clock generator** receives the high frequency clock at sampling
+rate, generates multi-phased clock for the interleaved ADC operation.
+* The **output retimer** receives the output from the ADC core, aligns
+multi-phased signals to a single clock to be received by the
+following digital backend.
 
 ## SubADC frontend layout generation
 
@@ -210,4 +225,22 @@ the following scripts:
 
     The commands will create a layout (and schematic) of sarafe_nsw,
     which is the frontend top of subADC, and run LVS. Try different
-    presets introduced before and see if designs are generated properly
+    presets introduced before and see if designs are generated properly.
+
+## SubADC backend layout generation
+
+## SubADC switch generation
+
+## Clocking path generation
+
+## Retimer
+
+## Bias
+
+## Top
+
+
+## Contributors
+
+The generator is written by Jaeduk Han, Eric Chang, Zhongkai Wang,
+Woorham Bae, and Pengpeng Lu. This document is written by Jaeduk Han.
