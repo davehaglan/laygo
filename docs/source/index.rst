@@ -10,14 +10,13 @@ Contents:
 
 .. toctree::
    :maxdepth: 4
-
    Introduction <introduction/introduction>
    Tutorial (GDS flow) <tutorial/tutorial_GDS>
    Tutorial (BAG flow) <tutorial/tutorial_BAG>
    Architecture <architecture/architecture>
    Generator example - logic family <example/logic>
    Generator example - serdes <example/serdes>
-   Generator example - sar adc (to be updated) <example/adc_sar>
+   Generator example - TISAR ADC (to be updated) <example/tisar>
    Technology setup guidelines (to be updated) <tech/tech>
    API documentation <api/modules>
 

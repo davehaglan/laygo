@@ -17,6 +17,8 @@ I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
 .PHONY: help
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
+	@echo "  gh         to make standalone HTML files for gh-page. You should follow 'Set up sphinx within main repository' in https://daler.github.io/sphinxdoc-test/includeme.html"
+	@echo "  gh_clean   to clean up gh-page pages"
 	@echo "  html       to make standalone HTML files"
 	@echo "  dirhtml    to make HTML files named index.html in directories"
 	@echo "  singlehtml to make a single large HTML file"
@@ -48,6 +50,19 @@ help:
 clean:
 	rm -rf $(BUILDDIR)/*
 	rm -rf build_html
+
+.PHONY: gh_clean
+gh_clean:
+	BUILDDIR      = ../../laygo-docs
+	rm -rf $(BUILDDIR)/*
+
+.PHONY: gh
+gh:
+	BUILDDIR      = ../../laygo-docs
+	ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
+	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) html
+	@echo
+	@echo "Build finished. The HTML pages are in ../../laygo-docs/html."
 
 .PHONY: html
 html:

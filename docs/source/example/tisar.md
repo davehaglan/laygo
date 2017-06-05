@@ -29,8 +29,8 @@ following commands.
     provided under proper NDAs for certain technologies. Use the
     following repos.
 
-    > 1. **tsmcN16**: [git@bwrcrepo.eecs.berkeley.edu:jdhan/TISARADC_TSMC16FFC.git](git@bwrcrepo.eecs.berkeley.edu:jdhan/TISARADC_TSMC16FFC.git)
-    > 2. **tsmcN28**:
+    > 1. **tsmc16FFC**: ```git@bwrcrepo.eecs.berkeley.edu:jdhan/TISARADC_TSMC16FFC.git```
+    > 2. **tsmc28hpm**:
 
 2. Run virtuoso and BAG.
 
@@ -150,6 +150,14 @@ In order to generate CDAC layout, type:
     This command will create a CDAC layout in
     **adc_sar_generated/capdac**.
 
+    * The capdac generator reads **n_bit** and **rdx_array** parameters
+    from **adc_sar_spec.yaml**, and **capdac_c_m**,
+    **capdac_num_bits_vertical**, **capdac_num_bits_horizontal**
+    parameters from **adc_sar_size.yaml** (or use default settings in
+    the python code if **load_from_file** is set to **false**), users
+    can update those parameters and regenerate the capdac. It will
+    create a new CDAC with different shapes.
+
     * If you want to generate the schematic as well, type:
 
         ```
@@ -176,6 +184,10 @@ In order to generate CDAC layout, type:
         ```
         run laygo/generators/adc_sar/adc_sar_capdac_extract.py
         ```
+
+        > Note: this step could take a long time, depending on your
+        extraction setup. Skip this if you just want to quickly go
+        through steps.
 
     * You can run simulations on CDAC via BAG framework. The following
     command will launch the transfer curve extraction simulation with
@@ -223,7 +235,7 @@ the following scripts:
     run laygo/generators/adc_sar/adc_sar_sarafe_nsw_lvs.py
     ```
 
-    The commands will create a layout (and schematic) of sarafe_nsw,
+    The commands will create a layout (and schematic) of **sarafe_nsw**,
     which is the frontend top of subADC, and run LVS. Try different
     presets introduced before and see if designs are generated properly.
 
