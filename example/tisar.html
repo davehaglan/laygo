@@ -1,0 +1,443 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Time-interleaved SAR ADC generator &mdash; laygo_documentation 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="laygo_documentation 1.0 documentation" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../index.html" class="fa fa-home"> laygo_documentation</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Time-interleaved SAR ADC generator</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#setting-up-parameters">Setting up parameters</a></li>
+<li><a class="reference internal" href="#tisaradc-architecture">TISARADC architecture</a></li>
+<li><a class="reference internal" href="#subadc-frontend-layout-generation">SubADC frontend layout generation</a></li>
+<li><a class="reference internal" href="#subadc-backend-layout-generation">SubADC backend layout generation</a></li>
+<li><a class="reference internal" href="#subadc-switch-generation">SubADC switch generation</a></li>
+<li><a class="reference internal" href="#clocking-path-generation">Clocking path generation</a></li>
+<li><a class="reference internal" href="#retimer">Retimer</a></li>
+<li><a class="reference internal" href="#bias">Bias</a></li>
+<li><a class="reference internal" href="#top">Top</a></li>
+<li><a class="reference internal" href="#contributors">Contributors</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">laygo_documentation</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Time-interleaved SAR ADC generator</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/example/tisar.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="time-interleaved-sar-adc-generator">
+<span id="time-interleaved-sar-adc-generator"></span><h1>Time-interleaved SAR ADC generator<a class="headerlink" href="#time-interleaved-sar-adc-generator" title="Permalink to this headline">¶</a></h1>
+<p>This section describes how to generate a time-interleaved SAR ADC
+schematic and layout using BAG and laygo.</p>
+<div class="section" id="overview">
+<span id="overview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Time Interleaved Successive Approximation ADC (TISARADC) is a popular
+way of implementing a moderate precision (4-12 bits) ADC that operates
+at higher sampling rates than single SAR ADCs can achieve. As an example
+of demonstrating the automated analog and mixed signal circuits
+generation flow, the entire TISARADC generator is explained here.</p>
+</div>
+<div class="section" id="installation">
+<span id="installation"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<ol>
+<li><p class="first">Set up a BAG/laygo working directory for the your technology.
+For example, cds_ff_mpt environment can be set up by running the
+following commands.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git@github.com:ucb-art/BAG2_cds_ff_mpt.git
+$ cd BAG2_cds_ff_mpt
+$ git submodule init
+$ git submodule update
+$ git submodule foreach git pull origin master
+</pre></div>
+</div>
+<blockquote>
+<div><p>Note: for BWRC users, comprehensive working environments are
+provided under proper NDAs for certain technologies. Use the
+following repos.</p>
+</div></blockquote>
+<blockquote>
+<div><ol class="simple">
+<li><strong>tsmc16FFC</strong>: <code class="docutils literal"><span class="pre">git&#64;bwrcrepo.eecs.berkeley.edu:jdhan/TISARADC_TSMC16FFC.git</span></code></li>
+<li><strong>tsmc28hpm</strong>:</li>
+</ol>
+</div></blockquote>
+</li>
+<li><p class="first">Run virtuoso and BAG.</p>
+</li>
+<li><p class="first">In the IPython interpreter, type the following command to construct
+the template and grid database.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">labs</span><span class="o">/</span><span class="n">lab2_a_gridlayoutgenerator_constructtemplate</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Run the following command to generate the logic gate template
+library. The library name will be (technology_name)_logic_templates.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">logic</span><span class="o">/</span><span class="n">logic_templates_layout_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="setting-up-parameters">
+<span id="setting-up-parameters"></span><h2>Setting up parameters<a class="headerlink" href="#setting-up-parameters" title="Permalink to this headline">¶</a></h2>
+<p>ADC schematic and layout are constructed based on spec/size parameters
+defined in 2 configuration files in <strong>YAML</strong> format
+(<strong>adc_sar_spec.yaml, adc_sar_size.yaml</strong>).</p>
+<p>Following parameters are defined in the configuration files:</p>
+<ol class="simple">
+<li>adc_sar_spec.yaml<ul>
+<li><strong>temp</strong>: nominal temperature</li>
+<li><strong>temp_min</strong>: minimum temperature</li>
+<li><strong>temp_max</strong>: maximum temperature</li>
+<li><strong>v_in</strong>: nominal input swing (single ended)</li>
+<li><strong>v_in_max</strong>: maximum input swing</li>
+<li><strong>v_in_cm</strong>: nominal inpuut common mode</li>
+<li><strong>n_bit</strong>: number of output bits</li>
+<li><strong>n_bit_cal</strong>: number of output bits after digital calibration</li>
+<li><strong>fsamp</strong>: effective sampling rate</li>
+<li><strong>n_interleave</strong>: interleaving ratio</li>
+<li><strong>c_unit</strong>: minimum unit capacitance of CDAC</li>
+<li><strong>c_ground</strong>: grounded parasitic capacitance of c_unit</li>
+<li><strong>c_delta</strong>: maximum capacitance mismatch of c_unit (normalized by
+c_unit)</li>
+<li><strong>n_bit_samp_noise</strong>: standard deviation of sampling noise (in bits)</li>
+<li><strong>n_bit_samp_settle</strong>: maximum sampler settling error in bits</li>
+<li><strong>n_bit_comp_noise</strong>: standard deviation of comparator noise in bits</li>
+<li><strong>rdx_array</strong>: CDAC radix array</li>
+<li><strong>rdx_enob</strong>: Target ENOB after calibration</li>
+<li><strong>cycle_comp</strong>: Comparator timing budget in cycle</li>
+<li><strong>cycle_logic</strong>: Logic timing budget in cycle</li>
+<li><strong>cycle_dac</strong>: DAC timing budget in cycle</li>
+<li><strong>vdd</strong>: nominal supply voltage</li>
+<li><strong>vdd_min</strong>: minimum supply voltage</li>
+<li><strong>vdd_max</strong>: maximum supply voltage</li>
+</ul>
+</li>
+<li>adc_sar_size.yaml<ul>
+<li><strong>capdac_c_m</strong>: multiplier of CDAC unit capacitor</li>
+<li><strong>capdac_num_bits_vertical</strong>: CDAC number of bits in vertical
+direction</li>
+<li><strong>capdac_num_bits_horizontal</strong>: CDAC number of bits in horizontal
+direction</li>
+<li><strong>capdrv_m_list</strong>: cap driver multiplier list</li>
+<li><strong>capdrv_space_offset</strong>: cap driver spacing parameter, for routing</li>
+<li><strong>salatch_m</strong>: strongArm latch sizing</li>
+<li><strong>salatch_m_buf</strong>: strongArm latch output buffer sizing</li>
+<li><strong>salatch_m_rgnn</strong>: strongArm latch regenerative latch sizing</li>
+<li><strong>salatch_m_rst</strong>: strongArm latch reset device sizing</li>
+<li><strong>sarclkgen_m</strong>: strongArm latch clock generator sizing</li>
+<li><strong>sarclkgen_fo</strong>: strongArm latch clock generator fanout</li>
+<li><strong>sarret_m</strong>: strongArm latch output retimer sizing</li>
+<li><strong>sarret_fo</strong>: strongArm latch output retimer fanout</li>
+<li><strong>sarfsm_m</strong>: SAR FSM sizing</li>
+<li><strong>sarlogic_m</strong>: SAR logic sizing</li>
+<li><strong>dcap2_m</strong>:</li>
+<li><strong>num_space_samp</strong>:</li>
+<li><strong>num_space_sar</strong>:</li>
+</ul>
+</li>
+</ol>
+<p>For the starting point, following preset files are provided. They are
+not 100% finalized, but will serve well for initializations.</p>
+<ul class="simple">
+<li>**adc_sar_spec(size)_craft.yaml** : 9.6GS/s, 9bit ADC with digital
+calibration.</li>
+<li>**adc_sar_spec(size)_11b.yaml** : GS/s, 11bit ADC with digital
+calibration.</li>
+<li>**adc_sar_spec(size)_6b.yaml** : 2GS/s, 6bit ADC with radix-2
+constellation.</li>
+</ul>
+</div>
+<div class="section" id="tisaradc-architecture">
+<span id="tisaradc-architecture"></span><h2>TISARADC architecture<a class="headerlink" href="#tisaradc-architecture" title="Permalink to this headline">¶</a></h2>
+<p>TISARADC is composed of 4 parts in the top level: ADC core, clock
+generator, output retimer and biasing.</p>
+<ul class="simple">
+<li>The <strong>ADC core</strong> performs the actual conversion operation. It is
+composed of multi-phased sampling frontend and N subADC that
+converts the actual ADC operation at (sampling_rate/N), where N is
+the interleaving ratio.</li>
+<li>The <strong>clock generator</strong> receives the high frequency clock at sampling
+rate, generates multi-phased clock for the interleaved ADC operation.</li>
+<li>The <strong>output retimer</strong> receives the output from the ADC core, aligns
+multi-phased signals to a single clock to be received by the
+following digital backend.</li>
+</ul>
+</div>
+<div class="section" id="subadc-frontend-layout-generation">
+<span id="subadc-frontend-layout-generation"></span><h2>SubADC frontend layout generation<a class="headerlink" href="#subadc-frontend-layout-generation" title="Permalink to this headline">¶</a></h2>
+<p>The frontend of subADCs is composed of three parts: capdac (CDAC),
+strongArm comparator (salatch), cap driver (capdrv). In the proposed
+flow, the &#8216;very&#8217; frontend sampling switches are not the part of
+subADC frontend because they are designed separately, but obviously
+this is not the only way of partition.</p>
+<ol>
+<li><p class="first">The first block to be generated is CDAC, since this generator
+assumes the horizontal dimension is limited by CDAC size in x-direction.
+In order to generate CDAC layout, type:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_capdac_layout_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>This command will create a CDAC layout in
+<strong>adc_sar_generated/capdac</strong>.</p>
+<ul>
+<li><p class="first">The capdac generator reads <strong>n_bit</strong> and <strong>rdx_array</strong> parameters
+from <strong>adc_sar_spec.yaml</strong>, and <strong>capdac_c_m</strong>,
+<strong>capdac_num_bits_vertical</strong>, <strong>capdac_num_bits_horizontal</strong>
+parameters from <strong>adc_sar_size.yaml</strong> (or use default settings in
+the python code if <strong>load_from_file</strong> is set to <strong>false</strong>), users
+can update those parameters and regenerate the capdac. It will
+create a new CDAC with different shapes.</p>
+</li>
+<li><p class="first">If you want to generate the schematic as well, type:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_capdac_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">The schematic generation is not required for full-ADC
+generations, since you can generate the whole ADC schematic by
+running a top-cell generation script (unlike the layout counterpart,
+which requires running several scripts in series to generate the
+entire ADC). The CDAC schematic generation is used for cell level
+verifications though, such as LVS or transfer curve extraction. For
+LVS, type:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_capdac_lvs</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>It will give a <strong>lvs passed</strong>  message if the design is LVS
+clean.</p>
+</li>
+<li><p class="first">For parasitic extraction, type the following command.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_capdac_extract</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>Note: this step could take a long time, depending on your
+extraction setup. Skip this if you just want to quickly go
+through steps.</p>
+</div></blockquote>
+</li>
+<li><p class="first">You can run simulations on CDAC via BAG framework. The following
+command will launch the transfer curve extraction simulation with
+schematic netlists. For the post-extract simulation, set
+<strong>extracted = True</strong> in the script.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_capdac_verify</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p class="first">After CDAC generation, strongArm latch layout can be generated by
+running:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_salatch_pmos_layout_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Here are additional scripts regarding the strongArm latch:<ol>
+<li><strong>adc_sar_salatch_pmos_schematic_generator.py</strong>: schematic
+generation</li>
+<li><strong>adc_sar_salatch_pmos_schematic_lvs.py</strong>: LVS</li>
+<li><strong>adc_sar_salatch_pmos_schematic_extract.py</strong>: RC extraction</li>
+<li><strong>adc_sar_salatch_pmos_verify.py</strong>: verifications (clk-q,
+noise)</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p class="first">The next step is generating capacitor drivers that drive CDAC. Run
+the following scripts:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_capdrv_nsw_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_capdrv_nsw_array_layout_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>This is 2-step generation; in the first script, individual driver
+cells are generated. The second script places driver cells (with
+the sizing parameters defined by <strong>capdrv_m_list</strong> in
+<strong>adc_sar_size.yaml</strong>.</p>
+</li>
+<li><p class="first">Now it&#8217;s time to generate the frontend top layout/schematic. Type:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarafe_nsw_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarafe_nsw_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarafe_nsw_lvs</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>The commands will create a layout (and schematic) of <strong>sarafe_nsw</strong>,
+which is the frontend top of subADC, and run LVS. Try different
+presets introduced before and see if designs are generated properly.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="subadc-backend-layout-generation">
+<span id="subadc-backend-layout-generation"></span><h2>SubADC backend layout generation<a class="headerlink" href="#subadc-backend-layout-generation" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="subadc-switch-generation">
+<span id="subadc-switch-generation"></span><h2>SubADC switch generation<a class="headerlink" href="#subadc-switch-generation" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="clocking-path-generation">
+<span id="clocking-path-generation"></span><h2>Clocking path generation<a class="headerlink" href="#clocking-path-generation" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="retimer">
+<span id="retimer"></span><h2>Retimer<a class="headerlink" href="#retimer" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="bias">
+<span id="bias"></span><h2>Bias<a class="headerlink" href="#bias" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="top">
+<span id="top"></span><h2>Top<a class="headerlink" href="#top" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="contributors">
+<span id="contributors"></span><h2>Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline">¶</a></h2>
+<p>The generator is written by Jaeduk Han, Eric Chang, Zhongkai Wang,
+Woorham Bae, and Pengpeng Lu. This document is written by Jaeduk Han.</p>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Jaeduk Han.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
