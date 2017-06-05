@@ -6,6 +6,10 @@
 Welcome to laygo's documentation!
 ===============================================
 
+This page stores all documentations for laygo_ repository. 
+
+.. _Laygo: https://github.com/ucb-art/laygo
+
 Contents:
 
 .. toctree::
@@ -28,4 +32,12 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+This document is built and published with Sphinx_, ReadtheDocs_ and sphinxdoc-test_.
+
+.. _Sphinx: http://www.sphinx-doc.org/en/stable/
+.. _ReadtheDocs: https://readthedocs.org/
+.. _sphinxdoc-test: https://daler.github.io/sphinxdoc-test/includeme.html
+
+
 
