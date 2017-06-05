@@ -1,0 +1,519 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>NAND gate generation and GDS export tutorial &mdash; laygo_documentation 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="laygo_documentation 1.0 documentation" href="../index.html"/>
+        <link rel="next" title="NAND gate generation and BAG export tutorial" href="tutorial_BAG.html"/>
+        <link rel="prev" title="LAYGO - LAYout with Gridded Objects" href="../introduction/introduction.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../index.html" class="fa fa-home"> laygo_documentation</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#installation-and-quick-start">Installation and Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#documentations">Documentations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#example-labs">Example Labs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#example-generators">Example Generators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#license">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial (GDS flow)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pin-creation">Pin creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gds-export">GDS export</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_BAG.html">Tutorial (BAG flow)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG.html#setup-and-running">Setup and running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG.html#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG.html#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG.html#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG.html#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG.html#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG.html#pin-creation">Pin creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG.html#export-to-bag">Export to BAG</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/logic.html">Generator example - logic family</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../example/logic.html#installation-and-launch">Installation and launch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/logic.html#supported-logic-gate-types">Supported logic gate types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/logic.html#schematic-templates">Schematic templates</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../example/serdes.html">Generator example - serdes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../example/serdes.html#installation-and-launch">Installation and launch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/serdes.html#parameterizations">Parameterizations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../example/tisar.html">Generator example - TISAR ADC (to be updated)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#setting-up-parameters">Setting up parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#tisaradc-architecture">TISARADC architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#subadc-frontend-layout-generation">SubADC frontend layout generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#subadc-backend-layout-generation">SubADC backend layout generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#subadc-switch-generation">SubADC switch generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#clocking-path-generation">Clocking path generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#retimer">Retimer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#bias">Bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#top">Top</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tech/tech.html">Technology setup guidelines (to be updated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/laygo.html">laygo package</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">laygo_documentation</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>NAND gate generation and GDS export tutorial</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/tutorial/tutorial_GDS.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="nand-gate-generation-and-gds-export-tutorial">
+<span id="nand-gate-generation-and-gds-export-tutorial"></span><h1>NAND gate generation and GDS export tutorial<a class="headerlink" href="#nand-gate-generation-and-gds-export-tutorial" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial contains instructions to generate a NAND gate layout and
+export it to a GDS file. You can simply run this tutorial by running
+<a class="reference external" href="../../../quick_start_GDS.py">quick_start_GDS.py</a>, but we recommend
+users to go through the entire tutorial steps, reading this document
+and running commands step by step, to get a better idea of the laygo
+flow.</p>
+<div class="section" id="setup">
+<span id="setup"></span><h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p>Run following commands below to install laygo and load.</p>
+<ol>
+<li><p class="first">Clone laygo repo</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git@github.com:ucb-art/laygo.git
+</pre></div>
+</div>
+</li>
+<li><p class="first">Launch ipython (or bag)</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ ipython
+</pre></div>
+</div>
+</li>
+<li><p class="first">In ipython, import laygo and numpy</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">laygo</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div>Note: if you just want to run
+<a class="reference external" href="../../../quick_start_GDS.py">quick_start_GDS.py</a> (not copy &amp; pasting
+codes in this document), you should first go into the laygo directory,
+by typing &#8216;cd laygo&#8217;, and type &#8216;run &#8216;quick_start_GDS.py&#8217; because all
+path variables in that file are based on the laygo directory.</div></blockquote>
+</div>
+<div class="section" id="initialize-gridlayoutgenerator">
+<span id="initialize-gridlayoutgenerator"></span><h2>Initialize GridLayoutGenerator<a class="headerlink" href="#initialize-gridlayoutgenerator" title="Permalink to this headline">¶</a></h2>
+<p>Run the following commands to initialize GridLayoutGenerator, the main
+generator object that contains all template and grid based layout
+generation functions.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#initialize</span>
+<span class="n">laygen</span> <span class="o">=</span> <span class="n">laygo</span><span class="o">.</span><span class="n">GridLayoutGenerator</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="s2">&quot;./laygo/labs/laygo_config.yaml&quot;</span><span class="p">)</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">use_phantom</span> <span class="o">=</span> <span class="bp">True</span> <span class="c1">#for abstract generation. False when generating a real layout.</span>
+</pre></div>
+</div>
+<p>Note that <strong>use_phantom</strong> tag is set to <strong>True</strong>, which means you are
+exporting to a phantom cell. This option is useful for the GDS flow,
+because in many cases you are not exporting the whole hierarchy to a
+single GDS file. This option allows users to display the layout and
+debug without exporting primitive templates.</p>
+</div>
+<div class="section" id="load-template-and-grid-database">
+<span id="load-template-and-grid-database"></span><h2>Load template and grid database<a class="headerlink" href="#load-template-and-grid-database" title="Permalink to this headline">¶</a></h2>
+<p>The provide technology setup uses <em>laygo_faketech_microtemplates_dense</em>
+for primitive template library name. All primitive template and grid
+information are stored in <a class="reference external" href="../../../labs/laygo_faketech_microtemplates_dense_templates.yaml">labs/laygo_faketech_microtemplates_dense_templates.yaml</a>,
+<a class="reference external" href="../../../labs/laygo_faketech_microtemplates_dense_grids.yaml">labs/laygo_faketech_microtemplates_dense_grids.yaml</a>
+and the files need to be loaded before actual layout generation steps.
+Run following commands for the database loading.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#load template and grid</span>
+<span class="n">utemplib</span> <span class="o">=</span> <span class="s1">&#39;laygo_faketech_microtemplates_dense&#39;</span> <span class="c1">#device template library name</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">load_template</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;./laygo/labs/&#39;</span><span class="o">+</span><span class="n">utemplib</span><span class="o">+</span><span class="s1">&#39;_templates.yaml&#39;</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">utemplib</span><span class="p">)</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">load_grid</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;./laygo/labs/&#39;</span><span class="o">+</span><span class="n">utemplib</span><span class="o">+</span><span class="s1">&#39;_grids.yaml&#39;</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">utemplib</span><span class="p">)</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">sel_library</span><span class="p">(</span><span class="n">utemplib</span><span class="p">)</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">sel_library</span><span class="p">(</span><span class="n">utemplib</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>load_template</strong> and <strong>load_grid</strong> functions load yaml files that store
+template and grid database to laygen.templates and laygen.grid.
+If you want to see the loaded information, run the following commands.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">laygen</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Or you can specify template (or grid name) to display, like this.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">laygen</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">libname</span><span class="o">=</span><span class="s1">&#39;laygo_faketech_microtemplates_dense&#39;</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="s1">&#39;nmos4_fast_center_nf2&#39;</span><span class="p">)</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">libname</span><span class="o">=</span><span class="s1">&#39;laygo_faketech_microtemplates_dense&#39;</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s1">&#39;route_M1_M2_basic&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then you can see the specified template and grid information, as shown
+below.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Display</span> <span class="n">lib</span><span class="p">:</span><span class="n">laygo_faketech_microtemplates_dense</span><span class="p">,</span> <span class="n">template</span><span class="p">:</span><span class="n">nmos4_fast_center_nf2</span>
+<span class="p">[</span><span class="n">Library</span><span class="p">]</span><span class="n">laygo_faketech_microtemplates_dense</span>
+ <span class="p">[</span><span class="n">Template</span><span class="p">]</span><span class="n">nmos4_fast_center_nf2</span>
+ <span class="n">xy</span><span class="p">:[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">]]</span> <span class="n">pins</span><span class="p">:{</span><span class="s1">&#39;S0&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;netname&#39;</span><span class="p">:</span> <span class="s1">&#39;S0&#39;</span><span class="p">,</span> <span class="s1">&#39;layer&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;pin&#39;</span><span class="p">],</span> <span class="s1">&#39;xy&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.2</span> <span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.5</span> <span class="p">]])},</span> <span class="s1">&#39;S1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;netname&#39;</span><span class="p">:</span> <span class="s1">&#39;S1&#39;</span><span class="p">,</span> <span class="s1">&#39;layer&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;pin&#39;</span><span class="p">],</span> <span class="s1">&#39;xy&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([[</span> <span class="mf">0.35</span><span class="p">,</span>  <span class="mf">0.2</span> <span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.45</span><span class="p">,</span>  <span class="mf">0.5</span> <span class="p">]])},</span> <span class="s1">&#39;D0&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;netname&#39;</span><span class="p">:</span> <span class="s1">&#39;D0&#39;</span><span class="p">,</span> <span class="s1">&#39;layer&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;pin&#39;</span><span class="p">],</span> <span class="s1">&#39;xy&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([[</span> <span class="mf">0.15</span><span class="p">,</span>  <span class="mf">0.2</span> <span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.25</span><span class="p">,</span>  <span class="mf">0.5</span> <span class="p">]])},</span> <span class="s1">&#39;G0&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;netname&#39;</span><span class="p">:</span> <span class="s1">&#39;G0&#39;</span><span class="p">,</span> <span class="s1">&#39;layer&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;pin&#39;</span><span class="p">],</span> <span class="s1">&#39;xy&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([[</span> <span class="mf">0.125</span><span class="p">,</span>  <span class="mf">0.625</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.275</span><span class="p">,</span>  <span class="mf">0.775</span><span class="p">]])}}</span>
+<span class="n">Display</span> <span class="n">lib</span><span class="p">:</span><span class="n">laygo_faketech_microtemplates_dense</span><span class="p">,</span> <span class="n">grid</span><span class="p">:</span><span class="n">route_M1_M2_basic</span>
+<span class="p">[</span><span class="n">Library</span><span class="p">]</span><span class="n">laygo_faketech_microtemplates_dense</span>
+ <span class="p">[</span><span class="n">Grid</span><span class="p">]</span><span class="n">route_M1_M2_basic</span>
+  <span class="n">route_M1_M2_basic</span> <span class="n">width</span><span class="p">:</span><span class="mf">0.2</span> <span class="n">height</span><span class="p">:</span><span class="mf">0.2</span> <span class="n">xgrid</span><span class="p">:[</span> <span class="mf">0.</span><span class="p">]</span> <span class="n">ygrid</span><span class="p">:[</span> <span class="mf">0.</span><span class="p">]</span> <span class="n">xwidth</span><span class="p">:[</span> <span class="mf">0.1</span><span class="p">]</span> <span class="n">ywidth</span><span class="p">:[</span> <span class="mf">0.1</span><span class="p">]</span> <span class="n">viamap</span><span class="p">:{</span><span class="n">via_M1_M2_0</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="library-and-cell-creation">
+<span id="library-and-cell-creation"></span><h2>Library and cell creation<a class="headerlink" href="#library-and-cell-creation" title="Permalink to this headline">¶</a></h2>
+<p>After initializing laygo and loading templates and grids, the next step
+is creating a library and cell to work on. Run the following commands to
+make a nand gate cell.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># library creation</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">add_library</span><span class="p">(</span><span class="s1">&#39;laygo_test&#39;</span><span class="p">)</span>
+<span class="c1"># cell generation</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="s1">&#39;nand_test&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The commands will create library and cell to work on. In order to
+display the contents, simply type <code class="docutils literal"><span class="pre">laygen.display()</span></code>. The laygen
+will show following contents (The nand_test is empty because we did not
+create anything yet).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Display</span>
+<span class="p">[</span><span class="n">Library</span><span class="p">]</span><span class="n">laygo_test</span>
+ <span class="p">[</span><span class="n">Cell</span><span class="p">]</span><span class="n">nand_test</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cell-placements">
+<span id="cell-placements"></span><h2>Cell placements<a class="headerlink" href="#cell-placements" title="Permalink to this headline">¶</a></h2>
+<p>Following commands will place 4 2-fingered transistors (2 nmos, 2 pmos)
+and cluster them to 2 lists, nrow and prow. Try running these commands
+first.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">nrow</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">nrow</span><span class="o">+=</span><span class="p">[</span><span class="n">laygen</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="s1">&#39;nmos4_fast_boundary&#39;</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s1">&#39;placement_basic&#39;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])]</span>
+<span class="n">nrow</span><span class="o">+=</span><span class="p">[</span><span class="n">laygen</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="s1">&#39;nmos4_fast_center_nf2&#39;</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s1">&#39;placement_basic&#39;</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>
+<span class="n">nrow</span><span class="o">+=</span><span class="p">[</span><span class="n">laygen</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="s1">&#39;nmos4_fast_boundary&#39;</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s1">&#39;placement_basic&#39;</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>
+<span class="n">nrow</span><span class="o">+=</span><span class="p">[</span><span class="n">laygen</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="s1">&#39;nmos4_fast_boundary&#39;</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s1">&#39;placement_basic&#39;</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>
+<span class="n">nrow</span><span class="o">+=</span><span class="p">[</span><span class="n">laygen</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="s1">&#39;nmos4_fast_center_nf2&#39;</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s1">&#39;placement_basic&#39;</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>
+<span class="n">nrow</span><span class="o">+=</span><span class="p">[</span><span class="n">laygen</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="s1">&#39;nmos4_fast_boundary&#39;</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s1">&#39;placement_basic&#39;</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>
+<span class="n">prow</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">prow</span><span class="o">+=</span><span class="p">[</span><span class="n">laygen</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="s1">&#39;pmos4_fast_boundary&#39;</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s1">&#39;placement_basic&#39;</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;MX&#39;</span><span class="p">)]</span>
+<span class="n">prow</span><span class="o">+=</span><span class="p">[</span><span class="n">laygen</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="s1">&#39;pmos4_fast_center_nf2&#39;</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s1">&#39;placement_basic&#39;</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;MX&#39;</span><span class="p">)]</span>
+<span class="n">prow</span><span class="o">+=</span><span class="p">[</span><span class="n">laygen</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="s1">&#39;pmos4_fast_boundary&#39;</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s1">&#39;placement_basic&#39;</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;MX&#39;</span><span class="p">)]</span>
+<span class="n">prow</span><span class="o">+=</span><span class="p">[</span><span class="n">laygen</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="s1">&#39;pmos4_fast_boundary&#39;</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s1">&#39;placement_basic&#39;</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;MX&#39;</span><span class="p">)]</span>
+<span class="n">prow</span><span class="o">+=</span><span class="p">[</span><span class="n">laygen</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="s1">&#39;pmos4_fast_center_nf2&#39;</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s1">&#39;placement_basic&#39;</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;MX&#39;</span><span class="p">)]</span>
+<span class="n">prow</span><span class="o">+=</span><span class="p">[</span><span class="n">laygen</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="s1">&#39;pmos4_fast_boundary&#39;</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s1">&#39;placement_basic&#39;</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;MX&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p><strong>GridLayoutGenerator.replace</strong> function places templates on grid,
+using relative geometry information provided as arguments. Basically
+there are 2 major ways to place using:</p>
+<ol class="simple">
+<li><strong>xy</strong>: with <strong>xy</strong> argument, the function places the
+template (specified by templatename) at <strong>xy</strong> on grid, specified by
+gridname.</li>
+<li><strong>refinstname</strong>: with refinstname argument, the function places
+the template (specified by templatename) on grid, specified by
+gridname, bound from <strong>refinstname</strong>, with additional geometry
+information such as <strong>direction</strong> and <strong>transform</strong>.</li>
+</ol>
+<p>The way to architect template totally depends on user&#8217;s interests,
+for the example technology, <strong>nmos4_fast_center_nf2</strong> and
+<strong>pmos4_fast_center_nf2</strong> templates are 2-fingered NMOS/PMOS devices, and
+<strong>nmos4_fast_boundary</strong> and <strong>pmos4_fast_boundary</strong> templates are used for
+boundary geometries for NMOS/PMOS devices.</p>
+<p>The resulting layout placement should look like this.</p>
+<p><img alt="placement" src="../_images/placement.png" /></p>
+<p>If you want to display the layout, run the following command and open
+<strong>output.gds</strong> file. Note that actual NMOS/PMOS shapes are not shown
+because they are abstracted.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">laygen</span><span class="o">.</span><span class="n">export_GDS</span><span class="p">(</span><span class="s1">&#39;output.gds&#39;</span><span class="p">,</span> <span class="n">cellname</span><span class="o">=</span><span class="s1">&#39;nand_test&#39;</span><span class="p">,</span> <span class="n">layermapfile</span><span class="o">=</span><span class="s2">&quot;./laygo/labs/laygo_faketech.layermap&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Instead of the single cell placements, multiple cells can be placed by
+single <strong>relplace</strong> function with list arguments, like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">nrow</span> <span class="o">=</span> <span class="n">laygen</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;nmos4_fast_boundary&#39;</span><span class="p">,</span> <span class="s1">&#39;nmos4_fast_center_nf2&#39;</span><span class="p">,</span> <span class="s1">&#39;nmos4_fast_boundary&#39;</span><span class="p">,</span>
+                                                <span class="s1">&#39;nmos4_fast_boundary&#39;</span><span class="p">,</span> <span class="s1">&#39;nmos4_fast_center_nf2&#39;</span><span class="p">,</span> <span class="s1">&#39;nmos4_fast_boundary&#39;</span><span class="p">],</span>
+                       <span class="n">gridname</span><span class="o">=</span><span class="s1">&#39;placement_basic&#39;</span><span class="p">)</span>
+<span class="n">prow</span> <span class="o">=</span> <span class="n">laygen</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pmos4_fast_boundary&#39;</span><span class="p">,</span> <span class="s1">&#39;pmos4_fast_center_nf2&#39;</span><span class="p">,</span> <span class="s1">&#39;pmos4_fast_boundary&#39;</span><span class="p">,</span>
+                                                <span class="s1">&#39;pmos4_fast_boundary&#39;</span><span class="p">,</span> <span class="s1">&#39;pmos4_fast_center_nf2&#39;</span><span class="p">,</span> <span class="s1">&#39;pmos4_fast_boundary&#39;</span><span class="p">],</span>
+                       <span class="n">gridname</span><span class="o">=</span><span class="s1">&#39;placement_basic&#39;</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span><span class="o">+</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">6</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;MX&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <strong>relplace</strong> function has several useful arguments, explained below:</p>
+<ol class="simple">
+<li><strong>shape</strong> parameter sets the array dimension, for mosaic
+placements. (eg. shape=[2, 3] will create a 2x3 dimensional array)</li>
+<li><strong>spacing</strong> parameter sets the &#8216;pitch&#8217; of the array placement.
+If None, laygo calculates the spacing parameter from the size of
+template.</li>
+<li><strong>direction</strong> parameters sets the direction where the object
+placed from (with respect to the reference instance). For example,
+refinstname=X, direction=&#8217;top&#8217; will place the new instance on top of
+instance X. Possible values are <strong>left</strong>, <strong>right</strong>, <strong>top</strong>, and
+<strong>bottom</strong>.</li>
+<li><strong>transform</strong> parameter sets the transformation of the instance.
+Possible values are <strong>R0</strong>, <strong>R180</strong>, <strong>MX</strong>, <strong>MY</strong>, and <strong>MXY</strong>.</li>
+</ol>
+<p>Refer to the API documentation for details.</p>
+</div>
+<div class="section" id="signal-routing">
+<span id="signal-routing"></span><h2>Signal routing<a class="headerlink" href="#signal-routing" title="Permalink to this headline">¶</a></h2>
+<p>Routing can be done by calling <strong>route</strong> commands. This routine creates
+a 180-degree rotated L shaped route, stacked from M1 to M3, for one of
+the nand gate input.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#a</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">xy0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">xy1</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">rg_m1m2</span><span class="p">,</span> <span class="n">refinstname0</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname0</span><span class="o">=</span><span class="s1">&#39;G0&#39;</span><span class="p">,</span>
+             <span class="n">via0</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="n">refinstname1</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname1</span><span class="o">=</span><span class="s1">&#39;G0&#39;</span><span class="p">)</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">xy0</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">xy1</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">rg_m1m2</span><span class="p">,</span> <span class="n">refinstname0</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname0</span><span class="o">=</span><span class="s1">&#39;G0&#39;</span><span class="p">,</span>
+             <span class="n">refinstname1</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname1</span><span class="o">=</span><span class="s1">&#39;G0&#39;</span><span class="p">)</span>
+<span class="n">ra0</span> <span class="o">=</span> <span class="n">laygen</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">xy0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">xy1</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">rg_m2m3</span><span class="p">,</span><span class="n">refinstname0</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname0</span><span class="o">=</span><span class="s1">&#39;G0&#39;</span><span class="p">,</span>
+                   <span class="n">refinstname1</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname1</span><span class="o">=</span><span class="s1">&#39;G0&#39;</span><span class="p">,</span> <span class="n">via0</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="n">endstyle0</span><span class="o">=</span><span class="s2">&quot;extend&quot;</span><span class="p">,</span> <span class="n">endstyle1</span><span class="o">=</span><span class="s2">&quot;extend&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The generated routing pattern should look like this:</p>
+<p><img alt="route a" src="../_images/route0.png" /></p>
+<p>Note that <strong>refinstname</strong> and <strong>refpinname</strong> are used to describe instance
+and pin related geometries for the routing, and <strong>via0</strong> and <strong>via1</strong>
+parameters are used to place via abut to the route objects.</p>
+<p>Running following commands will generate wire connections.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#b</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">xy0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">xy1</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">rg_m1m2</span><span class="p">,</span> <span class="n">refinstname0</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname0</span><span class="o">=</span><span class="s1">&#39;G0&#39;</span><span class="p">,</span>
+             <span class="n">via0</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="n">refinstname1</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname1</span><span class="o">=</span><span class="s1">&#39;G0&#39;</span><span class="p">)</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">xy0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">xy1</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">rg_m1m2</span><span class="p">,</span> <span class="n">refinstname0</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname0</span><span class="o">=</span><span class="s1">&#39;G0&#39;</span><span class="p">,</span>
+             <span class="n">refinstname1</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname1</span><span class="o">=</span><span class="s1">&#39;G0&#39;</span><span class="p">)</span>
+<span class="n">rb0</span> <span class="o">=</span> <span class="n">laygen</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">xy0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">xy1</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">rg_m2m3</span><span class="p">,</span><span class="n">refinstname0</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname0</span><span class="o">=</span><span class="s1">&#39;G0&#39;</span><span class="p">,</span>
+                   <span class="n">refinstname1</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname1</span><span class="o">=</span><span class="s1">&#39;G0&#39;</span><span class="p">,</span> <span class="n">via0</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="n">endstyle0</span><span class="o">=</span><span class="s2">&quot;extend&quot;</span><span class="p">,</span> <span class="n">endstyle1</span><span class="o">=</span><span class="s2">&quot;extend&quot;</span><span class="p">)</span>
+<span class="c1">#internal connections</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">xy0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">xy1</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">rg_m1m2</span><span class="p">,</span> <span class="n">refinstname0</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname0</span><span class="o">=</span><span class="s1">&#39;D0&#39;</span><span class="p">,</span>
+             <span class="n">refinstname1</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname1</span><span class="o">=</span><span class="s1">&#39;S1&#39;</span><span class="p">,</span> <span class="n">via0</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="n">via1</span><span class="o">=</span><span class="p">[[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="c1">#output</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">xy0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">xy1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">rg_m1m2</span><span class="p">,</span> <span class="n">refinstname0</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname0</span><span class="o">=</span><span class="s1">&#39;D0&#39;</span><span class="p">,</span>
+             <span class="n">refinstname1</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname1</span><span class="o">=</span><span class="s1">&#39;D0&#39;</span><span class="p">,</span> <span class="n">via0</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="n">via1</span><span class="o">=</span><span class="p">[[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">xy0</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">xy1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">rg_m1m2</span><span class="p">,</span> <span class="n">refinstname0</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname0</span><span class="o">=</span><span class="s1">&#39;D0&#39;</span><span class="p">,</span>
+             <span class="n">refinstname1</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname1</span><span class="o">=</span><span class="s1">&#39;D0&#39;</span><span class="p">,</span> <span class="n">via0</span><span class="o">=</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="n">ro0</span> <span class="o">=</span> <span class="n">laygen</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">xy0</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">xy1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">rg_m2m3</span><span class="p">,</span><span class="n">refinstname0</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname0</span><span class="o">=</span><span class="s1">&#39;D0&#39;</span><span class="p">,</span>
+                   <span class="n">via0</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="n">refinstname1</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname1</span><span class="o">=</span><span class="s1">&#39;D0&#39;</span><span class="p">,</span> <span class="n">via1</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="power-routing">
+<span id="power-routing"></span><h2>Power routing<a class="headerlink" href="#power-routing" title="Permalink to this headline">¶</a></h2>
+<p>Power routing is very similar to signal routing. Run following commands
+to creat power rail shapes.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># power and ground vertical route</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;S0&#39;</span><span class="p">,</span> <span class="s1">&#39;S1&#39;</span><span class="p">]:</span>
+    <span class="n">xy_s0</span> <span class="o">=</span> <span class="n">laygen</span><span class="o">.</span><span class="n">get_template_pin_coord</span><span class="p">(</span><span class="n">nrow</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">cellname</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">rg_m1m2</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">laygen</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">laygen</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;metal&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">xy0</span><span class="o">=</span><span class="n">xy_s0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">xy1</span><span class="o">=</span><span class="n">xy_s0</span><span class="p">,</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">rg_m1m2</span><span class="p">,</span>
+                 <span class="n">refinstname0</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">via0</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="n">refinstname1</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">laygen</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">laygen</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;metal&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">xy0</span><span class="o">=</span><span class="n">xy_s0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">xy1</span><span class="o">=</span><span class="n">xy_s0</span><span class="p">,</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">rg_m1m2</span><span class="p">,</span>
+                 <span class="n">refinstname0</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">via0</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="n">refinstname1</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">laygen</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">laygen</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;metal&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">xy0</span><span class="o">=</span><span class="n">xy_s0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">xy1</span><span class="o">=</span><span class="n">xy_s0</span><span class="p">,</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">rg_m1m2</span><span class="p">,</span>
+                 <span class="n">refinstname0</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">via0</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="n">refinstname1</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="c1"># power and ground rails</span>
+<span class="n">xy</span> <span class="o">=</span> <span class="n">laygen</span><span class="o">.</span><span class="n">get_template_size</span><span class="p">(</span><span class="n">nrow</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">cellname</span><span class="p">,</span> <span class="n">rg_m1m2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">rvdd</span><span class="o">=</span><span class="n">laygen</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">laygen</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;metal&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">xy0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">xy1</span><span class="o">=</span><span class="n">xy</span><span class="p">,</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">rg_m1m2</span><span class="p">,</span>
+                  <span class="n">refinstname0</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refinstname1</span><span class="o">=</span><span class="n">prow</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="n">rvss</span><span class="o">=</span><span class="n">laygen</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">laygen</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;metal&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">xy0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">xy1</span><span class="o">=</span><span class="n">xy</span><span class="p">,</span> <span class="n">gridname0</span><span class="o">=</span><span class="n">rg_m1m2</span><span class="p">,</span>
+                  <span class="n">refinstname0</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refinstname1</span><span class="o">=</span><span class="n">nrow</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After finishing the route, your layout will look like this:</p>
+<p><img alt="route" src="../_images/route1.png" /></p>
+</div>
+<div class="section" id="pin-creation">
+<span id="pin-creation"></span><h2>Pin creation<a class="headerlink" href="#pin-creation" title="Permalink to this headline">¶</a></h2>
+<p><strong>GridLayoutGenerator.pin</strong> function creates a pin and paste it to the
+generated layout. The function gets xy as arguments for pin coordinates,
+possibly provided from calling <strong>get_rect_xy</strong> function and providing the
+rect object that you want to create the pin over as an argument. Run the
+following commands.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># pins</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">pin</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">laygen</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;pin&#39;</span><span class="p">][</span><span class="mi">3</span><span class="p">],</span> <span class="n">xy</span><span class="o">=</span><span class="n">laygen</span><span class="o">.</span><span class="n">get_rect_xy</span><span class="p">(</span><span class="n">ra0</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rg_m2m3</span><span class="p">),</span> <span class="n">gridname</span><span class="o">=</span><span class="n">rg_m2m3</span><span class="p">)</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">pin</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">laygen</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;pin&#39;</span><span class="p">][</span><span class="mi">3</span><span class="p">],</span> <span class="n">xy</span><span class="o">=</span><span class="n">laygen</span><span class="o">.</span><span class="n">get_rect_xy</span><span class="p">(</span><span class="n">rb0</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rg_m2m3</span><span class="p">),</span> <span class="n">gridname</span><span class="o">=</span><span class="n">rg_m2m3</span><span class="p">)</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">pin</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">laygen</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;pin&#39;</span><span class="p">][</span><span class="mi">3</span><span class="p">],</span> <span class="n">xy</span><span class="o">=</span><span class="n">laygen</span><span class="o">.</span><span class="n">get_rect_xy</span><span class="p">(</span><span class="n">ro0</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rg_m2m3</span><span class="p">),</span> <span class="n">gridname</span><span class="o">=</span><span class="n">rg_m2m3</span><span class="p">)</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">pin</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;VDD&#39;</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">laygen</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;pin&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">xy</span><span class="o">=</span><span class="n">laygen</span><span class="o">.</span><span class="n">get_rect_xy</span><span class="p">(</span><span class="n">rvdd</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rg_m1m2</span><span class="p">),</span> <span class="n">gridname</span><span class="o">=</span><span class="n">rg_m1m2</span><span class="p">)</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">pin</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;VSS&#39;</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">laygen</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;pin&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">xy</span><span class="o">=</span><span class="n">laygen</span><span class="o">.</span><span class="n">get_rect_xy</span><span class="p">(</span><span class="n">rvss</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rg_m1m2</span><span class="p">),</span> <span class="n">gridname</span><span class="o">=</span><span class="n">rg_m1m2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="gds-export">
+<span id="gds-export"></span><h2>GDS export<a class="headerlink" href="#gds-export" title="Permalink to this headline">¶</a></h2>
+<p>Running the following command will give a final layout exported in GDS
+format.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># GDS export</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">export_GDS</span><span class="p">(</span><span class="s1">&#39;output.gds&#39;</span><span class="p">,</span> <span class="n">cellname</span><span class="o">=</span><span class="s1">&#39;nand_test&#39;</span><span class="p">,</span> <span class="n">layermapfile</span><span class="o">=</span><span class="s2">&quot;./laygo/labs/laygo_faketech.layermap&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The resulting layout will look like this.</p>
+<p><img alt="route a" src="../_images/laygo_quickstart1.png" /></p>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tutorial_BAG.html" class="btn btn-neutral float-right" title="NAND gate generation and BAG export tutorial">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../introduction/introduction.html" class="btn btn-neutral" title="LAYGO - LAYout with Gridded Objects"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Jaeduk Han.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

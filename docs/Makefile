@@ -48,6 +48,10 @@ help:
 	@echo "  coverage   to run coverage check of the documentation (if enabled)"
 	@echo "  dummy      to check syntax errors of document sources"
 
+.PHONY: publish
+publish: clean gh_clean html gh
+	cd $(BUILDDIR_GH)/html; git add . ; git commit -m "rebuilt docs"; git push origin gh-pages
+
 .PHONY: clean
 clean:
 	rm -rf $(BUILDDIR)/*
@@ -55,7 +59,8 @@ clean:
 
 .PHONY: gh_clean
 gh_clean:
-	rm -rf $(BUILDDIR_GH)/*
+	rm -rf $(BUILDDIR_GH)/doctrees
+	rm -rf $(BUILDDIR_GH)/html/*
 
 .PHONY: gh
 gh:
