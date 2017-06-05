@@ -33,7 +33,9 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="laygo_documentation 1.0 documentation" href="../index.html"/> 
+    <link rel="top" title="laygo_documentation 1.0 documentation" href="../index.html"/>
+        <link rel="next" title="NAND gate generation and GDS export tutorial" href="../tutorial/tutorial_GDS.html"/>
+        <link rel="prev" title="Welcome to laygo’s documentation!" href="../index.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -64,18 +66,73 @@
         
           
           
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">LAYGO - LAYout with Gridded Objects</a><ul>
-<li><a class="reference internal" href="#installation-and-quick-start">Installation and Quick Start</a></li>
-<li><a class="reference internal" href="#documentations">Documentations</a></li>
-<li><a class="reference internal" href="#example-labs">Example Labs</a></li>
-<li><a class="reference internal" href="#example-generators">Example Generators</a></li>
-<li><a class="reference internal" href="#license">License</a></li>
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation-and-quick-start">Installation and Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentations">Documentations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-labs">Example Labs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-generators">Example Generators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial_GDS.html">Tutorial (GDS flow)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#pin-creation">Pin creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#gds-export">GDS export</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial_BAG.html">Tutorial (BAG flow)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#setup-and-running">Setup and running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#pin-creation">Pin creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#export-to-bag">Export to BAG</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/logic.html">Generator example - logic family</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../example/logic.html#installation-and-launch">Installation and launch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/logic.html#supported-logic-gate-types">Supported logic gate types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/logic.html#schematic-templates">Schematic templates</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../example/serdes.html">Generator example - serdes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../example/serdes.html#installation-and-launch">Installation and launch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/serdes.html#parameterizations">Parameterizations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../example/tisar.html">Generator example - TISAR ADC (to be updated)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#setting-up-parameters">Setting up parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#tisaradc-architecture">TISARADC architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#subadc-frontend-layout-generation">SubADC frontend layout generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#subadc-backend-layout-generation">SubADC backend layout generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#subadc-switch-generation">SubADC switch generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#clocking-path-generation">Clocking path generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#retimer">Retimer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#bias">Bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#top">Top</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tech/tech.html">Technology setup guidelines (to be updated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/laygo.html">laygo package</a></li>
 </ul>
 </li>
 </ul>
-</div>
+
           
         
       </div>
@@ -199,6 +256,15 @@ before working on their designs. Labs modules can be found <a class="reference e
 
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../tutorial/tutorial_GDS.html" class="btn btn-neutral float-right" title="NAND gate generation and GDS export tutorial">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral" title="Welcome to laygo’s documentation!"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
