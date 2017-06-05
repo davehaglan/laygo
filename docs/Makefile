@@ -6,11 +6,13 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 PAPER         =
 BUILDDIR      = build
+BUILDDIR_GH   = ../../laygo-docs
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
 PAPEROPT_letter = -D latex_paper_size=letter
 ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
+ALLSPHINXOPTS_GH = -d $(BUILDDIR_GH)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
 # the i18n builder cannot share the environment and doctrees with the others
 I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
 
@@ -53,14 +55,11 @@ clean:
 
 .PHONY: gh_clean
 gh_clean:
-	BUILDDIR      = ../../laygo-docs
-	rm -rf $(BUILDDIR)/*
+	rm -rf $(BUILDDIR_GH)/*
 
 .PHONY: gh
 gh:
-	BUILDDIR      = ../../laygo-docs
-	ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
-	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) html
+	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS_GH) $(BUILDDIR_GH)/html
 	@echo
 	@echo "Build finished. The HTML pages are in ../../laygo-docs/html."
 
