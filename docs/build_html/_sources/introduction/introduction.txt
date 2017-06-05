@@ -59,9 +59,7 @@ than conventional custom IC design flows.
 can be found in [lab readme](docs/labs.md).
 
 ## Documentations
-You can find detailed documentations on the laygo API here:
-[docs/build_html/index.html](docs/build_html/index.html)
-(Open it after cloning the repo the get the correct page layout).
+Documents can be found at [https://ucb-art.github.io/laygo/](https://ucb-art.github.io/laygo/).
 
 ## Example Labs
 Various lab modules are provided to guide the layout generation
