@@ -235,7 +235,8 @@ CDAC0 to **(technology_name)_micretemplates_dense**, as shown below.</p>
 </div>
 </li>
 <li><p class="first">In the IPython interpreter, type the following command to construct
-the template and grid database.</p>
+the template and grid database. (Make sure proper techlib is attached
+to the microtemplate library)</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">labs</span><span class="o">/</span><span class="n">lab2_a_gridlayoutgenerator_constructtemplate</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
@@ -428,6 +429,10 @@ the following scripts:</p>
 cells are generated. The second script places driver cells (with
 the sizing parameters defined by <strong>capdrv_m_list</strong> in
 <strong>adc_sar_size.yaml</strong>.</p>
+<p>Here&#8217;s one example layout of the capdrv.</p>
+<p><img alt="capdrv" src="../_images/tisaradc_capdrv.png" /></p>
+<p>Here&#8217;s the capdrv_array layout (primitive cells are hidden).</p>
+<p><img alt="capdrv" src="../_images/tisaradc_capdrv_array.png" /></p>
 </li>
 <li><p class="first">Now it&#8217;s time to generate the frontend top layout/schematic. Type:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarafe_nsw_layout_generator</span><span class="o">.</span><span class="n">py</span>
@@ -438,6 +443,7 @@ the sizing parameters defined by <strong>capdrv_m_list</strong> in
 <p>The commands will create a layout (and schematic) of <strong>sarafe_nsw</strong>,
 which is the frontend top of subADC, and run LVS. Try different
 presets introduced before and see if designs are generated properly.</p>
+<p><img alt="sarafe" src="../_images/tisaradc_sarafe.png" /></p>
 </li>
 </ol>
 </div>

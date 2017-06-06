@@ -68,7 +68,8 @@ laygo/generators/adc_sar/yaml by typing:
     ```
 
 5. In the IPython interpreter, type the following command to construct
-the template and grid database.
+the template and grid database. (Make sure proper techlib is attached
+to the microtemplate library)
 
     ```
     run laygo/labs/lab2_a_gridlayoutgenerator_constructtemplate.py
@@ -266,6 +267,14 @@ the following scripts:
     the sizing parameters defined by **capdrv_m_list** in
     **adc_sar_size.yaml**.
 
+    Here's one example layout of the capdrv.
+
+    ![capdrv](images/tisaradc_capdrv.png)
+
+    Here's the capdrv_array layout (primitive cells are hidden).
+
+    ![capdrv](images/tisaradc_capdrv_array.png)
+
 4. Now it's time to generate the frontend top layout/schematic. Type:
 
     ```
@@ -277,6 +286,8 @@ the following scripts:
     The commands will create a layout (and schematic) of **sarafe_nsw**,
     which is the frontend top of subADC, and run LVS. Try different
     presets introduced before and see if designs are generated properly.
+
+    ![sarafe](images/tisaradc_sarafe.png)
 
 ## SubADC backend layout generation
 
