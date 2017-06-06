@@ -84,24 +84,16 @@ instances:
         num_bits: 1
   IAFE0:
     lib_name: adc_sar_templates
-    cell_name: sarafe_nsw_8b
+    cell_name: sarafe_nsw
     instpins:
-      VOR<7:0>:
+      VOL:
         direction: output
-        net_name: "VOR<7:0>"
-        num_bits: 8
-      VOL<7:0>:
+        net_name: "net6"
+        num_bits: 1
+      VOR:
         direction: output
-        net_name: "VOL<7:0>"
-        num_bits: 8
-      ENL7<2:0>:
-        direction: input
-        net_name: "ZM<8>,ZMID<8>,ZP<8>"
-        num_bits: 3
-      ENR7<2:0>:
-        direction: input
-        net_name: "ZP<8>,ZMID<8>,ZM<8>"
-        num_bits: 3
+        net_name: "net7"
+        num_bits: 1
       CLKB:
         direction: input
         net_name: "SARCLKB"
@@ -116,67 +108,19 @@ instances:
         num_bits: 1
       OUTM:
         direction: output
-        net_name: "SAOM"
+        net_name: "net8"
         num_bits: 1
       OUTP:
         direction: output
-        net_name: "SAOP"
+        net_name: "net9"
         num_bits: 1
       ENL0<2:0>:
         direction: input
-        net_name: "ZM<1>,ZMID<1>,ZP<1>"
-        num_bits: 3
-      ENL1<2:0>:
-        direction: input
-        net_name: "ZM<2>,ZMID<2>,ZP<2>"
-        num_bits: 3
-      ENL2<2:0>:
-        direction: input
-        net_name: "ZM<3>,ZMID<3>,ZP<3>"
-        num_bits: 3
-      ENL3<2:0>:
-        direction: input
-        net_name: "ZM<4>,ZMID<4>,ZP<4>"
-        num_bits: 3
-      ENL4<2:0>:
-        direction: input
-        net_name: "ZM<5>,ZMID<5>,ZP<5>"
-        num_bits: 3
-      ENL5<2:0>:
-        direction: input
-        net_name: "ZM<6>,ZMID<6>,ZP<6>"
-        num_bits: 3
-      ENL6<2:0>:
-        direction: input
-        net_name: "ZM<7>,ZMID<7>,ZP<7>"
+        net_name: "net10<0:2>"
         num_bits: 3
       ENR0<2:0>:
         direction: input
-        net_name: "ZP<1>,ZMID<1>,ZM<1>"
-        num_bits: 3
-      ENR1<2:0>:
-        direction: input
-        net_name: "ZP<2>,ZMID<2>,ZM<2>"
-        num_bits: 3
-      ENR2<2:0>:
-        direction: input
-        net_name: "ZP<3>,ZMID<3>,ZM<3>"
-        num_bits: 3
-      ENR3<2:0>:
-        direction: input
-        net_name: "ZP<4>,ZMID<4>,ZM<4>"
-        num_bits: 3
-      ENR4<2:0>:
-        direction: input
-        net_name: "ZP<5>,ZMID<5>,ZM<5>"
-        num_bits: 3
-      ENR5<2:0>:
-        direction: input
-        net_name: "ZP<6>,ZMID<6>,ZM<6>"
-        num_bits: 3
-      ENR6<2:0>:
-        direction: input
-        net_name: "ZP<7>,ZMID<7>,ZM<7>"
+        net_name: "net11<0:2>"
         num_bits: 3
       INM:
         direction: input
