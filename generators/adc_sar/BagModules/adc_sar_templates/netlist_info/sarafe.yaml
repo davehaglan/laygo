@@ -55,47 +55,47 @@ instances:
     cell_name: capdrv_array_7b
     instpins:
       VSS:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       VDD:
-        direction: inputOutput
+        direction: 
         net_name: "VDD"
         num_bits: 1
       VO<6:0>:
-        direction: inputOutput
+        direction: 
         net_name: "VOR<6:0>"
         num_bits: 7
       VREF<2:0>:
-        direction: inputOutput
+        direction: 
         net_name: "VREF<2:0>"
         num_bits: 3
       EN0<2:0>:
-        direction: input
+        direction: 
         net_name: "ENR0<2:0>"
         num_bits: 3
       EN1<2:0>:
-        direction: input
+        direction: 
         net_name: "ENR1<2:0>"
         num_bits: 3
       EN2<2:0>:
-        direction: input
+        direction: 
         net_name: "ENR2<2:0>"
         num_bits: 3
       EN3<2:0>:
-        direction: input
+        direction: 
         net_name: "ENR3<2:0>"
         num_bits: 3
       EN4<2:0>:
-        direction: input
+        direction: 
         net_name: "ENR4<2:0>"
         num_bits: 3
       EN5<2:0>:
-        direction: input
+        direction: 
         net_name: "ENR5<2:0>"
         num_bits: 3
       EN6<2:0>:
-        direction: input
+        direction: 
         net_name: "ENR6<2:0>"
         num_bits: 3
   ICDRVP0:
@@ -103,46 +103,46 @@ instances:
     cell_name: capdrv_array_7b
     instpins:
       VSS:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       VDD:
-        direction: inputOutput
+        direction: 
         net_name: "VDD"
         num_bits: 1
       VO<6:0>:
-        direction: inputOutput
+        direction: 
         net_name: "VOL<6:0>"
         num_bits: 7
       VREF<2:0>:
-        direction: inputOutput
+        direction: 
         net_name: "VREF<2:0>"
         num_bits: 3
       EN0<2:0>:
-        direction: input
+        direction: 
         net_name: "ENL0<2:0>"
         num_bits: 3
       EN1<2:0>:
-        direction: input
+        direction: 
         net_name: "ENL1<2:0>"
         num_bits: 3
       EN2<2:0>:
-        direction: input
+        direction: 
         net_name: "ENL2<2:0>"
         num_bits: 3
       EN3<2:0>:
-        direction: input
+        direction: 
         net_name: "ENL3<2:0>"
         num_bits: 3
       EN4<2:0>:
-        direction: input
+        direction: 
         net_name: "ENL4<2:0>"
         num_bits: 3
       EN5<2:0>:
-        direction: input
+        direction: 
         net_name: "ENL5<2:0>"
         num_bits: 3
       EN6<2:0>:
-        direction: input
+        direction: 
         net_name: "ENL6<2:0>"
         num_bits: 3
