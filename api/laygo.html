@@ -101,13 +101,13 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture/architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../example/logic.html">Generator example - logic family</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../example/logic.html#installation-and-launch">Installation and launch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/logic.html#install-and-launch">Install and launch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example/logic.html#supported-logic-gate-types">Supported logic gate types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example/logic.html#schematic-templates">Schematic templates</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../example/serdes.html">Generator example - serdes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../example/serdes.html#installation-and-launch">Installation and launch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/serdes.html#install-and-launch">Install and launch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example/serdes.html#parameterizations">Parameterizations</a></li>
 </ul>
 </li>
@@ -869,7 +869,7 @@ ex) [[x0, y0], [x1, x1], ..., [xn-1, yn-1], [x0, y0]]</li>
 <p>Base class for GDSIO objects</p>
 <dl class="attribute">
 <dt id="laygo.GDSIO.Element.possible_transform_parameters">
-<code class="descname">possible_transform_parameters</code><em class="property"> = {'R90': (0, 90), 'MX': (32768, 0), 'R270': (0, 270), 'R180': (0, 180), 'R0': (None, None), 'MY': (32768, 180)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="descname">possible_transform_parameters</code><em class="property"> = {'MY': (32768, 180), 'R90': (0, 90), 'R0': (None, None), 'R270': (0, 270), 'R180': (0, 180), 'MX': (32768, 0)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; transform parameter dictionary</p>
 </dd></dl>
 
@@ -1554,7 +1554,7 @@ grids.</p>
 
 <dl class="attribute">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.layers">
-<code class="descname">layers</code><em class="property"> = {'prbnd': [], 'metal': [], 'pin': [], 'text': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">layers</code><em class="property"> = {'prbnd': [], 'text': [], 'metal': [], 'pin': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; layer dictionary</p>
 </dd></dl>
 
