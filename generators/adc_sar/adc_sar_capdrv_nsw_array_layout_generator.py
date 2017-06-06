@@ -363,46 +363,30 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
     rvss = []
     if num_row%2==0: rp1='VSS0'
     else: rp1='VSS1'
-    for i in range(1, int(pwr_dim_left/2)):
-        #rvdd.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i, 0]), xy1=np.array([2*i, 0]), gridname0=rg_m2m3,
-        #             refinstname0=itapl[0].name, refpinname0='VSS0', refinstindex0=np.array([0, 0]),
-        #             refinstname1=itapl[-1].name, refpinname1=rp1, refinstindex1=np.array([0, 0])))
+    #for i in range(1, int(pwr_dim_left/2)):
+    for i in range(1, int(pwr_dim_left)):
         rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+1, 0]), xy1=np.array([2*i+1, 0]), gridname0=rg_m2m3,
                      refinstname0=itapl[0].name, refpinname0='VSS0', refinstindex0=np.array([0, 0]),
                      refinstname1=itapl[-1].name, refpinname1=rp1, refinstindex1=np.array([0, 0])))
-        #laygen.pin_from_rect('VSS1L'+str(i-1), laygen.layers['pin'][3], rvdd[-1], gridname=rg_m2m3, netname='VSS')
         laygen.pin_from_rect('VSSL'+str(i-1), laygen.layers['pin'][3], rvss[-1], gridname=rg_m2m3, netname='VSS')
-    for i in range(int(pwr_dim_left/2), pwr_dim_left): #double power route
-        #laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i, 0]), xy1=np.array([2*i, 0]), gridname0=rg_m2m3,
-        # refinstname0=itapl[0].name, refpinname0='VSS0', refinstindex0=np.array([0, 0]),
-        # refinstname1=itapl[-1].name, refpinname1=rp1, refinstindex1=np.array([0, 0]))
-        laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+1, 0]), xy1=np.array([2*i+1, 0]), gridname0=rg_m2m3,
-         refinstname0=itapl[0].name, refpinname0='VSS0', refinstindex0=np.array([0, 0]), via0=[[0, 0]],
-         refinstname1=itapl[-1].name, refpinname1=rp1, refinstindex1=np.array([0, 0]), via1=[[0, 0]])
+    #for i in range(int(pwr_dim_left/2), pwr_dim_left): #double power route
+    #    laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+1, 0]), xy1=np.array([2*i+1, 0]), gridname0=rg_m2m3,
+    #     refinstname0=itapl[0].name, refpinname0='VSS0', refinstindex0=np.array([0, 0]), via0=[[0, 0]],
+    #     refinstname1=itapl[-1].name, refpinname1=rp1, refinstindex1=np.array([0, 0]), via1=[[0, 0]])
     for i in range(1, int(pwr_dim_right/2)):
-        #rvdd.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+1-pwr_dim_delta, 0]), xy1=np.array([2*i+1-pwr_dim_delta, 0]), gridname0=rg_m2m3,
-        #             refinstname0=itapr[0].name, refpinname0='VSS0', refinstindex0=np.array([0, 0]),
-        #             refinstname1=itapr[-1].name, refpinname1=rp1, refinstindex1=np.array([0, 0])))
         rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i-pwr_dim_delta, 0]), xy1=np.array([2*i-pwr_dim_delta, 0]), gridname0=rg_m2m3,
                      refinstname0=itapr[0].name, refpinname0='VSS0', refinstindex0=np.array([0, 0]),
                      refinstname1=itapr[-1].name, refpinname1=rp1, refinstindex1=np.array([0, 0])))
-        #laygen.pin_from_rect('VSS1R'+str(i-1), laygen.layers['pin'][3], rvdd[-1], gridname=rg_m2m3, netname='VSS')
         laygen.pin_from_rect('VSSR'+str(i-1), laygen.layers['pin'][3], rvss[-1], gridname=rg_m2m3, netname='VSS')
     for i in range(num_row):
         for j in range(1, int(pwr_dim_left/2)):
-            #rvdd.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j, 0]), xy1=np.array([2*j, 0]), gridname0=rg_m2m3,
-            #             refinstname0=itapl[i].name, refpinname0='VSS1', refinstindex0=np.array([0, 0]), via0=[[0, 0]],
-            #             refinstname1=itapl[i].name, refpinname1='VSS0', refinstindex1=np.array([0, 0])))
-            rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j+1, 0]), xy1=np.array([2*j+1, 0]), gridname0=rg_m2m3,
-                         refinstname0=itapl[i].name, refpinname0='VSS1', refinstindex0=np.array([0, 0]), via0=[[0, 0]],
-                         refinstname1=itapl[i].name, refpinname1='VSS0', refinstindex1=np.array([0, 0]), via1=[[0, 0]]))
+            rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j+1, 0]), xy1=np.array([2*j+1, 0]), gridname0='route_M2_M3_thick_basic',
+                         refinstname0=itapl[i].name, refpinname0='VSS1', refinstindex0=np.array([0, 0]), via0=[[0, 0]],#, addvia0=True,
+                         refinstname1=itapl[i].name, refpinname1='VSS0', refinstindex1=np.array([0, 0]), via1=[[0, 0]]))#, addvia1=True))
         for j in range(1, int(pwr_dim_right/2)):
-            #rvdd.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j+1-pwr_dim_delta, 0]), xy1=np.array([2*j+1-pwr_dim_delta, 0]), gridname0=rg_m2m3,
-            #             refinstname0=itapr[i].name, refpinname0='VSS1', refinstindex0=np.array([0, 0]), via0=[[0, 0]],
-            #             refinstname1=itapr[i].name, refpinname1='VSS0', refinstindex1=np.array([0, 0])))
-            rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j-pwr_dim_delta, 0]), xy1=np.array([2*j-pwr_dim_delta, 0]), gridname0=rg_m2m3,
-                         refinstname0=itapr[i].name, refpinname0='VSS1', refinstindex0=np.array([0, 0]), via0=[[0, 0]],
-                         refinstname1=itapr[i].name, refpinname1='VSS0', refinstindex1=np.array([0, 0]), via1=[[0, 0]]))
+            rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j-pwr_dim_delta, 0]), xy1=np.array([2*j-pwr_dim_delta, 0]), gridname0='route_M2_M3_thick_basic',
+                         refinstname0=itapr[i].name, refpinname0='VSS1', refinstindex0=np.array([0, 0]), via0=[[0, 0]],#addvia0=True,
+                         refinstname1=itapr[i].name, refpinname1='VSS0', refinstindex1=np.array([0, 0]), via1=[[0, 0]]))#addvia1=True))
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")

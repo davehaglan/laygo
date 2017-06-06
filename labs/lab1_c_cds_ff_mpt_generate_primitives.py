@@ -378,6 +378,19 @@ params_route_grid = {
         'xwidth': [0.032],
         'ywidth': [0.032],
     },
+    'route_M3_M4_thick': {
+        'viamap': {
+            'via_M3_M4_1': [[0, 0]]
+        },
+        'layer_vert': ['M3', 'drawing'],
+        'layer_hori': ['M4', 'drawing'],
+        'xy0': [0.0, 0.0],
+        'xy1': [0.192, 0.192],
+        'xgrid': [0.0],
+        'ygrid': [0.0],
+        'xwidth': [0.096],
+        'ywidth': [0.096],
+    },
     'route_M4_M5_basic': {
         'viamap': {
             'via_M4_M5_0': [[0, 0]]
@@ -391,6 +404,19 @@ params_route_grid = {
         'xwidth': [0.032],
         'ywidth': [0.032],
     },
+    'route_M4_M5_thick': {
+        'viamap': {
+            'via_M4_M5_1': [[0, 0]]
+        },
+        'layer_vert': ['M5', 'drawing'],
+        'layer_hori': ['M4', 'drawing'],
+        'xy0': [0.0, 0.0],
+        'xy1': [0.192, 0.192],
+        'xgrid': [0.0],
+        'ygrid': [0.0],
+        'xwidth': [0.096],
+        'ywidth': [0.096],
+    },
     'route_M5_M6_basic': {
         'viamap': {
             'via_M5_M6_0': [[0, 0]]
@@ -403,6 +429,32 @@ params_route_grid = {
         'ygrid': [0.0],
         'xwidth': [0.032],
         'ywidth': [0.032],
+    },
+    'route_M5_M6_thick': {
+        'viamap': {
+            'via_M5_M6_1': [[0, 0]]
+        },
+        'layer_vert': ['M5', 'drawing'],
+        'layer_hori': ['M6', 'drawing'],
+        'xy0': [0.0, 0.0],
+        'xy1': [0.192, 0.192],
+        'xgrid': [0.0],
+        'ygrid': [0.0],
+        'xwidth': [0.096],
+        'ywidth': [0.096],
+    },
+    'route_M5_M6_basic_thick': {
+        'viamap': {
+            'via_M5_M6_1':[[0, 0]]
+        },
+        'layer_vert': ['M5', 'drawing'],
+        'layer_hori': ['M6', 'drawing'],
+        'xy0':    [0.0, 0.0],
+        'xy1':    [0.086, 0.192],
+        'xgrid':  [0.0],
+        'ygrid':  [0.0],
+        'xwidth': [0.032],
+        'ywidth': [0.096],
     },
     'route_M6_M7_basic': {
         'viamap': {
