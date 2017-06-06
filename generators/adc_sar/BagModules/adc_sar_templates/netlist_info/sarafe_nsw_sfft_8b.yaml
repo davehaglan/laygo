@@ -151,15 +151,15 @@ instances:
     cell_name: capdac_8b
     instpins:
       O:
-        direction: inputOutput
+        direction: 
         net_name: "INP"
         num_bits: 1
       I<7:0>:
-        direction: input
+        direction: 
         net_name: "VOL<7:0>"
         num_bits: 8
       I_C0:
-        direction: input
+        direction: 
         net_name: "VREF<1>"
         num_bits: 1
   ICAPM0:
@@ -167,14 +167,14 @@ instances:
     cell_name: capdac_8b
     instpins:
       O:
-        direction: inputOutput
+        direction: 
         net_name: "INM"
         num_bits: 1
       I<7:0>:
-        direction: input
+        direction: 
         net_name: "VOR<7:0>"
         num_bits: 8
       I_C0:
-        direction: input
+        direction: 
         net_name: "VREF<1>"
         num_bits: 1

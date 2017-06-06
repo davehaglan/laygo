@@ -7,11 +7,11 @@ instances:
     cell_name: momcap_center_1x
     instpins:
       BOTTOM:
-        direction: inputOutput
+        direction: 
         net_name: "I<7>"
         num_bits: 1
       TOP:
-        direction: inputOutput
+        direction: 
         net_name: "O"
         num_bits: 1
   CDAC6:
@@ -19,11 +19,11 @@ instances:
     cell_name: momcap_center_1x
     instpins:
       BOTTOM:
-        direction: inputOutput
+        direction: 
         net_name: "I<6>"
         num_bits: 1
       TOP:
-        direction: inputOutput
+        direction: 
         net_name: "O"
         num_bits: 1
   CDAC5:
@@ -31,11 +31,11 @@ instances:
     cell_name: momcap_center_1x
     instpins:
       BOTTOM:
-        direction: inputOutput
+        direction: 
         net_name: "I<5>"
         num_bits: 1
       TOP:
-        direction: inputOutput
+        direction: 
         net_name: "O"
         num_bits: 1
   CDAC4:
@@ -43,11 +43,11 @@ instances:
     cell_name: momcap_center_1x
     instpins:
       BOTTOM:
-        direction: inputOutput
+        direction: 
         net_name: "I<4>"
         num_bits: 1
       TOP:
-        direction: inputOutput
+        direction: 
         net_name: "O"
         num_bits: 1
   CDAC0:
@@ -55,11 +55,11 @@ instances:
     cell_name: momcap_center_1x
     instpins:
       BOTTOM:
-        direction: inputOutput
+        direction: 
         net_name: "I<0>"
         num_bits: 1
       TOP:
-        direction: inputOutput
+        direction: 
         net_name: "O"
         num_bits: 1
   CDAC3:
@@ -67,11 +67,11 @@ instances:
     cell_name: momcap_center_1x
     instpins:
       BOTTOM:
-        direction: inputOutput
+        direction: 
         net_name: "I<3>"
         num_bits: 1
       TOP:
-        direction: inputOutput
+        direction: 
         net_name: "O"
         num_bits: 1
   CDAC2:
@@ -79,11 +79,11 @@ instances:
     cell_name: momcap_center_1x
     instpins:
       BOTTOM:
-        direction: inputOutput
+        direction: 
         net_name: "I<2>"
         num_bits: 1
       TOP:
-        direction: inputOutput
+        direction: 
         net_name: "O"
         num_bits: 1
   CDAC1:
@@ -91,11 +91,11 @@ instances:
     cell_name: momcap_center_1x
     instpins:
       BOTTOM:
-        direction: inputOutput
+        direction: 
         net_name: "I<1>"
         num_bits: 1
       TOP:
-        direction: inputOutput
+        direction: 
         net_name: "O"
         num_bits: 1
   C0:
@@ -103,10 +103,10 @@ instances:
     cell_name: momcap_center_1x
     instpins:
       BOTTOM:
-        direction: inputOutput
+        direction: 
         net_name: "I_C0"
         num_bits: 1
       TOP:
-        direction: inputOutput
+        direction: 
         net_name: "O"
         num_bits: 1

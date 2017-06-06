@@ -224,6 +224,28 @@ params_via = {
         'extend_x_vert': 0.00,
         'extend_y_vert': 0.04,
     },
+    'via_M6_M7_0': {
+        'layer_vert': metal[7],
+        'layer_hori': metal[6],
+        'layer_via' : via[6],
+        'xwidth': 0.032,
+        'ywidth': 0.032,
+        'extend_x_hori': 0.04,
+        'extend_y_hori': 0.00,
+        'extend_x_vert': 0.00,
+        'extend_y_vert': 0.04,
+    },
+    'via_M6_M7_1': {
+        'layer_vert': metal[7],
+        'layer_hori': metal[6],
+        'layer_via' : via[6],
+        'xwidth': 0.032,
+        'ywidth': 0.032,
+        'extend_x_hori': 0.04,
+        'extend_y_hori': 0.016,
+        'extend_x_vert': 0.00,
+        'extend_y_vert': 0.04,
+    },
 }
 
 #grid parameters
@@ -374,6 +396,19 @@ params_route_grid = {
             'via_M5_M6_0': [[0, 0]]
         },
         'layer_vert': ['M5', 'drawing'],
+        'layer_hori': ['M6', 'drawing'],
+        'xy0': [0.0, 0.0],
+        'xy1': [0.086, 0.064],
+        'xgrid': [0.0],
+        'ygrid': [0.0],
+        'xwidth': [0.032],
+        'ywidth': [0.032],
+    },
+    'route_M6_M7_basic': {
+        'viamap': {
+            'via_M6_M7_0': [[0, 0]]
+        },
+        'layer_vert': ['M7', 'drawing'],
         'layer_hori': ['M6', 'drawing'],
         'xy0': [0.0, 0.0],
         'xy1': [0.086, 0.064],
@@ -651,7 +686,10 @@ for header in header_list:
     params['nf'] = 7 #number of fingers
     params['generate_gate_pins'] = False
     params['sd_pinname_list'] = [None, None, None, 'TAP0', 'TAP1', None, None, None]
-    params['sd_netname_list'] = [None, None, None, 'VSS', 'VSS', None, None, None]
+    if header.startswith('nmos'):
+        params['sd_netname_list'] = [None, None, None, 'VSS', 'VSS', None, None, None]
+    else:
+        params['sd_netname_list'] = [None, None, None, 'VDD', 'VDD', None, None, None]
     params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*2 \
                                        + ['_'+header+'_space_base_nf1']*2 \
                                        + ['_sd_base', '_sd_base'] \
@@ -661,6 +699,193 @@ for header in header_list:
                                  + [[params['cpo']*3, 0], [params['cpo']*4, 0]] \
                                  + [[0, 0]]
     construct_mosfet_structure(laygen, **params)
+
+#tap family
+header_list = ['ptap_fast', 'ntap_fast']
+for header in header_list:
+    mycell = header+'_boundary' #boundary cell placed at edges of a transistor row
+    mycells.append(mycell)
+    laygen.add_cell(mycell)
+    laygen.sel_cell(mycell)
+    params=deepcopy(params_transistor_default)
+    params['nf'] = 1 #number of fingers
+    params['generate_sd_pins'] = False
+    params['generate_gate_pins'] = False
+    params['instance_cellname_list'] = ['_'+header+'_boundary_base']
+    params['instance_xy_list'] = [[0, 0]]
+    construct_mosfet_structure(laygen, **params)
+
+    mycell = header+'_center_nf2' #2-finger mos
+    mycells.append(mycell)
+    laygen.add_cell(mycell)
+    laygen.sel_cell(mycell)
+    params=deepcopy(params_transistor_default)
+    params['nf'] = 2 #number of fingers
+    params['generate_gate_pins'] = False
+    params['sd_pinname_list'] = ['TAP0', 'TAP1', 'TAP2']
+    if header.startswith('ptap'):
+        params['sd_netname_list'] = ['VSS', 'VSS', 'VSS']
+    else:
+        params['sd_netname_list'] = ['VDD', 'VDD', 'VDD']
+    params['instance_cellname_list'] = ['_'+header+'_base_nf1', '_'+header+'_base_nf1'] \
+                                       + ['_sd_base', '_sd_base', '_sd_base'] 
+    params['instance_xy_list'] = [[0, 0], [params['cpo'], 0]] \
+                                 + [[0, 0], [params['cpo'], 0], [params['cpo']*2, 0]]
+    construct_mosfet_structure(laygen, **params)
+
+    mycell = header+'_center_nf1' #1-finger mos with a gate pin at left side
+    mycells.append(mycell)
+    laygen.add_cell(mycell)
+    laygen.sel_cell(mycell)
+    params=deepcopy(params_transistor_default)
+    params['ofxg_m1'] = 0 #gate pin x-center
+    params['nf'] = 1 #number of fingers
+    params['generate_gate_pins'] = False
+    params['sd_pinname_list'] = ['TAP0', 'TAP1']
+    if header.startswith('ptap'):
+        params['sd_netname_list'] = ['VSS', 'VSS']
+    else:
+        params['sd_netname_list'] = ['VDD', 'VDD']
+    params['instance_cellname_list'] = ['_'+header+'_base'] \
+                                       + ['_sd_base', '_sd_base'] 
+    params['instance_xy_list'] = [[0, 0]] \
+                                 + [[0, 0], [params['cpo'], 0]]
+    construct_mosfet_structure(laygen, **params)
+
+    mycell = header + '_space_nf2'  # space_nf2
+    mycells.append(mycell)
+    laygen.add_cell(mycell)
+    laygen.sel_cell(mycell)
+    params = deepcopy(params_transistor_default)
+    params['nf'] = 2  # number of fingers
+    params['generate_gate_pins'] = False
+    params['generate_sd_pins'] = False
+    params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*2 
+    params['instance_xy_list'] = [[0, 0], [params['cpo'], 0]]
+    construct_mosfet_structure(laygen, **params)
+
+    mycell = header + '_space_nf4'  # space_nf4
+    mycells.append(mycell)
+    laygen.add_cell(mycell)
+    laygen.sel_cell(mycell)
+    params = deepcopy(params_transistor_default)
+    params['nf'] = 4  # number of fingers
+    params['generate_gate_pins'] = False
+    params['generate_sd_pins'] = False
+    params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*2 
+    params['instance_xy_list'] = [[0, 0], [params['cpo'], 0]]
+    construct_mosfet_structure(laygen, **params)
+
+    mycell = header+'_left' #left side
+    mycells.append(mycell)
+    laygen.add_cell(mycell)
+    laygen.sel_cell(mycell)
+    params=deepcopy(params_transistor_default)
+    params['nf'] = 6 #number of fingers
+    params['generate_gate_pins'] = False
+    params['generate_sd_pins'] = False
+    params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*2 
+    params['instance_xy_list'] = [[params['cpo']*4, 0], [params['cpo']*5, 0]]
+    construct_mosfet_structure(laygen, **params)
+
+    mycell = header+'_right' #right side
+    mycells.append(mycell)
+    laygen.add_cell(mycell)
+    laygen.sel_cell(mycell)
+    params=deepcopy(params_transistor_default)
+    params['nf'] = 6 #number of fingers
+    params['generate_gate_pins'] = False
+    params['generate_sd_pins'] = False
+    params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*2 
+    params['instance_xy_list'] = [[params['cpo']*0, 0], [params['cpo']*1, 0]]
+    construct_mosfet_structure(laygen, **params)
+
+
+
+#boundary cell generation
+bnd_suffix = ['_topleft', '_topright', '_bottomleft', '_bottomright', '_top', '_bottom']
+bnd_nf = [6, 6, 6, 6, 2, 2]
+for bs, nf in zip(bnd_suffix, bnd_nf):
+    mycell = 'boundary'+bs 
+    mycells.append(mycell)
+    laygen.add_cell(mycell)
+    laygen.sel_cell(mycell)
+    params=deepcopy(params_transistor_default)
+    params['nf'] = nf #number of fingers
+    params['generate_gate_pins'] = False
+    params['generate_sd_pins'] = False
+    #params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*2 
+    #params['instance_xy_list'] = [[params['cpo']*4, 0], [params['cpo']*5, 0]]
+    construct_mosfet_structure(laygen, **params)
+
+    #momcap generation
+    capdim = np.array([21, 3])
+    capsp = np.array([0.064, 0.064])
+    capwidth = np.array([0.032, 0.032])
+    caplayer = [metal[5], metal[6]]
+    cap_pinlayer = [pin[5], pin[6]]
+    vname = 'via_M5_M6_0'
+    #momcap_center generation
+    mycell = 'momcap_center_1x' 
+    mycells.append(mycell)
+    laygen.add_cell(mycell)
+    laygen.sel_cell(mycell)
+    # prboundary
+    laygen.add_rect(None, [[0, 0], (capdim-np.array([1, 1]))*capsp], prbnd)
+    for i in range(capdim[0]): #vertical
+        if i%2==0: #bottom
+            xy0 = np.array([i*capsp[0]-capwidth[0]/2, 0])
+            xy1 = np.array([i*capsp[0]+capwidth[0]/2, (capdim[1]-1)*capsp[1]])
+            laygen.add_rect(None, [xy0, xy1], caplayer[0])
+            for j in range(capdim[1]): #via
+                if j%2==0: #bottom
+                    xy0 = np.array([i*capsp[0], 0])
+                    xy1 = np.array([i*capsp[0], (capdim[1]-1)*capsp[1]])
+                    laygen.add_inst(None, workinglib, vname, xy=xy0)
+                    laygen.add_inst(None, workinglib, vname, xy=xy1)
+    for j in range(capdim[1]): #horizontal
+        if j%2==0: #bottom
+            xy0 = np.array([0, j*capsp[1]-capwidth[1]/2])
+            xy1 = np.array([(capdim[0]-1)*capsp[0], j*capsp[1]+capwidth[1]/2])
+            laygen.add_rect(None, [xy0, xy1], caplayer[1])
+            if j==0:
+                laygen.add_pin('BOTTOM', 'BOTTOM', [xy0, xy1], cap_pinlayer[0])
+        else: #top
+            xy0 = np.array([0+2*capsp[0], j*capsp[1]-capwidth[1]/2])
+            xy1 = np.array([(capdim[0]-1-2)*capsp[0], j*capsp[1]+capwidth[1]/2])
+            laygen.add_rect(None, [xy0, xy1], caplayer[1])
+            laygen.add_pin('TOP', 'TOP', [xy0, xy1], cap_pinlayer[1])
+    #momcap_dmy generation
+    mycell = 'momcap_dmy_1x' 
+    mycells.append(mycell)
+    laygen.add_cell(mycell)
+    laygen.sel_cell(mycell)
+    # prboundary
+    laygen.add_rect(None, [[0, 0], (capdim-np.array([1, 1]))*capsp], prbnd)
+    for i in range(capdim[0]): #vertical
+        if i%2==0: #bottom
+            xy0 = np.array([i*capsp[0]-capwidth[0]/2, 0])
+            xy1 = np.array([i*capsp[0]+capwidth[0]/2, (capdim[1]-1)*capsp[1]])
+            laygen.add_rect(None, [xy0, xy1], caplayer[0])
+            for j in range(capdim[1]): #via
+                if j%2==0: #bottom
+                    xy0 = np.array([i*capsp[0], 0])
+                    xy1 = np.array([i*capsp[0], (capdim[1]-1)*capsp[1]])
+                    laygen.add_inst(None, workinglib, vname, xy=xy0)
+                    laygen.add_inst(None, workinglib, vname, xy=xy1)
+    for j in range(capdim[1]): #horizontal
+        if j%2==0: #bottom
+            xy0 = np.array([0, j*capsp[1]-capwidth[1]/2])
+            xy1 = np.array([(capdim[0]-1)*capsp[0], j*capsp[1]+capwidth[1]/2])
+            laygen.add_rect(None, [xy0, xy1], caplayer[1])
+    momcap_aux_cells = ['momcap_boundary_1x', 'momcap_dmyblk_1x']+['momcap_dmyptn_m'+str(i)+'_1x' for i in range(1,10)]
+    for mycell in momcap_aux_cells:
+        mycells.append(mycell)
+        laygen.add_cell(mycell)
+        laygen.sel_cell(mycell)
+        # prboundary
+        laygen.add_rect(None, [[0, 0], (capdim-np.array([1, 1]))*capsp], prbnd)
+
 
 #bag export, if bag does not exist, gds export
 from imp import find_module

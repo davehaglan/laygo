@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import bag
+import bag, yaml
 
+#adc template name
 lib_name = 'adc_sar_templates'
 
 prj = bag.BagProject()
