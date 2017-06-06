@@ -626,8 +626,8 @@ for header in header_list:
     params['nf'] = 4  # number of fingers
     params['generate_gate_pins'] = False
     params['generate_sd_pins'] = False
-    params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*2 
-    params['instance_xy_list'] = [[0, 0], [params['cpo'], 0]]
+    params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*4 
+    params['instance_xy_list'] = [[0, 0], [params['cpo'], 0], [2*params['cpo'], 0], [3*params['cpo'], 0]]
     construct_mosfet_structure(laygen, **params)
 
     mycell = header + '_space_nf2'  # space_nf2
@@ -650,8 +650,8 @@ for header in header_list:
     params['nf'] = 4  # number of fingers
     params['generate_gate_pins'] = False
     params['generate_sd_pins'] = False
-    params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*2 
-    params['instance_xy_list'] = [[0, 0], [params['cpo'], 0]]
+    params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*4 
+    params['instance_xy_list'] = [[0, 0], [params['cpo'], 0], [2*params['cpo'], 0], [3*params['cpo'], 0]]
     construct_mosfet_structure(laygen, **params)
 
     mycell = header+'_left' #left side
@@ -752,6 +752,18 @@ for header in header_list:
                                  + [[0, 0], [params['cpo'], 0]]
     construct_mosfet_structure(laygen, **params)
 
+    mycell = header + '_space'  # space
+    mycells.append(mycell)
+    laygen.add_cell(mycell)
+    laygen.sel_cell(mycell)
+    params = deepcopy(params_transistor_default)
+    params['nf'] = 1  # number of fingers
+    params['generate_gate_pins'] = False
+    params['generate_sd_pins'] = False
+    params['instance_cellname_list'] = ['_'+header+'_base_nf1']
+    params['instance_xy_list'] = [[0, 0]]
+    construct_mosfet_structure(laygen, **params)
+
     mycell = header + '_space_nf2'  # space_nf2
     mycells.append(mycell)
     laygen.add_cell(mycell)
@@ -760,7 +772,7 @@ for header in header_list:
     params['nf'] = 2  # number of fingers
     params['generate_gate_pins'] = False
     params['generate_sd_pins'] = False
-    params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*2 
+    params['instance_cellname_list'] = ['_'+header+'_base_nf1']*2 
     params['instance_xy_list'] = [[0, 0], [params['cpo'], 0]]
     construct_mosfet_structure(laygen, **params)
 
@@ -772,8 +784,8 @@ for header in header_list:
     params['nf'] = 4  # number of fingers
     params['generate_gate_pins'] = False
     params['generate_sd_pins'] = False
-    params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*2 
-    params['instance_xy_list'] = [[0, 0], [params['cpo'], 0]]
+    params['instance_cellname_list'] = ['_'+header+'_base_nf1']*4 
+    params['instance_xy_list'] = [[0, 0], [params['cpo'], 0], [2*params['cpo'], 0], [3*params['cpo'], 0]]
     construct_mosfet_structure(laygen, **params)
 
     mycell = header+'_left' #left side
@@ -784,7 +796,7 @@ for header in header_list:
     params['nf'] = 6 #number of fingers
     params['generate_gate_pins'] = False
     params['generate_sd_pins'] = False
-    params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*2 
+    params['instance_cellname_list'] = ['_'+header+'_base_nf1']*2 
     params['instance_xy_list'] = [[params['cpo']*4, 0], [params['cpo']*5, 0]]
     construct_mosfet_structure(laygen, **params)
 
@@ -796,7 +808,7 @@ for header in header_list:
     params['nf'] = 6 #number of fingers
     params['generate_gate_pins'] = False
     params['generate_sd_pins'] = False
-    params['instance_cellname_list'] = ['_'+header+'_space_base_nf1']*2 
+    params['instance_cellname_list'] = ['_'+header+'_base_nf1']*2 
     params['instance_xy_list'] = [[params['cpo']*0, 0], [params['cpo']*1, 0]]
     construct_mosfet_structure(laygen, **params)
 
@@ -804,7 +816,7 @@ for header in header_list:
 
 #boundary cell generation
 bnd_suffix = ['_topleft', '_topright', '_bottomleft', '_bottomright', '_top', '_bottom']
-bnd_nf = [6, 6, 6, 6, 2, 2]
+bnd_nf = [6, 6, 6, 6, 1, 1]
 for bs, nf in zip(bnd_suffix, bnd_nf):
     mycell = 'boundary'+bs 
     mycells.append(mycell)
