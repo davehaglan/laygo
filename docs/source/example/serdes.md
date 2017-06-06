@@ -11,7 +11,7 @@ abstracting functions) will be released soon.
 
 >Note 2: current version only contains the CMOS serializer part.
 
-## Installation and launch
+## Install and launch
 1. Set up BAG environment for the technology in use. This is usually
 done by cloning technology repo provided by BAG developers. For example,
 cds_ff_mpt environment can be set up by running following commands.

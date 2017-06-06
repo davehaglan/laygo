@@ -9,7 +9,7 @@ which are used for constructing custom digital cells.
  version following the tutorial conventions (possibly with more 
 abstracting functions) will be released soon.
 
-## Installation and launch
+## Install and launch
 1. Clone a proper tech repo. For cds_ff_mpt example type following
 commands.
 

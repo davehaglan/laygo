@@ -6,7 +6,7 @@
 Welcome to laygo's documentation!
 ===============================================
 
-This page stores all documents for laygo_ repository. 
+This page summarizes documentations for laygo_ repository.
 
 .. _Laygo: https://github.com/ucb-art/laygo
 

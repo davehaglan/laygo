@@ -27,21 +27,54 @@ following commands.
 
     > Note: for BWRC users, comprehensive working environments are
     provided under proper NDAs for certain technologies. Use the
-    following repos.
+    following repos and skip step 2, 3, 5, 6.
 
     > 1. **tsmc16FFC**: ```git@bwrcrepo.eecs.berkeley.edu:jdhan/TISARADC_TSMC16FFC.git```
     > 2. **tsmc28hpm**:
 
-2. Run virtuoso and BAG.
+2. Copy configuration files and design libraries from
+laygo/generators/adc_sar/yaml by typing:
 
-3. In the IPython interpreter, type the following command to construct
+    ```
+    cp laygo/generators/adc_sar/yaml/adc_sar_spec.yaml .
+    cp laygo/generators/adc_sar/yaml/adc_sar_size.yaml .
+    cp -r laygo/generators/adc_sar/BagModules/adc_sar_templates BagModules/
+    cp -r laygo/generators/adc_sar/adc_sar_templates .
+    cp -r laygo/generators/adc_sar/adc_sar_testbenches .
+    ```
+
+3. Add library definitions to your cds.lib
+
+    *In cds.lib*
+    ```
+    DEFINE adc_sar_templates ./adc_sar_templates
+    DEFINE adc_sar_testbenches ./adc_sar_testbenches
+    ```
+
+4. Run virtuoso and type the following command in CIW.
+    ```
+    load "start_bag.il"
+    ```
+
+5. Open **adc_sar_templates/capdac** and update the library name of C0 and
+ CDAC0 to **(technology_name)_micretemplates_dense**, as shown below.
+
+    ![CDAC](images/tisaradc_capdac_template.png)
+
+6. Launch bag and run the following import script.
+
+    ```
+    run laygo/generators/adc_sar/adc_sar_import.py
+    ```
+
+5. In the IPython interpreter, type the following command to construct
 the template and grid database.
 
     ```
     run laygo/labs/lab2_a_gridlayoutgenerator_constructtemplate.py
     ```
 
-4. Run the following command to generate the logic gate template
+6. Run the following command to generate the logic gate template
 library. The library name will be (technology_name)_logic_templates.
 
     ```
@@ -148,7 +181,9 @@ In order to generate CDAC layout, type:
     ```
 
     This command will create a CDAC layout in
-    **adc_sar_generated/capdac**.
+    **adc_sar_generated/capdac**, as shown below.
+
+    ![CDAC](images/tisaradc_capdac.png)
 
     * The capdac generator reads **n_bit** and **rdx_array** parameters
     from **adc_sar_spec.yaml**, and **capdac_c_m**,
@@ -156,7 +191,9 @@ In order to generate CDAC layout, type:
     parameters from **adc_sar_size.yaml** (or use default settings in
     the python code if **load_from_file** is set to **false**), users
     can update those parameters and regenerate the capdac. It will
-    create a new CDAC with different shapes.
+    create a new CDAC with different shapes, as shown below.
+
+    ![CDAC](images/tisaradc_capdac2.png)
 
     * If you want to generate the schematic as well, type:
 
@@ -205,6 +242,8 @@ running:
     run laygo/generators/adc_sar/adc_sar_salatch_pmos_layout_generator.py
     ```
 
+    ![salatch](images/tisaradc_salatch.png)
+
     * Here are additional scripts regarding the strongArm latch:
 
         1. **adc_sar_salatch_pmos_schematic_generator.py**: schematic
@@ -222,7 +261,7 @@ the following scripts:
     run laygo/generators/adc_sar/adc_sar_capdrv_nsw_array_layout_generator.py
     ```
 
-    This is 2-step generation; in the first script, individual driver
+    This is a 2-step generation; in the first script, individual driver
     cells are generated. The second script places driver cells (with
     the sizing parameters defined by **capdrv_m_list** in
     **adc_sar_size.yaml**.
