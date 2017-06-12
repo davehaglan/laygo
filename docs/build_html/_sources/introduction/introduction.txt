@@ -3,9 +3,9 @@
 Laygo is an add-on to [BAG2](https://github.com/pkerichang/BAG_framework)
 framework for layout generation, written by
 [Jaeduk Han](jdhan@eecs.berkeley.edu) and licensed under the BSD license.
-With laygo, primitive layout parameters are abstracted as templates and
-grids, and the layout job can be done without dealing with complex
-design rules.
+With laygo, layout elements and parameters are abstracted as templates
+and grids, and the layout job can be done without dealing with complex
+design rules in advanced CMOS technology.
 Layout process is abstracted and scripted in python, and with the help
 of BAG API, laygo provides higher productivity and process portability
 than conventional custom IC design flows.
@@ -18,27 +18,37 @@ than conventional custom IC design flows.
     ```
     $ git clone git@github.com:ucb-art/laygo.git
     ```
-3. Prepare following technology setup files.
+3. Prepare following etup files for your technology.
     * **laygo_config.yaml** - contains general technology information.
-     Example can be found here:
-     [labs/laygo_config.yaml](../../../labs/laygo_config.yaml)
-    * **(technology_name).layermap** - layer mapping file for the GDS flow.
-     Usually this file can be found in your PDK library.
-     If the BAG flow is used, this file is not required.
-     Example can be found here:
-     [labs/laygo_faketech.layermap](../../../labs/laygo_faketech.layermap)
-    * **primitive template and grid database** : laygo keeps template and
-     grid information in yaml files. Files can be provided under NDA or
-     constructed by users from handcrafted or generated GDS/OA.
-     Examples can be found here:
-     [labs/laygo_faketech_microtemplates_dense_templates.yaml](../../../labs/laygo_faketech_microtemplates_dense_templates.yaml),
-     [labs/laygo_faketech_microtemplates_dense_grids.yaml](../../../labs/laygo_faketech_microtemplates_dense_grids.yaml)
 
-    Those files can be provided to BWRC users (under proper NDA), as a
-    form of git repository. Laygo has default technology setup files for
-    the GDS flow (laygo_faketech).
-4. Launch ipython and run the tutorial script
-    [quick_start_GDS.py](../../../quick_start_GDS.py).
+        An example file can be found here: [labs/laygo_config.yaml](https://github.com/ucb-art/laygo/blob/master/labs/laygo_config.yaml)
+    * **(technology_name).layermap**(optional) - layer mapping file only
+    for the GDS flow. Usually layermap files can be found in your PDK
+    library.
+
+        An example file can be found here: [labs/laygo_faketech.layermap](https://github.com/ucb-art/laygo/blob/master/labs/laygo_faketech.layermap)
+    * **primitive template and grid database** : laygo keeps template
+    and grid information in yaml files. Users can construct yaml files
+    by themselves, or files can be provided under NDA.
+
+        Examples files can be found here (for laygo_faketech, used in the GDS flow):
+        [labs/laygo_faketech_microtemplates_dense_templates.yaml](https://github.com/ucb-art/laygo/blob/master/labs/laygo_faketech_microtemplates_dense_templates.yaml),
+        [labs/laygo_faketech_microtemplates_dense_grids.yaml](https://github.com/ucb-art/laygo/blob/master/labs/laygo_faketech_microtemplates_dense_grids.yaml)
+
+        An example script that consturcts the yaml database is here:
+        [labs/lab2_a_gridlayoutgenerator_constructtemplate.py](https://github.com/ucb-art/laygo/blob/master/labs/lab2_a_gridlayoutgenerator_constructtemplate.py)
+
+    Example setup files for generic technologies are released for
+    reference, which can be found here:
+
+        * [cds_ff_mpt](git@github.com:ucb-art/BAG2_cds_ff_mpt.git)
+        * [NCSU FreePDK45](git@github.com:ucb-art/BAG2_freePDK45.git)
+
+    For BWRC users, default setup files for real technologies can be
+    provided under proper NDA, as a form of git repository.
+
+4. For a toy example, launch ipython and run the GDS tutorial script
+    [quick_start_GDS.py](https://github.com/ucb-art/laygo/blob/master/quick_start_GDS.py).
     ```
     $ start_bag.sh    (or ipython)
     > cd laygo
@@ -49,14 +59,16 @@ than conventional custom IC design flows.
     ![qs_nand](images/laygo_quickstart.png)
 
     [KLayout](http://www.klayout.de/) was used for gds display. Detailed
-    explanations on the tutorial can be found
-    [here](../../../docs/source/tutorial/tutorial_GDS.md).
-    You can also export the layout to BAG interface. Refer to
-    [this document](../../../docs/source/tutorial/tutorial_BAG.md)
+    explanations on the tutorial script can be found
+    [here](https://ucb-art.github.io/laygo/tutorial/tutorial_GDS.html).
+    You can also export the layout to the BAG framework. Refer to
+    [this document](https://ucb-art.github.io/laygo/tutorial/tutorial_BAG.html)
     for details.
 
-5. Go over lab materials in [labs/](../../../labs/). Detailed instructions
-can be found in [lab readme](docs/labs.md).
+5. For more practice, go over lab materials in [labs/](https://github.com/ucb-art/laygo/tree/master/labs).
+Detailed instructions can be found in [lab readme](docs/labs.md).
+
+6. More generator examples are being uploaded in [https://ucb-art.github.io/laygo/](https://ucb-art.github.io/laygo/) for reference.
 
 ## Documentations
 Documents can be found at [https://ucb-art.github.io/laygo/](https://ucb-art.github.io/laygo/).
