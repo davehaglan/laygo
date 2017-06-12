@@ -202,6 +202,11 @@ In order to generate CDAC layout, type:
         run laygo/generators/adc_sar/adc_sar_capdac_schematic_generator.py
         ```
 
+        This is generated schematic. Note that CDAC capacitors (I0-I7)
+        are arrayed, with array sizes specified by **rdx_array**.
+
+    ![CDAC](images/tisaradc_capdac_sch.png)
+
     * The schematic generation is not required for full-ADC
     generations, since you can generate the whole ADC schematic by
     running a top-cell generation script (unlike the layout counterpart,

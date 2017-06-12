@@ -367,7 +367,12 @@ create a new CDAC with different shapes, as shown below.</li>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_capdac_schematic_generator</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
+<p>This is generated schematic. Note that CDAC capacitors (I0-I7)
+are arrayed, with array sizes specified by <strong>rdx_array</strong>.</p>
 </li>
+</ul>
+<p><img alt="CDAC" src="../_images/tisaradc_capdac_sch.png" /></p>
+<ul>
 <li><p class="first">The schematic generation is not required for full-ADC
 generations, since you can generate the whole ADC schematic by
 running a top-cell generation script (unlike the layout counterpart,
