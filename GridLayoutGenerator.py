@@ -275,6 +275,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         laygo.layoutObject.Instance
             generated instance
         """
+        #TODO: Align option, bottom/top-left/right directions
         # check if it's row placement
         if isinstance(templatename, list): # row placement
             # preprocessing arguments
