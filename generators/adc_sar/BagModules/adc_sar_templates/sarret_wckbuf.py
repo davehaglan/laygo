@@ -79,7 +79,6 @@ class adc_sar_templates__sarret_wckbuf(Module):
         #array generation
         name_list=[]
         term_list=[]
-        pin_en=''
         for i in range(num_bits):
             term_list.append({'I': 'IN<%d>'%(i), 'O':'OUT<%d>'%(i)})
             name_list.append('I%d'%(i))

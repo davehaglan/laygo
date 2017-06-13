@@ -307,7 +307,7 @@ def generate_sarret2_wckbuf(laygen, objectname_pfix, templib_logic, placement_gr
             rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j+1, 0]), xy1=np.array([2*j+1, 0]), gridname0=rg_m2m3,
                          refinstname0=itapl[i].name, refpinname0='VDD', refinstindex0=np.array([0, 0]),
                          refinstname1=itapl[i].name, refpinname1='VSS', refinstindex1=np.array([0, 0]), via1=[[0, 0]]))
-    for i in range(0, int(pwr_dim[0])):
+    for i in range(0, int(pwr_dim[0]/2)):
         rvdd.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+2+1, 0]), xy1=np.array([2*i+2+1, 0]), gridname0=rg_m2m3,
                      refinstname0=itapr[0].name, refpinname0='VSS', refinstindex0=np.array([0, 0]),
                      refinstname1=itapr[-1].name, refpinname1=rp1, refinstindex1=np.array([0, 0])))
@@ -317,7 +317,7 @@ def generate_sarret2_wckbuf(laygen, objectname_pfix, templib_logic, placement_gr
         laygen.pin_from_rect('VDD'+str(2*i-1), laygen.layers['pin'][3], rvdd[-1], gridname=rg_m2m3, netname='VDD')
         laygen.pin_from_rect('VSS'+str(2*i-1), laygen.layers['pin'][3], rvss[-1], gridname=rg_m2m3, netname='VSS')
     for i in range(num_row):
-        for j in range(0, int(pwr_dim[0])):
+        for j in range(0, int(pwr_dim[0]/2)):
             rvdd.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j+2+1, 0]), xy1=np.array([2*j+2+1, 0]), gridname0=rg_m2m3,
                          refinstname0=itapr[i].name, refpinname0='VDD', refinstindex0=np.array([0, 0]), via0=[[0, 0]],
                          refinstname1=itapr[i].name, refpinname1='VSS', refinstindex1=np.array([0, 0])))

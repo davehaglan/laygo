@@ -2391,10 +2391,10 @@ def generate_mux2to1_1x(laygen, objectname_pfix,
     #muxoutput to inverter input
     #laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m2m3,
     #             refinstname0=in2.name, refpinname0='D0', refinstname1="I"+objectname_pfix+"INV0N1", refpinname1='G0',
-    #             direction="left")
+    #             direction="x")
     laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m2m3,
                  refinstname0=in1.name, refpinname0='D0', refinstname1="I" + objectname_pfix + "INV0N1",
-                 refpinname1='G0', direction="left")
+                 refpinname1='G0', direction="x")
     laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, -2]), gridname0=rg_m2m3,
                  refinstname0="I" + objectname_pfix + "INV0N1", refpinname0='G0',
                  refinstname1="I" + objectname_pfix + "INV0N1", refpinname1='G0')

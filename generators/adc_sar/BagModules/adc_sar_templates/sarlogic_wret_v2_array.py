@@ -22,6 +22,10 @@
 #
 ########################################################################################################################
 
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
+# noinspection PyUnresolvedReferences,PyCompatibility
+from builtins import *
 
 import os
 import pkg_resources
@@ -29,11 +33,12 @@ import pkg_resources
 from bag.design import Module
 
 
-yaml_file = pkg_resources.resource_filename(__name__, os.path.join('netlist_info', 'sarfsm.yaml'))
+yaml_file = pkg_resources.resource_filename(__name__, os.path.join('netlist_info', 'sarlogic_wret_v2_array.yaml'))
 
 
-class adc_sar_templates__sarfsm(Module):
-    """Module for library adc_sar_templates cell sarfsm.
+# noinspection PyPep8Naming
+class adc_sar_templates__sarlogic_wret_v2_array(Module):
+    """Module for library adc_sar_templates cell sarlogic_wret_v2_array.
 
     Fill in high level description here.
     """
@@ -63,24 +68,26 @@ class adc_sar_templates__sarfsm(Module):
         self.parameters['m'] = m
         self.parameters['num_bits'] = num_bits
         self.parameters['device_intent'] = device_intent
-        self.instances['I0'].design(lch=lch, pw=pw, nw=nw, m=2, device_intent=device_intent)
-        self.instances['I1'].design(lch=lch, pw=pw, nw=nw, m=m, device_intent=device_intent)
-        self.instances['I2'].design(lch=lch, pw=pw, nw=nw, m=m, device_intent=device_intent)
-        self.instances['I3<0>'].design(lch=lch, pw=pw, nw=nw, m=m, device_intent=device_intent)
         #array generation
         name_list=[]
         term_list=[]
         for i in range(num_bits):
-            term_list.append({'I': 'SB<%d>'%(i+1), 
-                              'O': 'SB<%d>'%(i),}) 
-            if i==num_bits-1:
-                term_list[-1]['I']='TRIGB'
-            name_list.append('I3<%d>'%(i))
-        self.array_instance('I3<0>', name_list, term_list=term_list)
+            term_list.append({'SB': 'SB<%d>'%(i), 
+                              'ZP': 'ZP<%d>'%(i),
+                              'ZMID': 'ZMID<%d>'%(i),
+                              'ZM': 'ZM<%d>'%(i),
+                              'RETO': 'RETO<%d>'%(i),
+                             })
+            name_list.append('ISL%d'%(i))
+        self.array_instance('ISL0', name_list, term_list=term_list)
         for i in range(num_bits):
-            self.instances['I3<0>'][i].design(lch=lch, pw=pw, nw=nw, m=m, device_intent=device_intent)
+            self.instances['ISL0'][i].design(lch=lch, pw=pw, nw=nw, m=m, device_intent=device_intent)
 
         self.rename_pin('SB<0>','SB<%d:0>'%(num_bits-1))
+        self.rename_pin('ZP<0>','ZP<%d:0>'%(num_bits-1))
+        self.rename_pin('ZMID<0>','ZMID<%d:0>'%(num_bits-1))
+        self.rename_pin('ZM<0>','ZM<%d:0>'%(num_bits-1))
+        self.rename_pin('RETO<0>','RETO<%d:0>'%(num_bits-1))
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.
