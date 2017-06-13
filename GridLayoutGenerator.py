@@ -1014,6 +1014,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         return self.pin(name, layer, xy, gridname, netname=netname)
 
     def create_boundary_pin_form_rect(self, rect, gridname, pinname, layer, size=4, direction='left', netname=None):
+        print("[WARNING] create_boundary_pin_form_rect will be deprecated. Use create_boundary_pin_from_rect instead")
+        return self.create_boundary_pin_from_rect(rect=rect, gridname=gridname, pinname=pinname, layer=layer, size=size, direction=direction, netname=netname)
+
+    def create_boundary_pin_from_rect(self, rect, gridname, pinname, layer, size=4, direction='left', netname=None):
         """
         Generate a boundary Pin object from a reference Rect object
 
@@ -1050,7 +1054,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         elif direction=="top":
             xy[0][1] = xy[1][1] - size
 
-        self.pin(name=pinname, layer=layer, xy=xy, gridname=gridname, netname=netname)
+        return self.pin(name=pinname, layer=layer, xy=xy, gridname=gridname, netname=netname)
 
     #db access function
     def sel_template_library(self, libname):

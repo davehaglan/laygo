@@ -995,8 +995,8 @@ def generate_salatch_pmos(laygen, objectname_pfix, placement_grid,
         laygen.route(None, laygen.layers['metal'][3], xy0=np.array([-2, 1]), xy1=np.array([-2, 0]), gridname0=rg_m2m3,
                      refinstname0=imaininr0.name, refpinname0='S0', refinstindex0=np.array([m_in - 1 - i + 1, 0]), via0=[[0, 0]],
                      refinstname1=irgnrn1.name, refpinname1='S0', refinstindex1=np.array([-i + 1, 0]), via1=[[0, 0]])
-    laygen.create_boundary_pin_form_rect(rintp, gridname=rg_m2m3, pinname='INTP', layer=laygen.layers['pin'][3], size=2, direction='top')
-    laygen.create_boundary_pin_form_rect(rintm, gridname=rg_m2m3, pinname='INTM', layer=laygen.layers['pin'][3], size=2, direction='top')
+    laygen.create_boundary_pin_from_rect(rintp, gridname=rg_m2m3, pinname='INTP', layer=laygen.layers['pin'][3], size=2, direction='top')
+    laygen.create_boundary_pin_from_rect(rintm, gridname=rg_m2m3, pinname='INTM', layer=laygen.layers['pin'][3], size=2, direction='top')
     laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 1]), xy1=np.array([0, 1]), gridname0=rg_m2m3,
                  refinstname0=irgnrstlp0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
                  refinstname1=irgnrstlp1.name, refpinname1='D0', refinstindex1=np.array([m_rstn-1, 0]))
@@ -1021,7 +1021,7 @@ def generate_salatch_pmos(laygen, objectname_pfix, placement_grid,
     rclk2 = laygen.route(None, laygen.layers['metal'][4], xy0=xy0[1]+np.array([0, 0]), xy1=xy0[1]+np.array([2*m_rstn, 0]), gridname0=rg_m3m4)
     xy0=laygen.get_rect_xy(rclk2.name, rg_m4m5, sort=True)
     rclk3 = laygen.route(None, laygen.layers['metal'][5], xy0=xy0[0]+np.array([4, 0]), xy1=xy0[0]+np.array([4, 7]), gridname0=rg_m4m5, via0=[[0, 0]])
-    laygen.create_boundary_pin_form_rect(rclk3, gridname=rg_m4m5, pinname='CLKB', layer=laygen.layers['pin'][5], size=4, direction='top')
+    laygen.create_boundary_pin_from_rect(rclk3, gridname=rg_m4m5, pinname='CLKB', layer=laygen.layers['pin'][5], size=4, direction='top')
     laygen.via(None, np.array([1, 0]), refinstname=imainck0.name, refpinname='G0', refinstindex=np.array([m_clkh-1, 0]), gridname=rg_m2m3)
     laygen.via(None, np.array([1, 0]), refinstname=irgnrstlp1.name, refpinname='G0', refinstindex=np.array([m_rstn-1, 0]), gridname=rg_m2m3)
     #input connection
@@ -1030,12 +1030,12 @@ def generate_salatch_pmos(laygen, objectname_pfix, placement_grid,
     xy0=laygen.get_inst_pin_coord(imaininl0.name, pinname='G0', gridname=rg_m2m3, index=np.array([0, 0]), sort=True)[0]
     rinp=laygen.route(None, laygen.layers['metal'][3], xy0=np.array([xy0[0]+1-1, y0]), xy1=np.array([1-1, 0]), gridname0=rg_m2m3,
                       refinstname1=imaininl0.name, refpinname1='G0', refinstindex1=np.array([0, 0]))
-    laygen.create_boundary_pin_form_rect(rinp, gridname=rg_m3m4, pinname='INP', layer=laygen.layers['pin'][3], size=4, direction='bottom')
+    laygen.create_boundary_pin_from_rect(rinp, gridname=rg_m3m4, pinname='INP', layer=laygen.layers['pin'][3], size=4, direction='bottom')
     laygen.via(None, np.array([1-1, 0]), refinstname=imaininl0.name, refpinname='G0', refinstindex=np.array([0, 0]), gridname=rg_m2m3)
     xy0=laygen.get_inst_pin_coord(imaininr0.name, pinname='G0', gridname=rg_m2m3, index=np.array([0, 0]), sort=True)[0]
     rinm=laygen.route(None, laygen.layers['metal'][3], xy0=np.array([xy0[0]-1+1, y0]), xy1=np.array([1-1, 0]), gridname0=rg_m2m3,
                       refinstname1=imaininr0.name, refpinname1='G0', refinstindex1=np.array([0, 0]))
-    laygen.create_boundary_pin_form_rect(rinm, gridname=rg_m3m4, pinname='INM', layer=laygen.layers['pin'][3], size=4, direction='bottom')
+    laygen.create_boundary_pin_from_rect(rinm, gridname=rg_m3m4, pinname='INM', layer=laygen.layers['pin'][3], size=4, direction='bottom')
     laygen.via(None, np.array([1-1, 0]), refinstname=imaininr0.name, refpinname='G0', refinstindex=np.array([0, 0]), gridname=rg_m2m3)
 
     xy0=laygen.get_inst_pin_coord(iofstinl0.name, pinname='G0', gridname=rg_m2m3, index=np.array([0, 0]), sort=True)[0]
@@ -1043,7 +1043,7 @@ def generate_salatch_pmos(laygen, objectname_pfix, placement_grid,
     laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([-4, 0]), gridname0=rg_m2m3,
                  refinstname0=iofstinl0.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
                  refinstname1=iofstinl0.name, refpinname1='G0', refinstindex1=np.array([0, 0]))
-    laygen.create_boundary_pin_form_rect(rosp, gridname=rg_m3m4, pinname='OSP', layer=laygen.layers['pin'][3], size=4, direction='top')
+    laygen.create_boundary_pin_from_rect(rosp, gridname=rg_m3m4, pinname='OSP', layer=laygen.layers['pin'][3], size=4, direction='top')
     laygen.via(None, np.array([-4, 0]), refinstname=iofstinl0.name, refpinname='G0', refinstindex=np.array([0, 0]), gridname=rg_m2m3)
     xy0=laygen.get_inst_pin_coord(iofstinr0.name, pinname='G0', gridname=rg_m2m3, index=np.array([0, 0]), sort=True)[0]
     rosm=laygen.route(None, laygen.layers['metal'][3], xy0=np.array([xy0[0]+4, y1]), xy1=np.array([xy0[0]+4, xy0[1]]), gridname0=rg_m2m3)
@@ -1051,7 +1051,7 @@ def generate_salatch_pmos(laygen, objectname_pfix, placement_grid,
                  refinstname0=iofstinr0.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
                  refinstname1=iofstinr0.name, refpinname1='G0', refinstindex1=np.array([0, 0]))
     laygen.via(None, np.array([-4, 0]), refinstname=iofstinr0.name, refpinname='G0', refinstindex=np.array([0, 0]), gridname=rg_m2m3)
-    laygen.create_boundary_pin_form_rect(rosm, gridname=rg_m3m4, pinname='OSM', layer=laygen.layers['pin'][3], size=4, direction='top')
+    laygen.create_boundary_pin_from_rect(rosm, gridname=rg_m3m4, pinname='OSM', layer=laygen.layers['pin'][3], size=4, direction='top')
 
     #output connection
     y1=laygen.get_inst_xy(irgntap0.name, rg_m3m4)[1]-4
@@ -1078,8 +1078,8 @@ def generate_salatch_pmos(laygen, objectname_pfix, placement_grid,
     xy1=laygen.get_rect_xy(routp2.name, rg_m4m5, sort=True)
     routp3 = laygen.route(None, laygen.layers['metal'][5], xy0=xy1[0]+np.array([0, 0]), xy1=xy1[0]+np.array([0, 6]), gridname0=rg_m4m5, via0=[[0, 0]])
     routp3b = laygen.route(None, laygen.layers['metal'][5], xy0=xy1[0]+np.array([0, 2]), xy1=xy1[0]+np.array([0, 6]), gridname0=rg_m4m5, via0=[[0, 0]])
-    laygen.create_boundary_pin_form_rect(routp3, gridname=rg_m4m5, pinname='OUTM', layer=laygen.layers['pin'][5], size=4, direction='top')
-    laygen.create_boundary_pin_form_rect(routm3, gridname=rg_m4m5, pinname='OUTP', layer=laygen.layers['pin'][5], size=4, direction='top')
+    laygen.create_boundary_pin_from_rect(routp3, gridname=rg_m4m5, pinname='OUTM', layer=laygen.layers['pin'][5], size=4, direction='top')
+    laygen.create_boundary_pin_from_rect(routm3, gridname=rg_m4m5, pinname='OUTP', layer=laygen.layers['pin'][5], size=4, direction='top')
 
     #VDD/VSS
     #num_vert_pwr = 20

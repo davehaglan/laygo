@@ -108,19 +108,19 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
          + laygen.get_template_size(sa_name, gridname=rg_m5m6, libname=workinglib)[1]-4 #refer to sa
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvl_vo_c0_xy[0],
                                        icdacl_i_c0_xy[0], y0 + 1, rg_m5m6, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7)
-    laygen.create_boundary_pin_form_rect(rv0, rg_m5m6, "VOL_C0", laygen.layers['pin'][5], size=4, direction='bottom', netname='VREF<1>')
+    laygen.create_boundary_pin_from_rect(rv0, rg_m5m6, "VOL_C0", laygen.layers['pin'][5], size=4, direction='bottom', netname='VREF<1>')
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvr_vo_c0_xy[0],
                                        icdacr_i_c0_xy[0], y0 + 1, rg_m5m6, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7)
-    laygen.create_boundary_pin_form_rect(rv0, rg_m5m6, "VOR_C0", laygen.layers['pin'][5], size=4, direction='bottom', netname='VREF<1>')
+    laygen.create_boundary_pin_from_rect(rv0, rg_m5m6, "VOR_C0", laygen.layers['pin'][5], size=4, direction='bottom', netname='VREF<1>')
 
     for j in range(num_cdrv_output_routes):
         for i in range(num_bits):
             [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvl_vo_xy[i+j*num_bits][0],
                                                icdacl_i_xy[i][0], y0 - i, rg_m5m6, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7)
-            laygen.create_boundary_pin_form_rect(rv0, rg_m5m6, "VOL<"+str(i)+">", laygen.layers['pin'][5], size=4, direction='bottom')
+            laygen.create_boundary_pin_from_rect(rv0, rg_m5m6, "VOL<"+str(i)+">", laygen.layers['pin'][5], size=4, direction='bottom')
             [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvr_vo_xy[i+j*num_bits][0],
                                                icdacr_i_xy[i][0], y0 - i, rg_m5m6, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7)
-            laygen.create_boundary_pin_form_rect(rv0, rg_m5m6, "VOR<"+str(i)+">", laygen.layers['pin'][5], size=4, direction='bottom')
+            laygen.create_boundary_pin_from_rect(rv0, rg_m5m6, "VOR<"+str(i)+">", laygen.layers['pin'][5], size=4, direction='bottom')
             #more routes for horizontal dacs
             if i>=num_bits_vertical:
                 [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvl_vo_xy[i+j*num_bits][0],
@@ -398,25 +398,25 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
             input_rails_xy=input_rails_xy, generate_pin=True, overwrite_start_coord=0, overwrite_end_coord=x1, 
             overwrite_start_index=4+(num_vref_routes_m6+1)*i, overwrite_end_index=4+(num_vref_routes_m6+1)*i+num_vref_routes_m6-1)
 
-    laygen.create_boundary_pin_form_rect(rclkb, rg_m4m5, "CLKB", laygen.layers['pin'][5], size=4, direction='bottom')
-    laygen.create_boundary_pin_form_rect(routp, rg_m4m5, "OUTP", laygen.layers['pin'][5], size=4, direction='bottom')
-    laygen.create_boundary_pin_form_rect(routm, rg_m4m5, "OUTM", laygen.layers['pin'][5], size=4, direction='bottom')
-    laygen.create_boundary_pin_form_rect(rosp, rg_m2m3, "OSP", laygen.layers['pin'][3], size=4, direction='bottom')
-    laygen.create_boundary_pin_form_rect(rosm, rg_m2m3, "OSM", laygen.layers['pin'][3], size=4, direction='bottom')
+    laygen.create_boundary_pin_from_rect(rclkb, rg_m4m5, "CLKB", laygen.layers['pin'][5], size=4, direction='bottom')
+    laygen.create_boundary_pin_from_rect(routp, rg_m4m5, "OUTP", laygen.layers['pin'][5], size=4, direction='bottom')
+    laygen.create_boundary_pin_from_rect(routm, rg_m4m5, "OUTM", laygen.layers['pin'][5], size=4, direction='bottom')
+    laygen.create_boundary_pin_from_rect(rosp, rg_m2m3, "OSP", laygen.layers['pin'][3], size=4, direction='bottom')
+    laygen.create_boundary_pin_from_rect(rosm, rg_m2m3, "OSM", laygen.layers['pin'][3], size=4, direction='bottom')
     for i in range(num_bits):
-        laygen.create_boundary_pin_form_rect(renl0[i], rg_m5m6, "ENL"+str(i)+"<0>", laygen.layers['pin'][5], size=4, direction='bottom')
-        laygen.create_boundary_pin_form_rect(renl1[i], rg_m5m6, "ENL"+str(i)+"<1>", laygen.layers['pin'][5], size=4, direction='bottom')
-        laygen.create_boundary_pin_form_rect(renl2[i], rg_m5m6, "ENL"+str(i)+"<2>", laygen.layers['pin'][5], size=4, direction='bottom')
-        laygen.create_boundary_pin_form_rect(renr0[i], rg_m5m6, "ENR"+str(i)+"<0>", laygen.layers['pin'][5], size=4, direction='bottom')
-        laygen.create_boundary_pin_form_rect(renr1[i], rg_m5m6, "ENR"+str(i)+"<1>", laygen.layers['pin'][5], size=4, direction='bottom')
-        laygen.create_boundary_pin_form_rect(renr2[i], rg_m5m6, "ENR"+str(i)+"<2>", laygen.layers['pin'][5], size=4, direction='bottom')
+        laygen.create_boundary_pin_from_rect(renl0[i], rg_m5m6, "ENL"+str(i)+"<0>", laygen.layers['pin'][5], size=4, direction='bottom')
+        laygen.create_boundary_pin_from_rect(renl1[i], rg_m5m6, "ENL"+str(i)+"<1>", laygen.layers['pin'][5], size=4, direction='bottom')
+        laygen.create_boundary_pin_from_rect(renl2[i], rg_m5m6, "ENL"+str(i)+"<2>", laygen.layers['pin'][5], size=4, direction='bottom')
+        laygen.create_boundary_pin_from_rect(renr0[i], rg_m5m6, "ENR"+str(i)+"<0>", laygen.layers['pin'][5], size=4, direction='bottom')
+        laygen.create_boundary_pin_from_rect(renr1[i], rg_m5m6, "ENR"+str(i)+"<1>", laygen.layers['pin'][5], size=4, direction='bottom')
+        laygen.create_boundary_pin_from_rect(renr2[i], rg_m5m6, "ENR"+str(i)+"<2>", laygen.layers['pin'][5], size=4, direction='bottom')
 
     laygen.pin_from_rect(name='SAINP', layer=laygen.layers['pin'][4], rect=rsainp, gridname=rg_m4m5, netname='INP')
     laygen.pin_from_rect(name='SAINM', layer=laygen.layers['pin'][4], rect=rsainm, gridname=rg_m4m5, netname='INM')
     for i, r in enumerate(rinp):
-        laygen.create_boundary_pin_form_rect(r, rg_m5m6, "INP"+str(i), laygen.layers['pin'][6], size=8, direction='right', netname="INP")
+        laygen.create_boundary_pin_from_rect(r, rg_m5m6, "INP"+str(i), laygen.layers['pin'][6], size=8, direction='right', netname="INP")
     for i, r in enumerate(rinm):
-        laygen.create_boundary_pin_form_rect(r, rg_m5m6, "INM"+str(i), laygen.layers['pin'][6], size=8, direction='left', netname="INM")
+        laygen.create_boundary_pin_from_rect(r, rg_m5m6, "INM"+str(i), laygen.layers['pin'][6], size=8, direction='left', netname="INM")
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
