@@ -541,7 +541,7 @@ if __name__ == '__main__':
                             m_space_1x=0, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
     # 2. calculate spacing param and regenerate
-    x0 = laygen.templates.get_template('sarafe_nsw_'+str(specdict['n_bit']-1)+'b', libname=workinglib).xy[1][0] \
+    x0 = laygen.templates.get_template('sarafe_nsw', libname=workinglib).xy[1][0] \
          - laygen.templates.get_template(cellname, libname=workinglib).xy[1][0] \
          - laygen.templates.get_template('nmos4_fast_left').xy[1][0] * 2
     m_space = int(round(x0 / laygen.templates.get_template('space_1x', libname=logictemplib).xy[1][0]))
