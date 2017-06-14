@@ -46,7 +46,7 @@ class adc_sar_templates__sarafe_nsw(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, m_sa, m_rst_sa, m_rgnn_sa, m_buf_sa, m_drv_list, num_bits, c_m, rdx_array, device_intent='fast'):
+    def design(self, lch, pw, nw, sa_m, sa_m_rst, sa_m_rgnn, sa_m_buf, drv_m_list, num_bits, c_m, rdx_array, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -65,18 +65,18 @@ class adc_sar_templates__sarafe_nsw(Module):
         self.parameters['lch'] = lch
         self.parameters['pw'] = pw
         self.parameters['nw'] = nw
-        self.parameters['m_sa'] = m_sa
-        self.parameters['m_rst_sa'] = m_rst_sa
-        self.parameters['m_rgnn_sa'] = m_rgnn_sa
-        self.parameters['m_buf_sa'] = m_buf_sa
-        self.parameters['m_drv_list'] = m_drv_list
+        self.parameters['sa_m'] = sa_m
+        self.parameters['sa_m_rst'] = sa_m_rst
+        self.parameters['sa_m_rgnn'] = sa_m_rgnn
+        self.parameters['sa_m_buf'] = sa_m_buf
+        self.parameters['drv_m_list'] = drv_m_list
         self.parameters['num_bits'] = num_bits
         self.parameters['c_m'] = c_m
         self.parameters['rdx_array'] = rdx_array
         self.parameters['device_intent'] = device_intent
-        self.instances['ISA0'].design(lch=lch, pw=pw, nw=nw, m=m_sa, m_rst=m_rst_sa, m_rgnn=m_rgnn_sa, m_buf=m_buf_sa, device_intent=device_intent)
-        self.instances['ICDRVP0'].design(lch=lch, pw=pw, nw=nw, num_bits=num_bits, m_list=m_drv_list, device_intent=device_intent)
-        self.instances['ICDRVM0'].design(lch=lch, pw=pw, nw=nw, num_bits=num_bits, m_list=m_drv_list, device_intent=device_intent)
+        self.instances['ISA0'].design(lch=lch, pw=pw, nw=nw, m=sa_m, m_rst=sa_m_rst, m_rgnn=sa_m_rgnn, m_buf=sa_m_buf, device_intent=device_intent)
+        self.instances['ICDRVP0'].design(lch=lch, pw=pw, nw=nw, num_bits=num_bits, m_list=drv_m_list, device_intent=device_intent)
+        self.instances['ICDRVM0'].design(lch=lch, pw=pw, nw=nw, num_bits=num_bits, m_list=drv_m_list, device_intent=device_intent)
         self.instances['ICAPP0'].design(num_bits=num_bits, c_m=c_m, rdx_array=rdx_array)
         self.instances['ICAPM0'].design(num_bits=num_bits, c_m=c_m, rdx_array=rdx_array)
         #VOL/VOR
