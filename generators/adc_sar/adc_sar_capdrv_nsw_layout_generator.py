@@ -202,7 +202,8 @@ if __name__ == '__main__':
             sizedict = yaml.load(stream)
         m_list=list(set(sizedict['capdrv_m_list']))
         m_space_offset=sizedict['capdrv_space_offset']
-    m_space_ref=max(m_list)
+        num_bits=specdict['n_bit']
+    m_space_ref=max(m_list+[8])
     #capdrv generation
     for m in m_list:
         cellname='capdrv_nsw_'+str(m)+'x'
@@ -211,7 +212,7 @@ if __name__ == '__main__':
         laygen.add_cell(cellname)
         laygen.sel_cell(cellname)
         generate_capdrv_nsw(laygen, objectname_pfix='CD0', templib_logic=logictemplib,
-                            placement_grid=pg, routing_grid_m3m4=rg_m3m4, m=m, m_space=3*(m_space_ref-m)+m_space_offset, origin=np.array([0, 0])) 
+                            placement_grid=pg, routing_grid_m3m4=rg_m3m4, m=m, m_space=max(0, num_bits-8)*2+3*(m_space_ref-m)+m_space_offset, origin=np.array([0, 0])) 
                             #m_space multiplied by 3 because of 3 references
         laygen.add_template_from_cell()
 
