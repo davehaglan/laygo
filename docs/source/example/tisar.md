@@ -43,6 +43,9 @@ laygo/generators/adc_sar/yaml by typing:
     cp -r laygo/generators/adc_sar/adc_sar_testbenches .
     ```
 
+    > Note: some repos may already have those files in their working
+    directories.
+
 3. Add library definitions to your cds.lib
 
     *In cds.lib*
@@ -132,6 +135,7 @@ Following parameters are defined in the configuration files:
     * **salatch_m_rst**: strongArm latch reset device sizing
     * **sarclkgen_m**: strongArm latch clock generator sizing
     * **sarclkgen_fo**: strongArm latch clock generator fanout
+    * **sarclkgen_ndelay**: strongArm latch clock generator # of delays
     * **sarret_m**: strongArm latch output retimer sizing
     * **sarret_fo**: strongArm latch output retimer fanout
     * **sarfsm_m**: SAR FSM sizing
@@ -202,8 +206,9 @@ In order to generate CDAC layout, type:
         run laygo/generators/adc_sar/adc_sar_capdac_schematic_generator.py
         ```
 
-        This is generated schematic. Note that CDAC capacitors (I0-I7)
-        are arrayed, with array sizes specified by **rdx_array**.
+        The figure shown below is one example of generated schematic.
+        Note that CDAC capacitors (I0-I7) are arrayed, with radix
+        parameters specified by **rdx_array**.
 
     ![CDAC](images/tisaradc_capdac_sch.png)
 
@@ -221,6 +226,9 @@ In order to generate CDAC layout, type:
 
         It will give a **lvs passed**  message if the design is LVS
         clean.
+
+        >Note: BAG2_cds_ff_mpt / FreePDK45 does not support LVS &
+        extraction at this moment. Skip these steps for those processes
 
     * For parasitic extraction, type the following command.
 
@@ -295,6 +303,89 @@ the following scripts:
     ![sarafe](images/tisaradc_sarafe.png)
 
 ## SubADC backend layout generation
+
+1. The backend of subADCs is composed of FSM(sarfsm), SAR logic(sarlogic),
+clock generator(sarclkgen), and retimer(sarret).
+
+    Run following scripts to generate those building blocks.
+
+    ```
+    #FSM layout
+    run laygo/generators/adc_sar/adc_sar_sarfsm_layout_generator.py
+    #SAR logic
+    run laygo/generators/adc_sar/adc_sar_sarlogic_wret_layout_generator.py
+    run laygo/generators/adc_sar/adc_sar_sarlogic_wret_array_layout_generator.py
+    #SAR clock generator
+    run laygo/generators/adc_sar/adc_sar_sarclkdelay_layout_generator.py
+    run laygo/generators/adc_sar/adc_sar_sarclkgen_core_static2_layout_generator.py
+    run laygo/generators/adc_sar/adc_sar_sarclkgen_static_layout_generator.py
+    #SAR retimer
+    run laygo/generators/adc_sar/adc_sar_sarret_wckbuf_layout_generator.py
+    #spacing elements for routing/filling
+    run laygo/generators/adc_sar/adc_sar_space_layout_generator.py
+    #SAR backend generation
+    run laygo/generators/adc_sar/adc_sar_sarabe_dualdelay_layout_generator.py
+    ```
+
+    SAR FSM
+
+    ![sarfsm](images/tisaradc_sarfsm.png)
+
+    SAR logic
+
+    ![sarlogic](images/tisaradc_sarlogic.png)
+
+    SAR logic array
+
+    ![sarlogic_array](images/tisaradc_sarlogic_array.png)
+
+    SAR clock delayline
+
+    ![sarlogic_array](images/tisaradc_sarclkdelay.png)
+
+    SAR clock generator
+
+    ![sarclkgen](images/tisaradc_sarclkgen.png)
+
+    SAR retimer
+
+    ![sarret](images/tisaradc_sarret.png)
+
+    SAR backend top
+
+    ![sarabe](images/tisaradc_sarabe.png)
+
+
+2. For schematic generation, run scripts. Again, BAG is generating
+schematics in hierarachical order, so you don't need to run these
+scripts if you want to generate in top level.
+
+    ```
+    #FSM layout
+    run laygo/generators/adc_sar/adc_sar_sarfsm_schematic_generator.py
+    #SAR logic
+    run laygo/generators/adc_sar/adc_sar_sarlogic_wret_array_schematic_generator.py
+    #SAR clock generator
+    run laygo/generators/adc_sar/adc_sar_sarclkgen_static_schematic_generator.py
+    #SAR retimer
+    run laygo/generators/adc_sar/adc_sar_sarret_wckbuf_schematic_generator.py
+    #spacing elements for routing/filling
+    run laygo/generators/adc_sar/adc_sar_space_schematic_generator.py
+    #SAR backend generation
+    run laygo/generators/adc_sar/adc_sar_sarabe_dualdelay_schematic_generator.py
+    ```
+
+3. The frontend and backend can be integrated by running following
+scripts.
+
+    ```
+    # layout
+    run run laygo/generators/adc_sar/adc_sar_sar_layout_generator.py
+    # schematic
+    run run laygo/generators/adc_sar/adc_sar_sar_schematic_generator.py
+    ```
+
+    ![sar](images/tisaradc_sar.png)
 
 ## SubADC switch generation
 

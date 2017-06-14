@@ -869,7 +869,7 @@ ex) [[x0, y0], [x1, x1], ..., [xn-1, yn-1], [x0, y0]]</li>
 <p>Base class for GDSIO objects</p>
 <dl class="attribute">
 <dt id="laygo.GDSIO.Element.possible_transform_parameters">
-<code class="descname">possible_transform_parameters</code><em class="property"> = {'R270': (0, 270), 'R180': (0, 180), 'MY': (32768, 180), 'R0': (None, None), 'MX': (32768, 0), 'R90': (0, 90)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="descname">possible_transform_parameters</code><em class="property"> = {'R90': (0, 90), 'R270': (0, 270), 'R180': (0, 180), 'R0': (None, None), 'MX': (32768, 0), 'MY': (32768, 180)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; transform parameter dictionary</p>
 </dd></dl>
 
@@ -1554,7 +1554,7 @@ grids.</p>
 
 <dl class="attribute">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.layers">
-<code class="descname">layers</code><em class="property"> = {'pin': [], 'text': [], 'prbnd': [], 'metal': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">layers</code><em class="property"> = {'metal': [], 'prbnd': [], 'pin': [], 'text': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; layer dictionary</p>
 </dd></dl>
 
@@ -1982,6 +1982,11 @@ ex) if xy0 = [1, 2], xy1 = [1, 5], via1 = [0, 2] then a via will be placed at [1
 <dl class="method">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.create_boundary_pin_form_rect">
 <code class="descname">create_boundary_pin_form_rect</code><span class="sig-paren">(</span><em>rect</em>, <em>gridname</em>, <em>pinname</em>, <em>layer</em>, <em>size=4</em>, <em>direction='left'</em>, <em>netname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.create_boundary_pin_form_rect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.create_boundary_pin_form_rect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.create_boundary_pin_from_rect">
+<code class="descname">create_boundary_pin_from_rect</code><span class="sig-paren">(</span><em>rect</em>, <em>gridname</em>, <em>pinname</em>, <em>layer</em>, <em>size=4</em>, <em>direction='left'</em>, <em>netname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.create_boundary_pin_from_rect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.create_boundary_pin_from_rect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a boundary Pin object from a reference Rect object</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -3764,7 +3769,7 @@ All information shown in db.display() will be saved</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>db</strong> (<a class="reference internal" href="#laygo.TemplateDB.TemplateDB" title="laygo.TemplateDB.TemplateDB"><em>TemplateDB</em></a>) &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>db</strong> (<a class="reference internal" href="#module-laygo.TemplateDB" title="laygo.TemplateDB"><em>TemplateDB</em></a>) &#8211; </td>
 </tr>
 </tbody>
 </table>
