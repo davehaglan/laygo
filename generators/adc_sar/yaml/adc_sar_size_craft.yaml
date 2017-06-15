@@ -11,6 +11,7 @@ salatch_m: 12
 salatch_m_buf: 8
 salatch_m_rgnn: 8
 salatch_m_rst: 6
+sarabe_m_space_left_4x: 0
 sarclkgen_fo: 4
 sarclkgen_m: 2
 sarclkgen_ndelay: 1
