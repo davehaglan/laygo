@@ -328,10 +328,10 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
                     rh0, _rvo = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                                 icdrv_vo_xy[num_bits_row * i + j][0],
                                                 np.array([icdrv_en0_xy[num_bits_row * i + j][0][0] + num_row*3 + 6 + i + 12 + k*num_row, y1]), rg_m4m5)
-                rvo.append(_rvo)
-                #output_pin
-                laygen.create_boundary_pin_from_rect(_rvo, rg_m4m5, "VO"+str(k)+"<"+str(i*num_bits_row+j)+">", laygen.layers['pin'][5], size=6, 
-                                                     direction='top', netname="VO<"+str(i*num_bits_row+j)+">")
+                    rvo.append(_rvo)
+                    #output_pin
+                    laygen.create_boundary_pin_from_rect(_rvo, rg_m4m5, "VO"+str(k)+"<"+str(i*num_bits_row+j)+">", laygen.layers['pin'][5], size=6, 
+                                                         direction='top', netname="VO<"+str(i*num_bits_row+j)+">")
     #pins
     laygen.create_boundary_pin_from_rect(rvref0[0], rg_m4m5, "VREF<0>", laygen.layers['pin'][4], size=4, direction='left')
     laygen.create_boundary_pin_from_rect(rvref1[0], rg_m4m5, "VREF<1>", laygen.layers['pin'][4], size=4, direction='left')

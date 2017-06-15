@@ -290,10 +290,10 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                                            pdict_m5m6[ickg.name]['RST'][0],
                                            pdict_m5m6[isl.name]['RST'][0],
                                            pdict_m5m6[ickg.name]['RST'][0][0]+4, rg_m4m5)
-    [rh0, rrst2, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['RST'][0],
-                                           pdict_m5m6[isl.name]['RST'][0],
-                                           pdict_m5m6[ickg.name]['RST'][0][0]+6, rg_m4m5)
+    #[rh0, rrst2, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
+    #                                       pdict_m5m6[ickg.name]['RST'][0],
+    #                                       pdict_m5m6[isl.name]['RST'][0],
+    #                                       pdict_m5m6[ickg.name]['RST'][0][0]+6, rg_m4m5)
     # ckg to fsm
     [rh0, rrst0, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                            pdict_m5m6[ickg.name]['RST'][0],
@@ -303,10 +303,10 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                                            pdict_m5m6[ickg.name]['RST'][0],
                                            pdict_m5m6[ifsm.name]['RST'][0],
                                            pdict_m5m6[ickg.name]['RST'][0][0]+4, rg_m4m5)
-    [rh0, rrst2, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['RST'][0],
-                                           pdict_m5m6[ifsm.name]['RST'][0],
-                                           pdict_m5m6[ickg.name]['RST'][0][0]+6, rg_m4m5)
+    #[rh0, rrst2, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
+    #                                       pdict_m5m6[ickg.name]['RST'][0],
+    #                                       pdict_m5m6[ifsm.name]['RST'][0],
+    #                                       pdict_m5m6[ickg.name]['RST'][0][0]+6, rg_m4m5)
     # ckg to ret
     [rh0, rrst0, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                            pdict_m5m6[ickg.name]['RST'][0],
@@ -316,10 +316,10 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                                            pdict_m5m6[ickg.name]['RST'][0],
                                            pdict_m5m6[iret.name]['CLK'][0],
                                            pdict_m5m6[ickg.name]['RST'][0][0]+4, rg_m4m5)
-    [rh0, rrst2, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['RST'][0],
-                                           pdict_m5m6[iret.name]['CLK'][0],
-                                           pdict_m5m6[ickg.name]['RST'][0][0]+6, rg_m4m5)
+    #[rh0, rrst2, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
+    #                                       pdict_m5m6[ickg.name]['RST'][0],
+    #                                       pdict_m5m6[iret.name]['CLK'][0],
+    #                                       pdict_m5m6[ickg.name]['RST'][0][0]+6, rg_m4m5)
     # rst output to final retimer
     rrstout0 = laygen.route(None, laygen.layers['metal'][5],
                             xy0=pdict_m5m6[iret.name]['CLKO0'][0],
@@ -333,7 +333,7 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     # clk input 
     laygen.create_boundary_pin_from_rect(rrst0, rg_m5m6, 'RST0', laygen.layers['pin'][5], size=6, direction='top', netname='RST')
     laygen.create_boundary_pin_from_rect(rrst1, rg_m5m6, 'RST1' , laygen.layers['pin'][5], size=6, direction='top', netname='RST')
-    laygen.create_boundary_pin_from_rect(rrst2, rg_m5m6, 'RST2' , laygen.layers['pin'][5], size=6, direction='top', netname='RST')
+    #laygen.create_boundary_pin_from_rect(rrst2, rg_m5m6, 'RST2' , laygen.layers['pin'][5], size=6, direction='top', netname='RST')
 
     # sarclk signal route
     # ckgen to fsm
@@ -398,11 +398,11 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     for i in range(2):
         rh0, rclkdsel0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                          pdict_m4m5[ickg.name]['SEL<' + str(i) + '>'][0],
-                                         np.array([pdict_m4m5[ickg.name]['SEL<'+str(i)+'>'][1][0]+1+i+2, 0]), rg_m4m5)
+                                         np.array([pdict_m4m5[ickg.name]['SEL<'+str(i)+'>'][1][0]+1+i+2+2, 0]), rg_m4m5)
         laygen.create_boundary_pin_from_rect(rclkdsel0, rg_m4m5, 'CKDSEL0<' + str(i) + '>', laygen.layers['pin'][5], size=6,direction='bottom')
     rh0, rclkdsel1 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                      pdict_m4m5[ickg.name]['SEL<2>'][0],
-                                     np.array([pdict_m4m5[ickg.name]['SEL<2>'][1][0]+1+3+2, 0]), rg_m4m5)
+                                     np.array([pdict_m4m5[ickg.name]['SEL<2>'][1][0]+1+3+2+2, 0]), rg_m4m5)
     laygen.create_boundary_pin_from_rect(rclkdsel1, rg_m4m5, 'CKDSEL1<0>', laygen.layers['pin'][5], size=6,direction='bottom')
     #ckdsel dummy
     xy0 = laygen.get_rect_xy(name=rclkdsel0.name, gridname=rg_m4m5, sort=True)
@@ -423,7 +423,7 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
         if i%2==0: #even channel
             [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
                                                pdict_m5m6[isl.name]['RETO<'+str(i)+'>'][0],
-                                               pdict_m5m6[iret.name]['IN<'+str(i)+'>'][0], xyfsm[1]-int(i/2)*2, rg_m5m6)
+                                               pdict_m5m6[iret.name]['IN<'+str(i)+'>'][0], xyfsm[1]-int(i/2)*2+4, rg_m5m6)
         else:
             [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
                                                pdict_m5m6[isl.name]['RETO<'+str(i)+'>'][0],
@@ -533,9 +533,9 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     rvdd_m6=[]
     rvss_m6=[]
     #inst_reference=[isp[0], isp[1], iret,ifsm,isl]
-    inst_reference=[iret,ifsm,isl]
-    inst_reference_offset0=[0, 1, 0]
-    inst_reference_offset1=[4, 4, 6]
+    inst_reference=[ifsm,isl]
+    inst_reference_offset0=[2, 0]
+    inst_reference_offset1=[4, 6]
     #num_route=[10,10]
     num_route=[]
     for i, inst in enumerate(inst_reference):

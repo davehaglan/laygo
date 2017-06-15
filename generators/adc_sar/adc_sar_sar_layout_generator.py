@@ -150,8 +150,8 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
                                        pdict_m5m6[iabe.name]['RST0'][0], np.array([x0+3, y0 + 6*num_bits+3-3+8]), rg_m5m6)
     [rv0, rclk1] = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6],
                                        pdict_m5m6[iabe.name]['RST1'][0], np.array([x0+3, y0 + 6*num_bits+5-3+8]), rg_m5m6)
-    [rv0, rclk2] = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6],
-                                       pdict_m5m6[iabe.name]['RST2'][0], np.array([x0+3, y0 + 6*num_bits+7-3+8]), rg_m5m6)
+    #[rv0, rclk2] = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6],
+    #                                   pdict_m5m6[iabe.name]['RST2'][0], np.array([x0+3, y0 + 6*num_bits+7-3+8]), rg_m5m6)
     #[rv0, rclk0] = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6],
     #                                   pdict_m5m6[iabe.name]['RST0'][0], np.array([pdict_m5m6[iafe.name]['CLKB'][0][0]-5, y0 + 6*num_bits+7]), rg_m5m6)
     #[rv0, rclk1] = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6],
@@ -218,7 +218,7 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
     #laygen.pin(name='CLK', layer=laygen.layers['pin'][5], xy=laygen.get_rect_xy(rclk0.name, gridname=rg_m5m6), gridname=rg_m5m6)
     laygen.create_boundary_pin_from_rect(rclk0, rg_m5m6, 'CLK0', laygen.layers['pin'][6], size=6, direction='right', netname='CLK')
     laygen.create_boundary_pin_from_rect(rclk1, rg_m5m6, 'CLK1', laygen.layers['pin'][6], size=6, direction='right', netname='CLK')
-    laygen.create_boundary_pin_from_rect(rclk2, rg_m5m6, 'CLK2', laygen.layers['pin'][6], size=6, direction='right', netname='CLK')
+    #laygen.create_boundary_pin_from_rect(rclk2, rg_m5m6, 'CLK2', laygen.layers['pin'][6], size=6, direction='right', netname='CLK')
     laygen.pin(name='CLKOUT0', layer=laygen.layers['pin'][5], xy=pdict_m5m6[iabe.name]['RSTOUT0'], gridname=rg_m5m6, netname='CLKOUT')
     laygen.pin(name='CLKOUT1', layer=laygen.layers['pin'][5], xy=pdict_m5m6[iabe.name]['RSTOUT1'], gridname=rg_m5m6, netname='CLKOUT')
     #laygen.pin(name='CLKOUT2', layer=laygen.layers['pin'][5], xy=pdict_m5m6[iabe.name]['RSTOUT2'], gridname=rg_m5m6, netname='CLKOUT')
