@@ -199,8 +199,25 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
             devname_bnd_right += ['pmos4_fast_right', 'nmos4_fast_right']
             transform_bnd_left += ['R0', 'MX']
             transform_bnd_right += ['R0', 'MX']
-    # space insertion if number of rows is odd
-    if not ysl % 2 == 0:
+    # space insertion 2 if number of rows is even, 1 if odd
+    if ysl % 2 == 0:
+        isp.append(laygen.relplace(name="I" + objectname_pfix + 'SP' + str(len(isp)), templatename=space_name,
+                                   gridname=pg, refinstname=refi, direction='top', transform='R0',
+                                   template_libname=workinglib))
+        refi = isp[-1].name
+        devname_bnd_left += ['nmos4_fast_left', 'pmos4_fast_left']
+        devname_bnd_right += ['nmos4_fast_right', 'pmos4_fast_right']
+        transform_bnd_left += ['R0', 'MX']
+        transform_bnd_right += ['R0', 'MX']
+        isp.append(laygen.relplace(name="I" + objectname_pfix + 'SP' + str(len(isp)), templatename=space_name,
+                                   gridname=pg, refinstname=refi, direction='top', transform='MX',
+                                   template_libname=workinglib))
+        refi = isp[-1].name
+        devname_bnd_left += ['pmos4_fast_left', 'nmos4_fast_left']
+        devname_bnd_right += ['pmos4_fast_right', 'nmos4_fast_right']
+        transform_bnd_left += ['R0', 'MX']
+        transform_bnd_right += ['R0', 'MX']
+    else:
         isp.append(laygen.relplace(name="I" + objectname_pfix + 'SP' + str(len(isp)), templatename=space_name,
                                    gridname=pg, refinstname=refi, direction='top', transform='MX',
                                    template_libname=workinglib))
@@ -376,7 +393,7 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     #                                 pdict_m4m5[isl.name]['ZMID<5>'][0], rg_m4m5)
     rh0, rv0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                      pdict_m4m5[ickg.name]['SHORTB'][0],
-                                     pdict_m4m5[isl.name]['ZMID<6>'][0], rg_m4m5)
+                                     pdict_m4m5[isl.name]['ZMID<'+str(max(0, num_bits-3))+'>'][0], rg_m4m5)
     # ckdsel
     for i in range(2):
         rh0, rclkdsel0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
@@ -398,7 +415,8 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     # extclk, extsel_clk
     rh0, rextsel_clk0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                     pdict_m4m5[ickg.name]['EXTSEL_CLK'][0],
-                                    np.array([x0+13+3, 0]), rg_m4m5)
+                                    np.array([x0-2, 0]), rg_m4m5)
+                                    #np.array([x0+13+3, 0]), rg_m4m5)
     laygen.create_boundary_pin_from_rect(rextsel_clk0, rg_m4m5, 'EXTSEL_CLK', laygen.layers['pin'][5], size=6, direction='bottom')
     # fsm to ret (data)
     for i in range(num_bits):
@@ -517,7 +535,7 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     #inst_reference=[isp[0], isp[1], iret,ifsm,isl]
     inst_reference=[iret,ifsm,isl]
     inst_reference_offset0=[0, 1, 0]
-    inst_reference_offset1=[1, 4, 6]
+    inst_reference_offset1=[4, 4, 6]
     #num_route=[10,10]
     num_route=[]
     for i, inst in enumerate(inst_reference):

@@ -16,7 +16,7 @@ params = dict(
     nw=4,
     m=2,
     fo=2,
-    #num_bit=9,
+    num_bits=9,
     device_intent='fast',
     )
 load_from_file=True

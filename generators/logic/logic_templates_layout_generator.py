@@ -3527,6 +3527,19 @@ if __name__ == '__main__':
                  )
     laygen.add_template_from_cell()
 
+    laygen.add_cell('inv_6x')
+    laygen.sel_cell('inv_6x')
+    generate_inv(laygen, objectname_pfix='INV0',
+                 placement_grid=pg, routing_grid_m1m2=rg_m1m2, routing_grid_m2m3=rg_m2m3, routing_grid_m1m2_pin=rg_m1m2_pin,
+                 routing_grid_m2m3_pin=rg_m2m3_pin,
+                 devname_nmos_boundary='nmos4_fast_boundary',
+                 devname_nmos_body='nmos4_fast_center_nf2',
+                 devname_pmos_boundary='pmos4_fast_boundary',
+                 devname_pmos_body='pmos4_fast_center_nf2',
+                 m=6, create_pin=True
+                 )
+    laygen.add_template_from_cell()
+
     laygen.add_cell('inv_8x')
     laygen.sel_cell('inv_8x')
     generate_inv(laygen, objectname_pfix='INV0',
@@ -3537,6 +3550,19 @@ if __name__ == '__main__':
                  devname_pmos_boundary='pmos4_fast_boundary',
                  devname_pmos_body='pmos4_fast_center_nf2',
                  m=8, create_pin=True
+                 )
+    laygen.add_template_from_cell()
+
+    laygen.add_cell('inv_10x')
+    laygen.sel_cell('inv_10x')
+    generate_inv(laygen, objectname_pfix='INV0',
+                 placement_grid=pg, routing_grid_m1m2=rg_m1m2, routing_grid_m2m3=rg_m2m3, routing_grid_m1m2_pin=rg_m1m2_pin,
+                 routing_grid_m2m3_pin=rg_m2m3_pin,
+                 devname_nmos_boundary='nmos4_fast_boundary',
+                 devname_nmos_body='nmos4_fast_center_nf2',
+                 devname_pmos_boundary='pmos4_fast_boundary',
+                 devname_pmos_body='pmos4_fast_center_nf2',
+                 m=10, create_pin=True
                  )
     laygen.add_template_from_cell()
 
@@ -4141,7 +4167,7 @@ if __name__ == '__main__':
                  'dcap2_4x', 'dcap2_8x',
                  'dcap3_8x',
                  'bcap2_8x',
-                 'inv_1x', 'inv_2x', 'inv_4x', 'inv_8x', 'inv_16x', 'inv_24x', 'inv_32x',
+                 'inv_1x', 'inv_2x', 'inv_4x', 'inv_6x', 'inv_8x', 'inv_10x', 'inv_16x', 'inv_24x', 'inv_32x',
                  'tgate_2x', 'tgate_4x', 'tgate_8x',
                  'nsw_2x', 'nsw_4x', 'nsw_8x', 'nsw_12x', 'nsw_16x',
                  'nsw_wovdd_2x', 'nsw_wovdd_4x', 'nsw_wovdd_8x', 'nsw_wovdd_12x', 'nsw_wovdd_16x',

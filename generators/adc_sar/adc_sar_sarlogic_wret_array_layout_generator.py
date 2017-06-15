@@ -516,6 +516,7 @@ if __name__ == '__main__':
     #laygen.templates.display()
     #laygen.save_template(filename=workinglib+'_templates.yaml', libname=workinglib)
 
+    num_bits=9
     cellname_v2='sarlogic_wret_v2_array'
     #load from preset
     load_from_file=True
@@ -526,6 +527,7 @@ if __name__ == '__main__':
             specdict = yaml.load(stream)
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
+        num_bits=specdict['n_bit']
 
     cellname=cellname_v2
     print(cellname+" generating")
@@ -537,7 +539,7 @@ if __name__ == '__main__':
     laygen.sel_cell(cellname)
     generate_sarlogic_wret_v2_array(laygen, objectname_pfix='CA0', templib_logic=logictemplib, 
                             placement_grid=pg, routing_grid_m2m3=rg_m2m3, routing_grid_m3m4=rg_m3m4,
-                            routing_grid_m4m5=rg_m4m5, num_bits=9, num_bits_row=2, m_space_4x=0, m_space_2x=0,
+                            routing_grid_m4m5=rg_m4m5, num_bits=num_bits, num_bits_row=2, m_space_4x=0, m_space_2x=0,
                             m_space_1x=0, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
     # 2. calculate spacing param and regenerate
@@ -552,7 +554,7 @@ if __name__ == '__main__':
     laygen.sel_cell(cellname)
     generate_sarlogic_wret_v2_array(laygen, objectname_pfix='CA0', templib_logic=logictemplib,
                             placement_grid=pg, routing_grid_m2m3=rg_m2m3, routing_grid_m3m4=rg_m3m4,
-                            routing_grid_m4m5=rg_m4m5, num_bits=9, num_bits_row=2, m_space_4x=m_space_4x,
+                            routing_grid_m4m5=rg_m4m5, num_bits=num_bits, num_bits_row=2, m_space_4x=m_space_4x,
                             m_space_2x=m_space_2x, m_space_1x=m_space_1x, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 
