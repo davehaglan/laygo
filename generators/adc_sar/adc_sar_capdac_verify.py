@@ -10,7 +10,6 @@ import yaml
 import matplotlib.pyplot as plt
 
 lib_name = 'adc_sar_templates'
-#cell_name = 'capdac_8b'
 cell_name = 'capdac'
 impl_lib = 'adc_sar_generated'
 tb_lib = 'adc_sar_testbenches'
@@ -69,7 +68,7 @@ if verify_tran==True:
         tb.set_simulation_view(impl_lib, cell_name, 'calibre')
 
     tb.update_testbench()
-
+    '''
     print('running simulation')
     tb.run_simulation()
 
@@ -103,3 +102,4 @@ if verify_tran==True:
     plt.grid()
     plt.xlabel('code')
     plt.ylabel('v') 
+    '''

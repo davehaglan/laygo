@@ -193,6 +193,8 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     x1 = laygen.get_inst_xy(icdacr.name, rg_m5m6)[0] + 8
     nrin_sa = 4  # number of M6 horizontal route stacks for cdac to sa
     nrin = 2**num_bits_vertical - 2*nrin_sa # number of M6 horizontal route stacks
+    if nrin<1: 
+        nrin = 2**num_bits_vertical - nrin_sa
     rinp=[]
     rinm=[]
     for i in range(nrin):
