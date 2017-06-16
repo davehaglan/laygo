@@ -248,11 +248,16 @@ def generate_grids_from_xy(laygen, gridname_input, gridname_output, xy, xy_grid_
     #copy original database
     gi=laygen.get_grid(gridname_input)
     bnd=deepcopy(gi.xy)
-    xgrid = deepcopy(gi.get_xgrid())
-    ygrid = deepcopy(gi.get_ygrid())
-    xwidth = deepcopy(gi.get_xwidth())
-    ywidth = deepcopy(gi.get_ywidth())
-    _viamap = gi.get_viamap()
+    #xgrid = deepcopy(gi.get_xgrid())
+    #ygrid = deepcopy(gi.get_ygrid())
+    #xwidth = deepcopy(gi.get_xwidth())
+    #ywidth = deepcopy(gi.get_ywidth())
+    #_viamap = gi.get_viamap()
+    xgrid = deepcopy(gi.xgrid)
+    ygrid = deepcopy(gi.ygrid)
+    xwidth = deepcopy(gi.xwidth)
+    ywidth = deepcopy(gi.ywidth)
+    _viamap = gi.viamap
     vianame = list(_viamap.keys())[0] #just pickig one via; should be fixed
     #figure out routing direction
     if xy_grid_type==None:
