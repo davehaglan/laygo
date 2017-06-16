@@ -21,7 +21,7 @@ tb_noise_cell = 'salatch_pmos_tb_trannoise'
 cload=10e-15
 vamp_tran=1e-3
 vamp_noise=1e-3
-m_list=[8]
+m_list=[8, 12, 16, 20, 24]
 for _m in m_list:
     params = dict(
         lch=16e-9,
@@ -31,7 +31,7 @@ for _m in m_list:
         device_intent='fast',
         )
     verify = True
-    verify_noise = True
+    verify_noise = False
 
     print('creating BAG project')
     prj = bag.BagProject()

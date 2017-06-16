@@ -10,6 +10,7 @@ def execfile(filepath, globals=None, locals=None):
         exec(compile(file.read(), filepath, 'exec'), globals, locals)
 
 files=[
+    #'laygo/generators/adc_sar/adc_sar_dsn_system.py',
     'laygo/generators/adc_sar/adc_sar_capdac_layout_generator.py',
     'laygo/generators/adc_sar/adc_sar_salatch_pmos_layout_generator.py',
     'laygo/generators/adc_sar/adc_sar_capdrv_nsw_layout_generator.py',

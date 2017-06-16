@@ -21,10 +21,10 @@ vamp_tran=1e-3
 vamp_noise=1e-3
 
 load_from_file=True
-verify_lvs = True
-extracted = True
+verify_lvs = False
+extracted = False
 verify_tran = True
-verify_noise = True
+verify_noise = False
 
 yamlfile_spec="adc_sar_spec.yaml"
 yamlfile_spec_output="adc_sar_spec_output.yaml"
