@@ -293,7 +293,7 @@ class LayoutDB():
         return t
 
     def add_inst(self, name, libname, cellname, xy=np.array([0, 0]), shape=np.array([1, 1]), spacing=np.array([0, 0]),
-                 transform='R0', template=None):
+                 transform='R0', template=None, xy1=None, pins=None):
         """
         Add an instance to the specified library and cell (_plib, _pstr)
 

@@ -206,7 +206,7 @@ class BaseLayoutGenerator():
         return self.db.add_text(name, text, xy, layer)
 
     def add_inst(self, name, libname, cellname, xy=None, shape=np.array([1, 1]), spacing=np.array([0, 0]),
-                 transform='R0', template=None):
+                 transform='R0', template=None, xy1=None, pins=None):
         """
         Add an instance to specified coordinate.
 
@@ -218,7 +218,7 @@ class BaseLayoutGenerator():
             cell library name (not output library name)
         cellname : str
             cellname
-        xy : [float, float]
+        xy : np.array([float, float])
             xy coordinate
         shape : np.array([x0, y0])
             array shape parameter

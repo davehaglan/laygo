@@ -44,6 +44,7 @@ __status__ = "Prototype"
 from .BaseLayoutGenerator import *
 from .TemplateDB import *
 from .GridDB import *
+import _PrimitiveUtil as ut
 import numpy as np 
 import logging
 
@@ -116,16 +117,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         np.array([[int, int], [int, int]])
             transform matrix
         """
-        if transform=='R0':
-            return np.array([[1, 0], [0, 1]])
-        if transform=='MX':
-            return np.array([[1, 0], [0, -1]])
-        if transform=='MY':
-            return np.array([[-1, 0], [0, 1]])
-        if transform=='MXY': #mirror to y=x line
-            return np.array([[0, 1], [1, 0]])
-        if transform=='R180':
-            return np.array([[-1, 0], [0, -1]])
+        return ut.Mt(transform)
 
     def Md(self, direction):
         """
@@ -141,20 +133,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         np.array([[int, int], [int, int]])
             directional matrix
         """
-        if direction== 'left':
-            return np.array([[-1, 0], [0, 0]])
-        if direction== 'right':
-            return np.array([[1, 0], [0, 0]])
-        if direction== 'top':
-            return np.array([[0, 0], [0, 1]])
-        if direction== 'bottom':
-            return np.array([[0, 0], [0, -1]])
-        if direction== 'omni':
-            return np.array([[1, 0], [0, 1]])
-        if direction== 'x':
-            return np.array([[1, 0], [0, 0]])
-        if direction== 'y':
-            return np.array([[0, 0], [0, 1]])
+        return ut.Md(direction)
 
     def sort_rect_xy(self, xy):
         """

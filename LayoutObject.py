@@ -32,6 +32,8 @@ __email__ = "jdhan@eecs.berkeley.edu"
 __status__ = "Prototype"
 
 import numpy as np
+import _PrimitiveUtil as ut
+import copy
 #from math import log10
 #import logging
 
@@ -42,11 +44,11 @@ class LayoutObject():
     res = 0.005
     """float: Physical grid resolution"""
     _xy = np.array([0, 0])
-    """[float, float]: Object location"""
+    """np.array([float, float]): Object location"""
     def get_xy(self): return self._xy
     def set_xy(self, value): self._xy = self.trim(np.asarray(value))
     xy = property(get_xy, set_xy)
-    """[float, float]: Object location"""
+    """np.array([float, float]): Object location"""
 
     def __init__(self, name, res, xy):
         """
@@ -94,16 +96,24 @@ class Rect(LayoutObject):
     """[str, str]: Rect layer"""
     netname=None
     """str: net name"""
+    def get_xy0(self): return self.xy[0]
+    def set_xy0(self, value): self.xy[0] = self.trim(np.asarray(value))
+    xy0 = property(get_xy0, set_xy0)
+    """np.array([float, float]): lowerLeft coordinate of Rect"""
+    def get_xy1(self): return self.xy[1]
+    def set_xy1(self, value): self.xy[1] = self.trim(np.asarray(value))
+    xy1 = property(get_xy1, set_xy1)
+    """np.array([float, float]): upperRight coordinate of Rect"""
 
     @property
     def height(self):
         """float: height of Rect"""
-        return abs(self.xy[0][1]-self.xy[1][1])
+        return abs(self.xy0[1]-self.xy1[1])
 
     @property
     def width(self):
         """float: width of Rect"""
-        return abs(self.xy[0][0]-self.xy[1][0])
+        return abs(self.xy0[0]-self.xy1[0])
 
     @property
     def size(self):
@@ -113,12 +123,12 @@ class Rect(LayoutObject):
     @property
     def cx(self):
         """float: x-center of Rect"""
-        return 0.5*(self.xy[0][0]+self.xy[1][0])
+        return 0.5*(self.xy0[0]+self.xy1[0])
 
     @property
     def cy(self):
         """float: y-center of Rect"""
-        return 0.5*(self.xy[0][1]+self.xy[1][1])
+        return 0.5*(self.xy0[1]+self.xy1[1])
 
     @property
     def center(self):
@@ -230,16 +240,30 @@ class Instance(LayoutObject):
     shape = np.array([1, 1])
     """np.array([int, int]): array shape"""
     _spacing = np.array([0, 0])
-    """Array spacing (actually this is a pitch, but I just GDS's notations)"""
+    """Array spacing (actually this is a pitch, but I just followed GDS's notations)"""
     def get_spacing(self): return self._spacing
     def set_spacing(self, value): self._spacing = self.trim(np.asarray(value))
     spacing = property(get_spacing, set_spacing)
-    """Array spacing (actually this is a pitch, but I just GDS's notations)"""
+    """Array spacing (actually this is a pitch, but I just followed GDS's notations)"""
     transform='R0'
     """str: transform parameter"""
     template=None
     """str: original template name"""
-
+    @property
+    def pins(self): 
+        return self.template.pins #this should be updated to be something like xy_inst+Mt*xy_pins
+    """dict(): Pin dict"""
+    @property
+    def xy0(self): 
+        return self.xy
+    """np.array([float, float]): Object location"""
+    @property
+    def xy1(self):
+        if self.template is None:
+            return self.xy
+        else: 
+            return self.xy+np.dot(self.template.xy[1], ut.Mt(self.transform).T)
+    """np.array([float, float]): the opposite corner of xy (or xy0)"""
     @property
     def bbox(self):
         """[[float, float], [float, float]]: instance bounding box in physical coordinate"""
@@ -264,7 +288,6 @@ class Instance(LayoutObject):
                 orgn = i.xy + t.xy[0] * np.array([-1, -1])
                 return np.vstack((orgn + t.size * np.array([-1, -1]) * i.shape, orgn))
         return np.array([i.xy, i.xy])
-
 
     def __init__(self, name, res, xy, libname, cellname, shape=np.array([1, 1]), spacing=np.array([0, 0]),
                  transform='R0', template=None):

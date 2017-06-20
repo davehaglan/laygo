@@ -27,9 +27,9 @@ files=[
     'laygo/generators/adc_sar/adc_sar_sarabe_dualdelay_layout_generator.py',
     'laygo/generators/adc_sar/adc_sar_sar_layout_generator.py',
     'laygo/generators/adc_sar/sampler_nmos_layout_generator.py',
-    'laygo/generators/adc_sar/adc_sar_wsamp_schematic_generator.py',
-    'laygo/generators/adc_sar/adc_sar_wsamp_layout_generator.py',
-    'laygo/generators/adc_sar/adc_sar_wsamp_lvs.py',
+    'laygo/generators/adc_sar/adc_sar_sar_wsamp_schematic_generator.py',
+    'laygo/generators/adc_sar/adc_sar_sar_wsamp_layout_generator.py',
+    'laygo/generators/adc_sar/adc_sar_sar_wsamp_lvs.py',
     ]
 
 for f in files:
