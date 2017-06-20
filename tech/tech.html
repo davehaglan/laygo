@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>laygo setup for new technologies &mdash; laygo_documentation 1.0 documentation</title>
+  <title>Laygo setup for new technologies &mdash; laygo_documentation 1.0 documentation</title>
   
 
   
@@ -100,18 +100,18 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture/architecture.html">Architecture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../example/logic.html">Generator example - logic family</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../example/logic.html">Generator example - CMOS logic family</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../example/logic.html#install-and-launch">Install and launch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example/logic.html#supported-logic-gate-types">Supported logic gate types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example/logic.html#schematic-templates">Schematic templates</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../example/serdes.html">Generator example - serdes</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../example/serdes.html">Generator example - CMOS serdes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../example/serdes.html#install-and-launch">Install and launch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example/serdes.html#parameterizations">Parameterizations</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../example/tisar.html">Generator example - TISAR ADC (to be updated)</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../example/tisar.html">Generator example - TISAR ADC</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#installation">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#setting-up-parameters">Setting up parameters</a></li>
@@ -123,10 +123,18 @@
 <li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#retimer">Retimer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#bias">Bias</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#top">Top</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#full-stack-generation-scripts">Full-stack generation scripts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#contributors">Contributors</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Technology setup guidelines (to be updated)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Technology setup guidelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-setup-files">Example setup files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#laygo-config-yaml">laygo_config.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tech-lib-layermap-optional">(tech_lib).layermap (optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#template-library">template library</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../api/laygo.html">laygo package</a></li>
 </ul>
@@ -155,7 +163,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-    <li>laygo setup for new technologies</li>
+    <li>Laygo setup for new technologies</li>
       <li class="wy-breadcrumbs-aside">
         
           <a href="../_sources/tech/tech.txt" rel="nofollow"> View page source</a>
@@ -167,7 +175,213 @@
           <div role="main" class="document">
             
   <div class="section" id="laygo-setup-for-new-technologies">
-<span id="laygo-setup-for-new-technologies"></span><h1>laygo setup for new technologies<a class="headerlink" href="#laygo-setup-for-new-technologies" title="Permalink to this headline">¶</a></h1>
+<span id="laygo-setup-for-new-technologies"></span><h1>Laygo setup for new technologies<a class="headerlink" href="#laygo-setup-for-new-technologies" title="Permalink to this headline">¶</a></h1>
+<p>This section describes how to make a laygo setup for the technology in
+use. This document is assuming BAG is already set up for the technology
+(at least for schematic generations), but no laygo setup is created.
+This document helps users to prepare technology dependent setup files
+and template libraries.</p>
+<div class="section" id="overview">
+<span id="overview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="example-setup-files">
+<span id="example-setup-files"></span><h2>Example setup files<a class="headerlink" href="#example-setup-files" title="Permalink to this headline">¶</a></h2>
+<p>Instead of starting from scratch, example setups for generic
+technologies are provided. You can get files in the following repos.</p>
+</div>
+<div class="section" id="laygo-config-yaml">
+<span id="laygo-config-yaml"></span><h2>laygo_config.yaml<a class="headerlink" href="#laygo-config-yaml" title="Permalink to this headline">¶</a></h2>
+<p>The only technology file to be described by users is
+<strong>laygo_config.yaml</strong>. It defines basic technology dependent information
+(i.e. layer names for route layers). Here&#8217;s a example
+<strong>laygo_config.yaml</strong> for <strong>cds_ff_mpt</strong> technology (Cadence generic PDK
+for finfet and multiple patterning technology).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#default_laygo_config file</span>
+<span class="n">metal_layers</span><span class="p">:</span> <span class="c1">#metal layers</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M0</span><span class="p">,</span> <span class="n">donotuse</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M1</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M2</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M3</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M4</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M5</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M6</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M7</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M8</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M9</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="n">via_layers</span><span class="p">:</span> <span class="c1">#via layers</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">V0</span><span class="p">,</span> <span class="n">donotuse</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">V1</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">V2</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">V3</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">V4</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">V5</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">V6</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">V7</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">V8</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="n">pin_layers</span><span class="p">:</span> <span class="c1">#pin layers</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">text</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M1</span><span class="p">,</span> <span class="n">pin</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M2</span><span class="p">,</span> <span class="n">pin</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M3</span><span class="p">,</span> <span class="n">pin</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M4</span><span class="p">,</span> <span class="n">pin</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M5</span><span class="p">,</span> <span class="n">pin</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M6</span><span class="p">,</span> <span class="n">pin</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M7</span><span class="p">,</span> <span class="n">pin</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M8</span><span class="p">,</span> <span class="n">pin</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="n">M9</span><span class="p">,</span> <span class="n">pin</span><span class="p">]</span>
+<span class="n">prboundary_layer</span><span class="p">:</span> <span class="p">[</span><span class="n">prBoundary</span><span class="p">,</span> <span class="n">boundary</span><span class="p">]</span> <span class="c1">#boundary layer</span>
+<span class="n">tech_lib</span><span class="p">:</span> <span class="n">cds_ff_mpt</span>
+<span class="n">text_layer</span><span class="p">:</span> <span class="p">[</span><span class="n">text</span><span class="p">,</span> <span class="n">drawing</span><span class="p">]</span>
+<span class="n">physical_resolution</span><span class="p">:</span> <span class="mf">0.001</span>
+</pre></div>
+</div>
+<p>Here&#8217;s description on items.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="o">**</span><span class="n">metal_layers</span><span class="o">**</span> <span class="p">(</span><span class="nb">list</span><span class="p">):</span> <span class="n">contains</span> <span class="p">[</span><span class="o">*</span><span class="n">layername</span><span class="o">*</span><span class="p">,</span> <span class="o">*</span><span class="n">layerpurpose</span><span class="o">*</span><span class="p">]</span>
+ <span class="n">of</span> <span class="n">metal</span> <span class="n">layers</span> <span class="n">to</span> <span class="n">be</span> <span class="n">used</span> <span class="k">for</span> <span class="n">routing</span><span class="p">,</span> <span class="n">starting</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">bottom</span>
+ <span class="n">layer</span> <span class="n">to</span> <span class="n">the</span> <span class="n">top</span> <span class="n">layer</span><span class="o">.</span>
+<span class="o">*</span> <span class="o">**</span><span class="n">via_layers</span><span class="o">**</span> <span class="p">(</span><span class="nb">list</span><span class="p">):</span> <span class="n">contains</span> <span class="p">[</span><span class="o">*</span><span class="n">layername</span><span class="o">*</span><span class="p">,</span> <span class="o">*</span><span class="n">layerpurpose</span><span class="o">*</span><span class="p">]</span>
+ <span class="n">of</span> <span class="n">via</span> <span class="n">layers</span> <span class="n">to</span> <span class="n">be</span> <span class="n">used</span> <span class="k">for</span> <span class="n">routing</span><span class="p">,</span> <span class="n">starting</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">bottom</span>
+ <span class="n">layer</span> <span class="n">to</span> <span class="n">the</span> <span class="n">top</span> <span class="n">layer</span><span class="o">.</span>
+<span class="o">*</span> <span class="o">**</span><span class="n">pin_layers</span><span class="o">**</span> <span class="p">(</span><span class="nb">list</span><span class="p">):</span> <span class="n">contains</span> <span class="p">[</span><span class="o">*</span><span class="n">layername</span><span class="o">*</span><span class="p">,</span> <span class="o">*</span><span class="n">layerpurpose</span><span class="o">*</span><span class="p">]</span>
+ <span class="n">of</span> <span class="n">pin</span> <span class="n">layers</span> <span class="n">to</span> <span class="n">be</span> <span class="n">used</span> <span class="k">for</span> <span class="n">routing</span><span class="p">,</span> <span class="n">starting</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">bottom</span>
+ <span class="n">layer</span> <span class="n">to</span> <span class="n">the</span> <span class="n">top</span> <span class="n">layer</span><span class="o">.</span>
+<span class="o">*</span> <span class="o">**</span><span class="n">prboundary_layer</span><span class="o">**</span> <span class="p">(</span><span class="nb">list</span><span class="p">):</span> <span class="n">contains</span> <span class="p">[</span><span class="o">*</span><span class="n">layername</span><span class="o">*</span><span class="p">,</span> <span class="o">*</span><span class="n">layerpurpose</span><span class="o">*</span><span class="p">]</span>
+ <span class="n">of</span> <span class="n">the</span> <span class="n">prBoundary</span> <span class="n">layer</span> <span class="k">for</span> <span class="n">placement</span><span class="o">.</span>
+<span class="o">*</span> <span class="o">**</span><span class="n">tech_lib</span><span class="o">**</span> <span class="p">(</span><span class="nb">str</span><span class="p">):</span> <span class="n">name</span> <span class="n">of</span> <span class="n">technology</span><span class="o">.</span>
+<span class="o">*</span> <span class="o">**</span><span class="n">text_layers</span><span class="o">**</span> <span class="p">(</span><span class="nb">list</span><span class="p">):</span> <span class="n">contains</span> <span class="p">[</span><span class="o">*</span><span class="n">layername</span><span class="o">*</span><span class="p">,</span> <span class="o">*</span><span class="n">layerpurpose</span><span class="o">*</span><span class="p">]</span>
+ <span class="n">of</span> <span class="n">the</span> <span class="n">text</span> <span class="n">layer</span> <span class="k">for</span> <span class="n">annotations</span><span class="o">.</span>
+<span class="o">*</span> <span class="o">**</span><span class="n">physical_resolution</span><span class="o">**</span> <span class="p">(</span><span class="nb">float</span><span class="p">):</span> <span class="n">minimum</span> <span class="n">layout</span> <span class="n">grid</span> <span class="n">resolution</span> <span class="ow">in</span>
+<span class="n">micron</span><span class="o">.</span> <span class="n">Most</span> <span class="n">advanced</span> <span class="n">nodes</span> <span class="n">have</span> <span class="n">grid</span> <span class="n">resolutions</span> <span class="n">ranging</span> <span class="kn">from</span> <span class="mf">0.01</span>
+<span class="n">to</span> <span class="mf">0.001</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>As you can see, all parameters are straightforward and can easily be
+filled up.</p>
+</div>
+<div class="section" id="tech-lib-layermap-optional">
+<span id="tech-lib-layermap-optional"></span><h2>(tech_lib).layermap (optional)<a class="headerlink" href="#tech-lib-layermap-optional" title="Permalink to this headline">¶</a></h2>
+<p>For <strong>GDS flow</strong>, a separate layermap file is needed to map the layer
+names to actual layer ids. Usually the layermap file is provided by
+Foundry and can be found in the PDK library (because the file is used
+to stream out a layout to a GDS file). Users can also try to make a
+layermap file by themselves. Here&#8217;s a example of the layermap file
+(numbers are not from any real/generic PDKs). For <strong>BAG flow</strong> this file
+is not needed.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#technology layer information for gds export</span>
+<span class="c1">#you may find this in the cadence techlib directory</span>
+<span class="c1">#layername layerpurpose stream# datatype</span>
+<span class="n">text</span>        <span class="n">drawing</span> <span class="mi">100</span> <span class="mi">0</span>
+<span class="n">prBoundary</span>  <span class="n">drawing</span> <span class="mi">101</span> <span class="mi">0</span>
+<span class="n">M1</span>          <span class="n">drawing</span> <span class="mi">1</span>   <span class="mi">0</span>
+<span class="n">M1</span>          <span class="n">pin</span>     <span class="mi">1</span>   <span class="mi">1</span>
+<span class="n">M2</span>          <span class="n">drawing</span> <span class="mi">2</span>   <span class="mi">0</span>
+<span class="n">M2</span>          <span class="n">pin</span>     <span class="mi">2</span>   <span class="mi">1</span>
+<span class="n">M3</span>          <span class="n">drawing</span> <span class="mi">3</span>   <span class="mi">0</span>
+<span class="n">M3</span>          <span class="n">pin</span>     <span class="mi">3</span>   <span class="mi">1</span>
+<span class="n">M4</span>          <span class="n">drawing</span> <span class="mi">4</span>   <span class="mi">0</span>
+<span class="n">M4</span>          <span class="n">pin</span>     <span class="mi">4</span>   <span class="mi">1</span>
+<span class="n">M5</span>          <span class="n">drawing</span> <span class="mi">5</span>   <span class="mi">0</span>
+<span class="n">M5</span>          <span class="n">pin</span>     <span class="mi">5</span>   <span class="mi">1</span>
+<span class="n">M6</span>          <span class="n">drawing</span> <span class="mi">6</span>   <span class="mi">0</span>
+<span class="n">M6</span>          <span class="n">pin</span>     <span class="mi">6</span>   <span class="mi">1</span>
+<span class="n">M7</span>          <span class="n">drawing</span> <span class="mi">7</span>   <span class="mi">0</span>
+<span class="n">M7</span>          <span class="n">pin</span>     <span class="mi">7</span>   <span class="mi">1</span>
+<span class="n">M8</span>          <span class="n">drawing</span> <span class="mi">8</span>   <span class="mi">0</span>
+<span class="n">M8</span>          <span class="n">pin</span>     <span class="mi">8</span>   <span class="mi">1</span>
+<span class="n">M9</span>          <span class="n">drawing</span> <span class="mi">9</span>   <span class="mi">0</span>
+<span class="n">M9</span>          <span class="n">pin</span>     <span class="mi">9</span>   <span class="mi">1</span>
+<span class="n">VIA1</span>        <span class="n">drawing</span> <span class="mi">11</span>   <span class="mi">0</span>
+<span class="n">VIA2</span>        <span class="n">drawing</span> <span class="mi">12</span>   <span class="mi">0</span>
+<span class="n">VIA3</span>        <span class="n">drawing</span> <span class="mi">13</span>   <span class="mi">0</span>
+<span class="n">VIA4</span>        <span class="n">drawing</span> <span class="mi">14</span>   <span class="mi">0</span>
+<span class="n">VIA5</span>        <span class="n">drawing</span> <span class="mi">15</span>   <span class="mi">0</span>
+<span class="n">VIA6</span>        <span class="n">drawing</span> <span class="mi">16</span>   <span class="mi">0</span>
+<span class="n">VIA7</span>        <span class="n">drawing</span> <span class="mi">17</span>   <span class="mi">0</span>
+<span class="n">VIA8</span>        <span class="n">drawing</span> <span class="mi">18</span>   <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="template-library">
+<span id="template-library"></span><h2>template library<a class="headerlink" href="#template-library" title="Permalink to this headline">¶</a></h2>
+<p>This is the most critical part for the setup. Laygo uses handcraft
+templates of primitive devices for layout generations, meaning that
+users need to build the template devices by themselves if not provided.
+Basically there are 4 different cells to be created.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mf">1.</span> <span class="n">Placement</span> <span class="n">grids</span><span class="p">:</span> <span class="n">defines</span> <span class="n">the</span> <span class="n">grid</span> <span class="n">resolutions</span> <span class="n">that</span> <span class="n">devices</span> <span class="n">will</span>
+ <span class="n">be</span> <span class="n">placed</span><span class="o">.</span> <span class="o">**</span><span class="n">prboundary_layer</span><span class="o">**</span> <span class="ow">is</span> <span class="n">used</span> <span class="k">for</span> <span class="n">setting</span> <span class="n">the</span> <span class="n">resolution</span><span class="o">.</span>
+<span class="mf">2.</span> <span class="n">Routing</span> <span class="n">grids</span><span class="p">:</span> <span class="n">defines</span> <span class="n">the</span> <span class="n">grid</span> <span class="n">resolutions</span> <span class="n">that</span> <span class="n">routing</span> <span class="n">wires</span>
+ <span class="ow">and</span> <span class="n">vias</span> <span class="n">will</span> <span class="n">be</span> <span class="n">placed</span><span class="o">.</span> <span class="n">Rects</span> <span class="k">with</span> <span class="o">**</span><span class="n">metal_layers</span><span class="o">**</span> <span class="n">are</span> <span class="n">used</span> <span class="n">to</span>
+ <span class="n">define</span> <span class="n">the</span> <span class="n">width</span> <span class="o">/</span> <span class="n">spacing</span> <span class="o">/</span> <span class="n">coordinate</span> <span class="n">of</span> <span class="n">the</span> <span class="n">routing</span> <span class="n">grid</span><span class="o">.</span>
+<span class="mf">3.</span> <span class="n">Device</span> <span class="n">template</span> <span class="n">cells</span><span class="p">:</span> <span class="n">templates</span> <span class="n">of</span> <span class="n">devices</span> <span class="n">will</span> <span class="n">be</span> <span class="n">placed</span> <span class="n">on</span> <span class="n">one</span>
+ <span class="n">of</span> <span class="n">the</span> <span class="n">placement</span> <span class="n">grids</span>
+<span class="mf">4.</span> <span class="n">Via</span> <span class="n">template</span> <span class="n">cells</span><span class="p">:</span> <span class="n">templates</span> <span class="n">of</span> <span class="n">vias</span> <span class="n">will</span> <span class="n">be</span> <span class="n">placed</span> <span class="n">on</span> <span class="n">one</span> <span class="n">of</span>
+ <span class="n">the</span> <span class="n">route</span> <span class="n">grids</span><span class="o">.</span>
+</pre></div>
+</div>
+<p><img alt="techex" src="../_images/tech_example.png" /></p>
+<p>Template and grid cell examples</p>
+<p><strong>Multiple placement grids / routing grids / devices / vias</strong> can be
+defined for same technology / layer / device type. For example, users
+can use 2 different types of grids (e.g thin and thick grids) for Metal1
+and Metal2. Or 2 different set of NMOS templates (short channel and
+long channel) can be defined. This gives a flexibility on generated
+layout while still abstracting design rules.</p>
+<p>The set of template / grid elements depends on user&#8217;s preference, but
+here are cells that need to be included to generate layout in the
+example documentation.</p>
+<div class="section" id="example-template-library-name">
+<span id="example-template-library-name"></span><h3>Example template library name<a class="headerlink" href="#example-template-library-name" title="Permalink to this headline">¶</a></h3>
+<p>For generator examples, (tech_lib)_microtemplates_dense is used for the
+primitive template library name</p>
+<p><img alt="libname" src="../_images/tech_libname.png" /></p>
+</div>
+<div class="section" id="example-placement-grids">
+<span id="example-placement-grids"></span><h3>Example placement grids<a class="headerlink" href="#example-placement-grids" title="Permalink to this headline">¶</a></h3>
+<ol>
+<li><p class="first">placement_basic : a default placement grid cell. <strong>Contacted Poly
+Pitch(CPO)</strong> for the resolution in <strong>x</strong> direction and <strong>fin
+grid</strong> or <strong>contact pitch</strong> is a good candidate for the
+placement grid. Note that the size of any compatible templates
+should be a multiple of the placement grid.</p>
+<p><img alt="placement_basic" src="../_images/tech_placement_basic.png" /></p>
+<p>placement_basic example</p>
+</li>
+</ol>
+</div>
+<div class="section" id="example-routing-grids-and-vias">
+<span id="example-routing-grids-and-vias"></span><h3>Example routing grids and vias<a class="headerlink" href="#example-routing-grids-and-vias" title="Permalink to this headline">¶</a></h3>
+<ol>
+<li><p class="first">route_M1_M2_basic : a default M1_M2_route grid cell. <strong>Minimum metal
+spacings and widths</strong> are used for the resolution and metal width.</p>
+<p><img alt="m1_m2_basic" src="../_images/tech_m1_m2.png" /></p>
+</li>
+<li><p class="first">route_M1_M2_basic_thick: an M1_M2 grid that is composed of
+<strong>thin</strong> M1 and <strong>thick</strong> M2. This grid is useful for power grid routings.</p>
+<p><img alt="m1_m2_basic_thick" src="../_images/tech_m1_m2_basic_thick.png" /></p>
+</li>
+<li><p class="first">route_M1_M2_mos, route_M1_M2_cmos : M2_M2 grids that are designed
+to be compatible to NMOS/PMOS/CMOS stuctures. Note that grid coordinates
+are aligned to gate/drain/source pins of fets.</p>
+<p><img alt="m1_m2_mos" src="../_images/tech_m1_m2_mos.png" /></p>
+</li>
+<li><p class="first">M2_M3 grids (route_M2_M3_basic, route_M2_M3_thick_basic,
+route_M2_M3_cmos): M2_M3 grids that are compatible with M1_M2 grids.</p>
+<p><img alt="m2_m3" src="../_images/tech_m2_m3.png" /></p>
+</li>
+<li><p class="first">Other grids on upper metal layers: following grids are used for
+example generators.</p>
+<p><strong>M3_M4 grids</strong>: route_M3_M4_basic, route_M3_M4_basic_thick,
+route_M3_M4_thick</p>
+<p><strong>M4_M5 grids</strong>: route_M4_M5_basic, route_M4_M5_thick</p>
+<p><strong>M5_M6 grids</strong>: route_M5_M6_basic, route_M5_M6_basic_thick,
+route_M5_M6_thick</p>
+</li>
+</ol>
+</div>
+<div class="section" id="example-mosfet-templates">
+<span id="example-mosfet-templates"></span><h3>Example mosfet templates<a class="headerlink" href="#example-mosfet-templates" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
 </div>
 
 
