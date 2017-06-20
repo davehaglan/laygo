@@ -33,12 +33,12 @@ import pkg_resources
 from bag.design import Module
 
 
-yaml_file = pkg_resources.resource_filename(__name__, os.path.join('netlist_info', 'capdac.yaml'))
+yaml_file = pkg_resources.resource_filename(__name__, os.path.join('netlist_info', 'capdac_tester.yaml'))
 
 
 # noinspection PyPep8Naming
-class adc_sar_templates__capdac(Module):
-    """Module for library adc_sar_templates cell capdac.
+class adc_sar_templates__capdac_tester(Module):
+    """Module for library adc_sar_templates cell capdac_tester.
 
     Fill in high level description here.
     """
@@ -67,25 +67,8 @@ class adc_sar_templates__capdac(Module):
         self.parameters['rdx_array'] = rdx_array
         name_list=[]
         term_list=[]
-        for i in range(num_bits):
-            in_pin = 'I<%d>'%i
-            term_list.append({'BOTTOM': in_pin})
-            m_cap = rdx_array[i]*c_m
-            if m_cap == 1:
-                name_list.append('I%d'%(i))
-            else:
-                name_list.append('I%d<%d:0>'%(i,rdx_array[i]*c_m-1))
-            #for j in range(rdx_array[i]*c_m):
-            #    term_list.append({'BOTTOM': in_pin})
-            #    name_list.append('I%d_%d'%(i,j))
-        self.array_instance('CDAC0', name_list, term_list=term_list)
-
-        name_list=[]
-        for i in range(c_m):
-            name_list.append('IC0_%d'%(i))
-        self.array_instance('C0', name_list)
-
-        self.rename_pin('I','I<%d:0>'%(num_bits-1))
+        self.instances['ICDAC0'].design(num_bits=num_bits, c_m=c_m, rdx_array=rdx_array)
+        self.reconnect_instance_terminal(inst_name='ICDAC0', term_name='I', net_name='I<%d:0>'%(num_bits-1))
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

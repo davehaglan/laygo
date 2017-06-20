@@ -12,14 +12,17 @@ import matplotlib.pyplot as plt
 lib_name = 'adc_sar_templates'
 cell_name = 'capdac'
 impl_lib = 'adc_sar_generated'
+tester_cell_name = 'capdac_tester' #intermediate cell for programmable testbench generation
 tb_lib = 'adc_sar_testbenches'
-tb_cell = 'capdac_8b_tb_tran'
+#tb_cell = 'capdac_8b_tb_tran'
+tb_cell = 'capdac_tb_tran'
 
 #spec
 vh=0.3
 vl=0.0
 vcm=0.15
 per=1e-9
+num_bits=8
 
 verify_lvs = False
 extracted = False
@@ -34,10 +37,10 @@ if load_from_file==True:
         specdict = yaml.load(stream)
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
-    tb_cell = 'capdac_'+str(specdict['n_bit']-1)+'b_tb_tran'
     vh=specdict['v_in']
     vl=0.0
     vcm=specdict['v_in']/2
+    num_bits=specdict['n_bit']-1
 
 print('creating BAG project')
 prj = bag.BagProject()
@@ -55,7 +58,7 @@ if verify_lvs==True:
 if verify_tran==True:
     # transient test
     print('creating testbench %s__%s' % (impl_lib, tb_cell))
-    tb = prj.create_testbench(tb_lib, tb_cell, impl_lib, cell_name, impl_lib)
+    tb = prj.create_testbench(tb_lib, tb_cell, impl_lib, tester_cell_name, impl_lib)
     tb.set_parameter('pvh', vh)
     tb.set_parameter('pvl', vl)
     tb.set_parameter('pvcm', vcm)
@@ -68,7 +71,7 @@ if verify_tran==True:
         tb.set_simulation_view(impl_lib, cell_name, 'calibre')
 
     tb.update_testbench()
-    '''
+
     print('running simulation')
     tb.run_simulation()
 
@@ -90,7 +93,7 @@ if verify_tran==True:
     dac_v=[]
     dac_code=[]
     for i, t in enumerate(tvec):
-        if t>t_next and code<256:
+        if t>t_next and code<2**num_bits: #256:
             t_next+=0.5*per
             #print(code, vvec[i])
             dac_code.append(code)
@@ -102,4 +105,3 @@ if verify_tran==True:
     plt.grid()
     plt.xlabel('code')
     plt.ylabel('v') 
-    '''
