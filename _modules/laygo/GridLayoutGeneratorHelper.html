@@ -416,11 +416,16 @@
     <span class="c1">#copy original database</span>
     <span class="n">gi</span><span class="o">=</span><span class="n">laygen</span><span class="o">.</span><span class="n">get_grid</span><span class="p">(</span><span class="n">gridname_input</span><span class="p">)</span>
     <span class="n">bnd</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">gi</span><span class="o">.</span><span class="n">xy</span><span class="p">)</span>
-    <span class="n">xgrid</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">gi</span><span class="o">.</span><span class="n">get_xgrid</span><span class="p">())</span>
-    <span class="n">ygrid</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">gi</span><span class="o">.</span><span class="n">get_ygrid</span><span class="p">())</span>
-    <span class="n">xwidth</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">gi</span><span class="o">.</span><span class="n">get_xwidth</span><span class="p">())</span>
-    <span class="n">ywidth</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">gi</span><span class="o">.</span><span class="n">get_ywidth</span><span class="p">())</span>
-    <span class="n">_viamap</span> <span class="o">=</span> <span class="n">gi</span><span class="o">.</span><span class="n">get_viamap</span><span class="p">()</span>
+    <span class="c1">#xgrid = deepcopy(gi.get_xgrid())</span>
+    <span class="c1">#ygrid = deepcopy(gi.get_ygrid())</span>
+    <span class="c1">#xwidth = deepcopy(gi.get_xwidth())</span>
+    <span class="c1">#ywidth = deepcopy(gi.get_ywidth())</span>
+    <span class="c1">#_viamap = gi.get_viamap()</span>
+    <span class="n">xgrid</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">gi</span><span class="o">.</span><span class="n">xgrid</span><span class="p">)</span>
+    <span class="n">ygrid</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">gi</span><span class="o">.</span><span class="n">ygrid</span><span class="p">)</span>
+    <span class="n">xwidth</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">gi</span><span class="o">.</span><span class="n">xwidth</span><span class="p">)</span>
+    <span class="n">ywidth</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">gi</span><span class="o">.</span><span class="n">ywidth</span><span class="p">)</span>
+    <span class="n">_viamap</span> <span class="o">=</span> <span class="n">gi</span><span class="o">.</span><span class="n">viamap</span>
     <span class="n">vianame</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">_viamap</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span> <span class="c1">#just pickig one via; should be fixed</span>
     <span class="c1">#figure out routing direction</span>
     <span class="k">if</span> <span class="n">xy_grid_type</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
