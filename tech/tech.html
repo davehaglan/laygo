@@ -392,6 +392,73 @@ structures are divided into 3 parts:</p>
 <p>Any device row can be constructed by combining those element cells into
 one row.</p>
 <p><img alt="nmos" src="../_images/tech_nmos.png" /></p>
+<p>For generator examples, these types of cells need to be implemented:
+nmos4_fast, pmos4_fast, ntap_fast, ptap_fast</p>
+</div>
+<div class="section" id="nmos4-fast-family-cells">
+<span id="nmos4-fast-family-cells"></span><h4>nmos4_fast family cells<a class="headerlink" href="#nmos4-fast-family-cells" title="Permalink to this headline">¶</a></h4>
+<p>Here are the list of nmos cells used in generator examples:</p>
+<ol class="simple">
+<li><strong>nmos4_fast_left</strong>: left boundary of nmos4_fast row</li>
+<li><strong>nmos4_fast_right</strong>: right boundary of nmos4_fast row</li>
+<li><strong>nmos4_fast_boundary</strong>: local boundary of nmos4_fast primitives</li>
+<li><strong>nmos4_fast_space, nmos4_fast_space</strong>: 1x spacing cells</li>
+<li><strong>nmos4_fast_space_2x, nmos4_fast_space_nf2</strong>: 2x spacing cells</li>
+<li><strong>nmos4_fast_space_4x, nmos4_fast_space_nf4</strong>: 4x spacing cells</li>
+<li><strong>nmos4_fast_tap</strong>: nmos4 tap cell</li>
+<li><strong>nmos4_fast_center_nf2</strong>: 2 finger nmos core</li>
+<li><strong>nmos4_fast_center_nf2</strong>: 2-stacked nmos core</li>
+<li><strong>nmos4_fast_center_nf2</strong>: 1 finger nmos core (gate left sided)</li>
+<li><strong>nmos4_fast_center_nf2</strong>: 1 finger nmos core (gate right sided)</li>
+<li><strong>nmos4_fast_center_nf2</strong>: 2 finger dummy nmos</li>
+</ol>
+<p><img alt="nmos_type" src="../_images/tech_nmos_type.png" /></p>
+</div>
+<div class="section" id="pmos4-fast-family-cells">
+<span id="pmos4-fast-family-cells"></span><h4>pmos4_fast family cells<a class="headerlink" href="#pmos4-fast-family-cells" title="Permalink to this headline">¶</a></h4>
+<p>Equivalent pmos cells need to be implemented as well:</p>
+<ol class="simple">
+<li><strong>pmos4_fast_left</strong>: left boundary of pmos4_fast row</li>
+<li><strong>pmos4_fast_right</strong>: right boundary of pmos4_fast row</li>
+<li><strong>pmos4_fast_boundary</strong>: local boundary of pmos4_fast primitives</li>
+<li><strong>pmos4_fast_space, pmos4_fast_space</strong>: 1x spacing cell</li>
+<li><strong>pmos4_fast_space_2x, pmos4_fast_space_nf2</strong>: 2x spacing cells</li>
+<li><strong>pmos4_fast_space_4x, pmos4_fast_space_nf4</strong>: 4x spacing cells</li>
+<li><strong>pmos4_fast_tap</strong>: pmos4 tap cell</li>
+<li><strong>pmos4_fast_center_nf2</strong>: 2 finger pmos core</li>
+<li><strong>pmos4_fast_center_nf2</strong>: 2-stacked pmos core</li>
+<li><strong>pmos4_fast_center_nf2</strong>: 1 finger pmos core (gate left sided)</li>
+<li><strong>pmos4_fast_center_nf2</strong>: 1 finger pmos core (gate right sided)</li>
+<li><strong>pmos4_fast_center_nf2</strong>: 2 finger dummy pmos</li>
+</ol>
+</div>
+<div class="section" id="ptap-fast-family-cells">
+<span id="ptap-fast-family-cells"></span><h4>ptap_fast family cells<a class="headerlink" href="#ptap-fast-family-cells" title="Permalink to this headline">¶</a></h4>
+<p>Ptap cells are used for constructing a ptap row, in order to
+construct thicker power grids (usually for pure analog cells)
+or guard rings.</p>
+<ol class="simple">
+<li><strong>ptap_fast_left</strong>: left boundary of ptap_fast row</li>
+<li><strong>ptap_fast_right</strong>: left boundary of ptap_fast row</li>
+<li><strong>ptap_fast_boundary</strong>: local boundary of ptap_fast row</li>
+<li><strong>ptap_fast_center_nf2</strong>: 2 finger ptap core</li>
+<li><strong>ptap_fast_space</strong>: 1x spacing cell</li>
+<li><strong>ptap_fast_space_nf2</strong>: 1x spacing cell</li>
+<li><strong>ptap_fast_space_Nf4</strong>: 1x spacing cell</li>
+</ol>
+</div>
+<div class="section" id="ntap-fast-family-cells">
+<span id="ntap-fast-family-cells"></span><h4>ntap_fast family cells<a class="headerlink" href="#ntap-fast-family-cells" title="Permalink to this headline">¶</a></h4>
+<p>Equivalent ntap cells need to be implemented as well:</p>
+<ol class="simple">
+<li><strong>ntap_fast_left</strong>: left boundary of ntap_fast row</li>
+<li><strong>ntap_fast_right</strong>: left boundary of ntap_fast row</li>
+<li><strong>ntap_fast_boundary</strong>: local boundary of ntap_fast row</li>
+<li><strong>ntap_fast_center_nf2</strong>: 2 finger ntap core</li>
+<li><strong>ntap_fast_space</strong>: 1x spacing cell</li>
+<li><strong>ntap_fast_space_nf2</strong>: 1x spacing cell</li>
+<li><strong>ntap_fast_space_Nf4</strong>: 1x spacing cell</li>
+</ol>
 </div>
 </div>
 <div class="section" id="converting-template-layout-to-laygo-database">

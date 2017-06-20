@@ -224,6 +224,71 @@ one row.
 
 ![nmos](images/tech_nmos.png)
 
+For generator examples, these types of cells need to be implemented:
+nmos4_fast, pmos4_fast, ntap_fast, ptap_fast
+
+##### nmos4_fast family cells
+
+Here are the list of nmos cells used in generator examples:
+
+1. **nmos4_fast_left**: left boundary of nmos4_fast row
+2. **nmos4_fast_right**: right boundary of nmos4_fast row
+3. **nmos4_fast_boundary**: local boundary of nmos4_fast primitives
+4. **nmos4_fast_space, nmos4_fast_space**: 1x spacing cells
+5. **nmos4_fast_space_2x, nmos4_fast_space_nf2**: 2x spacing cells
+6. **nmos4_fast_space_4x, nmos4_fast_space_nf4**: 4x spacing cells
+7. **nmos4_fast_tap**: nmos4 tap cell
+8. **nmos4_fast_center_nf2**: 2 finger nmos core
+9. **nmos4_fast_center_nf2**: 2-stacked nmos core
+10. **nmos4_fast_center_nf2**: 1 finger nmos core (gate left sided)
+11. **nmos4_fast_center_nf2**: 1 finger nmos core (gate right sided)
+12. **nmos4_fast_center_nf2**: 2 finger dummy nmos
+
+![nmos_type](images/tech_nmos_type.png)
+
+##### pmos4_fast family cells
+
+Equivalent pmos cells need to be implemented as well:
+
+1. **pmos4_fast_left**: left boundary of pmos4_fast row
+2. **pmos4_fast_right**: right boundary of pmos4_fast row
+3. **pmos4_fast_boundary**: local boundary of pmos4_fast primitives
+4. **pmos4_fast_space, pmos4_fast_space**: 1x spacing cell
+5. **pmos4_fast_space_2x, pmos4_fast_space_nf2**: 2x spacing cells
+6. **pmos4_fast_space_4x, pmos4_fast_space_nf4**: 4x spacing cells
+7. **pmos4_fast_tap**: pmos4 tap cell
+8. **pmos4_fast_center_nf2**: 2 finger pmos core
+9. **pmos4_fast_center_nf2**: 2-stacked pmos core
+10. **pmos4_fast_center_nf2**: 1 finger pmos core (gate left sided)
+11. **pmos4_fast_center_nf2**: 1 finger pmos core (gate right sided)
+12. **pmos4_fast_center_nf2**: 2 finger dummy pmos
+
+##### ptap_fast family cells
+
+Ptap cells are used for constructing a ptap row, in order to
+construct thicker power grids (usually for pure analog cells)
+ or guard rings.
+
+1. **ptap_fast_left**: left boundary of ptap_fast row
+1. **ptap_fast_right**: left boundary of ptap_fast row
+1. **ptap_fast_boundary**: local boundary of ptap_fast row
+1. **ptap_fast_center_nf2**: 2 finger ptap core
+1. **ptap_fast_space**: 1x spacing cell
+1. **ptap_fast_space_nf2**: 1x spacing cell
+1. **ptap_fast_space_Nf4**: 1x spacing cell
+
+##### ntap_fast family cells
+
+Equivalent ntap cells need to be implemented as well:
+
+1. **ntap_fast_left**: left boundary of ntap_fast row
+1. **ntap_fast_right**: left boundary of ntap_fast row
+1. **ntap_fast_boundary**: local boundary of ntap_fast row
+1. **ntap_fast_center_nf2**: 2 finger ntap core
+1. **ntap_fast_space**: 1x spacing cell
+1. **ntap_fast_space_nf2**: 1x spacing cell
+1. **ntap_fast_space_Nf4**: 1x spacing cell
+
 #### Converting template layout to laygo database
 
 After building those primitive templates, open bag and type
