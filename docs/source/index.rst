@@ -19,10 +19,10 @@ Contents:
    Tutorial (GDS flow) <tutorial/tutorial_GDS>
    Tutorial (BAG flow) <tutorial/tutorial_BAG>
    Architecture <architecture/architecture>
-   Generator example - logic family <example/logic>
-   Generator example - serdes <example/serdes>
-   Generator example - TISAR ADC (to be updated) <example/tisar>
-   Technology setup guidelines (to be updated) <tech/tech>
+   Generator example - CMOS logic family <example/logic>
+   Generator example - CMOS serdes <example/serdes>
+   Generator example - TISAR ADC <example/tisar>
+   Technology setup guidelines <tech/tech>
    API documentation <api/modules>
 
 
