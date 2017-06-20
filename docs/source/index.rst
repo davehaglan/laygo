@@ -22,7 +22,7 @@ Contents:
    Generator example - CMOS logic family <example/logic>
    Generator example - CMOS serdes <example/serdes>
    Generator example - TISAR ADC <example/tisar>
-   Technology setup guidelines <tech/tech>
+   Technology setup instructions <tech/tech>
    API documentation <api/modules>
 
 
