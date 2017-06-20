@@ -61,23 +61,23 @@ physical_resolution: 0.001
 
 Here's description on items.
 
-    * **metal_layers** (list): contains [*layername*, *layerpurpose*]
-     of metal layers to be used for routing, starting from the bottom
-     layer to the top layer.
-    * **via_layers** (list): contains [*layername*, *layerpurpose*]
-     of via layers to be used for routing, starting from the bottom
-     layer to the top layer.
-    * **pin_layers** (list): contains [*layername*, *layerpurpose*]
-     of pin layers to be used for routing, starting from the bottom
-     layer to the top layer.
-    * **prboundary_layer** (list): contains [*layername*, *layerpurpose*]
-     of the prBoundary layer for placement.
-    * **tech_lib** (str): name of technology.
-    * **text_layers** (list): contains [*layername*, *layerpurpose*]
-     of the text layer for annotations.
-    * **physical_resolution** (float): minimum layout grid resolution in
-    micron. Most advanced nodes have grid resolutions ranging from 0.01
-    to 0.001.
+* **metal_layers** (list): contains [*layername*, *layerpurpose*]
+ of metal layers to be used for routing, starting from the bottom
+ layer to the top layer.
+* **via_layers** (list): contains [*layername*, *layerpurpose*]
+ of via layers to be used for routing, starting from the bottom
+ layer to the top layer.
+* **pin_layers** (list): contains [*layername*, *layerpurpose*]
+ of pin layers to be used for routing, starting from the bottom
+ layer to the top layer.
+* **prboundary_layer** (list): contains [*layername*, *layerpurpose*]
+ of the prBoundary layer for placement.
+* **tech_lib** (str): name of technology.
+* **text_layers** (list): contains [*layername*, *layerpurpose*]
+ of the text layer for annotations.
+* **physical_resolution** (float): minimum layout grid resolution in
+micron. Most advanced nodes have grid resolutions ranging from 0.01
+to 0.001.
 
 As you can see, all parameters are straightforward and can easily be
 filled up.
@@ -133,15 +133,15 @@ templates of primitive devices for layout generations, meaning that
 users need to build the template devices by themselves if not provided.
 Basically there are 4 different cells to be created.
 
-    1. Placement grids: defines the grid resolutions that devices will
-     be placed. **prboundary_layer** is used for setting the resolution.
-    2. Routing grids: defines the grid resolutions that routing wires
-     and vias will be placed. Rects with **metal_layers** are used to
-     define the width / spacing / coordinate of the routing grid.
-    3. Device template cells: templates of devices will be placed on one
-     of the placement grids
-    4. Via template cells: templates of vias will be placed on one of
-     the route grids.
+1. Placement grids: defines the grid resolutions that devices will
+ be placed. **prboundary_layer** is used for setting the resolution.
+2. Routing grids: defines the grid resolutions that routing wires
+ and vias will be placed. Rects with **metal_layers** are used to
+ define the width / spacing / coordinate of the routing grid.
+3. Device template cells: templates of devices will be placed on one
+ of the placement grids
+4. Via template cells: templates of vias will be placed on one of
+ the route grids.
 
 ![techex](images/tech_example.png)
 
