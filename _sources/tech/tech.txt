@@ -209,3 +209,31 @@ example generators.
     route_M5_M6_thick
 
 #### Example mosfet templates
+
+##### Basic idea
+
+In order to nicely capture all boundary design rules, all mostfet row
+structures are divided into 3 parts:
+
+* Row boundary cells: placed at the (left & right) edges of device rows.
+* Local boundary cells: placed between core devices
+* Core cells: actual device cells (e.g. NF=2 NMOS, NF=1 NMOS, dummy NMOS, tap, ...)
+
+Any device row can be constructed by combining those element cells into
+one row.
+
+![nmos](images/tech_nmos.png)
+
+#### Converting template layout to laygo database
+
+After building those primitive templates, open bag and type
+
+```
+    run laygo/labs/lab2_a_gridlayoutgenerator_constructtemplate.py
+```
+
+It will read the primitive template layouts and construct template / grid
+ databases and save them to the following 2 yaml files:
+
+    * (tech_lib)_microtemplates_dense_templates.yaml
+    * (tech_lib)_microtemplates_dense_grids.yaml

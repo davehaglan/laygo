@@ -380,6 +380,32 @@ route_M5_M6_thick</p>
 </div>
 <div class="section" id="example-mosfet-templates">
 <span id="example-mosfet-templates"></span><h3>Example mosfet templates<a class="headerlink" href="#example-mosfet-templates" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="basic-idea">
+<span id="basic-idea"></span><h4>Basic idea<a class="headerlink" href="#basic-idea" title="Permalink to this headline">¶</a></h4>
+<p>In order to nicely capture all boundary design rules, all mostfet row
+structures are divided into 3 parts:</p>
+<ul class="simple">
+<li>Row boundary cells: placed at the (left &amp; right) edges of device rows.</li>
+<li>Local boundary cells: placed between core devices</li>
+<li>Core cells: actual device cells (e.g. NF=2 NMOS, NF=1 NMOS, dummy NMOS, tap, ...)</li>
+</ul>
+<p>Any device row can be constructed by combining those element cells into
+one row.</p>
+<p><img alt="nmos" src="../_images/tech_nmos.png" /></p>
+</div>
+</div>
+<div class="section" id="converting-template-layout-to-laygo-database">
+<span id="converting-template-layout-to-laygo-database"></span><h3>Converting template layout to laygo database<a class="headerlink" href="#converting-template-layout-to-laygo-database" title="Permalink to this headline">¶</a></h3>
+<p>After building those primitive templates, open bag and type</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>    <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">labs</span><span class="o">/</span><span class="n">lab2_a_gridlayoutgenerator_constructtemplate</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>It will read the primitive template layouts and construct template / grid
+databases and save them to the following 2 yaml files:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="p">(</span><span class="n">tech_lib</span><span class="p">)</span><span class="n">_microtemplates_dense_templates</span><span class="o">.</span><span class="n">yaml</span>
+<span class="o">*</span> <span class="p">(</span><span class="n">tech_lib</span><span class="p">)</span><span class="n">_microtemplates_dense_grids</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>
