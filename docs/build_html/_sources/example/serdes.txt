@@ -1,4 +1,4 @@
-# SERDES generator
+# CMOS SERDES generator
 
 ![serdes](images/serdes.png)
 
@@ -9,9 +9,8 @@ templates.
  version following the tutorial conventions (possibly with more
 abstracting functions) will be released soon.
 
->Note 2: current version only contains the CMOS serializer part and this
-page will only contain materials on CMOS serdes. For more advance
-example, refer to BAG documentations.
+>Note 2: this document only contains materials on CMOS serializers
+For more advanced examples, refer to the BAG documentations.
 
 ## Install and launch
 1. Set up BAG environment for the technology in use. This is usually
