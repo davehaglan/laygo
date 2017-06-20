@@ -407,12 +407,15 @@ through steps.</p>
 </div></blockquote>
 </li>
 <li><p class="first">You can run simulations on CDAC via BAG framework. The following
-command will launch the transfer curve extraction simulation with
+command will launch the transfer curve simulation with
 schematic netlists. For the post-extract simulation, set
 <strong>extracted = True</strong> in the script.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_capdac_verify</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
+<p><img alt="salatch" src="../_images/tisaradc_capsim.png" /></p>
+<p>Simulation results from various settings (left: 5b-radix2,
+center: 8b-sub2radix, right: 10b-sub2radix)</p>
 </li>
 </ul>
 </li>
@@ -523,9 +526,9 @@ scripts if you want to generate in top level.</p>
 <li><p class="first">The frontend and backend can be integrated by running following
 scripts.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># layout</span>
-<span class="n">run</span> <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sar_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sar_layout_generator</span><span class="o">.</span><span class="n">py</span>
 <span class="c1"># schematic</span>
-<span class="n">run</span> <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sar_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sar_schematic_generator</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p><img alt="sar" src="../_images/tisaradc_sar.png" /></p>
