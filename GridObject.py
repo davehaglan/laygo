@@ -255,8 +255,10 @@ class GridObject():
         if _xy1.shape[0] == 1: _xy1 = _xy1[0]
         #upper right boundary adjust
         #check by re-converting to physical grid and see if the points are within original [xy0, xy1]
-        xy0_check = self.get_phygrid_coord_xy(_xy0)[0]
-        xy1_check = self.get_phygrid_coord_xy(_xy1)[0]
+        #xy0_check = self.get_phygrid_coord_xy(_xy0)[0]
+        #xy1_check = self.get_phygrid_coord_xy(_xy1)[0]
+        xy0_check = self.get_phygrid_xy(_xy0)
+        xy1_check = self.get_phygrid_xy(_xy1)
         xy0_check = np.around(xy0_check, decimals=self.max_resolution)
         xy1_check = np.around(xy1_check, decimals=self.max_resolution)
         xy0 = np.around(xy0, decimals=self.max_resolution)
@@ -344,7 +346,10 @@ class GridObject():
         np.array([float, float])
             physical coordinate vector
         """
-        return np.vstack((self.get_phygrid_coord_x(xy.T[0]), self.get_phygrid_coord_y(xy.T[1]))).T
+        if xy.ndim==1: #single coordinate
+            return np.vstack((self.get_phygrid_coord_x(xy.T[0]), self.get_phygrid_coord_y(xy.T[1]))).T[0]
+        else:
+            return np.vstack((self.get_phygrid_coord_x(xy.T[0]), self.get_phygrid_coord_y(xy.T[1]))).T
 
 
 class PlacementGrid(GridObject):
@@ -561,5 +566,5 @@ if __name__ == '__main__':
     abscoord=lgrid.get_absgrid_coord_xy(phycoord)
     print("  output:"+str(abscoord.tolist()))
     print('abstract grid to physical grid')
-    phycoord=lgrid.get_phygrid_coord_xy(abscoord).tolist()
+    phycoord=lgrid.get_phygrid_xy(abscoord).tolist()
     print("  output:"+str(phycoord))

@@ -69,8 +69,10 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
     pdict_m5m6_thick_basic=laygen.get_inst_pin_coord(None, None, rg_m5m6_thick_basic)
     sar_pins=sar_template.pins
     samp_pins=samp_template.pins
-    sar_xy=isar.xy[0]
-    samp_xy=isamp.xy[0]
+    #sar_xy=isar.xy[0]
+    #samp_xy=isamp.xy[0]
+    sar_xy=isar.xy
+    samp_xy=isamp.xy
 
     #signal route (clk/inp/inm)
     #make virtual grids and route on the grids (assuming drc clearance of each block)

@@ -258,7 +258,7 @@ class LayoutDB():
         """
         if name == None: name = self.genid(type='pin', pfix='P')
         xy = np.asarray(xy)
-        p = Pin(name=name, res=self.res, xy=xy, netname=netname, layer=layer)
+        p = Pin(name=name, res=self.res, xy=xy, netname=netname, layer=layer) #how to handle master?
         self.design[self.plib][self.pcell]['pins'][name] = p
         logging.debug('Pin added - Name:' + p.name + ', layer:' + str(layer) +
                       ', netname:' + p.netname + ', xy:' + str(p.xy.tolist()))

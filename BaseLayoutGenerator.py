@@ -40,6 +40,7 @@ __email__ = "jdhan@eecs.berkeley.edu"
 __status__ = "Prototype"
 
 from . import LayoutIO
+from . import PrimitiveUtil
 from .LayoutDB import *
 import numpy as np
 

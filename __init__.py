@@ -25,14 +25,10 @@
 """laygo package"""
 
 from . import LayoutIO
+from . import PrimitiveUtil 
 from .LayoutDB import *
 from .LayoutObject import *
 from .BaseLayoutGenerator import *
 from .GridLayoutGenerator import *
 
-#from LayoutObject import *
-#from BaseLayoutGenerator import *
-#from GridLayoutGenerator import *
-#from LayoutDB import *
-
-__all__ = ['layoutIO']
+__all__ = ['layoutIO', 'PrimitiveUtil']

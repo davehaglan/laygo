@@ -227,7 +227,7 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
             laygen.create_boundary_pin_from_rect(rtop, rg_m6m7, "O"+str(cnt), laygen.layers['pin'][6], size=4, direction='left', netname="O")
             cnt+=1
     #grid alignment
-    xy0 = (laygen.get_inst_xy(name=ibndtr0.name)+laygen.get_template_xy(name=ibndtr0.cellname)*np.array([num_space_right, num_space_top]))[0]
+    xy0 = laygen.get_inst_xy(name=ibndtr0.name)+laygen.get_template_xy(name=ibndtr0.cellname)*np.array([num_space_right, num_space_top])
     if not placement_resolution[0] is None:
         xy0[0] = ceil(xy0[0] / placement_resolution[0])*placement_resolution[0]
     if not placement_resolution[1] is None:

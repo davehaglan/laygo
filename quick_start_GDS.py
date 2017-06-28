@@ -121,8 +121,8 @@ if __name__ == '__main__':
     laygen.pin(name='A', layer=laygen.layers['pin'][3], xy=laygen.get_rect_xy(ra0.name, rg_m2m3), gridname=rg_m2m3)
     laygen.pin(name='B', layer=laygen.layers['pin'][3], xy=laygen.get_rect_xy(rb0.name, rg_m2m3), gridname=rg_m2m3)
     laygen.pin(name='O', layer=laygen.layers['pin'][3], xy=laygen.get_rect_xy(ro0.name, rg_m2m3), gridname=rg_m2m3)
-    laygen.pin(name='VDD', layer=laygen.layers['pin'][1], xy=laygen.get_rect_xy(rvdd.name, rg_m1m2), gridname=rg_m1m2)
-    laygen.pin(name='VSS', layer=laygen.layers['pin'][1], xy=laygen.get_rect_xy(rvss.name, rg_m1m2), gridname=rg_m1m2)
+    laygen.pin(name='VDD', layer=laygen.layers['pin'][2], xy=laygen.get_rect_xy(rvdd.name, rg_m1m2), gridname=rg_m1m2)
+    laygen.pin(name='VSS', layer=laygen.layers['pin'][2], xy=laygen.get_rect_xy(rvss.name, rg_m1m2), gridname=rg_m1m2)
 
     laygen.display()
     # export

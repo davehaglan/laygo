@@ -32,7 +32,7 @@ __email__ = "jdhan@eecs.berkeley.edu"
 __status__ = "Prototype"
 
 import numpy as np
-import _PrimitiveUtil as ut
+from . import PrimitiveUtil as ut
 import copy
 #from math import log10
 #import logging
@@ -170,8 +170,10 @@ class Pin(LayoutObject):
     """[str, str]: Pin layer"""
     netname=None
     """str: net name"""
+    master=None
+    """LayoutObject.Instance: master instance, only for instance pins"""
 
-    def __init__(self, name, res, xy, netname, layer):
+    def __init__(self, name, res, xy, netname=None, layer=None, master=None):
         """
         Constructor
 
@@ -181,15 +183,21 @@ class Pin(LayoutObject):
             object name
         res : float
             grid resolution
-        xy : np.array([[x0, y0], [x1, y1]])
+        xy : np.array([[x0, y0], [x1, y1]]), optional
             xy coorinates
-        netname : str
-            net name
+        netname : str, optional
+            net name. If None, name is used
         layer : [layer, pupose]
             layer name and purpose
+        master : LayoutObject.Instance
+            master instance handle
         """
+        if netname is None:
+            netname=name
+
         self.netname = netname
         self.layer = layer
+        self.master = master
         LayoutObject.__init__(self, name, res, xy)
 
     def display(self):
@@ -233,30 +241,38 @@ class Text(LayoutObject):
 
 class Instance(LayoutObject):
     """Instance object class"""
+
     libname=None
     """str: library name"""
+
     cellname=None
     """str: cell name"""
+
     shape = np.array([1, 1])
     """np.array([int, int]): array shape"""
+
     _spacing = np.array([0, 0])
     """Array spacing (actually this is a pitch, but I just followed GDS's notations)"""
+
     def get_spacing(self): return self._spacing
     def set_spacing(self, value): self._spacing = self.trim(np.asarray(value))
     spacing = property(get_spacing, set_spacing)
     """Array spacing (actually this is a pitch, but I just followed GDS's notations)"""
+
     transform='R0'
     """str: transform parameter"""
+
     template=None
     """str: original template name"""
-    @property
-    def pins(self): 
-        return self.template.pins #this should be updated to be something like xy_inst+Mt*xy_pins
-    """dict(): Pin dict"""
+
+    pins=None
+    """dict(): pin dictionary"""
+
     @property
     def xy0(self): 
         return self.xy
     """np.array([float, float]): Object location"""
+
     @property
     def xy1(self):
         if self.template is None:
@@ -264,6 +280,7 @@ class Instance(LayoutObject):
         else: 
             return self.xy+np.dot(self.template.xy[1], ut.Mt(self.transform).T)
     """np.array([float, float]): the opposite corner of xy (or xy0)"""
+
     @property
     def bbox(self):
         """[[float, float], [float, float]]: instance bounding box in physical coordinate"""
@@ -322,6 +339,12 @@ class Instance(LayoutObject):
         self.spacing = self.trim(spacing)
         self.transform = transform
         self.template = template
+        if not template is None:
+            #create a pin dictionary
+            self.pins = dict()
+            for pn, p in self.template.pins.items():
+                self.pins[pn] = Pin(name=pn, res=res, xy=p['xy'], netname=p['netname'], layer=p['layer'], master=self)
+            
 
     def display(self):
         """Display object information"""
