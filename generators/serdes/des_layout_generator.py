@@ -177,7 +177,7 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
                                        gridname = pg, refinstname = idivbuf[-1].name, transform=tf, shape=np.array([1,1]),
                                        template_libname=templib_logic))
                 iclkbuf.append(laygen.relplace(name = "I" + objectname_pfix + 'CLKBUF1x', templatename = 'inv_1x',
-                                       gridname = pg, refinstname = idivbuf[3].name, transform=tf, shape=np.array([1,1]), offset=np.array([0,0]),
+                                       gridname = pg, refinstname = idivbuf[3].name, transform=tf, shape=np.array([1,1]), xy=np.array([0,0]),
                                        template_libname=templib_logic))
                 iclkbuf.append(laygen.relplace(name = "I" + objectname_pfix + 'CLKBUF2x', templatename = 'inv_2x',
                                        gridname = pg, refinstname = iclkbuf[-1].name, transform=tf, shape=np.array([1,1]),
@@ -231,7 +231,7 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
                                        gridname = pg, refinstname = idivbuf[-1].name, transform=tf, shape=np.array([1,1]),
                                        template_libname=templib_logic))
                 iclkbuf.append(laygen.relplace(name = "I" + objectname_pfix + 'CLKBUF1x', templatename = 'inv_1x',
-                                       gridname = pg, refinstname = idivbuf[3].name, transform=tf, shape=np.array([1,1]), offset=np.array([0,0]),
+                                       gridname = pg, refinstname = idivbuf[3].name, transform=tf, shape=np.array([1,1]), xy=np.array([0,0]),
                                        template_libname=templib_logic))
                 iclkbuf.append(laygen.relplace(name = "I" + objectname_pfix + 'CLKBUF2x', templatename = 'inv_2x',
                                        gridname = pg, refinstname = iclkbuf[-1].name, transform=tf, shape=np.array([1,1]),
@@ -254,7 +254,7 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
                                           gridname = pg, xy=FF0_origin, transform=tf, shape=np.array([1,1]), template_libname = templib_logic))
                     iffout.append(laygen.relplace(name = "I" + objectname_pfix + 'FFOUT2', templatename = ff_name,
                                        gridname = pg, refinstname = iffout[0].name, transform=tf, shape=np.array([1,1]),
-                                       direction = 'left', template_libname=templib_logic))
+                                       direction = 'right', template_libname=templib_logic))
                 elif i==(num_row-1): #The last low depending on num_des: even or odd
                     iffout.append(laygen.relplace(name = "I" + objectname_pfix + 'FFOUT'+str(2*i-1), templatename = ff_name,
                                        gridname = pg, refinstname = iffout[-2].name, transform=tf, shape=np.array([1,1]),
@@ -262,24 +262,24 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
                     if num_des%2==0: #If not, space should be placed rather than FF
                         iffout.append(laygen.relplace(name = "I" + objectname_pfix + 'FFOUT'+str(2*i), templatename = ff_name,
                                        gridname = pg, refinstname = iffout[-1].name, transform=tf, shape=np.array([1,1]),
-                                       direction = 'left', template_libname=templib_logic))
+                                       direction = 'right', template_libname=templib_logic))
                 else: #FFOUTs will be the reference for FFIN and FFDIV
                     iffout.append(laygen.relplace(name = "I" + objectname_pfix + 'FFOUT'+str(2*i-1), templatename = ff_name,
                                        gridname = pg, refinstname = iffout[-2].name, transform=tf, shape=np.array([1,1]),
                                        direction = 'top', template_libname=templib_logic))
                     iffout.append(laygen.relplace(name = "I" + objectname_pfix + 'FFOUT'+str(2*i), templatename = ff_name,
                                        gridname = pg, refinstname = iffout[-1].name, transform=tf, shape=np.array([1,1]),
-                                       direction = 'left', template_libname=templib_logic))
+                                       direction = 'right', template_libname=templib_logic))
         for j in range(num_des): #Relplace of FFIN and the left side of FFDIV
             if iffout[j].transform=='MX': tf='MX'
             else: tf='R0'
             iffin.append(laygen.relplace(name = "I" + objectname_pfix + 'FFIN'+str(j+1), templatename = ff_name,
                                    gridname = pg, refinstname = iffout[j].name, transform=tf, shape=np.array([1,1]),
-                                   offset=np.array([laygen.get_template_size(ff_name,pg,templib_logic)[0],0]), template_libname=templib_logic))
+                                   xy=np.array([laygen.get_template_size(ff_name,pg,templib_logic)[0],0]), template_libname=templib_logic))
             if j%2==0:
                 iffdiv.append(laygen.relplace(name = "I" + objectname_pfix + 'FFDIV'+str(int(j/2+1)), templatename = ff_rst_name,
                                    gridname = pg, refinstname = iffin[j].name, transform=tf, shape=np.array([1,1]),
-                                   offset=np.array([laygen.get_template_size(ff_name,pg,templib_logic)[0],0]), template_libname=templib_logic))
+                                   xy=np.array([laygen.get_template_size(ff_name,pg,templib_logic)[0],0]), template_libname=templib_logic))
         for i in range(num_row, num_des+1): #Right side of FFDIV
             if num_des%2==1:
                 if i%2==0: tf='R0'
@@ -290,7 +290,7 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
             if i==num_row: #Even: relplaced by top FFDIV, odd: relplaced by second FFDIV from top
                 iffdiv.append(laygen.relplace(name = "I" + objectname_pfix + 'FFDIV'+str(i), templatename = ff_rst_name,
                                gridname = pg, refinstname = iffdiv[int(num_des/2)-1].name, transform=tf, shape=np.array([1,1]),
-                               direction = 'left', template_libname=templib_logic))
+                               direction = 'right', template_libname=templib_logic))
             else:
                 iffdiv.append(laygen.relplace(name = "I" + objectname_pfix + 'FFDIV'+str(i), templatename = ff_rst_name,
                                gridname = pg, refinstname = iffdiv[-1].name, transform=tf, shape=np.array([1,1]),
