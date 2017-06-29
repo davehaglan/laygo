@@ -113,7 +113,7 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
     tap_size=laygen.get_template_size(tap_name,pg,templib_logic)
     x0=ff_size[0]+ff_rst_size[0]+inv1_size[0]+2*inv2_size[0]+tinv_size[0]+2*tap_size[0]
     num_row=int(sub_ser)+1
-    print(ff_rst_size)
+    print(ff_size)
     print(laygen.get_template_size(ff_name,None,templib_logic))
     #boundaries
     m_bnd = int(x0 / laygen.get_template_size('boundary_bottom',pg)[0])
@@ -204,16 +204,16 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
             if i==num_row-1: #Top row for last bit latch, input clock buffer, and outinv
                 iclkbuf1=laygen.relplace(name = "I" + objectname_pfix + 'CLKBUF1', templatename = inv1_name,
                                    gridname = pg, refinstname = iffdiv[-1].name, transform=tf, shape=np.array([1,1]),
-                                   offset=np.array([(-ff_rst_size[0]+inv1_size[0])/2,0]), direction = 'top', template_libname=templib_logic)
+                                   xy=np.array([(-ff_rst_size[0]+inv1_size[0])/2,0]), direction = 'top', template_libname=templib_logic)
                 iclkbuf2=laygen.relplace(name = "I" + objectname_pfix + 'CLKBUF2', templatename = inv2_name,
                                    gridname = pg, refinstname = iclkbuf1.name, transform=tf, shape=np.array([1,1]),
                                    template_libname=templib_logic)
                 ilatch=laygen.relplace(name = "I" + objectname_pfix + 'LATCH0', templatename = latch_name,
                                    gridname = pg, refinstname = iffin[-1].name, transform=tf, shape=np.array([1,1]),
-                                   offset=np.array([(ff_size[0]-latch_size[0])/2,0]), direction = 'top', template_libname=templib_logic)
+                                   xy=np.array([(ff_size[0]-latch_size[0])/2,0]), direction = 'top', template_libname=templib_logic)
                 ioutinv=laygen.relplace(name = "I" + objectname_pfix + 'OUTINV', templatename = inv1_name,
                                    gridname = pg, refinstname = itinv[-1].name, transform=tf, shape=np.array([1,1]),
-                                   offset=np.array([(tinv_size[0]-outinv_size[0])/2,0]), direction = 'top', template_libname=templib_logic)
+                                   xy=np.array([(tinv_size[0]-outinv_size[0])/2,0]), direction = 'top', template_libname=templib_logic)
             elif i==num_row-2: #Row for the last bit (p0 row)
                 iffdiv.append(laygen.relplace(name = "I" + objectname_pfix + 'FFDIV0', templatename = ff_rst_name,
                                    gridname = pg, refinstname = iffdiv[-1].name, transform=tf, shape=np.array([1,1]),
