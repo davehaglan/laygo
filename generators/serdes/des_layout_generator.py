@@ -521,7 +521,7 @@ if __name__ == '__main__':
     laygen.grids.sel_library(utemplib)
 
     #library load or generation
-    workinglib = 'WRBAE'
+    workinglib = 'serdes_generated'
     laygen.add_library(workinglib)
     laygen.sel_library(workinglib)
     if os.path.exists(workinglib+'.yaml'): #generated layout file exists

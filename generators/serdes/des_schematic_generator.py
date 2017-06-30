@@ -9,7 +9,7 @@ import yaml
 
 lib_name = 'serdes_templates'
 cell_name = 'des'
-impl_lib = 'WRBAE'
+impl_lib = 'serdes_generated'
 params = dict(
     num_des = 8,
     num_flop = 1,
