@@ -1,13 +1,22 @@
 ***Setup***
-1) Copy some files to your working directory
+1) Copy some files to your working directory if you don't have them
 	cp /tools/projects/wrbae/serdes_test/craft_adc/serdes_spec.yaml .
 	cp /tools/projects/wrbae/serdes_test/craft_adc/serdes_size.yaml .
 	ln -s /tools/projects/jdhan/BAG/TISARADC_TSMC16FFC/tsmcN16_microtemplates_dense .
+	cp /tools/projects/wrbae/serdes_test/craft_adc/laygo_config.yaml .
 2) Open cds.lib and add
 	DEFINE serdes_templates ./laygo/generators/serdes/serdes_templates
 3) Open bag_libs.def and add
-	serdes_templates /tools/projects/wrbae/serdes_test/craft_adc/laygo/generators/serdes/BagModules
-4) In virtuoso, create a new library called serdes_generated
+	serdes_templates $BAG_WORK_DIR/laygo/generators/serdes/BagModules
+	and modify 'logic_templates' path to
+	$BAG_WORK_DIR/laygo/generators/logic/BagModules
+4) Open .cshrc_bag and comment out
+	setenv BAG_PYTHON "/tools/projects/erichang/programs/anaconda3/bin/python"
+	and add
+	setenv BAG_PYTHON "/tools/projects/eeis/BAG_2.0/anaconda2/bin/python"	
+5) Open start bag.sh and comment out "set = cmd~~" and "exec $cmd~~" and add this
+	exec ${BAG_PYTHON} -m IPython
+6) In virtuoso, create a new library called serdes_generated
 
 ***Serializer Generation***
 1) Set your SER parameters in serdes_spec.yaml and serdes_size.yaml
@@ -47,7 +56,7 @@
 	a) Open serdes_spec.yaml and set num_des and num_flop
 		num_des = N, num_flop can be 1 or 2, num_flop adjusts the aspect ratio of the layout
 	b) Generate layout
-		In BAG window, run laygo/generators/serdes/des_layout_generator.py
+		run laygo/generators/serdes/des_layout_generator.py
 	c) Generate schematic
         run laygo/generators/serdes/des_schematic_generator.py
 
