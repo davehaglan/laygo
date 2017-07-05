@@ -54,7 +54,7 @@ if __name__ == '__main__':
                                                     'nmos4_fast_boundary', 'nmos4_fast_center_nf2', 'nmos4_fast_boundary'], gridname=pg)
     prow = laygen.relplace(name=None, templatename=['pmos4_fast_boundary', 'pmos4_fast_center_nf2', 'pmos4_fast_boundary',
                                                     'pmos4_fast_boundary', 'pmos4_fast_center_nf2', 'pmos4_fast_boundary'],
-                           gridname=pg, refinstname=nrow[0].name, direction=['top']+['right']*6, transform='MX')
+                           gridname=pg, refinstname=nrow[0].name, direction=['top']+['right']*5, transform='MX')
     #routes
     #   a
     laygen.route(None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=prow[4].pins['G0'], refobj1=nrow[4].pins['G0'], via0=[0, 0])

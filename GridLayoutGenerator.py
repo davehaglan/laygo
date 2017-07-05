@@ -299,7 +299,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             if template_libname==None:
                 template_libname=self.templates.plib
             t=self.templates.get_template(templatename, template_libname)
-            t_size_grid = self.get_template_size(templatename, gridname, libname=template_libname)
+            t_size_grid = self.get_template_xy(templatename, gridname, libname=template_libname)
             t_size_grid = t_size_grid*shape
             #reference instance check 
             if (refinst is None) and (refinstname is None):
@@ -325,7 +325,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             return self.place(name=name, templatename=templatename, gridname=gridname, xy=i_xy_grid+xy, offset=offset,
                               template_libname=template_libname, shape=shape, spacing=spacing, transform=transform)
 
-    def via(self, name, xy, gridname, offset=np.array([0, 0]), refinstname=None, refinstindex=np.array([0, 0]),
+    def via(self, name, xy, gridname, refobj=None, refobjindex=np.array([0, 0]), offset=np.array([0, 0]), refinstname=None, refinstindex=np.array([0, 0]),
             refpinname=None, transform='R0', overwrite_xy_phy=None, refinst=None):
         """
         Place a via on grid.
@@ -338,6 +338,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             xy coordinate of the via
         gridname : str
             Grid name of the via
+        refobj : LayoutObject.LayoutObject
+            Reference object(Instance/Pin/Rect) handle. If None, refinstiname is used.
+        refobjindex : np.array([int, int]), optional
+            Index of refobj if it is a mosaic instance.
         offset : np.array([float, float]), optional
             Offset on the physical grid, bound fro xy
         refinst : LayoutObject.Instance, optional
@@ -362,6 +366,15 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         xy = np.asarray(xy)
         offset = np.asarray(offset)
         refinstindex = np.asarray(refinstindex)
+        # reading coordinate information from the reference objects
+        if not refobj is None:
+            if type(refobj).__name__ is 'Instance': 
+                refinstname=refobj.name
+                refinstindex=refobjindex
+            if type(refobj).__name__ is 'Pin': 
+                refinstname=refobj.master.name
+                refinstindex=refobjindex
+                refpinname=refobj.name
         # get physical grid coordinates
         if not refinstname is None:
             refinst = self.get_inst(refinstname)
