@@ -147,8 +147,9 @@ if __name__ == '__main__':
         imp.find_module('bag')
         laygen.use_phantom = False
     except ImportError:
-        laygen.use_phantom = True
+        laygen.use_phantom = True #for gds export use phantom cells (not necessary)
 
+    #load primitive template/grid
     tech=laygen.tech
     utemplib = tech+'_microtemplates_dense' #primitive template / grid
     laygen.load_template(filename=tech+'_microtemplates_dense_templates.yaml', libname=utemplib)
