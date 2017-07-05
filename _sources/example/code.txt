@@ -12,7 +12,7 @@ codes added.
 This example is about making basic functional elements (i.e. logic gates,
 amplifiers) using primitive templates.
 
-[generators/golden/nand_golden_example.py](generators/golden/nand_golden_example.py)
+[generators/golden/nand_golden_example.py](https://github.com/ucb-art/laygo/blob/master/generators/golden/nand_golden_example.py)
 
 ## Code example 2: block level placement and routes
 This example is about making a block in higher level, composed of basic
