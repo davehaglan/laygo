@@ -47,21 +47,22 @@ def generate_samp_wckbuf(laygen, objectname_pfix, templib_logic,
                          inbuf_cellname_list=['inv_8x', 'inv_24x'],
                          outbuf_cellname_list=['inv_4x', 'inv_24x'],
                          space_cellname_list=['space_1x', 'space_2x', 'space_4x'],
+                         tap_cellname='tap',
                          space_left_m_list=[0, 0, 0],
                          space_right_m_list=[0, 0, 0],
+                         tap_m_list=[1, 1],
                          origin=np.array([0, 0])):
     """generate a sampler with clock buffers. used when AnalogMOS is not available
     """
     #variable/cell namings
     pg = placement_grid
     rg_m3m4 = routing_grid_m3m4
-    tap_name='tap'
 
     # placement
-    itapl=[]
-    itapr=[]
-    ispl=[]
-    ispr=[]
+    itapl=[] #left tap
+    itapr=[] #right tap
+    ispl=[]  #left space
+    ispr=[]  #right space
     ispinb=[]
     ispoutb=[]
     # sampler row
@@ -82,10 +83,10 @@ def generate_samp_wckbuf(laygen, objectname_pfix, templib_logic,
         if i%2==0: tf='R0'
         else: tf='MX'
         if i==0:
-            itapl.append(laygen.place(name="I" + objectname_pfix + 'TAPL0', templatename=tap_name,
+            itapl.append(laygen.place(name="I" + objectname_pfix + 'TAPL0', templatename=tap_cellname,
                                       gridname=pg, xy=origin, template_libname=templib_logic))
         else:
-            itapl.append(laygen.relplace(name = "I" + objectname_pfix + 'TAPL'+str(i), templatename = tap_name,
+            itapl.append(laygen.relplace(name = "I" + objectname_pfix + 'TAPL'+str(i), templatename = tap_cellname,
                                          gridname = pg, refinstname = itapl[-1].name, transform=tf,
                                          direction = 'top', template_libname=templib_logic))
         refi=itapl[-1].name
@@ -165,7 +166,7 @@ def generate_samp_wckbuf(laygen, objectname_pfix, templib_logic,
                          shape=np.array([m_space_1x, 1]), transform=tf, gridname=pg,
                          refinstname=refi, template_libname=templib_logic))
             refi = isp1x[-1].name
-        itapr.append(laygen.relplace(name = "I" + objectname_pfix + 'TAPR'+str(i), templatename = tap_name,
+        itapr.append(laygen.relplace(name = "I" + objectname_pfix + 'TAPR'+str(i), templatename = tap_cellname,
                                      gridname = pg, refinstname = refi, transform=tf, template_libname = templib_logic))
 
     #internal pins
