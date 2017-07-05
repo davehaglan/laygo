@@ -147,11 +147,11 @@ Following parameters are defined in the configuration files:
 For the starting point, following preset files are provided. They are
 not 100% finalized, but will serve well for initializations.
 
-* **adc_sar_spec(size)_craft.yaml** : 9.6GS/s, 9bit ADC with digital
+1. **adc_sar_spec(size)_craft.yaml** : 9.6GS/s, 9bit ADC with digital
 calibration.
-* **adc_sar_spec(size)_11b.yaml** : GS/s, 11bit ADC with digital
+2. **adc_sar_spec(size)_11b.yaml** : GS/s, 11bit ADC with digital
 calibration.
-* **adc_sar_spec(size)_6b.yaml** : 2GS/s, 6bit ADC with radix-2
+3. **adc_sar_spec(size)_6b.yaml** : 2GS/s, 6bit ADC with radix-2
 constellation.
 
 ## TISARADC architecture

@@ -8,9 +8,11 @@ coding styles, in order to help users to build their codes in the
 most effective way. Codes will be kept updated, as new features and
 codes added.
 
-## Code example 1: simple elements using primitive templates
+## Code example 1: basic elements using primitive templates
 This example is about making basic functional elements (i.e. logic gates,
 amplifiers) using primitive templates.
+
+[generators/golden/nand_golden_example.py](generators/golden/nand_golden_example.py)
 
 ## Code example 2: block level placement and routes
 This example is about making a block in higher level, composed of basic
