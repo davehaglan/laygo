@@ -108,6 +108,7 @@ This section describes how to generate CMOS SER/DES with a flexible SER/DES rati
     The schematic shown below is for 5:1 serializer.
 
     ![serdes](images/ser_5to1_schematic.png)
+    
 3) Generate 2:1 SER with a half-rate clock
 
     a) Generate layout
@@ -125,6 +126,7 @@ This section describes how to generate CMOS SER/DES with a flexible SER/DES rati
     The layout shown below is for 10:1 serializer.
 
     ![serdes](images/ser_10to1_layout.png)
+    
     b) Generate schematic
     
         run laygo/generators/serdes/ser_2Nto1_schematic_generator.py
@@ -147,6 +149,7 @@ This section describes how to generate CMOS SER/DES with a flexible SER/DES rati
     The layout shown below is for 10:1 serializer.
 
     ![serdes](images/ser_30to1_layout.png)
+    
     c) Generate schematic
     
         run laygo/generators/serdes/ser_3stage_schematic_generator.py
