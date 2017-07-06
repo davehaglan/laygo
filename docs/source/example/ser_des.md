@@ -4,12 +4,14 @@ This section describes how to generate CMOS SER/DES with a flexible SER/DES rati
 
 ## Structure
 1) 2N:1 serializer
+
     ![serdes](images/ser_2Nto1.png)
 
     * Assuming half-rate clocking
     * Two step: 2N:2, 2:1 for arbitrary N
     * Not 2:1 tree structure: more flexible SER ratio
 2) N:1 serializer
+
     ![serdes](images/ser_Nto1.png)
     
     * Multi-phase divider using shift register
@@ -18,11 +20,13 @@ This section describes how to generate CMOS SER/DES with a flexible SER/DES rati
     * Retiming flip-flops for the input
     * N:1 MUX using tri-state inverters
 3) 2NM:1 serializer
+
     ![serdes](images/ser_3stage.png)
     
     * 3 stage (2NM:2N:2:1)
     * For high serialization ratio
 4) 1:N deserializer
+
     ![serdes](images/des_1toN.png)
     
     * Shift-register divider for arbitrary division ratio
