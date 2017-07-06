@@ -22,6 +22,7 @@ Contents:
    Generator example - CMOS logic family <example/logic>
    Generator example - CMOS serdes <example/serdes>
    Generator example - TISAR ADC <example/tisar>
+   Generator example - Flexible CMOS DES <example/des>
    Code examples (to be uploaded) <example/code>
    Technology setup instructions <tech/tech>
    API documentation <api/modules>
