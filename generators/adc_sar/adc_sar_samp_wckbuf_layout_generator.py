@@ -83,21 +83,25 @@ def generate_samp_body(laygen, objectname_pfix, templib_logic,
     yofst_i=2
     yofst_o=4
     yofst_en=0
+    y=laygen.get_inst_pin_xy(name=isampl.name, pinname='I', gridname=rg34, index=np.array([0, 0]), sort=True)[0][1]
+    x=[laygen.get_inst_pin_xy(name=isampl.name, pinname='EN', gridname=rg34, index=np.array([0, 0]), sort=True)[0][1],
+       laygen.get_inst_pin_xy(name=isampr.name, pinname='EN', gridname=rg34, index=np.array([0, 0]), sort=True)[0][1]]
+
     # switch input
-    xy1=laygen.get_inst_pin_xy(name=isampl.name, pinname='I', gridname=rg34, index=np.array([0, 0]), sort=True)[0]+np.array([-4, yofst_i])
+    xy1=laygen.get_inst_pin_xy(name=isampl.name, pinname='I', gridname=rg34, index=np.array([0, 0]), sort=True)[0]+np.array([-6, yofst_i])
     for i in range(samp_m):
         xy0=laygen.get_inst_pin_xy(name=isampl.name, pinname='I', gridname=rg34, index=np.array([i, 0]), sort=True)[0]
         [rv0, rh0] = laygen.route_vh(xy0=xy0, xy1=xy1, gridname0=rg34)
-    xy1=laygen.get_inst_pin_xy(name=isampr.name, pinname='I', gridname=rg34, index=np.array([0, 0]), sort=True)[0]+np.array([4, yofst_i])
+    xy1=laygen.get_inst_pin_xy(name=isampr.name, pinname='I', gridname=rg34, index=np.array([0, 0]), sort=True)[0]+np.array([6, yofst_i])
     for i in range(samp_m):
         xy0=laygen.get_inst_pin_xy(name=isampr.name, pinname='I', gridname=rg34, index=np.array([i, 0]), sort=True)[0]
         [rv0, rh0] = laygen.route_vh(xy0=xy0, xy1=xy1, gridname0=rg34)
     # switch output
-    xy1=laygen.get_inst_pin_xy(name=isampl.name, pinname='O', gridname=rg34, index=np.array([0, 0]), sort=True)[0]+np.array([-4, yofst_o])
+    xy1=laygen.get_inst_pin_xy(name=isampl.name, pinname='O', gridname=rg34, index=np.array([0, 0]), sort=True)[0]+np.array([-5, yofst_o])
     for i in range(samp_m):
         xy0=laygen.get_inst_pin_xy(name=isampl.name, pinname='O', gridname=rg34, index=np.array([i, 0]), sort=True)[0]
         [rv0, rh0] = laygen.route_vh(xy0=xy0, xy1=xy1, gridname0=rg34)
-    xy1=laygen.get_inst_pin_xy(name=isampr.name, pinname='O', gridname=rg34, index=np.array([0, 0]), sort=True)[0]+np.array([4, yofst_o])
+    xy1=laygen.get_inst_pin_xy(name=isampr.name, pinname='O', gridname=rg34, index=np.array([0, 0]), sort=True)[0]+np.array([5, yofst_o])
     for i in range(samp_m):
         xy0=laygen.get_inst_pin_xy(name=isampr.name, pinname='O', gridname=rg34, index=np.array([i, 0]), sort=True)[0]
         [rv0, rh0] = laygen.route_vh(xy0=xy0, xy1=xy1, gridname0=rg34)

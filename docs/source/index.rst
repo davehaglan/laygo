@@ -20,9 +20,9 @@ Contents:
    Tutorial (BAG flow) <tutorial/tutorial_BAG>
    Architecture <architecture/architecture>
    Generator example - CMOS logic family <example/logic>
-   Generator example - CMOS serdes <example/serdes>
+   Generator example - CMOS 2:1 mux serializer (obsolete) <example/serdes>
+   Generator example - Flexible CMOS SERDES <example/ser_des>
    Generator example - TISAR ADC <example/tisar>
-   Generator example - Flexible CMOS DES <example/ser_des>
    Code examples (to be uploaded) <example/code>
    Technology setup instructions <tech/tech>
    API documentation <api/modules>
