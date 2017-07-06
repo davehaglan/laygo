@@ -1220,6 +1220,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         np.array([int, int])
             Instance pin coordinates
         """
+        index=np.asarray(index)
         if name == None:
             xy=dict()
             for i in self.get_inst():

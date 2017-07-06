@@ -83,10 +83,20 @@ def generate_samp_body(laygen, objectname_pfix, templib_logic,
     yofst_i=2
     yofst_o=4
     yofst_en=0
-    y=laygen.get_inst_pin_xy(name=isampl.name, pinname='I', gridname=rg34, index=np.array([0, 0]), sort=True)[0][1]
-    x=[laygen.get_inst_pin_xy(name=isampl.name, pinname='EN', gridname=rg34, index=np.array([0, 0]), sort=True)[0][1],
-       laygen.get_inst_pin_xy(name=isampr.name, pinname='EN', gridname=rg34, index=np.array([0, 0]), sort=True)[0][1]]
-
+    y0=laygen.get_inst_pin_xy(name=isampl.name, pinname='I', gridname=rg34, index=[0, 0], sort=True)[0][1]
+    y=[y0+yofst_i, y0+yofst_o, y0+yofst_en]
+    xl=[laygen.get_inst_pin_xy(name=isampl.name, pinname='EN', gridname=rg34, index=[0, 0], sort=True)[0][1],
+        laygen.get_inst_pin_xy(name=isampl.name, pinname='I', gridname=rg34, index=[m_samp-1, 0], sort=True)[0][1]]
+    xr=[laygen.get_inst_pin_xy(name=isampr.name, pinname='I', gridname=rg34, index=[m_samp-1, 0], sort=True)[0][1],
+        laygen.get_inst_pin_xy(name=isampr.name, pinname='EN', gridname=rg34, index=[0, 0], sort=True)[0][1]]
+    for i in range(samp_m):
+        laygen.route(name=None, xy0=[x[0],y[0]], xy1=np.array([0, 0]), gridname0=None, gridname1=None, direction='omni',
+              refobj0=None, refobj1=None, refobjindex0=np.array([0, 0]), refobjindex1=np.array([0, 0]), 
+              refinstname0=None, refinstname1=None, refinstindex0=np.array([0, 0]), refinstindex1=np.array([0, 0]),
+              refpinname0=None, refpinname1=None, offset0=np.array([0,0]), offset1=None,
+              transform0='R0', transform1=None, endstyle0="truncate", endstyle1="truncate",
+              via0=None, via1=None, addvia0=False, addvia1=False, netname=None):
+    '''
     # switch input
     xy1=laygen.get_inst_pin_xy(name=isampl.name, pinname='I', gridname=rg34, index=np.array([0, 0]), sort=True)[0]+np.array([-6, yofst_i])
     for i in range(samp_m):
@@ -114,6 +124,7 @@ def generate_samp_body(laygen, objectname_pfix, templib_logic,
     for i in range(samp_m):
         xy0=laygen.get_inst_pin_xy(name=isampr.name, pinname='EN', gridname=rg34, index=np.array([i, 0]), sort=True)[0]
         [rv0, rh0] = laygen.route_vh(xy0=xy0, xy1=xy1, gridname0=rg34)
+    '''
 
 def generate_samp_wckbuf(laygen, objectname_pfix, templib_logic, 
                          placement_grid='placement_basic',
