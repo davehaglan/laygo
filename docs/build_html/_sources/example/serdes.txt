@@ -2,15 +2,10 @@
 
 ![serdes](images/serdes.png)
 
+(This generator example is not maintained anymore. Please refer to Woorham\`s example for the latest codes)
+
 This section describes how to generate CMOS serdes building block layout
 templates.
-
->Note 1: the codes are lengthy and not cleaned up yet. An improved
- version following the tutorial conventions (possibly with more
-abstracting functions) will be released soon.
-
->Note 2: this document only contains materials on CMOS serializers
-For more advanced examples, refer to the BAG documentations.
 
 ## Install and launch
 1. Set up BAG environment for the technology in use. This is usually
