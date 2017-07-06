@@ -34,7 +34,7 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="laygo_documentation 1.0 documentation" href="../index.html"/>
-        <link rel="next" title="Time-interleaved SAR ADC generator" href="tisar.html"/>
+        <link rel="next" title="CMOS SER/DES generator" href="ser_des.html"/>
         <link rel="prev" title="Logic family generator" href="logic.html"/> 
 
   
@@ -106,9 +106,16 @@
 <li class="toctree-l2"><a class="reference internal" href="logic.html#schematic-templates">Schematic templates</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Generator example - CMOS serdes</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Generator example - CMOS 2:1 mux serializer (obsolete)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#install-and-launch">Install and launch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#parameterizations">Parameterizations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ser_des.html">Generator example - Flexible CMOS SERDES</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ser_des.html#structure">Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ser_des.html#setup-for-bwrc-users">Setup (for BWRC users)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ser_des.html#serializer-generation">Serializer Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ser_des.html#deserializer-generation">Deserializer Generation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tisar.html">Generator example - TISAR ADC</a><ul>
@@ -183,15 +190,9 @@
   <div class="section" id="cmos-serdes-generator">
 <span id="cmos-serdes-generator"></span><h1>CMOS SERDES generator<a class="headerlink" href="#cmos-serdes-generator" title="Permalink to this headline">¶</a></h1>
 <p><img alt="serdes" src="../_images/serdes.png" /></p>
+<p>(This generator example is not maintained anymore. Please refer to Woorham`s example for the latest codes)</p>
 <p>This section describes how to generate CMOS serdes building block layout
 templates.</p>
-<blockquote>
-<div>Note 1: the codes are lengthy and not cleaned up yet. An improved
-version following the tutorial conventions (possibly with more
-abstracting functions) will be released soon.</div></blockquote>
-<blockquote>
-<div>Note 2: this document only contains materials on CMOS serializers
-For more advanced examples, refer to the BAG documentations.</div></blockquote>
 <div class="section" id="install-and-launch">
 <span id="install-and-launch"></span><h2>Install and launch<a class="headerlink" href="#install-and-launch" title="Permalink to this headline">¶</a></h2>
 <ol>
@@ -249,7 +250,7 @@ the increased serialization ratio.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="tisar.html" class="btn btn-neutral float-right" title="Time-interleaved SAR ADC generator">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="ser_des.html" class="btn btn-neutral float-right" title="CMOS SER/DES generator">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="logic.html" class="btn btn-neutral" title="Logic family generator"><span class="fa fa-arrow-circle-left"></span> Previous</a>

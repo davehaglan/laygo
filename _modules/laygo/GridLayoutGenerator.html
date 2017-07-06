@@ -105,9 +105,16 @@
 <li class="toctree-l2"><a class="reference internal" href="../../example/logic.html#schematic-templates">Schematic templates</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../example/serdes.html">Generator example - CMOS serdes</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../example/serdes.html">Generator example - CMOS 2:1 mux serializer (obsolete)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../example/serdes.html#install-and-launch">Install and launch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../example/serdes.html#parameterizations">Parameterizations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../example/ser_des.html">Generator example - Flexible CMOS SERDES</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../example/ser_des.html#structure">Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/ser_des.html#setup-for-bwrc-users">Setup (for BWRC users)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/ser_des.html#serializer-generation">Serializer Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/ser_des.html#deserializer-generation">Deserializer Generation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../example/tisar.html">Generator example - TISAR ADC</a><ul>
@@ -469,7 +476,8 @@
                                    <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">template_libname</span><span class="o">=</span><span class="n">template_libname</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">sh</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="n">sp</span><span class="p">,</span>
                                    <span class="n">transform</span><span class="o">=</span><span class="n">tr</span><span class="p">)</span>
                 <span class="n">return_inst_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">refi</span><span class="p">)</span>
-                <span class="n">refi_name</span> <span class="o">=</span> <span class="n">refi</span><span class="o">.</span><span class="n">name</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">refi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">refi_name</span> <span class="o">=</span> <span class="n">refi</span><span class="o">.</span><span class="n">name</span>
             <span class="k">return</span> <span class="n">return_inst_list</span>
         <span class="k">else</span><span class="p">:</span> <span class="c1"># single placement</span>
             <span class="c1"># preprocessing arguments</span>
@@ -882,6 +890,7 @@
 <span class="sd">        [laygo.layoutObject.Rect, laygo.layoutObject.Rect]</span>
 <span class="sd">            generated routes (vertical, horizontal)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#TODO: support refobj instead of refinstname/refpinname</span>
         <span class="n">xy0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy0</span><span class="p">)</span>
         <span class="n">xy1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy1</span><span class="p">)</span>
         <span class="n">xy0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy0</span><span class="p">)</span>
@@ -899,31 +908,6 @@
                          <span class="n">refinstname0</span><span class="o">=</span><span class="n">refinstname1</span><span class="p">,</span> <span class="n">refinstindex0</span><span class="o">=</span><span class="n">refinstindex1</span><span class="p">,</span> <span class="n">refpinname0</span><span class="o">=</span><span class="n">refpinname1</span><span class="p">,</span>
                          <span class="n">refinstname1</span><span class="o">=</span><span class="n">refinstname0</span><span class="p">,</span> <span class="n">refinstindex1</span><span class="o">=</span><span class="n">refinstindex0</span><span class="p">,</span> <span class="n">refpinname1</span><span class="o">=</span><span class="n">refpinname0</span><span class="p">,</span>
                          <span class="n">endstyle0</span><span class="o">=</span><span class="n">endstyle0</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">endstyle1</span><span class="o">=</span><span class="n">endstyle1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">via0</span><span class="o">=</span><span class="n">via1</span><span class="p">)</span>
-        <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        if not refinstname0 is None:</span>
-<span class="sd">            if not refpinname0 is None:</span>
-<span class="sd">                _xy0 = self.get_inst_pin_coord(name=refinstname0, pinname=refpinname0, gridname=gridname0,</span>
-<span class="sd">                                               index=refinstindex0, sort=False)[0] + \</span>
-<span class="sd">                                               np.dot(xy0, self.Mt(self.get_inst(refinstname0).transform).T)</span>
-<span class="sd">            else:</span>
-<span class="sd">                _xy0 = self.get_inst_xy(name=refinstname0, gridname=gridname0, index=refinstindex0) + \</span>
-<span class="sd">                                        np.dot(xy0, self.Mt(self.get_inst(refinstname0).transform).T)</span>
-<span class="sd">        else:</span>
-<span class="sd">             _xy0 = xy0</span>
-<span class="sd">        if not refinstname1 is None:</span>
-<span class="sd">            if not refpinname1 is None:</span>
-<span class="sd">                _xy1 = self.get_inst_pin_coord(name=refinstname1, pinname=refpinname1, gridname=gridname1,</span>
-<span class="sd">                                               index=refinstindex1, sort=False)[0] + \</span>
-<span class="sd">                                               np.dot(xy1, self.Mt(self.get_inst(refinstname1).transform).T)</span>
-<span class="sd">            else:</span>
-<span class="sd">                _xy1 = self.get_inst_xy(name=refinstname1, gridname=gridname1, index=refinstindex1) + \</span>
-<span class="sd">                                        np.dot(xy1, self.Mt(self.get_inst(refinstname1).transform).T)</span>
-<span class="sd">        else:</span>
-<span class="sd">            _xy1 = xy1</span>
-<span class="sd">        rh0 = self.route(None, layerh, xy0=_xy1, xy1=np.array([_xy0[0], _xy1[1]]), gridname0=gridname1, via0=via1,</span>
-<span class="sd">                         via1=[[0, 0]])</span>
-<span class="sd">        rv0 = self.route(None, layerv, xy0=np.array([_xy0[0], _xy1[1]]), xy1=_xy0, gridname0=gridname0, via1=via0, via0=[[0, 0]])</span>
-<span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">rv0</span><span class="p">,</span> <span class="n">rh0</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="GridLayoutGenerator.route_hv"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.route_hv">[docs]</a>    <span class="k">def</span> <span class="nf">route_hv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layerh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layerv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridname0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridname1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -971,6 +955,8 @@
 <span class="sd">        [laygo.layoutObject.Rect, laygo.layoutObject.Rect]</span>
 <span class="sd">            generated routes (horizontal, vertical)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#TODO: support refobj instead of refinstname/refpinname</span>
+
         <span class="n">xy0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy0</span><span class="p">)</span>
         <span class="n">xy1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy1</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">gridname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -986,32 +972,6 @@
                        <span class="n">refinstname0</span><span class="o">=</span><span class="n">refinstname1</span><span class="p">,</span> <span class="n">refinstindex0</span><span class="o">=</span><span class="n">refinstindex1</span><span class="p">,</span> <span class="n">refpinname0</span><span class="o">=</span><span class="n">refpinname1</span><span class="p">,</span>
                        <span class="n">refinstname1</span><span class="o">=</span><span class="n">refinstname0</span><span class="p">,</span> <span class="n">refinstindex1</span><span class="o">=</span><span class="n">refinstindex0</span><span class="p">,</span> <span class="n">refpinname1</span><span class="o">=</span><span class="n">refpinname0</span><span class="p">,</span>
                        <span class="n">endstyle0</span><span class="o">=</span><span class="n">endstyle0</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">endstyle1</span><span class="o">=</span><span class="n">endstyle1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">via0</span><span class="o">=</span><span class="n">via1</span><span class="p">)</span>
-        <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        if not refinstname0 is None:</span>
-<span class="sd">            if not refpinname0 is None:</span>
-<span class="sd">                _xy0 = self.get_inst_pin_coord(name=refinstname0, pinname=refpinname0, gridname=gridname0,</span>
-<span class="sd">                                               index=refinstindex0, sort=False)[0] + \</span>
-<span class="sd">                                               np.dot(xy0, self.Mt(self.get_inst(refinstname0).transform).T)</span>
-<span class="sd">            else:</span>
-<span class="sd">                _xy0 = self.get_inst_xy(name=refinstname0, gridname=gridname0, index=refinstindex0) + \</span>
-<span class="sd">                                        np.dot(xy0, self.Mt(self.get_inst(refinstname0).transform).T)</span>
-<span class="sd">        else:</span>
-<span class="sd">             _xy0 = xy0</span>
-<span class="sd">        if not refinstname1 is None:</span>
-<span class="sd">            if not refpinname1 is None:</span>
-<span class="sd">                _xy1 = self.get_inst_pin_coord(name=refinstname1, pinname=refpinname1, gridname=gridname1,</span>
-<span class="sd">                                               index=refinstindex1, sort=False)[0] + \</span>
-<span class="sd">                                               np.dot(xy1, self.Mt(self.get_inst(refinstname1).transform).T)</span>
-<span class="sd">            else:</span>
-<span class="sd">                _xy1 = self.get_inst_xy(name=refinstname1, gridname=gridname1, index=refinstindex1) + \</span>
-<span class="sd">                                        np.dot(xy1, self.Mt(self.get_inst(refinstname1).transform).T)</span>
-<span class="sd">        else:</span>
-<span class="sd">            _xy1 = xy1</span>
-<span class="sd">        rh0=self.route(None, layerh, xy0=_xy0 , xy1=np.array([_xy1[0], _xy0[1]]), gridname0=gridname0,</span>
-<span class="sd">                       endstyle0=endstyle0[0], endstyle1=endstyle1[0], via0=via0, via1=[[0, 0]])</span>
-<span class="sd">        rv0=self.route(None, layerv, xy0=np.array([_xy1[0], _xy0[1]]), xy1=_xy1, gridname0=gridname1,</span>
-<span class="sd">                       endstyle0=endstyle0[1], endstyle1=endstyle1[1], via1=via1)</span>
-<span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">rh0</span><span class="p">,</span> <span class="n">rv0</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="GridLayoutGenerator.route_vhv"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.route_vhv">[docs]</a>    <span class="k">def</span> <span class="nf">route_vhv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layerv0</span><span class="p">,</span> <span class="n">layerh</span><span class="p">,</span> <span class="n">xy0</span><span class="p">,</span> <span class="n">xy1</span><span class="p">,</span> <span class="n">track_y</span><span class="p">,</span> <span class="n">gridname0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layerv1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridname1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1049,6 +1009,7 @@
 <span class="sd">        [laygo.layoutObject.Rect, laygo.layoutObject.Rect, laygo.layoutObject.Rect]</span>
 <span class="sd">            generated routes (vertical, horizontal, vertical)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#TODO: support refobj</span>
         <span class="n">xy0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy0</span><span class="p">)</span>
         <span class="n">xy1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy1</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">layerv1</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
@@ -1124,6 +1085,7 @@
 <span class="sd">        [laygo.layoutObject.Rect, laygo.layoutObject.Rect, laygo.layoutObject.Rect]</span>
 <span class="sd">            generated routes (horizontal, vertical, horizontal)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#TODO: support refobj</span>
         <span class="n">xy0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy0</span><span class="p">)</span>
         <span class="n">xy1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy1</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">layerh1</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
@@ -1447,10 +1409,11 @@
 <span class="sd">        np.array([int, int])</span>
 <span class="sd">            Instance pin coordinates</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">index</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">xy</span><span class="o">=</span><span class="nb">dict</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_inst</span><span class="p">():</span>
-                <span class="n">xy</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_inst_pin_coord</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">pinname</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">sort</span><span class="p">)</span>
+                <span class="n">xy</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_inst_pin_xy</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">pinname</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">sort</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">xy</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_inst</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
@@ -1462,7 +1425,7 @@
                 <span class="k">if</span> <span class="n">pinname</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
                     <span class="n">xy</span><span class="o">=</span><span class="nb">dict</span><span class="p">()</span>
                     <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">pins</span><span class="p">:</span>
-                        <span class="n">xy</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_inst_pin_coord</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">sort</span><span class="p">)</span>
+                        <span class="n">xy</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_inst_pin_xy</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">sort</span><span class="p">)</span>
                     <span class="k">return</span> <span class="n">xy</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">xy0</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">xy</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">index</span> <span class="o">+</span> <span class="n">t</span><span class="o">.</span><span class="n">pins</span><span class="p">[</span><span class="n">pinname</span><span class="p">][</span><span class="s1">&#39;xy&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mt</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
