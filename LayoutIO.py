@@ -280,26 +280,27 @@ def export_BAG(db, libname, cellname, prj, array_delimiter=['[', ']'], via_tech=
                 logging.debug('ExportBAG: Pin:' + p.name + ' net:' + p.netname + ' layer:' + str(p.layer) +
                               ' xy:' + str(bnd.tolist()))
         for inst in s['instances'].values():  # instance generation
-            if inst.xy.ndim == 1:
-                xy = np.expand_dims(inst.xy, axis=0)  # extend dims for iteration
-            else:
-                xy = inst.xy
-            xyl = xy.tolist()
-            for i, _xy in enumerate(xyl):
-                if len(xyl) == 1:
-                    name = inst.name
-                else:  # multiple placements
-                    if isinstance(array_delimiter, list):
-                        name = inst.name + array_delimiter[0] + str(i) + array_delimiter[1]
-                    else:
-                        name = inst.name + array_delimiter + str(i)  # array delimiter is string
-                if inst.shape[0]<1 or inst.shape[1]<1: #unsupported array
-                    print("[WARNING] Instance "+inst.name+" ("+ inst.cellname+") has an unsupported shape:" + str(inst.shape))
-                x = inst.spacing[1]
-                inst_list.append({'loc': _xy, 'name': inst.name, 'lib': inst.libname,
-                                  'sp_cols': eval(repr(inst.spacing[0])), 'sp_rows': eval(repr(inst.spacing[1])),
-                                  'cell': inst.cellname, 'num_cols': int(inst.shape[0]), 'num_rows': int(inst.shape[1]),
-                                  'orient': inst.transform, 'view': 'layout'})
+            if np.all(inst.shape>np.array([0, 0])):
+                if inst.xy.ndim == 1:
+                    xy = np.expand_dims(inst.xy, axis=0)  # extend dims for iteration
+                else:
+                    xy = inst.xy
+                xyl = xy.tolist()
+                for i, _xy in enumerate(xyl):
+                    if len(xyl) == 1:
+                        name = inst.name
+                    else:  # multiple placements
+                        if isinstance(array_delimiter, list):
+                            name = inst.name + array_delimiter[0] + str(i) + array_delimiter[1]
+                        else:
+                            name = inst.name + array_delimiter + str(i)  # array delimiter is string
+                    if inst.shape[0]<1 or inst.shape[1]<1: #unsupported array
+                        print("[WARNING] Instance "+inst.name+" ("+ inst.cellname+") has an unsupported shape:" + str(inst.shape))
+                    x = inst.spacing[1]
+                    inst_list.append({'loc': _xy, 'name': inst.name, 'lib': inst.libname,
+                                      'sp_cols': eval(repr(inst.spacing[0])), 'sp_rows': eval(repr(inst.spacing[1])),
+                                      'cell': inst.cellname, 'num_cols': int(inst.shape[0]), 'num_rows': int(inst.shape[1]),
+                                      'orient': inst.transform, 'view': 'layout'})
 
         logging.debug('ExportBAG: rect_list:' + str(rect_list))
         logging.debug('ExportBAG: inst_list:' + str(inst_list))

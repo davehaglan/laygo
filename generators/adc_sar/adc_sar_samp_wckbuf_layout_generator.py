@@ -40,164 +40,146 @@ def create_power_pin_from_inst(laygen, layer, gridname, inst_left, inst_right):
     laygen.pin(name='VDD', layer=layer, xy=np.vstack((rvdd0_pin_xy[0],rvdd1_pin_xy[1])), gridname=gridname)
     laygen.pin(name='VSS', layer=layer, xy=np.vstack((rvss0_pin_xy[0],rvss1_pin_xy[1])), gridname=gridname)
 
+def generate_samp_body(laygen, objectname_pfix, templib_logic, 
+                       placement_grid='placement_basic',
+                       routing_grid_m3m4='route_M3_M4_basic', 
+                       samp_cellname='nsw_wovdd_4x',
+                       samp_m=4,
+                       space_cellname_list=['space_wovdd_4x', 'space_wovdd_2x', 'space_wovdd_1x'],
+                       tap_cellname='tap_wovdd',
+                       space_m_list=[0, 0, 0],
+                       tap_m_list=[1, 1],
+                       origin=np.array([0, 0])):
+    """generate a sampler body. 
+    """
+    #variable/cell namings
+    pg = placement_grid
+    rg34 = routing_grid_m3m4
+
+    # placement
+    # sampler row
+    # left tap
+    itapl = laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, refinstname=None, 
+                            direction='right', shape=[tap_m_list[0], 1], template_libname=templib_logic, transform='R0')
+    # left space
+    ispl = laygen.relplace(name=None, templatename=space_cellname_list, gridname=pg, refinstname=itapl.name, 
+                            direction=['right']*len(space_cellname_list), shape=[[i, 1] for i in space_m_list], 
+                            template_libname=templib_logic, transform='R0')
+    # left switch
+    isampl = laygen.relplace(name=None, templatename=samp_cellname, gridname=pg, refinstname=ispl[-1].name, 
+                             direction='right', shape=[samp_m, 1], template_libname=templib_logic, transform='R0')
+    # right switch
+    isampr = laygen.relplace(name=None, templatename=samp_cellname, gridname=pg, refinstname=isampl.name, 
+                             direction='right', shape=[samp_m, 1], template_libname=templib_logic, transform='MY')
+    # right space
+    ispr = laygen.relplace(name=None, templatename=list(reversed(space_cellname_list)), gridname=pg, refinstname=isampr.name, 
+                            direction=['right']*len(space_cellname_list), shape=[[i, 1] for i in list(reversed(space_m_list))], 
+                            template_libname=templib_logic, transform='R0')
+    # right tap
+    itapr = laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, refinstname=ispr[-1].name, 
+                            direction='right', shape=[tap_m_list[0], 1], template_libname=templib_logic, transform='R0')
+    
+    # routes
+    yofst_i=2
+    yofst_o=4
+    yofst_en=0
+    # switch input
+    xy1=laygen.get_inst_pin_xy(name=isampl.name, pinname='I', gridname=rg34, index=np.array([0, 0]), sort=True)[0]+np.array([-4, yofst_i])
+    for i in range(samp_m):
+        xy0=laygen.get_inst_pin_xy(name=isampl.name, pinname='I', gridname=rg34, index=np.array([i, 0]), sort=True)[0]
+        [rv0, rh0] = laygen.route_vh(xy0=xy0, xy1=xy1, gridname0=rg34)
+    xy1=laygen.get_inst_pin_xy(name=isampr.name, pinname='I', gridname=rg34, index=np.array([0, 0]), sort=True)[0]+np.array([4, yofst_i])
+    for i in range(samp_m):
+        xy0=laygen.get_inst_pin_xy(name=isampr.name, pinname='I', gridname=rg34, index=np.array([i, 0]), sort=True)[0]
+        [rv0, rh0] = laygen.route_vh(xy0=xy0, xy1=xy1, gridname0=rg34)
+    # switch output
+    xy1=laygen.get_inst_pin_xy(name=isampl.name, pinname='O', gridname=rg34, index=np.array([0, 0]), sort=True)[0]+np.array([-4, yofst_o])
+    for i in range(samp_m):
+        xy0=laygen.get_inst_pin_xy(name=isampl.name, pinname='O', gridname=rg34, index=np.array([i, 0]), sort=True)[0]
+        [rv0, rh0] = laygen.route_vh(xy0=xy0, xy1=xy1, gridname0=rg34)
+    xy1=laygen.get_inst_pin_xy(name=isampr.name, pinname='O', gridname=rg34, index=np.array([0, 0]), sort=True)[0]+np.array([4, yofst_o])
+    for i in range(samp_m):
+        xy0=laygen.get_inst_pin_xy(name=isampr.name, pinname='O', gridname=rg34, index=np.array([i, 0]), sort=True)[0]
+        [rv0, rh0] = laygen.route_vh(xy0=xy0, xy1=xy1, gridname0=rg34)
+    # switch enable
+    xy1=laygen.get_inst_pin_xy(name=isampl.name, pinname='EN', gridname=rg34, index=np.array([0, 0]), sort=True)[0]+np.array([-4, yofst_en])
+    for i in range(samp_m):
+        xy0=laygen.get_inst_pin_xy(name=isampl.name, pinname='EN', gridname=rg34, index=np.array([i, 0]), sort=True)[0]
+        [rv0, rh0] = laygen.route_vh(xy0=xy0, xy1=xy1, gridname0=rg34)
+    xy1=laygen.get_inst_pin_xy(name=isampr.name, pinname='EN', gridname=rg34, index=np.array([0, 0]), sort=True)[0]+np.array([4, yofst_en])
+    for i in range(samp_m):
+        xy0=laygen.get_inst_pin_xy(name=isampr.name, pinname='EN', gridname=rg34, index=np.array([i, 0]), sort=True)[0]
+        [rv0, rh0] = laygen.route_vh(xy0=xy0, xy1=xy1, gridname0=rg34)
+
 def generate_samp_wckbuf(laygen, objectname_pfix, templib_logic, 
                          placement_grid='placement_basic',
                          routing_grid_m3m4='route_M3_M4_basic', 
-                         samp_cellname='nsw_24x',
+                         samp_cellname='nsw_4x',
+                         samp_m=4,
                          inbuf_cellname_list=['inv_8x', 'inv_24x'],
                          outbuf_cellname_list=['inv_4x', 'inv_24x'],
                          space_cellname_list=['space_1x', 'space_2x', 'space_4x'],
                          tap_cellname='tap',
-                         space_left_m_list=[0, 0, 0],
-                         space_right_m_list=[0, 0, 0],
+                         space_m_list=[0, 0, 0],
                          tap_m_list=[1, 1],
                          origin=np.array([0, 0])):
     """generate a sampler with clock buffers. used when AnalogMOS is not available
     """
     #variable/cell namings
     pg = placement_grid
-    rg_m3m4 = routing_grid_m3m4
+    rg34 = routing_grid_m3m4
 
     # placement
-    itapl=[] #left tap
-    itapr=[] #right tap
-    ispl=[]  #left space
-    ispr=[]  #right space
-    ispinb=[]
-    ispoutb=[]
     # sampler row
-    # spacing
-    refi = None
-    tf = 'R0'
-    for spn, spm in zip(space_name, m_space_left_list):
-        ispl.append([laygen.relplace(name=None, templatename=spn, gridname=pg, refinstname=refi,
-            gridname = pg, refinstname = refi, shape=np.array([nfill_buf_4x, 1]),
-                                         direction = 'top', template_libname=templib_logic))
-                ifill_buf_4x=laygen.relplace(name = "I" + objectname_pfix + 'SLFILL4X'+str(i), templatename = space_4x_name,
-                                         gridname = pg, refinstname = refi, shape=np.array([nfill_buf_4x, 1]),
-                                         transform=tf, template_libname=templib_logic)
-                refi = ifill_buf_4x.name
-        refi=itapl[-1].name
-    ispl.append([laygen.replace
-    for i in range(num_row):
-        if i%2==0: tf='R0'
-        else: tf='MX'
-        if i==0:
-            itapl.append(laygen.place(name="I" + objectname_pfix + 'TAPL0', templatename=tap_cellname,
-                                      gridname=pg, xy=origin, template_libname=templib_logic))
-        else:
-            itapl.append(laygen.relplace(name = "I" + objectname_pfix + 'TAPL'+str(i), templatename = tap_cellname,
-                                         gridname = pg, refinstname = itapl[-1].name, transform=tf,
-                                         direction = 'top', template_libname=templib_logic))
-        refi=itapl[-1].name
-        #ckbuf
-        if i==num_row-1:
-            ickbuf0=laygen.relplace(name = "I" + objectname_pfix + 'CKBUF0',
-                                          templatename = ckbuf0_name, gridname = pg, refinstname = refi,
-                                          transform=tf, template_libname=templib_logic)
-            refi=ickbuf0.name
-            ickbuf1=laygen.relplace(name = "I" + objectname_pfix + 'CKBUF1',
-                                          templatename = ckbuf1_name, gridname = pg, refinstname = refi,
-                                          transform=tf, template_libname=templib_logic)
-            refi=ickbuf1.name
-        elif i==num_row-2:
-            ickbuf2=laygen.relplace(name = "I" + objectname_pfix + 'CKBUF2',
-                                          templatename = ckbuf0_name, gridname = pg, refinstname = refi,
-                                          transform=tf, template_libname=templib_logic)
-            refi=ickbuf2.name
-            ickbuf3=laygen.relplace(name = "I" + objectname_pfix + 'CKBUF3',
-                                          templatename = ckbuf1_name, gridname = pg, refinstname = refi,
-                                          transform=tf, template_libname=templib_logic)
-            refi=ickbuf3.name
-        else:
-            if nfill_buf_4x>0:
-                ifill_buf_4x=laygen.relplace(name = "I" + objectname_pfix + 'SLFILL4X'+str(i), templatename = space_4x_name,
-                                         gridname = pg, refinstname = refi, shape=np.array([nfill_buf_4x, 1]),
-                                         transform=tf, template_libname=templib_logic)
-                refi = ifill_buf_4x.name
-            if nfill_buf_2x>0:
-                ifill_buf_2x=laygen.relplace(name = "I" + objectname_pfix + 'SLFILL2X'+str(i), templatename = space_2x_name,
-                                         gridname = pg, refinstname = refi, shape=np.array([nfill_buf_2x, 1]),
-                                         transform=tf, template_libname=templib_logic)
-                refi = ifill_buf_2x.name
-            if nfill_buf_1x>0:
-                ifill_buf_1x=laygen.relplace(name = "I" + objectname_pfix + 'SLFILL1X'+str(i), templatename = space_2x_name,
-                                         gridname = pg, refinstname = refi, shape=np.array([nfill_buf_1x, 1]),
-                                         transform=tf, template_libname=templib_logic)
-        for j in range(num_bits_row):
-            if i*num_bits_row+j < num_bits:
-                islice.append(laygen.relplace(name = "I" + objectname_pfix + 'SL' + str(i) + '_' + str(j),
-                                              templatename = slice_name, gridname = pg, refinstname = refi,
-                                              transform=tf, template_libname=workinglib))
-                refi = islice[-1].name
-            else:
-                #last row
-                nfill = laygen.get_template_size(name=islice[0].cellname, gridname=pg, libname=workinglib)[0]
-                nfill_4x = int(nfill/4)
-                nfill_2x = int((nfill-nfill_4x*4)/2)
-                nfill_1x = nfill-nfill_4x*4-nfill_2x*2
-                if nfill_4x>0:
-                    ifill_4x=laygen.relplace(name = "I" + objectname_pfix + 'SLFILL4X'+str(i*num_bits_row+j), templatename = space_4x_name,
-                                             gridname = pg, refinstname = refi, shape=np.array([nfill_4x, 1]),
-                                             transform=tf, template_libname=templib_logic)
-                    refi = ifill_4x.name
-                if nfill_2x>0:
-                    ifill_2x=laygen.relplace(name = "I" + objectname_pfix + 'SLFILL2X'+str(i*num_bits_row+j), templatename = space_2x_name,
-                                             gridname = pg, refinstname = refi, shape=np.array([nfill_2x, 1]),
-                                             transform=tf, template_libname=templib_logic)
-                    refi = ifill_2x.name
-                if nfill_1x>0:
-                    ifill_1x=laygen.relplace(name = "I" + objectname_pfix + 'SLFILL1X'+str(i*num_bits_row+j), templatename = space_2x_name,
-                                             gridname = pg, refinstname = refi, shape=np.array([nfill_1x, 1]),
-                                             transform=tf, template_libname=templib_logic)
-                    refi = ifill_1x.name
-        if not m_space_4x==0:
-            isp4x.append(laygen.relplace(name="I" + objectname_pfix + 'SP4X'+str(i), templatename=space_4x_name,
-                         shape = np.array([m_space_4x, 1]), transform=tf, gridname=pg,
-                         refinstname=refi, template_libname=templib_logic))
-            refi = isp4x[-1].name
-        if not m_space_2x==0:
-            isp2x.append(laygen.relplace(name="I" + objectname_pfix + 'SP2X'+str(i), templatename=space_2x_name,
-                         shape = np.array([m_space_2x, 1]), transform=tf, gridname=pg,
-                         refinstname=refi, template_libname=templib_logic))
-            refi = isp2x[-1].name
-        if not m_space_1x==0:
-            isp1x.append(laygen.relplace(name="I" + objectname_pfix + 'SP1X'+str(i), templatename=space_1x_name,
-                         shape=np.array([m_space_1x, 1]), transform=tf, gridname=pg,
-                         refinstname=refi, template_libname=templib_logic))
-            refi = isp1x[-1].name
-        itapr.append(laygen.relplace(name = "I" + objectname_pfix + 'TAPR'+str(i), templatename = tap_cellname,
-                                     gridname = pg, refinstname = refi, transform=tf, template_libname = templib_logic))
-
+    # tap
+    itap = laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, refinstname=None, 
+                            direction='right', shape=[tap_m_list[0], 1], template_libname=templib_logic, transform='R0')
+    # space
+    isp = laygen.relplace(name=None, templatename=space_cellname_list, gridname=pg, refinstname=itap.name, 
+                           direction=['right']*len(space_cellname_list), shape=[[i, 1] for i in space_m_list], 
+                           template_libname=templib_logic, transform='R0')
+    # input buffer
+    iibuf = laygen.relplace(name=None, templatename=inbuf_cellname_list, gridname=pg, refinstname=isp[-1].name, 
+                           direction=['right']*len(inbuf_cellname_list), shape=[1, 1],
+                           template_libname=templib_logic, transform='R0')
+    # switch
+    isamp = laygen.relplace(name=None, templatename=samp_cellname, gridname=pg, refinstname=iibuf[-1].name, 
+                            direction='right', shape=[samp_m, 1], template_libname=templib_logic, transform='R0')
+    
+    # routes
+    pdict34 = laygen.get_inst_pin_xy(None, None, rg34)
+    print(pdict34)
+    #y0 = pdict[islice[0].name]['I'][0][1]+2
+    '''
     #internal pins
-    pdict = laygen.get_inst_pin_coord(None, None, rg_m3m4)
+    pdict = laygen.get_inst_pin_coord(None, None, rg34)
     pdict_m4m5 = laygen.get_inst_pin_coord(None, None, rg_m4m5)
 
     y0 = pdict[islice[0].name]['I'][0][1]+2
-    x1 = laygen.get_inst_xy(name=islice[-1].name, gridname=rg_m3m4)[0]\
-         +laygen.get_template_size(name=islice[-1].cellname, gridname=rg_m3m4, libname=workinglib)[0] - 1
+    x1 = laygen.get_inst_xy(name=islice[-1].name, gridname=rg34)[0]\
+         +laygen.get_template_size(name=islice[-1].cellname, gridname=rg34, libname=workinglib)[0] - 1
     y1_m4m5 = laygen.get_inst_xy(name=islice[-1].name, gridname=rg_m4m5)[1] - 2
     if num_row%2==1:
-         y1_m4m5 +=laygen.get_template_size(name=islice[-1].cellname, gridname=rg_m3m4, libname=workinglib)[1]
+         y1_m4m5 +=laygen.get_template_size(name=islice[-1].cellname, gridname=rg34, libname=workinglib)[1]
     #ckbuf route
     [rv0, rclk0] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[ickbuf0.name]['I'][0],
-                                       pdict[ickbuf0.name]['I'][1]+np.array([4, 1]), rg_m3m4)
+                                       pdict[ickbuf0.name]['I'][1]+np.array([4, 1]), rg34)
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[ickbuf0.name]['O'][0],
                                        pdict[ickbuf1.name]['I'][0],
-                                       pdict[islice[num_bits_row*(num_row-1)].name]['CLK'][1][1]-2, rg_m3m4)
+                                       pdict[islice[num_bits_row*(num_row-1)].name]['CLK'][1][1]-2, rg34)
     [rv0, rclko0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[ickbuf1.name]['O'][0],
                                        pdict[islice[num_bits_row*(num_row-1)].name]['CLK'][0],
-                                       pdict[islice[num_bits_row*(num_row-1)].name]['CLK'][1][1] , rg_m3m4)
+                                       pdict[islice[num_bits_row*(num_row-1)].name]['CLK'][1][1] , rg34)
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[ickbuf1.name]['O'][0],
                                        pdict[ickbuf2.name]['I'][0], 
-                                       pdict[ickbuf1.name]['O'][0][1]-4, rg_m3m4)
+                                       pdict[ickbuf1.name]['O'][0][1]-4, rg34)
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[ickbuf2.name]['O'][0],
                                        pdict[ickbuf3.name]['I'][0], 
-                                       pdict[ickbuf2.name]['O'][0][1], rg_m3m4)
+                                       pdict[ickbuf2.name]['O'][0][1], rg34)
     [rv0, rh0] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[ickbuf3.name]['O'][0],
-                                       pdict[ickbuf3.name]['O'][0]+np.array([-3,-1]), rg_m3m4)
+                                       pdict[ickbuf3.name]['O'][0]+np.array([-3,-1]), rg34)
     [rv0, rclko0] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[ickbuf3.name]['O'][0],
-                                       pdict[ickbuf3.name]['O'][0]+np.array([2,-1]), rg_m3m4)
+                                       pdict[ickbuf3.name]['O'][0]+np.array([2,-1]), rg34)
     #xy=laygen.get_rect_xy(rclk0.name, rg_m4m5, sort=True)
     #rh0, rclk0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], xy[0],
     #                             np.array([xy[0][0]+6-6, y1_m4m5]), rg_m4m5)
@@ -218,12 +200,12 @@ def generate_samp_wckbuf(laygen, objectname_pfix, templib_logic,
             [rh0, rv0, rclk0] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][3],
                                  pdict[islice[num_bits_row-1].name]['CLK'][1], 
                                  pdict[islice[(i+1)*num_bits_row-1].name]['CLK'][1], 
-                                 pdict[islice[0].name]['CLK'][0][0], rg_m3m4)
+                                 pdict[islice[0].name]['CLK'][0][0], rg34)
         else:
             [rh0, rv0, rclk0] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][3],
                                  pdict[islice[num_bits_row-1].name]['CLK'][1], 
                                  pdict[islice[-1].name]['CLK'][1], 
-                                 pdict[islice[0].name]['CLK'][0][0], rg_m3m4)
+                                 pdict[islice[0].name]['CLK'][0][0], rg34)
     #pins
     for i in range(num_bits):
         rh0, rin0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], pdict_m4m5[islice[i].name]['I'][0],
@@ -275,7 +257,7 @@ def generate_samp_wckbuf(laygen, objectname_pfix, templib_logic,
             rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j+2, 0]), xy1=np.array([2*j+2, 0]), gridname0=rg_m2m3,
                          refinstname0=itapr[i].name, refpinname0='VDD', refinstindex0=np.array([0, 0]),
                          refinstname1=itapr[i].name, refpinname1='VSS', refinstindex1=np.array([0, 0]), via1=[[0, 0]]))
-
+    '''
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
@@ -306,24 +288,11 @@ if __name__ == '__main__':
 
     #grid
     pg = 'placement_basic' #placement grid
-    rg_m1m2 = 'route_M1_M2_cmos'
-    rg_m1m2_thick = 'route_M1_M2_thick'
-    rg_m2m3 = 'route_M2_M3_cmos'
-    rg_m3m4 = 'route_M3_M4_basic'
-    rg_m4m5 = 'route_M4_M5_basic'
-    rg_m5m6 = 'route_M5_M6_basic'
-    rg_m1m2_pin = 'route_M1_M2_basic'
-    rg_m2m3_pin = 'route_M2_M3_basic'
-
-    #display
-    #laygen.display()
-    #laygen.templates.display()
-    #laygen.save_template(filename=workinglib+'_templates.yaml', libname=workinglib)
+    rg34 = 'route_M3_M4_basic'
 
     mycell_list = []
-    num_bits=9
     #load from preset
-    load_from_file=True
+    '''load_from_file=True
     yamlfile_spec="adc_sar_spec.yaml"
     yamlfile_size="adc_sar_size.yaml"
     if load_from_file==True:
@@ -334,25 +303,44 @@ if __name__ == '__main__':
         num_bits=specdict['n_bit']
         m_sarret=sizedict['sarret_m']
         fo_sarret=sizedict['sarret_fo']
+    '''
     #cell generation (slice)
-    cellname='sarretslice'
+    cellname='sarsamp_body' 
     print(cellname+" generating")
     mycell_list.append(cellname)
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
-    generate_sarretslice(laygen, objectname_pfix='DSL0', templib_logic=logictemplib, placement_grid=pg, routing_grid_m3m4=rg_m3m4,
-                         m=m_sarret, fo=fo_sarret, origin=np.array([0, 0]))
+    generate_samp_body(laygen, objectname_pfix='SW0', templib_logic=logictemplib, 
+                       placement_grid=pg,
+                       routing_grid_m3m4=rg34,
+                       samp_cellname='nsw_wovdd_4x',
+                       samp_m=4,
+                       space_cellname_list=['space_wovdd_4x', 'space_wovdd_2x', 'space_wovdd_1x'],
+                       tap_cellname='tap_wovdd',
+                       space_m_list=[4, 1, 1],
+                       tap_m_list=[1, 1],
+                       origin=np.array([0, 0]))
     laygen.add_template_from_cell()
-    #array generation (2 step)
-    cellname='sarret_wckbuf' #_'+str(num_bits)+'b'
+    '''
+    #sampler generation (2 step)
+    cellname='sarsamp' 
     print(cellname+" generating")
     mycell_list.append(cellname)
     # 1. generate without spacing
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
-    generate_sarret2_wckbuf(laygen, objectname_pfix='RET0', templib_logic=logictemplib, placement_grid=pg,
-                     routing_grid_m3m4=rg_m3m4, num_bits=num_bits, num_bits_row=int(num_bits/2), m_slice=m_sarret, m_space_4x=0, m_space_2x=0,
-                     m_space_1x=0, origin=np.array([0, 0]))
+    generate_samp_wckbuf(laygen, objectname_pfix='SAMP0', templib_logic=logictemplib, 
+                         placement_grid=pg,
+                         routing_grid_m3m4=rg34,
+                         samp_cellname='nsw_4x',
+                         samp_m=4,
+                         inbuf_cellname_list=['inv_8x', 'inv_24x'],
+                         outbuf_cellname_list=['inv_4x', 'inv_24x'],
+                         space_cellname_list=['space_1x', 'space_2x', 'space_4x'],
+                         tap_cellname='tap',
+                         space_m_list=[4, 0, 3],
+                         tap_m_list=[1, 1],
+                         origin=np.array([0, 0]))
     laygen.add_template_from_cell()
     # 2. calculate spacing param and regenerate
     x0 = laygen.templates.get_template('sarafe_nsw', libname=workinglib).xy[1][0] \
@@ -365,10 +353,10 @@ if __name__ == '__main__':
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
     generate_sarret2_wckbuf(laygen, objectname_pfix='RET0', templib_logic=logictemplib, placement_grid=pg,
-                    routing_grid_m3m4=rg_m3m4, num_bits=num_bits, num_bits_row=int(num_bits/2), m_slice=m_sarret, m_space_4x=m_space_4x,
+                    routing_grid_m3m4=rg34, num_bits=num_bits, num_bits_row=int(num_bits/2), m_slice=m_sarret, m_space_4x=m_space_4x,
                     m_space_2x=m_space_2x, m_space_1x=m_space_1x, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
-
+    '''
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)
     #bag export, if bag does not exist, gds export
     import imp

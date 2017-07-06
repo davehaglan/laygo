@@ -287,7 +287,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                                    offset=offset, template_libname=template_libname, shape=sh, spacing=sp,
                                    transform=tr)
                 return_inst_list.append(refi)
-                refi_name = refi.name
+                if not refi is None:
+                    refi_name = refi.name
             return return_inst_list
         else: # single placement
             # preprocessing arguments
@@ -700,6 +701,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         [laygo.layoutObject.Rect, laygo.layoutObject.Rect]
             generated routes (vertical, horizontal)
         """
+        #TODO: support refobj instead of refinstname/refpinname
         xy0 = np.asarray(xy0)
         xy1 = np.asarray(xy1)
         xy0 = np.asarray(xy0)
@@ -717,31 +719,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                          refinstname0=refinstname1, refinstindex0=refinstindex1, refpinname0=refpinname1,
                          refinstname1=refinstname0, refinstindex1=refinstindex0, refpinname1=refpinname0,
                          endstyle0=endstyle0[1], endstyle1=endstyle1[1], via0=via1)
-        '''
-        if not refinstname0 is None:
-            if not refpinname0 is None:
-                _xy0 = self.get_inst_pin_coord(name=refinstname0, pinname=refpinname0, gridname=gridname0,
-                                               index=refinstindex0, sort=False)[0] + \
-                                               np.dot(xy0, self.Mt(self.get_inst(refinstname0).transform).T)
-            else:
-                _xy0 = self.get_inst_xy(name=refinstname0, gridname=gridname0, index=refinstindex0) + \
-                                        np.dot(xy0, self.Mt(self.get_inst(refinstname0).transform).T)
-        else:
-             _xy0 = xy0
-        if not refinstname1 is None:
-            if not refpinname1 is None:
-                _xy1 = self.get_inst_pin_coord(name=refinstname1, pinname=refpinname1, gridname=gridname1,
-                                               index=refinstindex1, sort=False)[0] + \
-                                               np.dot(xy1, self.Mt(self.get_inst(refinstname1).transform).T)
-            else:
-                _xy1 = self.get_inst_xy(name=refinstname1, gridname=gridname1, index=refinstindex1) + \
-                                        np.dot(xy1, self.Mt(self.get_inst(refinstname1).transform).T)
-        else:
-            _xy1 = xy1
-        rh0 = self.route(None, layerh, xy0=_xy1, xy1=np.array([_xy0[0], _xy1[1]]), gridname0=gridname1, via0=via1,
-                         via1=[[0, 0]])
-        rv0 = self.route(None, layerv, xy0=np.array([_xy0[0], _xy1[1]]), xy1=_xy0, gridname0=gridname0, via1=via0, via0=[[0, 0]])
-        '''
         return [rv0, rh0]
 
     def route_hv(self, layerh=None, layerv=None, xy0=None, xy1=None, gridname0=None, gridname1=None,
@@ -789,6 +766,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         [laygo.layoutObject.Rect, laygo.layoutObject.Rect]
             generated routes (horizontal, vertical)
         """
+        #TODO: support refobj instead of refinstname/refpinname
+
         xy0=np.asarray(xy0)
         xy1=np.asarray(xy1)
         if not gridname is None:
@@ -804,32 +783,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                        refinstname0=refinstname1, refinstindex0=refinstindex1, refpinname0=refpinname1,
                        refinstname1=refinstname0, refinstindex1=refinstindex0, refpinname1=refpinname0,
                        endstyle0=endstyle0[1], endstyle1=endstyle1[1], via0=via1)
-        '''
-        if not refinstname0 is None:
-            if not refpinname0 is None:
-                _xy0 = self.get_inst_pin_coord(name=refinstname0, pinname=refpinname0, gridname=gridname0,
-                                               index=refinstindex0, sort=False)[0] + \
-                                               np.dot(xy0, self.Mt(self.get_inst(refinstname0).transform).T)
-            else:
-                _xy0 = self.get_inst_xy(name=refinstname0, gridname=gridname0, index=refinstindex0) + \
-                                        np.dot(xy0, self.Mt(self.get_inst(refinstname0).transform).T)
-        else:
-             _xy0 = xy0
-        if not refinstname1 is None:
-            if not refpinname1 is None:
-                _xy1 = self.get_inst_pin_coord(name=refinstname1, pinname=refpinname1, gridname=gridname1,
-                                               index=refinstindex1, sort=False)[0] + \
-                                               np.dot(xy1, self.Mt(self.get_inst(refinstname1).transform).T)
-            else:
-                _xy1 = self.get_inst_xy(name=refinstname1, gridname=gridname1, index=refinstindex1) + \
-                                        np.dot(xy1, self.Mt(self.get_inst(refinstname1).transform).T)
-        else:
-            _xy1 = xy1
-        rh0=self.route(None, layerh, xy0=_xy0 , xy1=np.array([_xy1[0], _xy0[1]]), gridname0=gridname0,
-                       endstyle0=endstyle0[0], endstyle1=endstyle1[0], via0=via0, via1=[[0, 0]])
-        rv0=self.route(None, layerv, xy0=np.array([_xy1[0], _xy0[1]]), xy1=_xy1, gridname0=gridname1,
-                       endstyle0=endstyle0[1], endstyle1=endstyle1[1], via1=via1)
-        '''
         return [rh0, rv0]
 
     def route_vhv(self, layerv0, layerh, xy0, xy1, track_y, gridname0=None, layerv1=None, gridname1=None,
@@ -867,6 +820,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         [laygo.layoutObject.Rect, laygo.layoutObject.Rect, laygo.layoutObject.Rect]
             generated routes (vertical, horizontal, vertical)
         """
+        #TODO: support refobj
         xy0=np.asarray(xy0)
         xy1=np.asarray(xy1)
         if layerv1==None:
@@ -942,6 +896,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         [laygo.layoutObject.Rect, laygo.layoutObject.Rect, laygo.layoutObject.Rect]
             generated routes (horizontal, vertical, horizontal)
         """
+        #TODO: support refobj
         xy0=np.asarray(xy0)
         xy1=np.asarray(xy1)
         if layerh1==None:
@@ -1268,7 +1223,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         if name == None:
             xy=dict()
             for i in self.get_inst():
-                xy[i]=self.get_inst_pin_coord(i, pinname, gridname, index, sort)
+                xy[i]=self.get_inst_pin_xy(i, pinname, gridname, index, sort)
             return xy
         else:
             i = self.get_inst(name)
@@ -1280,7 +1235,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 if pinname==None:
                     xy=dict()
                     for p in t.pins:
-                        xy[p]=self.get_inst_pin_coord(name, p, gridname, index, sort)
+                        xy[p]=self.get_inst_pin_xy(name, p, gridname, index, sort)
                     return xy
                 else:
                     xy0 = i.xy + np.dot(t.size * index + t.pins[pinname]['xy'][0, :], self.Mt(i.transform).T)
