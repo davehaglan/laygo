@@ -785,7 +785,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                        endstyle0=endstyle0[1], endstyle1=endstyle1[1], via0=via1)
         return [rh0, rv0]
 
-    def route_vhv(self, layerv0, layerh, xy0, xy1, track_y, gridname0=None, layerv1=None, gridname1=None,
+    def route_vhv(self, layerv0=None, layerh=None, xy0=[0, 0], xy1=[0, 0], track_y=0, gridname0=None, layerv1=None, gridname1=None,
                   extendl=0, extendr=0, gridname=None):
         """
         Vertical-horizontal-vertical route function
@@ -841,10 +841,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         xy1_grid0=self.grids.get_phygrid_xy(gridname0, xy1)
         xy1_grid1=self.grids.get_phygrid_xy(gridname1, xy1)
         if not xy1_grid0[0]==xy1_grid1[0]: #xy1[0] mismatch
-            rh0 = self.route(None, layerh, xy0=np.array([xy0_0, track_y]), xy1=np.array([xy1_0, track_y]),
+            rh0 = self.route(None, layer=layerh, xy0=np.array([xy0_0, track_y]), xy1=np.array([xy1_0, track_y]),
                              gridname0=gridname0, offset1=np.array([xy1_grid1[0] - xy1_grid0[0], 0]))
         else:
-            rh0 = self.route(None, layerh, xy0=np.array([xy0_0, track_y]), xy1=np.array([xy1_0, track_y]),
+            rh0 = self.route(None, layer=layerh, xy0=np.array([xy0_0, track_y]), xy1=np.array([xy1_0, track_y]),
                              gridname0=gridname0)
         rv0=None;rv1=None
         if gridname==gridname1 and xy0[0]==xy1[0]: #no horozontal route/no via
@@ -852,16 +852,16 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         else:
             via0 = [[0, 0]]
         if not track_y == xy0[1]:
-            rv0=self.route(None, layerv0, xy0=np.array([xy0[0], track_y]), xy1=xy0, gridname0=gridname0, via0=via0)
+            rv0=self.route(None, layer=layerv0, xy0=np.array([xy0[0], track_y]), xy1=xy0, gridname0=gridname0, via0=via0)
         else:
             self.via(None, xy0, gridname=gridname0)
         if not track_y == xy1[1]:
-            rv1=self.route(None, layerv1, xy0=np.array([xy1[0], track_y]), xy1=xy1, gridname0=gridname1, via0=via0)
+            rv1=self.route(None, layer=layerv1, xy0=np.array([xy1[0], track_y]), xy1=xy1, gridname0=gridname1, via0=via0)
         else:
             self.via(None, xy1, gridname=gridname0)
         return [rv0, rh0, rv1]
 
-    def route_hvh(self, layerh0, layerv, xy0, xy1, track_x, gridname0=None, layerh1=None, gridname1=None,
+    def route_hvh(self, layerh0=None, layerv=None, xy0=[0, 0], xy1=[0, 0], track_x=0, gridname0=None, layerh1=None, gridname1=None,
                   extendt=0, extendb=0, gridname=None):
         """
         Horizontal-vertical-horizontal route function
@@ -1263,7 +1263,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         np.array([[int, int], [int, int]])
             instance bbox in abstract coordinate
         """
-        xy = self.get_inst_bbox_phygrid(instname)
+        xy = self.get_inst(instname).bbox
+        #xy = self.get_inst_bbox_phygrid(instname)
         if sort == True: xy = self.sort_rect_xy(xy)
         if gridname is None:
             return xy
