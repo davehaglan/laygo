@@ -264,18 +264,22 @@ if __name__ == '__main__':
 
     mycell_list = []
     num_bits=9
-    num_slices=9
+    num_slices=8
     #slice_order=[4,3,5,2,6,1,7,0]
     #slice_order=[0,7,1,6,2,5,3,4]
     slice_order=[0,2,4,6,1,3,5,7]
     #load from preset
     load_from_file=True
     yamlfile_spec="adc_sar_spec.yaml"
+    yamlfile_size="adc_sar_size.yaml"
     if load_from_file==True:
         with open(yamlfile_spec, 'r') as stream:
             specdict = yaml.load(stream)
+        with open(yamlfile_size, 'r') as stream:
+            sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']
         num_slices=specdict['n_interleave']
+        slice_order=sizedict['slice_order']
     #sar generation
     cellname='sar_wsamp_array'
     sar_name = 'sar_wsamp'
