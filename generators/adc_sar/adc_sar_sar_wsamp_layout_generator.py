@@ -242,7 +242,6 @@ if __name__ == '__main__':
     laygen.load_template(filename=tech+'_microtemplates_dense_templates.yaml', libname=utemplib)
     laygen.load_grid(filename=tech+'_microtemplates_dense_grids.yaml', libname=utemplib)
     laygen.load_template(filename=logictemplib+'.yaml', libname=logictemplib)
-    laygen.load_template(filename=samp_lib+'.yaml', libname=samp_lib)
     laygen.templates.sel_library(utemplib)
     laygen.grids.sel_library(utemplib)
 
@@ -283,6 +282,8 @@ if __name__ == '__main__':
         if specdict['samp_use_laygo'] is True:
             samp_lib = 'adc_sar_generated'
             samp_name = 'sarsamp'
+        else:
+            laygen.load_template(filename=samp_lib+'.yaml', libname=samp_lib)
     #yamlfile_system_input="adc_sar_dsn_system_input.yaml"
     #if load_from_file==True:
     #    with open(yamlfile_system_input, 'r') as stream:
