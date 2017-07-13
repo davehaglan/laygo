@@ -126,6 +126,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#subadc-frontend-layout-generation">SubADC frontend layout generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#subadc-backend-layout-generation">SubADC backend layout generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#subadc-switch-generation">SubADC switch generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subadc-top-generation">SubADC top generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#array-generation">Array generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#clocking-path-generation">Clocking path generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#retimer">Retimer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#bias">Bias</a></li>
@@ -135,9 +137,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="code.html">Code examples (to be uploaded)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="code.html#code-example-1-basic-elements-using-primitive-templates">Code example 1: basic elements using primitive templates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#code-example-2-block-level-placement-and-routes">Code example 2: block level placement and routes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#code-example-3-top-semi-top-level-integration">Code example 3: top / semi-top level integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#code-example-1-low-level-building-block-generations-using-primitive-templates">Code example 1: low-level building block generations using primitive templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#code-example-2-high-level-building-block-top-generations">Code example 2: high-level building block / top generations</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../tech/tech.html">Technology setup instructions</a><ul>
@@ -242,6 +243,13 @@ directories.</p>
 <p><em>In cds.lib</em></p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">DEFINE</span> <span class="n">adc_sar_templates</span> <span class="o">./</span><span class="n">adc_sar_templates</span>
 <span class="n">DEFINE</span> <span class="n">adc_sar_testbenches</span> <span class="o">./</span><span class="n">adc_sar_testbenches</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Open bag_lib.defs and remove the definition of adc_sar_templates if
+exist</p>
+<p><em>In bag_lib.defs</em></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">adc_sar_templates</span> <span class="n">BagModules</span> <span class="c1">#remove this</span>
 </pre></div>
 </div>
 </li>
@@ -558,6 +566,49 @@ scripts.</p>
 </div>
 <div class="section" id="subadc-switch-generation">
 <span id="subadc-switch-generation"></span><h2>SubADC switch generation<a class="headerlink" href="#subadc-switch-generation" title="Permalink to this headline">¶</a></h2>
+<p>The sampling frontend can be generated either from laygo or AnalogBase.
+While the sampler generated from AnalogBase is more flexible, associated
+APIs need to be set up (which is not for the cds_ff_mpt technology), so
+laygo based sampler is used for this document.</p>
+<p>Run the following script to generate the sampling switches.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># layout</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarsamp_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="c1"># schematic</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarsamp_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p><img alt="sar" src="../_images/tisaradc_sarsamp.png" /></p>
+<p>If the AnalogBase is set up for your technology, these scripts will
+generate the sampling switches.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>```
+# layout
+run laygo/generators/adc_sar/sampler_nmos_layout_generator.py
+# schematic
+run laygo/generators/adc_sar/sampler_nmos_schematic_generator.py
+```
+</pre></div>
+</div>
+</div>
+<div class="section" id="subadc-top-generation">
+<span id="subadc-top-generation"></span><h2>SubADC top generation<a class="headerlink" href="#subadc-top-generation" title="Permalink to this headline">¶</a></h2>
+<p>If all subblocks are generated sucessfully, the SubADC top (sar_wsamp)
+can be easily generated by placing and routing subcells. Run following
+scripts to generate the SubADC top.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>```
+# layout
+run laygo/generators/adc_sar/sar_wsamp_layout_generator.py
+# schematic
+run laygo/generators/adc_sar/sar_wsamp_schematic_generator.py
+```
+</pre></div>
+</div>
+<p>The generated layouts shown below are from the full-stack subADC
+generation with different settings (9b, 6b, 10bits and different
+sizing parameters).</p>
+<p><img alt="sar" src="../_images/tisaradc_sar_wsamp.png" /></p>
+</div>
+<div class="section" id="array-generation">
+<span id="array-generation"></span><h2>Array generation<a class="headerlink" href="#array-generation" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="clocking-path-generation">
 <span id="clocking-path-generation"></span><h2>Clocking path generation<a class="headerlink" href="#clocking-path-generation" title="Permalink to this headline">¶</a></h2>
@@ -576,7 +627,7 @@ scripts.</p>
 </div>
 <div class="section" id="contributors">
 <span id="contributors"></span><h2>Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline">¶</a></h2>
-<p>The generator is written by Jaeduk Han, Eric Chang, Zhongkai Wang,
+<p>The generator codes are written by Jaeduk Han, Eric Chang, Zhongkai Wang,
 Woorham Bae, and Pengpeng Lu. This document is written by Jaeduk Han.</p>
 </div>
 </div>
