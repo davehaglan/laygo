@@ -160,9 +160,6 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     bnd_left_size_x = laygen.get_template_size(name='nmos4_fast_left', gridname=pg, libname=tech+'_microtemplates_dense')[0]
     bnd_right_size_x = laygen.get_template_size(name='nmos4_fast_right', gridname=pg, libname=tech+'_microtemplates_dense')[0]
     tap4_size_x = laygen.get_template_size(name='ptap_fast_space_nf4', gridname=pg, libname=tech+'_microtemplates_dense')[0]
-    #bnd_left_size_x = laygen.get_template_size(name='nmos4_fast_left', gridname=pg, libname='tsmcN16_microtemplates_dense')[0]
-    #bnd_right_size_x = laygen.get_template_size(name='nmos4_fast_right', gridname=pg, libname='tsmcN16_microtemplates_dense')[0]
-    #tap4_size_x = laygen.get_template_size(name='ptap_fast_space_nf4', gridname=pg, libname='tsmcN16_microtemplates_dense')[0]
 
     #Caluclate number of top and bottom cells
     bnd_m = width - bnd_left_size_x - bnd_right_size_x  ##This is all the numbe of the cells, using a lot in code!!
@@ -196,13 +193,6 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
                     shape=np.array([bnd_m-2*tap4_size_x, 1]))
     ptap0_2 = laygen.relplace(name='I'+objectname_pfix+'PTAP0_2', templatename='ptap_fast_space_nf4', 
                     gridname=pg, refinstname=ptap0_1.name, template_libname=tech+'_microtemplates_dense')
-    #ptap0_0 = laygen.relplace(name='I'+objectname_pfix+'PTAP0_0', templatename='ptap_fast_space_nf4', 
-    #                gridname=pg, refinstname=bnd_left[0].name, template_libname='tsmcN16_microtemplates_dense')
-    #ptap0_1= laygen.relplace(name='I'+objectname_pfix+'PTAP0_1', templatename='ptap_fast_center_nf1', 
-    #                gridname=pg, refinstname=ptap0_0.name, template_libname='tsmcN16_microtemplates_dense',
-    #                shape=np.array([bnd_m-2*tap4_size_x, 1]))
-    #ptap0_2 = laygen.relplace(name='I'+objectname_pfix+'PTAP0_2', templatename='ptap_fast_space_nf4', 
-    #                gridname=pg, refinstname=ptap0_1.name, template_libname='tsmcN16_microtemplates_dense')
 
     ##CAP switch row
     #Calculate coodinate of sw_dmy0
@@ -222,11 +212,11 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
 
     ##Mitddle ntap row
     ntap0_0= laygen.relplace(name='I'+objectname_pfix+'NTAP0_0', templatename='ntap_fast_space_nf4', gridname=pg, 
-            refinstname=bnd_left[3].name, template_libname='tsmcN16_microtemplates_dense', shape=np.array([1, 1]), transform='MX')
+            refinstname=bnd_left[3].name, template_libname=tech+'_microtemplates_dense', shape=np.array([1, 1]), transform='MX')
     ntap0_1= laygen.relplace(name='I'+objectname_pfix+'NTAP0_1', templatename='ntap_fast_center_nf1', gridname=pg, 
-            refinstname=ntap0_0.name, template_libname='tsmcN16_microtemplates_dense', shape=np.array([bnd_m-2*tap4_size_x, 1]), transform='MX')
+            refinstname=ntap0_0.name, template_libname=tech+'_microtemplates_dense', shape=np.array([bnd_m-2*tap4_size_x, 1]), transform='MX')
     ntap0_2= laygen.relplace(name='I'+objectname_pfix+'NTAP0_2', templatename='ntap_fast_space_nf4', gridname=pg, 
-            refinstname=ntap0_1.name, template_libname='tsmcN16_microtemplates_dense', shape=np.array([1, 1]), transform='MX')
+            refinstname=ntap0_1.name, template_libname=tech+'_microtemplates_dense', shape=np.array([1, 1]), transform='MX')
     
     ##DFF row
     #Calculate coodinate of dff_dmy0
@@ -238,14 +228,14 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     tgated0=laygen.relplace(name='I'+objectname_pfix+'TGD0', templatename='tgate_dn_'+str(m_tgate)+'x', gridname=pg, 
             refinstname=dff_dmy0.name, template_libname=logictemp_lib, transform='R180')
     dff0=laygen.relplace(name='I'+objectname_pfix+'DFF0', templatename='dff_strsth_ckb_'+str(m_dff)+'x', gridname=pg, 
-            refinstname=tgated0.name, template_libname='tsmcN16_logic_templates', transform='MX')
+            refinstname=tgated0.name, template_libname=tech+'_logic_templates', transform='MX')
     inv0=laygen.relplace(name='I'+objectname_pfix+'INV0', templatename='inv_'+str(m_inv1)+'x', gridname=pg, 
-            refinstname=dff0.name, template_libname='tsmcN16_logic_templates', transform='MX')
+            refinstname=dff0.name, template_libname=tech+'_logic_templates', transform='MX')
     inv1=laygen.relplace(name='I'+objectname_pfix+'INV1', templatename='inv_'+str(m_inv2)+'x', gridname=pg, 
-            refinstname=inv0.name, template_libname='tsmcN16_logic_templates', transform='MX')
+            refinstname=inv0.name, template_libname=tech+'_logic_templates', transform='MX')
     #Calculate number of dff_dmy1
     inv1_x = laygen.get_inst_xy(name=inv1.name, gridname=pg)[0]
-    m_inv1_x = laygen.get_template_size(name='inv_'+str(m_inv2)+'x', gridname=pg, libname='tsmcN16_logic_templates')[0]
+    m_inv1_x = laygen.get_template_size(name='inv_'+str(m_inv2)+'x', gridname=pg, libname=tech+'_logic_templates')[0]
     bnd_right_5_x = laygen.get_inst_xy(name=bnd_right[5].name, gridname=pg)[0] #y coodinate
     dff_dmy1_m = bnd_right_5_x-(inv1_x+m_inv1_x)
     ##Calculate coodinate of dff_dmy1
@@ -256,13 +246,13 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     
     ##Top ptap row
     ptap1_0 = laygen.relplace(name='I'+objectname_pfix+'PTAP1_0', templatename='ptap_fast_space_nf4', 
-                    gridname=pg, refinstname=bnd_left[6].name, template_libname='tsmcN16_microtemplates_dense',
+                    gridname=pg, refinstname=bnd_left[6].name, template_libname=tech+'_microtemplates_dense',
                     transform='MX')
     ptap1_1= laygen.relplace(name='I'+objectname_pfix+'PTAP1_1', templatename='ptap_fast_center_nf1', 
-                    gridname=pg, refinstname=ptap1_0.name, template_libname='tsmcN16_microtemplates_dense',
+                    gridname=pg, refinstname=ptap1_0.name, template_libname=tech+'_microtemplates_dense',
                     shape=np.array([bnd_m-2*tap4_size_x, 1]), transform='MX')
     ptap1_2 = laygen.relplace(name='I'+objectname_pfix+'PTAP1_2', templatename='ptap_fast_space_nf4', 
-                    gridname=pg, refinstname=ptap1_1.name, template_libname='tsmcN16_microtemplates_dense',
+                    gridname=pg, refinstname=ptap1_1.name, template_libname=tech+'_microtemplates_dense',
                     transform='MX')
     
     #####Route and Pin
