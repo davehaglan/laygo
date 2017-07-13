@@ -6,7 +6,7 @@ schematic and layout using BAG and laygo.
 ## Overview
 
 Time Interleaved Successive Approximation ADC (TISARADC) is a popular
-way of implementing a moderate precision (4-12 bits) ADC that operates
+way of implementing a moderate precision (4-10 bits) ADC that operates
 at higher sampling rates than single SAR ADCs can achieve. As an example
  of demonstrating the automated analog and mixed signal circuits
  generation flow, the entire TISARADC generator is explained here.
@@ -453,11 +453,13 @@ sizing parameters).
 
 ## Retimer
 
+From now on, AnalogBase has to be set up for layout generations (which
+is not for the cds_ff_mpt technology).
+
+
 ## Bias
 
 ## Top
-
-## Full-stack generation scripts
 
 ## Contributors
 

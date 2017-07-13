@@ -132,7 +132,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#retimer">Retimer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#bias">Bias</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#top">Top</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#full-stack-generation-scripts">Full-stack generation scripts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#contributors">Contributors</a></li>
 </ul>
 </li>
@@ -195,7 +194,7 @@ schematic and layout using BAG and laygo.</p>
 <div class="section" id="overview">
 <span id="overview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>Time Interleaved Successive Approximation ADC (TISARADC) is a popular
-way of implementing a moderate precision (4-12 bits) ADC that operates
+way of implementing a moderate precision (4-10 bits) ADC that operates
 at higher sampling rates than single SAR ADCs can achieve. As an example
 of demonstrating the automated analog and mixed signal circuits
 generation flow, the entire TISARADC generator is explained here.</p>
@@ -615,15 +614,14 @@ sizing parameters).</p>
 </div>
 <div class="section" id="retimer">
 <span id="retimer"></span><h2>Retimer<a class="headerlink" href="#retimer" title="Permalink to this headline">¶</a></h2>
+<p>From now on, AnalogBase has to be set up for layout generations (which
+is not for the cds_ff_mpt technology).</p>
 </div>
 <div class="section" id="bias">
 <span id="bias"></span><h2>Bias<a class="headerlink" href="#bias" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="top">
 <span id="top"></span><h2>Top<a class="headerlink" href="#top" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="full-stack-generation-scripts">
-<span id="full-stack-generation-scripts"></span><h2>Full-stack generation scripts<a class="headerlink" href="#full-stack-generation-scripts" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="contributors">
 <span id="contributors"></span><h2>Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline">¶</a></h2>
