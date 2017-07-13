@@ -4736,6 +4736,8 @@ if __name__ == '__main__':
         laygen.add_template_from_cell()
         mycell_list.append('dff_strsth_ckb_'+str(m)+'x')
 
+    #end Zhongkai's cells
+
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)
 
 
