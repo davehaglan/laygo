@@ -54,6 +54,14 @@ laygo/generators/adc_sar/yaml by typing:
     DEFINE adc_sar_testbenches ./adc_sar_testbenches
     ```
 
+3. Open bag_lib.defs and remove the definition of adc_sar_templates if
+exist
+
+    *In bag_lib.defs*
+    ```
+    adc_sar_templates BagModules #remove this
+    ```
+
 4. Run virtuoso and type the following command in CIW.
     ```
     load "start_bag.il"
