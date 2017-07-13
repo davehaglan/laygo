@@ -567,9 +567,9 @@ scripts.</p>
 <div class="section" id="subadc-switch-generation">
 <span id="subadc-switch-generation"></span><h2>SubADC switch generation<a class="headerlink" href="#subadc-switch-generation" title="Permalink to this headline">¶</a></h2>
 <p>The sampling frontend can be generated either from laygo or AnalogBase.
-While the sampler generated from AnalogBase is more flexible, associated
-APIs need to be set up (which is not for the cds_ff_mpt technology), so
-laygo based sampler is used for this document.</p>
+While the sampler generated from AnalogBase (written by Eric Chang) is
+more flexible, associated APIs need to be set up (which is not for the
+cds_ff_mpt technology), so laygo based sampler is used for this example.</p>
 <p>Run the following script to generate the sampling switches.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># layout</span>
 <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarsamp_layout_generator</span><span class="o">.</span><span class="n">py</span>

@@ -403,9 +403,9 @@ scripts.
 ## SubADC switch generation
 
 The sampling frontend can be generated either from laygo or AnalogBase.
-While the sampler generated from AnalogBase is more flexible, associated
-APIs need to be set up (which is not for the cds_ff_mpt technology), so
-laygo based sampler is used for this document.
+While the sampler generated from AnalogBase (written by Eric Chang) is
+more flexible, associated APIs need to be set up (which is not for the
+cds_ff_mpt technology), so laygo based sampler is used for this example.
 
 Run the following script to generate the sampling switches.
 
