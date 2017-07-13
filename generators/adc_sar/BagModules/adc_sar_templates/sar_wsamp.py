@@ -101,6 +101,7 @@ class adc_sar_templates__sar_wsamp(Module):
             self.replace_instance_master(inst_name='XSAMP0', lib_name='adc_sar_templates', cell_name='sarsamp')
             self.instances['XSAMP0'].design(lch=samp_lch, pw=samp_wp, nw=samp_wn, m_sw=4, m_sw_arr=samp_fgn, m_inbuf_list=samp_fg_inbuf_list, m_outbuf_list=samp_fg_outbuf_list, device_intent=samp_intent)
         else:
+            self.replace_instance_master(inst_name='XSAMP0', lib_name='adc_ec_templates', cell_name='sampler_nmos')
             self.instances['XSAMP0'].design_specs(lch=samp_lch, pw=samp_wp, nw=samp_wn, m_sw=samp_fgn, fg_inbuf_list=samp_fg_inbuf_list, fg_outbuf_list=samp_fg_outbuf_list, nduml=samp_nduml, ndumr=samp_ndumr, nsep=samp_nsep, intent=samp_intent)
         #rewiring
         self.reconnect_instance_terminal(inst_name='ISAR0', term_name='ADCOUT<0>', net_name='ADCOUT<%d:0>'%(num_bits-1))
