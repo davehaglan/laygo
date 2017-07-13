@@ -190,12 +190,19 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
 
     ##Bottom ptap row
     ptap0_0 = laygen.relplace(name='I'+objectname_pfix+'PTAP0_0', templatename='ptap_fast_space_nf4', 
-                    gridname=pg, refinstname=bnd_left[0].name, template_libname='tsmcN16_microtemplates_dense')
+                    gridname=pg, refinstname=bnd_left[0].name, template_libname=tech+'_microtemplates_dense')
     ptap0_1= laygen.relplace(name='I'+objectname_pfix+'PTAP0_1', templatename='ptap_fast_center_nf1', 
-                    gridname=pg, refinstname=ptap0_0.name, template_libname='tsmcN16_microtemplates_dense',
+                    gridname=pg, refinstname=ptap0_0.name, template_libname=tech+'_microtemplates_dense',
                     shape=np.array([bnd_m-2*tap4_size_x, 1]))
     ptap0_2 = laygen.relplace(name='I'+objectname_pfix+'PTAP0_2', templatename='ptap_fast_space_nf4', 
-                    gridname=pg, refinstname=ptap0_1.name, template_libname='tsmcN16_microtemplates_dense')
+                    gridname=pg, refinstname=ptap0_1.name, template_libname=tech+'_microtemplates_dense')
+    #ptap0_0 = laygen.relplace(name='I'+objectname_pfix+'PTAP0_0', templatename='ptap_fast_space_nf4', 
+    #                gridname=pg, refinstname=bnd_left[0].name, template_libname='tsmcN16_microtemplates_dense')
+    #ptap0_1= laygen.relplace(name='I'+objectname_pfix+'PTAP0_1', templatename='ptap_fast_center_nf1', 
+    #                gridname=pg, refinstname=ptap0_0.name, template_libname='tsmcN16_microtemplates_dense',
+    #                shape=np.array([bnd_m-2*tap4_size_x, 1]))
+    #ptap0_2 = laygen.relplace(name='I'+objectname_pfix+'PTAP0_2', templatename='ptap_fast_space_nf4', 
+    #                gridname=pg, refinstname=ptap0_1.name, template_libname='tsmcN16_microtemplates_dense')
 
     ##CAP switch row
     #Calculate coodinate of sw_dmy0
