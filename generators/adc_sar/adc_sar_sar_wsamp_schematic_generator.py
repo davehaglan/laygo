@@ -39,6 +39,7 @@ params = dict(
     samp_ndumr=4,
     samp_nsep=2,
     samp_intent='ulvt',
+    samp_use_laygo=False,
 )
 load_from_file=True
 yamlfile_spec="adc_sar_spec.yaml"
@@ -64,6 +65,14 @@ if load_from_file==True:
     params['sar_c_m']=sizedict['capdac_c_m']
     params['sar_rdx_array']=specdict['rdx_array']
     params['num_bits']=specdict['n_bit']
+    params['samp_use_laygo']=specdict['samp_use_laygo']
+#sampler sizing
+if params['samp_use_laygo']==True:
+    params['samp_wp']=params['sar_pw']
+    params['samp_wn']=params['sar_nw']
+    params['samp_fgn']=sizedict['sarsamp_m_sw_arr']
+    params['samp_fg_inbuf_list']=sizedict['sarsamp_m_inbuf_list']
+    params['samp_fg_outbuf_list']=sizedict['sarsamp_m_outbuf_list']
 
 print('creating BAG project')
 prj = bag.BagProject()

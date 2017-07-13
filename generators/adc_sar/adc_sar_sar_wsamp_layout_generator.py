@@ -238,7 +238,6 @@ if __name__ == '__main__':
     utemplib = tech+'_microtemplates_dense'
     logictemplib = tech+'_logic_templates'
     samp_lib = 'adc_sampler_ec'
-    #samp_lib = 'adc_sar_generated'
     samp_name = 'sampler_nmos'
     laygen.load_template(filename=tech+'_microtemplates_dense_templates.yaml', libname=utemplib)
     laygen.load_grid(filename=tech+'_microtemplates_dense_grids.yaml', libname=utemplib)
@@ -281,6 +280,9 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']
+        if specdict['samp_use_laygo'] is True:
+            samp_lib = 'adc_sar_generated'
+            samp_name = 'sarsamp'
     #yamlfile_system_input="adc_sar_dsn_system_input.yaml"
     #if load_from_file==True:
     #    with open(yamlfile_system_input, 'r') as stream:
