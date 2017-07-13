@@ -247,7 +247,7 @@ if __name__ == '__main__':
         rg_m2m3_thick = 'route_M2_M3_thick',
         rg_m2m3_thick2 = 'route_M2_M3_thick_basic',
         rg_m3m4 = 'route_M3_M4_basic',
-        rg_m3m4_dense = 'route_M3_M4_dense',
+        rg_m3m4_dense = 'route_M3_M4_basic',
         rg_m3m4_thick2 = 'route_M3_M4_basic_thick',
         rg_m4m5 = 'route_M4_M5_basic',
         rg_m5m6 = 'route_M5_M6_basic',
