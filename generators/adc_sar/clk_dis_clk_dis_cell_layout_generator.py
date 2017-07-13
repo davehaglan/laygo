@@ -157,9 +157,12 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     #####Place Boundary
 
     #Calculate size of boundary cell
-    bnd_left_size_x = laygen.get_template_size(name='nmos4_fast_left', gridname=pg, libname='tsmcN16_microtemplates_dense')[0]
-    bnd_right_size_x = laygen.get_template_size(name='nmos4_fast_right', gridname=pg, libname='tsmcN16_microtemplates_dense')[0]
-    tap4_size_x = laygen.get_template_size(name='ptap_fast_space_nf4', gridname=pg, libname='tsmcN16_microtemplates_dense')[0]
+    bnd_left_size_x = laygen.get_template_size(name='nmos4_fast_left', gridname=pg, libname=tech+'_microtemplates_dense')[0]
+    bnd_right_size_x = laygen.get_template_size(name='nmos4_fast_right', gridname=pg, libname=tech+'_microtemplates_dense')[0]
+    tap4_size_x = laygen.get_template_size(name='ptap_fast_space_nf4', gridname=pg, libname=tech+'_microtemplates_dense')[0]
+    #bnd_left_size_x = laygen.get_template_size(name='nmos4_fast_left', gridname=pg, libname='tsmcN16_microtemplates_dense')[0]
+    #bnd_right_size_x = laygen.get_template_size(name='nmos4_fast_right', gridname=pg, libname='tsmcN16_microtemplates_dense')[0]
+    #tap4_size_x = laygen.get_template_size(name='ptap_fast_space_nf4', gridname=pg, libname='tsmcN16_microtemplates_dense')[0]
 
     #Caluclate number of top and bottom cells
     bnd_m = width - bnd_left_size_x - bnd_right_size_x  ##This is all the numbe of the cells, using a lot in code!!
