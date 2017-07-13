@@ -113,7 +113,7 @@ if __name__ == '__main__':
     #grid
     pg = 'placement_basic' #placement grid
     rg_m1m2 = 'route_M1_M2_cmos'
-    rg_m1m2_thick = 'route_M1_M2_thick'
+    rg_m1m2_thick = 'route_M1_M2_basic_thick'
     rg_m2m3 = 'route_M2_M3_cmos'
     rg_m2m3_thick = 'route_M2_M3_thick'
     rg_m3m4 = 'route_M3_M4_basic'
