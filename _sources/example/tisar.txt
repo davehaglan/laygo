@@ -436,9 +436,9 @@ scripts to generate the SubADC top.
 
 ```
 # layout
-run laygo/generators/adc_sar/sar_wsamp_layout_generator.py
+run laygo/generators/adc_sar/adc_sar_sar_wsamp_layout_generator.py
 # schematic
-run laygo/generators/adc_sar/sar_wsamp_schematic_generator.py
+run laygo/generators/adc_sar/adc_sar_sar_wsamp_schematic_generator.py
 ```
 
 The generated layouts shown below are from the full-stack subADC
@@ -453,9 +453,9 @@ The SAR array can be easily made from running the following scripts.
 
 ```
 # layout
-run laygo/generators/adc_sar/sar_wsamp_array_layout_generator.py
+run laygo/generators/adc_sar/adc_sar_sar_wsamp_array_layout_generator.py
 # schematic
-run laygo/generators/adc_sar/sar_wsamp_array_schematic_generator.py
+run laygo/generators/adc_sar/adc_sar_sar_wsamp_array_schematic_generator.py
 ```
 
 ![sar](images/tisaradc_sar_wsamp_array.png)
