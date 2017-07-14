@@ -17,8 +17,8 @@ files=[
     'laygo/generators/adc_sar/clk_dis_viadel_layout_generator.py',
     'laygo/generators/adc_sar/clk_dis_htree_layout_generator.py',
     'laygo/generators/adc_sar/clk_dis_viadel_htree_layout_generator.py',
-    'laygo/generators/adc_sar/clk_dis_viadel_htree_schematic_generator.py',
-    'laygo/generators/adc_sar/clk_dis_viadel_htree_lvs.py',
+    #'laygo/generators/adc_sar/clk_dis_viadel_htree_schematic_generator.py',
+    #'laygo/generators/adc_sar/clk_dis_viadel_htree_lvs.py',
     ]
 
 for f in files:

@@ -31,7 +31,7 @@ import yaml
 #import logging;logging.basicConfig(level=logging.DEBUG)
 
 def generate_clkdis_viadel(laygen, objectname_pfix, logictemp_lib, working_lib, grid, origin=np.array([0, 0]), way_order=[0, 2, 4, 6, 1, 3, 5, 7],
-        m_clki=2, m_clko=2, num_bits=5, num_vss_h=4, num_vdd_h=4):
+        m_clki=2, m_clko=2, num_bits=5, num_vss_h=4, num_vdd_h=4, pitch_x=20):
     """generate cap driver """
 
     pg = grid['pg']
@@ -125,8 +125,8 @@ def generate_clkdis_viadel(laygen, objectname_pfix, logictemp_lib, working_lib, 
     
     ##Route, for calibration signals
     #Get the right coodinate on grid m3m4
-    m2m3_x = laygen.grids.get_absgrid_coord_x(gridname=rg_m2m3_basic, x=20.16)
-    m3m4_x = laygen.grids.get_absgrid_coord_x(gridname=rg_m3m4, x=20.16)
+    m2m3_x = laygen.grids.get_absgrid_coord_x(gridname=rg_m2m3_basic, x=pitch_x)
+    m3m4_x = laygen.grids.get_absgrid_coord_x(gridname=rg_m3m4, x=pitch_x)
     for i in range(num_ways):
         for j in range(num_bits):
             viadel_m2m3_xy = laygen.get_inst_pin_coord(viacell[i].name, 'CAL<'+str(j)+'>', rg_m2m3_basic)[1]
@@ -139,7 +139,7 @@ def generate_clkdis_viadel(laygen, objectname_pfix, logictemp_lib, working_lib, 
 
     ##Route, for set/reset signals
     #STP and RSTP -- even
-    m2m3_x = laygen.grids.get_absgrid_coord_x(gridname=rg_m2m3_basic, x=20.16)
+    m2m3_x = laygen.grids.get_absgrid_coord_x(gridname=rg_m2m3_basic, x=pitch_x)
     viadel_ST_xy = laygen.get_inst_pin_coord(viacell[way_index_even[0]].name, 'ST', rg_m2m3_basic)[1]
     laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], viadel_ST_xy, np.array([0,viadel_ST_xy[1]+12]), rg_m2m3_basic)
 
@@ -225,6 +225,7 @@ if __name__ == '__main__':
         m_clki = 12,
         m_clko = 4,
         num_bits = 5,
+        pitch_x = 20,
     )
     load_from_file=True
     yamlfile_spec="adc_sar_spec.yaml"
@@ -236,6 +237,7 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         params['way_order']=sizedict['slice_order']
+        params['pitch_x']=laygen.get_template_xy(name='clk_dis_viadel_cell', libname=workinglib)[0]
 
     #grid
     grid = dict(

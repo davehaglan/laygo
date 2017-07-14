@@ -532,6 +532,7 @@ if __name__ == '__main__':
     workinglib = 'clk_dis_generated'
     laygen.add_library(workinglib)
     laygen.sel_library(workinglib)
+    laygen.load_template(filename='adc_sar_generated.yaml', libname='adc_sar_generated')
     if os.path.exists(workinglib + '.yaml'):  # generated layout file exists
         laygen.load_template(filename=workinglib + '.yaml', libname=workinglib)
         laygen.templates.sel_library(utemplib)
@@ -570,6 +571,10 @@ if __name__ == '__main__':
         m_tgate=18, 
     )
 
+    load_from_file=True
+    if load_from_file==True:
+        #load parameters
+        params['phy_width']=laygen.get_template_xy(name='sar_wsamp', libname='adc_sar_generated')[0]
     #grid
     grid = dict(
         pg = 'placement_basic', #placement grid

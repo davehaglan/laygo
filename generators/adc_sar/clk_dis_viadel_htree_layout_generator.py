@@ -67,14 +67,18 @@ def generate_clkdis_viadel_htree(laygen, objectname_pfix, logictemp_lib, working
     ht0_WO_xy = laygen.get_inst_pin_coord(htree0.name, 'WO0_0_0', rg_m4m5)[0]
     ht0_WI_xy = laygen.get_inst_pin_coord(htree0.name, 'WI_0', rg_m4m5)[0]
     #move htree0
-    htree0.xy = np.array([(vd_CLKI0_xy[0]-ht0_WO_xy[0])*0.08, (vd_CLKI0_xy[1]-ht0_WO_xy[1])*0.08])
+    res_x=laygen.get_grid(gridname=rg_m4m5).width
+    res_y=laygen.get_grid(gridname=rg_m4m5).height
+    #htree0.xy = np.array([(vd_CLKI0_xy[0]-ht0_WO_xy[0])*0.08, (vd_CLKI0_xy[1]-ht0_WO_xy[1])*0.08])
+    htree0.xy = np.array([(vd_CLKI0_xy[0]-ht0_WO_xy[0])*res_x, (vd_CLKI0_xy[1]-ht0_WO_xy[1])*res_y])
     ht0_WI_xy = np.array([ht0_WI_xy[0]+(vd_CLKI0_xy[0]-ht0_WO_xy[0]), ht0_WI_xy[1]+(vd_CLKI0_xy[1]-ht0_WO_xy[1])])
     htree1 = laygen.place(name='I'+objectname_pfix+'HTREE1', templatename='clk_dis_htree', gridname=pg, xy=origin, 
             template_libname=working_lib)
     ht1_WO_xy = laygen.get_inst_pin_coord(htree1.name, 'WO0_0_0', rg_m4m5)[0]
     ht1_WI_xy = laygen.get_inst_pin_coord(htree1.name, 'WI_0', rg_m4m5)[0]
     #move htree1
-    htree1.xy = np.array([(vd_CLKI1_xy[0]-ht1_WO_xy[0])*0.08, (vd_CLKI1_xy[1]-ht1_WO_xy[1])*0.08])
+    #htree1.xy = np.array([(vd_CLKI1_xy[0]-ht1_WO_xy[0])*0.08, (vd_CLKI1_xy[1]-ht1_WO_xy[1])*0.08])
+    htree1.xy = np.array([(vd_CLKI1_xy[0]-ht1_WO_xy[0])*res_x, (vd_CLKI1_xy[1]-ht1_WO_xy[1])*res_y])
     ht1_WI_xy = np.array([ht1_WI_xy[0]+(vd_CLKI1_xy[0]-ht1_WO_xy[0]), ht1_WI_xy[1]+(vd_CLKI1_xy[1]-ht1_WO_xy[1])])
     #Create input wire
     #ht0_WI_xy = laygen.get_inst_pin_coord(htree0.name, 'WI_0', rg_m4m5)
