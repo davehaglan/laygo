@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 ########################################################################################################################
 #
@@ -33,12 +34,12 @@ import pkg_resources
 from bag.design import Module
 
 
-yaml_file = pkg_resources.resource_filename(__name__, os.path.join('netlist_info', 'clk_dis_viadel_htree.yaml'))
+yaml_file = pkg_resources.resource_filename(__name__, os.path.join('netlist_info', 'clk_dis_viadel.yaml'))
 
 
 # noinspection PyPep8Naming
-class clk_dis_templates__clk_dis_viadel_htree(Module):
-    """Module for library clk_dis_templates cell clk_dis_viadel_htree.
+class clk_dis_templates__clk_dis_viadel(Module):
+    """Module for library clk_dis_templates cell clk_dis_viadel.
 
     Fill in high level description here.
     """
@@ -46,7 +47,7 @@ class clk_dis_templates__clk_dis_viadel_htree(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, m_dff=2, m_inv1=4, m_inv2=8, m_tgate=4, n_pd=4, m_capsw=2, num_bits=5, num_ways=8, unit_cell=1, device_intent='fast'):
+    def design(self, lch, pw, nw, m_dff=2, m_inv1=4, m_inv2=8, m_tgate=4, n_pd=2, m_capsw=2, num_bits=5, num_ways=8, unit_cell=1, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -76,32 +77,69 @@ class clk_dis_templates__clk_dis_viadel_htree(Module):
         self.parameters['unit_cell'] = unit_cell
         self.parameters['device_intent'] = device_intent
 
+        name_list=[]
+        term_list=[]
 
-        self.instances['I0'].design(lch=lch, pw=pw, nw=nw, m_dff=m_dff, m_inv1=m_inv1, m_inv2=m_inv2,
-            m_tgate=m_tgate, n_pd=n_pd, m_capsw=m_capsw, num_bits=num_bits, unit_cell=unit_cell, device_intent=device_intent, num_ways=num_ways)    #viadel
+        VSS_pin = 'VSS'
+        VDD_pin = 'VDD'
 
+        for i in range(num_ways):
+            
+            DATAO_pin = 'DATAO<%d>'%i
+
+            if i%2 == 0:
+                if i == 0:
+                    DATAI_pin = 'DATAO<%d>'%(num_ways-2)
+                else:
+                    DATAI_pin = 'DATAO<%d>'%(i-2)
+            if i%2 == 1:
+                if i == 1:
+                    DATAI_pin = 'DATAO<%d>'%(num_ways-1)
+                else:
+                    DATAI_pin = 'DATAO<%d>'%(i-2)
+
+
+            CLKI_pin = 'CLKI<%d>'%i
+            CLKO_pin = 'CLKO<%d>'%i
+
+            CAL_pin = 'CLKCAL%d<%d:0>'%(i,(num_bits-1))
+
+            if i%2==0:
+                if i==0:
+                    ST_pin = 'RSTP'
+                    RST_pin = 'VSS'
+                else:
+                    ST_pin = 'VSS'
+                    RST_pin = 'RSTP'
+            else:
+                if i==1:
+                    ST_pin = 'RSTN'
+                    RST_pin = 'VSS'
+                else:
+                    ST_pin = 'VSS'
+                    RST_pin = 'RSTN'
+
+
+            term_list.append({'DATAI': DATAI_pin, 'DATAO':DATAO_pin, 'ST':ST_pin, 'RST':RST_pin, 'CLKI':CLKI_pin, 'CLKO':CLKO_pin, 'CAL':CAL_pin, 'VSS':VSS_pin, 'VDD':VDD_pin})
+            name_list.append('I%d'%i)
+
+        #print(term_list)
+        #print(name_list)
+
+        self.array_instance('I0', name_list, term_list=term_list) 
+
+        for inst in self.instances['I0']:
+            inst.design(lch=lch, pw=pw, nw=nw, m_dff=m_dff, m_inv1=m_inv1, m_inv2=m_inv2,
+                m_tgate=m_tgate, n_pd=n_pd, m_capsw=m_capsw, num_bits=num_bits, unit_cell=unit_cell, device_intent=device_intent)
+
+        #self.reconnect_instance_terminal('I0', 'CAL<%d:0>'%(num_bits-1), 'CAL<%d:0>'%(num_bits-1))
+        
+        self.rename_pin('CLKI','CLKI<%d:0>'%(num_ways-1))
         self.rename_pin('CLKO','CLKO<%d:0>'%(num_ways-1))
         self.rename_pin('DATAO','DATAO<%d:0>'%(num_ways-1))
-        self.reconnect_instance_terminal('I0', 'CLKO', 'CLKO<%d:0>'%(num_ways-1))
-        self.reconnect_instance_terminal('I0', 'DATAO', 'DATAO<%d:0>'%(num_ways-1))
 
-        #for i in range(num_ways):
-        #    self.rename_pin('CAL'+str(i),'CLKCAL'+str(i)+'<%d:0>'%(num_bits-1))
-        #    self.reconnect_instance_terminal('I0', 'CAL'+str(i), 'CLKCAL'+str(i)+'<%d:0>'%(num_bits-1))
-        cal_pn=''
-        clk_pn=''
         for i in range(num_ways):
-            cal_pn+='CLKCAL'+str(i)+'<%d:0>,'%(num_bits-1)
-            if i%2==0:
-                clk_pn+='CLKIN,'
-            else: 
-                clk_pn+='CLKIP,'
-        cal_pn=cal_pn[:-1]
-        clk_pn=clk_pn[:-1]
-        self.rename_pin('CAL0',cal_pn)
-        self.reconnect_instance_terminal('I0', 'CAL0', cal_pn)
-        self.reconnect_instance_terminal('I0', 'CLKI', clk_pn)
-
+            self.rename_pin('CAL'+str(i),'CLKCAL'+str(i)+'<%d:0>'%(num_bits-1))
 
 
     def get_layout_params(self, **kwargs):

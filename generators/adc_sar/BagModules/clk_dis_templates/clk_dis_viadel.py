@@ -138,8 +138,13 @@ class clk_dis_templates__clk_dis_viadel(Module):
         self.rename_pin('CLKO','CLKO<%d:0>'%(num_ways-1))
         self.rename_pin('DATAO','DATAO<%d:0>'%(num_ways-1))
 
+        #for i in range(num_ways):
+        #    self.rename_pin('CAL'+str(i),'CLKCAL'+str(i)+'<%d:0>'%(num_bits-1))
+        cal_pn=''
         for i in range(num_ways):
-            self.rename_pin('CAL'+str(i),'CLKCAL'+str(i)+'<%d:0>'%(num_bits-1))
+            cal_pn+='CLKCAL'+str(i)+'<%d:0>,'%(num_bits-1)
+        cal_pn=cal_pn[:-1]
+        self.rename_pin('CAL0', cal_pn)
 
 
     def get_layout_params(self, **kwargs):

@@ -147,6 +147,7 @@ def generate_clkdis_viadel(laygen, objectname_pfix, logictemp_lib, working_lib, 
     laygen.route(None, laygen.layers['metal'][3], xy0=viadel_RST_xy, xy1=np.array([viadel_RST_xy[0],viadel_RST_xy[1]+4]), gridname0=rg_m2m3)
     laygen.via(None, xy=np.array([viadel_RST_xy[0],viadel_RST_xy[1]+4]), gridname=rg_m2m3)
 
+    viadel_RST_xy = laygen.get_inst_pin_coord(viacell[way_index_even[0]].name, 'RST', rg_m2m3_basic)[1]
     for i in range(int(num_ways/2)-1):#way_index
         viadel_RST_xy = laygen.get_inst_pin_coord(viacell[way_index_even[i+1]].name, 'RST', rg_m2m3_basic)[1]
         laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], viadel_RST_xy, np.array([0,viadel_RST_xy[1]+12]), rg_m2m3_basic)
@@ -166,6 +167,7 @@ def generate_clkdis_viadel(laygen, objectname_pfix, logictemp_lib, working_lib, 
     laygen.route(None, laygen.layers['metal'][3], xy0=viadel_RST_xy, xy1=np.array([viadel_RST_xy[0],viadel_RST_xy[1]+4]), gridname0=rg_m2m3)
     laygen.via(None, xy=np.array([viadel_RST_xy[0],viadel_RST_xy[1]+4]), gridname=rg_m2m3)
 
+    viadel_RST_xy = laygen.get_inst_pin_coord(viacell[way_index_odd[0]].name, 'RST', rg_m2m3_basic)[1]
     for i in range(int(num_ways/2)-1):#way_index
         viadel_RST_xy = laygen.get_inst_pin_coord(viacell[way_index_odd[i+1]].name, 'RST', rg_m2m3_basic)[1]
         laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], viadel_RST_xy, np.array([0,viadel_RST_xy[1]+13]), rg_m2m3_basic)

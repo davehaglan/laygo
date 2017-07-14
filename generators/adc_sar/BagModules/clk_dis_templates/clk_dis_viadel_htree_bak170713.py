@@ -78,29 +78,16 @@ class clk_dis_templates__clk_dis_viadel_htree(Module):
 
 
         self.instances['I0'].design(lch=lch, pw=pw, nw=nw, m_dff=m_dff, m_inv1=m_inv1, m_inv2=m_inv2,
-            m_tgate=m_tgate, n_pd=n_pd, m_capsw=m_capsw, num_bits=num_bits, unit_cell=unit_cell, device_intent=device_intent, num_ways=num_ways)    #viadel
+            m_tgate=m_tgate, n_pd=n_pd, m_capsw=m_capsw, num_bits=num_bits, unit_cell=unit_cell, device_intent=device_intent)    #viadel
 
         self.rename_pin('CLKO','CLKO<%d:0>'%(num_ways-1))
         self.rename_pin('DATAO','DATAO<%d:0>'%(num_ways-1))
         self.reconnect_instance_terminal('I0', 'CLKO', 'CLKO<%d:0>'%(num_ways-1))
         self.reconnect_instance_terminal('I0', 'DATAO', 'DATAO<%d:0>'%(num_ways-1))
 
-        #for i in range(num_ways):
-        #    self.rename_pin('CAL'+str(i),'CLKCAL'+str(i)+'<%d:0>'%(num_bits-1))
-        #    self.reconnect_instance_terminal('I0', 'CAL'+str(i), 'CLKCAL'+str(i)+'<%d:0>'%(num_bits-1))
-        cal_pn=''
-        clk_pn=''
         for i in range(num_ways):
-            cal_pn+='CLKCAL'+str(i)+'<%d:0>,'%(num_bits-1)
-            if i%2==0:
-                clk_pn+='CLKIN,'
-            else: 
-                clk_pn+='CLKIP,'
-        cal_pn=cal_pn[:-1]
-        clk_pn=clk_pn[:-1]
-        self.rename_pin('CAL0',cal_pn)
-        self.reconnect_instance_terminal('I0', 'CAL0', cal_pn)
-        self.reconnect_instance_terminal('I0', 'CLKI', clk_pn)
+            self.rename_pin('CAL'+str(i),'CLKCAL'+str(i)+'<%d:0>'%(num_bits-1))
+            self.reconnect_instance_terminal('I0', 'CAL'+str(i), 'CLKCAL'+str(i)+'<%d:0>'%(num_bits-1))
 
 
 

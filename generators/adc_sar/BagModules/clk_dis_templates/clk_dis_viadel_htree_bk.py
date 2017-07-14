@@ -33,12 +33,12 @@ import pkg_resources
 from bag.design import Module
 
 
-yaml_file = pkg_resources.resource_filename(__name__, os.path.join('netlist_info', 'clk_dis_viadel_htree.yaml'))
+yaml_file = pkg_resources.resource_filename(__name__, os.path.join('netlist_info', 'clk_dis_viadel_htree_bk.yaml'))
 
 
 # noinspection PyPep8Naming
-class clk_dis_templates__clk_dis_viadel_htree(Module):
-    """Module for library clk_dis_templates cell clk_dis_viadel_htree.
+class clk_dis_templates__clk_dis_viadel_htree_bk(Module):
+    """Module for library clk_dis_templates cell clk_dis_viadel_htree_bk.
 
     Fill in high level description here.
     """
@@ -46,7 +46,7 @@ class clk_dis_templates__clk_dis_viadel_htree(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, m_dff=2, m_inv1=4, m_inv2=8, m_tgate=4, n_pd=4, m_capsw=2, num_bits=5, num_ways=8, unit_cell=1, device_intent='fast'):
+    def design(self):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -62,47 +62,7 @@ class clk_dis_templates__clk_dis_viadel_htree(Module):
         restore_instance()
         array_instance()
         """
-        self.parameters['lch'] = lch
-        self.parameters['pw'] = pw
-        self.parameters['nw'] = nw
-        self.parameters['m_dff'] = m_dff
-        self.parameters['m_inv1'] = m_inv1
-        self.parameters['m_inv2'] = m_inv2
-        self.parameters['m_tgate'] = m_tgate
-        self.parameters['n_pd'] = n_pd
-        self.parameters['m_capsw'] = m_capsw
-        self.parameters['num_bits'] = num_bits
-        self.parameters['num_ways'] = num_ways
-        self.parameters['unit_cell'] = unit_cell
-        self.parameters['device_intent'] = device_intent
-
-
-        self.instances['I0'].design(lch=lch, pw=pw, nw=nw, m_dff=m_dff, m_inv1=m_inv1, m_inv2=m_inv2,
-            m_tgate=m_tgate, n_pd=n_pd, m_capsw=m_capsw, num_bits=num_bits, unit_cell=unit_cell, device_intent=device_intent, num_ways=num_ways)    #viadel
-
-        self.rename_pin('CLKO','CLKO<%d:0>'%(num_ways-1))
-        self.rename_pin('DATAO','DATAO<%d:0>'%(num_ways-1))
-        self.reconnect_instance_terminal('I0', 'CLKO', 'CLKO<%d:0>'%(num_ways-1))
-        self.reconnect_instance_terminal('I0', 'DATAO', 'DATAO<%d:0>'%(num_ways-1))
-
-        #for i in range(num_ways):
-        #    self.rename_pin('CAL'+str(i),'CLKCAL'+str(i)+'<%d:0>'%(num_bits-1))
-        #    self.reconnect_instance_terminal('I0', 'CAL'+str(i), 'CLKCAL'+str(i)+'<%d:0>'%(num_bits-1))
-        cal_pn=''
-        clk_pn=''
-        for i in range(num_ways):
-            cal_pn+='CLKCAL'+str(i)+'<%d:0>,'%(num_bits-1)
-            if i%2==0:
-                clk_pn+='CLKIN,'
-            else: 
-                clk_pn+='CLKIP,'
-        cal_pn=cal_pn[:-1]
-        clk_pn=clk_pn[:-1]
-        self.rename_pin('CAL0',cal_pn)
-        self.reconnect_instance_terminal('I0', 'CAL0', cal_pn)
-        self.reconnect_instance_terminal('I0', 'CLKI', clk_pn)
-
-
+        pass
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

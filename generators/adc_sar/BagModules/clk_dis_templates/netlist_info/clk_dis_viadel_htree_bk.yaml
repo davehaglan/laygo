@@ -1,6 +1,6 @@
 lib_name: clk_dis_templates
-cell_name: clk_dis_viadel_htree
-pins: [ "CAL0", "CLKO", "DATAO", "RSTN", "VSS", "VDD", "CLKIN", "CLKIP", "RSTP" ]
+cell_name: clk_dis_viadel_htree_bk
+pins: [ "CAL7", "CAL6", "CAL5", "CAL4", "CAL3", "CAL2", "CAL1", "CAL0", "CLKO", "DATAO", "RSTN", "VSS", "VDD", "CLKIN", "CLKIP", "RSTP" ]
 instances:
   I0:
     lib_name: clk_dis_templates
@@ -22,6 +22,30 @@ instances:
         direction: input
         net_name: "CAL0"
         num_bits: 1
+      CAL1:
+        direction: 
+        net_name: "CAL1"
+        num_bits: 1
+      CAL2:
+        direction: 
+        net_name: "CAL2"
+        num_bits: 1
+      CAL3:
+        direction: 
+        net_name: "CAL3"
+        num_bits: 1
+      CAL4:
+        direction: 
+        net_name: "CAL4"
+        num_bits: 1
+      CAL5:
+        direction: 
+        net_name: "CAL5"
+        num_bits: 1
+      CAL7:
+        direction: 
+        net_name: "CAL7"
+        num_bits: 1
       VSS:
         direction: inputOutput
         net_name: "VSS"
@@ -34,7 +58,11 @@ instances:
         direction: output
         net_name: "CLKO"
         num_bits: 1
+      CAL6:
+        direction: 
+        net_name: "CAL6"
+        num_bits: 1
       CLKI:
         direction: input
-        net_name: "CLKIN"
+        net_name: "net2"
         num_bits: 1
