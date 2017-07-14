@@ -49,7 +49,7 @@ def generate_clkdis_viadel_htree(laygen, objectname_pfix, logictemp_lib, working
 
     trackm = 12
     #len_h = laygen.grids.get_absgrid_coord_x(gridname=rg_m4m5, x=20.16)
-    len_h = laygen.grids.get_absgrid_coord_x(gridname=rg_m4m5, x=pitch_x)
+    len_h = laygen.grids.get_absgrid_coord_x(gridname=rg_m4m5, x=pitch_x)*num_ways/8
     len_in = laygen.grids.get_absgrid_coord_x(gridname=rg_m4m5, x=2)
     #num_ways = 8
     num_bits = 5
@@ -86,6 +86,7 @@ def generate_clkdis_viadel_htree(laygen, objectname_pfix, logictemp_lib, working
     #print(ht1_WI_xy)
 
     ##create input vias and metals
+    
     for i in range(trackm):
         for j in range (trackm):
             laygen.via(None, xy=np.array([ht0_WI_xy[0]+2*i, ht0_WI_xy[1]+2*j]), gridname=rg_m4m5)
