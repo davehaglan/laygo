@@ -87,7 +87,6 @@ class adc_sar_templates__adc_retimer(Module):
         ck_phase_0_1=1
         ck_phase_out=ck_phase_1
         ck_phase_buf=sorted(set([ck_phase_2, ck_phase_1, ck_phase_0_0, ck_phase_0_1]))
-        #self.instances['ISLICE0'].design(lch=lch, pw=pw, nw=nw, m=m_latch, num_bits=num_bits, device_intent=device_intent)
 
         #ibuf
         name_list=[]
