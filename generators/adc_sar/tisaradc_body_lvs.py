@@ -10,7 +10,7 @@ import yaml
 import matplotlib.pyplot as plt
 
 lib_name = 'adc_sar_templates'
-cell_name = 'tisaradc_body_core'
+cell_name = 'tisaradc_body'
 impl_lib = 'adc_sar_generated'
 #tb_lib = 'adc_sar_testbenches'
 #tb_cell = 'capdac_8b_tb_tran'

@@ -33,12 +33,12 @@ import pkg_resources
 from bag.design import Module
 
 
-yaml_file = pkg_resources.resource_filename(__name__, os.path.join('netlist_info', 'tisaradc_body_core.yaml'))
+yaml_file = pkg_resources.resource_filename(__name__, os.path.join('netlist_info', 'tisaradc_body.yaml'))
 
 
 # noinspection PyPep8Naming
-class adc_sar_templates__tisaradc_body_core(Module):
-    """Module for library adc_sar_templates cell tisaradc_body_core.
+class adc_sar_templates__tisaradc_body(Module):
+    """Module for library adc_sar_templates cell tisaradc_body.
 
     Fill in high level description here.
     """
@@ -94,6 +94,8 @@ class adc_sar_templates__tisaradc_body_core(Module):
             ret_m_obuf,
             ret_m_latch,
             ret_device_intent,
+            space_msar,
+            space_msamp,
         ):
         """To be overridden by subclasses to design this module.
 
@@ -159,110 +161,73 @@ class adc_sar_templates__tisaradc_body_core(Module):
         self.parameters['ret_m_obuf'] = ret_m_obuf
         self.parameters['ret_m_latch'] = ret_m_latch
         self.parameters['ret_device_intent'] = ret_device_intent
+        self.parameters['space_msar'] = space_msar
+        self.parameters['space_msamp'] = space_msamp
 
         #sar_wsamp_array generation
         term_list=[{
-            'CLK0': ','.join(['ICLK%d'%(i) for i in range(num_slices)]),
-            'OSP0': ','.join(['OSP%d'%(i) for i in range(num_slices)]),
-            'OSM0': ','.join(['OSM%d'%(i) for i in range(num_slices)]),
-            'ASCLKD0<3:0>': ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]),
-            'EXTSEL_CLK0': ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]),
-            'ADCOUT0<0>': ','.join(['ADCO%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
-            'CLKO0': ','.join(['CLKO%d'%(i) for i in range(num_slices)]),
+            'OSP': ','.join(['OSP%d'%(i) for i in range(num_slices)]),
+            'OSM': ','.join(['OSM%d'%(i) for i in range(num_slices)]),
+            'ASCLKD<3:0>': ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]),
+            'EXTSEL_CLK': ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]),
+            'CLKCAL': ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]),
+            'ADCOUT': ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
         }]
-        name_list=(['ISAR0'])
-        self.array_instance('ISAR0', name_list, term_list=term_list)
-        self.instances['ISAR0'][0].design(
-            sar_lch,
-            sar_pw,
-            sar_nw,
-            sar_sa_m,
-            sar_sa_m_rst,
-            sar_sa_m_rgnn,
-            sar_sa_m_buf,
-            sar_drv_m_list,
-            sar_ckgen_m,
-            sar_ckgen_fo,
-            sar_ckgen_ndelay,
-            sar_logic_m,
-            sar_fsm_m,
-            sar_ret_m,
-            sar_ret_fo,
-            sar_device_intent,
-            sar_c_m,
-            sar_rdx_array,
-            samp_lch,
-            samp_wp,
-            samp_wn,
-            samp_fgn,
-            samp_fg_inbuf_list,
-            samp_fg_outbuf_list,
-            samp_nduml,
-            samp_ndumr,
-            samp_nsep,
-            samp_intent,
-            num_bits,
-            samp_use_laygo,
+        name_list=(['ICORE0'])
+        self.array_instance('ICORE0', name_list, term_list=term_list)
+        self.instances['ICORE0'][0].design(
+            sar_lch, 
+            sar_pw, 
+            sar_nw, 
+            sar_sa_m, 
+            sar_sa_m_rst, 
+            sar_sa_m_rgnn, 
+            sar_sa_m_buf, 
+            sar_drv_m_list,sar_ckgen_m,sar_ckgen_fo, 
+            sar_ckgen_ndelay, 
+            sar_logic_m, 
+            sar_fsm_m, 
+            sar_ret_m, 
+            sar_ret_fo, 
+            sar_device_intent, 
+            sar_c_m, 
+            sar_rdx_array, 
+            samp_lch, 
+            samp_wp, 
+            samp_wn, 
+            samp_fgn, 
+            samp_fg_inbuf_list, 
+            samp_fg_outbuf_list, 
+            samp_nduml, 
+            samp_ndumr, 
+            samp_nsep, 
+            samp_intent, 
+            num_bits, 
+            samp_use_laygo, 
             num_slices,
+            clk_lch, 
+            clk_pw, 
+            clk_nw, 
+            clk_m_dff, 
+            clk_m_inv1, 
+            clk_m_inv2, 
+            clk_m_tgate, 
+            clk_n_pd, 
+            clk_m_capsw, 
+            clk_unit_cell, 
+            clk_device_intent,
+            ret_lch,
+            ret_pw,
+            ret_nw,
+            ret_m_ibuf,
+            ret_m_obuf,
+            ret_m_latch,
+            ret_device_intent,
         )
+
+        self.instances['IDCAP0'].design(sar_lch, sar_pw, sar_nw, space_msamp, space_msar, device_intent=sar_device_intent)
+        self.instances['IDCAP1'].design(sar_lch, sar_pw, sar_nw, space_msamp, space_msar, device_intent=sar_device_intent)
     
-        #clock generation
-        term_list=[{
-            'CAL0': ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]),
-            'CLKO': ','.join(['ICLK%d'%(num_slices-1-i) for i in range(num_slices)]),
-            'DATAO': 'DATAO<%d:0>'%(num_slices-1)
-        }]
-        name_list=(['ICLKDIS0'])
-        self.array_instance('ICLKDIS0', name_list, term_list=term_list)
-        self.instances['ICLKDIS0'][0].design(
-            lch=clk_lch, 
-            pw=clk_pw, 
-            nw=clk_nw, 
-            m_dff=clk_m_dff, 
-            m_inv1=clk_m_inv1, 
-            m_inv2=clk_m_inv2, 
-            m_tgate=clk_m_tgate, 
-            n_pd=clk_n_pd, 
-            m_capsw=clk_m_capsw, 
-            num_bits=5, 
-            num_ways=num_slices, 
-            unit_cell=clk_unit_cell, 
-            device_intent=clk_device_intent,
-        )
-
-        #retimer generation
-        #clk_bar phases
-        #rules:
-        # 1) last stage latches: num_slices-1
-        # 2) second last stage latches: int(num_slices/2)-1
-        # 3) the first half of first stage latches: int((int(num_slices/2)+1)%num_slices)
-        # 4) the second half of first stage latches: 1
-        # 5) the output phase = the second last latch phase
-        ck_phase_2=num_slices-1
-        ck_phase_1=int(num_slices/2)-1
-        ck_phase_0_0=int((int(num_slices/2)+1)%num_slices)
-        ck_phase_0_1=1
-        ck_phase_out=ck_phase_1
-        ck_phase_buf=sorted(set([ck_phase_2, ck_phase_1, ck_phase_0_0, ck_phase_0_1]))
-
-        term_list=[{
-            'in': ','.join(['ADCO%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
-            'out': ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
-            'clk': ','.join(['CLKO%d'%(i) for i in ck_phase_buf]),
-        }]
-        name_list=(['IRET0'])
-        self.array_instance('IRET0', name_list, term_list=term_list)
-        self.instances['IRET0'][0].design(
-            lch = ret_lch,            
-            pw = ret_pw,
-            nw = ret_nw,
-            m_ibuf = ret_m_ibuf,
-            m_obuf = ret_m_obuf,
-            m_latch = ret_m_latch,
-            num_slices = num_slices,
-            num_bits = num_bits,
-            device_intent = ret_device_intent,
-        )
         self.rename_pin('CLKCAL', ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]))
         self.rename_pin('OSP', ','.join(['OSP%d'%(i) for i in range(num_slices)]))
         self.rename_pin('OSM', ','.join(['OSM%d'%(i) for i in range(num_slices)]))

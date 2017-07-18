@@ -67,13 +67,13 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
 
     sar_template = laygen.templates.get_template(sar_name, sar_libname)
     sar_pins=sar_template.pins
-    sar_xy=isar.xy[0]
+    sar_xy=isar.xy
     ret_template = laygen.templates.get_template(ret_name, ret_libname)
     ret_pins=ret_template.pins
-    ret_xy=iret.xy[0]
+    ret_xy=iret.xy
     clkdist_template = laygen.templates.get_template(clkdist_name, clkdist_libname)
     clkdist_pins=clkdist_template.pins
-    clkdist_xy=iclkdist.xy[0]
+    clkdist_xy=iclkdist.xy
 
     #prboundary
     sar_size = laygen.templates.get_template(sar_name, libname=sar_libname).size
@@ -134,7 +134,7 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
             overwrite_start_coord=None, overwrite_end_coord=None, overwrite_num_routes=None, offset_start_index=1, offset_end_index=-1)
         rvdd_ckd_m5+=rvdd
         rvss_ckd_m5+=rvss
-    laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_CLKD_', layer=laygen.layers['pin'][6], gridname=rg_m5m6_thick, netnames=['VDDCLKD:', 'VSS:'], direction='x', 
+    laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_CLKD_', layer=laygen.layers['pin'][6], gridname=rg_m5m6_thick, netnames=['VDDSAMP:', 'VSS:'], direction='x', 
                                          input_rails_rect=[rvdd_ckd_m5, rvss_ckd_m5], generate_pin=True, 
                                          overwrite_start_coord=0, overwrite_end_coord=None, overwrite_num_routes=None,
                                          offset_start_index=0, offset_end_index=0)
@@ -179,7 +179,7 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
         laygen.add_pin('INM' + str(i), 'INM', rinm[-1].xy, laygen.layers['pin'][6])
 
     #clk output pins
-    laygen.add_pin('CLKBOUT_NC', 'CLKBOUT_NC', np.array([sar_xy, sar_xy])+sar_pins['CLKO07']['xy'], sar_pins['CLKO07']['layer'])
+    #laygen.add_pin('CLKBOUT_NC', 'CLKBOUT_NC', np.array([sar_xy, sar_xy])+sar_pins['CLKO07']['xy'], sar_pins['CLKO07']['layer'])
     laygen.add_pin('CLKOUT_DES', 'CLKOUT_DES', ret_pins['ck_out']['xy'], ret_pins['ck_out']['layer'])
     
     #retimer output pins
@@ -277,7 +277,40 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
                             track_y=pdict_m4m5[isar.name]['ADCOUT'+str(i)+'<'+str(j)+'>'][0][1]+j*2+2, 
                             gridname=rg_m4m5, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4, extendl=0, extendr=0)
     #sar-retimer routes (clock)
+    #finding clock_bar phases <- added by Jaeduk
+    #rules:
+    # 1) last stage latches: num_slices-1
+    # 2) second last stage latches: int(num_slices/2)-1
+    # 3) the first half of first stage latches: int((int(num_slices/2)+1)%num_slices)
+    # 4) the second half of first stage latches: 1
+    # 5) the output phase = the second last latch phase
+    ck_phase_2=num_slices-1
+    ck_phase_1=int(num_slices/2)-1
+    ck_phase_0_0=int((int(num_slices/2)+1)%num_slices)
+    ck_phase_0_1=1
+    ck_phase_out=ck_phase_1
+    ck_phase_buf=sorted(set([ck_phase_2, ck_phase_1, ck_phase_0_0, ck_phase_0_1]))
     rg_m3m4_temp_clk='route_M3_M4_basic_temp_clk'
+    laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m3m4, gridname_output=rg_m3m4_temp_clk,
+                                          instname=iret.name, 
+                                          inst_pin_prefix=['clk'+str(i) for i in ck_phase_buf], xy_grid_type='xgrid')
+    pdict_m3m4_temp_clk = laygen.get_inst_pin_coord(None, None, rg_m3m4_temp_clk)
+    for i in ck_phase_buf:
+        for j in range(4):
+            laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4], 
+                            xy0=pdict_m4m5[isar.name]['CLKO0'+str(i)][0], 
+                            xy1=pdict_m3m4_temp_clk[iret.name]['clk'+str(i)][0], 
+                            track_y=pdict_m4m5[isar.name]['CLKO00'][0][1]+num_bits*2+2+2*j, 
+                            gridname=rg_m4m5, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4_temp_clk, extendl=0, extendr=0)
+            laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4], 
+                            xy0=pdict_m4m5[isar.name]['CLKO1'+str(i)][0], 
+                            xy1=pdict_m3m4_temp_clk[iret.name]['clk'+str(i)][0], 
+                            track_y=pdict_m4m5[isar.name]['CLKO00'][0][1]+num_bits*2+2+2*j, 
+                            gridname=rg_m4m5, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4_temp_clk, extendl=0, extendr=0)
+        r=laygen.route(None, layer=laygen.layers['metal'][3], xy0=pdict_m3m4_temp_clk[iret.name]['clk'+str(i)][0], 
+                        xy1=np.array([pdict_m3m4_temp_clk[iret.name]['clk'+str(i)][0][0], 
+                                      pdict_m4m5[isar.name]['CLKO00'][0][1]+num_bits*2+2+2*4+1]), gridname0=rg_m3m4_temp_clk)
+    '''    
     laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m3m4, gridname_output=rg_m3m4_temp_clk,
                                           instname=iret.name, 
                                           inst_pin_prefix=['clk'+str(2*i+1) for i in range(int(num_slices/2))], xy_grid_type='xgrid')
@@ -297,6 +330,7 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
         r=laygen.route(None, layer=laygen.layers['metal'][3], xy0=pdict_m3m4_temp_clk[iret.name]['clk'+str(2*i+1)][0], 
                         xy1=np.array([pdict_m3m4_temp_clk[iret.name]['clk'+str(2*i+1)][0][0], 
                                       pdict_m4m5[isar.name]['CLKO00'][0][1]+num_bits*2+2+2*4+1]), gridname0=rg_m3m4_temp_clk)
+    '''
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")

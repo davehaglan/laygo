@@ -86,7 +86,7 @@ instances:
         direction: input
         net_name: "ADCO"
         num_bits: 1
-  ICLK0:
+  ICLKDIS0:
     lib_name: clk_dis_templates
     cell_name: clk_dis_viadel_htree
     instpins:
