@@ -11,6 +11,7 @@ def execfile(filepath, globals=None, locals=None):
 
 files=[
     #'laygo/generators/adc_sar/adc_sar_dsn_system.py',
+    'laygo/generators/logic/logic_templates_layout_generator.py',
     'laygo/generators/adc_sar/adc_sar_capdac_layout_generator.py',
     'laygo/generators/adc_sar/adc_sar_salatch_pmos_layout_generator.py',
     'laygo/generators/adc_sar/adc_sar_capdrv_nsw_layout_generator.py',
@@ -39,8 +40,8 @@ files=[
     'laygo/generators/adc_sar/clk_dis_viadel_htree_layout_generator.py',
     'laygo/generators/adc_sar/adc_retimer_layout_generator.py',
     'laygo/generators/adc_sar/tisaradc_body_core_layout_generator.py',
-    'laygo/generators/adc_sar/tisaradc_body_layout_generator.py',
     'laygo/generators/adc_sar/tisaradc_body_space_layout_generator.py',
+    'laygo/generators/adc_sar/tisaradc_body_layout_generator.py',
     'laygo/generators/adc_sar/tisaradc_body_schematic_generator.py',
     'laygo/generators/adc_sar/tisaradc_body_lvs.py',
     ]
