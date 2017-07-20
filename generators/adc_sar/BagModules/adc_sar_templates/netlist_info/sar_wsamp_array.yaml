@@ -2,6 +2,38 @@ lib_name: adc_sar_templates
 cell_name: sar_wsamp_array
 pins: [ "OSM0", "OSP0", "INM0", "CLK0", "INP0", "VREF<2:0>", "VSS", "EXTSEL_CLK0", "ASCLKD0<3:0>", "ADCOUT0<0>", "CLKO0", "VDDSAMP", "VDDSAR" ]
 instances:
+  PIN57:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN49:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN38:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN5:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN3:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN2:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN1:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN0:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
   ISLICE0:
     lib_name: adc_sar_templates
     cell_name: sar_wsamp
@@ -130,3 +162,23 @@ instances:
         direction: input
         net_name: "VREF<2:0>"
         num_bits: 3
+  PIN90:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
+  PIN50:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
+  PIN4:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
+  PIN82:
+    lib_name: basic
+    cell_name: opin
+    instpins: {}
+  PIN51:
+    lib_name: basic
+    cell_name: opin
+    instpins: {}

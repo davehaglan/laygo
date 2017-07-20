@@ -162,13 +162,22 @@ class adc_sar_templates__tisaradc_body_core(Module):
 
         #sar_wsamp_array generation
         term_list=[{
-            'CLK0': ','.join(['ICLK%d'%(i) for i in range(num_slices)]),
-            'OSP0': ','.join(['OSP%d'%(i) for i in range(num_slices)]),
-            'OSM0': ','.join(['OSM%d'%(i) for i in range(num_slices)]),
-            'ASCLKD0<3:0>': ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]),
-            'EXTSEL_CLK0': ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]),
-            'ADCOUT0<0>': ','.join(['ADCO%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
-            'CLKO0': ','.join(['CLKO%d'%(i) for i in range(num_slices)]),
+            ','.join(['INP%d'%(i) for i in range(num_slices)]): 'INP',
+            ','.join(['INM%d'%(i) for i in range(num_slices)]): 'INM',
+            ','.join(['CLK%d'%(i) for i in range(num_slices)]):
+                ','.join(['ICLK%d'%(i) for i in range(num_slices)]),
+            ','.join(['OSP%d'%(i) for i in range(num_slices)]):
+                ','.join(['OSP%d'%(i) for i in range(num_slices)]),
+            ','.join(['OSM%d'%(i) for i in range(num_slices)]):
+                ','.join(['OSM%d'%(i) for i in range(num_slices)]),
+            ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]):
+                ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]),
+            ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]):
+                ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]),
+            ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]): 
+                ','.join(['ADCO%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
+            ','.join(['CLKO%d'%(i) for i in range(num_slices)]):
+                ','.join(['CLKO%d'%(i) for i in range(num_slices)]),
         }]
         name_list=(['ISAR0'])
         self.array_instance('ISAR0', name_list, term_list=term_list)
@@ -208,9 +217,9 @@ class adc_sar_templates__tisaradc_body_core(Module):
     
         #clock generation
         term_list=[{
-            'CAL0': ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]),
-            'CLKO': ','.join(['ICLK%d'%(num_slices-1-i) for i in range(num_slices)]),
-            'DATAO': 'DATAO<%d:0>'%(num_slices-1)
+            ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]): ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]),
+            'CLKO<%d:0>'%(num_slices-1): ','.join(['ICLK%d'%(num_slices-1-i) for i in range(num_slices)]),
+            'DATAO<%d:0>'%(num_slices-1): 'DATAO<%d:0>'%(num_slices-1)
         }]
         name_list=(['ICLKDIS0'])
         self.array_instance('ICLKDIS0', name_list, term_list=term_list)
@@ -246,9 +255,12 @@ class adc_sar_templates__tisaradc_body_core(Module):
         ck_phase_buf=sorted(set([ck_phase_2, ck_phase_1, ck_phase_0_0, ck_phase_0_1]))
 
         term_list=[{
-            'in': ','.join(['ADCO%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
-            'out': ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
-            'clk': ','.join(['CLKO%d'%(i) for i in ck_phase_buf]),
+            ','.join(['in_%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]):
+                ','.join(['ADCO%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
+            ','.join(['out_%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]):
+                ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
+            ','.join(['clk%d'%(i) for i in ck_phase_buf]):
+                ','.join(['CLKO%d'%(i) for i in ck_phase_buf]),
         }]
         name_list=(['IRET0'])
         self.array_instance('IRET0', name_list, term_list=term_list)

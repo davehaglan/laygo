@@ -166,12 +166,18 @@ class adc_sar_templates__tisaradc_body(Module):
 
         #sar_wsamp_array generation
         term_list=[{
-            'OSP': ','.join(['OSP%d'%(i) for i in range(num_slices)]),
-            'OSM': ','.join(['OSM%d'%(i) for i in range(num_slices)]),
-            'ASCLKD<3:0>': ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]),
-            'EXTSEL_CLK': ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]),
-            'CLKCAL': ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]),
-            'ADCOUT': ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
+            ','.join(['OSP%d'%(i) for i in range(num_slices)]):
+                ','.join(['OSP%d'%(i) for i in range(num_slices)]),
+            ','.join(['OSM%d'%(i) for i in range(num_slices)]):
+                ','.join(['OSM%d'%(i) for i in range(num_slices)]),
+            ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]):
+                ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]),
+            ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]):
+                ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]),
+            ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]):
+                ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]),
+            ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]):
+                ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
         }]
         name_list=(['ICORE0'])
         self.array_instance('ICORE0', name_list, term_list=term_list)

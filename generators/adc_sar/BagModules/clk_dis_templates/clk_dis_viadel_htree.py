@@ -82,25 +82,26 @@ class clk_dis_templates__clk_dis_viadel_htree(Module):
 
         self.rename_pin('CLKO','CLKO<%d:0>'%(num_ways-1))
         self.rename_pin('DATAO','DATAO<%d:0>'%(num_ways-1))
-        self.reconnect_instance_terminal('I0', 'CLKO', 'CLKO<%d:0>'%(num_ways-1))
-        self.reconnect_instance_terminal('I0', 'DATAO', 'DATAO<%d:0>'%(num_ways-1))
+        self.reconnect_instance_terminal('I0', 'CLKO<%d:0>'%(num_ways-1), 'CLKO<%d:0>'%(num_ways-1))
+        self.reconnect_instance_terminal('I0', 'DATAO<%d:0>'%(num_ways-1), 'DATAO<%d:0>'%(num_ways-1))
 
         #for i in range(num_ways):
         #    self.rename_pin('CAL'+str(i),'CLKCAL'+str(i)+'<%d:0>'%(num_bits-1))
         #    self.reconnect_instance_terminal('I0', 'CAL'+str(i), 'CLKCAL'+str(i)+'<%d:0>'%(num_bits-1))
-        cal_pn=''
+        cal_pn=','.join(['CLKCAL'+str(i)+'<%d:0>'%(num_bits-1) for i in range(num_ways)])
+        cal_pn_term=','.join(['CLKCAL'+str(i)+'<%d:0>'%(num_bits-1) for i in range(num_ways)])
         clk_pn=''
         for i in range(num_ways):
-            cal_pn+='CLKCAL'+str(i)+'<%d:0>,'%(num_bits-1)
+            #cal_pn+='CLKCAL'+str(i)+'<%d:0>,'%(num_bits-1)
             if i%2==0:
                 clk_pn+='CLKIN,'
             else: 
                 clk_pn+='CLKIP,'
-        cal_pn=cal_pn[:-1]
+        #cal_pn=cal_pn[:-1]
         clk_pn=clk_pn[:-1]
         self.rename_pin('CAL0',cal_pn)
-        self.reconnect_instance_terminal('I0', 'CAL0', cal_pn)
-        self.reconnect_instance_terminal('I0', 'CLKI', clk_pn)
+        self.reconnect_instance_terminal('I0', cal_pn_term, cal_pn)
+        self.reconnect_instance_terminal('I0', 'CLKI<%d:0>'%(num_ways-1), clk_pn)
 
 
 

@@ -22,6 +22,14 @@ instances:
         direction: output
         net_name: "CLK"
         num_bits: 1
+  PIN2:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN0:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
   I0:
     lib_name: logic_templates
     cell_name: latch_2ck
@@ -50,3 +58,15 @@ instances:
         direction: input
         net_name: "CLKB"
         num_bits: 1
+  PIN3:
+    lib_name: basic
+    cell_name: opin
+    instpins: {}
+  PIN5:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
+  PIN4:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}

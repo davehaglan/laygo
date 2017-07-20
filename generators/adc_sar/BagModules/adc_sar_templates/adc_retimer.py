@@ -109,8 +109,8 @@ class adc_sar_templates__adc_retimer(Module):
         name_list=[]
         term_list=[]
         for i in range(num_slices):
-            tdict={'in': 'in_%d<%d:0>'%(i, num_bits-1), 
-                   'out':'out_%d<%d:0>'%(i, num_bits-1),
+            tdict={'in<%d:0>'%(num_bits-1) : 'in_%d<%d:0>'%(i, num_bits-1), 
+                   'out<%d:0>'%(num_bits-1) :'out_%d<%d:0>'%(i, num_bits-1),
                    'clkb2': 'clkb%d'%(ck_phase_2),
                    'clkb1': 'clkb%d'%(ck_phase_1),
                   }

@@ -50,6 +50,18 @@ instances:
         direction: input
         net_name: "I"
         num_bits: 1
+  PIN2:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN1:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN0:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
   I2:
     lib_name: logic_templates
     cell_name: tinv_small
@@ -78,3 +90,15 @@ instances:
         direction: input
         net_name: "O"
         num_bits: 1
+  PIN3:
+    lib_name: basic
+    cell_name: opin
+    instpins: {}
+  PIN5:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
+  PIN4:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
