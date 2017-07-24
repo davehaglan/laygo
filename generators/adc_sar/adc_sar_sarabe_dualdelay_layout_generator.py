@@ -337,18 +337,21 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
 
     # sarclk signal route
     # ckgen to fsm
-    #rh0, rv0, rh1 = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-    #                                 pdict_m4m5[ickg.name]['CLKO'][0], pdict_m4m5[ifsm.name]['CLK'][0], 
-    #                                 pdict_m4m5[isl.name]['RETO<1>'][1][0]-1, rg_m4m5)
     rh0, rv0, rh1 = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                      pdict_m4m5[ickg.name]['CLKO'][0], pdict_m4m5[ifsm.name]['CLK'][0], 
-                                     pdict_m4m5[isl.name]['RETO<'+str(num_bits-2)+'>'][1][0]+9-4-1-3, rg_m4m5)
-                                     #pdict_m4m5[ickg.name]['CLKO'][1][0]+2, rg_m4m5)
+                                     pdict_m4m5[ickg.name]['CLKO'][0][0], rg_m4m5)
     # ckgen to fsm #2 (to reduce route resistance)
     rh0, rv0, rh1 = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                      pdict_m4m5[ickg.name]['CLKO'][0], pdict_m4m5[ifsm.name]['CLK'][0], 
-                                     pdict_m4m5[isl.name]['RETO<'+str(num_bits-2)+'>'][1][0]+11-4-1-3, rg_m4m5)
-                                     #pdict_m4m5[ickg.name]['CLKO'][1][0]+4, rg_m4m5)
+                                     pdict_m4m5[ickg.name]['CLKO'][0][0]+2, rg_m4m5)
+    ## ckgen to fsm
+    #rh0, rv0, rh1 = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
+    #                                 pdict_m4m5[ickg.name]['CLKO'][0], pdict_m4m5[ifsm.name]['CLK'][0], 
+    #                                 pdict_m4m5[isl.name]['RETO<'+str(num_bits-2)+'>'][1][0]+9-4-1-3, rg_m4m5)
+    ## ckgen to fsm #2 (to reduce route resistance)
+    #rh0, rv0, rh1 = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
+    #                                 pdict_m4m5[ickg.name]['CLKO'][0], pdict_m4m5[ifsm.name]['CLK'][0], 
+    #                                 pdict_m4m5[isl.name]['RETO<'+str(num_bits-2)+'>'][1][0]+11-4-1-3, rg_m4m5)
 
     # ckgen to sl route
     # saopb/saomb
