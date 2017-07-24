@@ -33,6 +33,11 @@ if load_from_file==True:
     params['m_sw_arr']=sizedict['sarsamp_m_sw_arr']
     params['m_inbuf_list']=sizedict['sarsamp_m_inbuf_list']
     params['m_outbuf_list']=sizedict['sarsamp_m_outbuf_list']
+    params['lch']=sizedict['lch']
+    params['pw']=sizedict['pw']
+    params['nw']=sizedict['nw']
+    params['device_intent']=sizedict['device_intent']
+
 
 print('creating BAG project')
 prj = bag.BagProject()

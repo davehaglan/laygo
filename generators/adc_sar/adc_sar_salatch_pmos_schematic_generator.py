@@ -39,7 +39,10 @@ if load_from_file==True:
     params['m_rst']=sizedict['salatch_m_rst']
     params['m_rgnn']=sizedict['salatch_m_rgnn']
     params['m_buf']=sizedict['salatch_m_buf']
-
+    params['lch']=sizedict['lch']
+    params['pw']=sizedict['pw']
+    params['nw']=sizedict['nw']
+    params['device_intent']=sizedict['device_intent']
 
 print('creating BAG project')
 prj = bag.BagProject()

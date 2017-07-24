@@ -33,6 +33,10 @@ if load_from_file==True:
     params['m']=sizedict['sarclkgen_m']
     params['fo']=sizedict['sarclkgen_fo']
     params['ndelay']=sizedict['sarclkgen_ndelay']
+    params['lch']=sizedict['lch']
+    params['pw']=sizedict['pw']
+    params['nw']=sizedict['nw']
+    params['device_intent']=sizedict['device_intent']
 
 print('creating BAG project')
 prj = bag.BagProject()

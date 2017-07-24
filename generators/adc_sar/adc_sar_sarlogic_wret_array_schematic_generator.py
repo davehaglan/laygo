@@ -32,7 +32,10 @@ if load_from_file==True:
     cell_name='sarlogic_wret_v2_array'
     params['m']=sizedict['sarlogic_m']
     params['num_bits']=sysdict_i['n_bit']
-
+    params['lch']=sizedict['lch']
+    params['pw']=sizedict['pw']
+    params['nw']=sizedict['nw']
+    params['device_intent']=sizedict['device_intent']
 
 print('creating BAG project')
 prj = bag.BagProject()

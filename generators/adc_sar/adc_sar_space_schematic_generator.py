@@ -26,6 +26,10 @@ if load_from_file==True:
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
     params['m']=sizedict['m_dcap2']*8
+    params['lch']=sizedict['lch']
+    params['pw']=sizedict['pw']
+    params['nw']=sizedict['nw']
+    params['device_intent']=sizedict['device_intent']
 
 print('creating BAG project')
 prj = bag.BagProject()

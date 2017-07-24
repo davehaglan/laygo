@@ -1013,14 +1013,16 @@ def generate_salatch_pmos(laygen, objectname_pfix, placement_grid,
     xy0=laygen.get_inst_pin_coord(imainck0.name, pinname='G0', gridname=rg_m2m3, index=np.array([m_clkh - 1, 0]), sort=True)[0]
     y0=laygen.get_inst_xy(imaintap0.name, rg_m3m4)[1]-1
     xy1=laygen.get_inst_pin_coord(irgnrstlp1.name, pinname='G0', gridname=rg_m2m3, index=np.array([m_clkh - 1, 0]), sort=True)[0]
-    rclk=laygen.route(None, laygen.layers['metal'][3], xy0=np.array([xy0[0]+1, y0]), xy1=np.array([1, 0-4]), gridname0=rg_m2m3,
+    rclk=laygen.route(None, laygen.layers['metal'][3], xy0=np.array([xy0[0]+1, y0]), xy1=np.array([1, 0-4-1]), gridname0=rg_m2m3,
                       refinstname1=irgnrstlp1.name, refpinname1='G0', refinstindex1=np.array([m_rstn-1, 0])
                       )
     xy0=laygen.get_rect_xy(rclk.name, rg_m3m4, sort=True)
-    laygen.route(None, laygen.layers['metal'][4], xy0=xy0[1]+np.array([-2*m_rstn, 0]), xy1=xy0[1]+np.array([0, 0]), gridname0=rg_m3m4, via1=[[0, 0]])
-    rclk2 = laygen.route(None, laygen.layers['metal'][4], xy0=xy0[1]+np.array([0, 0]), xy1=xy0[1]+np.array([2*m_rstn, 0]), gridname0=rg_m3m4)
+    #laygen.route(None, laygen.layers['metal'][4], xy0=xy0[1]+np.array([-2*m_rstn, 0]), xy1=xy0[1]+np.array([0, 0]), gridname0=rg_m3m4, via1=[[0, 0]])
+    #rclk2 = laygen.route(None, laygen.layers['metal'][4], xy0=xy0[1]+np.array([0, 0]), xy1=xy0[1]+np.array([2*m_rstn, 0]), gridname0=rg_m3m4)
+    laygen.route(None, laygen.layers['metal'][4], xy0=xy0[1]+np.array([-4, 0]), xy1=xy0[1]+np.array([0, 0]), gridname0=rg_m3m4, via1=[[0, 0]])
+    rclk2 = laygen.route(None, laygen.layers['metal'][4], xy0=xy0[1]+np.array([0, 0]), xy1=xy0[1]+np.array([4, 0]), gridname0=rg_m3m4)
     xy0=laygen.get_rect_xy(rclk2.name, rg_m4m5, sort=True)
-    rclk3 = laygen.route(None, laygen.layers['metal'][5], xy0=xy0[0]+np.array([4, 0]), xy1=xy0[0]+np.array([4, 7]), gridname0=rg_m4m5, via0=[[0, 0]])
+    rclk3 = laygen.route(None, laygen.layers['metal'][5], xy0=xy0[0]+np.array([4, 0]), xy1=xy0[0]+np.array([4, 5]), gridname0=rg_m4m5, via0=[[0, 0]])
     laygen.create_boundary_pin_from_rect(rclk3, gridname=rg_m4m5, pinname='CLKB', layer=laygen.layers['pin'][5], size=4, direction='top')
     laygen.via(None, np.array([1, 0]), refinstname=imainck0.name, refpinname='G0', refinstindex=np.array([m_clkh-1, 0]), gridname=rg_m2m3)
     laygen.via(None, np.array([1, 0]), refinstname=irgnrstlp1.name, refpinname='G0', refinstindex=np.array([m_rstn-1, 0]), gridname=rg_m2m3)

@@ -89,6 +89,18 @@ if load_from_file==True:
     params['num_slices']=specdict['n_interleave']
     params['space_msar']=sizedict['m_dcap2']*8*sizedict['num_space_sar']
     params['space_msamp']=sizedict['m_dcap2']*8*sizedict['num_space_samp']
+    params['sar_lch']=sizedict['lch']
+    params['sar_pw']=sizedict['pw']
+    params['sar_nw']=sizedict['nw']
+    params['sar_device_intent']=sizedict['device_intent']
+    params['samp_lch']=sizedict['lch']
+    #params['samp_pw']=sizedict['pw']
+    #params['samp_nw']=sizedict['nw']
+    params['samp_intent']=sizedict['device_intent']
+    params['ret_lch']=sizedict['lch']
+    params['ret_pw']=sizedict['pw']
+    params['ret_nw']=sizedict['nw']
+    params['ret_device_intent']=sizedict['device_intent']
 #sampler sizing
 if params['samp_use_laygo']==True:
     params['samp_wp']=params['sar_pw']

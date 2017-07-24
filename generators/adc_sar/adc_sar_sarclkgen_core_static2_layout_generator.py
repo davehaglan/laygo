@@ -250,7 +250,7 @@ def generate_sarclkgen_core_static(laygen, objectname_pfix,
                    gridname=rg_m1m2)
         laygen.via(None, np.array([0, 0]), refinstname=ip4.name, refpinname='G0', refinstindex=np.array([i, 0]),
                    gridname=rg_m1m2)
-    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
+    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([-1, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
                  refinstname0=ip4.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
                  refinstname1=ip4.name, refpinname1='G0', refinstindex1=np.array([m - 1, 0]))
     rupb0 = laygen.route(None, laygen.layers['metal'][3], xy0=np.array([-1, 0]), xy1=np.array([-1, 2]), gridname0=rg_m2m3,

@@ -66,6 +66,14 @@ if load_from_file==True:
     params['sar_rdx_array']=specdict['rdx_array']
     params['num_bits']=specdict['n_bit']
     params['samp_use_laygo']=specdict['samp_use_laygo']
+    params['sar_lch']=sizedict['lch']
+    params['sar_pw']=sizedict['pw']
+    params['sar_nw']=sizedict['nw']
+    params['sar_device_intent']=sizedict['device_intent']
+    params['samp_lch']=sizedict['lch']
+    #params['samp_pw']=sizedict['pw']
+    #params['samp_nw']=sizedict['nw']
+    params['samp_intent']=sizedict['device_intent']
 #sampler sizing
 if params['samp_use_laygo']==True:
     params['samp_wp']=params['sar_pw']

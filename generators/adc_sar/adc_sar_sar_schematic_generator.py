@@ -54,6 +54,10 @@ if load_from_file==True:
     params['c_m']=sizedict['capdac_c_m']
     params['rdx_array']=specdict['rdx_array']
     params['num_bits']=specdict['n_bit']
+    params['lch']=sizedict['lch']
+    params['pw']=sizedict['pw']
+    params['nw']=sizedict['nw']
+    params['device_intent']=sizedict['device_intent']
 
 print('creating BAG project')
 prj = bag.BagProject()

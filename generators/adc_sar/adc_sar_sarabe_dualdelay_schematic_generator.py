@@ -44,6 +44,10 @@ if load_from_file==True:
     params['fsm_m']=sizedict['sarfsm_m']
     params['ret_m']=sizedict['sarret_m']
     params['ret_fo']=sizedict['sarret_fo']
+    params['lch']=sizedict['lch']
+    params['pw']=sizedict['pw']
+    params['nw']=sizedict['nw']
+    params['device_intent']=sizedict['device_intent']
 
 print('creating BAG project')
 prj = bag.BagProject()

@@ -31,7 +31,10 @@ if load_from_file==True:
     params['m']=sizedict['sarret_m']
     params['fo']=sizedict['sarret_fo']
     params['num_bits']=specdict['n_bit']
-
+    params['lch']=sizedict['lch']
+    params['pw']=sizedict['pw']
+    params['nw']=sizedict['nw']
+    params['device_intent']=sizedict['device_intent']
 
 print('creating BAG project')
 prj = bag.BagProject()

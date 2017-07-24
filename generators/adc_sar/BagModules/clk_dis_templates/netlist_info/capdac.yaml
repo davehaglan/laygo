@@ -15,10 +15,10 @@ instances:
     cell_name: momcap_center_1x
     instpins:
       BOTTOM:
-        direction: inputOutput
+        direction: 
         net_name: "I"
         num_bits: 1
       TOP:
-        direction: inputOutput
+        direction: 
         net_name: "O"
         num_bits: 1
