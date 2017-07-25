@@ -374,9 +374,19 @@ def generate_samp(laygen, objectname_pfix, workinglib,
     input_rails_rect = [rvdd_m5[0]+rvdd_m5[1], rvss_m5[0]+rvss_m5[1]]
     x1 = laygen.get_inst_bbox(instname=ibuf.name, gridname=pg56t)[1][0] + laygen.get_template_size('nmos4_fast_left', gridname=pg56t)[0]
     rvdd_m6, rvss_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_', 
-                layer=laygen.layers['pin'][6], gridname=pg56t, netnames=['VDD', 'VSS'], direction='x', 
-                input_rails_rect=input_rails_rect, generate_pin=True, overwrite_start_coord=0, overwrite_end_coord=x1,
+                layer=laygen.layers['metal'][6], gridname=pg56t, netnames=['VDD', 'VSS'], direction='x', 
+                input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=x1,
                 offset_start_index=0, offset_end_index=0)
+    #trimming and pinning
+    x1_phy = laygen.get_inst_bbox(instname=ibuf.name)[1][0] + laygen.get_template_size('nmos4_fast_left')[0]
+    for r in rvdd_m6:
+        r.xy1[0]=x1_phy
+        p=laygen.pin_from_rect(name='VDD_M6_'+r.name, layer=laygen.layers['pin'][6], rect=r, gridname=pg56t, netname='VDD')
+        p.xy1[0]=x1_phy
+    for r in rvss_m6:
+        r.xy1[0]=x1_phy
+        p=laygen.pin_from_rect(name='VSS_M6_'+r.name, layer=laygen.layers['pin'][6], rect=r, gridname=pg56t, netname='VSS')
+        p.xy1[0]=x1_phy
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
