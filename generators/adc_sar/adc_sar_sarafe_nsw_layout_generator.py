@@ -201,15 +201,19 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
         xy0=laygen.get_inst_pin_coord(icdacl.name, "O"+str(outcnt-1-i), rg_m5m6, index=np.array([0, 0]), sort=True)[0]
         r = laygen.route(None, laygen.layers['metal'][6], xy0=xy0, xy1=np.array([x0, xy0[1]]), gridname0=rg_m5m6)
         rinp.append(r)
+        '''
         #additional routes for dummy for density rules; may not process portable
         for j in range(3):
             laygen.route(None, laygen.layers['metal'][6], xy0=xy0+np.array([0, 2*j+2]), xy1=np.array([x0, xy0[1]+2*j+2]), gridname0=rg_m5m6)
+        '''
         xy0=laygen.get_inst_pin_coord(icdacr.name, "O"+str(outcnt-1-i), rg_m5m6, index=np.array([0, 0]), sort=True)[1]
         r = laygen.route(None, laygen.layers['metal'][6], xy0=xy0, xy1=np.array([x1, xy0[1]]), gridname0=rg_m5m6)
         rinm.append(r)
+        '''
         #additional routes for dummy for density rules; may not process portable
         for j in range(3):
             laygen.route(None, laygen.layers['metal'][6], xy0=xy0+np.array([0, 2*j+2]), xy1=np.array([x1, xy0[1]+2*j+2]), gridname0=rg_m5m6)
+        '''
 
     for i in range(nrin_sa):
         xy0=laygen.get_inst_pin_coord(icdacl.name, "O"+str(i), rg_m5m6, index=np.array([0, 0]), sort=True)[0]
@@ -314,6 +318,8 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     num_vref_routes_m6=4
     x1 = laygen.get_inst_xy(name=isa.name, gridname=rg_m5m6_thick)[0]\
          +laygen.get_template_size(name=isa.cellname, gridname=rg_m5m6_thick, libname=workinglib)[0]
+    x1_phy = laygen.get_inst_xy(name=isa.name)[0]\
+         +laygen.get_template_size(name=isa.cellname, libname=workinglib)[0]
     y1 = laygen.get_inst_xy(name=isa.name, gridname=rg_m5m6_thick)[1]
     input_rails_rect = [rvdd_sal_m5+rvdd_sar_m5, rvss_sal_m5+rvss_sar_m5]
     #sa_m6_bottom_shield
@@ -321,6 +327,11 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
                 layer=laygen.layers['metal'][6], gridname=rg_m5m6_thick, netnames=['VDD', 'VSS'], direction='x', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=x1,
                 overwrite_start_index=2, overwrite_end_index=4)
+    #trimming
+    for r in rvdd_sa_m6:
+        r.xy1[0]=x1_phy
+    for r in rvss_sa_m6:
+        r.xy1[0]=x1_phy
     #sa_m6_mid and top_shield
     for i in range(3):
         rvss_sa_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_'+str(i+1)+'_', 
@@ -328,12 +339,24 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
                     input_rails_rect=[rvss_sal_m5+rvss_sar_m5], 
                     generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=x1,
                     overwrite_start_index=4+(1+num_vref_routes_m6)*(i+1)-1, overwrite_num_routes=0)#overwrite_end_index=4+(1+num_vref_routes_m6)*(i+1))
+        #trimming
+        for r in rvss_sa_m6[0]:
+            r.xy1[0]=x1_phy
     #sa_m6_top_main_route
     rvdd_sa_m6, rvss_sa_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_', 
-                layer=laygen.layers['pin'][6], gridname=rg_m5m6_thick, netnames=['VDD', 'VSS'], direction='x', 
-                input_rails_rect=input_rails_rect, generate_pin=True, overwrite_start_coord=0, overwrite_end_coord=x1,
+                layer=laygen.layers['metal'][6], gridname=rg_m5m6_thick, netnames=['VDD', 'VSS'], direction='x', 
+                input_rails_rect=input_rails_rect, generate_pin=False, 
+                overwrite_start_coord=0, overwrite_end_coord=x1,
                 offset_start_index=4+(1+num_vref_routes_m6)*3, offset_end_index=-2)
-
+    #trimming and pinning
+    for r in rvdd_sa_m6:
+        r.xy1[0]=x1_phy
+        p=laygen.pin_from_rect(name='VDD_M6_'+r.name, layer=laygen.layers['pin'][6], rect=r, gridname=rg_m5m6_thick, netname='VDD')
+        p.xy1[0]=x1_phy
+    for r in rvss_sa_m6:
+        r.xy1[0]=x1_phy
+        p=laygen.pin_from_rect(name='VSS_M6_'+r.name, layer=laygen.layers['pin'][6], rect=r, gridname=rg_m5m6_thick, netname='VSS')
+        p.xy1[0]=x1_phy
     #pins
     #laygen.pin(name='VREF<0>', layer=laygen.layers['pin'][4], xy=laygen.get_rect_xy(rvref0.name, rg_m4m5), gridname=rg_m4m5)
     #laygen.pin(name='VREF<1>', layer=laygen.layers['pin'][4], xy=laygen.get_rect_xy(rvref1.name, rg_m4m5), gridname=rg_m4m5)

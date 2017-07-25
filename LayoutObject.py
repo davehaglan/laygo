@@ -172,6 +172,14 @@ class Pin(LayoutObject):
     """str: net name"""
     master=None
     """LayoutObject.Instance: master instance, only for instance pins"""
+    def get_xy0(self): return self.xy[0]
+    def set_xy0(self, value): self.xy[0] = self.trim(np.asarray(value))
+    xy0 = property(get_xy0, set_xy0)
+    """np.array([float, float]): lowerLeft coordinate of Rect"""
+    def get_xy1(self): return self.xy[1]
+    def set_xy1(self, value): self.xy[1] = self.trim(np.asarray(value))
+    xy1 = property(get_xy1, set_xy1)
+    """np.array([float, float]): upperRight coordinate of Rect"""
 
     def __init__(self, name, res, xy, netname=None, layer=None, master=None):
         """
