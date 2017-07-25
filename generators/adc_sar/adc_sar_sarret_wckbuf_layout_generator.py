@@ -237,9 +237,14 @@ def generate_sarret2_wckbuf(laygen, objectname_pfix, templib_logic, placement_gr
     [rv0, rclko0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[ickbuf1.name]['O'][0],
                                        pdict[islice[num_bits_row*(num_row-1)].name]['CLK'][0],
                                        pdict[islice[num_bits_row*(num_row-1)].name]['CLK'][1][1] , rg_m3m4)
-    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[ickbuf1.name]['O'][0],
-                                       pdict[ickbuf2.name]['I'][0], 
-                                       pdict[ickbuf1.name]['O'][0][1]-4, rg_m3m4)
+    if num_row%2==1:
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[ickbuf1.name]['O'][0],
+                                           pdict[ickbuf2.name]['I'][0], 
+                                           pdict[ickbuf1.name]['O'][0][1]-4, rg_m3m4)
+    else:
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[ickbuf1.name]['O'][0],
+                                           pdict[ickbuf2.name]['I'][0], 
+                                           pdict[ickbuf1.name]['O'][0][1]-6, rg_m3m4)
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[ickbuf2.name]['O'][0],
                                        pdict[ickbuf3.name]['I'][0], 
                                        pdict[ickbuf2.name]['O'][0][1], rg_m3m4)
