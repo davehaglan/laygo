@@ -44,7 +44,7 @@ def create_power_pin_from_inst(laygen, layer, gridname, inst_left, inst_right):
 
 def generate_sarfsm(laygen, objectname_pfix, templib_logic, placement_grid,
                     routing_grid_m3m4, num_bits=8, num_bits_row=4, m=2,
-                    m_space_4x=0, m_space_2x=0, m_space_1x=0, origin=np.array([0, 0])):
+                    m_space_left_4x=0, m_space_4x=0, m_space_2x=0, m_space_1x=0, origin=np.array([0, 0])):
     """generate one-hot coded sar fsm """
     pg = placement_grid
     rg_m3m4 = routing_grid_m3m4
@@ -63,16 +63,22 @@ def generate_sarfsm(laygen, objectname_pfix, templib_logic, placement_grid,
     # placement
     itapl=[]
     itapr=[]
-    itapl.append(laygen.place(name = "I" + objectname_pfix + 'TAPL0', templatename = tap_name,
-                              gridname = pg, xy=origin, template_libname = templib_logic))
     isp4x=[] #space cells
     isp2x=[]
     isp1x=[]
     ifill4x=[] #fill cells
     ifill2x=[]
     ifill1x=[]
+    itapl.append(laygen.place(name = "I" + objectname_pfix + 'TAPL0', templatename = tap_name,
+                              gridname = pg, xy=origin, template_libname = templib_logic))
+    refi=itapl[-1].name
+    if not m_space_left_4x==0:
+        ispl4x=laygen.relplace(name="I" + objectname_pfix + 'SPL4X0', templatename=space_4x_name,
+                               shape = np.array([m_space_left_4x, 1]), gridname=pg,
+                               refinstname=refi, template_libname=templib_logic)
+        refi = ispl4x.name
     itie0 = laygen.relplace(name = "I" + objectname_pfix + 'TIE0', templatename = tie_name,
-                            gridname = pg, refinstname = itapl[-1].name, template_libname = templib_logic)
+                            gridname = pg, refinstname = refi, template_libname = templib_logic)
     idff0 = laygen.relplace(name = "I" + objectname_pfix + 'TRGGEN0', templatename = dff_name,
                             gridname = pg, refinstname = itie0.name, template_libname = templib_logic)
     iinv0 = laygen.relplace(name = "I" + objectname_pfix + 'INV0', templatename = inv_name,
@@ -126,9 +132,15 @@ def generate_sarfsm(laygen, objectname_pfix, templib_logic, placement_grid,
         itapl.append(laygen.relplace(name = "I" + objectname_pfix + 'TAPL'+str(i+1), templatename = tap_name,
                                      gridname = pg, refinstname = itapl[-1].name, transform=tf,
                                      direction = 'top', template_libname=templib_logic))
+        refi=itapl[-1].name
+        if not m_space_left_4x==0:
+            ispl4x=laygen.relplace(name="I" + objectname_pfix + 'SPL4X'+str(i+1), templatename=space_4x_name,
+                                   shape = np.array([m_space_left_4x, 1]), gridname=pg, transform=tf,
+                                   refinstname=refi, template_libname=templib_logic)
+            refi = ispl4x.name
         ifilltie=laygen.relplace(name="I" + objectname_pfix + 'FT'+str(i), templatename=space_1x_name,
                      shape=np.array([fill_tie_x, 1]), gridname=pg, transform=tf,
-                     refinstname=itapl[-1].name, template_libname=templib_logic)
+                     refinstname=refi, template_libname=templib_logic)
         refi = ifilltie.name
         for j in range(num_bits_row):
             if i*num_bits_row+j < num_bits:
@@ -365,6 +377,7 @@ if __name__ == '__main__':
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']
         m=sizedict['sarfsm_m']
+        m_space_left_4x=sizedict['sarabe_m_space_left_4x']
     #yamlfile_system_input="adc_sar_dsn_system_input.yaml"
     #if load_from_file==True:
     #    with open(yamlfile_system_input, 'r') as stream:
@@ -380,7 +393,8 @@ if __name__ == '__main__':
     laygen.sel_cell(cellname)
     num_bits_row=3
     generate_sarfsm(laygen, objectname_pfix='FSM0', templib_logic=logictemplib, placement_grid=pg,
-                    routing_grid_m3m4=rg_m3m4, num_bits=num_bits, num_bits_row=num_bits_row, m=m, m_space_4x=0, m_space_2x=0, m_space_1x=0,
+                    routing_grid_m3m4=rg_m3m4, num_bits=num_bits, num_bits_row=num_bits_row, m=m, 
+                    m_space_left_4x=m_space_left_4x, m_space_4x=0, m_space_2x=0, m_space_1x=0,
                     origin=np.array([0, 0]))
     laygen.add_template_from_cell()
     # 2. calculate spacing param and regenerate
@@ -394,7 +408,8 @@ if __name__ == '__main__':
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
     generate_sarfsm(laygen, objectname_pfix='FSM0', templib_logic=logictemplib, placement_grid=pg,
-                    routing_grid_m3m4=rg_m3m4, num_bits=num_bits, num_bits_row=num_bits_row, m=m, m_space_4x=m_space_4x, m_space_2x=m_space_2x,
+                    routing_grid_m3m4=rg_m3m4, num_bits=num_bits, num_bits_row=num_bits_row, m=m, 
+                    m_space_left_4x=m_space_left_4x, m_space_4x=m_space_4x, m_space_2x=m_space_2x,
                     m_space_1x=m_space_1x, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 

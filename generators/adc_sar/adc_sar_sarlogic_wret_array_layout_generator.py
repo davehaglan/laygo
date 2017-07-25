@@ -84,7 +84,8 @@ def generate_boundary(laygen, objectname_pfix, placement_grid,
     return [dev_bottom, dev_top, dev_left, dev_right]
 
 def generate_sarlogic_wret_array(laygen, objectname_pfix, templib_logic, placement_grid, routing_grid_m2m3,
-                            routing_grid_m3m4, routing_grid_m4m5, num_bits=8, num_bits_row=4, m_space_4x=0,
+                            routing_grid_m3m4, routing_grid_m4m5, num_bits=8, num_bits_row=4, 
+                            m_space_left_4x=0, m_space_4x=0,
                             m_space_2x=0, m_space_1x=0, origin=np.array([0, 0])):
     """generate cap driver array """
     pg = placement_grid
@@ -120,6 +121,11 @@ def generate_sarlogic_wret_array(laygen, objectname_pfix, templib_logic, placeme
                                          gridname = pg, refinstname = itapl[-1].name, transform=tf,
                                          direction = 'top', template_libname=templib_logic))
         refi = itapl[-1].name
+        if not m_space_left_4x==0:
+            ispl4x=laygen.relplace(name="I" + objectname_pfix + 'SPL4X'+str(i), templatename=space_4x_name,
+                                   shape = np.array([m_space_left_4x, 1]), gridname=pg, transform=tf,
+                                   refinstname=refi, template_libname=templib_logic)
+            refi = ispl4x.name
         for j in range(num_bits_row):
             if i*num_bits_row+j < num_bits:
                 islogic.append(laygen.relplace(name = "I" + objectname_pfix + 'CLG'+str(i*num_bits_row+j), templatename = slogic_name,
@@ -278,8 +284,8 @@ def generate_sarlogic_wret_array(laygen, objectname_pfix, templib_logic, placeme
                          refinstname1=itapr[i].name, refpinname1='VSS', refinstindex1=np.array([0, 0]), via1=[[0, 0]]))
 
 def generate_sarlogic_wret_v2_array(laygen, objectname_pfix, templib_logic, placement_grid, routing_grid_m2m3,
-                            routing_grid_m3m4, routing_grid_m4m5, num_bits=8, num_bits_row=4, m_space_4x=0,
-                            m_space_2x=0, m_space_1x=0, origin=np.array([0, 0])):
+                            routing_grid_m3m4, routing_grid_m4m5, num_bits=8, num_bits_row=4, 
+                            m_space_left_4x=0, m_space_4x=0, m_space_2x=0, m_space_1x=0, origin=np.array([0, 0])):
     """generate cap driver array """
     pg = placement_grid
 
@@ -314,6 +320,11 @@ def generate_sarlogic_wret_v2_array(laygen, objectname_pfix, templib_logic, plac
                                          gridname = pg, refinstname = itapl[-1].name, transform=tf,
                                          direction = 'top', template_libname=templib_logic))
         refi = itapl[-1].name
+        if not m_space_left_4x==0:
+            ispl4x=laygen.relplace(name="I" + objectname_pfix + 'SPL4X'+str(i), templatename=space_4x_name,
+                                   shape = np.array([m_space_left_4x, 1]), gridname=pg, transform=tf,
+                                   refinstname=refi, template_libname=templib_logic)
+            refi = ispl4x.name
         for j in range(num_bits_row):
             if i*num_bits_row+j < num_bits:
                 islogic.append(laygen.relplace(name = "I" + objectname_pfix + 'CLG'+str(i*num_bits_row+j), templatename = slogic_name,
@@ -528,6 +539,7 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']
+        m_space_left_4x=sizedict['sarabe_m_space_left_4x']
 
     cellname=cellname_v2
     print(cellname+" generating")
@@ -539,7 +551,8 @@ if __name__ == '__main__':
     laygen.sel_cell(cellname)
     generate_sarlogic_wret_v2_array(laygen, objectname_pfix='CA0', templib_logic=logictemplib, 
                             placement_grid=pg, routing_grid_m2m3=rg_m2m3, routing_grid_m3m4=rg_m3m4,
-                            routing_grid_m4m5=rg_m4m5, num_bits=num_bits, num_bits_row=2, m_space_4x=0, m_space_2x=0,
+                            routing_grid_m4m5=rg_m4m5, num_bits=num_bits, num_bits_row=2, 
+                            m_space_left_4x=m_space_left_4x, m_space_4x=0, m_space_2x=0,
                             m_space_1x=0, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
     # 2. calculate spacing param and regenerate
@@ -554,7 +567,8 @@ if __name__ == '__main__':
     laygen.sel_cell(cellname)
     generate_sarlogic_wret_v2_array(laygen, objectname_pfix='CA0', templib_logic=logictemplib,
                             placement_grid=pg, routing_grid_m2m3=rg_m2m3, routing_grid_m3m4=rg_m3m4,
-                            routing_grid_m4m5=rg_m4m5, num_bits=num_bits, num_bits_row=2, m_space_4x=m_space_4x,
+                            routing_grid_m4m5=rg_m4m5, num_bits=num_bits, num_bits_row=2, 
+                            m_space_left_4x=m_space_left_4x, m_space_4x=m_space_4x,
                             m_space_2x=m_space_2x, m_space_1x=m_space_1x, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 

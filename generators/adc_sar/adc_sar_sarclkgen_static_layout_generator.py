@@ -41,7 +41,7 @@ def create_power_pin_from_inst(laygen, layer, gridname, inst_left, inst_right):
     laygen.pin(name='VSS', layer=layer, xy=np.vstack((rvss0_pin_xy[0],rvss1_pin_xy[1])), gridname=gridname)
 
 def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_grid, routing_grid_m3m4,
-                       m=2, fo=2, m_space_4x=0, m_space_2x=0, m_space_1x=0, origin=np.array([0, 0])):
+        m=2, fo=2, m_space_left_4x=0, m_space_4x=0, m_space_2x=0, m_space_1x=0, origin=np.array([0, 0])):
     """generate a static sar clock generator """
     pg = placement_grid
     rg_m3m4 = routing_grid_m3m4
@@ -66,8 +66,14 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
     # placement
     itapl = laygen.place(name = "I" + objectname_pfix + 'TAPL0', templatename = tap_name,
                          gridname = pg, xy=origin, template_libname = templib_logic)
+    refi=itapl.name
+    if not m_space_left_4x==0:
+        ispl4x=laygen.relplace(name="I" + objectname_pfix + 'SPL4X0', templatename=space_4x_name,
+                               shape = np.array([m_space_left_4x, 1]), gridname=pg,
+                               refinstname=refi, template_libname=templib_logic)
+        refi = ispl4x.name
     iinv7 = laygen.relplace(name="I" + objectname_pfix + 'INV7', templatename=invd_name,
-                            gridname=pg, refinstname=itapl.name, template_libname=templib_logic)
+                            gridname=pg, refinstname=refi, template_libname=templib_logic)
     inand0 = laygen.relplace(name="I" + objectname_pfix + 'ND0', templatename=nand_name,
                              gridname=pg, refinstname=iinv7.name, template_libname=templib_logic)
     #icore2 = laygen.relplace(name="I" + objectname_pfix + 'CORE2', templatename=core2_name,
@@ -318,6 +324,7 @@ if __name__ == '__main__':
         m=sizedict['sarclkgen_m']
         fo=sizedict['sarclkgen_fo']
         ndelay=sizedict['sarclkgen_ndelay']
+        m_space_left_4x=sizedict['sarabe_m_space_left_4x']
     #generation (2 step)
     cellname='sarclkgen_static'
     print(cellname+" generating")
@@ -327,7 +334,8 @@ if __name__ == '__main__':
     laygen.sel_cell(cellname)
     generate_sarclkgen_static(laygen, objectname_pfix='CKG0', templib_logic=logictemplib, placement_grid=pg,
                        routing_grid_m3m4=rg_m3m4,
-                       m=m, fo=fo, m_space_4x=0, m_space_2x=0, m_space_1x=0, origin=np.array([0, 0]))
+                       m=m, fo=fo, m_space_left_4x=m_space_left_4x, m_space_4x=0, m_space_2x=0, m_space_1x=0, 
+                       origin=np.array([0, 0]))
     laygen.add_template_from_cell()
     #2. calculate spacing param and regenerate
     x0 = laygen.templates.get_template('sarafe_nsw', libname=workinglib).xy[1][0] \
@@ -341,7 +349,8 @@ if __name__ == '__main__':
     laygen.sel_cell(cellname)
     generate_sarclkgen_static(laygen, objectname_pfix='CKG0', templib_logic=logictemplib, placement_grid=pg,
                        routing_grid_m3m4=rg_m3m4,
-                       m=m, fo=fo, m_space_4x=m_space_4x, m_space_2x=m_space_2x, m_space_1x=m_space_1x, origin=np.array([0, 0]))
+                       m=m, fo=fo, m_space_left_4x=m_space_left_4x, 
+                       m_space_4x=m_space_4x, m_space_2x=m_space_2x, m_space_1x=m_space_1x, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)

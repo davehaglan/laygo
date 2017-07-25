@@ -98,7 +98,7 @@ def generate_sarretslice(laygen, objectname_pfix, templib_logic, placement_grid,
     create_power_pin_from_inst(laygen, layer=laygen.layers['pin'][2], gridname=rg_m1m2, inst_left=iinv0, inst_right=iinv2)
 
 def generate_sarret2_wckbuf(laygen, objectname_pfix, templib_logic, placement_grid,
-                    routing_grid_m3m4, num_bits=8, num_bits_row=2, m_slice=2, m_space_4x=0, m_space_2x=0, m_space_1x=0,
+                    routing_grid_m3m4, num_bits=8, num_bits_row=2, m_slice=2, m_space_left_4x=0, m_space_4x=0, m_space_2x=0, m_space_1x=0,
                     origin=np.array([0, 0])):
     """generate one-hot coded sar fsm """
     pg = placement_grid
@@ -139,6 +139,11 @@ def generate_sarret2_wckbuf(laygen, objectname_pfix, templib_logic, placement_gr
                                          gridname = pg, refinstname = itapl[-1].name, transform=tf,
                                          direction = 'top', template_libname=templib_logic))
         refi=itapl[-1].name
+        if not m_space_left_4x==0:
+            ispl4x=laygen.relplace(name="I" + objectname_pfix + 'SPL4X'+str(i), templatename=space_4x_name,
+                                   shape = np.array([m_space_left_4x, 1]), gridname=pg, transform=tf,
+                                   refinstname=refi, template_libname=templib_logic)
+            refi = ispl4x.name
         #ckbuf
         if i==num_row-1:
             ickbuf0=laygen.relplace(name = "I" + objectname_pfix + 'CKBUF0',
@@ -388,6 +393,7 @@ if __name__ == '__main__':
         num_bits=specdict['n_bit']
         m_sarret=sizedict['sarret_m']
         fo_sarret=sizedict['sarret_fo']
+        m_space_left_4x=sizedict['sarabe_m_space_left_4x']
     #cell generation (slice)
     cellname='sarretslice'
     print(cellname+" generating")
@@ -405,7 +411,8 @@ if __name__ == '__main__':
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
     generate_sarret2_wckbuf(laygen, objectname_pfix='RET0', templib_logic=logictemplib, placement_grid=pg,
-                     routing_grid_m3m4=rg_m3m4, num_bits=num_bits, num_bits_row=int(num_bits/2), m_slice=m_sarret, m_space_4x=0, m_space_2x=0,
+                     routing_grid_m3m4=rg_m3m4, num_bits=num_bits, num_bits_row=int(num_bits/2), m_slice=m_sarret, 
+                     m_space_left_4x=m_space_left_4x, m_space_4x=0, m_space_2x=0,
                      m_space_1x=0, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
     # 2. calculate spacing param and regenerate
@@ -419,7 +426,8 @@ if __name__ == '__main__':
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
     generate_sarret2_wckbuf(laygen, objectname_pfix='RET0', templib_logic=logictemplib, placement_grid=pg,
-                    routing_grid_m3m4=rg_m3m4, num_bits=num_bits, num_bits_row=int(num_bits/2), m_slice=m_sarret, m_space_4x=m_space_4x,
+                    routing_grid_m3m4=rg_m3m4, num_bits=num_bits, num_bits_row=int(num_bits/2), m_slice=m_sarret, 
+                    m_space_left_4x=m_space_left_4x, m_space_4x=m_space_4x,
                     m_space_2x=m_space_2x, m_space_1x=m_space_1x, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 
