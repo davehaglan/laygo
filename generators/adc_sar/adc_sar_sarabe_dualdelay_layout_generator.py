@@ -339,11 +339,11 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     # ckgen to fsm
     rh0, rv0, rh1 = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                      pdict_m4m5[ickg.name]['CLKO'][0], pdict_m4m5[ifsm.name]['CLK'][0], 
-                                     pdict_m4m5[ickg.name]['CLKO'][0][0], rg_m4m5)
+                                     pdict_m4m5[ickg.name]['CLKO'][1][0], rg_m4m5)
     # ckgen to fsm #2 (to reduce route resistance)
     rh0, rv0, rh1 = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                      pdict_m4m5[ickg.name]['CLKO'][0], pdict_m4m5[ifsm.name]['CLK'][0], 
-                                     pdict_m4m5[ickg.name]['CLKO'][0][0]+2, rg_m4m5)
+                                     pdict_m4m5[ickg.name]['CLKO'][1][0]+2, rg_m4m5)
     ## ckgen to fsm
     #rh0, rv0, rh1 = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
     #                                 pdict_m4m5[ickg.name]['CLKO'][0], pdict_m4m5[ifsm.name]['CLK'][0], 
