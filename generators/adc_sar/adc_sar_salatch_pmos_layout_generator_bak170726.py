@@ -929,7 +929,6 @@ def generate_salatch_pmos(laygen, objectname_pfix, placement_grid,
     m_clkh_dmy = m_tot - m_clkh
     #m_rgnn_dmy = m_tot - m_rgnn - m_rstn * 2 - m_buf * (1+4)
     m_rgnn_dmy = m_tot - m_rgnn - m_rstn * 2 - m_buf
-    l_clkb_m4=4 #clkb output wire length
 
     #grids
     pg = placement_grid
@@ -1021,10 +1020,10 @@ def generate_salatch_pmos(laygen, objectname_pfix, placement_grid,
     xy0=laygen.get_rect_xy(rclk.name, rg_m3m4, sort=True)
     #laygen.route(None, laygen.layers['metal'][4], xy0=xy0[1]+np.array([-2*m_rstn, 0]), xy1=xy0[1]+np.array([0, 0]), gridname0=rg_m3m4, via1=[[0, 0]])
     #rclk2 = laygen.route(None, laygen.layers['metal'][4], xy0=xy0[1]+np.array([0, 0]), xy1=xy0[1]+np.array([2*m_rstn, 0]), gridname0=rg_m3m4)
-    laygen.route(None, laygen.layers['metal'][4], xy0=xy0[1]+np.array([-1*l_clkb_m4, 0]), xy1=xy0[1]+np.array([0, 0]), gridname0=rg_m3m4, via1=[[0, 0]])
-    rclk2 = laygen.route(None, laygen.layers['metal'][4], xy0=xy0[1]+np.array([0, 0]), xy1=xy0[1]+np.array([l_clkb_m4, 0]), gridname0=rg_m3m4)
+    laygen.route(None, laygen.layers['metal'][4], xy0=xy0[1]+np.array([-4, 0]), xy1=xy0[1]+np.array([0, 0]), gridname0=rg_m3m4, via1=[[0, 0]])
+    rclk2 = laygen.route(None, laygen.layers['metal'][4], xy0=xy0[1]+np.array([0, 0]), xy1=xy0[1]+np.array([4, 0]), gridname0=rg_m3m4)
     xy0=laygen.get_rect_xy(rclk2.name, rg_m4m5, sort=True)
-    rclk3 = laygen.route(None, laygen.layers['metal'][5], xy0=xy0[0]+np.array([l_clkb_m4, 0]), xy1=xy0[0]+np.array([l_clkb_m4, 5]), gridname0=rg_m4m5, via0=[[0, 0]])
+    rclk3 = laygen.route(None, laygen.layers['metal'][5], xy0=xy0[0]+np.array([4, 0]), xy1=xy0[0]+np.array([4, 5]), gridname0=rg_m4m5, via0=[[0, 0]])
     laygen.create_boundary_pin_from_rect(rclk3, gridname=rg_m4m5, pinname='CLKB', layer=laygen.layers['pin'][5], size=4, direction='top')
     laygen.via(None, np.array([1, 0]), refinstname=imainck0.name, refpinname='G0', refinstindex=np.array([m_clkh-1, 0]), gridname=rg_m2m3)
     laygen.via(None, np.array([1, 0]), refinstname=irgnrstlp1.name, refpinname='G0', refinstindex=np.array([m_rstn-1, 0]), gridname=rg_m2m3)
@@ -1058,37 +1057,27 @@ def generate_salatch_pmos(laygen, objectname_pfix, placement_grid,
     laygen.create_boundary_pin_from_rect(rosm, gridname=rg_m3m4, pinname='OSM', layer=laygen.layers['pin'][3], size=4, direction='top')
 
     #output connection
-    x_center=laygen.get_rect_xy(rclk.name, rg_m3m4, sort=True)[0][0]
     y1=laygen.get_inst_xy(irgntap0.name, rg_m3m4)[1]-4
     xy0=laygen.get_inst_pin_coord(irgnbuflp0.name, pinname='D0', gridname=rg_m3m4, index=np.array([m_buf-1, 0]), sort=True)[0]
     routm=laygen.route(None, laygen.layers['metal'][3], xy0=np.array([xy0[0], y1+4]), xy1=np.array([0, 1]), gridname0=rg_m3m4,
                       refinstname1=irgnbuflp0.name, refpinname1='D0', refinstindex1=np.array([m_buf-1, 0]),
                       direction='top')
-    routm2=laygen.route(None, laygen.layers['metal'][4], xy0=np.array([xy0[0], y1]), xy1=np.array([x_center-l_clkb_m4-2, y1]),
+    routm2=laygen.route(None, laygen.layers['metal'][4], xy0=np.array([xy0[0], y1]), xy1=np.array([xy0[0]+2*(m_rgnn+m_rstn+1+m_in-5), y1]),
                         gridname0=rg_m3m4, via0=[[0, 0]])
-    routm2b=laygen.route(None, laygen.layers['metal'][4], xy0=np.array([xy0[0], y1+2]), xy1=np.array([x_center-l_clkb_m4-2, y1+2]),
+    routm2b=laygen.route(None, laygen.layers['metal'][4], xy0=np.array([xy0[0], y1+2]), xy1=np.array([xy0[0]+2*(m_rgnn+m_rstn+1+m_in-5), y1+2]),
                         gridname0=rg_m3m4, via0=[[0, 0]])
-    #routm2=laygen.route(None, laygen.layers['metal'][4], xy0=np.array([xy0[0], y1]), xy1=np.array([xy0[0]+2*(m_rgnn+m_rstn+1+m_in-5), y1]),
-    #                    gridname0=rg_m3m4, via0=[[0, 0]])
-    #routm2b=laygen.route(None, laygen.layers['metal'][4], xy0=np.array([xy0[0], y1+2]), xy1=np.array([xy0[0]+2*(m_rgnn+m_rstn+1+m_in-5), y1+2]),
-    #                    gridname0=rg_m3m4, via0=[[0, 0]])
     xy1=laygen.get_rect_xy(routm2.name, rg_m4m5, sort=True)
     routm3 = laygen.route(None, laygen.layers['metal'][5], xy0=xy1[1], xy1=xy1[1]+np.array([0, 6]), gridname0=rg_m4m5, via0=[[0, 0]])
     routm3b = laygen.route(None, laygen.layers['metal'][5], xy0=xy1[1]+np.array([0, 2]), xy1=xy1[1]+np.array([0, 6]), gridname0=rg_m4m5, via0=[[0, 0]])
-
-    y1=laygen.get_inst_xy(irgntap0.name, rg_m3m4)[1]-4
     xy0=laygen.get_inst_pin_coord(irgnbufrp0.name, pinname='D0', gridname=rg_m3m4, index=np.array([m_buf-1, 0]), sort=True)[0]
+    y1=laygen.get_inst_xy(irgntap0.name, rg_m3m4)[1]-4
     routp=laygen.route(None, laygen.layers['metal'][3], xy0=np.array([xy0[0], y1+4]), xy1=np.array([0, 1]), gridname0=rg_m3m4,
                       refinstname1=irgnbufrp0.name, refpinname1='D0', refinstindex1=np.array([m_buf-1, 0]),
                       direction='top')
-    routp2=laygen.route(None, laygen.layers['metal'][4], xy0=np.array([xy0[0], y1]), xy1=np.array([x_center+l_clkb_m4+2, y1]),
+    routp2=laygen.route(None, laygen.layers['metal'][4], xy0=np.array([xy0[0], y1]), xy1=np.array([xy0[0]-2*(m_rgnn+m_rstn+1+m_in-5), y1]),
                         gridname0=rg_m3m4, via0=[[0, 0]])
-    routp2b=laygen.route(None, laygen.layers['metal'][4], xy0=np.array([xy0[0], y1+2]), xy1=np.array([x_center+l_clkb_m4+2, y1+2]),
+    routp2b=laygen.route(None, laygen.layers['metal'][4], xy0=np.array([xy0[0], y1+2]), xy1=np.array([xy0[0]-2*(m_rgnn+m_rstn+1+m_in-5), y1+2]),
                         gridname0=rg_m3m4, via0=[[0, 0]])
-    #routp2=laygen.route(None, laygen.layers['metal'][4], xy0=np.array([xy0[0], y1]), xy1=np.array([xy0[0]-2*(m_rgnn+m_rstn+1+m_in-5), y1]),
-    #                    gridname0=rg_m3m4, via0=[[0, 0]])
-    #routp2b=laygen.route(None, laygen.layers['metal'][4], xy0=np.array([xy0[0], y1+2]), xy1=np.array([xy0[0]-2*(m_rgnn+m_rstn+1+m_in-5), y1+2]),
-    #                    gridname0=rg_m3m4, via0=[[0, 0]])
     xy1=laygen.get_rect_xy(routp2.name, rg_m4m5, sort=True)
     routp3 = laygen.route(None, laygen.layers['metal'][5], xy0=xy1[0]+np.array([0, 0]), xy1=xy1[0]+np.array([0, 6]), gridname0=rg_m4m5, via0=[[0, 0]])
     routp3b = laygen.route(None, laygen.layers['metal'][5], xy0=xy1[0]+np.array([0, 2]), xy1=xy1[0]+np.array([0, 6]), gridname0=rg_m4m5, via0=[[0, 0]])

@@ -10,6 +10,7 @@ import yaml
 
 lib_name = 'adc_sar_templates'
 cell_name = 'salatch_pmos'
+cell_name_standalone = 'salatch_pmos_standalone'
 impl_lib = 'adc_sar_generated'
 tb_lib = 'adc_sar_testbenches'
 tb_cell = 'salatch_pmos_tb_tran'
@@ -56,4 +57,5 @@ dsn.design(**params)
 # implement the design
 print('implementing design with library %s' % impl_lib)
 dsn.implement_design(impl_lib, top_cell_name=cell_name, erase=True)
+dsn.implement_design(impl_lib, top_cell_name=cell_name_standalone, erase=True)
 

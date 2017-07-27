@@ -24,7 +24,8 @@ params = dict(
     rdx_array = [1, 2, 4, 8, 16, 32, 64, 128],
     )
 
-extracted = False
+extracted_calibre = False
+extracted_pvs = True
 verify_tran = True
 
 load_from_file=True
@@ -72,8 +73,10 @@ if verify_tran==True:
     tb.set_simulation_environments(['tt'])
     tb.add_output("vout_tran", """getData("/O" ?result 'tran)""")
 
-    if extracted:
+    if extracted_calibre:
         tb.set_simulation_view(impl_lib, cell_name, 'calibre')
+    if extracted_pvs:
+        tb.set_simulation_view(impl_lib, cell_name, 'av_extracted')
 
     tb.update_testbench()
 
