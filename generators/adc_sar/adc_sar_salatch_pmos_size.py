@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
+from math import log10
 import yaml
 
 import bag
@@ -28,26 +29,39 @@ m_rgnn_list=[6, 8, 10]
 m_rst_list=[4, 6, 8]
 load_from_file=True
 yamlfile_spec="adc_sar_spec.yaml"
+yamlfile_spec_output="adc_sar_spec_output.yaml"
 yamlfile_size="adc_sar_size.yaml"
 
+vdd = 0.8
+#vincm = 0.15
+vincm = 0.15
+vth = 0.3
+vregen_target = vdd*0.9 #target regeneration
+vn_in = 0.000 #input noise stddev
+gamma = 1 
 if load_from_file==True:
     with open(yamlfile_spec, 'r') as stream:
         specdict = yaml.load(stream)
+    with open(yamlfile_spec_output, 'r') as stream:
+        specdict_o = yaml.load(stream)
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
-    #m=sizedict['salatch_m']
-    #m_rst=sizedict['salatch_m_rst']
-    #m_rgnn=sizedict['salatch_m_rgnn']
-    #m_buf=sizedict['salatch_m_buf']
+    #m=sizedict['salatch']['m']
+    #m_rst=sizedict['salatch']['m_rst']
+    #m_rgnn=sizedict['salatch']['m_rgnn']
+    #m_buf=sizedict['salatch']['m_buf']
     l=sizedict['lch']
     pw=sizedict['pw']
     nw=sizedict['nw']
     intent=sizedict['device_intent']
-vdd = 0.8
-vincm = 0.2
-vth = 0.3
-vn_in = 0.000 #input noise stddev
-gamma = 1 
+    m_list=sizedict['salatch_preset']['m']
+    m_buf_list=sizedict['salatch_preset']['m_buf']
+    m_rgnn_list=sizedict['salatch_preset']['m_rgnn']
+    m_rst_list=sizedict['salatch_preset']['m_rst']
+    vamp=specdict_o['v_bit']/2
+    vincm=specdict['v_in_cm']
+    vdd=specdict['vdd']
+    vregen_target = vdd*0.9
 
 mos_config = bag.BagProject().tech_info.tech_params['mos']
 root_dir = mos_config['mos_char_root']
@@ -71,37 +85,21 @@ res_dict['cbuf']=[]
 res_dict['ibuf']=[]
 res_dict['tbuf']=[]
 res_dict['tckq']=[]
-'''
-res_dict['cgs']=[]
-res_dict['cgg']=[]
-res_dict['cgsn']=[]
-res_dict['cggn']=[]
-res_dict['cgd']=[]
-res_dict['cgdn']=[]
-res_dict['cdb']=[]
-res_dict['cdd']=[]
-res_dict['w']=[]
-res_dict['vbs']=[]
-res_dict['vgs']=[]
-res_dict['vds']=[]
-res_dict['ids']=[]
-res_dict['gm']=[]
-'''
 for m, m_buf, m_rgnn, m_rst in zip(m_list, m_buf_list, m_rgnn_list, m_rst_list):
     #multiplier
     m_in = m #input pair
-    m_clkh = max(2, m_in-2) #clock
+    m_clk = 2*max(2, m_in-2) #clock
     m_rstn = int(m_rst)
     m_buf= int(m_buf)
     m_rgnn = int(m_rgnn)
     m_rgnp = int(m_rgnn)+2*m_rstn-2
-    # clkh transistor
+    # clk transistor
     vbs = 0.0
     vgs = -vdd
-    vds = -vdd/2
-    mclkh=pmos_db.query(w=pw, vbs=vbs, vgs=vgs, vds=vds)
+    vds = -vdd*0.1 #heuristic, does not affect the result much
+    mclk=pmos_db.query(w=pw, vbs=vbs, vgs=vgs, vds=vds)
     # input transistor
-    vbs = 0.0
+    vbs = vdd*0.1 #heuristic from mclk
     vgs = vincm-vdd
     vds = vth-vdd
     min0=pmos_db.query(w=pw, vbs=vbs, vgs=vgs, vds=vds)
@@ -117,12 +115,12 @@ for m, m_buf, m_rgnn, m_rst in zip(m_list, m_buf_list, m_rgnn_list, m_rst_list):
     mrgnn=nmos_db.query(w=nw, vbs=vbs, vgs=vgs, vds=vds)
     # buf_n transistor
     vbs = 0.0
-    vgs = vdd
+    vgs = vdd/2
     vds = vdd/2
     mbufn=nmos_db.query(w=nw, vbs=vbs, vgs=vgs, vds=vds)
     # buf_p transistor
     vbs = 0.0
-    vgs = -vdd
+    vgs = -vdd/2
     vds = -vdd/2
     mbufp=pmos_db.query(w=pw, vbs=vbs, vgs=vgs, vds=vds)
     # resetn transistor
@@ -133,17 +131,19 @@ for m, m_buf, m_rgnn, m_rst in zip(m_list, m_buf_list, m_rgnn_list, m_rst_list):
     
     #timing calculation
     # turn on time
-    con=min0['css']*m_in*2+mclkh['cdd']*m_clkh 
-    ion=-mclkh['ids']*2*m_clkh
+    con=min0['css']*m_in*2+mclk['cdd']*m_clk 
+    ion=-mclk['ids']*m_clk
     ton=con/ion*vth
     # integration time
     cint0=min0['cdd']*m_in+(mrgnp['css']+mrgnp['cgs'])*m_rgnp+mrstn['cdd']*m_rstn
     cint1=(mrgnp['cdd']+mrgnp['cgg'])*m_rgnp+(mrgnn['cdd']+mrgnn['cgg'])*m_rgnn+(mbufn['cgg']+mbufp['cgg'])*m_buf+mrstn['cdd']*m_rstn
-    iint=-mclkh['ids']*m_clkh
-    tint=cint0/iint*vth*2+cint1/iint*vth
+    iint=-mclk['ids']*m_clk
+    gmint=min0['gm']*m_in
+    tint=cint0/iint*vth+cint1/iint*vth
+    vint=gmint*tint/cint1*vamp
     # regeneration time
-    gm_rgn=mrgnn['gm']*m_rgnn
-    trgn=cint1/gm_rgn
+    gm_rgn=mrgnn['gm']*m_rgnn+mrgnp['gm']*m_rgnp
+    trgn=2.3*cint1/gm_rgn*log10(vregen_target/vint)
     # buffer delay
     cbuf=mbufn['cdd']*m_buf+mbufp['cdd']*m_buf+cl
     ibuf=mbufn['ids']*m_buf
@@ -163,21 +163,6 @@ for m, m_buf, m_rgnn, m_rst in zip(m_list, m_buf_list, m_rgnn_list, m_rst_list):
     res_dict['trgn'].append(trgn)
     res_dict['tbuf'].append(tbuf)
     res_dict['tckq'].append(tckq)
-    '''
-    res_dict['cgs'].append(min0['cgs'])
-    res_dict['cgg'].append(min0['cgg'])
-    res_dict['cgsn'].append(mbufn['cgs'])
-    res_dict['cggn'].append(mbufn['cgg'])
-    res_dict['cgd'].append(min0['cgd'])
-    res_dict['cgdn'].append(mbufn['cgd'])
-    res_dict['cdb'].append(min0['cdb'])
-    res_dict['cdd'].append(min0['cdd'])
-    res_dict['w'].append(min0['w'])
-    res_dict['vbs'].append(min0['vbs'])
-    res_dict['vgs'].append(min0['vgs'])
-    res_dict['vds'].append(min0['vds'])
-    res_dict['ids'].append(min0['ids'])
-    '''
 '''
 print('trgn:',trgn)
 print('c0:',c0)

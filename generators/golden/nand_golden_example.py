@@ -64,13 +64,13 @@ def generate_nand(laygen, prefix, placement_grid, routing_grid_m1m2, routing_gri
     nrow = laygen.relplace(name=['I'+prefix+'N'+str(i) for i in range(6)],
                            templatename=[devname_nmos_boundary, devname_nmos_body, devname_nmos_boundary,
                                          devname_nmos_boundary, devname_nmos_body, devname_nmos_boundary], 
-                           gridname=pg, refinstname=None, direction=['right']*6, 
-                           shape=[[1, 1], [m, 1], [1, 1], [1, 1], [m, 1], [1, 1]], transform='R0')
+                           gridname=pg, refobj=None, direction=['right']*6, 
+                           shape=[[1, 1], [m, 1], [1, 1]]*2, transform='R0')
     prow = laygen.relplace(name=['I'+prefix+'P'+str(i) for i in range(6)], 
                            templatename=[devname_pmos_boundary, devname_pmos_body, devname_pmos_boundary,
                                          devname_pmos_boundary, devname_pmos_body, devname_pmos_boundary],
-                           gridname=pg, refinstname=nrow[0].name, direction=['top']+['right']*5, 
-                           shape=[[1, 1], [m, 1], [1, 1], [1, 1], [m, 1], [1, 1]], transform='MX')
+                           gridname=pg, refobj=nrow[0], direction=['top']+['right']*5, 
+                           shape=[[1, 1], [m, 1], [1, 1]]*2, transform='MX')
 
     # route
     if m == 1: 
@@ -81,18 +81,18 @@ def generate_nand(laygen, prefix, placement_grid, routing_grid_m1m2, routing_gri
         rend='truncate'
     # b
     for i in range(m):
-        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=nrow[1].pins['G0'], 
-                     refobj1=prow[1].pins['G0'], refobjindex0=[i, 0], refobjindex1=[i, 0], via0=[0, 0])
-    laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[1], 0], gridname0=rg23, refobj0=nrow[1].pins['G0'], 
-                 refobj1=nrow[1].pins['G0'], refobjindex0=[0, 0], refobjindex1=[m - 1, 0], endstyle0=rend, endstyle1=rend)
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=nrow[1].elements[i][0].pins['G0'], 
+                     refobj1=prow[1].elements[i][0].pins['G0'], via0=[0, 0])
+    laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[1], 0], gridname0=rg23, refobj0=nrow[1].elements[0][0].pins['G0'], 
+                 refobj1=nrow[1].elements[m-1][0].pins['G0'], endstyle0=rend, endstyle1=rend)
     rb0 = laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[0], 2], gridname0=rg23, refobj0=nrow[1].pins['G0'], 
                        refobj1=nrow[1].pins['G0'], via0=[0, 0])
     # a
     for i in range(m):
-        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=nrow[4].pins['G0'], 
-                     refobj1=prow[4].pins['G0'], refobjindex0=[i, 0], refobjindex1=[i, 0], via1=[0, 0])
-    laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[1], 0], gridname0=rg23, refobj0=prow[4].pins['G0'], 
-                 refobj1=prow[4].pins['G0'], refobjindex0=[0, 0], refobjindex1=[m - 1, 0], endstyle0=rend, endstyle1=rend)
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=nrow[4].elements[i][0].pins['G0'], 
+                     refobj1=prow[4].elements[i][0].pins['G0'], via1=[0, 0])
+    laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[1], 0], gridname0=rg23, refobj0=prow[4].elements[0][0].pins['G0'], 
+                 refobj1=prow[4].elements[m-1][0].pins['G0'], endstyle0=rend, endstyle1=rend)
     ra0 = laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[0], 2], gridname0=rg23, refobj0=prow[4].pins['G0'], 
                        refobj1=prow[4].pins['G0'], via0=[0, 0])
     # internal connections
@@ -116,8 +116,8 @@ def generate_nand(laygen, prefix, placement_grid, routing_grid_m1m2, routing_gri
     xy_s0 = laygen.get_template_pin_xy(name=nrow[1].cellname, pinname='S0', gridname=rg12)[0, :]
     xy_s1 = laygen.get_template_pin_xy(name=nrow[1].cellname, pinname='S1', gridname=rg12)[0, :]
     for i in range(m):
-        laygen.route(name=None, xy0=[xy_s0[0], 0], xy1=xy_s0, gridname0=rg12, refobj0=nrow[1], 
-                     refobj1=nrow[1], refobjindex0=[i, 0], refobjindex1=[i, 0], via0=[0, 0])
+        laygen.route(name=None, xy0=[xy_s0[0], 0], xy1=xy_s0, gridname0=rg12, refobj0=nrow[1].elements[i][0], 
+                     refobj1=nrow[1].elements[i][0], via0=[0, 0])
         laygen.route(name=None, xy0=[xy_s0[0], 0], xy1=xy_s0, gridname0=rg12, refobj0=prow[1], 
                      refobj1=prow[1], refobjindex0=[i, 0], refobjindex1=[i, 0], via0=[0, 0])
         laygen.route(name=None, xy0=[xy_s0[0], 0], xy1=xy_s0, gridname0=rg12, refobj0=prow[4], 

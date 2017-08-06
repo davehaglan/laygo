@@ -222,7 +222,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         return inst
 
     def relplace(self, name, templatename, gridname, refinstname=None, direction='right', xy=np.array([0, 0]),
-                 offset=np.array([0, 0]), template_libname=None, shape=np.array([1, 1]), spacing=None, transform='R0', refinst=None):
+                 offset=np.array([0, 0]), template_libname=None, shape=np.array([1, 1]), spacing=None, transform='R0', refobj=None):
         """
         Place an instance on abstract grid, bound from a reference object. If the reference object is not specified,
         the absolate origin is used as the reference point.
@@ -237,8 +237,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             Grid name for the instance placement.
         xy : np.array([x, y]), optional
             Placement coordinate on the grid, specified by gridname. If not specified, [0, 0] is used.
-        refinst : LayoutObject.Instance, optional
-            Reference instance handle, if None, refinstname is used
+        refobj : LayoutObject.Instance, optional
+            Reference instance handle, if None, refinstname is used. Will be extended to support other objects.
         refinstname : str, optional
             Reference instance name, if None, [0, 0] is used for the reference point.
         direction : str, optional
@@ -258,16 +258,32 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             generated instance
         """
         #TODO: Align option, bottom/top-left/right directions
-        # check if it's row placement
-        if isinstance(templatename, list): # row placement
+        # check if it's multiple placement
+        if isinstance(templatename, list): # multiple placement
+            flag_recursive=False #recursive placement flag. If True, next placement refer the current placement
             # preprocessing arguments
             len_inst = len(templatename)
             if name is None:
                 name = [None] * len_inst
             if refinstname is None:
-                refi_name = None
+                if refobj is None:
+                    flag_recursive=True
+                    _refinstname=[None for i in range(len_inst)]
+                else:
+                    #check if refobj is list. If not, do recursive placement
+                    if isinstance(refobj, list):
+                        _refinstname=[i.name for i in refobj]
+                    else:
+                        flag_recursive=True
+                        _refinstname=[refobj.name]+[None for i in range(len_inst-1)]
             else:
-                refi_name = refinstname
+                #check if refinstname is list. If not, do recursive placement
+                if isinstance(refinstname, list):
+                    _refinstname=refinstname
+                else:
+                    flag_recursive=True
+                    _refinstname=[refinstname]+[None for i in range(len_inst-1)]
+            refi_name = _refinstname[0]
             if isinstance(xy[0], (int, np.int64)):
                 xy = [xy] * len_inst
             if isinstance(direction, str):
@@ -282,13 +298,14 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 if not isinstance(spacing, list): spacing = [spacing] * len_inst
             if isinstance(transform, str): transform = [transform] * len_inst
             return_inst_list = []
-            for nm, _xy, tl, dr, sh, sp, tr in zip(name, xy, templatename, direction, shape, spacing, transform): #row placement
-                refi = self.relplace(nm, tl, gridname, refinstname=refi_name, direction=dr, xy=_xy,
+            for i, nm, _refi_name, _xy, tl, dr, sh, sp, tr in zip(range(len_inst), name, _refinstname, xy, templatename, direction, shape, spacing, transform): #row placement
+                refi = self.relplace(nm, tl, gridname, refinstname=_refi_name, direction=dr, xy=_xy,
                                    offset=offset, template_libname=template_libname, shape=sh, spacing=sp,
-                                   transform=tr)
+                                   transform=tr)#, refobj=refobj)
                 return_inst_list.append(refi)
-                if not refi is None:
-                    refi_name = refi.name
+                if flag_recursive is True:
+                    if not i == len_inst-1:
+                        _refinstname[i+1] = refi.name
             return return_inst_list
         else: # single placement
             # preprocessing arguments
@@ -303,14 +320,14 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             t_size_grid = self.get_template_xy(templatename, gridname, libname=template_libname)
             t_size_grid = t_size_grid*shape
             #reference instance check 
-            if (refinst is None) and (refinstname is None):
+            if (refobj is None) and (refinstname is None):
                 ir_xy_grid = np.array([0, t_size_grid[1]/2.0])
                 tr_size_grid = np.array([0, 0])
                 mtr = self.Mt('R0')
                 mti = self.Mt('R0')
             else:
-                if not refinst is None:
-                    ir = refinst
+                if not refobj is None:
+                    ir = refobj
                 else:
                     ir = self.get_inst(refinstname)
                 tr = self.templates.get_template(ir.cellname, libname=ir.libname)
@@ -368,17 +385,21 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         offset = np.asarray(offset)
         refinstindex = np.asarray(refinstindex)
         # reading coordinate information from the reference objects
+        # this needs to be cleaned up
         if not refobj is None:
-            if type(refobj).__name__ is 'Instance': 
+            if type(refobj).__name__ is 'Instance':
+                refinst = refobj 
                 refinstname=refobj.name
                 refinstindex=refobjindex
             if type(refobj).__name__ is 'Pin': 
+                refinst = refobj.master
                 refinstname=refobj.master.name
                 refinstindex=refobjindex
                 refpinname=refobj.name
+        else:
+            if not refinstname is None:
+                refinst = self.get_inst(refinstname)
         # get physical grid coordinates
-        if not refinstname is None:
-            refinst = self.get_inst(refinstname)
         if not refinst is None:
             reftemplate = self.templates.get_template(refinst.cellname, libname=refinst.libname)
             offset = offset + refinst.xy + np.dot(refinst.spacing * refinstindex, self.Mt(refinst.transform).T)
@@ -485,6 +506,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         xy1 = np.asarray(xy1)
         refinstindex0 = np.asarray(refinstindex0)
         refinstindex1 = np.asarray(refinstindex1)
+        refinst0 = None
+        refinst1 = None
         offset0 = np.asarray(offset0)
         if not offset1 == None: offset1 = np.asarray(offset1)
         if gridname1 == None: gridname1 = gridname0
@@ -503,24 +526,34 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         _offset0=offset0
         _offset1=offset1
         # reading coordinate information from the reference objects
+        # this needs to be cleaned up
         if not refobj0 is None:
             if type(refobj0).__name__ is 'Instance': 
+                refinst0=refobj0
                 refinstname0=refobj0.name
                 refinstindex0=refobjindex0
             if type(refobj0).__name__ is 'Pin': 
+                refinst0=refobj0.master
                 refinstname0=refobj0.master.name
                 refinstindex0=refobjindex0
                 refpinname0=refobj0.name
+        else:
+            if not refinstname0 == None:
+                refinst0=self.get_inst(refinstname0)
         if not refobj1 is None:
             if type(refobj1).__name__ is 'Instance': 
+                refinst1=refobj1
                 refinstname1=refobj1.name
                 refinstindex1=refobjindex1
             if type(refobj1).__name__ is 'Pin': 
+                refinst1=refobj1.master
                 refinstname1=refobj1.master.name
                 refinstindex1=refobjindex1
                 refpinname1=refobj1.name
+        else:
+            if not refinstname1 == None:
+                refinst1=self.get_inst(refinstname1)
         if not refinstname0 == None:
-            refinst0=self.get_inst(refinstname0)
             reftemplate0=self.templates.get_template(refinst0.cellname, libname=refinst0.libname)
             _offset0=offset0+refinst0.xy+np.dot(refinst0.spacing*refinstindex0, self.Mt(refinst0.transform).T)
             if not refpinname0 == None: # if pin reference is specified
@@ -528,7 +561,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 _xy0=xy0+pin_xy0_abs
             transform0=refinst0.transform # overwrite transform variable
         if not refinstname1 == None:
-            refinst1=self.get_inst(refinstname1)
             reftemplate1=self.templates.get_template(refinst1.cellname, libname=refinst1.libname)
             _offset1=offset1+refinst1.xy+np.dot(refinst1.spacing*refinstindex1, self.Mt(refinst1.transform).T)
             if not refpinname1 == None: # if pin reference is specified
@@ -547,27 +579,26 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         #xy1_phy=np.dot(self.grids.get_phygrid_xy(gridname1, xy1), self.Mt(transform1).T)+offset1
         if addvia0==True:
             print("[WARNING] addvia0 option in GridLayoutGenerator.route will be deprecated. Use via0=[[0, 0]] instead")
-            self.via(None, xy0, gridname0, offset=offset0, refinstname=refinstname0, refinstindex=refinstindex0,
+            self.via(None, xy0, gridname0, offset=offset0, refobj=refinst0, refinstindex=refinstindex0,
             refpinname=refpinname0, transform=transform0)
         if addvia1==True:
             print("[WARNING] addvia1 option in GridLayoutGenerator.route will be deprecated. Use via1=[[0, 0]] instead")
-            self.via(None, xy1, gridname1, offset=offset1, refinstname=refinstname1, refinstindex=refinstindex1,
+            self.via(None, xy1, gridname1, offset=offset1, refobj=refinst1, refinstindex=refinstindex1,
             refpinname=refpinname1, transform=transform1)
         if not via0 is None:
             for vofst in via0:
-                self.via(None, xy0+vofst, gridname0, offset=offset0, refinstname=refinstname0, refinstindex=refinstindex0,
+                self.via(None, xy0+vofst, gridname0, offset=offset0, refobj=refinst0, refobjindex=refinstindex0,
                          refpinname=refpinname0, transform=transform0)
         if not via1 is None:
             for vofst in via1:
                 #overwrite xy coordinate to handle direction matrix (xy1+vofst does not reflect direction matrix in via function)
                 if direction=='omni':
-                    self.via(None, xy1+vofst, gridname1, offset=offset1, refinstname=refinstname1, refinstindex=refinstindex1,
+                    self.via(None, xy1+vofst, gridname1, offset=offset1, refobj=refinst1, refobjindex=refinstindex1,
                         refpinname=refpinname1, transform=transform1)
                 else:
-                    _xy1=self.get_absgrid_xy(gridname=gridname1, xy=xy1_phy_center, refinstname=refinstname1,
-                                                    refinstindex=refinstindex1, refpinname=refpinname1)
-                    #print(xy1_phy_center, _xy1, transform1, refinstname1, refpinname1)
-                    self.via(None, _xy1, gridname1, offset=offset1, refinstname=refinstname1, refinstindex=refinstindex1,
+                    _xy1=self.get_absgrid_xy(gridname=gridname1, xy=xy1_phy_center, refobj=refinst1,
+                                             refobjindex=refinstindex1, refpinname=refpinname1)
+                    self.via(None, _xy1, gridname1, offset=offset1, refobj=refinst1, refobjindex=refinstindex1,
                         refpinname=refpinname1, transform=transform1)
         #layer handling
         if layer is None:
@@ -1304,7 +1335,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         return self.grids.get_grid(gridname)
 
-    def get_absgrid_xy(self, gridname, xy, refinstname=None, refinstindex=np.array([0, 0]), refpinname=None):
+    def get_absgrid_xy(self, gridname, xy, refinstname=None, refinstindex=np.array([0, 0]), refpinname=None, refobj=None, refobjindex=None):
         """
         Convert physical coordinate to abstract coordinate
 
@@ -1328,14 +1359,16 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         if not refinstname is None:
             rinst = self.get_inst(name=refinstname, index=refinstindex)
+        elif not refobj is None:
+            rinst = refobj
+            refinstname = refobj.name
+            refinstindex = refobjindex
+        if not refinstname is None:
             if not refpinname is None:
                 pxy_ongrid = self.get_template_pin_coord(name=rinst.cellname, pinname=refpinname, gridname=gridname)[0]
-                #pxy = self.grids.get_phygrid_xy(gridname=gridname, xy=pxy_ongrid)[0]
                 pxy = self.grids.get_phygrid_xy(gridname=gridname, xy=pxy_ongrid)
-                #rxy = rinst.xy[0] + np.dot(self.Mt(rinst.transform), pxy)
                 rxy = rinst.xy + np.dot(self.Mt(rinst.transform), pxy)
             else:
-                #rxy = rinst.xy[0]
                 rxy = rinst.xy
             _xy = np.dot(np.linalg.inv(self.Mt(rinst.transform)), xy - rxy)
         else:

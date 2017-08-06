@@ -50,10 +50,10 @@ if load_from_file==True:
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
     cell_name = 'sar_wsamp'
-    params['sar_sa_m']=sizedict['salatch_m']
-    params['sar_sa_m_rst']=sizedict['salatch_m_rst']
-    params['sar_sa_m_rgnn']=sizedict['salatch_m_rgnn']
-    params['sar_sa_m_buf']=sizedict['salatch_m_buf']
+    params['sar_sa_m']=sizedict['salatch']['m']
+    params['sar_sa_m_rst']=sizedict['salatch']['m_rst']
+    params['sar_sa_m_rgnn']=sizedict['salatch']['m_rgnn']
+    params['sar_sa_m_buf']=sizedict['salatch']['m_buf']
     params['sar_drv_m_list']=sizedict['capdrv_m_list']
     params['sar_logic_m']=sizedict['sarlogic_m']
     params['sar_fsm_m']=sizedict['sarfsm_m']

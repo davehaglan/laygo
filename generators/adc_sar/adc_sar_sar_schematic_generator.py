@@ -39,10 +39,14 @@ if load_from_file==True:
         specdict = yaml.load(stream)
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
-    params['sa_m']=sizedict['salatch_m']
-    params['sa_m_rst']=sizedict['salatch_m_rst']
-    params['sa_m_rgnn']=sizedict['salatch_m_rgnn']
-    params['sa_m_buf']=sizedict['salatch_m_buf']
+    #params['sa_m']=sizedict['salatch_m']
+    #params['sa_m_rst']=sizedict['salatch_m_rst']
+    #params['sa_m_rgnn']=sizedict['salatch_m_rgnn']
+    #params['sa_m_buf']=sizedict['salatch_m_buf']
+    params['sa_m']=sizedict['salatch']['m']
+    params['sa_m_rst']=sizedict['salatch']['m_rst']
+    params['sa_m_rgnn']=sizedict['salatch']['m_rgnn']
+    params['sa_m_buf']=sizedict['salatch']['m_buf']
     params['drv_m_list']=sizedict['capdrv_m_list']
     params['logic_m']=sizedict['sarlogic_m']
     params['fsm_m']=sizedict['sarfsm_m']

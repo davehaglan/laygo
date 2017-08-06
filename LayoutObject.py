@@ -340,6 +340,10 @@ class Instance(LayoutObject):
         template: TemplateObject
             template handle (if exist)
         """
+        xy=np.asarray(xy)
+        shape=np.asarray(shape)
+        spacing=np.asarray(spacing)
+
         LayoutObject.__init__(self, name, res, xy)
         self.libname = libname
         self.cellname = cellname
@@ -347,8 +351,21 @@ class Instance(LayoutObject):
         self.spacing = self.trim(spacing)
         self.transform = transform
         self.template = template
+        self.elements = []
+        #create subelement list
+        if not np.all(shape==np.array([1, 1])):
+            for i in range(shape[0]):
+                self.elements.append([])
+                for j in range(shape[1]):
+                    _xy=xy+np.dot(spacing*np.array([i, j]), ut.Mt(transform).T)
+                    inst=Instance(name=name, res=res, xy=_xy, 
+                                  libname=libname, cellname=cellname, shape=[1, 1], spacing=[0, 0],
+                                  transform=transform, template=template)
+                    self.elements[i].append(inst)
+        else:
+            self.elements=[[self]]
         if not template is None:
-            #create a pin dictionary
+            #create pin dictionary
             self.pins = dict()
             for pn, p in self.template.pins.items():
                 self.pins[pn] = Pin(name=pn, res=res, xy=p['xy'], netname=p['netname'], layer=p['layer'], master=self)

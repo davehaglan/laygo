@@ -23,7 +23,9 @@ if not lvs_passed:
     raise Exception('oops lvs died.  See LVS log file %s' % lvs_log)
 print('lvs passed')
 
+'''
 lvs_passed, lvs_log = prj.run_lvs(impl_lib, cell_name_standalone)
 if not lvs_passed:
     raise Exception('oops lvs died.  See LVS log file %s' % lvs_log)
 print('lvs passed')
+'''

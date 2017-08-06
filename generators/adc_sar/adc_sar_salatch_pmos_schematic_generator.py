@@ -36,10 +36,14 @@ if load_from_file==True:
         specdict = yaml.load(stream)
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
-    params['m']=sizedict['salatch_m']
-    params['m_rst']=sizedict['salatch_m_rst']
-    params['m_rgnn']=sizedict['salatch_m_rgnn']
-    params['m_buf']=sizedict['salatch_m_buf']
+    #params['m']=sizedict['salatch_m']
+    #params['m_rst']=sizedict['salatch_m_rst']
+    #params['m_rgnn']=sizedict['salatch_m_rgnn']
+    #params['m_buf']=sizedict['salatch_m_buf']
+    params['m']=sizedict['salatch']['m']
+    params['m_rst']=sizedict['salatch']['m_rst']
+    params['m_rgnn']=sizedict['salatch']['m_rgnn']
+    params['m_buf']=sizedict['salatch']['m_buf']
     params['lch']=sizedict['lch']
     params['pw']=sizedict['pw']
     params['nw']=sizedict['nw']
@@ -57,5 +61,5 @@ dsn.design(**params)
 # implement the design
 print('implementing design with library %s' % impl_lib)
 dsn.implement_design(impl_lib, top_cell_name=cell_name, erase=True)
-dsn.implement_design(impl_lib, top_cell_name=cell_name_standalone, erase=True)
+#dsn.implement_design(impl_lib, top_cell_name=cell_name_standalone, erase=True)
 
