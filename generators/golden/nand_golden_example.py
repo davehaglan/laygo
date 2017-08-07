@@ -102,22 +102,21 @@ def generate_nand(laygen, prefix, placement_grid, routing_grid_m1m2, routing_gri
     # internal connections
     laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg23, refobj0=nd[0][0].pins['D0'], refobj1=nd[1][-1].pins['S1'])
     laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg23, refobj0=pd[0][0].pins['D0'], refobj1=pd[1][-1].pins['D0'])
-    laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[1], 0], gridname0=rg23, refobj0=nd[1][0].pins['D0'], 
-                 refobj1=nd[1][-1].pins['D0'], endstyle0=rend, endstyle1=rend)
-    for i in range(m):
-        laygen.via(None, xy=[0, 1], refobj=nd[0][i].pins['D0'], gridname=rg12)
-        laygen.via(None, xy=[0, 1], refobj=pd[0][i].pins['D0'], gridname=rg12)
-        laygen.via(None, xy=[0, 1], refobj=nd[1][i].pins['S0'], gridname=rg12)
-        laygen.via(None, xy=[0, 1], refobj=pd[1][i].pins['D0'], gridname=rg12)
-        laygen.via(None, xy=[0, 0], refobj=nd[1][i].pins['D0'], gridname=rg12)
+    for dev, pn in zip([nd[0], pd[0], nd[1], pd[1]], ['D0', 'D0', 'S0', 'D0']):
+        for _d in dev:
+            laygen.via(None, xy=[0, 1], refobj=_d.pins[pn], gridname=rg12)
     laygen.via(None, xy=[0, 1], refobj=nd[1][-1].pins['S1'], gridname=rg12)
     # output
+    laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[1], 0], gridname0=rg23, refobj0=nd[1][0].pins['D0'], 
+                 refobj1=nd[1][-1].pins['D0'], endstyle0=rend, endstyle1=rend)
+    for _nd in nd[1]:
+        laygen.via(None, xy=[0, 0], refobj=_nd.pins['D0'], gridname=rg12)
     ro0 = laygen.route(name=None, xy0=[0, 0], xy1=[0, 1], gridname0=rg23, refobj0=nd[1][-1].pins['D0'], 
                        refobj1=pd[1][-1].pins['D0'], via0=[0, 0], via1=[0, 0])
     # power and ground route
     xy_s0 = laygen.get_template_pin_xy(name=nrow[1].cellname, pinname='S0', gridname=rg12)[0, :]
     xy_s1 = laygen.get_template_pin_xy(name=nrow[1].cellname, pinname='S1', gridname=rg12)[0, :]
-    for dev in nd[0].tolist()+pd[0].tolist()+pd[1].tolist():
+    for dev in np.concatenate((nd[0],pd[0],pd[1])):
         for xy in [xy_s0, xy_s1]:
             for i in range(m):
                 laygen.route(name=None, xy0=[xy[0], 0], xy1=xy, gridname0=rg12, refobj0=dev, refobj1=dev, via0=[0, 0])
