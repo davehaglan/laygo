@@ -24,6 +24,7 @@
 
 """Logic layout
 """
+import bag
 import laygo
 import numpy as np
 import yaml
@@ -33,7 +34,7 @@ import os
 def create_io_pin(laygen, layer, gridname, pinname_list, rect_list, offset_y=np.array([-1, 1])):
     """create digital io pin"""
     rect_xy_list = [laygen.get_rect_xy(name=r.name, gridname=gridname, sort=True) for r in rect_list]
-    #align pins
+    #align pin shapes
     ry = rect_xy_list[0][:, 1] + offset_y.T
     for i, xy_rect in enumerate(rect_xy_list):
         xy_rect[:, 1]=ry
@@ -46,13 +47,14 @@ def create_power_pin(laygen, layer, gridname, rect_vdd, rect_vss, pinname_vdd='V
     laygen.pin(name=pinname_vdd, layer=layer, xy=rvdd_pin_xy, gridname=gridname)
     laygen.pin(name=pinname_vss, layer=layer, xy=rvss_pin_xy, gridname=gridname)
 
-def generate_nand(laygen, prefix, placement_grid, routing_grid_m1m2, routing_grid_m2m3, 
+def generate_nand(laygen, prefix, placement_grid, routing_grid_m1m2, routing_grid_m2m3, routing_grid_m3m4,
                   devname_nmos_boundary, devname_nmos_body, devname_pmos_boundary, devname_pmos_body,
                   m=2, origin=[0, 0], create_pin=False):
     """generate nand gate layout"""
     pg = placement_grid
     rg12 = routing_grid_m1m2
     rg23 = routing_grid_m2m3
+    rg34 = routing_grid_m3m4
 
     _m=m
     if m==1:
@@ -71,6 +73,8 @@ def generate_nand(laygen, prefix, placement_grid, routing_grid_m1m2, routing_gri
                                          devname_pmos_boundary, devname_pmos_body, devname_pmos_boundary],
                            gridname=pg, refobj=nrow[0], direction=['top']+['right']*5, 
                            shape=[[1, 1], [m, 1], [1, 1]]*2, transform='MX')
+    nd=[nrow[1].elements[:,0], nrow[4].elements[:,0]]
+    pd=[prow[1].elements[:,0], prow[4].elements[:,0]]
 
     # route
     if m == 1: 
@@ -79,47 +83,44 @@ def generate_nand(laygen, prefix, placement_grid, routing_grid_m1m2, routing_gri
     else: 
         rofst=[0, 0]
         rend='truncate'
-    # b
-    for i in range(m):
-        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=nrow[1].elements[i][0].pins['G0'], 
-                     refobj1=prow[1].elements[i][0].pins['G0'], via0=[0, 0])
-    laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[1], 0], gridname0=rg23, refobj0=nrow[1].elements[0][0].pins['G0'], 
-                 refobj1=nrow[1].elements[m-1][0].pins['G0'], endstyle0=rend, endstyle1=rend)
-    rb0 = laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[0], 2], gridname0=rg23, refobj0=nrow[1].pins['G0'], 
-                       refobj1=nrow[1].pins['G0'], via0=[0, 0])
+    # b-metal1
+    for _nd, _pd in zip(nd[0], pd[0]):
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=_nd.pins['G0'], refobj1=_pd.pins['G0'], via0=[0, 0])
+    # b-metal2
+    laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[1], 0], gridname0=rg23, refobj0=nd[0][0].pins['G0'], 
+                 refobj1=nd[0][-1].pins['G0'], endstyle0=rend, endstyle1=rend)
+    # b-metal3
+    rb0 = laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[0], 2], gridname0=rg23, refobj0=nd[0][0].pins['G0'], 
+                       refobj1=nd[0][0].pins['G0'], via0=[0, 0])
     # a
-    for i in range(m):
-        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=nrow[4].elements[i][0].pins['G0'], 
-                     refobj1=prow[4].elements[i][0].pins['G0'], via1=[0, 0])
-    laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[1], 0], gridname0=rg23, refobj0=prow[4].elements[0][0].pins['G0'], 
-                 refobj1=prow[4].elements[m-1][0].pins['G0'], endstyle0=rend, endstyle1=rend)
-    ra0 = laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[0], 2], gridname0=rg23, refobj0=prow[4].pins['G0'], 
-                       refobj1=prow[4].pins['G0'], via0=[0, 0])
+    for _nd, _pd in zip(nd[1], pd[1]):
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=_nd.pins['G0'], refobj1=_pd.pins['G0'], via1=[0, 0])
+    laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[1], 0], gridname0=rg23, refobj0=pd[1][0].pins['G0'], 
+                 refobj1=pd[1][-1].pins['G0'], endstyle0=rend, endstyle1=rend)
+    ra0 = laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[0], 2], gridname0=rg23, refobj0=pd[1][0].pins['G0'], 
+                       refobj1=pd[1][0].pins['G0'], via0=[0, 0])
     # internal connections
-    laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg23, refobj0=nrow[1].elements[0][0].pins['D0'], 
-                 refobj1=nrow[4].elements[m-1][0].pins['S1'])
-    laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg23, refobj0=prow[1].elements[0][0].pins['D0'], 
-                 refobj1=prow[4].elements[m-1][0].pins['D0'])
-    laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[1], 0], gridname0=rg23, refobj0=nrow[4].elements[0][0].pins['D0'], 
-                 refobj1=nrow[4].elements[m-1][0].pins['D0'], endstyle0=rend, endstyle1=rend)
+    laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg23, refobj0=nd[0][0].pins['D0'], refobj1=nd[1][-1].pins['S1'])
+    laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg23, refobj0=pd[0][0].pins['D0'], refobj1=pd[1][-1].pins['D0'])
+    laygen.route(name=None, xy0=[rofst[0], 0], xy1=[rofst[1], 0], gridname0=rg23, refobj0=nd[1][0].pins['D0'], 
+                 refobj1=nd[1][-1].pins['D0'], endstyle0=rend, endstyle1=rend)
     for i in range(m):
-        laygen.via(None, xy=[0, 1], refobj=nrow[1].elements[i][0].pins['D0'], gridname=rg12)
-        laygen.via(None, xy=[0, 1], refobj=prow[1].elements[i][0].pins['D0'], gridname=rg12)
-        laygen.via(None, xy=[0, 1], refobj=nrow[4].elements[i][0].pins['S0'], gridname=rg12)
-        laygen.via(None, xy=[0, 1], refobj=prow[4].elements[i][0].pins['D0'], gridname=rg12)
-        laygen.via(None, xy=[0, 0], refobj=nrow[4].elements[i][0].pins['D0'], gridname=rg12)
-    laygen.via(None, xy=[0, 1], refobj=nrow[4].elements[m-1][0].pins['S1'], gridname=rg12)
+        laygen.via(None, xy=[0, 1], refobj=nd[0][i].pins['D0'], gridname=rg12)
+        laygen.via(None, xy=[0, 1], refobj=pd[0][i].pins['D0'], gridname=rg12)
+        laygen.via(None, xy=[0, 1], refobj=nd[1][i].pins['S0'], gridname=rg12)
+        laygen.via(None, xy=[0, 1], refobj=pd[1][i].pins['D0'], gridname=rg12)
+        laygen.via(None, xy=[0, 0], refobj=nd[1][i].pins['D0'], gridname=rg12)
+    laygen.via(None, xy=[0, 1], refobj=nd[1][-1].pins['S1'], gridname=rg12)
     # output
-    ro0 = laygen.route(name=None, xy0=[0, 0], xy1=[0, 1], gridname0=rg23, refobj0=nrow[4].elements[m-1][0].pins['D0'], 
-                       refobj1=prow[4].elements[m-1][0].pins['D0'], via0=[0, 0], via1=[0, 0])
+    ro0 = laygen.route(name=None, xy0=[0, 0], xy1=[0, 1], gridname0=rg23, refobj0=nd[1][-1].pins['D0'], 
+                       refobj1=pd[1][-1].pins['D0'], via0=[0, 0], via1=[0, 0])
     # power and ground route
     xy_s0 = laygen.get_template_pin_xy(name=nrow[1].cellname, pinname='S0', gridname=rg12)[0, :]
     xy_s1 = laygen.get_template_pin_xy(name=nrow[1].cellname, pinname='S1', gridname=rg12)[0, :]
-    for dev in [nrow[1], prow[1], prow[4]]:
+    for dev in nd[0].tolist()+pd[0].tolist()+pd[1].tolist():
         for xy in [xy_s0, xy_s1]:
             for i in range(m):
-                laygen.route(name=None, xy0=[xy[0], 0], xy1=xy, gridname0=rg12, 
-                             refobj0=dev.elements[i][0], refobj1=dev.elements[i][0], via0=[0, 0])
+                laygen.route(name=None, xy0=[xy[0], 0], xy1=xy, gridname0=rg12, refobj0=dev, refobj1=dev, via0=[0, 0])
     # power and groud rail
     xy = laygen.get_template_xy(nrow[5].cellname, rg12) * np.array([1, 0])
     rvdd=laygen.route(name='R'+prefix+'VDD0', xy0=[0, 0], xy1=xy, gridname0=rg12, refobj0=prow[0], refobj1=prow[5])
@@ -132,18 +133,12 @@ def generate_nand(laygen, prefix, placement_grid, routing_grid_m1m2, routing_gri
         create_power_pin(laygen, layer=laygen.layers['pin'][2], gridname=rg12, rect_vdd=rvdd, rect_vss=rvss)
 
 if __name__ == '__main__':
+    #laygo generator
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
-
-    import imp
-    try:
-        imp.find_module('bag')
-        laygen.use_phantom = False
-    except ImportError:
-        laygen.use_phantom = True #for gds export use phantom cells (not necessary)
 
     #load primitive template/grid
     tech=laygen.tech
-    utemplib = tech+'_microtemplates_dense' #primitive template / grid
+    utemplib = tech+'_microtemplates_dense' #primitive templates / grids
     laygen.load_template(filename=tech+'_microtemplates_dense_templates.yaml', libname=utemplib)
     laygen.load_grid(filename=tech+'_microtemplates_dense_grids.yaml', libname=utemplib)
     laygen.templates.sel_library(utemplib)
@@ -171,31 +166,24 @@ if __name__ == '__main__':
             mycell_list.append(cellname)
             laygen.add_cell(cellname)
             laygen.sel_cell(cellname)
-            generate_nand(laygen, prefix='ND0', placement_grid=pg, routing_grid_m1m2=rg12,
+            generate_nand(laygen, prefix='ND0', 
+                          placement_grid=pg, 
+                          routing_grid_m1m2=rg12,
                           routing_grid_m2m3=rg23, 
+                          routing_grid_m3m4=rg34, 
                           devname_nmos_boundary='nmos4_fast_boundary',
                           devname_nmos_body='nmos4_fast_center_nf2',
                           devname_pmos_boundary='pmos4_fast_boundary',
                           devname_pmos_body='pmos4_fast_center_nf2',
-                          m=m, create_pin=True
-                          )
+                          m=m, create_pin=True)
             laygen.add_template_from_cell()
 
+    #save template database to file
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)
 
-    #bag export, if bag does not exist, gds export
-
-    import imp
-    try:
-        imp.find_module('bag')
-        import bag
-        prj = bag.BagProject()
-        for mycell in mycell_list:
-            laygen.sel_cell(mycell)
-            laygen.export_BAG(prj, array_delimiter=['[', ']'])
-    except ImportError:
-        laygen.export_GDS('output.gds', cellname=mycell_list, layermapfile=tech+".layermap")  # change layermapfile
-
-
-
+    #export to bag
+    prj = bag.BagProject()
+    for mycell in mycell_list:
+        laygen.sel_cell(mycell)
+        laygen.export_BAG(prj, array_delimiter=['[', ']'])
 

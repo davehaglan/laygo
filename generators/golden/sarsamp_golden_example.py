@@ -24,6 +24,7 @@
 
 """ADC library
 """
+import bag
 import laygo
 import numpy as np
 from math import log
@@ -64,24 +65,24 @@ def generate_samp_body(laygen, objectname_pfix, templib_logic,
     isamp=[]
     # placement
     # left tap
-    itap.append(laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, refinstname=None, 
+    itap.append(laygen.relplace(name=None, templatename=tap_cellname, gridname=pg,  
                                 direction='right', shape=[tap_m_list[0], 1], template_libname=templib_logic, transform='R0'))
     # left space
-    isp.append(laygen.relplace(name=None, templatename=space_cellname_list, gridname=pg, refinstname=itap[-1].name, 
+    isp.append(laygen.relplace(name=None, templatename=space_cellname_list, gridname=pg, refobj=itap[-1], 
                                direction=['right']*len(space_cellname_list), shape=[[i, 1] for i in space_m_list], 
                                template_libname=templib_logic, transform='R0'))
     # left switch
-    isamp.append(laygen.relplace(name=None, templatename=samp_cellname, gridname=pg, refinstname=isp[-1][-1].name, 
+    isamp.append(laygen.relplace(name=None, templatename=samp_cellname, gridname=pg, refobj=isp[-1][-1], 
                                  direction='right', shape=[samp_m, 1], template_libname=templib_logic, transform='R0'))
     # right switch
-    isamp.append(laygen.relplace(name=None, templatename=samp_cellname, gridname=pg, refinstname=isamp[-1].name, 
+    isamp.append(laygen.relplace(name=None, templatename=samp_cellname, gridname=pg, refobj=isamp[-1], 
                                  direction='right', shape=[samp_m, 1], template_libname=templib_logic, transform='MY'))
     # right space
-    isp.append(laygen.relplace(name=None, templatename=list(reversed(space_cellname_list)), gridname=pg, refinstname=isamp[-1].name, 
+    isp.append(laygen.relplace(name=None, templatename=list(reversed(space_cellname_list)), gridname=pg, refobj=isamp[-1], 
                                direction=['right']*len(space_cellname_list), shape=[[i, 1] for i in list(reversed(space_m_list))], 
                                template_libname=templib_logic, transform='R0'))
     # right tap
-    itap.append(laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, refinstname=isp[-1][-1].name, 
+    itap.append(laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, refobj=isp[-1][-1], 
                                 direction='right', shape=[tap_m_list[0], 1], template_libname=templib_logic, transform='R0'))
     
     # signal routes
@@ -155,24 +156,24 @@ def generate_samp_buffer(laygen, objectname_pfix, templib_logic,
     ioutbuf=[]
     # placement
     # left tap
-    itap.append(laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, refinstname=None, 
+    itap.append(laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, refobj=None, 
                                 direction='right', shape=[tap_m_list[0], 1], template_libname=templib_logic, transform='R0'))
     # left space
-    isp.append(laygen.relplace(name=None, templatename=space_cellname_list, gridname=pg, refinstname=itap[-1].name, 
+    isp.append(laygen.relplace(name=None, templatename=space_cellname_list, gridname=pg, refobj=itap[-1], 
                                direction=['right']*len(space_cellname_list), shape=[[i, 1] for i in space_m_list], 
                                template_libname=templib_logic, transform='R0'))
     # inbuf buffer
-    iinbuf=laygen.relplace(name=None, templatename=inbuf_cellname_list, gridname=pg, refinstname=isp[-1][-1].name, 
+    iinbuf=laygen.relplace(name=None, templatename=inbuf_cellname_list, gridname=pg, refobj=isp[-1][-1], 
                            direction='right', template_libname=templib_logic, transform='R0')
     # right switch
-    ioutbuf=laygen.relplace(name=None, templatename=outbuf_cellname_list, gridname=pg, refinstname=iinbuf[-1].name, 
+    ioutbuf=laygen.relplace(name=None, templatename=outbuf_cellname_list, gridname=pg, refobj=iinbuf[-1], 
                             direction='right', template_libname=templib_logic, transform='R0')
     # right space
-    isp.append(laygen.relplace(name=None, templatename=list(reversed(space_cellname_list)), gridname=pg, refinstname=ioutbuf[-1].name, 
+    isp.append(laygen.relplace(name=None, templatename=list(reversed(space_cellname_list)), gridname=pg, refobj=ioutbuf[-1], 
                                direction=['right']*len(space_cellname_list), shape=[[i, 1] for i in list(reversed(space_m_list))], 
                                template_libname=templib_logic, transform='R0'))
     # right tap
-    itap.append(laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, refinstname=isp[-1][-1].name, 
+    itap.append(laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, refobj=isp[-1][-1], 
                                 direction='right', shape=[tap_m_list[0], 1], template_libname=templib_logic, transform='R0'))
     
     # signal routes
@@ -246,7 +247,7 @@ def generate_samp(laygen, objectname_pfix, workinglib,
     # sampler body
     isamp = laygen.relplace(name=None, templatename='sarsamp_body', gridname=pg, template_libname=workinglib, transform='R0', xy=core_origin)
     # clock buffer
-    ibuf = laygen.relplace(name=None, templatename='sarsamp_buf', gridname=pg, refinstname=isamp.name,
+    ibuf = laygen.relplace(name=None, templatename='sarsamp_buf', gridname=pg, refobj=isamp,
                            direction='top', template_libname=workinglib, transform='R0')
     # boundaries
     m_bnd = int(laygen.get_template_size('sarsamp_body', gridname=pg, libname=workinglib)[0]/laygen.get_template_size('boundary_bottom', gridname=pg)[0])
@@ -379,15 +380,10 @@ def generate_samp(laygen, objectname_pfix, workinglib,
                 offset_start_index=0, offset_end_index=0)
 
 if __name__ == '__main__':
+    #laygo generator
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
 
-    import imp
-    try:
-        imp.find_module('bag')
-        laygen.use_phantom = False
-    except ImportError:
-        laygen.use_phantom = True
-
+    #load primitive template/grid
     tech=laygen.tech
     utemplib = tech+'_microtemplates_dense'
     logictemplib = tech+'_logic_templates'
@@ -398,48 +394,45 @@ if __name__ == '__main__':
     laygen.grids.sel_library(utemplib)
 
     #library load or generation
-    workinglib = 'adc_sar_generated'
+    #workinglib = 'adc_sar_generated'
+    workinglib = 'laygo_working'
     laygen.add_library(workinglib)
     laygen.sel_library(workinglib)
     if os.path.exists(workinglib+'.yaml'): #generated layout file exists
         laygen.load_template(filename=workinglib+'.yaml', libname=workinglib)
         laygen.templates.sel_library(utemplib)
 
-    #grid
-    pg = 'placement_basic' #placement grid
-    rg23 = 'route_M2_M3_cmos'
+    #grids
+    pg = 'placement_basic'              #placement grid
+    rg23 = 'route_M2_M3_cmos'           #route grids
     rg34 = 'route_M3_M4_basic'
     rg34bt = 'route_M3_M4_basic_thick'
     rg45bt = 'route_M4_M5_basic_thick'
     rg45t = 'route_M4_M5_thick'
     rg56t = 'route_M5_M6_thick'
-
-    mycell_list = []
-    #load from preset
-    load_from_file=True
-    yamlfile_spec="adc_sar_spec.yaml"
-    yamlfile_size="adc_sar_size.yaml"
-    if load_from_file==True:
-        with open(yamlfile_spec, 'r') as stream:
-            specdict = yaml.load(stream)
-        with open(yamlfile_size, 'r') as stream:
-            sizedict = yaml.load(stream)
-        m_sw=sizedict['sarsamp_m_sw']
-        m_sw_arr=sizedict['sarsamp_m_sw_arr']
-        m_inbuf_list=sizedict['sarsamp_m_inbuf_list']
-        m_outbuf_list=sizedict['sarsamp_m_outbuf_list']
+    
+    #parameters
+    m_sw=4
+    m_sw_arr=6
+    m_inbuf_list=[16, 24]
+    m_outbuf_list=[8, 32]
+    m_space_sw=[2, 0, 0]
+    m_space_buf=[0, 0, 0]
     samp_cellname='nsw_wovdd_'+str(m_sw)+'x'
     inbuf_cellname_list=['inv_'+str(i)+'x' for i in m_inbuf_list]
     outbuf_cellname_list=['inv_'+str(i)+'x' for i in m_outbuf_list]
 
-    #body cell generation (2 step)
+    #cell generation
+    mycell_list = []
+
+    #body cell generation
     cellname='sarsamp_body' 
     print(cellname+" generating")
     mycell_list.append(cellname)
-    # 1. generate without spacing
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
-    generate_samp_body(laygen, objectname_pfix='SW0', templib_logic=logictemplib, 
+    generate_samp_body(laygen, objectname_pfix='SW0', 
+                       templib_logic=logictemplib, 
                        placement_grid=pg,
                        routing_grid_m2m3=rg23,
                        routing_grid_m3m4=rg34,
@@ -447,42 +440,19 @@ if __name__ == '__main__':
                        samp_m=m_sw_arr,
                        space_cellname_list=['space_wovdd_4x', 'space_wovdd_2x', 'space_wovdd_1x'],
                        tap_cellname='tap_wovdd',
-                       space_m_list=[0, 0, 0],
-                       tap_m_list=[4, 4],
-                       origin=np.array([0, 0]))
-    laygen.add_template_from_cell()
-    # 2. calculate spacing param and regenerate
-    x0 = laygen.templates.get_template('sarafe_nsw', libname=workinglib).xy[1][0] \
-         - laygen.templates.get_template(cellname, libname=workinglib).xy[1][0] \
-         - laygen.templates.get_template('nmos4_fast_left').xy[1][0]*2
-    m_space = int(round(x0 / laygen.templates.get_template('space_1x', libname=logictemplib).xy[1][0]))
-    m_space = int(m_space/2) #double space cells
-    m_space_4x = int(m_space / 4)
-    m_space_2x = int((m_space - m_space_4x * 4) / 2)
-    m_space_1x = int(m_space - m_space_4x * 4 - m_space_2x * 2)
-    laygen.add_cell(cellname)
-    laygen.sel_cell(cellname)
-    generate_samp_body(laygen, objectname_pfix='SW0', templib_logic=logictemplib, 
-                       placement_grid=pg,
-                       routing_grid_m2m3=rg23,
-                       routing_grid_m3m4=rg34,
-                       samp_cellname=samp_cellname,
-                       samp_m=m_sw_arr,
-                       space_cellname_list=['space_wovdd_4x', 'space_wovdd_2x', 'space_wovdd_1x'],
-                       tap_cellname='tap_wovdd',
-                       space_m_list=[m_space_4x, m_space_2x, m_space_1x],
+                       space_m_list=m_space_sw,
                        tap_m_list=[4, 4],
                        origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 
-    #buffer cell generation (2 step)
+    #buffer cell generation
     cellname='sarsamp_buf' 
     print(cellname+" generating")
     mycell_list.append(cellname)
-    # 1. generate without spacing
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
-    generate_samp_buffer(laygen, objectname_pfix='BUF0', templib_logic=logictemplib, 
+    generate_samp_buffer(laygen, objectname_pfix='BUF0', 
+                         templib_logic=logictemplib, 
                          placement_grid=pg,
                          routing_grid_m2m3=rg23,
                          routing_grid_m3m4=rg34, 
@@ -490,30 +460,7 @@ if __name__ == '__main__':
                          outbuf_cellname_list=outbuf_cellname_list,
                          space_cellname_list=['space_4x', 'space_2x', 'space_1x'],
                          tap_cellname='tap',
-                         space_m_list=[0, 0, 0],
-                         tap_m_list=[4, 4],
-                         origin=np.array([0, 0]))
-    laygen.add_template_from_cell()
-    # 2. calculate spacing param and regenerate
-    x0 = laygen.templates.get_template('sarafe_nsw', libname=workinglib).xy[1][0] \
-         - laygen.templates.get_template(cellname, libname=workinglib).xy[1][0] \
-         - laygen.templates.get_template('nmos4_fast_left').xy[1][0]*2
-    m_space = int(round(x0 / laygen.templates.get_template('space_1x', libname=logictemplib).xy[1][0]))
-    m_space = int(m_space/2) #double space cells
-    m_space_4x = int(m_space / 4)
-    m_space_2x = int((m_space - m_space_4x * 4) / 2)
-    m_space_1x = int(m_space - m_space_4x * 4 - m_space_2x * 2)
-    laygen.add_cell(cellname)
-    laygen.sel_cell(cellname)
-    generate_samp_buffer(laygen, objectname_pfix='BUF0', templib_logic=logictemplib, 
-                         placement_grid=pg,
-                         routing_grid_m2m3=rg23,
-                         routing_grid_m3m4=rg34, 
-                         inbuf_cellname_list=inbuf_cellname_list,
-                         outbuf_cellname_list=outbuf_cellname_list,
-                         space_cellname_list=['space_4x', 'space_2x', 'space_1x'],
-                         tap_cellname='tap',
-                         space_m_list=[m_space_4x, m_space_2x, m_space_1x],
+                         space_m_list=m_space_buf,
                          tap_m_list=[4, 4],
                          origin=np.array([0, 0]))
     laygen.add_template_from_cell()
@@ -522,10 +469,11 @@ if __name__ == '__main__':
     cellname='sarsamp' 
     print(cellname+" generating")
     mycell_list.append(cellname)
-    # 1. generate without spacing
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
-    generate_samp(laygen, objectname_pfix='SAMP0', workinglib=workinglib, placement_grid=pg,
+    generate_samp(laygen, objectname_pfix='SAMP0', 
+                  workinglib=workinglib, 
+                  placement_grid=pg,
                   routing_grid_m4m5=rg45bt, 
                   power_grid_m3m4=rg34bt, 
                   power_grid_m4m5=rg45t,
@@ -533,16 +481,11 @@ if __name__ == '__main__':
                   origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 
-
+    #save template database to file
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)
-    #bag export, if bag does not exist, gds export
-    import imp
-    try:
-        imp.find_module('bag')
-        import bag
-        prj = bag.BagProject()
-        for mycell in mycell_list:
-            laygen.sel_cell(mycell)
-            laygen.export_BAG(prj, array_delimiter=['[', ']'])
-    except ImportError:
-        laygen.export_GDS('output.gds', cellname=mycell_list, layermapfile=tech+".layermap")  # change layermapfile
+
+    #export to bag
+    prj = bag.BagProject()
+    for mycell in mycell_list:
+        laygen.sel_cell(mycell)
+        laygen.export_BAG(prj, array_delimiter=['[', ']'])

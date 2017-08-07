@@ -351,19 +351,21 @@ class Instance(LayoutObject):
         self.spacing = self.trim(spacing)
         self.transform = transform
         self.template = template
-        self.elements = []
+        self.elements = np.array([])
         #create subelement list
         if not np.all(shape==np.array([1, 1])):
+            elements=[]
             for i in range(shape[0]):
-                self.elements.append([])
+                elements.append([])
                 for j in range(shape[1]):
                     _xy=xy+np.dot(spacing*np.array([i, j]), ut.Mt(transform).T)
                     inst=Instance(name=name, res=res, xy=_xy, 
                                   libname=libname, cellname=cellname, shape=[1, 1], spacing=[0, 0],
                                   transform=transform, template=template)
-                    self.elements[i].append(inst)
+                    elements[i].append(inst)
+            self.elements=np.array(elements)
         else:
-            self.elements=[[self]]
+            self.elements=np.array([[self]])
         if not template is None:
             #create pin dictionary
             self.pins = dict()

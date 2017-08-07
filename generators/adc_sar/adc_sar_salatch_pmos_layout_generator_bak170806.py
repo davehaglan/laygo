@@ -108,25 +108,21 @@ def generate_tap(laygen, objectname_pfix, placement_grid, routing_grid_m1m2_thic
 
     #power route
     laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg12t,
-                 refobj0=itap0.elements[0, 0].pins['TAP0'], refobj1=itap0.elements[m-1, 0].pins['TAP1'])
+                 refobj0=itap0.elements[0][0].pins['TAP0'], refobj1=itap0.elements[m-1][0].pins['TAP1'])
     laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12t,
-                 refobj0=itap0.elements[0, 0].pins['TAP0'], refobj1=itap0.elements[m-1, 0].pins['TAP1'])
+                 refobj0=itap0.elements[0][0].pins['TAP0'], refobj1=itap0.elements[m-1][0].pins['TAP1'])
     for i in range(0, m, 2):
-        laygen.via(name=None, xy=[0, 1], refobj=itap0.elements[i, 0].pins['TAP0'], gridname=rg12t)
-        laygen.via(name=None, xy=[0, 0], refobj=itap0.elements[i, 0].pins['TAP1'], gridname=rg12t)
+        laygen.via(name=None, xy=[0, 1], refobj=itap0.elements[i][0].pins['TAP0'], gridname=rg12t)
+        laygen.via(name=None, xy=[0, 0], refobj=itap0.elements[i][0].pins['TAP1'], gridname=rg12t)
     if m%2==0:
-        laygen.via(name=None, xy=[0, 1], refobj=itap0.elements[m-1, 0].pins['TAP1'], gridname=rg12t)
+        laygen.via(name=None, xy=[0, 1], refobj=itap0.elements[m-1][0].pins['TAP1'], gridname=rg12t)
     if double_rail==True: #make 2-track rail
         laygen.route(name=None, xy0=[0, -1], xy1=[0, -1], gridname0=rg12t,
-                     refobj0=itap0.elements[0, 0].pins['TAP0'], refobj1=itap0.elements[m-1, 0].pins['TAP1'])
-        for i in range(0, m, 2):
-            laygen.route(None, xy0=np.array([0, -1]), xy1=np.array([0, 1]), gridname0=rg12t,
-                         refobj0=itap0.elements[i, 0].pins['TAP0'], refobj1=itap0.elements[i, 0].pins['TAP0'])
-            laygen.via(None, np.array([0, -1]), refobj=itap0.elements[i, 0].pins['TAP0'], gridname=rg12t)
-        if m%2==0:
-            laygen.route(None, xy0=np.array([0, -1]), xy1=np.array([0, 1]), gridname0=rg12t,
-                         refobj0=itap0.elements[m-1, 0].pins['TAP1'], refobj1=itap0.elements[m-1, 0].pins['TAP1'])
-            laygen.via(name=None, xy=[0, -1], refobj=itap0.elements[m-1, 0].pins['TAP1'], gridname=rg12t)
+                     refobj0=itap0.elements[0][0].pins['TAP0'], refobj1=itap0.elements[m-1][0].pins['TAP1'])
+        for i in range(0, int(m/2)+1):
+            laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, -1]), xy1=np.array([0, 1]), gridname0=rg12t,
+                         refobj0=itap0.elements[2*i][0].pins['TAP0'], refobj1=itap0.elements[2*i][0].pins['TAP0']))
+            laygen.via(None, np.array([0, 1]), refinstname=itap0.elements[2*i][-1].pins['TAP0'], gridname=rg12t)
     return [itapbl0, itap0, itapbr0]
 
 def generate_mos(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, devname_mos_boundary, devname_mos_body,
