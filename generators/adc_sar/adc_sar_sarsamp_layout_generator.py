@@ -64,24 +64,24 @@ def generate_samp_body(laygen, objectname_pfix, templib_logic,
     isamp=[]
     # placement
     # left tap
-    itap.append(laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, refinstname=None, 
+    itap.append(laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, 
                                 direction='right', shape=[tap_m_list[0], 1], template_libname=templib_logic, transform='R0'))
     # left space
-    isp.append(laygen.relplace(name=None, templatename=space_cellname_list, gridname=pg, refinstname=itap[-1].name, 
+    isp.append(laygen.relplace(name=None, templatename=space_cellname_list, gridname=pg, refobj=itap[-1], 
                                direction=['right']*len(space_cellname_list), shape=[[i, 1] for i in space_m_list], 
                                template_libname=templib_logic, transform='R0'))
     # left switch
-    isamp.append(laygen.relplace(name=None, templatename=samp_cellname, gridname=pg, refinstname=isp[-1][-1].name, 
+    isamp.append(laygen.relplace(name=None, templatename=samp_cellname, gridname=pg, refobj=isp[-1][-1], 
                                  direction='right', shape=[samp_m, 1], template_libname=templib_logic, transform='R0'))
     # right switch
-    isamp.append(laygen.relplace(name=None, templatename=samp_cellname, gridname=pg, refinstname=isamp[-1].name, 
+    isamp.append(laygen.relplace(name=None, templatename=samp_cellname, gridname=pg, refobj=isamp[-1], 
                                  direction='right', shape=[samp_m, 1], template_libname=templib_logic, transform='MY'))
     # right space
-    isp.append(laygen.relplace(name=None, templatename=list(reversed(space_cellname_list)), gridname=pg, refinstname=isamp[-1].name, 
+    isp.append(laygen.relplace(name=None, templatename=list(reversed(space_cellname_list)), gridname=pg, refobj=isamp[-1], 
                                direction=['right']*len(space_cellname_list), shape=[[i, 1] for i in list(reversed(space_m_list))], 
                                template_libname=templib_logic, transform='R0'))
     # right tap
-    itap.append(laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, refinstname=isp[-1][-1].name, 
+    itap.append(laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, refobj=isp[-1][-1], 
                                 direction='right', shape=[tap_m_list[0], 1], template_libname=templib_logic, transform='R0'))
     
     # signal routes
@@ -108,7 +108,7 @@ def generate_samp_body(laygen, objectname_pfix, templib_logic,
             routes[p].append(laygen.route(name=None, xy0=[_x[0],_y], xy1=[_x[1],_y], gridname0=rg34)) 
         for p, _y in zip(pins_diff+pins_se, np.concatenate((y_diff,y_se))):
             for i in range(samp_m): #vertical M3 + via
-                laygen.route(name=None, xy0=[0, 0], xy1=[_x[0],_y], refobj0=_isamp.pins[p], refobjindex0=[i, 0], 
+                laygen.route(name=None, xy0=[0, 0], xy1=[_x[0],_y], refobj0=_isamp.elements[i, 0].pins[p], 
                              gridname0=rg34, direction='y', via1=[0, 0]) 
     # signal pins 
     for p in pins_diff:
@@ -155,24 +155,24 @@ def generate_samp_buffer(laygen, objectname_pfix, templib_logic,
     ioutbuf=[]
     # placement
     # left tap
-    itap.append(laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, refinstname=None, 
+    itap.append(laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, 
                                 direction='right', shape=[tap_m_list[0], 1], template_libname=templib_logic, transform='R0'))
     # left space
-    isp.append(laygen.relplace(name=None, templatename=space_cellname_list, gridname=pg, refinstname=itap[-1].name, 
+    isp.append(laygen.relplace(name=None, templatename=space_cellname_list, gridname=pg, refobj=itap[-1], 
                                direction=['right']*len(space_cellname_list), shape=[[i, 1] for i in space_m_list], 
                                template_libname=templib_logic, transform='R0'))
     # inbuf buffer
-    iinbuf=laygen.relplace(name=None, templatename=inbuf_cellname_list, gridname=pg, refinstname=isp[-1][-1].name, 
+    iinbuf=laygen.relplace(name=None, templatename=inbuf_cellname_list, gridname=pg, refobj=isp[-1][-1], 
                            direction='right', template_libname=templib_logic, transform='R0')
     # right switch
-    ioutbuf=laygen.relplace(name=None, templatename=outbuf_cellname_list, gridname=pg, refinstname=iinbuf[-1].name, 
+    ioutbuf=laygen.relplace(name=None, templatename=outbuf_cellname_list, gridname=pg, refobj=iinbuf[-1], 
                             direction='right', template_libname=templib_logic, transform='R0')
     # right space
-    isp.append(laygen.relplace(name=None, templatename=list(reversed(space_cellname_list)), gridname=pg, refinstname=ioutbuf[-1].name, 
+    isp.append(laygen.relplace(name=None, templatename=list(reversed(space_cellname_list)), gridname=pg, refobj=ioutbuf[-1], 
                                direction=['right']*len(space_cellname_list), shape=[[i, 1] for i in list(reversed(space_m_list))], 
                                template_libname=templib_logic, transform='R0'))
     # right tap
-    itap.append(laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, refinstname=isp[-1][-1].name, 
+    itap.append(laygen.relplace(name=None, templatename=tap_cellname, gridname=pg, refobj=isp[-1][-1], 
                                 direction='right', shape=[tap_m_list[0], 1], template_libname=templib_logic, transform='R0'))
     
     # signal routes
@@ -246,7 +246,7 @@ def generate_samp(laygen, objectname_pfix, workinglib,
     # sampler body
     isamp = laygen.relplace(name=None, templatename='sarsamp_body', gridname=pg, template_libname=workinglib, transform='R0', xy=core_origin)
     # clock buffer
-    ibuf = laygen.relplace(name=None, templatename='sarsamp_buf', gridname=pg, refinstname=isamp.name,
+    ibuf = laygen.relplace(name=None, templatename='sarsamp_buf', gridname=pg, refobj=isamp,
                            direction='top', template_libname=workinglib, transform='R0')
     # boundaries
     m_bnd = int(laygen.get_template_size('sarsamp_body', gridname=pg, libname=workinglib)[0]/laygen.get_template_size('boundary_bottom', gridname=pg)[0])
@@ -434,10 +434,10 @@ if __name__ == '__main__':
             specdict = yaml.load(stream)
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
-        m_sw=sizedict['sarsamp_m_sw']
-        m_sw_arr=sizedict['sarsamp_m_sw_arr']
-        m_inbuf_list=sizedict['sarsamp_m_inbuf_list']
-        m_outbuf_list=sizedict['sarsamp_m_outbuf_list']
+        m_sw=sizedict['sarsamp']['m_sw']
+        m_sw_arr=sizedict['sarsamp']['m_sw_arr']
+        m_inbuf_list=sizedict['sarsamp']['m_inbuf_list']
+        m_outbuf_list=sizedict['sarsamp']['m_outbuf_list']
     samp_cellname='nsw_wovdd_'+str(m_sw)+'x'
     inbuf_cellname_list=['inv_'+str(i)+'x' for i in m_inbuf_list]
     outbuf_cellname_list=['inv_'+str(i)+'x' for i in m_outbuf_list]

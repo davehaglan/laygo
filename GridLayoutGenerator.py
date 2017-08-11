@@ -602,7 +602,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                         refpinname=refpinname1, transform=transform1)
         #layer handling
         if layer is None:
-            if xy0_phy_center[0] == xy1_phy_center[0]:
+            #if xy0_phy_center[0] == xy1_phy_center[0]: #not accurate enough..
+            if int(round(xy0_phy_center[0]/self.res)) == int(round(xy1_phy_center[0]/self.res)):
                 layer = self.grids.get_route_xlayer_xy(gridname0, _xy0)
             else:
                 layer = self.grids.get_route_ylayer_xy(gridname0, _xy0)

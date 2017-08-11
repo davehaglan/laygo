@@ -10,35 +10,35 @@ import yaml
 import matplotlib.pyplot as plt
 
 lib_name = 'adc_sar_templates'
-cell_name = 'salatch_pmos'
+cell_name = 'sarsamp'
 impl_lib = 'adc_sar_generated'
 #tb_lib = 'adc_sar_testbenches'
-tb_cell = 'salatch_pmos_tb_tran'
-tb_noise_cell = 'salatch_pmos_tb_trannoise'
+tb_cell = 'sarsamp_tb_ac'
+#tb_noise_cell = 'salatch_pmos_tb_trannoise'
 
 #spec
 cload=60e-15
-vamp_tran=1e-3
-vamp_noise=1e-3
+cckload=60e-15
 vcm=0.15
 vdd=0.8
+vck=0.8
 #corners=['tt', 'ff', 'ss']
 corners=['tt'] #, 'ff', 'ss']
 
 verify_lvs = False
 extracted_calibre = False
 extracted_pvs = True
-verify_tran = True
+verify_ac = True
 verify_noise = False
 
 params = dict(
     lch=16e-9,
     pw=4,
     nw=4,
-    m=8, #larger than 8, even number
-    m_rst=4,
-    m_rgnn=4,
-    m_buf=8,
+    m_sw=4,
+    m_sw_arr=6,
+    m_inbuf_list=[16, 24],
+    m_outbuf_list=[8, 32],
     device_intent='fast',
     )
 
@@ -56,14 +56,15 @@ if load_from_file==True:
         sizedict = yaml.load(stream)
     with open(yamlfile_output, 'r') as stream:
         outdict = yaml.load(stream)
-    vamp_tran=outdict['system']['v_bit']/2
-    vamp_noise=outdict['system']['v_comp_noise']/2
     vincm=specdict['v_in_cm']
     vdd=specdict['vdd']
-    params['m']=sizedict['salatch']['m']
-    params['m_rst']=sizedict['salatch']['m_rst']
-    params['m_rgnn']=sizedict['salatch']['m_rgnn']
-    params['m_buf']=sizedict['salatch']['m_buf']
+    vck=specdict['vdd']
+    cload=sizedict['capdac']['c_m']*(2**(specdict['n_bit']-1))*specdict['c_unit']
+    fbw_target=specdict['fbw_samp']
+    params['m_sw']=sizedict['sarsamp']['m_sw']
+    params['m_sw_arr']=sizedict['sarsamp']['m_sw_arr']
+    params['m_inbuf_list']=sizedict['sarsamp']['m_inbuf_list']
+    params['m_outbuf_list']=sizedict['sarsamp']['m_outbuf_list']
     params['lch']=sizedict['lch']
     params['pw']=sizedict['pw']
     params['nw']=sizedict['nw']
@@ -82,7 +83,7 @@ if verify_lvs==True:
     print('lvs passed')
 
 # transient test
-if verify_tran==True:
+if verify_ac==True:
     #hotfix: remove orig_state
     prj.impl_db._eval_skill('delete_cellview( "%s" "%s" "%s" )' % (impl_lib, tb_cell, 'orig_state'))
 
@@ -94,14 +95,13 @@ if verify_tran==True:
     tb_dsn.implement_design(impl_lib, top_cell_name=tb_cell, erase=True)
     tb = prj.configure_testbench(impl_lib, tb_cell)
     tb.set_parameter('cload', cload)
-    tb.set_parameter('vamp', vamp_tran)
+    tb.set_parameter('vck', vck)
     tb.set_parameter('vcm', vincm)
     tb.set_parameter('vdd', vdd)
+    tb.set_parameter('fmax', fbw_target*10)
 
     tb.set_simulation_environments(corners)
-
-    tb.add_output("outdm_tran", """getData("/OUTDM" ?result 'tran)""")
-    tb.add_output("clkb_tran", """getData("/CLKB" ?result 'tran)""")
+    tb.add_output("outdm_ac", """getData("/OUTDM" ?result 'ac)""")
 
     if extracted_calibre:
         tb.set_simulation_view(impl_lib, cell_name, 'calibre')
@@ -116,64 +116,28 @@ if verify_tran==True:
     print('loading results')
     results = bag.data.load_sim_results(tb.save_dir)
 
-    vout = results["outdm_tran"]
-    clkbout = results["clkb_tran"]
-    tvec = results['time']
+    vout = results["outdm_ac"]
+    fbw = results["fbw"]
+    fvec = results['freq']
     plt.figure(1)
     plt.hold(True)
     if len(corners)==1:
-        clkbout = [clkbout]
         vout = [vout]
-    vvec = clkbout[0][:]
-    plt.plot(tvec, vvec, label='clkb')
     for i, c in enumerate(corners):
         vvec = vout[i][:]
-        plt.plot(tvec, vvec, label=c)
+        plt.plot(fvec, vvec, label=c)
     plt.legend()
     plt.show(block=False)
 
-    print('t_ckq:'+str(results['tckq']))
-    print('q_samp_fF:'+str(results['q_samp_fF']))
+    print('fbw:'+str(results['fbw']))
 
     if save_to_file==True:
         with open(yamlfile_output, 'r') as stream:
             outdict = yaml.load(stream)
         if len(corners)==1:
-            outdict['salatch']['t_ckq']=float(results['tckq'])
-            outdict['salatch']['q_samp_fF']=float(results['q_samp_fF'])
-            #outdict['scratch']['t_ckq'].append(float(results['tckq']))
-            #outdict['scratch']['q_samp_fF'].append(float(results['q_samp_fF']))
+            outdict['sarsamp']['fbw']=float(results['fbw'])
         else:
-            outdict['salatch']['t_ckq']=float(results['tckq'][0])
-            outdict['salatch']['q_samp_fF']=float(results['q_samp_fF'][0])
-            #outdict['scratch']['t_ckq'].append(float(results['tckq'][0]))
-            #outdict['scratch']['q_samp_fF'].append(float(results['q_samp_fF'][0]))
+            outdict['sarsamp']['fbw']=float(results['fbw'][0])
         with open(yamlfile_output, 'w') as stream:
             yaml.dump(outdict, stream)
 
-# transient noise test
-if verify_noise==True:
-    print('creating testbench %s__%s' % (impl_lib, tb_noise_cell))
-    #tb_noise = prj.create_testbench(tb_lib, tb_noise_cell, impl_lib, cell_name, impl_lib)
-    tb_noise_dsn = prj.create_design_module(lib_name, tb_noise_cell)
-    tb_noise_dsn.design(**params)
-    tb_noise_dsn.implement_design(impl_lib, top_cell_name=tb_noise_cell, erase=True)
-    tb_noise = prj.configure_testbench(impl_lib, tb_noise_cell)
-    tb_noise.set_parameter('cload', cload)
-    tb_noise.set_parameter('vamp', vamp_noise)
-    tb_noise.set_parameter('vcm', vincm)
-    tb_noise.set_parameter('vdd', vdd)
-
-    tb_noise.set_simulation_environments(corners)
-
-    if extracted:
-        tb_noise.set_simulation_view(impl_lib, cell_name, 'calibre')
-
-    tb_noise.update_testbench()
-
-    print('running simulation')
-    tb_noise.run_simulation()
-
-    print('loading results')
-    results = bag.data.load_sim_results(tb_noise.save_dir)
-    print('0/1 ratio (0.841 for 1sigma):'+str(results['zero_one_ratio']))

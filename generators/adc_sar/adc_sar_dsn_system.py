@@ -7,8 +7,9 @@ import numpy as np
 import yaml
 from math import log10
 
+save_to_file=True
 yamlfile_input="adc_sar_spec.yaml"         #given spec
-yamlfile_output="adc_sar_spec_output.yaml" #derived spec
+yamlfile_output="adc_sar_output.yaml" #derived spec
 #load spec
 with open(yamlfile_input, 'r') as stream:
     specdict = yaml.load(stream)
@@ -97,12 +98,15 @@ enob=(sndr-1.76)/6.02
 print("enob without BW limitation and redundancy", enob)
 
 #write to file
-outdict=dict()
-outdict['v_bit']=v_bit
-outdict['v_comp_noise']=v_comp_noise
-outdict['t_comp']=t_comp
-outdict['t_logic']=t_logic
-outdict['t_dac']=t_dac
-outdict['c_m_new']=c_m_new
-with open(yamlfile_output, 'w') as stream:
-    yaml.dump(outdict, stream)
+if save_to_file==True:
+    with open(yamlfile_output, 'r') as stream:
+        outdict = yaml.load(stream)
+    outdict['system']['v_bit']=v_bit
+    outdict['system']['v_comp_noise']=v_comp_noise
+    outdict['system']['t_comp']=t_comp
+    outdict['system']['t_logic']=t_logic
+    outdict['system']['t_dac']=t_dac
+    outdict['system']['c_m']=c_m_new
+    #outdict['c_m_new']=c_m_new
+    with open(yamlfile_output, 'w') as stream:
+        yaml.dump(outdict, stream)

@@ -94,7 +94,7 @@ def generate_boundary(laygen, objectname_pfix, placement_grid,
     return [dev_bottom, dev_top, dev_left, dev_right]
 
 def generate_tap(laygen, objectname_pfix, placement_grid, routing_grid_m1m2_thick, devname_tap_boundary, devname_tap_body,
-                 m=1, origin=np.array([0,0]), double_rail=False, transform='R0'):
+                 m=1, origin=np.array([0,0]), extend_rail=False, transform='R0'):
     """generate a tap primitive"""
     pg = placement_grid
     rg12t = routing_grid_m1m2_thick
@@ -105,298 +105,225 @@ def generate_tap(laygen, objectname_pfix, placement_grid, routing_grid_m1m2_thic
                              gridname=pg, xy=[origin, [0, 0], [0, 0]], shape=[[1, 1], [m, 1], [1, 1]], 
                              transform=transform)
     itapbl0, itap0, itapbr0 = taprow
+    td=itap0.elements[:, 0]
 
     #power route
     laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg12t,
-                 refobj0=itap0.elements[0, 0].pins['TAP0'], refobj1=itap0.elements[m-1, 0].pins['TAP1'])
+                 refobj0=td[0].pins['TAP0'], refobj1=td[-1].pins['TAP1'])
     laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12t,
-                 refobj0=itap0.elements[0, 0].pins['TAP0'], refobj1=itap0.elements[m-1, 0].pins['TAP1'])
-    for i in range(0, m, 2):
-        laygen.via(name=None, xy=[0, 1], refobj=itap0.elements[i, 0].pins['TAP0'], gridname=rg12t)
-        laygen.via(name=None, xy=[0, 0], refobj=itap0.elements[i, 0].pins['TAP1'], gridname=rg12t)
-    if m%2==0:
-        laygen.via(name=None, xy=[0, 1], refobj=itap0.elements[m-1, 0].pins['TAP1'], gridname=rg12t)
-    if double_rail==True: #make 2-track rail
+                 refobj0=td[0].pins['TAP0'], refobj1=td[-1].pins['TAP1'])
+    key=1
+    for _td in td:
+        laygen.via(name=None, xy=[0, key], refobj=_td.pins['TAP0'], gridname=rg12t)
+        key=1-key
+    laygen.via(name=None, xy=[0, key], refobj=td[-1].pins['TAP1'], gridname=rg12t)
+    if extend_rail==True: #extend rail for better power integrity
         laygen.route(name=None, xy0=[0, -1], xy1=[0, -1], gridname0=rg12t,
-                     refobj0=itap0.elements[0, 0].pins['TAP0'], refobj1=itap0.elements[m-1, 0].pins['TAP1'])
-        for i in range(0, m, 2):
-            laygen.route(None, xy0=np.array([0, -1]), xy1=np.array([0, 1]), gridname0=rg12t,
-                         refobj0=itap0.elements[i, 0].pins['TAP0'], refobj1=itap0.elements[i, 0].pins['TAP0'])
-            laygen.via(None, np.array([0, -1]), refobj=itap0.elements[i, 0].pins['TAP0'], gridname=rg12t)
-        if m%2==0:
-            laygen.route(None, xy0=np.array([0, -1]), xy1=np.array([0, 1]), gridname0=rg12t,
-                         refobj0=itap0.elements[m-1, 0].pins['TAP1'], refobj1=itap0.elements[m-1, 0].pins['TAP1'])
-            laygen.via(name=None, xy=[0, -1], refobj=itap0.elements[m-1, 0].pins['TAP1'], gridname=rg12t)
+                     refobj0=td[0].pins['TAP0'], refobj1=td[-1].pins['TAP1'])
+        for _td in td[::2]:
+            laygen.route(None, xy0=[0, -1], xy1=[0, 1], gridname0=rg12t, refobj0=_td.pins['TAP0'], refobj1=_td.pins['TAP0'])
+            laygen.via(None, [0, -1], refobj=_td.pins['TAP0'], gridname=rg12t)
+        laygen.route(None, xy0=[0, -1], xy1=[0, 1], gridname0=rg12t, refobj0=td[-1].pins['TAP1'], refobj1=td[-1].pins['TAP1'])
+        laygen.via(None, [0, -1], refobj=td[-1].pins['TAP1'], gridname=rg12t)
     return [itapbl0, itap0, itapbr0]
 
 def generate_mos(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, devname_mos_boundary, devname_mos_body,
                  devname_mos_dmy, m=1, m_dmy=0, origin=np.array([0,0])):
     """generate a analog mos primitive with dummies"""
     pg = placement_grid
-    rg_m1m2 = routing_grid_m1m2
+    rg12 = routing_grid_m1m2
+    pfix = objectname_pfix
 
     # placement
+    imbl0 = laygen.relplace(name="I" + pfix + 'BL0', templatename=devname_mos_boundary, gridname=pg, xy=origin)
+    refi=imbl0
     if not m_dmy==0:
-        imbl0 = laygen.place("I" + objectname_pfix + 'BL0', devname_mos_boundary, pg, xy=origin)
-        imdmyl0 = laygen.relplace("I" + objectname_pfix + 'DMYL0', devname_mos_dmy, pg, imbl0.name, shape=np.array([m_dmy, 1]))
-        im0 = laygen.relplace("I" + objectname_pfix + '0', devname_mos_body, pg, imdmyl0.name, shape=np.array([m, 1]))
-        imdmyr0 = laygen.relplace("I" + objectname_pfix + 'DMYR0', devname_mos_dmy, pg, im0.name, shape=np.array([m_dmy, 1]))
-        imbr0 = laygen.relplace("I" + objectname_pfix + 'BR0', devname_mos_boundary, pg, imdmyr0.name)
+        imdmyl0 = laygen.relplace(name="I" + pfix + 'DMYL0', templatename=devname_mos_dmy, gridname=pg, refobj=refi, shape=[m_dmy, 1])
+        refi=imdmyl0
     else:
-        imbl0 = laygen.place("I" + objectname_pfix + 'BL0', devname_mos_boundary, pg, xy=origin)
         imdmyl0 = None
-        im0 = laygen.relplace("I" + objectname_pfix + '0', devname_mos_body, pg, imbl0.name, shape=np.array([m, 1]))
+    im0 = laygen.relplace(name="I" + pfix + '0', templatename=devname_mos_body, gridname=pg, refobj=refi, shape=[m, 1])
+    refi=im0
+    if not m_dmy==0:
+        imdmyr0 = laygen.relplace(name="I" + pfix + 'DMYR0', templatename=devname_mos_dmy, gridname=pg, refobj=refi, shape=[m_dmy, 1])
+        refi=imdmyr0
+    else:
         imdmyr0 = None
-        imbr0 = laygen.relplace("I" + objectname_pfix + 'BR0', devname_mos_boundary, pg, im0.name)
+    imbr0 = laygen.relplace(name="I" + pfix + 'BR0', templatename=devname_mos_boundary, gridname=pg, refobj=imdmyr0)
+    md=im0.elements[:, 0]
     #route
     #gate
-    rg0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=im0.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
-                      refinstname1=im0.name, refpinname1='G0', refinstindex1=np.array([m-1, 0])
-                      )
-    for i in range(m):
-        laygen.via(None, np.array([0, 0]), refinstname=im0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
+    rg0=laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=md[0].pins['G0'], refobj1=md[-1].pins['G0'])
+    for _md in md:
+        laygen.via(name=None, xy=[0, 0], refobj=_md.pins['G0'], gridname=rg12)
     #drain
-    rdl0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 1]), xy1=np.array([0, 1]), gridname0=rg_m1m2,
-                      refinstname0=im0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
-                      refinstname1=im0.name, refpinname1='D0', refinstindex1=np.array([m-1, 0])
-                      )
-    for i in range(m):
-        laygen.via(None, np.array([0, 1]), refinstname=im0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
+    rdl0=laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg12, refobj0=md[0].pins['D0'], refobj1=md[-1].pins['D0'])
+    for _md in md:
+        laygen.via(name=None, xy=[0, 1], refobj=_md.pins['D0'], gridname=rg12)
     #source
-    rs0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=im0.name, refpinname0='S0', refinstindex0=np.array([0, 0]),
-                      refinstname1=im0.name, refpinname1='S1', refinstindex1=np.array([m-1, 0])
-                      )
-    for i in range(m):
-        laygen.via(None, np.array([0, 0]), refinstname=im0.name, refpinname='S0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-    laygen.via(None, np.array([0, 0]), refinstname=im0.name, refpinname='S1', refinstindex=np.array([m - 1, 0]), gridname=rg_m1m2)
+    rs0=laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=md[0].pins['S0'], refobj1=md[-1].pins['S1'])
+    for _md in md:
+        laygen.via(name=None, xy=[0, 0], refobj=_md.pins['S0'], gridname=rg12)
+    laygen.via(name=None, xy=[0, 0], refobj=md[-1].pins['S1'], gridname=rg12)
     #dmy
     if m_dmy>=2:
-        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 1]), xy1=np.array([0, 1]), gridname0=rg_m1m2,
-                      refinstname0=imdmyl0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imdmyl0.name, refpinname1='D0', refinstindex1=np.array([m_dmy-1, 0])
-                      )
-        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 1]), xy1=np.array([0, 1]), gridname0=rg_m1m2,
-                      refinstname0=imdmyr0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imdmyr0.name, refpinname1='D0', refinstindex1=np.array([m_dmy-1, 0])
-                      )
-        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=imdmyl0.name, refpinname0='S0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imdmyl0.name, refpinname1='S0', refinstindex1=np.array([m_dmy-1, 0])
-                      )
-        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=imdmyr0.name, refpinname0='S1', refinstindex0=np.array([0, 0]),
-                      refinstname1=imdmyr0.name, refpinname1='S1', refinstindex1=np.array([m_dmy-1, 0])
-                      )
-        for i in range(m_dmy):
-            laygen.via(None, np.array([0, 1]), refinstname=imdmyl0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-            laygen.via(None, np.array([0, 1]), refinstname=imdmyr0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-            laygen.via(None, np.array([0, 0]), refinstname=imdmyl0.name, refpinname='S0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-            laygen.via(None, np.array([0, 0]), refinstname=imdmyr0.name, refpinname='S1', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-
+        mdmyl=imdmyl0.elements[:, 0]
+        mdmyr=imdmyr0.elements[:, 0]
+        laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg12, refobj0=mdmyl[0].pins['D0'], refobj1=mdmyl[-1].pins['D0'])
+        laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg12, refobj0=mdmyr[0].pins['D0'], refobj1=mdmyr[-1].pins['D0'])
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=mdmyl[0].pins['S0'], refobj1=mdmyl[-1].pins['S1'])
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=mdmyr[0].pins['S0'], refobj1=mdmyr[-1].pins['S1'])
+        for _mdmyl in mdmyl:
+            laygen.via(name=None, xy=[0, 1], refobj=_mdmyl.pins['D0'], gridname=rg12)
+            laygen.via(name=None, xy=[0, 0], refobj=_mdmyl.pins['S0'], gridname=rg12)
+        for _mdmyr in mdmyr:
+            laygen.via(name=None, xy=[0, 1], refobj=_mdmyr.pins['D0'], gridname=rg12)
+            laygen.via(name=None, xy=[0, 0], refobj=_mdmyr.pins['S1'], gridname=rg12)
     return [imbl0, imdmyl0, im0, imdmyr0, imbr0]
 
 def generate_diff_mos_ofst(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, devname_mos_boundary, devname_mos_body,
                       devname_mos_dmy, m=1, m_ofst=2, m_dmy=0, origin=np.array([0,0])):
     """generate an analog differential mos structure with dummmies """
     pg = placement_grid
-    rg_m1m2 = routing_grid_m1m2
+    rg12 = routing_grid_m1m2
+    pfix = objectname_pfix
+
     # placement
+    imbl0 = laygen.relplace(name="I" + pfix + 'BL0', templatename=devname_mos_boundary, gridname=pg, xy=origin)
+    refi=imbl0
     if not m_dmy==0:
-        imbl0 = laygen.place("I" + objectname_pfix + 'BL0', devname_mos_boundary, pg, xy=origin)
-        imdmyl0 = laygen.relplace("I" + objectname_pfix + 'DMYL0', devname_mos_body, pg, imbl0.name, shape=np.array([m_dmy, 1]))
-        imofstl0 = laygen.relplace("I" + objectname_pfix + 'OFST0', devname_mos_body, pg, imdmyl0.name, shape=np.array([m_ofst, 1]))
-        iml0 = laygen.relplace("I" + objectname_pfix + '0', devname_mos_body, pg, imofstl0.name, shape=np.array([m, 1]))
-        imr0 = laygen.relplace("I" + objectname_pfix + '1', devname_mos_body, pg, iml0.name, shape=np.array([m, 1]), transform='MY')
-        imofstr0 = laygen.relplace("I" + objectname_pfix + 'OFST1', devname_mos_body, pg, imr0.name, shape=np.array([m_ofst, 1]), transform='MY')
-        imdmyr0 = laygen.relplace("I" + objectname_pfix + 'DMYR0', devname_mos_body, pg, imofstr0.name, shape=np.array([m_dmy, 1]), transform='MY')
-        imbr0 = laygen.relplace("I" + objectname_pfix + 'BR0', devname_mos_boundary, pg, imdmyr0.name, transform='MY')
+        imdmyl0 = laygen.relplace(name="I" + pfix + 'DMYL0', templatename=devname_mos_body, gridname=pg, refobj=refi, shape=[m_dmy, 1])
+        refi=imdmyl0
     else:
-        imbl0 = laygen.place("I" + objectname_pfix + 'BL0', devname_mos_boundary, pg, xy=origin)
-        imdmyl0 = None
-        imofstl0 = laygen.relplace("I" + objectname_pfix + '0', devname_mos_body, pg, imbl0.name, shape=np.array([m_ofst, 1]))
-        iml0 = laygen.relplace("I" + objectname_pfix + '0', devname_mos_body, pg, imofstl0.name, shape=np.array([m, 1]))
-        imr0 = laygen.relplace("I" + objectname_pfix + '1', devname_mos_body, pg, iml0.name, shape=np.array([m, 1]), transform='MY')
-        imofstr0 = laygen.relplace("I" + objectname_pfix + '1', devname_mos_body, pg, imr0.name, shape=np.array([m_ofst, 1]), transform='MY')
-        imdmyr0 = None
-        imbr0 = laygen.relplace("I" + objectname_pfix + 'BR0', devname_mos_boundary, pg, imofstr0.name, transform='MY')
+        imdmyl0=None
+    imofstl0 = laygen.relplace(name="I" + pfix + 'OFST0', templatename=devname_mos_body, gridname=pg, refobj=refi, shape=[m_ofst, 1])
+    iml0 = laygen.relplace(name="I" + pfix + '0', templatename=devname_mos_body, gridname=pg, refobj=imofstl0, shape=[m, 1])
+    imr0 = laygen.relplace(name="I" + pfix + '1', templatename=devname_mos_body, gridname=pg, refobj=iml0, shape=[m, 1], transform='MY')
+    imofstr0 = laygen.relplace(name="I" + pfix + 'OFST1', templatename=devname_mos_body, gridname=pg, refobj=imr0, shape=[m_ofst, 1], transform='MY')
+    refi=imofstr0
+    if not m_dmy==0:
+        imdmyr0 = laygen.relplace(name="I" + pfix + 'DMYR0', templatename=devname_mos_body, gridname=pg, refobj=imofstr0, shape=[m_dmy, 1], transform='MY')
+        refi=imdmyr0
+    else:
+        imdmyr0=None
+    imbr0 = laygen.relplace(name="I" + pfix + 'BR0', templatename=devname_mos_boundary, gridname=pg, refobj=refi, transform='MY')
+    mdl=iml0.elements[:, 0]
+    mdr=imr0.elements[:, 0]
+    mdol=imofstl0.elements[:, 0]
+    mdor=imofstr0.elements[:, 0]
 
     #route
     #gate
-    rgl0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=iml0.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
-                      refinstname1=iml0.name, refpinname1='G0', refinstindex1=np.array([m-1, 0])
-                      )
-    rgr0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=imr0.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imr0.name, refpinname1='G0', refinstindex1=np.array([m-1, 0])
-                      )
-    for i in range(m):
-        laygen.via(None, np.array([0, 0]), refinstname=iml0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-        laygen.via(None, np.array([0, 0]), refinstname=imr0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
+    rgl0=laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=mdl[0].pins['G0'], refobj1=mdl[-1].pins['G0'])
+    rgr0=laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=mdr[0].pins['G0'], refobj1=mdr[-1].pins['G0'])
+    for _mdl, _mdr in zip(mdl, mdr):
+        laygen.via(name=None, xy=[0, 0], refobj=_mdl.pins['G0'], gridname=rg12)
+        laygen.via(name=None, xy=[0, 0], refobj=_mdr.pins['G0'], gridname=rg12)
     #gate_ofst
-    rgofstl0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=imofstl0.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imofstl0.name, refpinname1='G0', refinstindex1=np.array([m_ofst-1, 0])
-                      )
-    rgofstr0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=imofstr0.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imofstr0.name, refpinname1='G0', refinstindex1=np.array([m_ofst-1, 0])
-                      )
-    for i in range(m_ofst):
-        laygen.via(None, np.array([0, 0]), refinstname=imofstl0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-        laygen.via(None, np.array([0, 0]), refinstname=imofstr0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
+    rgofstl0=laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=mdol[0].pins['G0'], refobj1=mdol[-1].pins['G0'])
+    rgofstr0=laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=mdor[0].pins['G0'], refobj1=mdor[-1].pins['G0'])
+    for _mdol, _mdor in zip(mdol, mdor):
+        laygen.via(name=None, xy=[0, 0], refobj=_mdol.pins['G0'], gridname=rg12)
+        laygen.via(name=None, xy=[0, 0], refobj=_mdor.pins['G0'], gridname=rg12)
     #drain
-    rdl0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 1]), xy1=np.array([0, 1]), gridname0=rg_m1m2,
-                      refinstname0=imofstl0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
-                      refinstname1=iml0.name, refpinname1='D0', refinstindex1=np.array([m-1, 0])
-                      )
-    rdr0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 1]), xy1=np.array([0, 1]), gridname0=rg_m1m2,
-                      refinstname0=imr0.name, refpinname0='D0', refinstindex0=np.array([m-1, 0]),
-                      refinstname1=imofstr0.name, refpinname1='D0', refinstindex1=np.array([0, 0])
-                      )
-    for i in range(m):
-        laygen.via(None, np.array([0, 1]), refinstname=iml0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-        laygen.via(None, np.array([0, 1]), refinstname=imr0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-    for i in range(m_ofst):
-        laygen.via(None, np.array([0, 1]), refinstname=imofstl0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-        laygen.via(None, np.array([0, 1]), refinstname=imofstr0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
+    rdl0=laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg12, refobj0=mdol[0].pins['D0'], refobj1=mdl[-1].pins['D0'])
+    rdr0=laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg12, refobj0=mdr[-1].pins['D0'], refobj1=mdor[0].pins['D0'])
+    for _mdl, _mdr in zip(mdl, mdr):
+        laygen.via(name=None, xy=[0, 1], refobj=_mdl.pins['D0'], gridname=rg12)
+        laygen.via(name=None, xy=[0, 1], refobj=_mdr.pins['D0'], gridname=rg12)
+    for _mdol, _mdor in zip(mdol, mdor):
+        laygen.via(name=None, xy=[0, 1], refobj=_mdol.pins['D0'], gridname=rg12)
+        laygen.via(name=None, xy=[0, 1], refobj=_mdor.pins['D0'], gridname=rg12)
     #source
-    rs0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=imofstl0.name, refpinname0='S0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imofstr0.name, refpinname1='S0', refinstindex1=np.array([0, 0])
-                      )
-    for i in range(m):
-        laygen.via(None, np.array([0, 0]), refinstname=iml0.name, refpinname='S0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-        laygen.via(None, np.array([0, 0]), refinstname=imr0.name, refpinname='S0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-    laygen.via(None, np.array([0, 0]), refinstname=iml0.name, refpinname='S1', refinstindex=np.array([m - 1, 0]), gridname=rg_m1m2)
-    laygen.via(None, np.array([0, 0]), refinstname=imr0.name, refpinname='S1', refinstindex=np.array([m - 1, 0]), gridname=rg_m1m2)
-    for i in range(m_ofst):
-        laygen.via(None, np.array([0, 0]), refinstname=imofstl0.name, refpinname='S0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-        laygen.via(None, np.array([0, 0]), refinstname=imofstr0.name, refpinname='S0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-    laygen.via(None, np.array([0, 0]), refinstname=imofstl0.name, refpinname='S1', refinstindex=np.array([m_ofst - 1, 0]), gridname=rg_m1m2)
-    laygen.via(None, np.array([0, 0]), refinstname=imofstr0.name, refpinname='S1', refinstindex=np.array([m_ofst - 1, 0]), gridname=rg_m1m2)
+    rs0=laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=mdol[0].pins['S0'], refobj1=mdor[0].pins['S0'])
+    for _mdl, _mdr in zip(mdl, mdr):
+        laygen.via(name=None, xy=[0, 0], refobj=_mdl.pins['S0'], gridname=rg12)
+        laygen.via(name=None, xy=[0, 0], refobj=_mdr.pins['S0'], gridname=rg12)
+    laygen.via(name=None, xy=[0, 0], refobj=mdl[-1].pins['S1'], gridname=rg12)
+    laygen.via(name=None, xy=[0, 0], refobj=mdr[-1].pins['S1'], gridname=rg12)
+    for _mdol, _mdor in zip(mdol, mdor):
+        laygen.via(name=None, xy=[0, 0], refobj=_mdol.pins['S0'], gridname=rg12)
+        laygen.via(name=None, xy=[0, 0], refobj=_mdor.pins['S0'], gridname=rg12)
+    laygen.via(name=None, xy=[0, 0], refobj=mdol[-1].pins['S1'], gridname=rg12)
+    laygen.via(name=None, xy=[0, 0], refobj=mdor[-1].pins['S1'], gridname=rg12)
     #dmy
     if m_dmy>=2:
-        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 1]), xy1=np.array([0, 1]), gridname0=rg_m1m2,
-                      refinstname0=imdmyl0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imdmyl0.name, refpinname1='D0', refinstindex1=np.array([m_dmy-1, 0])
-                      )
-        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 1]), xy1=np.array([0, 1]), gridname0=rg_m1m2,
-                      refinstname0=imdmyr0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imdmyr0.name, refpinname1='D0', refinstindex1=np.array([m_dmy-1, 0])
-                      )
-        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=imdmyl0.name, refpinname0='S0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imdmyl0.name, refpinname1='S0', refinstindex1=np.array([m_dmy-1, 0])
-                      )
-        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=imdmyr0.name, refpinname0='S0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imdmyr0.name, refpinname1='S0', refinstindex1=np.array([m_dmy-1, 0])
-                      )
-        for i in range(m_dmy):
-            laygen.via(None, np.array([0, 1]), refinstname=imdmyl0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-            laygen.via(None, np.array([0, 1]), refinstname=imdmyr0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-            laygen.via(None, np.array([0, 0]), refinstname=imdmyl0.name, refpinname='S0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-            laygen.via(None, np.array([0, 0]), refinstname=imdmyr0.name, refpinname='S0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-
+        mdmyl=imdmyl0.elements[:, 0]
+        mdmyr=imdmyr0.elements[:, 0]
+        laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg12, refobj0=mdmyl[0].pins['D0'], refobj1=mdmyl[-1].pins['D0'])
+        laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg12, refobj0=mdmyr[0].pins['D0'], refobj1=mdmyr[-1].pins['D0'])
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=mdmyl[0].pins['S0'], refobj1=mdmyl[-1].pins['S0'])
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=mdmyr[0].pins['S0'], refobj1=mdmyr[-1].pins['S0'])
+        for _mdmyl, _mdmyr in zip(mdmyl, mdmyr):
+            laygen.via(name=None, xy=[0, 1], refobj=_mdmyl.pins['D0'], gridname=rg12)
+            laygen.via(name=None, xy=[0, 1], refobj=_mdmyr.pins['D0'], gridname=rg12)
+            laygen.via(name=None, xy=[0, 0], refobj=_mdmyl.pins['S0'], gridname=rg12)
+            laygen.via(name=None, xy=[0, 0], refobj=_mdmyr.pins['S0'], gridname=rg12)
     return [imbl0, imdmyl0, imofstl0, iml0, imr0, imofstr0, imdmyr0, imbr0]
 
 def generate_clkdiffpair_ofst(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, routing_grid_m1m2_thick, routing_grid_m2m3,
-                         devname_mos_boundary, devname_mos_body, devname_mos_dmy, devname_tap_boundary, devname_tap_body,
-                         m_in=2, m_ofst=2, m_in_dmy=1, m_clkh=2, m_clkh_dmy=1, m_tap=12, origin=np.array([0, 0])):
+                              devname_mos_boundary, devname_mos_body, devname_mos_dmy, devname_tap_boundary, devname_tap_body,
+                              m_in=2, m_ofst=2, m_in_dmy=1, m_clkh=2, m_clkh_dmy=1, m_tap=12, origin=np.array([0, 0])):
     """generate a clocked differential pair with offset"""
     pg = placement_grid
-    rg_m1m2 = routing_grid_m1m2
-    rg_m1m2_thick = routing_grid_m1m2_thick
-    rg_m2m3 = routing_grid_m2m3
-
+    rg12 = routing_grid_m1m2
+    rg12t = routing_grid_m1m2_thick
+    rg23 = routing_grid_m2m3
     m_clk=m_clkh*2
+
+    #placement
     [itapbl0, itap0, itapbr0] = generate_tap(laygen, objectname_pfix=objectname_pfix+'NTAP0', placement_grid=pg,
-                                             routing_grid_m1m2_thick=rg_m1m2_thick,
+                                             routing_grid_m1m2_thick=rg12t,
                                              devname_tap_boundary=devname_tap_boundary, devname_tap_body=devname_tap_body,
-                                             m=m_tap, double_rail=True, origin=origin)
+                                             m=m_tap, extend_rail=True, origin=origin)
     diffpair_origin = laygen.get_inst_xy(itapbl0.name, pg) + laygen.get_template_size(itapbl0.cellname, pg) * np.array([0, 1])
-    [ickbl0, ickdmyl0, ick0, ickdmyr0, ickbr0]=generate_mos(laygen, objectname_pfix +'CK0', placement_grid=pg, routing_grid_m1m2=rg_m1m2,
+    [ickbl0, ickdmyl0, ick0, ickdmyr0, ickbr0]=generate_mos(laygen, objectname_pfix +'CK0', placement_grid=pg, routing_grid_m1m2=rg12,
                                         devname_mos_boundary=devname_mos_boundary, devname_mos_body=devname_mos_body,
                                         devname_mos_dmy=devname_mos_dmy, m=m_clkh*2, m_dmy=m_clkh_dmy, origin=diffpair_origin)
     in_origin=laygen.get_inst_xy(ickbl0.name, pg)+laygen.get_template_size(ickbl0.cellname, pg)*np.array([0,1])
     [iinbl0, iindmyl0, iofstl0, iinl0, iinr0, iofstr0, iindmyr0, iinbr0] = \
-        generate_diff_mos_ofst(laygen, objectname_pfix+'IN0', placement_grid=pg, routing_grid_m1m2=rg_m1m2,
+        generate_diff_mos_ofst(laygen, objectname_pfix+'IN0', placement_grid=pg, routing_grid_m1m2=rg12,
                           devname_mos_boundary=devname_mos_boundary, devname_mos_body=devname_mos_body,
                           devname_mos_dmy=devname_mos_dmy, m=m_in, m_ofst=m_ofst, m_dmy=m_in_dmy, origin=in_origin)
+
+    #route
     #tap to cs
-    for i in range(m_clkh*2):
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=ick0.name, refpinname0='S0', refinstindex0=np.array([i, 0]),
-                     refinstname1=itap0.name, refpinname1='TAP0', refinstindex1=np.array([0, 0]),
-                     direction='y'
-                     )
-    laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=ick0.name, refpinname0='S1', refinstindex0=np.array([m_clkh*2-1, 0]),
-                     refinstname1=itap0.name, refpinname1='TAP0', refinstindex1=np.array([0, 0]),
-                     direction='y'
-                     )
+    for _ick0 in ick0.elements[:, 0]:
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=_ick0.pins['S0'], refobj1=itap0.pins['TAP0'], direction='y')
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=ick0.elements[-1, 0].pins['S1'], refobj1=itap0.pins['TAP0'], direction='y')
     #cs to in (tail)
     for i in range(min(m_clkh-1, m_in-1)):
-        laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 1]), gridname0=rg_m2m3,
-                     refinstname0=iinl0.name, refpinname0='D0', refinstindex0=np.array([m_in-i-1, 0]),
-                     refinstname1=ick0.name, refpinname1='D0', refinstindex1=np.array([m_clkh-i-1, 0]),
-                     via0=[[0, 0]], via1=[[0, 0]],
-                     )
-        laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 1]), gridname0=rg_m2m3,
-                     refinstname0=iinr0.name, refpinname0='D0', refinstindex0=np.array([m_in-i-1, 0]),
-                     refinstname1=ick0.name, refpinname1='D0', refinstindex1=np.array([m_clkh+i, 0]),
-                     via0=[[0, 0]], via1=[[0, 0]],
-                     )
-    #biascap
-    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0+2, 0]), gridname0=rg_m1m2,
-                 refinstname0=iindmyl0.name, refpinname0='G0', refinstindex0=np.array([1, 0]),
-                 refinstname1=iindmyl0.name, refpinname1='G0', refinstindex1=np.array([m_in_dmy-1, 0])
-                 )
-    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0+2, 0]), gridname0=rg_m1m2,
-                 refinstname0=iindmyr0.name, refpinname0='G0', refinstindex0=np.array([1, 0]),
-                 refinstname1=iindmyr0.name, refpinname1='G0', refinstindex1=np.array([m_in_dmy-1, 0])
-                 )
-    laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                 refinstname0=iindmyl0.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
-                 refinstname1=iindmyl0.name, refpinname1='D0', refinstindex1=np.array([0, 0])
-                 )
-    laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                 refinstname0=iindmyl0.name, refpinname0='G0', refinstindex0=np.array([m_in_dmy-1, 0]),
-                 refinstname1=iindmyl0.name, refpinname1='D0', refinstindex1=np.array([m_in_dmy-1, 0])
-                 )
-    laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                 refinstname0=iindmyr0.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
-                 refinstname1=iindmyr0.name, refpinname1='D0', refinstindex1=np.array([0, 0])
-                 )
-    laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                 refinstname0=iindmyr0.name, refpinname0='G0', refinstindex0=np.array([m_in_dmy-1, 0]),
-                 refinstname1=iindmyr0.name, refpinname1='D0', refinstindex1=np.array([m_in_dmy-1, 0])
-                 )
-    for i in range(1, m_in_dmy-1):
-        laygen.via(None, np.array([0, 0]), refinstname=iindmyl0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-        laygen.via(None, np.array([0, 0]), refinstname=iindmyr0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-    #clock
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 1], gridname0=rg23,
+                     refobj0=iinl0.elements[m_in-i-1, 0].pins['D0'], via0=[0, 0],
+                     refobj1=ick0.elements[m_clkh-i-1, 0].pins['D0'], via1=[0, 0])
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 1], gridname0=rg23,
+                     refobj0=iinr0.elements[m_in-i-1, 0].pins['D0'], via0=[0, 0],
+                     refobj1=ick0.elements[m_clkh+i, 0].pins['D0'], via1=[0, 0])
+    #biascap for ofst
+    laygen.route(name=None, xy0=[0, 0], xy1=[2, 0], gridname0=rg12, 
+                 refobj0=iindmyl0.elements[1, 0].pins['G0'], refobj1=iindmyl0.elements[-1, 0].pins['G0'])
+    laygen.route(name=None, xy0=[0, 0], xy1=[2, 0], gridname0=rg12,
+                 refobj0=iindmyr0.elements[1, 0].pins['G0'], refobj1=iindmyr0.elements[-1, 0].pins['G0'])
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, 
+                 refobj0=iindmyl0.elements[0, 0].pins['G0'], refobj1=iindmyl0.elements[0, 0].pins['D0'])
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                 refobj0=iindmyl0.elements[-1, 0].pins['G0'], refobj1=iindmyl0.elements[-1, 0].pins['D0'])
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                 refobj0=iindmyr0.elements[0, 0].pins['G0'], refobj1=iindmyr0.elements[0, 0].pins['D0'])
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                 refobj0=iindmyr0.elements[-1, 0].pins['G0'], refobj1=iindmyr0.elements[-1, 0].pins['D0'])
+    for _dmyl, _dmyr in zip(iindmyl0.elements[1:-1, 0], iindmyr0.elements[1:-1, 0]):
+        laygen.via(name=None, xy=[0, 0], refobj=_dmyl.pins['G0'], gridname=rg12)
+        laygen.via(name=None, xy=[0, 0], refobj=_dmyr.pins['G0'], gridname=rg12)
     #dmy route
-    #for i in range(min(m_clkh_dmy, m_in_dmy)):
-    laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                 refinstname0=iindmyl0.name, refpinname0='S0', refinstindex0=np.array([0, 0]),
-                 refinstname1=itap0.name, refpinname1='TAP0', refinstindex1=np.array([0, 0])
-                 )
-    laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                 refinstname0=iindmyl0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
-                 refinstname1=itap0.name, refpinname1='TAP0', refinstindex1=np.array([1, 0])
-                 )
-    laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                 refinstname0=iindmyr0.name, refpinname0='S0', refinstindex0=np.array([0, 0]),
-                 refinstname1=itap0.name, refpinname1='TAP1', refinstindex1=np.array([m_tap-1, 0])
-                 )
-    laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                 refinstname0=iindmyr0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
-                 refinstname1=itap0.name, refpinname1='TAP0', refinstindex1=np.array([m_tap-1, 0])
-                 )
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, 
+                 refobj0=iindmyl0.elements[0, 0].pins['S0'], refobj1=itap0.elements[0, 0].pins['TAP0'])
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                 refobj0=iindmyl0.elements[0, 0].pins['D0'], refobj1=itap0.elements[1, 0].pins['TAP0'])
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                 refobj0=iindmyr0.elements[0, 0].pins['S0'], refobj1=itap0.elements[-1, 0].pins['TAP1'])
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                 refobj0=iindmyr0.elements[0, 0].pins['D0'], refobj1=itap0.elements[-1, 0].pins['TAP0'])
     return [itapbl0, itap0, itapbr0, ickbl0, ick0, ickbr0, iinbl0, iindmyl0, iofstl0, iinl0, iinr0, iofstr0, iindmyr0, iinbr0]
 
 def generate_salatch_regen(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, routing_grid_m1m2_thick,
@@ -405,348 +332,289 @@ def generate_salatch_regen(laygen, objectname_pfix, placement_grid, routing_grid
                    devname_pmos_boundary, devname_pmos_body, devname_pmos_dmy,
                    devname_ptap_boundary, devname_ptap_body, devname_ntap_boundary, devname_ntap_body,
                    m_rgnp=2, m_rgnp_dmy=1, m_rstp=1, m_tap=12, m_buf=1, origin=np.array([0, 0])):
-    """generate regenerative stage of SAlatch"""
+    """generate regenerative stage of SAlatch. N/P flipped for pmos type"""
     pg = placement_grid
-    rg_m1m2 = routing_grid_m1m2
-    rg_m1m2_thick = routing_grid_m1m2_thick
-    rg_m2m3 = routing_grid_m2m3
-    rg_m3m4 = routing_grid_m3m4
+    rg12 = routing_grid_m1m2
+    rg12t = routing_grid_m1m2_thick
+    rg23 = routing_grid_m2m3
+    rg34 = routing_grid_m3m4
+    pfix = objectname_pfix
 
     m_rgnn = m_rgnp + 2 * m_rstp - 1
     m_rgnn_dmy = m_rgnp_dmy
 
+    #placement
     #tap
-    [itapbln0, itapn0, itapbrn0] = generate_tap(laygen, objectname_pfix=objectname_pfix+'NTAP0', placement_grid=pg,
-                                             routing_grid_m1m2_thick=rg_m1m2_thick,
-                                             devname_tap_boundary=devname_ptap_boundary, devname_tap_body=devname_ptap_body,
-                                             m=m_tap, origin=origin)
+    [itapbln0, itapn0, itapbrn0] = generate_tap(laygen, objectname_pfix=pfix+'NTAP0', 
+                                                placement_grid=pg, routing_grid_m1m2_thick=rg12t,
+                                                devname_tap_boundary=devname_ptap_boundary, devname_tap_body=devname_ptap_body,
+                                                m=m_tap, origin=origin)
     rgnbody_origin = laygen.get_inst_xy(itapbln0.name, pg) + laygen.get_template_size(itapbln0.cellname, pg) * np.array([0, 1])
     #nmos row
+    imbln0 = laygen.relplace(name="I" + pfix + 'BLN0', templatename=devname_nmos_boundary, gridname=pg, xy=rgnbody_origin)
+    imbufln0 = laygen.relplace(name="I" + pfix + 'BUFLN0', templatename=devname_nmos_body, gridname=pg, refobj=imbln0, shape=[m_buf, 1])
+    refi=imbufln0
     if not m_rgnn_dmy==0:
-        imbln0 = laygen.place("I" + objectname_pfix + 'BLN0', devname_nmos_boundary, pg, xy=rgnbody_origin)
-        imbufln0 = laygen.relplace("I" + objectname_pfix + 'BUFLN0', devname_nmos_body, pg, imbln0.name, shape=np.array([m_buf, 1]))
-        imdmyln0 = laygen.relplace("I" + objectname_pfix + 'DMYLN0', devname_nmos_dmy, pg, imbufln0.name, shape=np.array([m_rgnn_dmy, 1]))
-        imln0 = laygen.relplace("I" + objectname_pfix + 'LN0', devname_nmos_body, pg, imdmyln0.name, shape=np.array([m_rgnn, 1]))
-        imln1 = laygen.relplace("I" + objectname_pfix + 'LN1', devname_nmos_dmy, pg, imln0.name)
-        imrn1 = laygen.relplace("I" + objectname_pfix + 'RN1', devname_nmos_dmy, pg, imln1.name, transform='MY')
-        imrn0 = laygen.relplace("I" + objectname_pfix + 'RN0', devname_nmos_body, pg, imrn1.name, shape=np.array([m_rgnn, 1]), transform='MY')
-        imdmyrn0 = laygen.relplace("I" + objectname_pfix + 'DMYRN0', devname_nmos_dmy, pg, imrn0.name, shape=np.array([m_rgnn_dmy, 1]), transform='MY')
-        imbufrn0 = laygen.relplace("I" + objectname_pfix + 'BUFRN0', devname_nmos_body, pg, imdmyrn0.name, shape=np.array([m_buf, 1]), transform='MY')
-        imbrn0 = laygen.relplace("I" + objectname_pfix + 'BRN0', devname_nmos_boundary, pg, imbufrn0.name, transform='MY')
+        imdmyln0 = laygen.relplace(name="I" + pfix + 'DMYLN0', templatename=devname_nmos_dmy, gridname=pg, refobj=imbufln0, shape=[m_rgnn_dmy, 1])
+        refi=imdmyln0
     else:
-        imbln0 = laygen.place("I" + objectname_pfix + 'BLN0', devname_nmos_boundary, pg, xy=origin)
-        imbufln0 = laygen.relplace("I" + objectname_pfix + 'BUFLN0', devname_nmos_body, pg, imbln0.name, shape=np.array([m_buf, 1]))
-        imdmyln0 = None
-        imln0 = laygen.relplace("I" + objectname_pfix + 'LN0', devname_nmos_body, pg, imbufln0.name, shape=np.array([m_rgnn, 1]))
-        imln1 = laygen.relplace("I" + objectname_pfix + 'LN1', devname_nmos_dmy, pg, imln0.name)
-        imrn1 = laygen.relplace("I" + objectname_pfix + 'RN1', devname_nmos_dmy, pg, imln1.name, transform='MY')
-        imrn0 = laygen.relplace("I" + objectname_pfix + 'RN0', devname_nmos_body, pg, imrn1.name, shape=np.array([m_rgnn, 1]), transform='MY')
-        imdmyrn0 = None
-        imbufrn0 = laygen.relplace("I" + objectname_pfix + 'BUFRN0', devname_nmos_body, pg, imrn0.name, shape=np.array([m_buf, 1]), transform='MY')
-        imbrn0 = laygen.relplace("I" + objectname_pfix + 'BRN0', devname_nmos_boundary, pg, imbufrn0.name, transform='MY')
+        imdmyln0=None
+    imln0 = laygen.relplace(name="I" + pfix + 'LN0', templatename=devname_nmos_body, gridname=pg, refobj=refi, shape=[m_rgnn, 1])
+    imln1 = laygen.relplace(name="I" + pfix + 'LN1', templatename=devname_nmos_dmy, gridname=pg, refobj=imln0)
+    imrn1 = laygen.relplace(name="I" + pfix + 'RN1', templatename=devname_nmos_dmy, gridname=pg, refobj=imln1, transform='MY')
+    imrn0 = laygen.relplace(name="I" + pfix + 'RN0', templatename=devname_nmos_body, gridname=pg, refobj=imrn1, shape=[m_rgnn, 1], transform='MY')
+    refi=imrn0
+    if not m_rgnn_dmy==0:
+        imdmyrn0 = laygen.relplace(name="I" + pfix + 'DMYRN0', templatename=devname_nmos_dmy, gridname=pg, refobj=imrn0, shape=[m_rgnn_dmy, 1], transform='MY')
+        refi=imdmyrn0
+    imbufrn0 = laygen.relplace(name="I" + pfix + 'BUFRN0', templatename=devname_nmos_body, gridname=pg, refobj=refi, shape=[m_buf, 1], transform='MY')
+    imbrn0 = laygen.relplace(name="I" + pfix + 'BRN0', templatename=devname_nmos_boundary, gridname=pg, refobj=imbufrn0, transform='MY')
     #pmos row
+    imblp0 = laygen.relplace(name="I" + pfix + 'BLP0', templatename=devname_pmos_boundary, gridname=pg, refobj=imbln0, direction='top', transform='MX')
+    imbuflp0 = laygen.relplace(name="I" + pfix + 'BUFLP0', templatename=devname_pmos_body, gridname=pg, refobj=imblp0, shape=[m_buf, 1], transform='MX')
+    refi=imbufln0
     if not m_rgnp_dmy==0:
-        imblp0 = laygen.relplace("I" + objectname_pfix + 'BLP0', devname_pmos_boundary, pg, imbln0.name, direction='top', transform='MX')
-        imbuflp0 = laygen.relplace("I" + objectname_pfix + 'BUFLP0', devname_pmos_body, pg, imblp0.name, shape=np.array([m_buf, 1]), transform='MX')
-        imdmylp0 = laygen.relplace("I" + objectname_pfix + 'DMYLP0', devname_pmos_body, pg, imbuflp0.name, shape=np.array([m_rgnp_dmy, 1]), transform='MX')
-        imlp0 = laygen.relplace("I" + objectname_pfix + 'LP0', devname_pmos_body, pg, imdmylp0.name, shape=np.array([m_rgnp, 1]), transform='MX')
-        imrstlp0 = laygen.relplace("I" + objectname_pfix + 'RSTLP0', devname_pmos_body, pg, imlp0.name, shape=np.array([m_rstp, 1]), transform='MX')
-        imrstlp1 = laygen.relplace("I" + objectname_pfix + 'RSTLP1', devname_pmos_body, pg, imrstlp0.name, shape=np.array([m_rstp, 1]), transform='MX')
-        imrstrp1 = laygen.relplace("I" + objectname_pfix + 'RSTRP1', devname_pmos_body, pg, imrstlp1.name, shape=np.array([m_rstp, 1]), transform='R180')
-        imrstrp0 = laygen.relplace("I" + objectname_pfix + 'RSTRP0', devname_pmos_body, pg, imrstrp1.name, shape=np.array([m_rstp, 1]), transform='R180')
-        imrp0 = laygen.relplace("I" + objectname_pfix + 'RP0', devname_pmos_body, pg, imrstrp0.name, shape=np.array([m_rgnp, 1]), transform='R180')
-        imdmyrp0 = laygen.relplace("I" + objectname_pfix + 'DMYRP0', devname_pmos_body, pg, imrp0.name, shape=np.array([m_rgnp_dmy, 1]), transform='R180')
-        imbufrp0 = laygen.relplace("I" + objectname_pfix + 'BUFRP0', devname_pmos_body, pg, imdmyrp0.name, shape=np.array([m_buf, 1]), transform='R180')
-        imbrp0 = laygen.relplace("I" + objectname_pfix + 'BRP0', devname_pmos_boundary, pg, imbufrp0.name, transform='R180')
+        imdmylp0 = laygen.relplace(name="I" + pfix + 'DMYLP0', templatename=devname_pmos_body, gridname=pg, refobj=imbuflp0, shape=[m_rgnp_dmy, 1], transform='MX')
+        refi=imdmylp0
     else:
-        imblp0 = laygen.relplace("I" + objectname_pfix + 'BLP0', devname_pmos_boundary, pg, imbln0.name, direction='top', transform='MX')
-        imbuflp0 = laygen.relplace("I" + objectname_pfix + 'BUFLP0', devname_pmos_body, pg, imblp0.name, shape=np.array([m_buf, 1]), transform='MX')
-        imdmylp0 = None
-        imlp0 = laygen.relplace("I" + objectname_pfix + 'LP0', devname_pmos_body, pg, imbuflp0.name, shape=np.array([m_rgnp, 1]), transform='MX')
-        imrstlp0 = laygen.relplace("I" + objectname_pfix + 'RSTLP0', devname_pmos_body, pg, imlp0.name, shape=np.array([m_rstp, 1]), transform='MX')
-        imrstlp1 = laygen.relplace("I" + objectname_pfix + 'RSTLP1', devname_pmos_body, pg, imrstlp0.name, shape=np.array([m_rstp, 1]), transform='MX')
-        imrstrp1 = laygen.relplace("I" + objectname_pfix + 'RSTRP1', devname_pmos_body, pg, imrstlp1.name, shape=np.array([m_rstp, 1]), transform='R180')
-        imrstrp0 = laygen.relplace("I" + objectname_pfix + 'RSTRP0', devname_pmos_body, pg, imrstrp1.name, shape=np.array([m_rstp, 1]), transform='R180')
-        imrp0 = laygen.relplace("I" + objectname_pfix + 'RP0', devname_pmos_body, pg, imrstrp0.name, shape=np.array([m_rgnp, 1]), transform='R180')
+        imdmylp0=None
+    imlp0 = laygen.relplace(name="I" + pfix + 'LP0', templatename=devname_pmos_body, gridname=pg, refobj=imdmylp0, shape=[m_rgnp, 1], transform='MX')
+    imrstlp0 = laygen.relplace(name="I" + pfix + 'RSTLP0', templatename=devname_pmos_body, gridname=pg, refobj=imlp0, shape=[m_rstp, 1], transform='MX')
+    imrstlp1 = laygen.relplace(name="I" + pfix + 'RSTLP1', templatename=devname_pmos_body, gridname=pg, refobj=imrstlp0, shape=[m_rstp, 1], transform='MX')
+    imrstrp1 = laygen.relplace(name="I" + pfix + 'RSTRP1', templatename=devname_pmos_body, gridname=pg, refobj=imrstlp1, shape=[m_rstp, 1], transform='R180')
+    imrstrp0 = laygen.relplace(name="I" + pfix + 'RSTRP0', templatename=devname_pmos_body, gridname=pg, refobj=imrstrp1, shape=[m_rstp, 1], transform='R180')
+    imrp0 = laygen.relplace(name="I" + pfix + 'RP0', templatename=devname_pmos_body, gridname=pg, refobj=imrstrp0, shape=[m_rgnp, 1], transform='R180')
+    refi=imrp0
+    if not m_rgnp_dmy==0:
+        imdmyrp0 = laygen.relplace(name="I" + pfix + 'DMYRP0', templatename=devname_pmos_body, gridname=pg, refobj=imrp0, shape=[m_rgnp_dmy, 1], transform='R180')
+        refi = imdmyrp0
+    else:
         imdmyrp0 = None
-        imbufrp0 = laygen.relplace("I" + objectname_pfix + 'BUFRP0', devname_pmos_body, pg, imrp0.name, shape=np.array([m_buf, 1]), transform='R180')
-        imbrp0 = laygen.relplace("I" + objectname_pfix + 'BRP0', devname_pmos_boundary, pg, imbufrp0.name, transform='R180')
+    imbufrp0 = laygen.relplace(name="I" + pfix + 'BUFRP0', templatename=devname_pmos_body, gridname=pg, refobj=imdmyrp0, shape=[m_buf, 1], transform='R180')
+    imbrp0 = laygen.relplace(name="I" + pfix + 'BRP0', templatename=devname_pmos_boundary, gridname=pg, refobj=imbufrp0, transform='R180')
+    #tap
     tap_origin = laygen.get_inst_xy(imblp0.name, pg) + laygen.get_template_size(devname_ntap_boundary, pg) * np.array([0, 1])
-    [itapbl0, itap0, itapbr0] = generate_tap(laygen, objectname_pfix=objectname_pfix+'PTAP0', placement_grid=pg, routing_grid_m1m2_thick=rg_m1m2_thick,
+    [itapbl0, itap0, itapbr0] = generate_tap(laygen, objectname_pfix=pfix+'PTAP0', placement_grid=pg, routing_grid_m1m2_thick=rg12t,
                                              devname_tap_boundary=devname_ntap_boundary, devname_tap_body=devname_ntap_body,
-                                             m=m_tap, double_rail=True, origin=tap_origin, transform='MX')
+                                             m=m_tap, extend_rail=True, origin=tap_origin, transform='MX')
+
+    #route
     #tap to pmos
-    for i in range(m_rgnp+1):
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=imlp0.name, refpinname0='S0', refinstindex0=np.array([i, 0]),
-                     refinstname1=itap0.name, refpinname1='TAP0', refinstindex1=np.array([0, 0]),
-                     direction='y'
-                     )
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=imrp0.name, refpinname0='S0', refinstindex0=np.array([i, 0]),
-                     refinstname1=itap0.name, refpinname1='TAP0', refinstindex1=np.array([0, 0]),
-                     direction='y'
-                     )
-    for i in range(m_rstp+1):
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=imrstlp0.name, refpinname0='S0', refinstindex0=np.array([i, 0]),
-                     refinstname1=itap0.name, refpinname1='TAP0', refinstindex1=np.array([0, 0]),
-                     direction='y'
-                     )
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=imrstlp1.name, refpinname0='S0', refinstindex0=np.array([i, 0]),
-                     refinstname1=itap0.name, refpinname1='TAP0', refinstindex1=np.array([0, 0]),
-                     direction='y'
-                     )
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=imrstrp1.name, refpinname0='S0', refinstindex0=np.array([i, 0]),
-                     refinstname1=itap0.name, refpinname1='TAP0', refinstindex1=np.array([0, 0]),
-                     direction='y'
-                     )
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=imrstrp0.name, refpinname0='S0', refinstindex0=np.array([i, 0]),
-                     refinstname1=itap0.name, refpinname1='TAP0', refinstindex1=np.array([0, 0]),
-                     direction='y'
-                     )
+    for i in range(m_rgnp):
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                     refobj0=imlp0.elements[i, 0].pins['S0'], refobj1=itap0.pins['TAP0'], direction='y')
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                     refobj0=imrp0.elements[i, 0].pins['S0'], refobj1=itap0.pins['TAP0'], direction='y')
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                 refobj0=imlp0.elements[-1, 0].pins['S1'], refobj1=itap0.pins['TAP0'], direction='y')
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                 refobj0=imrp0.elements[-1, 0].pins['S1'], refobj1=itap0.pins['TAP0'], direction='y')
+    for i in range(m_rstp):
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                     refobj0=imrstlp0.elements[i, 0].pins['S0'], refobj1=itap0.pins['TAP0'], direction='y')
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                     refobj0=imrstlp1.elements[i, 0].pins['S0'], refobj1=itap0.pins['TAP0'], direction='y')
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                     refobj0=imrstrp1.elements[i, 0].pins['S0'], refobj1=itap0.pins['TAP0'], direction='y')
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                     refobj0=imrstrp0.elements[i, 0].pins['S0'], refobj1=itap0.pins['TAP0'], direction='y')
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                 refobj0=imrstlp0.elements[-1, 0].pins['S1'], refobj1=itap0.pins['TAP0'], direction='y')
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                 refobj0=imrstlp1.elements[-1, 0].pins['S1'], refobj1=itap0.pins['TAP0'], direction='y')
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                 refobj0=imrstrp1.elements[-1, 0].pins['S1'], refobj1=itap0.pins['TAP0'], direction='y')
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                 refobj0=imrstrp0.elements[-1, 0].pins['S1'], refobj1=itap0.pins['TAP0'], direction='y')
     #gate-n
-    rgln0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=imln0.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imln0.name, refpinname1='G0', refinstindex1=np.array([m_rgnn-1, 0])
-                      )
-    for i in range(m_rgnn):
-        laygen.via(None, np.array([0, 0]), refinstname=imln0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-    rgrn0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=imrn0.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imrn0.name, refpinname1='G0', refinstindex1=np.array([m_rgnn-1, 0])
-                      )
-    for i in range(m_rgnn):
-        laygen.via(None, np.array([0, 0]), refinstname=imrn0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
+    rgln0=laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                       refobj0=imln0.elements[0, 0].pins['G0'], refobj1=imln0.elements[-1, 0].pins['G0'])
+    for _mln in imln0.elements[:, 0]:
+        laygen.via(name=None, xy=[0, 0], refobj=_mln.pins['G0'], gridname=rg12)
+    rgrn0=laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                       refobj0=imrn0.elements[0, 0].pins['G0'], refobj1=imrn0.elements[-1, 0].pins['G0'])
+    for _mrn in imrn0.elements[:, 0]:
+        laygen.via(name=None, xy=[0, 0], refobj=_mrn.pins['G0'], gridname=rg12)
 
     #gate-p
-    rglp0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([-2, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=imlp0.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imlp0.name, refpinname1='G0', refinstindex1=np.array([m_rgnp-1, 0])
-                      )
-    for i in range(m_rgnp):
-        laygen.via(None, np.array([0, 0]), refinstname=imlp0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-    rgrp0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([-2, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=imrp0.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imrp0.name, refpinname1='G0', refinstindex1=np.array([m_rgnp-1, 0])
-                      )
-    for i in range(m_rgnp):
-        laygen.via(None, np.array([0, 0]), refinstname=imrp0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
+    rglp0=laygen.route(None, xy0=[-2, 0], xy1=[0, 0], gridname0=rg12,
+                       refobj0=imlp0.elements[0, 0].pins['G0'], refobj1=imlp0.elements[-1, 0].pins['G0'])
+    for _mlp in imlp0.elements[:, 0]:
+        laygen.via(name=None, xy=[0, 0], refobj=_mlp.pins['G0'], gridname=rg12)
+    rgrp0=laygen.route(None, xy0=[-2, 0], xy1=[0, 0], gridname0=rg12,
+                       refobj0=imrp0.elements[0, 0].pins['G0'], refobj1=imrp0.elements[-1, 0].pins['G0'])
+    for _mrp in imrp0.elements[:, 0]:
+        laygen.via(name=None, xy=[0, 0], refobj=_mrp.pins['G0'], gridname=rg12)
     #gate-pn vertical
-    rglv0=laygen.route(None, laygen.layers['metal'][3], xy0=np.array([-1, 0]), xy1=np.array([-1, 0]), gridname0=rg_m2m3,
-                      refinstname0=imlp0.name, refpinname0='G0', refinstindex0=np.array([m_rgnp-1, 0]), via0=[[0, 0]],
-                      refinstname1=imln0.name, refpinname1='G0', refinstindex1=np.array([m_rgnp-1, 0]), via1=[[0, 0]]
-                      )
-    rgrv0=laygen.route(None, laygen.layers['metal'][3], xy0=np.array([-1, 0]), xy1=np.array([-1, 0]), gridname0=rg_m2m3,
-                      refinstname0=imrp0.name, refpinname0='G0', refinstindex0=np.array([m_rgnp-1, 0]), via0=[[0, 0]],
-                      refinstname1=imrn0.name, refpinname1='G0', refinstindex1=np.array([m_rgnp-1, 0]), via1=[[0, 0]],
-                      )
+    rglv0=laygen.route(name=None, xy0=[-1, 0], xy1=[-1, 0], gridname0=rg23,
+                       refobj0=imlp0.elements[-1, 0].pins['G0'], via0=[0, 0], refobj1=imln0.elements[m_rgnp-1, 0].pins['G0'], via1=[0, 0])
+    rgrv0=laygen.route(name=None, xy0=[-1, 0], xy1=[-1, 0], gridname0=rg23,
+                       refobj0=imrp0.elements[-1, 0].pins['G0'], via0=[0, 0], refobj1=imrn0.elements[m_rgnp-1, 0].pins['G0'], via1=[0, 0])
 
     #drain-pn vertical
-    rdlv0=laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 1]), gridname0=rg_m2m3,
-                      refinstname0=imlp0.name, refpinname0='D0', refinstindex0=np.array([-1, 0]), via0=[[0, 0]],
-                      refinstname1=imln0.name, refpinname1='D0', refinstindex1=np.array([-1, 0]), via1=[[0, 0]],
-                      )
-    rdrv0=laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 1]), gridname0=rg_m2m3,
-                      refinstname0=imrp0.name, refpinname0='D0', refinstindex0=np.array([-1, 0]), via0=[[0, 0]],
-                      refinstname1=imrn0.name, refpinname1='D0', refinstindex1=np.array([-1, 0]), via1=[[0, 0]],
-                      )
-    for i in range(m_rgnp):
-        laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 1]), gridname0=rg_m2m3,
-                    refobj0=imlp0, refpinname0='D0', refobjindex0=np.array([i, 0]), via0=[[0, 0]],
-                    refobj1=imln0, refpinname1='D0', refobjindex1=np.array([i, 0]), via1=[[0, 0]],
-                    )
-        laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 1]), gridname0=rg_m2m3,
-                    refobj0=imrp0, refpinname0='D0', refobjindex0=np.array([i, 0]), via0=[[0, 0]],
-                    refobj1=imrn0, refpinname1='D0', refobjindex1=np.array([i, 0]), via1=[[0, 0]],
-                    )
+    rdlv0=laygen.route(name=None, xy0=[-2, 0], xy1=[-2, 1], gridname0=rg23,
+                       refobj0=imlp0.elements[0, 0].pins['D0'], via0=[0, 0], refobj1=imln0.elements[0, 0].pins['D0'], via1=[0, 0])
+    rdrv0=laygen.route(name=None, xy0=[-2, 0], xy1=[-2, 1], gridname0=rg23,
+                       refobj0=imrp0.elements[0, 0].pins['D0'], via0=[0, 0], refobj1=imrn0.elements[0, 0].pins['D0'], via1=[0, 0])
+    for _mlp, _mln in zip(imlp0.elements[:, 0], imln0.elements[:, 0]):
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 1], gridname0=rg23,
+                     refobj0=_mlp.pins['D0'], via0=[0, 0], refobj1=_mln.pins['D0'], via1=[0, 0])
+    for _mrp, _mrn in zip(imrp0.elements[:, 0], imrn0.elements[:, 0]):
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 1], gridname0=rg23,
+                     refobj0=_mrp.pins['D0'], via0=[0, 0], refobj1=_mrn.pins['D0'], via1=[0, 0])
     for i in range(m_rstp):
-        laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 1]), gridname0=rg_m2m3,
-                    refobj0=imrstlp0, refpinname0='D0', refobjindex0=np.array([i, 0]), via0=[[0, 0]],
-                    refobj1=imln0, refpinname1='D0', refobjindex1=np.array([i+m_rgnp, 0]), via1=[[0, 0]],
-                    )
-        laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 1]), gridname0=rg_m2m3,
-                    refobj0=imrstrp0, refpinname0='D0', refobjindex0=np.array([i, 0]), via0=[[0, 0]],
-                    refobj1=imrn0, refpinname1='D0', refobjindex1=np.array([i+m_rgnp, 0]), via1=[[0, 0]],
-                    )
-
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 1], gridname0=rg23,
+                    refobj0=imrstlp0.elements[i, 0].pins['D0'], via0=[0, 0],
+                    refobj1=imln0.elements[i+m_rgnp, 0].pins['D0'], via1=[0, 0])
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 1], gridname0=rg23,
+                    refobj0=imrstrp0.elements[i, 0].pins['D0'], via0=[0, 0],
+                    refobj1=imrn0.elements[i+m_rgnp, 0].pins['D0'], via1=[0, 0])
     #gate-clkp
-    rgrstp0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=imrstlp0.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imrstrp0.name, refpinname1='G0', refinstindex1=np.array([0, 0])
-                      )
+    rgrstp0=laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, 
+                         refobj0=imrstlp0.pins['G0'], refobj1=imrstrp0.pins['G0'])
     for i in range(m_rstp):
-        laygen.via(None, np.array([0, 0]), refinstname=imrstlp0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-        laygen.via(None, np.array([0, 0]), refinstname=imrstlp1.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-        laygen.via(None, np.array([0, 0]), refinstname=imrstrp1.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-        laygen.via(None, np.array([0, 0]), refinstname=imrstrp0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
+        laygen.via(name=None, xy=[0, 0], refobj=imrstlp0.elements[i, 0].pins['G0'], gridname=rg12)
+        laygen.via(name=None, xy=[0, 0], refobj=imrstlp1.elements[i, 0].pins['G0'], gridname=rg12)
+        laygen.via(name=None, xy=[0, 0], refobj=imrstrp1.elements[i, 0].pins['G0'], gridname=rg12)
+        laygen.via(name=None, xy=[0, 0], refobj=imrstrp0.elements[i, 0].pins['G0'], gridname=rg12)
     #drain-p
-    rdlp0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([-2, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=imlp0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imlp0.name, refpinname1='D0', refinstindex1=np.array([m_rgnp+m_rstp-1, 0])
-                      )
-    for i in range(m_rgnp):
-        laygen.via(None, np.array([0, 0]), refinstname=imlp0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-    for i in range(m_rstp):
-        laygen.via(None, np.array([0, 0]), refinstname=imrstlp0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-    rdrp0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([-2, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=imrp0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imrp0.name, refpinname1='D0', refinstindex1=np.array([m_rgnp+m_rstp-1, 0])
-                      )
-    for i in range(m_rgnp):
-        laygen.via(None, np.array([0, 0]), refinstname=imrp0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-    for i in range(m_rstp):
-        laygen.via(None, np.array([0, 0]), refinstname=imrstrp0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
+    rdlp0=laygen.route(name=None, xy0=[-2, 0], xy1=[0, 0], gridname0=rg12,
+                       refobj0=imlp0.elements[0, 0].pins['D0'], refobj1=imrstlp0.elements[-1, 0].pins['D0'])
+    for _m in imlp0.elements[:, 0]:
+        laygen.via(name=None, xy=[0, 0], refobj=_m.pins['D0'], gridname=rg12)
+    for _m in imrstlp0.elements[:, 0]:
+        laygen.via(name=None, xy=[0, 0], refobj=_m.pins['D0'], gridname=rg12)
+    rdrp0=laygen.route(name=None, xy0=[-2, 0], xy1=[0, 0], gridname0=rg12,
+                       refobj0=imrp0.elements[0, 0].pins['D0'], refobj1=imrstrp0.elements[-1, 0].pins['D0'])
+    for _m in imrp0.elements[:, 0]:
+        laygen.via(name=None, xy=[0, 0], refobj=_m.pins['D0'], gridname=rg12)
+    for _m in imrstrp0.elements[:, 0]:
+        laygen.via(name=None, xy=[0, 0], refobj=_m.pins['D0'], gridname=rg12)
     #cross-coupled route and via
-    xyg0=laygen.get_rect_xy(rglv0.name, rg_m3m4, sort=True)[0]
-    xyd0=laygen.get_rect_xy(rdlv0.name, rg_m3m4, sort=True)[0]
-    xyg1=laygen.get_rect_xy(rgrv0.name, rg_m3m4, sort=True)[0]
-    xyd1=laygen.get_rect_xy(rdrv0.name, rg_m3m4, sort=True)[0]
-    laygen.route(None, laygen.layers['metal'][4], xy0=np.array([xyd0[0], xyg0[1]]), xy1=np.array([xyd1[0], xyg0[1]]), gridname0=rg_m3m4)
-    laygen.route(None, laygen.layers['metal'][4], xy0=np.array([xyd0[0], xyg0[1]+1]), xy1=np.array([xyd1[0], xyg0[1]+1]), gridname0=rg_m3m4)
-    laygen.via(None, np.array([xyg0[0], xyg0[1]]), gridname=rg_m3m4)
-    laygen.via(None, np.array([xyd1[0], xyg0[1]]), gridname=rg_m3m4)
-    laygen.via(None, np.array([xyd0[0], xyg0[1]+1]), gridname=rg_m3m4)
-    laygen.via(None, np.array([xyg1[0], xyg0[1]+1]), gridname=rg_m3m4)
+    xyg0=laygen.get_rect_xy(rglv0.name, rg34, sort=True)[0]
+    xyd0=laygen.get_rect_xy(rdlv0.name, rg34, sort=True)[0]
+    xyg1=laygen.get_rect_xy(rgrv0.name, rg34, sort=True)[0]
+    xyd1=laygen.get_rect_xy(rdrv0.name, rg34, sort=True)[0]
+    laygen.route(name=None, xy0=[xyd0[0], xyg0[1]], xy1=[xyd1[0], xyg0[1]], gridname0=rg34)
+    laygen.route(name=None, xy0=[xyd0[0], xyg0[1]+1], xy1=[xyd1[0], xyg0[1]+1], gridname0=rg34)
+    laygen.via(name=None, xy=[xyg0[0], xyg0[1]], gridname=rg34)
+    laygen.via(name=None, xy=[xyd1[0], xyg0[1]], gridname=rg34)
+    laygen.via(name=None, xy=[xyd0[0], xyg0[1]+1], gridname=rg34)
+    laygen.via(name=None, xy=[xyg1[0], xyg0[1]+1], gridname=rg34)
     #source/drain-n
-    rdln0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([-2, 1]), xy1=np.array([0, 1]), gridname0=rg_m1m2,
-                      refinstname0=imln0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imln0.name, refpinname1='D0', refinstindex1=np.array([m_rgnn-1, 0])
-                      )
-    for i in range(m_rgnn):
-        laygen.via(None, np.array([0, 1]), refinstname=imln0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-    rdrn0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([-2, 1]), xy1=np.array([0, 1]), gridname0=rg_m1m2,
-                      refinstname0=imrn0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imrn0.name, refpinname1='D0', refinstindex1=np.array([m_rgnn-1, 0])
-                      )
-    for i in range(m_rgnn):
-        laygen.via(None, np.array([0, 1]), refinstname=imrn0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-    rsln0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=imln0.name, refpinname0='S0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imln1.name, refpinname1='S0', refinstindex1=np.array([0, 0])
-                      )
-    for i in range(m_rgnn):
-        laygen.via(None, np.array([0, 0]), refinstname=imln0.name, refpinname='S0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-    laygen.via(None, np.array([0, 0]), refinstname=imln1.name, refpinname='S0', refinstindex=np.array([0, 0]), gridname=rg_m1m2)
-    rsrn0=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                      refinstname0=imrn0.name, refpinname0='S0', refinstindex0=np.array([0, 0]),
-                      refinstname1=imrn1.name, refpinname1='S0', refinstindex1=np.array([0, 0])
-                      )
-    for i in range(m_rgnn):
-        laygen.via(None, np.array([0, 0]), refinstname=imrn0.name, refpinname='S0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-    laygen.via(None, np.array([0, 0]), refinstname=imrn1.name, refpinname='S0', refinstindex=np.array([0, 0]), gridname=rg_m1m2)
+    rdln0=laygen.route(name=None, xy0=[-2, 1], xy1=[0, 1], gridname0=rg12,
+                       refobj0=imln0.elements[0, 0].pins['D0'], refobj1=imln0.elements[-1, 0].pins['D0'])
+    for _m in imln0.elements[:, 0]:
+        laygen.via(name=None, xy=[0, 1], refobj=_m.pins['D0'], gridname=rg12)
+    rdrn0=laygen.route(name=None, xy0=[-2, 1], xy1=[0, 1], gridname0=rg12,
+                       refobj0=imrn0.elements[0, 0].pins['D0'], refobj1=imrn0.elements[-1, 0].pins['D0'])
+    for _m in imrn0.elements[:, 0]:
+        laygen.via(name=None, xy=[0, 1], refobj=_m.pins['D0'], gridname=rg12)
+    rsln0=laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                       refobj0=imln0.elements[0, 0].pins['S0'], refobj1=imln1.elements[0, 0].pins['S0'])
+    for _m in imln0.elements[:, 0]:
+        laygen.via(name=None, xy=[0, 0], refobj=_m.pins['S0'], gridname=rg12)
+    laygen.via(name=None, xy=[0, 0], refobj=imln1.elements[0, 0].pins['S0'], gridname=rg12)
+    rsrn0=laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                      refobj0=imrn0.elements[0, 0].pins['S0'],
+                      refobj1=imrn1.elements[0, 0].pins['S0'])
+    for _m in imrn0.elements[:, 0]:
+        laygen.via(name=None, xy=[0, 0], refobj=_m.pins['S0'], gridname=rg12)
+    laygen.via(name=None, xy=[0, 0], refobj=imrn1.elements[0, 0].pins['S0'], gridname=rg12)
     #tap to rgnn
-    laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=imln1.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
-                     refinstname1=itapn0.name, refpinname1='TAP0', refinstindex1=np.array([0, 0]),
-                     direction='y'
-                     )
-    laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=imln1.name, refpinname0='S1', refinstindex0=np.array([0, 0]),
-                     refinstname1=itapn0.name, refpinname1='TAP0', refinstindex1=np.array([0, 0]),
-                     direction='y'
-                     )
-    laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=imrn1.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
-                     refinstname1=itapn0.name, refpinname1='TAP0', refinstindex1=np.array([0, 0]),
-                     direction='y'
-                     )
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                 refobj0=imln1.elements[0, 0].pins['D0'], refobj1=itapn0.elements[0, 0].pins['TAP0'], direction='y')
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                 refobj0=imln1.elements[0, 0].pins['S1'], refobj1=itapn0.elements[0, 0].pins['TAP0'], direction='y')
+    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                 refobj0=imrn1.elements[0, 0].pins['D0'], refobj1=itapn0.elements[0, 0].pins['TAP0'], direction='y')
     #buf tap to rgnn
     for i in range(m_buf):
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=imbufln0.name, refpinname0='S0', refinstindex0=np.array([i, 0]),
-                     refinstname1=itapn0.name, refpinname1='TAP0', refinstindex1=np.array([i, 0]), direction='y')
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=imbufrn0.name, refpinname0='S0', refinstindex0=np.array([i, 0]),
-                     refinstname1=itapn0.name, refpinname1='TAP1', refinstindex1=np.array([m_tap-i, 0]), direction='y')
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=imbuflp0.name, refpinname0='S0', refinstindex0=np.array([i, 0]),
-                     refinstname1=itap0.name, refpinname1='TAP0', refinstindex1=np.array([i, 0]), direction='y')
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=imbufrp0.name, refpinname0='S0', refinstindex0=np.array([i, 0]),
-                     refinstname1=itap0.name, refpinname1='TAP1', refinstindex1=np.array([m_tap-i, 0]), direction='y')
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                     refobj0=imbufln0.elements[i, 0].pins['S0'], refobj1=itapn0.elements[i, 0].pins['TAP0'], direction='y')
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                     refobj0=imbufrn0.elements[i, 0].pins['S0'], refobj1=itapn0.elements[m_tap-i-1, 0].pins['TAP1'], direction='y')
+        laygen.route(name=None, xy0=[0, 0], xy1=np.array([0, 0]), gridname0=rg12,
+                     refobj0=imbuflp0.elements[i, 0].pins['S0'], refobj1=itap0.elements[i, 0].pins['TAP0'], direction='y')
+        laygen.route(name=None, xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg12,
+                     refobj0=imbufrp0.elements[i, 0].pins['S0'], refobj1=itap0.elements[m_tap-i-1, 0].pins['TAP1'], direction='y')
     #buf-gate
     for i in range(m_buf):
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=imbufln0.name, refpinname0='G0', refinstindex0=np.array([i, 0]),
-                     refinstname1=imbuflp0.name, refpinname1='G0', refinstindex1=np.array([i, 0]), direction='y')
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=imbufrn0.name, refpinname0='G0', refinstindex0=np.array([i, 0]),
-                     refinstname1=imbufrp0.name, refpinname1='G0', refinstindex1=np.array([i, 0]), direction='y')
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                     refobj0=imbufln0.elements[i, 0].pins['G0'], refobj1=imbuflp0.elements[i, 0].pins['G0'], direction='y')
+        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+                     refobj0=imbufrn0.elements[i, 0].pins['G0'], refobj1=imbufrp0.elements[i, 0].pins['G0'], direction='y')
     #buf-gate(horizontal)
-    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([2*m_rgnn_dmy, 0]), gridname0=rg_m2m3,
+    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([2*m_rgnn_dmy, 0]), gridname0=rg23,
                  refinstname0=imbufln0.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
                  refinstname1=imbufln0.name, refpinname1='G0', refinstindex1=np.array([m_buf-1, 0]), via1=[[0, 0]])
-    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([2*m_rgnn_dmy, 0]), gridname0=rg_m2m3,
+    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([2*m_rgnn_dmy, 0]), gridname0=rg23,
                  refinstname0=imbufrn0.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
                  refinstname1=imbufrn0.name, refpinname1='G0', refinstindex1=np.array([m_buf-1, 0]), via1=[[0, 0]])
     for i in range(m_buf):
-        laygen.via(None, np.array([0, 0]), refinstname=imbufln0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-        laygen.via(None, np.array([0, 0]), refinstname=imbufrn0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
+        laygen.via(None, np.array([0, 0]), refinstname=imbufln0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg12)
+        laygen.via(None, np.array([0, 0]), refinstname=imbufrn0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg12)
     #buf-drain
     for i in range(m_buf):
-        laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 1]), gridname0=rg_m2m3,
+        laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 1]), gridname0=rg23,
                      refinstname0=imbufln0.name, refpinname0='D0', refinstindex0=np.array([i, 0]), via0=[[0, 0]],
                      refinstname1=imbuflp0.name, refpinname1='D0', refinstindex1=np.array([i, 0]), via1=[[0, 0]])
-        laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 1]), gridname0=rg_m2m3,
+        laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 1]), gridname0=rg23,
                      refinstname0=imbufrn0.name, refpinname0='D0', refinstindex0=np.array([i, 0]), via0=[[0, 0]],
                      refinstname1=imbufrp0.name, refpinname1='D0', refinstindex1=np.array([i, 0]), via1=[[0, 0]])
-    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m2m3,
+    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg23,
                  refinstname0=imbufln0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
                  refinstname1=imbufln0.name, refpinname1='D0', refinstindex1=np.array([m_buf-1, 0]),
                  endstyle0="extend", endstyle1="extend")
-    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m2m3,
+    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg23,
                  refinstname0=imbufrn0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
                  refinstname1=imbufrn0.name, refpinname1='D0', refinstindex1=np.array([m_buf-1, 0]),
                  endstyle0="extend", endstyle1="extend")
-    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 1]), xy1=np.array([0, 1]), gridname0=rg_m2m3,
+    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 1]), xy1=np.array([0, 1]), gridname0=rg23,
                  refinstname0=imbuflp0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
                  refinstname1=imbuflp0.name, refpinname1='D0', refinstindex1=np.array([m_buf-1, 0]))
-    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 1]), xy1=np.array([0, 1]), gridname0=rg_m2m3,
+    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 1]), xy1=np.array([0, 1]), gridname0=rg23,
                  refinstname0=imbufrp0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
                  refinstname1=imbufrp0.name, refpinname1='D0', refinstindex1=np.array([m_buf-1, 0]))
     for i in range(m_buf):
-        laygen.via(None, np.array([0, 0]), refinstname=imbufln0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-        laygen.via(None, np.array([0, 1]), refinstname=imbuflp0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-        laygen.via(None, np.array([0, 0]), refinstname=imbufrn0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-        laygen.via(None, np.array([0, 1]), refinstname=imbufrp0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
+        laygen.via(None, np.array([0, 0]), refinstname=imbufln0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg12)
+        laygen.via(None, np.array([0, 1]), refinstname=imbuflp0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg12)
+        laygen.via(None, np.array([0, 0]), refinstname=imbufrn0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg12)
+        laygen.via(None, np.array([0, 1]), refinstname=imbufrp0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg12)
     #dmy-p
     for i in range(m_rgnp_dmy):
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
+        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg12,
                      refinstname0=imdmylp0.name, refpinname0='S0', refinstindex0=np.array([i, 0]),
                      refinstname1=itap0.name, refpinname1='TAP0', refinstindex1=np.array([i, 0]),
                      direction='y'
                      )
-        laygen.via(None, np.array([0, 0]), refinstname=imdmylp0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-        laygen.via(None, np.array([0, 0]), refinstname=imdmylp0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
+        laygen.via(None, np.array([0, 0]), refinstname=imdmylp0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg12)
+        laygen.via(None, np.array([0, 0]), refinstname=imdmylp0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg12)
+        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg12,
                      refinstname0=imdmyrp0.name, refpinname0='S0', refinstindex0=np.array([i, 0]),
                      refinstname1=itap0.name, refpinname1='TAP0', refinstindex1=np.array([m_tap-i, 0]),
                      direction='y'
                      )
-        laygen.via(None, np.array([0, 0]), refinstname=imdmyrp0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
-        laygen.via(None, np.array([0, 0]), refinstname=imdmyrp0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
+        laygen.via(None, np.array([0, 0]), refinstname=imdmyrp0.name, refpinname='G0', refinstindex=np.array([i, 0]), gridname=rg12)
+        laygen.via(None, np.array([0, 0]), refinstname=imdmyrp0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg12)
     #dmy-n
     for i in range(m_rgnn_dmy):
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
+        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg12,
                      refinstname0=imdmyln0.name, refpinname0='S0', refinstindex0=np.array([i, 0]),
                      refinstname1=itapn0.name, refpinname1='TAP0', refinstindex1=np.array([i, 0]),
                      direction='y'
                      )
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
+        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg12,
                      refinstname0=imdmyln0.name, refpinname0='D0', refinstindex0=np.array([i, 0]),
                      refinstname1=itapn0.name, refpinname1='TAP0', refinstindex1=np.array([i+1, 0]),
                      direction='y'
                      )
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
+        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg12,
                      refinstname0=imdmyrn0.name, refpinname0='S0', refinstindex0=np.array([i, 0]),
                      refinstname1=itapn0.name, refpinname1='TAP0', refinstindex1=np.array([m_tap-i, 0]),
                      direction='y'
                      )
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
+        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg12,
                      refinstname0=imdmyrn0.name, refpinname0='D0', refinstindex0=np.array([i, 0]),
                      refinstname1=itapn0.name, refpinname1='TAP0', refinstindex1=np.array([m_tap-i-1, 0]),
                      direction='y'
@@ -1005,7 +873,7 @@ def generate_salatch_pmos(laygen, objectname_pfix, placement_grid,
         laygen.pin(name='VDDR'+str(i), layer=laygen.layers['pin'][3],
                    xy=laygen.get_rect_xy(rvvdd_r.name, rg_m2m3_thick), gridname=rg_m2m3_thick, netname='VDD')
 
-def generate_salatch_pmos_fitdim(laygen, objectname_pfix, placement_grid, routing_grid_m1m2,
+def generate_salatch_pmos_wbnd(laygen, objectname_pfix, placement_grid, routing_grid_m1m2,
                                  routing_grid_m1m2_thick, routing_grid_m2m3, routing_grid_m2m3_thick, routing_grid_m3m4, routing_grid_m4m5,
                                  devname_ptap_boundary, devname_ptap_body,
                                  devname_nmos_boundary, devname_nmos_body, devname_nmos_dmy,
@@ -1223,7 +1091,7 @@ if __name__ == '__main__':
 
     #salatch body
     # 1. generate without spacing
-    generate_salatch_pmos_fitdim(laygen, objectname_pfix='SA0',
+    generate_salatch_pmos_wbnd(laygen, objectname_pfix='SA0',
                                 placement_grid=pg, routing_grid_m1m2=rg_m1m2, routing_grid_m1m2_thick=rg_m1m2_thick,
                                 routing_grid_m2m3=rg_m2m3, routing_grid_m2m3_thick=rg_m2m3_thick, routing_grid_m3m4=rg_m3m4, routing_grid_m4m5=rg_m4m5,
                                 devname_ptap_boundary='ptap_fast_boundary', devname_ptap_body='ptap_fast_center_nf1',
@@ -1238,17 +1106,17 @@ if __name__ == '__main__':
     # 2. calculate spacing param and regenerate
     x0 = 2*laygen.templates.get_template('capdac', libname=workinglib).xy[1][0] \
          - laygen.templates.get_template(cellname, libname=workinglib).xy[1][0]
-    m_space = int(round(x0 / 2 / laygen.templates.get_template('space_1x', libname=logictemplib).xy[1][0]))
+    m_space = int(round(x0 / 2 / laygen.templates.get_template('space_1x', libname=logictemplib).xy[1][0]))+10*4
     m_space_4x = int(m_space / 4)
     m_space_2x = int((m_space - m_space_4x * 4) / 2)
     m_space_1x = int(m_space - m_space_4x * 4 - m_space_2x * 2)
-    #print("debug", x0, laygen.templates.get_template('capdrv_array_7b', libname=workinglib).xy[1][0] \
+    #print("debug", x0, laygen.templates.get_template('capdac', libname=workinglib).xy[1][0] \
     #        , laygen.templates.get_template(cellname, libname=workinglib).xy[1][0] \
     #        , laygen.templates.get_template('space_1x', libname=logictemplib).xy[1][0], m_space, m_space_4x, m_space_2x, m_space_1x)
     
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
-    generate_salatch_pmos_fitdim(laygen, objectname_pfix='SA0',
+    generate_salatch_pmos_wbnd(laygen, objectname_pfix='SA0',
                                 placement_grid=pg, routing_grid_m1m2=rg_m1m2, routing_grid_m1m2_thick=rg_m1m2_thick,
                                 routing_grid_m2m3=rg_m2m3, routing_grid_m2m3_thick=rg_m2m3_thick, routing_grid_m3m4=rg_m3m4, routing_grid_m4m5=rg_m4m5,
                                 devname_ptap_boundary='ptap_fast_boundary', devname_ptap_body='ptap_fast_center_nf1',
@@ -1258,7 +1126,7 @@ if __name__ == '__main__':
                                 devname_pmos_dmy='pmos4_fast_dmy_nf2',
                                 devname_ntap_boundary='ntap_fast_boundary', devname_ntap_body='ntap_fast_center_nf1',
                                 m_in=m_in, m_ofst=m_ofst, m_clkh=m_clkh, m_rgnn=m_rgnn, m_rstn=m_rstn, m_buf=m_buf,
-                                m_space_4x=10+m_space_4x, m_space_2x=m_space_2x, m_space_1x=m_space_1x, origin=sa_origin)
+                                m_space_4x=m_space_4x, m_space_2x=m_space_2x, m_space_1x=m_space_1x, origin=sa_origin)
     laygen.add_template_from_cell()
     
 

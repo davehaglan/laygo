@@ -29,10 +29,10 @@ if load_from_file==True:
         specdict = yaml.load(stream)
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
-    params['m_sw']=sizedict['sarsamp_m_sw']
-    params['m_sw_arr']=sizedict['sarsamp_m_sw_arr']
-    params['m_inbuf_list']=sizedict['sarsamp_m_inbuf_list']
-    params['m_outbuf_list']=sizedict['sarsamp_m_outbuf_list']
+    params['m_sw']=sizedict['sarsamp']['m_sw']
+    params['m_sw_arr']=sizedict['sarsamp']['m_sw_arr']
+    params['m_inbuf_list']=sizedict['sarsamp']['m_inbuf_list']
+    params['m_outbuf_list']=sizedict['sarsamp']['m_outbuf_list']
     params['lch']=sizedict['lch']
     params['pw']=sizedict['pw']
     params['nw']=sizedict['nw']

@@ -12,10 +12,9 @@ def execfile(filepath, globals=None, locals=None):
 
 files=[
     'laygo/generators/adc_sar/adc_sar_salatch_pmos_layout_generator.py',
-    #'laygo/generators/adc_sar/adc_sar_salatch_pmos_layout_generator_standalone.py',
     'laygo/generators/adc_sar/adc_sar_salatch_pmos_schematic_generator.py',
-    #'laygo/generators/adc_sar/adc_sar_salatch_pmos_lvs.py',
-    #'laygo/generators/adc_sar/adc_sar_salatch_pmos_extract.py',
+    'laygo/generators/adc_sar/adc_sar_salatch_pmos_lvs.py',
+    'laygo/generators/adc_sar/adc_sar_salatch_pmos_extract.py',
     'laygo/generators/adc_sar/adc_sar_salatch_pmos_verify.py',
     ]
 
