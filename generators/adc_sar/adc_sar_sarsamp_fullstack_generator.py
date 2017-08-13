@@ -13,6 +13,8 @@ files=[
     'laygo/generators/adc_sar/adc_sar_sarsamp_layout_generator.py',
     'laygo/generators/adc_sar/adc_sar_sarsamp_schematic_generator.py',
     'laygo/generators/adc_sar/adc_sar_sarsamp_lvs.py',
+    'laygo/generators/adc_sar/adc_sar_sarsamp_extract.py',
+    'laygo/generators/adc_sar/adc_sar_sarsamp_verify.py',
     ]
 
 for f in files:

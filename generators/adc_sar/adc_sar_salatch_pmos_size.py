@@ -61,6 +61,7 @@ if load_from_file==True:
     vdd=specdict['vdd']
     vregen_target = vdd*0.9
     tckq_target=outdict['system']['t_comp']
+    vnin_target=outdict['system']['v_comp_noise']
 
 mos_config = bag.BagProject().tech_info.tech_params['mos']
 root_dir = mos_config['mos_char_root']
@@ -85,6 +86,7 @@ res_dict['cbuf']=[]
 res_dict['ibuf']=[]
 res_dict['tbuf']=[]
 res_dict['tckq']=[]
+res_dict['vnin']=[]
 m_opt=m_list[-1]
 m_buf_opt=m_buf_list[-1]
 m_rgnn_opt=m_rgnn_list[-1]
@@ -158,6 +160,12 @@ for m, m_buf, m_rgnn, m_rst in zip(m_list, m_buf_list, m_rgnn_list, m_rst_list):
     #total delay
     tckq=ton+tint+trgn+tbuf
     
+    #noise calculation
+    kt=1.38*10e-23*300
+    vn_in_tot = (kt/gamma/(min0['gm']*m_in)**3*min0['gds']*cint1/(tint**2)+vn_in**2)**0.5
+    #vn_in_tot = (kt*gamma/c1+vn_in**2)**0.5
+    #print('vnin:',vn_in_tot)
+
     res_dict['con'].append(con)
     res_dict['ion'].append(ion)
     res_dict['ton'].append(ton)
@@ -169,8 +177,9 @@ for m, m_buf, m_rgnn, m_rst in zip(m_list, m_buf_list, m_rgnn_list, m_rst_list):
     res_dict['trgn'].append(trgn)
     res_dict['tbuf'].append(tbuf)
     res_dict['tckq'].append(tckq)
+    res_dict['vnin'].append(vn_in_tot)
     
-    if tckq < tckq_target: # meets specification
+    if tckq < tckq_target and vn_in_tot < vnin_target: # meets specification
         if m < m_opt:
             m_opt=m
             m_buf_opt=m_buf
@@ -195,15 +204,4 @@ if save_to_file==True:
         yaml.dump(sizedict, stream)
 
 print('salatch size results - m:'+str(m_opt)+' m_rgnn:'+str(m_rgnn_opt)+' m_rst:'+str(m_rst_opt)+' m_buf:'+str(m_buf_opt))
-'''
-#noise calculation
-kt=1.38*10e-23*300
-vn_in_tot = (kt/gamma/(min0['gm']*m_in)**3*min0['gds']*cint1/(tint**2)+vn_in**2)**0.5
-#vn_in_tot = (kt*gamma/c1+vn_in**2)**0.5
-#print('vnin:',vn_in_tot)
 
-#vbs = 0.0
-#vgs = -0.4
-#vds = -0.4
-#pprint.pprint(nmos_db.query(w=w, vbs=vbs, vgs=vgs, vds=vds))
-'''

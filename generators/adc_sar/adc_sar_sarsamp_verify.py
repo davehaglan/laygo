@@ -87,9 +87,7 @@ if verify_ac==True:
     #hotfix: remove orig_state
     prj.impl_db._eval_skill('delete_cellview( "%s" "%s" "%s" )' % (impl_lib, tb_cell, 'orig_state'))
 
-
     print('creating testbench %s__%s' % (impl_lib, tb_cell))
-    #tb = prj.create_testbench(tb_lib, tb_cell, impl_lib, cell_name, impl_lib)
     tb_dsn = prj.create_design_module(lib_name, tb_cell)
     tb_dsn.design(**params)
     tb_dsn.implement_design(impl_lib, top_cell_name=tb_cell, erase=True)
@@ -98,7 +96,7 @@ if verify_ac==True:
     tb.set_parameter('vck', vck)
     tb.set_parameter('vcm', vincm)
     tb.set_parameter('vdd', vdd)
-    tb.set_parameter('fmax', fbw_target*10)
+    tb.set_parameter('fmax', fbw_target*20)
 
     tb.set_simulation_environments(corners)
     tb.add_output("outdm_ac", """getData("/OUTDM" ?result 'ac)""")

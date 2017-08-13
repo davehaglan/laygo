@@ -12,6 +12,8 @@ from bag.layout import RoutingGrid, TemplateDB
 #from adc_sar.sampler import NPassGateWClk
 from abs_templates_ec.adc_sar.sampler import NPassGateWClk
 
+import yaml
+
 impl_lib = 'adc_sar_generated'
 
 if __name__ == '__main__':
@@ -19,18 +21,6 @@ if __name__ == '__main__':
     lib_name = 'adc_ec_templates'
     cell_name = 'sampler_nmos'
 
-    #params = dict(
-    #    lch=16e-9,
-    #    wp=6,
-    #    wn=6,
-    #    fgn=20,
-    #    fg_inbuf_list=[(10, 10), (20, 20)],
-    #    fg_outbuf_list=[(4, 4), (24, 24)],
-    #    nduml=4,
-    #    ndumr=6,
-    #    nsep=2,
-    #    intent='ulvt',
-    #)
     params = dict(
         lch=16e-9,
         wp=8,
@@ -44,8 +34,25 @@ if __name__ == '__main__':
         intent='ulvt',
     )
 
-
-
+    load_from_file=True
+    yamlfile_spec="adc_sar_spec.yaml"
+    yamlfile_size="adc_sar_size.yaml"
+    if load_from_file==True:
+        with open(yamlfile_spec, 'r') as stream:
+            specdict = yaml.load(stream)
+        with open(yamlfile_size, 'r') as stream:
+            sizedict = yaml.load(stream)
+        params['lch']=sizedict['lch']
+        params['wp']=sizedict['pw']*2
+        params['wn']=sizedict['nw']*2
+        params['fgn']=int(sizedict['sarsamp']['m_sw']*sizedict['sarsamp']['m_sw_arr']/2)
+        params['fg_inbuf_list']=[]
+        params['fg_outbuf_list']=[]
+        for m in sizedict['sarsamp']['m_inbuf_list']:
+             params['fg_inbuf_list']+=[(m, m)]
+        for m in sizedict['sarsamp']['m_outbuf_list']:
+             params['fg_outbuf_list']+=[(m, m)]
+    
     # create design module and run design method.
     print('designing module')
     dsn = prj.create_design_module(lib_name, cell_name)

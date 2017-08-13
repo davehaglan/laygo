@@ -295,9 +295,9 @@ if __name__ == '__main__':
             specdict = yaml.load(stream)
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
-        m_unit=sizedict['capdac_c_m']
-        num_bits_vertical=sizedict['capdac_num_bits_vertical']
-        num_bits_horizontal=sizedict['capdac_num_bits_horizontal']
+        m_unit=sizedict['capdac']['c_m']
+        num_bits_vertical=sizedict['capdac']['num_bits_vertical']
+        num_bits_horizontal=sizedict['capdac']['num_bits_horizontal']
         m_vertical=specdict['rdx_array'][:int(-1*(num_bits_horizontal))]
         m_horizontal=specdict['rdx_array'][int(-1*(num_bits_horizontal)):]
         for i, m in enumerate(m_horizontal):

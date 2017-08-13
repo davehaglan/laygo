@@ -200,8 +200,8 @@ if __name__ == '__main__':
             specdict = yaml.load(stream)
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
-        m_list=list(set(sizedict['capdrv_m_list']))
-        m_space_offset=sizedict['capdrv_space_offset']
+        m_list=list(set(sizedict['capdrv']['m_list']))
+        m_space_offset=sizedict['capdrv']['space_offset']
         num_bits=specdict['n_bit']
     m_space_ref=max(m_list+[8])
     #capdrv generation

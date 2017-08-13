@@ -25,7 +25,7 @@ if load_from_file==True:
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
     params['num_bits']=specdict['n_bit']-1
-    params['c_m']=sizedict['capdac_c_m']
+    params['c_m']=sizedict['capdac']['c_m']
     params['rdx_array']=specdict['rdx_array']
 
 print('creating BAG project')

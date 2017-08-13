@@ -6,6 +6,7 @@ from builtins import *
 
 import cProfile
 import pprint
+import yaml
 
 import bag
 from bag.layout import RoutingGrid, TemplateDB
@@ -54,6 +55,25 @@ if __name__ == '__main__':
         guard_ring_nf=2,
         tot_width=224,
     )
+
+    load_from_file=True
+    yamlfile_spec="adc_sar_spec.yaml"
+    yamlfile_size="adc_sar_size.yaml"
+    if load_from_file==True:
+        with open(yamlfile_spec, 'r') as stream:
+            specdict = yaml.load(stream)
+        with open(yamlfile_size, 'r') as stream:
+            sizedict = yaml.load(stream)
+        params['lch']=sizedict['lch']
+        params['wp']=sizedict['pw']*2
+        params['wn']=sizedict['nw']*2
+        params['fgn']=int(sizedict['sarsamp']['m_sw']*sizedict['sarsamp']['m_sw_arr']/2)
+        params['fg_inbuf_list']=[]
+        params['fg_outbuf_list']=[]
+        for m in sizedict['sarsamp']['m_inbuf_list']:
+             params['fg_inbuf_list']+=[(m, m)]
+        for m in sizedict['sarsamp']['m_outbuf_list']:
+             params['fg_outbuf_list']+=[(m, m)]
     
     # template and grid information
     layers = [4, 5, 6, 7]

@@ -29,7 +29,7 @@ verify_lvs = False
 extracted_calibre = False
 extracted_pvs = True
 verify_tran = True
-verify_noise = False
+verify_noise = True
 
 params = dict(
     lch=16e-9,
@@ -86,9 +86,7 @@ if verify_tran==True:
     #hotfix: remove orig_state
     prj.impl_db._eval_skill('delete_cellview( "%s" "%s" "%s" )' % (impl_lib, tb_cell, 'orig_state'))
 
-
     print('creating testbench %s__%s' % (impl_lib, tb_cell))
-    #tb = prj.create_testbench(tb_lib, tb_cell, impl_lib, cell_name, impl_lib)
     tb_dsn = prj.create_design_module(lib_name, tb_cell)
     tb_dsn.design(**params)
     tb_dsn.implement_design(impl_lib, top_cell_name=tb_cell, erase=True)
@@ -153,8 +151,10 @@ if verify_tran==True:
 
 # transient noise test
 if verify_noise==True:
+    #hotfix: remove orig_state
+    prj.impl_db._eval_skill('delete_cellview( "%s" "%s" "%s" )' % (impl_lib, tb_noise_cell, 'orig_state'))
+
     print('creating testbench %s__%s' % (impl_lib, tb_noise_cell))
-    #tb_noise = prj.create_testbench(tb_lib, tb_noise_cell, impl_lib, cell_name, impl_lib)
     tb_noise_dsn = prj.create_design_module(lib_name, tb_noise_cell)
     tb_noise_dsn.design(**params)
     tb_noise_dsn.implement_design(impl_lib, top_cell_name=tb_noise_cell, erase=True)
@@ -166,8 +166,10 @@ if verify_noise==True:
 
     tb_noise.set_simulation_environments(corners)
 
-    if extracted:
+    if extracted_calibre:
         tb_noise.set_simulation_view(impl_lib, cell_name, 'calibre')
+    if extracted_pvs:
+        tb_noise.set_simulation_view(impl_lib, cell_name, 'av_extracted')
 
     tb_noise.update_testbench()
 

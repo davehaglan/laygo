@@ -20,9 +20,6 @@ n_bit=specdict['n_bit']              #number of bits
 n_interleave=specdict['n_interleave']              #interleaving ratio
 fsamp=float(specdict['fsamp'])              #effective sampling rate
 c_unit=specdict['c_unit']             #minimum cap size (set by process and template)
-#c_m=specdict['c_m']                  #multiplier of unit cap for LSB
-c_m=1                                 #multiplier of unit cap for LSB
-c0=c_unit*c_m 
 c_delta=specdict['c_delta']          #Max. cap mismatch ratio for c_unit
 n_bit_samp_noise=specdict['n_bit_samp_noise']   #Max. sampling noise level in bits
 n_bit_samp_settle=specdict['n_bit_samp_settle'] #Max. sampling settling error level in bits
@@ -30,30 +27,28 @@ n_bit_comp_noise=specdict['n_bit_comp_noise']   #Max. comparator noise level in 
 rdx_array=np.array(specdict['rdx_array'])      #capdac radix array
 rdx_enob=specdict['rdx_enob']        #enob from redundancy
 v_bit=v_in/2**n_bit                  #1 bit step(ideal)
-c_samp=c0*np.sum(rdx_array)          #sampling cap from c_unit
 t_comp=(n_interleave-1)/n_bit/fsamp*specdict['cycle_comp'] #comparator timing
 t_logic=(n_interleave-1)/n_bit/fsamp*specdict['cycle_logic'] #logic timing
 t_dac=(n_interleave-1)/n_bit/fsamp*specdict['cycle_dac']  #DAC settling timing
 
 print("[Top level parameters]")
 print("v_bit:"+str(v_bit*1e3)+"mV")
-print("c_samp:"+str(c_samp*1e15)+"fF")
+
 #sampling noise calculaton
 v_samp_noise=v_bit*n_bit_samp_noise   #sampling noise
 c_samp_noise=kT/v_samp_noise**2     #sampling cap from noise requirement
-c_unit_noise=c_samp_noise/2**n_bit   #unit cap calculated from noise requirement
+c_unit_noise=c_samp_noise/np.sum(rdx_array)   #unit cap calculated from noise requirement
+c_m=int(np.ceil(c_unit_noise/c_unit))
+c0=c_unit*c_m 
+c_samp=c0*np.sum(rdx_array)          #sampling cap from c_unit
 print("")
 print("[[Frontend]]")
 print("")
 print("[Sampling noise analysis]")
 print("v_samp_noise:"+str(v_samp_noise*1e3)+"mV")
 print("c_samp_noise:"+str(c_samp_noise*1e15)+"fF")
-if c_samp_noise>c_samp:
-    print("Sampling cap has to increase to meet noise calculation. Use a larger c_unit or c_m, or relax n_bit_samp_noise")
-    c_m_new=c_m*(int(c_samp_noise/c_samp)+1)
-    print("Suggested c_m is "+str(c_m_new))
-else:
-    print("Current sampling cap meets noise specification")
+print("Suggested c_m is "+str(c_m))
+print("Calculated c_samp:"+str(c_samp*1e15)+"fF")
 #sampling bandwidth calculation
 print("")
 print("[Sampling bandwidth analysis]")
@@ -102,11 +97,11 @@ if save_to_file==True:
     with open(yamlfile_output, 'r') as stream:
         outdict = yaml.load(stream)
     outdict['system']['v_bit']=v_bit
+    outdict['system']['v_samp_noise']=v_samp_noise
     outdict['system']['v_comp_noise']=v_comp_noise
     outdict['system']['t_comp']=t_comp
     outdict['system']['t_logic']=t_logic
     outdict['system']['t_dac']=t_dac
-    outdict['system']['c_m']=c_m_new
-    #outdict['c_m_new']=c_m_new
+    outdict['system']['c_m']=c_m
     with open(yamlfile_output, 'w') as stream:
         yaml.dump(outdict, stream)

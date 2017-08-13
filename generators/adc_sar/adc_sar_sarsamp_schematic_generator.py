@@ -20,8 +20,8 @@ params = dict(
     m_outbuf_list=[8, 32],
     device_intent='fast',
     )
-load_from_file=True
 
+load_from_file=True
 yamlfile_spec="adc_sar_spec.yaml"
 yamlfile_size="adc_sar_size.yaml"
 if load_from_file==True:

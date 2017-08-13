@@ -451,9 +451,7 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']-1
-        num_bits_vertical=sizedict['capdac_num_bits_vertical']
-        num_bits_horizontal=sizedict['capdac_num_bits_horizontal']
-        m_list=sizedict['capdrv_m_list']
+        m_list=sizedict['capdrv']['m_list']
         cdrv_name_list=[]
         for i, m in enumerate(m_list):
             cdrv_name_list.append('capdrv_nsw_'+str(m)+'x')
