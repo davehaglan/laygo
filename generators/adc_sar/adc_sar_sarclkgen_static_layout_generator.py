@@ -321,9 +321,9 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']
-        m=sizedict['sarclkgen_m']
-        fo=sizedict['sarclkgen_fo']
-        ndelay=sizedict['sarclkgen_ndelay']
+        m=sizedict['sarclkgen']['m']
+        fo=sizedict['sarclkgen']['fo']
+        ndelay=sizedict['sarclkgen']['ndelay']
         m_space_left_4x=sizedict['sarabe_m_space_left_4x']
     #generation (2 step)
     cellname='sarclkgen_static'

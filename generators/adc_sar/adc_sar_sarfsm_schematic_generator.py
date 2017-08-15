@@ -29,7 +29,7 @@ if load_from_file==True:
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
     cell_name='sarfsm'
-    params['m']=sizedict['sarfsm_m']
+    params['m']=sizedict['sarfsm']['m']
     params['num_bits']=specdict['n_bit']
     params['lch']=sizedict['lch']
     params['pw']=sizedict['pw']

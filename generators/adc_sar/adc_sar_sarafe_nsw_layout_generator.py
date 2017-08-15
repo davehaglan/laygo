@@ -499,8 +499,8 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']-1
-        m_sa=sizedict['salatch_m']
-        num_bits_vertical=sizedict['capdac_num_bits_vertical']
+        m_sa=sizedict['salatch']['m']
+        num_bits_vertical=sizedict['capdac']['num_bits_vertical']
     #sarafe generation
     cellname='sarafe_nsw'
     print(cellname+" generating")

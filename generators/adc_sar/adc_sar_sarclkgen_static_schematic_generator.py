@@ -30,9 +30,9 @@ if load_from_file==True:
         specdict = yaml.load(stream)
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
-    params['m']=sizedict['sarclkgen_m']
-    params['fo']=sizedict['sarclkgen_fo']
-    params['ndelay']=sizedict['sarclkgen_ndelay']
+    params['m']=sizedict['sarclkgen']['m']
+    params['fo']=sizedict['sarclkgen']['fo']
+    params['ndelay']=sizedict['sarclkgen']['ndelay']
     params['lch']=sizedict['lch']
     params['pw']=sizedict['pw']
     params['nw']=sizedict['nw']

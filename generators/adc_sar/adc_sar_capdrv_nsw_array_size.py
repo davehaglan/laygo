@@ -68,12 +68,13 @@ vbs = vincm
 vgs = vdd-vincm
 vds = vincm
 mdrv = nmos_db.query(w=pw, vbs=vbs, vgs=vgs, vds=vds)
+
 # parameter calculation
-m0 = 2.3*cmax/(tdac_target*mdrv['gds']-2.3*mdrv['cdd']) #90% settling (+cal). Need to be updated if other settling target is needed
+m0 = 2.3*cmax/(tdac_target*np.abs(mdrv['gds'])-2.3*mdrv['cdd']) #90% settling (+cal). Need to be updated if other settling target is needed
 m0 = 2**(np.ceil(np.log2(m0)))
 m_opt=min(max(m0, m_min), m_max)
 c_in_opt=mdrv['cgg']*m_opt
-m_iter=int(m_opt[0])
+m_iter=int(m_opt)
 m_list_new=[]
 for i in range(num_bits):
     m_list_new = [m_iter]+m_list_new

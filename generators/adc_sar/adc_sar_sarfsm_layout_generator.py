@@ -376,7 +376,7 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']
-        m=sizedict['sarfsm_m']
+        m=sizedict['sarfsm']['m']
         m_space_left_4x=sizedict['sarabe_m_space_left_4x']
     #yamlfile_system_input="adc_sar_dsn_system_input.yaml"
     #if load_from_file==True:
@@ -391,7 +391,12 @@ if __name__ == '__main__':
     # 1. generate without spacing
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
-    num_bits_row=3
+    #num_bits_row=3
+    x0 = laygen.templates.get_template('sarafe_nsw', libname=workinglib).xy[1][0] \
+         - laygen.templates.get_template('nmos4_fast_left').xy[1][0] * 2
+    dff_name='dff_rsth_'+str(m)+'x'
+    x1 = laygen.templates.get_template(dff_name, libname=logictemplib).xy[1][0] 
+    num_bits_row=int(np.floor(x0/x1))
     generate_sarfsm(laygen, objectname_pfix='FSM0', templib_logic=logictemplib, placement_grid=pg,
                     routing_grid_m3m4=rg_m3m4, num_bits=num_bits, num_bits_row=num_bits_row, m=m, 
                     m_space_left_4x=m_space_left_4x, m_space_4x=0, m_space_2x=0, m_space_1x=0,

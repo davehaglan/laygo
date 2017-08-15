@@ -268,7 +268,7 @@ if __name__ == '__main__':
             specdict = yaml.load(stream)
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
-        ndelay=sizedict['sarclkgen_ndelay']
+        ndelay=sizedict['sarclkgen']['ndelay']
 
     #cell generation (slice_compact)
     cellname='sarclkdelayslice_compact'

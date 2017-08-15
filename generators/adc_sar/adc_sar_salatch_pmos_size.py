@@ -30,6 +30,7 @@ m_rst_list=[4, 6, 8]
 
 load_from_file=True
 save_to_file=True #update sizing yaml file
+estimate_cload=False #true if you want calculate the cload from previous sizing. 
 yamlfile_spec="adc_sar_spec.yaml"
 yamlfile_size="adc_sar_size.yaml"
 yamlfile_output="adc_sar_output.yaml"
@@ -123,6 +124,7 @@ vgs = 0.0
 vds = vdd/2
 mrstn=nmos_db.query(w=nw, vbs=vbs, vgs=vgs, vds=vds)
 
+
 for m, m_buf, m_rgnn, m_rst in zip(m_list, m_buf_list, m_rgnn_list, m_rst_list):
     #multiplier
     m_in = m #input pair
@@ -140,12 +142,12 @@ for m, m_buf, m_rgnn, m_rst in zip(m_list, m_buf_list, m_rgnn_list, m_rst_list):
     #timing calculation
     # turn on time
     con=min0['css']*m_in*2+mclk['cdd']*m_clk 
-    ion=-mclk['ids']*m_clk
+    ion=np.abs(mclk['ids'])*m_clk
     ton=con/ion*vth
     # integration time
     cint0=min0['cdd']*m_in+(mrgnp['css']+mrgnp['cgs'])*m_rgnp+mrstn['cdd']*m_rstn
     cint1=(mrgnp['cdd']+mrgnp['cgg'])*m_rgnp+(mrgnn['cdd']+mrgnn['cgg'])*m_rgnn+(mbufn['cgg']+mbufp['cgg'])*m_buf+mrstn['cdd']*m_rstn
-    iint=-mclk['ids']*m_clk
+    iint=np.abs(mclk['ids'])*m_clk
     gmint=min0['gm']*m_in
     tint=cint0/iint*vth+cint1/iint*vth
     vint=gmint*tint/cint1*vamp

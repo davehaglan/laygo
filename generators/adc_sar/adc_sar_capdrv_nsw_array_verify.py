@@ -14,7 +14,6 @@ cell_name = 'capdrv_nsw_array'
 impl_lib = 'adc_sar_generated'
 #tb_lib = 'adc_sar_testbenches'
 tb_cell = 'capdrv_nsw_array_tb_tran'
-#tb_noise_cell = 'salatch_pmos_tb_trannoise'
 
 #spec
 trf=20e-12
@@ -29,7 +28,6 @@ verify_lvs = False
 extracted_calibre = False
 extracted_pvs = True
 verify_tran = True
-verify_noise = False
 
 params = dict(
     lch=16e-9,

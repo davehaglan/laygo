@@ -391,8 +391,8 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']
-        m_sarret=sizedict['sarret_m']
-        fo_sarret=sizedict['sarret_fo']
+        m_sarret=sizedict['sarret']['m']
+        fo_sarret=sizedict['sarret']['fo']
         m_space_left_4x=sizedict['sarabe_m_space_left_4x']
     #cell generation (slice)
     cellname='sarretslice'

@@ -354,7 +354,7 @@ if __name__ == '__main__':
             specdict = yaml.load(stream)
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
-        m=sizedict['sarlogic_m']
+        m=sizedict['sarlogic']['m']
    
     cellname='sarlogic_wret_v2'
     print(cellname+" generating")

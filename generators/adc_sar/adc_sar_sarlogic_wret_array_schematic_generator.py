@@ -30,7 +30,7 @@ if load_from_file==True:
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
     cell_name='sarlogic_wret_v2_array'
-    params['m']=sizedict['sarlogic_m']
+    params['m']=sizedict['sarlogic']['m']
     params['num_bits']=sysdict_i['n_bit']
     params['lch']=sizedict['lch']
     params['pw']=sizedict['pw']

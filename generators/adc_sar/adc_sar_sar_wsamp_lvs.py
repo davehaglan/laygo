@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 lib_name = 'adc_sar_templates'
 cell_name = 'sar_wsamp'
 impl_lib = 'adc_sar_generated'
+#impl_lib = 'adc_sampler_ec'
 #tb_lib = 'adc_sar_testbenches'
 #tb_cell = 'capdac_8b_tb_tran'
 load_from_file=True

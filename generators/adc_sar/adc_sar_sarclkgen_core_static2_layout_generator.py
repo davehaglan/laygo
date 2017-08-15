@@ -417,7 +417,7 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']
-        m=sizedict['sarclkgen_m']*4
+        m=sizedict['sarclkgen']['m']*4
 
     print(cell_name+" generating")
     mycell_list.append(cell_name)

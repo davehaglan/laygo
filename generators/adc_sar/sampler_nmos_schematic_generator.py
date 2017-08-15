@@ -14,8 +14,8 @@ from abs_templates_ec.adc_sar.sampler import NPassGateWClk
 
 import yaml
 
-impl_lib = 'adc_sar_generated'
-
+#impl_lib = 'adc_sar_generated'
+impl_lib = 'adc_sampler_ec'
 if __name__ == '__main__':
     prj = bag.BagProject()
     lib_name = 'adc_ec_templates'

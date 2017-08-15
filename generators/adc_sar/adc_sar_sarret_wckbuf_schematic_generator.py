@@ -28,8 +28,8 @@ if load_from_file==True:
         specdict = yaml.load(stream)
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
-    params['m']=sizedict['sarret_m']
-    params['fo']=sizedict['sarret_fo']
+    params['m']=sizedict['sarret']['m']
+    params['fo']=sizedict['sarret']['fo']
     params['num_bits']=specdict['n_bit']
     params['lch']=sizedict['lch']
     params['pw']=sizedict['pw']

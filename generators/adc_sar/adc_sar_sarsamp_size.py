@@ -82,14 +82,15 @@ m_sw_arr_opt=m_sw_arr_list[-1]
 m_inbuf_list_opt=m_inbuf_list_list[-1]
 m_outbuf_list_list=m_outbuf_list_list[-1]
 
+# sw transistor
+vbs = vincm
+vgs = vdd-vincm
+vds = vincm
+msw = nmos_db.query(w=pw, vbs=vbs, vgs=vgs, vds=vds)
+
 #sweep and calculate
 for m_sw, m_sw_arr in zip(m_sw_list, m_sw_arr_list):
     m=m_sw*m_sw_arr
-    # sw transistor
-    vbs = vincm
-    vgs = vdd-vincm
-    vds = vincm
-    msw = nmos_db.query(w=pw, vbs=vbs, vgs=vgs, vds=vds)
     # parameter calculation
     ctot = msw['cdd']*m+csamp
     rsw = 1/msw['gds']/m
