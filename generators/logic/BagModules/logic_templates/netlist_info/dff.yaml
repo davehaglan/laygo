@@ -58,6 +58,18 @@ instances:
         direction: input
         net_name: "LATCH"
         num_bits: 1
+  PIN0:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN1:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN3:
+    lib_name: basic
+    cell_name: opin
+    instpins: {}
   I7:
     lib_name: logic_templates
     cell_name: inv
@@ -194,3 +206,11 @@ instances:
         direction: input
         net_name: "I"
         num_bits: 1
+  PIN4:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
+  PIN5:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
