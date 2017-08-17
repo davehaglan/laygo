@@ -46,7 +46,7 @@ laygo/generators/adc_sar/yaml by typing:
     > Note: some repos may already have those files in their working
     directories.
 
-3. Add library definitions to your cds.lib
+3. Add library definitions to your cds.lib (some distributions use cds.lib.core instead of cds.lib)
 
     *In cds.lib*
     ```
@@ -466,11 +466,44 @@ Zhongkai Wang made schematic and layout generators for the clock
 generation. Running following scripts will generate the clocking
 frontend. (You don't need this for non-interleaving ADCs)
 
+```
+run laygo/generators/adc_sar/clk_dis_capsw_array_layout_generator.py
+run laygo/generators/adc_sar/clk_dis_clk_dis_cell_layout_generator.py
+run laygo/generators/adc_sar/clk_dis_capdac_layout_generator.py
+run laygo/generators/adc_sar/clk_dis_viadel_cell_layout_generator.py
+run laygo/generators/adc_sar/clk_dis_viadel_layout_generator.py
+run laygo/generators/adc_sar/clk_dis_htree_layout_generator.py
+run laygo/generators/adc_sar/clk_dis_viadel_htree_layout_generator.py
+run laygo/generators/adc_sar/clk_dis_viadel_htree_schematic_generator.py
+```
+
+The following picture shows generated clocking paths for different
+interleaving ratio settings
+
+![sar](images/tisaradc_clking.png)
+
 ## Retimer
 
-From now on, AnalogBase has to be set up for layout generations (which
-is not for the cds_ff_mpt technology).
+(From now on, AnalogBase has to be set up for layout generations (which
+is not for the cds_ff_mpt technology)
 
+Generator codes for the final retimer is written by Eric Chang. Run
+these scripts to generate the retimer schematic and layout.
+
+```
+run laygo/generators/adc_sar/adc_retimer_layout_generator.py
+run laygo/generators/adc_sar/adc_retimer_schematic_generator.py
+```
+
+## TISARADC body (clock+sar+retimer)
+
+Following scripts are for generating layout and schematic of TISARADC
+body.
+
+```
+run laygo/generators/adc_sar/tisaradc_body_core_layout_generator.py
+run laygo/generators/adc_sar/tisaradc_body_core_schematic_generator.py
+```
 
 ## Bias
 

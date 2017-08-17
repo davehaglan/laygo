@@ -239,7 +239,7 @@ laygo/generators/adc_sar/yaml by typing:</p>
 directories.</p>
 </div></blockquote>
 </li>
-<li><p class="first">Add library definitions to your cds.lib</p>
+<li><p class="first">Add library definitions to your cds.lib (some distributions use cds.lib.core instead of cds.lib)</p>
 <p><em>In cds.lib</em></p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">DEFINE</span> <span class="n">adc_sar_templates</span> <span class="o">./</span><span class="n">adc_sar_templates</span>
 <span class="n">DEFINE</span> <span class="n">adc_sar_testbenches</span> <span class="o">./</span><span class="n">adc_sar_testbenches</span>
@@ -619,6 +619,19 @@ sizing parameters).</p>
 <p>Zhongkai Wang made schematic and layout generators for the clock
 generation. Running following scripts will generate the clocking
 frontend. (You don&#8217;t need this for non-interleaving ADCs)</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">clk_dis_capsw_array_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">clk_dis_clk_dis_cell_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">clk_dis_capdac_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">clk_dis_viadel_cell_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">clk_dis_viadel_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">clk_dis_htree_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">clk_dis_viadel_htree_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">clk_dis_viadel_htree_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>The following picture shows generated clocking paths for different
+interleaving ratio settings</p>
+<p><img alt="sar" src="../_images/tisaradc_clking.png" /></p>
 </div>
 <div class="section" id="retimer">
 <span id="retimer"></span><h2>Retimer<a class="headerlink" href="#retimer" title="Permalink to this headline">¶</a></h2>
