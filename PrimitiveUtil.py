@@ -64,6 +64,31 @@ def Mt(transform):
     if transform=='R180':
         return np.array([[-1, 0], [0, -1]])
 
+def Mtinv(transform):
+    """
+    Get inverse of transform matrix
+
+    Parameters
+    ----------
+    transform : str
+        transform parameter. possible values are 'R0', 'MX', 'MY', 'MXY', and 'R180'
+
+    Returns
+    -------
+    np.array([[int, int], [int, int]])
+        inverse of transform matrix
+    """
+    if transform=='R0':
+        return np.array([[1, 0], [0, 1]])
+    if transform=='MX':
+        return np.array([[1, 0], [0, -1]])
+    if transform=='MY':
+        return np.array([[-1, 0], [0, 1]])
+    if transform=='MXY': #mirror to y=x line
+        return np.array([[0, 1], [1, 0]])
+    if transform=='R180':
+        return np.array([[-1, 0], [0, -1]])
+
 def Md(direction):
     """
     Get direction/projection matrix

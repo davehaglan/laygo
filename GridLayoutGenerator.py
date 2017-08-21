@@ -227,7 +227,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             self.add_text(None, text=inst.name+"/"+t.name, xy=xy_phy, layer=self.layers['prbnd'])
         return inst
 
-    def relplace(self, name, templatename, gridname, refinstname=None, direction='right', xy=np.array([0, 0]),
+    def relplace(self, name=None, templatename=None, gridname=None, refinstname=None, direction='right', xy=np.array([0, 0]),
                  offset=np.array([0, 0]), template_libname=None, shape=np.array([1, 1]), spacing=None, transform='R0', refobj=None):
         """
         Place an instance on abstract grid, bound from a reference object. If the reference object is not specified,
@@ -257,7 +257,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         transform : str ('R0', 'MX', 'MY')
             Transform parameter. 'R0' is used by default.
 
-        refinstname : str, optional, will be deprecated
+        refinstname : str, optional, deprecated
             Reference instance name, if None, [0, 0] is used for the reference point.
 
         Returns
@@ -351,8 +351,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             return self.place(name=name, templatename=templatename, gridname=gridname, xy=i_xy_grid+xy, offset=offset,
                               template_libname=template_libname, shape=shape, spacing=spacing, transform=transform)
 
-    def via(self, name, xy, gridname, refobj=None, refobjindex=np.array([0, 0]), offset=np.array([0, 0]), refinstname=None, refinstindex=np.array([0, 0]),
-            refpinname=None, transform='R0', overwrite_xy_phy=None, overlayobj=None):
+    def via(self, name=None, xy=np.array([0, 0]), gridname=None, refobj=None, refobjindex=np.array([0, 0]), offset=np.array([0, 0]), refinstname=None, refinstindex=np.array([0, 0]),
+            refpinname=None, transform='R0', overwrite_xy_phy=None, overlay=None):
         """
         Place a via on grid.
 
@@ -366,8 +366,9 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             Grid name of the via
         refobj : LayoutObject.LayoutObject
             Reference object(Instance/Pin/Rect) handle. If None, refinstiname is used.
-        overlayobj : LayoutObject.LayoutObject
-            Layout object for via placement at intersection (via will be placed at the overlaid point btn refobj and overlayobj)
+        overlay : LayoutObject.LayoutObject
+            Layout object for via placement at intersection (via will be placed at the overlaid point btn refobj and overlay)
+            Use with refobj only. Not compatible with legacy reference parameters (refinstname)
         offset : np.array([float, float]), optional
             Offset on the physical grid, bound from xy
         transform : str ('R0', 'MX', 'MY'), optional
@@ -375,13 +376,13 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         overwrite_xy_phy : None or np.array([float, float]), optional
             If specified, final xy physical coordinates are overwritten by the argument.
 
-        refobjindex : np.array([int, int]), optional, will be deprecated
+        refobjindex : np.array([int, int]), optional, deprecated
             Index of refobj if it is a mosaic instance.
-        refinstname : str, optional, will be deprecated
+        refinstname : str, optional, deprecated
             Reference instance name for xy. If None, origin([0,0]) is used as the reference point.
-        refinstindex : str, optional, will be deprecated
+        refinstindex : str, optional, deprecated
             Index of refinstname if it is a mosaic instance
-        refpinname : str, optional, will be deprecated
+        refpinname : str, optional, deprecated
             Reference pin of refinstname for reference point of xy. If None, the origin of refinstname0 is used.
 
         Returns
@@ -411,21 +412,27 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         else:
             if not refinstname is None:
                 refinst = self.get_inst(refinstname)
-        if not overlayobj is None:
-            if type(overlayobj).__name__ is 'Rect':
-                refrect1 = overlayobj
+        if not overlay is None:
+            if type(overlay).__name__ is 'Rect':
+                refrect1 = overlay
 
         ### preprocessing arguments ends ###
         # get physical grid coordinates
+        # need to be refactored
         if not refinst is None:
             reftemplate = self.templates.get_template(refinst.cellname, libname=refinst.libname)
             offset = offset + refinst.xy + np.dot(refinst.spacing * refinstindex, self.Mt(refinst.transform).T)
             if not refpinname == None: #if pin reference is specified
                 pin_xy_phy=reftemplate.pins[refpinname]['xy']
-                if not refrect1 is None:
-                    #TODO: implement overlay function using refrect1
-                    pass
-                pin_xy_abs=self.get_absgrid_region(gridname, pin_xy_phy[0], pin_xy_phy[1])[0,:]
+                bbox=pin_xy_phy
+                if not refrect1 is None: #overlay
+                    bbox0=pin_xy_phy
+                    bbox1=np.dot(refrect1.xy - refinst.xy, ut.Mtinv(refinst.transform).T)
+                    sx=sorted([bbox0[0][0], bbox0[1][0], bbox1[0][0], bbox1[1][0]])
+                    sy=sorted([bbox0[0][1], bbox0[1][1], bbox1[0][1], bbox1[1][1]])
+                    bbox=np.array([[sx[1], sy[1]], [sx[2], sy[2]]])
+                #pin_xy_abs=self.get_absgrid_region(gridname, pin_xy_phy[0], pin_xy_phy[1])[0,:]
+                pin_xy_abs=self.get_absgrid_region(gridname, bbox[0], bbox[1])[0,:]
                 xy=xy+pin_xy_abs
             transform=refinst.transform #overwrite transform variable
         if not refrect0 is None:
@@ -448,7 +455,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         return inst
 
     # Route functions
-    def route(self, name, layer=None, xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=None, gridname1=None, direction='omni',
+    def route(self, name=None, layer=None, xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=None, gridname1=None, direction='omni',
               refobj0=None, refobj1=None, refobjindex0=np.array([0, 0]), refobjindex1=np.array([0, 0]), 
               refinstname0=None, refinstname1=None, refinstindex0=np.array([0, 0]), refinstindex1=np.array([0, 0]),
               refpinname0=None, refpinname1=None, offset0=np.array([0,0]), offset1=None,
@@ -496,27 +503,27 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             Offset coordinates for via placements, bound from xy1
             ex) if xy0 = [1, 2], xy1 = [1, 5], via1 = [0, 2] then a via will be placed at [1, 7]
         addvia0 : bool, optional
-            True if a via is placed on xy0 (will be deprecated, use via0=[0] instead)
+            True if a via is placed on xy0 (deprecated, use via0=[0] instead)
         addvia1 : bool, optional
-            True if a via is placed on xy1 (will be deprecated, use via1=[0] instead)
+            True if a via is placed on xy1 (deprecated, use via1=[0] instead)
         netname : str, optional
             net name of the route
 
-        refobjindex0 : np.array([int, int]), optional, will be deprecated
+        refobjindex0 : np.array([int, int]), optional, deprecated
             Index of refobj0 if it is a mosaic instance.
-        refobjindex1 : np.array([int, int]), optional, will be deprecated
+        refobjindex1 : np.array([int, int]), optional, deprecated
             Index of refobj1 if it is a mosaic instance.
-        refinstname0 : str, optional, will be deprecated
+        refinstname0 : str, optional, deprecated
             Reference instance name for start point. If None, origin([0,0]) is used as the reference point.
-        refinstname1 : str, optional, will be deprecated
+        refinstname1 : str, optional, deprecated
             Reference instance name for end point. If None, origin([0,0]) is used as the reference point.
-        refinstindex0 : np.array([int, int]), optional, will be deprecated
+        refinstindex0 : np.array([int, int]), optional, deprecated
             Index of refinstname0 if it is a mosaic instance.
-        refinstindex1 : np.array([int, int]), optional, will be deprecated
+        refinstindex1 : np.array([int, int]), optional, deprecated
             Index of refinstname1 if it is a mosaic instance.
-        refpinname0 : str, optional, will be deprecated
+        refpinname0 : str, optional, deprecated
             Reference pin of refinstname0 for reference point of xy0. If None, the origin of refinstname0 is used.
-        refpinname1 : str, optional, will be deprecated
+        refpinname1 : str, optional, deprecated
             Reference pin of refinstname1 for reference point of xy1. If None, the origin of refinstname1 is used.
 
         Returns
@@ -604,11 +611,11 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         xy0_phy_center=xy_phy_center[0,:]; xy1_phy_center=xy_phy_center[1,:]
         # optional via placements
         if addvia0==True:
-            print("[WARNING] addvia0 option in GridLayoutGenerator.route will be deprecated. Use via0=[[0, 0]] instead")
+            print("[WARNING] addvia0 option in GridLayoutGenerator.route deprecated. Use via0=[[0, 0]] instead")
             self.via(None, xy0, gridname0, offset=offset0, refobj=refinst0, refinstindex=refinstindex0,
             refpinname=refpinname0, transform=transform0)
         if addvia1==True:
-            print("[WARNING] addvia1 option in GridLayoutGenerator.route will be deprecated. Use via1=[[0, 0]] instead")
+            print("[WARNING] addvia1 option in GridLayoutGenerator.route deprecated. Use via1=[[0, 0]] instead")
             self.via(None, xy1, gridname1, offset=offset1, refobj=refinst1, refinstindex=refinstindex1,
             refpinname=refpinname1, transform=transform1)
         if not via0 is None:
@@ -765,7 +772,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         xy0 = np.asarray(xy0)
         xy1 = np.asarray(xy1)
         if not gridname is None:
-            print("gridname in GridLayoutGenerator.route_vh will be deprecated. Use gridname0 instead")
+            print("gridname in GridLayoutGenerator.route_vh deprecated. Use gridname0 instead")
             gridname0 = gridname
         if gridname1 is None:
             gridname1 = gridname0
@@ -829,7 +836,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         xy0=np.asarray(xy0)
         xy1=np.asarray(xy1)
         if not gridname is None:
-            print("gridname in GridLayoutGenerator.route_hv will be deprecated. Use gridname0 instead")
+            print("gridname in GridLayoutGenerator.route_hv deprecated. Use gridname0 instead")
             gridname0 = gridname
         if gridname1 is None:
             gridname1 = gridname0
@@ -884,7 +891,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         if layerv1==None:
             layerv1=layerv0
         if not gridname is None:
-            print("gridname in GridLayoutGenerator.route_vhv will be deprecated. Use gridname0 instead")
+            print("gridname in GridLayoutGenerator.route_vhv deprecated. Use gridname0 instead")
             gridname0 = gridname
         if gridname1 is None:
             gridname1 = gridname0
@@ -960,7 +967,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         if layerh1==None:
             layerh1=layerh0
         if not gridname is None:
-            print("gridname in GridLayoutGenerator.route_hvh will be deprecated. Use gridname0 instead")
+            print("gridname in GridLayoutGenerator.route_hvh deprecated. Use gridname0 instead")
             gridname0 = gridname
         if gridname1 is None:
             gridname1 = gridname0
@@ -1003,8 +1010,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             pin name
         layer : [str, str]
             pin layer
-        xy : np.array([[int, int], [int, int]]), optional
-            xy coordinate. will be deprecated. use xy0, xy1 instead
+        xy : np.array([[int, int], [int, int]]), optional, deprecated
+            xy coordinate. deprecated. use xy0, xy1 instead
         xy0 : np.array([[int, int]), optional
             first coordinate
         xy1 : np.array([[int, int]), optional
@@ -1068,10 +1075,13 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         return self.pin(name, layer, xy, gridname, netname=netname)
 
     def create_boundary_pin_form_rect(self, rect, gridname, pinname, layer, size=4, direction='left', netname=None):
-        print("[WARNING] create_boundary_pin_form_rect will be deprecated. Use create_boundary_pin_from_rect instead")
-        return self.create_boundary_pin_from_rect(rect=rect, gridname=gridname, pinname=pinname, layer=layer, size=size, direction=direction, netname=netname)
+        print("[WARNING] create_boundary_pin_form_rect deprecated. Use boundary_pin_from_rect instead")
+        return self.boundary_pin_from_rect(rect=rect, gridname=gridname, name=pinname, layer=layer, size=size, direction=direction, netname=netname)
 
     def create_boundary_pin_from_rect(self, rect, gridname, pinname, layer, size=4, direction='left', netname=None):
+        return self.boundary_pin_from_rect(rect=rect, gridname=gridname, name=pinname, layer=layer, size=size, direction=direction, netname=netname)
+
+    def boundary_pin_from_rect(self, rect, gridname, name, layer, size=4, direction='left', netname=None):
         """
         Generate a boundary Pin object from a reference Rect object
 
@@ -1081,7 +1091,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             reference rect object
         gridname : str
             grid name
-        pinname : str
+        name : str
             pin name
         layer : [str, str]
             pin layer
@@ -1343,7 +1353,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         np.array([[float, float], [float, float]])
             instance bbox
         """
-        print("[WARNING] GridLayoutGenerater.get_inst_bbox_phygrid will be deprecated. Use inst.bbox instead")
+        print("[WARNING] GridLayoutGenerater.get_inst_bbox_phygrid deprecated. Use inst.bbox instead")
         return self.get_inst(instname).bbox
 
     def get_grid(self, gridname):
