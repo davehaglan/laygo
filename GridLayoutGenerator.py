@@ -1107,7 +1107,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         laygo.LayoutObject.Pin
             generated Pin object
         """
-        if netname == None: netname = pinname
+        if netname == None: netname = name
         xy=self.get_rect_xy(rect.name, gridname, sort=True)
         if direction=="left":
             xy[1][0] = xy[0][0] + size
@@ -1118,7 +1118,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         elif direction=="top":
             xy[0][1] = xy[1][1] - size
 
-        return self.pin(name=pinname, layer=layer, xy=xy, gridname=gridname, netname=netname)
+        return self.pin(name=name, layer=layer, xy=xy, gridname=gridname, netname=netname)
 
     #db access function
     def sel_template_library(self, libname):
