@@ -34,7 +34,7 @@ lib_name = 'logic_templates'
 tech_lib = prj.bag_config['database']['schematic']['tech_lib']
 impl_lib = tech_lib+'_logic_templates'
 
-params = dict(lch=18e-9, pw=4, nw=4, device_intent='fast', m=1)
+params = dict(lch=20e-9, pw=4, nw=4, device_intent='fast', m=1)
 
 cell_name_dict={'tie':[2],
                 'tie_wovdd':[2],

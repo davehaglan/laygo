@@ -148,8 +148,8 @@ class serdes_templates__ser_2Nto1(Module):
             if i%2==1:
                 in0_name = in0_name+',in<%d>'%(num_ser-i-3)
             print(in0_name)
-        self.reconnect_instance_terminal('INto1_1', 'in<0>', in1_name)
-        self.reconnect_instance_terminal('INto1_0', 'in<0>', in0_name)
+        self.reconnect_instance_terminal('INto1_1', 'in<%d:0>'%(sub_ser-1), in1_name)
+        self.reconnect_instance_terminal('INto1_0', 'in<%d:0>'%(sub_ser-1), in0_name)
         
         self.rename_pin('in<1:0>','in<%d:0>'%(num_ser-1))
 

@@ -1,5 +1,0 @@
-lib_name: logic_templates
-cell_name: nmos4_fast
-pins: [ "G", "D", "S", "B" ]
-instances:
-  {}
