@@ -302,6 +302,10 @@ if __name__ == '__main__':
         m_horizontal=specdict['rdx_array'][int(-1*(num_bits_horizontal)):]
         for i, m in enumerate(m_horizontal):
             m_horizontal[i]=int(m_horizontal[i]/(2**i))
+        if 'num_space_left' in sizedict['capdac']:
+            num_space_left=sizedict['capdac']['num_space_left']
+        if 'num_space_right' in sizedict['capdac']:
+            num_space_right=sizedict['capdac']['num_space_right']
         #print(m_vertical, m_horizontal)
 
     yres=laygen.get_template_size(name='nmos4_fast_center_nf2')[1]*2
