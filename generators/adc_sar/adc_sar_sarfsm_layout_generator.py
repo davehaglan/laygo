@@ -393,6 +393,7 @@ if __name__ == '__main__':
     laygen.sel_cell(cellname)
     #num_bits_row=3
     x0 = laygen.templates.get_template('sarafe_nsw', libname=workinglib).xy[1][0] \
+         - laygen.templates.get_template('tap', libname=logictemplib).xy[1][0] * 2 \
          - laygen.templates.get_template('nmos4_fast_left').xy[1][0] * 2
     dff_name='dff_rsth_'+str(m)+'x'
     x1 = laygen.templates.get_template(dff_name, libname=logictemplib).xy[1][0] 

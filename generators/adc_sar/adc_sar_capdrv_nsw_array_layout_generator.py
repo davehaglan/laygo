@@ -354,8 +354,8 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
     # power pin
     pwr_dim_left=laygen.get_template_size(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)[0]
     pwr_dim_right=pwr_dim_left
-    if not m_space_4x==0:
-        pwr_dim_right+=laygen.get_template_size(name=isp4x[0].cellname, gridname=rg_m2m3, libname=isp4x[0].libname)[0]*m_space_4x
+    if m_space_4x>1:
+        pwr_dim_right+=laygen.get_template_size(name=isp4x[0].cellname, gridname=rg_m2m3, libname=isp4x[0].libname)[0]*(m_space_4x-1)
     pwr_dim_delta=pwr_dim_right-pwr_dim_left
     rvdd = []
     rvss = []

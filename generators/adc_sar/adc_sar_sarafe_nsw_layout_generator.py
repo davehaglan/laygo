@@ -292,7 +292,7 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     rvdd_sal_m5, rvss_sal_m5 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAL_M5_', 
                 layer=laygen.layers['metal'][5], gridname=rg_m4m5_thick, netnames=['VDD', 'VSS'], direction='y', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=None,
-                offset_start_index=1, offset_end_index=-2+2)
+                offset_start_index=1, offset_end_index=-2)
     #sa_right_m4_m5
     x1 = laygen.get_inst_xy(name=isa.name, gridname=rg_m3m4_thick)[0]\
          +laygen.get_template_size(name=isa.cellname, gridname=rg_m3m4_thick, libname=workinglib)[0]
@@ -313,7 +313,7 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     rvdd_sar_m5, rvss_sar_m5 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAR_M5_', 
                 layer=laygen.layers['metal'][5], gridname=rg_m4m5_thick, netnames=['VDD', 'VSS'], direction='y', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=None,
-                offset_start_index=2-2, offset_end_index=0)
+                offset_start_index=2, offset_end_index=-1)
     #sa_m6
     num_vref_routes_m6=4
     x1 = laygen.get_inst_xy(name=isa.name, gridname=rg_m5m6_thick)[0]\
