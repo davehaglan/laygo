@@ -189,8 +189,10 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     for pn in pdict_m5m6[icdacl.name]:
         if pn.startswith('O'): #out pin
             outcnt+=1
-    x0 = laygen.get_inst_xy(icdacl.name, rg_m5m6)[0] - 8
-    x1 = laygen.get_inst_xy(icdacr.name, rg_m5m6)[0] + 8
+    _x0 = laygen.get_inst_xy(icdacl.name, rg_m5m6)[0] 
+    _x1 = laygen.get_inst_xy(icdacr.name, rg_m5m6)[0] 
+    x0 = _x0+(_x1-_x0)-4
+    x1 = _x1-(_x1-_x0)+4
     nrin_sa = 4  # number of M6 horizontal route stacks for cdac to sa
     nrin = 2**num_bits_vertical - 2*nrin_sa # number of M6 horizontal route stacks
     if nrin<1: 
@@ -292,7 +294,7 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     rvdd_sal_m5, rvss_sal_m5 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAL_M5_', 
                 layer=laygen.layers['metal'][5], gridname=rg_m4m5_thick, netnames=['VDD', 'VSS'], direction='y', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=None,
-                offset_start_index=1, offset_end_index=-2)
+                offset_start_index=1, offset_end_index=0)
     #sa_right_m4_m5
     x1 = laygen.get_inst_xy(name=isa.name, gridname=rg_m3m4_thick)[0]\
          +laygen.get_template_size(name=isa.cellname, gridname=rg_m3m4_thick, libname=workinglib)[0]
@@ -313,7 +315,7 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     rvdd_sar_m5, rvss_sar_m5 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAR_M5_', 
                 layer=laygen.layers['metal'][5], gridname=rg_m4m5_thick, netnames=['VDD', 'VSS'], direction='y', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=None,
-                offset_start_index=2, offset_end_index=-1)
+                offset_start_index=0, offset_end_index=0)
     #sa_m6
     num_vref_routes_m6=4
     x1 = laygen.get_inst_xy(name=isa.name, gridname=rg_m5m6_thick)[0]\
@@ -358,48 +360,6 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
         p=laygen.pin_from_rect(name='VSS_M6_'+r.name, layer=laygen.layers['pin'][6], rect=r, gridname=rg_m5m6_thick, netname='VSS')
         p.xy1[0]=x1_phy
     #pins
-    #laygen.pin(name='VREF<0>', layer=laygen.layers['pin'][4], xy=laygen.get_rect_xy(rvref0.name, rg_m4m5), gridname=rg_m4m5)
-    #laygen.pin(name='VREF<1>', layer=laygen.layers['pin'][4], xy=laygen.get_rect_xy(rvref1.name, rg_m4m5), gridname=rg_m4m5)
-    #laygen.pin(name='VREF<2>', layer=laygen.layers['pin'][4], xy=laygen.get_rect_xy(rvref2.name, rg_m4m5), gridname=rg_m4m5)
-    '''
-    t = laygen.templates.get_template(icdrvl.cellname, libname=workinglib)
-    vref0vl_pin_xy=np.tile(laygen.get_inst_xy(name=icdrvl.name, gridname=rg_m4m5), (2,1))\
-                   + np.array([-1, 1]) * laygen.get_template_pin_coord(t.name, 'VREF_M5<0>', rg_m4m5, libname=workinglib)
-    vref1vl_pin_xy=np.tile(laygen.get_inst_xy(name=icdrvl.name, gridname=rg_m4m5), (2,1))\
-                   + np.array([-1, 1]) * laygen.get_template_pin_coord(t.name, 'VREF_M5<1>', rg_m4m5, libname=workinglib)
-    vref2vl_pin_xy=np.tile(laygen.get_inst_xy(name=icdrvl.name, gridname=rg_m4m5), (2,1))\
-                   + np.array([-1, 1]) * laygen.get_template_pin_coord(t.name, 'VREF_M5<2>', rg_m4m5, libname=workinglib)
-    vref0vr_pin_xy=np.tile(laygen.get_inst_xy(name=icdrvr.name, gridname=rg_m4m5), (2,1))\
-                   + np.array([1, 1]) * laygen.get_template_pin_coord(t.name, 'VREF_M5<0>', rg_m4m5, libname=workinglib)
-    vref1vr_pin_xy=np.tile(laygen.get_inst_xy(name=icdrvr.name, gridname=rg_m4m5), (2,1))\
-                   + np.array([1, 1]) * laygen.get_template_pin_coord(t.name, 'VREF_M5<1>', rg_m4m5, libname=workinglib)
-    vref2vr_pin_xy=np.tile(laygen.get_inst_xy(name=icdrvr.name, gridname=rg_m4m5), (2,1))\
-                   + np.array([1, 1]) * laygen.get_template_pin_coord(t.name, 'VREF_M5<2>', rg_m4m5, libname=workinglib)
-    laygen.pin(name='VREF_M5L<0>', layer=laygen.layers['pin'][5], xy=vref0vl_pin_xy, gridname=rg_m4m5, netname='VREF<0>')
-    laygen.pin(name='VREF_M5L<1>', layer=laygen.layers['pin'][5], xy=vref1vl_pin_xy, gridname=rg_m4m5, netname='VREF<1>')
-    laygen.pin(name='VREF_M5L<2>', layer=laygen.layers['pin'][5], xy=vref2vl_pin_xy, gridname=rg_m4m5, netname='VREF<2>')
-    laygen.pin(name='VREF_M5R<0>', layer=laygen.layers['pin'][5], xy=vref0vr_pin_xy, gridname=rg_m4m5, netname='VREF<0>')
-    laygen.pin(name='VREF_M5R<1>', layer=laygen.layers['pin'][5], xy=vref1vr_pin_xy, gridname=rg_m4m5, netname='VREF<1>')
-    laygen.pin(name='VREF_M5R<2>', layer=laygen.layers['pin'][5], xy=vref2vr_pin_xy, gridname=rg_m4m5, netname='VREF<2>')
-    vref0vl_pin_xy=np.tile(laygen.get_inst_xy(name=icdrvl.name, gridname=rg_m4m5), (2,1))\
-                   + np.array([-1, 1]) * laygen.get_template_pin_coord(t.name, 'VREF_M5_2<0>', rg_m4m5, libname=workinglib)
-    vref1vl_pin_xy=np.tile(laygen.get_inst_xy(name=icdrvl.name, gridname=rg_m4m5), (2,1))\
-                   + np.array([-1, 1]) * laygen.get_template_pin_coord(t.name, 'VREF_M5_2<1>', rg_m4m5, libname=workinglib)
-    vref2vl_pin_xy=np.tile(laygen.get_inst_xy(name=icdrvl.name, gridname=rg_m4m5), (2,1))\
-                   + np.array([-1, 1]) * laygen.get_template_pin_coord(t.name, 'VREF_M5_2<2>', rg_m4m5, libname=workinglib)
-    vref0vr_pin_xy=np.tile(laygen.get_inst_xy(name=icdrvr.name, gridname=rg_m4m5), (2,1))\
-                   + np.array([1, 1]) * laygen.get_template_pin_coord(t.name, 'VREF_M5_2<0>', rg_m4m5, libname=workinglib)
-    vref1vr_pin_xy=np.tile(laygen.get_inst_xy(name=icdrvr.name, gridname=rg_m4m5), (2,1))\
-                   + np.array([1, 1]) * laygen.get_template_pin_coord(t.name, 'VREF_M5_2<1>', rg_m4m5, libname=workinglib)
-    vref2vr_pin_xy=np.tile(laygen.get_inst_xy(name=icdrvr.name, gridname=rg_m4m5), (2,1))\
-                   + np.array([1, 1]) * laygen.get_template_pin_coord(t.name, 'VREF_M5_2<2>', rg_m4m5, libname=workinglib)
-    laygen.pin(name='VREF_M5L_2<0>', layer=laygen.layers['pin'][5], xy=vref0vl_pin_xy, gridname=rg_m4m5, netname='VREF<0>')
-    laygen.pin(name='VREF_M5L_2<1>', layer=laygen.layers['pin'][5], xy=vref1vl_pin_xy, gridname=rg_m4m5, netname='VREF<1>')
-    laygen.pin(name='VREF_M5L_2<2>', layer=laygen.layers['pin'][5], xy=vref2vl_pin_xy, gridname=rg_m4m5, netname='VREF<2>')
-    laygen.pin(name='VREF_M5R_2<0>', layer=laygen.layers['pin'][5], xy=vref0vr_pin_xy, gridname=rg_m4m5, netname='VREF<0>')
-    laygen.pin(name='VREF_M5R_2<1>', layer=laygen.layers['pin'][5], xy=vref1vr_pin_xy, gridname=rg_m4m5, netname='VREF<1>')
-    laygen.pin(name='VREF_M5R_2<2>', layer=laygen.layers['pin'][5], xy=vref2vr_pin_xy, gridname=rg_m4m5, netname='VREF<2>')
-    '''
     pdict_vref=laygen.get_inst_pin_coord(None, None, rg_m5m6_basic_thick)
     x1 = laygen.get_inst_xy(name=isa.name, gridname=rg_m5m6_basic_thick)[0]\
          +laygen.get_template_size(name=isa.cellname, gridname=rg_m5m6_basic_thick, libname=workinglib)[0]

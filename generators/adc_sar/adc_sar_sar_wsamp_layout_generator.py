@@ -87,11 +87,6 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
                          xy1=pdict_m5m6_thick_basic_temp_sig[isar.name]['CLK0'][1]-np.array([0,1]), gridname0=rg_m5m6_thick_basic_temp_sig)
     laygen.via(None,pdict_m5m6_thick_basic_temp_sig[isar.name]['CLK0'][1], rg_m5m6_thick_basic_temp_sig)
     laygen.via(None,pdict_m5m6_thick_basic_temp_sig[isar.name]['CLK1'][1], rg_m5m6_thick_basic_temp_sig)
-    #laygen.via(None,pdict_m5m6_thick_basic_temp_sig[isar.name]['CLK2'][1], rg_m5m6_thick_basic_temp_sig)
-    #rclk0 = laygen.route(None, laygen.layers['metal'][5],
-    #                     xy0=pdict_m5m6_thick_basic[isamp.name]['ckout'][0],
-    #                     xy1=pdict_m5m6_thick_basic[isar.name]['CLK'][1]-np.array([0,1]), gridname0=rg_m5m6_thick_basic)
-    #laygen.via(None,pdict_m5m6_thick_basic[isar.name]['CLK'][1], rg_m5m6_thick_basic)
 
     #frontend sig
     inp_y_list=[]
@@ -101,12 +96,10 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
             inp_y_list.append(p[0][1])
             pv=np.array([pdict_m5m6_thick_basic_temp_sig[isamp.name]['outp'][0][0], p[0][1]])
             laygen.via(None,pv, rg_m5m6_thick_basic_temp_sig)
-            #laygen.via(None,p[0], rg_m5m6_thick_basic_temp_sig)
         if pn.startswith('INM'):
             inm_y_list.append(p[0][1])
             pv=np.array([pdict_m5m6_thick_basic_temp_sig[isamp.name]['outn'][0][0], p[0][1]])
             laygen.via(None,pv, rg_m5m6_thick_basic_temp_sig)
-            #laygen.via(None,p[0], rg_m5m6_thick_basic_temp_sig)
     inp_y=min(inp_y_list)
     inm_y=min(inm_y_list)
     rinp0 = laygen.route(None, laygen.layers['metal'][5],
