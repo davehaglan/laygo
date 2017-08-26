@@ -43,16 +43,16 @@ laygen.add_cell('nand_demo')
 
 #placements
 pg = 'placement_basic'           #placement grid
-nb = 'nmos4_fast_boundary'       #nmos boundary templatename
-n0 = laygen.relplace(templatename=nb, gridname=pg, xy=[0, 0])
-nc = 'nmos4_fast_center_nf2'     #nmos body templatename
-n1 = laygen.relplace(templatename=nc, gridname=pg, direction='right', shape=[2, 1], refobj=n0)
-n2, n3, n4, n5 = laygen.relplace(templatename=[nb, nb, nc, nb], 
+nb = 'nmos4_fast_boundary'       #nmos boundary cellname
+n0 = laygen.relplace(cellname=nb, gridname=pg, xy=[0, 0])
+nc = 'nmos4_fast_center_nf2'     #nmos body cellname
+n1 = laygen.relplace(cellname=nc, gridname=pg, direction='right', shape=[2, 1], refobj=n0)
+n2, n3, n4, n5 = laygen.relplace(cellname=[nb, nb, nc, nb], 
                                  shape=[[1, 1], [1, 1], [2, 1], [1, 1]],
                                  gridname=pg, refobj=n1) #default direction is right
-pb = 'pmos4_fast_boundary'       #pmos boundary templatename
-pc = 'pmos4_fast_center_nf2'     #pmos body templatename
-p0, p1, p2, p3, p4, p5 = laygen.relplace(templatename=[pb, pc, pb, pb, pc, pb],
+pb = 'pmos4_fast_boundary'       #pmos boundary cellname
+pc = 'pmos4_fast_center_nf2'     #pmos body cellname
+p0, p1, p2, p3, p4, p5 = laygen.relplace(cellname=[pb, pc, pb, pb, pc, pb],
                                          gridname=pg, refobj=n0, direction=['top']+['right']*5, 
                                          shape=[[1, 1], [2, 1], [1, 1]]*2, transform='MX')
 
