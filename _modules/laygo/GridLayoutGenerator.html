@@ -129,6 +129,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#array-generation">Array generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#clocking-path-generation">Clocking path generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#retimer">Retimer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#tisaradc-body-clock-sar-retimer">TISARADC body (clock+sar+retimer)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#bias">Bias</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#top">Top</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#full-stack-generation">Full stack generation</a></li>
@@ -251,6 +252,12 @@
 <span class="sd">        physical grid resolution</span>
 <span class="sd">    config_file : str</span>
 <span class="sd">        laygo configuration file path</span>
+<span class="sd">    templates : laygo.TemplateDB.TemplateDB</span>
+<span class="sd">        template database</span>
+<span class="sd">    grids : laygo.GridDB.GridDB</span>
+<span class="sd">        grid database</span>
+<span class="sd">    layers: dict</span>
+<span class="sd">        layer dictionary. metal, pin, text, prbnd are used as keys</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">templates</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="sd">&quot;&quot;&quot;laygo.TemplateDB.TemplateDB: template database&quot;&quot;&quot;</span>
@@ -259,7 +266,7 @@
     <span class="n">use_phantom</span><span class="o">=</span><span class="kc">False</span> <span class="c1">#phantom cell usage</span>
     <span class="sd">&quot;&quot;&quot;bool: true if phantom cells are exported (not real cells)&quot;&quot;&quot;</span>
     <span class="n">layers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;metal&#39;</span><span class="p">:[],</span> <span class="s1">&#39;pin&#39;</span><span class="p">:[],</span> <span class="s1">&#39;text&#39;</span><span class="p">:[],</span> <span class="s1">&#39;prbnd&#39;</span><span class="p">:[]}</span>
-    <span class="sd">&quot;&quot;&quot;dict: layer dictionary&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;dict: layer dictionary. metal, pin, text, prbnd are used as keys&quot;&quot;&quot;</span>
 
     <span class="c1">#physical resolution</span>
     <span class="nd">@property</span>
@@ -331,8 +338,8 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        xy : np.array([[int, int], [int, int]])</span>
-<span class="sd">            point matrix</span>
+<span class="sd">        xy : np.array([[int, int], [int, int]]) or</span>
+<span class="sd">            point matrix. List can be also used.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -351,7 +358,7 @@
 <div class="viewcode-block" id="GridLayoutGenerator.place"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.place">[docs]</a>    <span class="k">def</span> <span class="nf">place</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">templatename</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">template_libname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">spacing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
               <span class="n">offset</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;R0&#39;</span><span class="p">,</span> <span class="n">annotate_text</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Place an instance on abstract grid.</span>
+<span class="sd">        Place an instance on abstract grid. Use relplace instead</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -361,36 +368,36 @@
 <span class="sd">            Name of the template for the instance.</span>
 <span class="sd">        gridname : str</span>
 <span class="sd">            Grid name for the instance placement.</span>
-<span class="sd">        xy : np.array([int, int])</span>
+<span class="sd">        xy : np.array([int, int]) or [int, int]</span>
 <span class="sd">            Placement coordinate on the grid, specified by gridname.</span>
-<span class="sd">        template_libname: str</span>
+<span class="sd">        template_libname: str, optional</span>
 <span class="sd">            Template library name. If not specified, self.templates.plib is used.</span>
 <span class="sd">        shape : np.array([int, int]), optional</span>
 <span class="sd">            Array dimension of the instance. If not specified, [1, 1] is used.</span>
-<span class="sd">        spacing : np.array([int, int])</span>
-<span class="sd">            Array spacing parameter for the instance. If none, the size of the instance of is used.</span>
+<span class="sd">        spacing : np.array([int, int]), optional</span>
+<span class="sd">            Array spacing parameter for the instance. If None, the size of the instance of is used.</span>
 <span class="sd">        offset : np.array([float, float]), optional</span>
 <span class="sd">            Offset in physical coordinate.</span>
-<span class="sd">        transform : str (&#39;R0&#39;, &#39;MX&#39;, &#39;MY&#39;)</span>
+<span class="sd">        transform : str (&#39;R0&#39;, &#39;MX&#39;, &#39;MY&#39;), optional</span>
 <span class="sd">            Transform parameter</span>
-<span class="sd">        annotate_text : str</span>
-<span class="sd">            text to be annotated, None if not annotated</span>
+<span class="sd">        annotate_text : str, optional</span>
+<span class="sd">            text to be annotated. Use None if no annotation is required</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        laygo.layoutObject.Instance</span>
 <span class="sd">            generated instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># preprocessing arguments</span>
+        <span class="c1">### preprocessing arguments starts ###</span>
         <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span>  <span class="c1"># convert to a numpy array</span>
         <span class="n">shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">spacing</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span> <span class="n">spacing</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">spacing</span><span class="p">)</span>
         <span class="n">offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">template_libname</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
             <span class="n">template_libname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">plib</span>
+        <span class="c1">### preprocessing arguments ends ###</span>
         <span class="n">t</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">templatename</span><span class="p">,</span> <span class="n">template_libname</span><span class="p">)</span>
         <span class="n">xy_phy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">get_phygrid_xy</span><span class="p">(</span><span class="n">gridname</span><span class="p">,</span> <span class="n">xy</span><span class="p">)</span><span class="o">+</span><span class="n">offset</span>
-        <span class="c1">#print(xy_phy, xy, offset)</span>
         <span class="c1"># instantiation</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spacing</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span> <span class="n">spacing</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">size</span>
         <span class="n">inst</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">add_inst</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">template_libname</span><span class="p">,</span> <span class="n">cellname</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">xy_phy</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span>
@@ -411,8 +418,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">inst</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">xy_phy</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;prbnd&#39;</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">inst</span></div>
 
-<div class="viewcode-block" id="GridLayoutGenerator.relplace"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.relplace">[docs]</a>    <span class="k">def</span> <span class="nf">relplace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">templatename</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
-                 <span class="n">offset</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">template_libname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">spacing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;R0&#39;</span><span class="p">,</span> <span class="n">refinst</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="GridLayoutGenerator.relplace"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.relplace">[docs]</a>    <span class="k">def</span> <span class="nf">relplace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+                 <span class="n">offset</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">template_libname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">spacing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;R0&#39;</span><span class="p">,</span> <span class="n">refobj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Place an instance on abstract grid, bound from a reference object. If the reference object is not specified,</span>
 <span class="sd">        the absolate origin is used as the reference point.</span>
@@ -422,42 +429,59 @@
 <span class="sd">        name : str</span>
 <span class="sd">            Name of the instance.</span>
 <span class="sd">        templatename : str</span>
-<span class="sd">            Name of the template for the instance.</span>
+<span class="sd">            Template name (cellname) of the instance.</span>
 <span class="sd">        gridname : str</span>
-<span class="sd">            Grid name for the instance placement.</span>
-<span class="sd">        xy : np.array([x, y]), optional</span>
+<span class="sd">            Grid name for the placement.</span>
+<span class="sd">        xy : np.array([x, y]) or [int, int], optional</span>
 <span class="sd">            Placement coordinate on the grid, specified by gridname. If not specified, [0, 0] is used.</span>
-<span class="sd">        refinst : LayoutObject.Instance, optional</span>
-<span class="sd">            Reference instance handle, if None, refinstname is used</span>
-<span class="sd">        refinstname : str, optional</span>
-<span class="sd">            Reference instance name, if None, [0, 0] is used for the reference point.</span>
+<span class="sd">        refobj : LayoutObject.Instance, optional</span>
+<span class="sd">            Reference instance handle, if None, refinstname is used. Will be extended to support other objects.</span>
 <span class="sd">        direction : str, optional</span>
-<span class="sd">            Direction of placement, bound from refinstname.</span>
+<span class="sd">            Direction of placement, bound from refobj. For example, if the instance will be place on top of refobj,</span>
+<span class="sd">            direction=&#39;top&#39; is used</span>
 <span class="sd">        offset : np.array([float, float]), optional</span>
-<span class="sd">            Offset in physical coordinate.</span>
-<span class="sd">        shape : np.array([int, int]), optional</span>
+<span class="sd">            Placement offset in physical coordinate.</span>
+<span class="sd">        shape : np.array([int, int]) or [int, int], optional</span>
 <span class="sd">            Array dimension of the instance. If not specified, [1, 1] is used.</span>
-<span class="sd">        spacing : np.array([int, int])</span>
+<span class="sd">        spacing : np.array([int, int]) or [int, int]</span>
 <span class="sd">            Array spacing parameter for the instance. If none, the size of the instance of is used.</span>
 <span class="sd">        transform : str (&#39;R0&#39;, &#39;MX&#39;, &#39;MY&#39;)</span>
-<span class="sd">            Transform parameter</span>
+<span class="sd">            Transform parameter. &#39;R0&#39; is used by default.</span>
+
+<span class="sd">        refinstname : str, optional, deprecated</span>
+<span class="sd">            Reference instance name, if None, [0, 0] is used for the reference point.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        laygo.layoutObject.Instance</span>
 <span class="sd">            generated instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1">#TODO: Align option, bottom/top-left/right directions</span>
-        <span class="c1"># check if it&#39;s row placement</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">templatename</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span> <span class="c1"># row placement</span>
+        <span class="c1">#TODO: Alignment option, bottom/top-left/right directions</span>
+        <span class="c1"># check if it&#39;s multiple placement</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">templatename</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span> <span class="c1"># multiple placement</span>
+            <span class="n">flag_recursive</span><span class="o">=</span><span class="kc">False</span> <span class="c1">#recursive placement flag. If True, next placement refer the current placement</span>
             <span class="c1"># preprocessing arguments</span>
-            <span class="n">len_inst</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">templatename</span><span class="p">)</span>
+            <span class="n">len_inst</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">templatename</span><span class="p">)</span> <span class="c1">#number of instance to be placed (for multiple placements)</span>
             <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">len_inst</span>
-            <span class="k">if</span> <span class="n">refinstname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">refi_name</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">len_inst</span> <span class="c1">#extend Name list to be matched with templatename</span>
+            <span class="k">if</span> <span class="n">refinstname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1">#for backward compatibility. Use refobj instead of refinstname if possible</span>
+                <span class="k">if</span> <span class="n">refobj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">flag_recursive</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="n">_refinstname</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">len_inst</span><span class="p">)]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1">#check if refobj is list. If so, do a recursive placement</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">refobj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                        <span class="n">_refinstname</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">refobj</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">flag_recursive</span><span class="o">=</span><span class="kc">True</span>
+                        <span class="n">_refinstname</span><span class="o">=</span><span class="p">[</span><span class="n">refobj</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">+</span><span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">len_inst</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">refi_name</span> <span class="o">=</span> <span class="n">refinstname</span>
+                <span class="c1">#check if refinstname is list. If so, do a recursive placement</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">refinstname</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">_refinstname</span><span class="o">=</span><span class="n">refinstname</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">flag_recursive</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="n">_refinstname</span><span class="o">=</span><span class="p">[</span><span class="n">refinstname</span><span class="p">]</span><span class="o">+</span><span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">len_inst</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)):</span>
                 <span class="n">xy</span> <span class="o">=</span> <span class="p">[</span><span class="n">xy</span><span class="p">]</span> <span class="o">*</span> <span class="n">len_inst</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -472,16 +496,17 @@
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spacing</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span> <span class="n">spacing</span> <span class="o">=</span> <span class="p">[</span><span class="n">spacing</span><span class="p">]</span> <span class="o">*</span> <span class="n">len_inst</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span> <span class="n">transform</span> <span class="o">=</span> <span class="p">[</span><span class="n">transform</span><span class="p">]</span> <span class="o">*</span> <span class="n">len_inst</span>
             <span class="n">return_inst_list</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">nm</span><span class="p">,</span> <span class="n">_xy</span><span class="p">,</span> <span class="n">tl</span><span class="p">,</span> <span class="n">dr</span><span class="p">,</span> <span class="n">sh</span><span class="p">,</span> <span class="n">sp</span><span class="p">,</span> <span class="n">tr</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">templatename</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">transform</span><span class="p">):</span> <span class="c1">#row placement</span>
-                <span class="n">refi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">nm</span><span class="p">,</span> <span class="n">tl</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">refi_name</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">dr</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_xy</span><span class="p">,</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">nm</span><span class="p">,</span> <span class="n">_refi_name</span><span class="p">,</span> <span class="n">_xy</span><span class="p">,</span> <span class="n">tl</span><span class="p">,</span> <span class="n">dr</span><span class="p">,</span> <span class="n">sh</span><span class="p">,</span> <span class="n">sp</span><span class="p">,</span> <span class="n">tr</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">len_inst</span><span class="p">),</span> <span class="n">name</span><span class="p">,</span> <span class="n">_refinstname</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">templatename</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">transform</span><span class="p">):</span> <span class="c1">#row placement</span>
+                <span class="n">refi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">nm</span><span class="p">,</span> <span class="n">tl</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">_refi_name</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">dr</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_xy</span><span class="p">,</span>
                                    <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">template_libname</span><span class="o">=</span><span class="n">template_libname</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">sh</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="n">sp</span><span class="p">,</span>
-                                   <span class="n">transform</span><span class="o">=</span><span class="n">tr</span><span class="p">)</span>
+                                   <span class="n">transform</span><span class="o">=</span><span class="n">tr</span><span class="p">)</span><span class="c1">#, refobj=refobj)</span>
                 <span class="n">return_inst_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">refi</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">refi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">refi_name</span> <span class="o">=</span> <span class="n">refi</span><span class="o">.</span><span class="n">name</span>
+                <span class="k">if</span> <span class="n">flag_recursive</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span> <span class="o">==</span> <span class="n">len_inst</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="n">_refinstname</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">refi</span><span class="o">.</span><span class="n">name</span>
             <span class="k">return</span> <span class="n">return_inst_list</span>
         <span class="k">else</span><span class="p">:</span> <span class="c1"># single placement</span>
-            <span class="c1"># preprocessing arguments</span>
+            <span class="c1">### preprocessing arguments starts ###</span>
             <span class="n">shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">spacing</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span> <span class="n">spacing</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">spacing</span><span class="p">)</span>
             <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span>
@@ -489,18 +514,19 @@
             <span class="c1">#get object information</span>
             <span class="k">if</span> <span class="n">template_libname</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
                 <span class="n">template_libname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">plib</span>
+            <span class="c1">### preprocessing arguments ends ###</span>
             <span class="n">t</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">templatename</span><span class="p">,</span> <span class="n">template_libname</span><span class="p">)</span>
             <span class="n">t_size_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_template_xy</span><span class="p">(</span><span class="n">templatename</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">template_libname</span><span class="p">)</span>
             <span class="n">t_size_grid</span> <span class="o">=</span> <span class="n">t_size_grid</span><span class="o">*</span><span class="n">shape</span>
             <span class="c1">#reference instance check </span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">refinst</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">refinstname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">refobj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">refinstname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
                 <span class="n">ir_xy_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">t_size_grid</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mf">2.0</span><span class="p">])</span>
                 <span class="n">tr_size_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
                 <span class="n">mtr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mt</span><span class="p">(</span><span class="s1">&#39;R0&#39;</span><span class="p">)</span>
                 <span class="n">mti</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mt</span><span class="p">(</span><span class="s1">&#39;R0&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">refinst</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">ir</span> <span class="o">=</span> <span class="n">refinst</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">refobj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">ir</span> <span class="o">=</span> <span class="n">refobj</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">ir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_inst</span><span class="p">(</span><span class="n">refinstname</span><span class="p">)</span>
                 <span class="n">tr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">ir</span><span class="o">.</span><span class="n">cellname</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">ir</span><span class="o">.</span><span class="n">libname</span><span class="p">)</span>
@@ -516,8 +542,8 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">place</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="n">templatename</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="n">gridname</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">i_xy_grid</span><span class="o">+</span><span class="n">xy</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
                               <span class="n">template_libname</span><span class="o">=</span><span class="n">template_libname</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="n">spacing</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridLayoutGenerator.via"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.via">[docs]</a>    <span class="k">def</span> <span class="nf">via</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">refobj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refobjindex</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">offset</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">refinstname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refinstindex</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
-            <span class="n">refpinname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;R0&#39;</span><span class="p">,</span> <span class="n">overwrite_xy_phy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refinst</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="GridLayoutGenerator.via"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.via">[docs]</a>    <span class="k">def</span> <span class="nf">via</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">gridname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refobj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refobjindex</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">offset</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">refinstname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refinstindex</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+            <span class="n">refpinname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;R0&#39;</span><span class="p">,</span> <span class="n">overwrite_xy_phy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overlay</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Place a via on grid.</span>
 
@@ -525,58 +551,87 @@
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            Name of the via</span>
-<span class="sd">        xy : np.array([int, int])</span>
+<span class="sd">        xy : np.array([int, int]) or [int, int]</span>
 <span class="sd">            xy coordinate of the via</span>
 <span class="sd">        gridname : str</span>
 <span class="sd">            Grid name of the via</span>
 <span class="sd">        refobj : LayoutObject.LayoutObject</span>
 <span class="sd">            Reference object(Instance/Pin/Rect) handle. If None, refinstiname is used.</span>
-<span class="sd">        refobjindex : np.array([int, int]), optional</span>
-<span class="sd">            Index of refobj if it is a mosaic instance.</span>
+<span class="sd">        overlay : LayoutObject.LayoutObject</span>
+<span class="sd">            Layout object for via placement at intersection (via will be placed at the overlaid point btn refobj and overlay)</span>
+<span class="sd">            Use with refobj only. Not compatible with legacy reference parameters (refinstname)</span>
 <span class="sd">        offset : np.array([float, float]), optional</span>
-<span class="sd">            Offset on the physical grid, bound fro xy</span>
-<span class="sd">        refinst : LayoutObject.Instance, optional</span>
-<span class="sd">            Reference instance handle, if None, refinstname is used</span>
-<span class="sd">        refinstname : str, optional</span>
-<span class="sd">            Reference instance name for xy. If None, origin([0,0]) is used as the reference point.</span>
-<span class="sd">        refinstindex : str, optional</span>
-<span class="sd">            Index of refinstname if it is a mosaic instance</span>
-<span class="sd">        refpinname : str, optional</span>
-<span class="sd">            Reference pin of refinstname for reference point of xy. If None, the origin of refinstname0 is used.</span>
+<span class="sd">            Offset on the physical grid, bound from xy</span>
 <span class="sd">        transform : str (&#39;R0&#39;, &#39;MX&#39;, &#39;MY&#39;), optional</span>
 <span class="sd">            Transform parameter for grid. Overwritten by transform of refinstname if not specified.</span>
 <span class="sd">        overwrite_xy_phy : None or np.array([float, float]), optional</span>
 <span class="sd">            If specified, final xy physical coordinates are overwritten by the argument.</span>
+
+<span class="sd">        refobjindex : np.array([int, int]), optional, deprecated</span>
+<span class="sd">            Index of refobj if it is a mosaic instance.</span>
+<span class="sd">        refinstname : str, optional, deprecated</span>
+<span class="sd">            Reference instance name for xy. If None, origin([0,0]) is used as the reference point.</span>
+<span class="sd">        refinstindex : str, optional, deprecated</span>
+<span class="sd">            Index of refinstname if it is a mosaic instance</span>
+<span class="sd">        refpinname : str, optional, deprecated</span>
+<span class="sd">            Reference pin of refinstname for reference point of xy. If None, the origin of refinstname0 is used.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        laygo.layoutObject.Instance</span>
 <span class="sd">            generated via instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># preprocessing arguments</span>
+        <span class="c1">### preprocessing arguments starts ###</span>
         <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span>
         <span class="n">offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
         <span class="n">refinstindex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">refinstindex</span><span class="p">)</span>
         <span class="c1"># reading coordinate information from the reference objects</span>
+        <span class="c1"># this needs to be cleaned up</span>
+        <span class="n">refinst</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">refrect0</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">refrect1</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">refobj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">refobj</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">is</span> <span class="s1">&#39;Instance&#39;</span><span class="p">:</span> 
-                <span class="n">refinstname</span><span class="o">=</span><span class="n">refobj</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">refobj</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">is</span> <span class="s1">&#39;Instance&#39;</span><span class="p">:</span>
+                <span class="n">refinst</span> <span class="o">=</span> <span class="n">refobj</span>
                 <span class="n">refinstindex</span><span class="o">=</span><span class="n">refobjindex</span>
-            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">refobj</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">is</span> <span class="s1">&#39;Pin&#39;</span><span class="p">:</span> 
-                <span class="n">refinstname</span><span class="o">=</span><span class="n">refobj</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">refobj</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">is</span> <span class="s1">&#39;Pin&#39;</span><span class="p">:</span>
+                <span class="n">refinst</span> <span class="o">=</span> <span class="n">refobj</span><span class="o">.</span><span class="n">master</span>
                 <span class="n">refinstindex</span><span class="o">=</span><span class="n">refobjindex</span>
                 <span class="n">refpinname</span><span class="o">=</span><span class="n">refobj</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">refobj</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">is</span> <span class="s1">&#39;Rect&#39;</span><span class="p">:</span>
+                <span class="n">refrect0</span> <span class="o">=</span> <span class="n">refobj</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">refinstname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">refinst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_inst</span><span class="p">(</span><span class="n">refinstname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">overlay</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">overlay</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">is</span> <span class="s1">&#39;Rect&#39;</span><span class="p">:</span>
+                <span class="n">refrect1</span> <span class="o">=</span> <span class="n">overlay</span>
+
+        <span class="c1">### preprocessing arguments ends ###</span>
         <span class="c1"># get physical grid coordinates</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">refinstname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">refinst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_inst</span><span class="p">(</span><span class="n">refinstname</span><span class="p">)</span>
+        <span class="c1"># need to be refactored</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">refinst</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">reftemplate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">refinst</span><span class="o">.</span><span class="n">cellname</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">refinst</span><span class="o">.</span><span class="n">libname</span><span class="p">)</span>
             <span class="n">offset</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">refinst</span><span class="o">.</span><span class="n">xy</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">refinst</span><span class="o">.</span><span class="n">spacing</span> <span class="o">*</span> <span class="n">refinstindex</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mt</span><span class="p">(</span><span class="n">refinst</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">refpinname</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span> <span class="c1">#if pin reference is specified</span>
                 <span class="n">pin_xy_phy</span><span class="o">=</span><span class="n">reftemplate</span><span class="o">.</span><span class="n">pins</span><span class="p">[</span><span class="n">refpinname</span><span class="p">][</span><span class="s1">&#39;xy&#39;</span><span class="p">]</span>
-                <span class="n">pin_xy_abs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_absgrid_region</span><span class="p">(</span><span class="n">gridname</span><span class="p">,</span> <span class="n">pin_xy_phy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pin_xy_phy</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">,:]</span>
+                <span class="n">bbox</span><span class="o">=</span><span class="n">pin_xy_phy</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">refrect1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1">#overlay</span>
+                    <span class="n">bbox0</span><span class="o">=</span><span class="n">pin_xy_phy</span>
+                    <span class="n">bbox1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">refrect1</span><span class="o">.</span><span class="n">xy</span> <span class="o">-</span> <span class="n">refinst</span><span class="o">.</span><span class="n">xy</span><span class="p">,</span> <span class="n">ut</span><span class="o">.</span><span class="n">Mtinv</span><span class="p">(</span><span class="n">refinst</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+                    <span class="n">sx</span><span class="o">=</span><span class="nb">sorted</span><span class="p">([</span><span class="n">bbox0</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">bbox0</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+                    <span class="n">sy</span><span class="o">=</span><span class="nb">sorted</span><span class="p">([</span><span class="n">bbox0</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">bbox0</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">bbox1</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]])</span>
+                    <span class="n">bbox</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">sx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sy</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="p">[</span><span class="n">sx</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">sy</span><span class="p">[</span><span class="mi">2</span><span class="p">]]])</span>
+                <span class="c1">#pin_xy_abs=self.get_absgrid_region(gridname, pin_xy_phy[0], pin_xy_phy[1])[0,:]</span>
+                <span class="n">pin_xy_abs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_absgrid_region</span><span class="p">(</span><span class="n">gridname</span><span class="p">,</span> <span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">,:]</span>
                 <span class="n">xy</span><span class="o">=</span><span class="n">xy</span><span class="o">+</span><span class="n">pin_xy_abs</span>
             <span class="n">transform</span><span class="o">=</span><span class="n">refinst</span><span class="o">.</span><span class="n">transform</span> <span class="c1">#overwrite transform variable</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">refrect0</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">xy</span><span class="o">=</span><span class="n">xy</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">get_absgrid_region</span><span class="p">(</span><span class="n">gridname</span><span class="p">,</span> <span class="n">refrect0</span><span class="o">.</span><span class="n">xy0</span><span class="p">,</span> <span class="n">refrect0</span><span class="o">.</span><span class="n">xy1</span><span class="p">)[</span><span class="mi">0</span><span class="p">,:]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">refrect1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1">#TODO: implement overlay function using refrect1</span>
+                <span class="k">pass</span>
+
         <span class="n">vianame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">get_vianame</span><span class="p">(</span><span class="n">gridname</span><span class="p">,</span> <span class="n">xy</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">overwrite_xy_phy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">xy_phy</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">get_phygrid_xy</span><span class="p">(</span><span class="n">gridname</span><span class="p">,</span> <span class="n">xy</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mt</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">+</span><span class="n">offset</span>
@@ -591,7 +646,7 @@
         <span class="k">return</span> <span class="n">inst</span></div>
 
     <span class="c1"># Route functions</span>
-<div class="viewcode-block" id="GridLayoutGenerator.route"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.route">[docs]</a>    <span class="k">def</span> <span class="nf">route</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">xy1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">gridname0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridname1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;omni&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="GridLayoutGenerator.route"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.route">[docs]</a>    <span class="k">def</span> <span class="nf">route</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">xy1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">gridname0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridname1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;omni&#39;</span><span class="p">,</span>
               <span class="n">refobj0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refobj1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refobjindex0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">refobjindex1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> 
               <span class="n">refinstname0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refinstname1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refinstindex0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">refinstindex1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
               <span class="n">refpinname0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refpinname1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span> <span class="n">offset1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -605,10 +660,10 @@
 <span class="sd">        name : str</span>
 <span class="sd">            Route name. If None, the name will be automatically assigned by genid.</span>
 <span class="sd">        layer : [str, str], optional</span>
-<span class="sd">            Routing layer [name, purpose].</span>
-<span class="sd">        xy0 : np.array([int, int])</span>
+<span class="sd">            Routing layer [name, purpose]. If None, it figures out the layer from grid and coordinates</span>
+<span class="sd">        xy0 : np.array([int, int]) or [int, int]</span>
 <span class="sd">            xy coordinate for start point.</span>
-<span class="sd">        xy1 : np.array([int, int])</span>
+<span class="sd">        xy1 : np.array([int, int]) or [int, int]</span>
 <span class="sd">            xy coordinate for end point.</span>
 <span class="sd">        gridname0 : str</span>
 <span class="sd">            Grid name0</span>
@@ -620,22 +675,6 @@
 <span class="sd">            Reference object(Instance/Pin/Rect) handle. If None, refinstiname0 is used.</span>
 <span class="sd">        refobj1 : LayoutObject.LayoutObject</span>
 <span class="sd">            Reference object(Instance/Pin/Rect) handle. If None, refinstiname1 is used.</span>
-<span class="sd">        refobjindex0 : np.array([int, int]), optional</span>
-<span class="sd">            Index of refobj0 if it is a mosaic instance.</span>
-<span class="sd">        refobjindex1 : np.array([int, int]), optional</span>
-<span class="sd">            Index of refobj1 if it is a mosaic instance.</span>
-<span class="sd">        refinstname0 : str, optional</span>
-<span class="sd">            Reference instance name for start point. If None, origin([0,0]) is used as the reference point.</span>
-<span class="sd">        refinstname1 : str, optional</span>
-<span class="sd">            Reference instance name for end point. If None, origin([0,0]) is used as the reference point.</span>
-<span class="sd">        refinstindex0 : np.array([int, int]), optional</span>
-<span class="sd">            Index of refinstname0 if it is a mosaic instance.</span>
-<span class="sd">        refinstindex1 : np.array([int, int]), optional</span>
-<span class="sd">            Index of refinstname1 if it is a mosaic instance.</span>
-<span class="sd">        refpinname0 : str, optional</span>
-<span class="sd">            Reference pin of refinstname0 for reference point of xy0. If None, the origin of refinstname0 is used.</span>
-<span class="sd">        refpinname1 : str, optional</span>
-<span class="sd">            Reference pin of refinstname1 for reference point of xy1. If None, the origin of refinstname1 is used.</span>
 <span class="sd">        offset0 : np.array([float, float]), optional</span>
 <span class="sd">            Coordinate offset from xy0, on the physical grid.</span>
 <span class="sd">        offset1 : np.array([float, float]), optional</span>
@@ -655,11 +694,28 @@
 <span class="sd">            Offset coordinates for via placements, bound from xy1</span>
 <span class="sd">            ex) if xy0 = [1, 2], xy1 = [1, 5], via1 = [0, 2] then a via will be placed at [1, 7]</span>
 <span class="sd">        addvia0 : bool, optional</span>
-<span class="sd">            True if a via is placed on xy0 (will be deprecated, use via0=[0] instead)</span>
+<span class="sd">            True if a via is placed on xy0 (deprecated, use via0=[0] instead)</span>
 <span class="sd">        addvia1 : bool, optional</span>
-<span class="sd">            True if a via is placed on xy1 (will be deprecated, use via1=[0] instead)</span>
+<span class="sd">            True if a via is placed on xy1 (deprecated, use via1=[0] instead)</span>
 <span class="sd">        netname : str, optional</span>
 <span class="sd">            net name of the route</span>
+
+<span class="sd">        refobjindex0 : np.array([int, int]), optional, deprecated</span>
+<span class="sd">            Index of refobj0 if it is a mosaic instance.</span>
+<span class="sd">        refobjindex1 : np.array([int, int]), optional, deprecated</span>
+<span class="sd">            Index of refobj1 if it is a mosaic instance.</span>
+<span class="sd">        refinstname0 : str, optional, deprecated</span>
+<span class="sd">            Reference instance name for start point. If None, origin([0,0]) is used as the reference point.</span>
+<span class="sd">        refinstname1 : str, optional, deprecated</span>
+<span class="sd">            Reference instance name for end point. If None, origin([0,0]) is used as the reference point.</span>
+<span class="sd">        refinstindex0 : np.array([int, int]), optional, deprecated</span>
+<span class="sd">            Index of refinstname0 if it is a mosaic instance.</span>
+<span class="sd">        refinstindex1 : np.array([int, int]), optional, deprecated</span>
+<span class="sd">            Index of refinstname1 if it is a mosaic instance.</span>
+<span class="sd">        refpinname0 : str, optional, deprecated</span>
+<span class="sd">            Reference pin of refinstname0 for reference point of xy0. If None, the origin of refinstname0 is used.</span>
+<span class="sd">        refpinname1 : str, optional, deprecated</span>
+<span class="sd">            Reference pin of refinstname1 for reference point of xy1. If None, the origin of refinstname1 is used.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -670,11 +726,13 @@
         <span class="k">if</span> <span class="n">xy0</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;GridLayoutGenerator.route - specify xy0&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">xy1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;GridLayoutGenerator.route - specify xy1&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">gridname0</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;GridLayoutGenerator.route - specify gridname0&#39;</span><span class="p">)</span>
-        <span class="c1"># preprocessing arguments</span>
+        <span class="c1">### preprocessing arguments starts ###</span>
         <span class="n">xy0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy0</span><span class="p">)</span>
         <span class="n">xy1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy1</span><span class="p">)</span>
         <span class="n">refinstindex0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">refinstindex0</span><span class="p">)</span>
         <span class="n">refinstindex1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">refinstindex1</span><span class="p">)</span>
+        <span class="n">refinst0</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">refinst1</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">offset0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">offset0</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">offset1</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span> <span class="n">offset1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">offset1</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">gridname1</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span> <span class="n">gridname1</span> <span class="o">=</span> <span class="n">gridname0</span>
@@ -688,29 +746,40 @@
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">via1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)):</span> <span class="c1">#convert 1-dim array to 2-dim array</span>
                 <span class="n">via1</span><span class="o">=</span><span class="p">[</span><span class="n">via1</span><span class="p">]</span>
             <span class="n">via1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">via1</span><span class="p">)</span>
+        <span class="c1">### preprocessing arguments ends ###</span>
         <span class="n">_xy0</span><span class="o">=</span><span class="n">xy0</span>
         <span class="n">_xy1</span><span class="o">=</span><span class="n">xy1</span>
         <span class="n">_offset0</span><span class="o">=</span><span class="n">offset0</span>
         <span class="n">_offset1</span><span class="o">=</span><span class="n">offset1</span>
         <span class="c1"># reading coordinate information from the reference objects</span>
+        <span class="c1"># this needs to be cleaned up</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">refobj0</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">refobj0</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">is</span> <span class="s1">&#39;Instance&#39;</span><span class="p">:</span> 
+                <span class="n">refinst0</span><span class="o">=</span><span class="n">refobj0</span>
                 <span class="n">refinstname0</span><span class="o">=</span><span class="n">refobj0</span><span class="o">.</span><span class="n">name</span>
                 <span class="n">refinstindex0</span><span class="o">=</span><span class="n">refobjindex0</span>
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">refobj0</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">is</span> <span class="s1">&#39;Pin&#39;</span><span class="p">:</span> 
+                <span class="n">refinst0</span><span class="o">=</span><span class="n">refobj0</span><span class="o">.</span><span class="n">master</span>
                 <span class="n">refinstname0</span><span class="o">=</span><span class="n">refobj0</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">name</span>
                 <span class="n">refinstindex0</span><span class="o">=</span><span class="n">refobjindex0</span>
                 <span class="n">refpinname0</span><span class="o">=</span><span class="n">refobj0</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">refinstname0</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">refinst0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_inst</span><span class="p">(</span><span class="n">refinstname0</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">refobj1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">refobj1</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">is</span> <span class="s1">&#39;Instance&#39;</span><span class="p">:</span> 
+                <span class="n">refinst1</span><span class="o">=</span><span class="n">refobj1</span>
                 <span class="n">refinstname1</span><span class="o">=</span><span class="n">refobj1</span><span class="o">.</span><span class="n">name</span>
                 <span class="n">refinstindex1</span><span class="o">=</span><span class="n">refobjindex1</span>
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">refobj1</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">is</span> <span class="s1">&#39;Pin&#39;</span><span class="p">:</span> 
+                <span class="n">refinst1</span><span class="o">=</span><span class="n">refobj1</span><span class="o">.</span><span class="n">master</span>
                 <span class="n">refinstname1</span><span class="o">=</span><span class="n">refobj1</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">name</span>
                 <span class="n">refinstindex1</span><span class="o">=</span><span class="n">refobjindex1</span>
                 <span class="n">refpinname1</span><span class="o">=</span><span class="n">refobj1</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">refinstname1</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">refinst1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_inst</span><span class="p">(</span><span class="n">refinstname1</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">refinstname0</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">refinst0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_inst</span><span class="p">(</span><span class="n">refinstname0</span><span class="p">)</span>
             <span class="n">reftemplate0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">refinst0</span><span class="o">.</span><span class="n">cellname</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">refinst0</span><span class="o">.</span><span class="n">libname</span><span class="p">)</span>
             <span class="n">_offset0</span><span class="o">=</span><span class="n">offset0</span><span class="o">+</span><span class="n">refinst0</span><span class="o">.</span><span class="n">xy</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">refinst0</span><span class="o">.</span><span class="n">spacing</span><span class="o">*</span><span class="n">refinstindex0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mt</span><span class="p">(</span><span class="n">refinst0</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">refpinname0</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># if pin reference is specified</span>
@@ -718,7 +787,6 @@
                 <span class="n">_xy0</span><span class="o">=</span><span class="n">xy0</span><span class="o">+</span><span class="n">pin_xy0_abs</span>
             <span class="n">transform0</span><span class="o">=</span><span class="n">refinst0</span><span class="o">.</span><span class="n">transform</span> <span class="c1"># overwrite transform variable</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">refinstname1</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">refinst1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_inst</span><span class="p">(</span><span class="n">refinstname1</span><span class="p">)</span>
             <span class="n">reftemplate1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">refinst1</span><span class="o">.</span><span class="n">cellname</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">refinst1</span><span class="o">.</span><span class="n">libname</span><span class="p">)</span>
             <span class="n">_offset1</span><span class="o">=</span><span class="n">offset1</span><span class="o">+</span><span class="n">refinst1</span><span class="o">.</span><span class="n">xy</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">refinst1</span><span class="o">.</span><span class="n">spacing</span><span class="o">*</span><span class="n">refinstindex1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mt</span><span class="p">(</span><span class="n">refinst1</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">refpinname1</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># if pin reference is specified</span>
@@ -733,35 +801,33 @@
         <span class="n">xy0_phy</span><span class="o">=</span><span class="n">xy_phy</span><span class="p">[</span><span class="mi">0</span><span class="p">,:];</span> <span class="n">xy1_phy</span><span class="o">=</span><span class="n">xy_phy</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span>
         <span class="n">xy0_phy_center</span><span class="o">=</span><span class="n">xy_phy_center</span><span class="p">[</span><span class="mi">0</span><span class="p">,:];</span> <span class="n">xy1_phy_center</span><span class="o">=</span><span class="n">xy_phy_center</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span>
         <span class="c1"># optional via placements</span>
-        <span class="c1">#xy0_phy=np.dot(self.grids.get_phygrid_xy(gridname0, xy0), self.Mt(transform0).T)+offset0</span>
-        <span class="c1">#xy1_phy=np.dot(self.grids.get_phygrid_xy(gridname1, xy1), self.Mt(transform1).T)+offset1</span>
         <span class="k">if</span> <span class="n">addvia0</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[WARNING] addvia0 option in GridLayoutGenerator.route will be deprecated. Use via0=[[0, 0]] instead&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">via</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy0</span><span class="p">,</span> <span class="n">gridname0</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset0</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">refinstname0</span><span class="p">,</span> <span class="n">refinstindex</span><span class="o">=</span><span class="n">refinstindex0</span><span class="p">,</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[WARNING] addvia0 option in GridLayoutGenerator.route deprecated. Use via0=[[0, 0]] instead&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">via</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy0</span><span class="p">,</span> <span class="n">gridname0</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset0</span><span class="p">,</span> <span class="n">refobj</span><span class="o">=</span><span class="n">refinst0</span><span class="p">,</span> <span class="n">refinstindex</span><span class="o">=</span><span class="n">refinstindex0</span><span class="p">,</span>
             <span class="n">refpinname</span><span class="o">=</span><span class="n">refpinname0</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform0</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">addvia1</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[WARNING] addvia1 option in GridLayoutGenerator.route will be deprecated. Use via1=[[0, 0]] instead&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">via</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy1</span><span class="p">,</span> <span class="n">gridname1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset1</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">refinstname1</span><span class="p">,</span> <span class="n">refinstindex</span><span class="o">=</span><span class="n">refinstindex1</span><span class="p">,</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[WARNING] addvia1 option in GridLayoutGenerator.route deprecated. Use via1=[[0, 0]] instead&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">via</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy1</span><span class="p">,</span> <span class="n">gridname1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset1</span><span class="p">,</span> <span class="n">refobj</span><span class="o">=</span><span class="n">refinst1</span><span class="p">,</span> <span class="n">refinstindex</span><span class="o">=</span><span class="n">refinstindex1</span><span class="p">,</span>
             <span class="n">refpinname</span><span class="o">=</span><span class="n">refpinname1</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform1</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">via0</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">vofst</span> <span class="ow">in</span> <span class="n">via0</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">via</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy0</span><span class="o">+</span><span class="n">vofst</span><span class="p">,</span> <span class="n">gridname0</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset0</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">refinstname0</span><span class="p">,</span> <span class="n">refinstindex</span><span class="o">=</span><span class="n">refinstindex0</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">via</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy0</span><span class="o">+</span><span class="n">vofst</span><span class="p">,</span> <span class="n">gridname0</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset0</span><span class="p">,</span> <span class="n">refobj</span><span class="o">=</span><span class="n">refinst0</span><span class="p">,</span> <span class="n">refobjindex</span><span class="o">=</span><span class="n">refinstindex0</span><span class="p">,</span>
                          <span class="n">refpinname</span><span class="o">=</span><span class="n">refpinname0</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform0</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">via1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">vofst</span> <span class="ow">in</span> <span class="n">via1</span><span class="p">:</span>
                 <span class="c1">#overwrite xy coordinate to handle direction matrix (xy1+vofst does not reflect direction matrix in via function)</span>
                 <span class="k">if</span> <span class="n">direction</span><span class="o">==</span><span class="s1">&#39;omni&#39;</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">via</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy1</span><span class="o">+</span><span class="n">vofst</span><span class="p">,</span> <span class="n">gridname1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset1</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">refinstname1</span><span class="p">,</span> <span class="n">refinstindex</span><span class="o">=</span><span class="n">refinstindex1</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">via</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy1</span><span class="o">+</span><span class="n">vofst</span><span class="p">,</span> <span class="n">gridname1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset1</span><span class="p">,</span> <span class="n">refobj</span><span class="o">=</span><span class="n">refinst1</span><span class="p">,</span> <span class="n">refobjindex</span><span class="o">=</span><span class="n">refinstindex1</span><span class="p">,</span>
                         <span class="n">refpinname</span><span class="o">=</span><span class="n">refpinname1</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform1</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">_xy1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_absgrid_xy</span><span class="p">(</span><span class="n">gridname</span><span class="o">=</span><span class="n">gridname1</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">xy1_phy_center</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">refinstname1</span><span class="p">,</span>
-                                                    <span class="n">refinstindex</span><span class="o">=</span><span class="n">refinstindex1</span><span class="p">,</span> <span class="n">refpinname</span><span class="o">=</span><span class="n">refpinname1</span><span class="p">)</span>
-                    <span class="c1">#print(xy1_phy_center, _xy1, transform1, refinstname1, refpinname1)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">via</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">_xy1</span><span class="p">,</span> <span class="n">gridname1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset1</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="n">refinstname1</span><span class="p">,</span> <span class="n">refinstindex</span><span class="o">=</span><span class="n">refinstindex1</span><span class="p">,</span>
+                    <span class="n">_xy1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_absgrid_xy</span><span class="p">(</span><span class="n">gridname</span><span class="o">=</span><span class="n">gridname1</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">xy1_phy_center</span><span class="p">,</span> <span class="n">refobj</span><span class="o">=</span><span class="n">refinst1</span><span class="p">,</span>
+                                             <span class="n">refobjindex</span><span class="o">=</span><span class="n">refinstindex1</span><span class="p">,</span> <span class="n">refpinname</span><span class="o">=</span><span class="n">refpinname1</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">via</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">_xy1</span><span class="p">,</span> <span class="n">gridname1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset1</span><span class="p">,</span> <span class="n">refobj</span><span class="o">=</span><span class="n">refinst1</span><span class="p">,</span> <span class="n">refobjindex</span><span class="o">=</span><span class="n">refinstindex1</span><span class="p">,</span>
                         <span class="n">refpinname</span><span class="o">=</span><span class="n">refpinname1</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform1</span><span class="p">)</span>
         <span class="c1">#layer handling</span>
         <span class="k">if</span> <span class="n">layer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">xy0_phy_center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">xy1_phy_center</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="c1">#if xy0_phy_center[0] == xy1_phy_center[0]: #not accurate enough..</span>
+            <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">xy0_phy_center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="p">))</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">xy1_phy_center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="p">)):</span>
                 <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">get_route_xlayer_xy</span><span class="p">(</span><span class="n">gridname0</span><span class="p">,</span> <span class="n">_xy0</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">get_route_ylayer_xy</span><span class="p">(</span><span class="n">gridname0</span><span class="p">,</span> <span class="n">_xy0</span><span class="p">)</span>
@@ -897,7 +963,7 @@
         <span class="n">xy0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy0</span><span class="p">)</span>
         <span class="n">xy1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy1</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">gridname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;gridname in GridLayoutGenerator.route_vh will be deprecated. Use gridname0 instead&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;gridname in GridLayoutGenerator.route_vh deprecated. Use gridname0 instead&quot;</span><span class="p">)</span>
             <span class="n">gridname0</span> <span class="o">=</span> <span class="n">gridname</span>
         <span class="k">if</span> <span class="n">gridname1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">gridname1</span> <span class="o">=</span> <span class="n">gridname0</span>
@@ -961,7 +1027,7 @@
         <span class="n">xy0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy0</span><span class="p">)</span>
         <span class="n">xy1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xy1</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">gridname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;gridname in GridLayoutGenerator.route_hv will be deprecated. Use gridname0 instead&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;gridname in GridLayoutGenerator.route_hv deprecated. Use gridname0 instead&quot;</span><span class="p">)</span>
             <span class="n">gridname0</span> <span class="o">=</span> <span class="n">gridname</span>
         <span class="k">if</span> <span class="n">gridname1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">gridname1</span> <span class="o">=</span> <span class="n">gridname0</span>
@@ -1016,7 +1082,7 @@
         <span class="k">if</span> <span class="n">layerv1</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
             <span class="n">layerv1</span><span class="o">=</span><span class="n">layerv0</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">gridname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;gridname in GridLayoutGenerator.route_vhv will be deprecated. Use gridname0 instead&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;gridname in GridLayoutGenerator.route_vhv deprecated. Use gridname0 instead&quot;</span><span class="p">)</span>
             <span class="n">gridname0</span> <span class="o">=</span> <span class="n">gridname</span>
         <span class="k">if</span> <span class="n">gridname1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">gridname1</span> <span class="o">=</span> <span class="n">gridname0</span>
@@ -1092,7 +1158,7 @@
         <span class="k">if</span> <span class="n">layerh1</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
             <span class="n">layerh1</span><span class="o">=</span><span class="n">layerh0</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">gridname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;gridname in GridLayoutGenerator.route_hvh will be deprecated. Use gridname0 instead&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;gridname in GridLayoutGenerator.route_hvh deprecated. Use gridname0 instead&quot;</span><span class="p">)</span>
             <span class="n">gridname0</span> <span class="o">=</span> <span class="n">gridname</span>
         <span class="k">if</span> <span class="n">gridname1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">gridname1</span> <span class="o">=</span> <span class="n">gridname0</span>
@@ -1135,8 +1201,8 @@
 <span class="sd">            pin name</span>
 <span class="sd">        layer : [str, str]</span>
 <span class="sd">            pin layer</span>
-<span class="sd">        xy : np.array([[int, int], [int, int]]), optional</span>
-<span class="sd">            xy coordinate. will be deprecated. use xy0, xy1 instead</span>
+<span class="sd">        xy : np.array([[int, int], [int, int]]), optional, deprecated</span>
+<span class="sd">            xy coordinate. deprecated. use xy0, xy1 instead</span>
 <span class="sd">        xy0 : np.array([[int, int]), optional</span>
 <span class="sd">            first coordinate</span>
 <span class="sd">        xy1 : np.array([[int, int]), optional</span>
@@ -1200,10 +1266,13 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pin</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">netname</span><span class="o">=</span><span class="n">netname</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GridLayoutGenerator.create_boundary_pin_form_rect"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.create_boundary_pin_form_rect">[docs]</a>    <span class="k">def</span> <span class="nf">create_boundary_pin_form_rect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rect</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">pinname</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">netname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[WARNING] create_boundary_pin_form_rect will be deprecated. Use create_boundary_pin_from_rect instead&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_boundary_pin_from_rect</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="n">rect</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="n">gridname</span><span class="p">,</span> <span class="n">pinname</span><span class="o">=</span><span class="n">pinname</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">netname</span><span class="o">=</span><span class="n">netname</span><span class="p">)</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[WARNING] create_boundary_pin_form_rect deprecated. Use boundary_pin_from_rect instead&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_pin_from_rect</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="n">rect</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="n">gridname</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">pinname</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">netname</span><span class="o">=</span><span class="n">netname</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GridLayoutGenerator.create_boundary_pin_from_rect"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.create_boundary_pin_from_rect">[docs]</a>    <span class="k">def</span> <span class="nf">create_boundary_pin_from_rect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rect</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">pinname</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">netname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_pin_from_rect</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="n">rect</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="n">gridname</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">pinname</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">netname</span><span class="o">=</span><span class="n">netname</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GridLayoutGenerator.boundary_pin_from_rect"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.boundary_pin_from_rect">[docs]</a>    <span class="k">def</span> <span class="nf">boundary_pin_from_rect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rect</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">netname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a boundary Pin object from a reference Rect object</span>
 
@@ -1213,7 +1282,7 @@
 <span class="sd">            reference rect object</span>
 <span class="sd">        gridname : str</span>
 <span class="sd">            grid name</span>
-<span class="sd">        pinname : str</span>
+<span class="sd">        name : str</span>
 <span class="sd">            pin name</span>
 <span class="sd">        layer : [str, str]</span>
 <span class="sd">            pin layer</span>
@@ -1229,7 +1298,7 @@
 <span class="sd">        laygo.LayoutObject.Pin</span>
 <span class="sd">            generated Pin object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">netname</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span> <span class="n">netname</span> <span class="o">=</span> <span class="n">pinname</span>
+        <span class="k">if</span> <span class="n">netname</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span> <span class="n">netname</span> <span class="o">=</span> <span class="n">name</span>
         <span class="n">xy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_rect_xy</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">direction</span><span class="o">==</span><span class="s2">&quot;left&quot;</span><span class="p">:</span>
             <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">size</span>
@@ -1240,7 +1309,7 @@
         <span class="k">elif</span> <span class="n">direction</span><span class="o">==</span><span class="s2">&quot;top&quot;</span><span class="p">:</span>
             <span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">size</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pin</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">pinname</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">xy</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="n">gridname</span><span class="p">,</span> <span class="n">netname</span><span class="o">=</span><span class="n">netname</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pin</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">xy</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="n">gridname</span><span class="p">,</span> <span class="n">netname</span><span class="o">=</span><span class="n">netname</span><span class="p">)</span></div>
 
     <span class="c1">#db access function</span>
 <div class="viewcode-block" id="GridLayoutGenerator.sel_template_library"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.sel_template_library">[docs]</a>    <span class="k">def</span> <span class="nf">sel_template_library</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">libname</span><span class="p">):</span>
@@ -1475,7 +1544,7 @@
 <span class="sd">        np.array([[float, float], [float, float]])</span>
 <span class="sd">            instance bbox</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[WARNING] GridLayoutGenerater.get_inst_bbox_phygrid will be deprecated. Use inst.bbox instead&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[WARNING] GridLayoutGenerater.get_inst_bbox_phygrid deprecated. Use inst.bbox instead&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_inst</span><span class="p">(</span><span class="n">instname</span><span class="p">)</span><span class="o">.</span><span class="n">bbox</span></div>
 
 <div class="viewcode-block" id="GridLayoutGenerator.get_grid"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_grid">[docs]</a>    <span class="k">def</span> <span class="nf">get_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridname</span><span class="p">):</span>
@@ -1494,7 +1563,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">get_grid</span><span class="p">(</span><span class="n">gridname</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridLayoutGenerator.get_absgrid_xy"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_absgrid_xy">[docs]</a>    <span class="k">def</span> <span class="nf">get_absgrid_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refinstindex</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">refpinname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="GridLayoutGenerator.get_absgrid_xy"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_absgrid_xy">[docs]</a>    <span class="k">def</span> <span class="nf">get_absgrid_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">refinstname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refinstindex</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">refpinname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refobj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refobjindex</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert physical coordinate to abstract coordinate</span>
 
@@ -1518,14 +1587,16 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">refinstname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">rinst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_inst</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">refinstname</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">refinstindex</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">refobj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">rinst</span> <span class="o">=</span> <span class="n">refobj</span>
+            <span class="n">refinstname</span> <span class="o">=</span> <span class="n">refobj</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">refinstindex</span> <span class="o">=</span> <span class="n">refobjindex</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">refinstname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">refpinname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">pxy_ongrid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_template_pin_coord</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">rinst</span><span class="o">.</span><span class="n">cellname</span><span class="p">,</span> <span class="n">pinname</span><span class="o">=</span><span class="n">refpinname</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="n">gridname</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="c1">#pxy = self.grids.get_phygrid_xy(gridname=gridname, xy=pxy_ongrid)[0]</span>
                 <span class="n">pxy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">get_phygrid_xy</span><span class="p">(</span><span class="n">gridname</span><span class="o">=</span><span class="n">gridname</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">pxy_ongrid</span><span class="p">)</span>
-                <span class="c1">#rxy = rinst.xy[0] + np.dot(self.Mt(rinst.transform), pxy)</span>
                 <span class="n">rxy</span> <span class="o">=</span> <span class="n">rinst</span><span class="o">.</span><span class="n">xy</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Mt</span><span class="p">(</span><span class="n">rinst</span><span class="o">.</span><span class="n">transform</span><span class="p">),</span> <span class="n">pxy</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="c1">#rxy = rinst.xy[0]</span>
                 <span class="n">rxy</span> <span class="o">=</span> <span class="n">rinst</span><span class="o">.</span><span class="n">xy</span>
             <span class="n">_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Mt</span><span class="p">(</span><span class="n">rinst</span><span class="o">.</span><span class="n">transform</span><span class="p">)),</span> <span class="n">xy</span> <span class="o">-</span> <span class="n">rxy</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1789,6 +1860,7 @@
 <span class="sd">            loaded grid object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">import_yaml</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">libname</span><span class="p">)</span></div></div>
+
 </pre></div>
 
           </div>

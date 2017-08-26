@@ -484,9 +484,26 @@ interleaving ratio settings
 
 ## Retimer
 
-From now on, AnalogBase has to be set up for layout generations (which
-is not for the cds_ff_mpt technology).
+(From now on, AnalogBase has to be set up for layout generations (which
+is not for the cds_ff_mpt technology)
 
+Generator codes for the final retimer is written by Eric Chang. Run
+these scripts to generate the retimer schematic and layout.
+
+```
+run laygo/generators/adc_sar/adc_retimer_layout_generator.py
+run laygo/generators/adc_sar/adc_retimer_schematic_generator.py
+```
+
+## TISARADC body (clock+sar+retimer)
+
+Following scripts are for generating layout and schematic of TISARADC
+body.
+
+```
+run laygo/generators/adc_sar/tisaradc_body_core_layout_generator.py
+run laygo/generators/adc_sar/tisaradc_body_core_schematic_generator.py
+```
 
 ## Bias
 

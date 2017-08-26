@@ -129,6 +129,7 @@
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#array-generation">Array generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#clocking-path-generation">Clocking path generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#retimer">Retimer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example/tisar.html#tisaradc-body-clock-sar-retimer">TISARADC body (clock+sar+retimer)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#bias">Bias</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#top">Top</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#full-stack-generation">Full stack generation</a></li>
@@ -368,14 +369,18 @@
   <dt><a href="api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator">BaseLayoutGenerator (class in laygo.BaseLayoutGenerator)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.bbox">bbox (laygo.LayoutObject.Instance attribute)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#laygo.GDSIO.Boundary">Boundary (class in laygo.GDSIO)</a>
+  </dt>
+
+      
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.boundary_pin_from_rect">boundary_pin_from_rect() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
   </dt>
 
   </dl></td>
@@ -901,13 +906,25 @@
   </dt>
 
       
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.get_xy0">get_xy0() (laygo.LayoutObject.Rect method)</a>
+  <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.get_xy0">get_xy0() (laygo.LayoutObject.Pin method)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.get_xy0">(laygo.LayoutObject.Rect method)</a>
+  </dt>
+
+      </dl></dd>
       
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.get_xy1">get_xy1() (laygo.LayoutObject.Rect method)</a>
+  <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.get_xy1">get_xy1() (laygo.LayoutObject.Pin method)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.get_xy1">(laygo.LayoutObject.Rect method)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="api/laygo.html#laygo.GridObject.GridObject.get_ygrid">get_ygrid() (laygo.GridObject.GridObject method)</a>
   </dt>
@@ -1382,12 +1399,12 @@
   <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.sel_template_library">sel_template_library() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.set_spacing">set_spacing() (laygo.LayoutObject.Instance method)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#laygo.GDSIO.Element.set_transform_parameters">set_transform_parameters() (laygo.GDSIO.Element method)</a>
   </dt>
@@ -1397,13 +1414,25 @@
   </dt>
 
       
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.set_xy0">set_xy0() (laygo.LayoutObject.Rect method)</a>
+  <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.set_xy0">set_xy0() (laygo.LayoutObject.Pin method)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.set_xy0">(laygo.LayoutObject.Rect method)</a>
+  </dt>
+
+      </dl></dd>
       
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.set_xy1">set_xy1() (laygo.LayoutObject.Rect method)</a>
+  <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.set_xy1">set_xy1() (laygo.LayoutObject.Pin method)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.set_xy1">(laygo.LayoutObject.Rect method)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.shape">shape (laygo.LayoutObject.Instance attribute)</a>
   </dt>
@@ -1594,6 +1623,10 @@
 
       <dd><dl>
         
+  <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.xy0">(laygo.LayoutObject.Pin attribute)</a>
+  </dt>
+
+        
   <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.xy0">(laygo.LayoutObject.Rect attribute)</a>
   </dt>
 
@@ -1603,6 +1636,10 @@
   </dt>
 
       <dd><dl>
+        
+  <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.xy1">(laygo.LayoutObject.Pin attribute)</a>
+  </dt>
+
         
   <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.xy1">(laygo.LayoutObject.Rect attribute)</a>
   </dt>

@@ -18,7 +18,7 @@ than conventional custom IC design flows.
     ```
     $ git clone git@github.com:ucb-art/laygo.git
     ```
-3. Prepare following etup files for your technology.
+3. Prepare following setup files for your technology.
     * **laygo_config.yaml** - contains general technology information.
 
         An example file can be found here: [labs/laygo_config.yaml](https://github.com/ucb-art/laygo/blob/master/labs/laygo_config.yaml)
