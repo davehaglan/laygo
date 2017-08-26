@@ -44,7 +44,7 @@ if __name__ == '__main__':
     laygen.add_library('laygo_working')
     laygen.add_cell('nand_test')
 
-    # grids
+    # grid variables
     pg = 'placement_basic'
     rg12 = 'route_M1_M2_cmos'
     rg23 = 'route_M2_M3_cmos'
