@@ -1623,7 +1623,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             pindict[pinname]={'netname':pin.netname, 'layer':pin.layer, 'xy':pin.xy}
         self.templates.add_template(name=cellname, libname=libname, xy=bnd, pins=pindict)
 
-
     def save_template(self, filename, libname=None):
         """
         Save templateDB to yaml file
