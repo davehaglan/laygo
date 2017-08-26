@@ -93,6 +93,7 @@ laygen.pin_from_rect(name='B', layer=laygen.layers['pin'][2], rect=rb, gridname=
 laygen.pin_from_rect(name='O', layer=laygen.layers['pin'][3], rect=ro, gridname=rg23)
 laygen.pin_from_rect(name='VDD', layer=laygen.layers['pin'][2], rect=rvdd, gridname=rg12)
 laygen.pin_from_rect(name='VSS', layer=laygen.layers['pin'][2], rect=rvss, gridname=rg12)
+
 #export to BAG
 laygen.export_BAG(prj)
 
