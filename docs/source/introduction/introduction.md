@@ -1,7 +1,7 @@
 # LAYGO - LAYout with Gridded Objects 
 
 Laygo is an add-on to [BAG2](https://github.com/pkerichang/BAG_framework)
-framework for layout generation, written by Jaeduk Han, (jdhan@eecs.berkeley.edu)
+framework for layout generation, written by Jaeduk Han, (https://jdhan.github.io/)
 and licensed under the BSD license.
 With laygo, layout elements and parameters are abstracted as templates
 and grids, and the layout job can be done without dealing with complex
