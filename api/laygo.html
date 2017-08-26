@@ -892,7 +892,7 @@ ex) [[x0, y0], [x1, x1], ..., [xn-1, yn-1], [x0, y0]]</li>
 <p>Base class for GDSIO objects</p>
 <dl class="attribute">
 <dt id="laygo.GDSIO.Element.possible_transform_parameters">
-<code class="descname">possible_transform_parameters</code><em class="property"> = {'R0': (None, None), 'R180': (0, 180), 'R270': (0, 270), 'MX': (32768, 0), 'MY': (32768, 180), 'R90': (0, 90)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="descname">possible_transform_parameters</code><em class="property"> = {'R0': (None, None), 'MY': (32768, 180), 'R270': (0, 270), 'R90': (0, 90), 'R180': (0, 180), 'MX': (32768, 0)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; transform parameter dictionary</p>
 </dd></dl>
 
@@ -1580,7 +1580,7 @@ grids.</p>
 
 <dl class="attribute">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.layers">
-<code class="descname">layers</code><em class="property"> = {'text': [], 'prbnd': [], 'metal': [], 'pin': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">layers</code><em class="property"> = {'metal': [], 'pin': [], 'prbnd': [], 'text': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; layer dictionary. metal, pin, text, prbnd are used as keys</p>
 </dd></dl>
 
@@ -1658,7 +1658,7 @@ grids.</p>
 
 <dl class="method">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.place">
-<code class="descname">place</code><span class="sig-paren">(</span><em>name</em>, <em>templatename</em>, <em>gridname</em>, <em>xy</em>, <em>template_libname=None</em>, <em>shape=array([1</em>, <em>1])</em>, <em>spacing=None</em>, <em>offset=array([0</em>, <em>0])</em>, <em>transform='R0'</em>, <em>annotate_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.place"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.place" title="Permalink to this definition">¶</a></dt>
+<code class="descname">place</code><span class="sig-paren">(</span><em>name</em>, <em>templatename</em>, <em>gridname</em>, <em>xy</em>, <em>template_libname=None</em>, <em>shape=array([1</em>, <em>1])</em>, <em>spacing=None</em>, <em>offset=array([0</em>, <em>0])</em>, <em>transform='R0'</em>, <em>annotate_text=None</em>, <em>libname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.place"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.place" title="Permalink to this definition">¶</a></dt>
 <dd><p>Place an instance on abstract grid. Use relplace instead</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1669,19 +1669,25 @@ grids.</p>
 <li><strong>templatename</strong> (<em>str</em>) &#8211; Name of the template for the instance.</li>
 <li><strong>gridname</strong> (<em>str</em>) &#8211; Grid name for the instance placement.</li>
 <li><strong>xy</strong> (<em>np.array([int, int]) or [int, int]</em>) &#8211; Placement coordinate on the grid, specified by gridname.</li>
-<li><strong>template_libname</strong> (<em>str, optional</em>) &#8211; Template library name. If not specified, self.templates.plib is used.</li>
+<li><strong>libname</strong> (<em>str, optional</em>) &#8211; Template library name. If not specified, self.templates.plib is used.</li>
 <li><strong>shape</strong> (<em>np.array([int, int]), optional</em>) &#8211; Array dimension of the instance. If not specified, [1, 1] is used.</li>
-<li><strong>spacing</strong> (<em>np.array([int, int]), optional</em>) &#8211; Array spacing parameter for the instance. If None, the size of the instance of is used.</li>
-<li><strong>offset</strong> (<em>np.array([float, float]), optional</em>) &#8211; Offset in physical coordinate.</li>
 <li><strong>transform</strong> (<em>str ('R0', 'MX', 'MY'), optional</em>) &#8211; Transform parameter</li>
-<li><strong>annotate_text</strong> (<em>str, optional</em>) &#8211; text to be annotated. Use None if no annotation is required</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">generated instance</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">laygo.layoutObject.Instance</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">laygo.layoutObject.Instance</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>template_libname</strong> (<em>str, optional, deprecated</em>) &#8211; Replaced with libname</li>
+<li><strong>spacing</strong> (<em>np.array([int, int]), optional</em>) &#8211; Array spacing parameter for the instance. If None, the size of the instance of is used.</li>
+<li><strong>offset</strong> (<em>np.array([float, float]), optional</em>) &#8211; Offset in physical coordinate.</li>
+<li><strong>annotate_text</strong> (<em>str, optional</em>) &#8211; text to be annotated. Use None if no annotation is required</li>
+</ul>
 </td>
 </tr>
 </tbody>
@@ -1690,43 +1696,59 @@ grids.</p>
 
 <dl class="method">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.relplace">
-<code class="descname">relplace</code><span class="sig-paren">(</span><em>name=None</em>, <em>templatename=None</em>, <em>gridname=None</em>, <em>refinstname=None</em>, <em>direction='right'</em>, <em>xy=array([0</em>, <em>0])</em>, <em>offset=array([0</em>, <em>0])</em>, <em>template_libname=None</em>, <em>shape=array([1</em>, <em>1])</em>, <em>spacing=None</em>, <em>transform='R0'</em>, <em>refobj=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.relplace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.relplace" title="Permalink to this definition">¶</a></dt>
-<dd><p>Place an instance on abstract grid, bound from a reference object. If the reference object is not specified,
-the absolate origin is used as the reference point.</p>
+<code class="descname">relplace</code><span class="sig-paren">(</span><em>name=None</em>, <em>templatename=None</em>, <em>gridname=None</em>, <em>refinstname=None</em>, <em>direction='right'</em>, <em>xy=array([0</em>, <em>0])</em>, <em>offset=array([0</em>, <em>0])</em>, <em>template_libname=None</em>, <em>shape=array([1</em>, <em>1])</em>, <em>spacing=None</em>, <em>transform='R0'</em>, <em>refobj=None</em>, <em>libname=None</em>, <em>cellname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.relplace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.relplace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Place an instance on abstract grid, bound from a reference object. If reference object is not specified,
+[0, 0]+offset is used as the reference point.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>name</strong> (<em>str</em>) &#8211; Name of the instance.</li>
-<li><strong>templatename</strong> (<em>str</em>) &#8211; Template name (cellname) of the instance.</li>
+<li><strong>cellname</strong> (<em>str</em>) &#8211; Template name (cellname) of the instance.</li>
 <li><strong>gridname</strong> (<em>str</em>) &#8211; Grid name for the placement.</li>
 <li><strong>xy</strong> (<em>np.array([x, y]) or [int, int], optional</em>) &#8211; Placement coordinate on the grid, specified by gridname. If not specified, [0, 0] is used.</li>
 <li><strong>refobj</strong> (<em>LayoutObject.Instance, optional</em>) &#8211; Reference instance handle, if None, refinstname is used. Will be extended to support other objects.</li>
 <li><strong>direction</strong> (<em>str, optional</em>) &#8211; Direction of placement, bound from refobj. For example, if the instance will be place on top of refobj,
 direction=&#8217;top&#8217; is used</li>
-<li><strong>offset</strong> (<em>np.array([float, float]), optional</em>) &#8211; Placement offset in physical coordinate.</li>
 <li><strong>shape</strong> (<em>np.array([int, int]) or [int, int], optional</em>) &#8211; Array dimension of the instance. If not specified, [1, 1] is used.</li>
-<li><strong>spacing</strong> (<em>np.array([int, int]) or [int, int]</em>) &#8211; Array spacing parameter for the instance. If none, the size of the instance of is used.</li>
 <li><strong>transform</strong> (<em>str ('R0', 'MX', 'MY')</em>) &#8211; Transform parameter. &#8216;R0&#8217; is used by default.</li>
-<li><strong>refinstname</strong> (<em>str, optional, deprecated</em>) &#8211; Reference instance name, if None, [0, 0] is used for the reference point.</li>
+<li><strong>libname</strong> (<em>str, optional</em>) &#8211; Template library name. If not specified, self.templates.plib is used.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">generated instance</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">laygo.layoutObject.Instance</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">laygo.layoutObject.Instance</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>refinstname</strong> (<em>str, optional, deprecated</em>) &#8211; Reference instance name, if None, [0, 0] is used for the reference point.</li>
+<li><strong>templatename</strong> (<em>str, deprecated</em>) &#8211; Replaced with cellname</li>
+<li><strong>template_libname</strong> (<em>str, optional, deprecated</em>) &#8211; Replaced with libname</li>
+<li><strong>spacing</strong> (<em>np.array([int, int]) or [int, int]</em>) &#8211; Array spacing parameter for the instance. If none, the size of the instance of is used.</li>
+<li><strong>offset</strong> (<em>np.array([float, float]), optional</em>) &#8211; Placement offset in physical coordinate.</li>
+</ul>
 </td>
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.place" title="laygo.GridLayoutGenerator.GridLayoutGenerator.place"><code class="xref py py-meth docutils literal"><span class="pre">place()</span></code></a></dt>
+<dd>substrate function of relplace</dd>
+</dl>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.via">
 <code class="descname">via</code><span class="sig-paren">(</span><em>name=None</em>, <em>xy=array([0</em>, <em>0])</em>, <em>gridname=None</em>, <em>refobj=None</em>, <em>refobjindex=array([0</em>, <em>0])</em>, <em>offset=array([0</em>, <em>0])</em>, <em>refinstname=None</em>, <em>refinstindex=array([0</em>, <em>0])</em>, <em>refpinname=None</em>, <em>transform='R0'</em>, <em>overwrite_xy_phy=None</em>, <em>overlay=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.via"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.via" title="Permalink to this definition">¶</a></dt>
-<dd><p>Place a via on grid.</p>
+<dd><p>Place a via on abstract grid, bound from a reference object. If reference object is not specified,
+[0, 0]+offset is used as the reference point.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1738,20 +1760,25 @@ direction=&#8217;top&#8217; is used</li>
 <li><strong>refobj</strong> (<a class="reference internal" href="#laygo.LayoutObject.LayoutObject" title="laygo.LayoutObject.LayoutObject"><em>LayoutObject.LayoutObject</em></a>) &#8211; Reference object(Instance/Pin/Rect) handle. If None, refinstiname is used.</li>
 <li><strong>overlay</strong> (<a class="reference internal" href="#laygo.LayoutObject.LayoutObject" title="laygo.LayoutObject.LayoutObject"><em>LayoutObject.LayoutObject</em></a>) &#8211; Layout object for via placement at intersection (via will be placed at the overlaid point btn refobj and overlay)
 Use with refobj only. Not compatible with legacy reference parameters (refinstname)</li>
-<li><strong>offset</strong> (<em>np.array([float, float]), optional</em>) &#8211; Offset on the physical grid, bound from xy</li>
 <li><strong>transform</strong> (<em>str ('R0', 'MX', 'MY'), optional</em>) &#8211; Transform parameter for grid. Overwritten by transform of refinstname if not specified.</li>
-<li><strong>overwrite_xy_phy</strong> (<em>None or np.array([float, float]), optional</em>) &#8211; If specified, final xy physical coordinates are overwritten by the argument.</li>
-<li><strong>refobjindex</strong> (<em>np.array([int, int]), optional, deprecated</em>) &#8211; Index of refobj if it is a mosaic instance.</li>
-<li><strong>refinstname</strong> (<em>str, optional, deprecated</em>) &#8211; Reference instance name for xy. If None, origin([0,0]) is used as the reference point.</li>
-<li><strong>refinstindex</strong> (<em>str, optional, deprecated</em>) &#8211; Index of refinstname if it is a mosaic instance</li>
-<li><strong>refpinname</strong> (<em>str, optional, deprecated</em>) &#8211; Reference pin of refinstname for reference point of xy. If None, the origin of refinstname0 is used.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">generated via instance</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">laygo.layoutObject.Instance</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">laygo.layoutObject.Instance</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>offset</strong> (<em>np.array([float, float]), optional</em>) &#8211; Offset on the physical grid, bound from xy</li>
+<li><strong>overwrite_xy_phy</strong> (<em>None or np.array([float, float]), optional</em>) &#8211; If specified, final xy physical coordinates are overwritten by the argument.</li>
+<li><strong>refobjindex</strong> (<em>np.array([int, int]), optional, deprecated</em>) &#8211; Index of refobj if it is a mosaic instance.</li>
+<li><strong>refinstname</strong> (<em>str, optional, deprecated</em>) &#8211; Reference instance name for xy. If None, origin([0,0]) is used as the reference point.</li>
+<li><strong>refinstindex</strong> (<em>str, optional, deprecated</em>) &#8211; Index of refinstname if it is a mosaic instance</li>
+<li><strong>refpinname</strong> (<em>str, optional, deprecated</em>) &#8211; Reference pin of refinstname for reference point of xy. If None, the origin of refinstname0 is used.</li>
+</ul>
 </td>
 </tr>
 </tbody>
@@ -1761,7 +1788,8 @@ Use with refobj only. Not compatible with legacy reference parameters (refinstna
 <dl class="method">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.route">
 <code class="descname">route</code><span class="sig-paren">(</span><em>name=None</em>, <em>layer=None</em>, <em>xy0=array([0</em>, <em>0])</em>, <em>xy1=array([0</em>, <em>0])</em>, <em>gridname0=None</em>, <em>gridname1=None</em>, <em>direction='omni'</em>, <em>refobj0=None</em>, <em>refobj1=None</em>, <em>refobjindex0=array([0</em>, <em>0])</em>, <em>refobjindex1=array([0</em>, <em>0])</em>, <em>refinstname0=None</em>, <em>refinstname1=None</em>, <em>refinstindex0=array([0</em>, <em>0])</em>, <em>refinstindex1=array([0</em>, <em>0])</em>, <em>refpinname0=None</em>, <em>refpinname1=None</em>, <em>offset0=array([0</em>, <em>0])</em>, <em>offset1=None</em>, <em>transform0='R0'</em>, <em>transform1=None</em>, <em>endstyle0='truncate'</em>, <em>endstyle1='truncate'</em>, <em>via0=None</em>, <em>via1=None</em>, <em>addvia0=False</em>, <em>addvia1=False</em>, <em>netname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.route"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.route" title="Permalink to this definition">¶</a></dt>
-<dd><p>Route on grid</p>
+<dd><p>Route on abstract grid, bound from reference objects. If reference objects are not specified,
+[0, 0]+offset is used as reference points.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1776,8 +1804,6 @@ Use with refobj only. Not compatible with legacy reference parameters (refinstna
 <li><strong>direction</strong> (<em>str, optional</em>) &#8211; Routing direction (omni, x, y, ...). It will be used as the input argument of GridLayoutGenerator.Md.</li>
 <li><strong>refobj0</strong> (<a class="reference internal" href="#laygo.LayoutObject.LayoutObject" title="laygo.LayoutObject.LayoutObject"><em>LayoutObject.LayoutObject</em></a>) &#8211; Reference object(Instance/Pin/Rect) handle. If None, refinstiname0 is used.</li>
 <li><strong>refobj1</strong> (<a class="reference internal" href="#laygo.LayoutObject.LayoutObject" title="laygo.LayoutObject.LayoutObject"><em>LayoutObject.LayoutObject</em></a>) &#8211; Reference object(Instance/Pin/Rect) handle. If None, refinstiname1 is used.</li>
-<li><strong>offset0</strong> (<em>np.array([float, float]), optional</em>) &#8211; Coordinate offset from xy0, on the physical grid.</li>
-<li><strong>offset1</strong> (<em>np.array([float, float]), optional</em>) &#8211; Coordinate offset from xy1, on the physical grid.</li>
 <li><strong>transform0</strong> (<em>str, optional</em>) &#8211; Transform parameter for grid0. Overwritten by transform of refinstname0 if not specified.</li>
 <li><strong>transform1</strong> (<em>str, optional</em>) &#8211; Transform parameter for grid1. Overwritten by transform of refinstname1 if not specified.</li>
 <li><strong>endstyle0</strong> (<em>str ('extend', 'truncate'), optional</em>) &#8211; End style of xy0 (extend the edge by width/2 if endstyle==&#8217;extend&#8217;)</li>
@@ -1786,9 +1812,20 @@ Use with refobj only. Not compatible with legacy reference parameters (refinstna
 ex) if xy0 = [1, 2], xy1 = [1, 5], via0 = [0, 2] then a via will be placed at [1, 4]</li>
 <li><strong>via1</strong> (<em>None or np.array([x, y]) or np.array([[x0, y0], [x1, y1], [x2, y2], ...]), optional</em>) &#8211; Offset coordinates for via placements, bound from xy1
 ex) if xy0 = [1, 2], xy1 = [1, 5], via1 = [0, 2] then a via will be placed at [1, 7]</li>
-<li><strong>addvia0</strong> (<em>bool, optional</em>) &#8211; True if a via is placed on xy0 (deprecated, use via0=[0] instead)</li>
-<li><strong>addvia1</strong> (<em>bool, optional</em>) &#8211; True if a via is placed on xy1 (deprecated, use via1=[0] instead)</li>
 <li><strong>netname</strong> (<em>str, optional</em>) &#8211; net name of the route</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">generated route</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">laygo.layoutObject.Rect</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>offset0</strong> (<em>np.array([float, float]), optional</em>) &#8211; Coordinate offset from xy0, on the physical grid.</li>
+<li><strong>offset1</strong> (<em>np.array([float, float]), optional</em>) &#8211; Coordinate offset from xy1, on the physical grid.</li>
 <li><strong>refobjindex0</strong> (<em>np.array([int, int]), optional, deprecated</em>) &#8211; Index of refobj0 if it is a mosaic instance.</li>
 <li><strong>refobjindex1</strong> (<em>np.array([int, int]), optional, deprecated</em>) &#8211; Index of refobj1 if it is a mosaic instance.</li>
 <li><strong>refinstname0</strong> (<em>str, optional, deprecated</em>) &#8211; Reference instance name for start point. If None, origin([0,0]) is used as the reference point.</li>
@@ -1797,13 +1834,9 @@ ex) if xy0 = [1, 2], xy1 = [1, 5], via1 = [0, 2] then a via will be placed at [1
 <li><strong>refinstindex1</strong> (<em>np.array([int, int]), optional, deprecated</em>) &#8211; Index of refinstname1 if it is a mosaic instance.</li>
 <li><strong>refpinname0</strong> (<em>str, optional, deprecated</em>) &#8211; Reference pin of refinstname0 for reference point of xy0. If None, the origin of refinstname0 is used.</li>
 <li><strong>refpinname1</strong> (<em>str, optional, deprecated</em>) &#8211; Reference pin of refinstname1 for reference point of xy1. If None, the origin of refinstname1 is used.</li>
+<li><strong>addvia0</strong> (<em>bool, optional, deprecated</em>) &#8211; True if a via is placed on xy0 (deprecated, use via0=[0] instead)</li>
+<li><strong>addvia1</strong> (<em>bool, optional, deprecated</em>) &#8211; True if a via is placed on xy1 (deprecated, use via1=[0] instead)</li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">generated route</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">laygo.layoutObject.Rect</p>
 </td>
 </tr>
 </tbody>
@@ -1989,12 +2022,21 @@ ex) if xy0 = [1, 2], xy1 = [1, 5], via1 = [0, 2] then a via will be placed at [1
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.pin_from_rect" title="laygo.GridLayoutGenerator.GridLayoutGenerator.pin_from_rect"><code class="xref py py-meth docutils literal"><span class="pre">pin_from_rect()</span></code></a></dt>
+<dd>generate a Pin from a Rect</dd>
+<dt><a class="reference internal" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.boundary_pin_from_rect" title="laygo.GridLayoutGenerator.GridLayoutGenerator.boundary_pin_from_rect"><code class="xref py py-meth docutils literal"><span class="pre">boundary_pin_from_rect()</span></code></a></dt>
+<dd>generate a boundary Pin from a Rect</dd>
+</dl>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.pin_from_rect">
 <code class="descname">pin_from_rect</code><span class="sig-paren">(</span><em>name</em>, <em>layer</em>, <em>rect</em>, <em>gridname</em>, <em>netname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.pin_from_rect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.pin_from_rect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a Pin object from a rect object</p>
+<dd><p>Generate a Pin object from a Rect object</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
