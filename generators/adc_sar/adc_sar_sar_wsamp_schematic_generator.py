@@ -82,11 +82,15 @@ if params['samp_use_laygo']==True:
     params['samp_fg_inbuf_list']=sizedict['sarsamp']['m_inbuf_list']
     params['samp_fg_outbuf_list']=sizedict['sarsamp']['m_outbuf_list']
 else:
-    params['samp_wp']=params['sar_pw']
-    params['samp_wn']=params['sar_nw']
-    params['samp_fgn']=sizedict['sarsamp']['m_sw_arr']*sizedict['sarsamp']['m_sw']
-    params['samp_fg_inbuf_list']=sizedict['sarsamp']['m_inbuf_list']
-    params['samp_fg_outbuf_list']=sizedict['sarsamp']['m_outbuf_list']
+    params['samp_wp']=params['sar_pw']*2
+    params['samp_wn']=params['sar_nw']*2
+    params['samp_fgn']=int(sizedict['sarsamp']['m_sw_arr']*sizedict['sarsamp']['m_sw']/2)
+    params['samp_fg_inbuf_list']=[]
+    params['samp_fg_outbuf_list']=[]
+    for m in sizedict['sarsamp']['m_inbuf_list']:
+         params['samp_fg_inbuf_list']+=[(m, m)]
+    for m in sizedict['sarsamp']['m_outbuf_list']:
+         params['samp_fg_outbuf_list']+=[(m, m)]
 
 print('creating BAG project')
 prj = bag.BagProject()
