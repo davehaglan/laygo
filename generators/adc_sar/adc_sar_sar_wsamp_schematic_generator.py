@@ -82,6 +82,15 @@ if params['samp_use_laygo']==True:
     params['samp_fg_inbuf_list']=sizedict['sarsamp']['m_inbuf_list']
     params['samp_fg_outbuf_list']=sizedict['sarsamp']['m_outbuf_list']
 else:
+    params['samp_wp']=sizedict['sampler_nmos']['wp']
+    params['samp_wn']=sizedict['sampler_nmos']['wn']
+    params['samp_fgn']=sizedict['sampler_nmos']['fgn']
+    params['samp_fg_inbuf_list']=sizedict['sampler_nmos']['fg_inbuf_list']
+    params['samp_fg_outbuf_list']=sizedict['sampler_nmos']['fg_outbuf_list']
+    params['samp_nduml']=sizedict['sampler_nmos']['nduml']
+    params['samp_ndumr']=sizedict['sampler_nmos']['ndumr']
+    params['samp_nsep']=sizedict['sampler_nmos']['nsep']
+    '''
     params['samp_wp']=params['sar_pw']*2
     params['samp_wn']=params['sar_nw']*2
     params['samp_fgn']=int(sizedict['sarsamp']['m_sw_arr']*sizedict['sarsamp']['m_sw']/2)
@@ -91,6 +100,7 @@ else:
          params['samp_fg_inbuf_list']+=[(m, m)]
     for m in sizedict['sarsamp']['m_outbuf_list']:
          params['samp_fg_outbuf_list']+=[(m, m)]
+    '''
 
 print('creating BAG project')
 prj = bag.BagProject()
