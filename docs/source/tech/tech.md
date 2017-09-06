@@ -13,7 +13,7 @@ files. Check the following repos for reference:
 
 ## Overview
 
-Following items are need to be set up for laygo
+Following items are need to be set up for laygo.
 
 * BAG
 * config files: laygo_config.yaml, layermap file (GDS only)
@@ -142,56 +142,69 @@ VIA8        drawing 18   0
 
 ## Template library
 
-This is the most critical part for the setup. Laygo uses handcraft
-templates of primitive devices for layout generations, meaning that
-users need to build the template devices by themselves if not provided.
-Basically there are 4 different cells to be created.
+This is the most critical part of the laygo setup. Laygo uses hand-drawn
+templates of primitive devices and automatic generations are done in
+block levels. Therefore, users need to build the primitive templates and
+ grids associated with the templates in advance.
+Template and grid cells in laygo are classified into 4 categories.
 
-1. Placement grids: defines the grid resolutions that devices will
- be placed. **prboundary_layer** is used for setting the resolution.
+1. Placement grids: defines the grid resolutions to place devices.
+**prboundary_layer** is used for specifying the resolution.
 2. Routing grids: defines the grid resolutions that routing wires
- and vias will be placed. Rects with **metal_layers** are used to
- define the width / spacing / coordinate of the routing grid.
+ and vias will be placed on. Rect objects with **metal_layers** are used
+ to define the width / spacing / coordinate of the routing grid. Vias
+ are placed at cross-sections of route wires, and they are constructed
+ as via template cells.
 3. Device template cells: templates of devices will be placed on one
- of the placement grids
+ of the placement grids. **prboundary_layer** is used to specify
+ boundaries of the template, and **pin_layers** are used to specify pin
+ regions and pin names.
 4. Via template cells: templates of vias will be placed on one of
  the route grids.
 
+The figure shown below contains all types of template and grid cells.
+
 ![techex](images/tech_example.png)
 
-Template and grid cell examples
+Since there are no limitations on architecting grids, **multiple
+placement grids / routing grids / devices / vias** can be
+used for same technology / layer / device types. For example, 2
+different types of grids (e.g thin and thick grids) can be used for
+Metal1-Metal2 grids. Or 2 different set of NMOS templates (short channel
+devices and long channel ones) can be constructed. These aspects are
+one of major differences from digital place and route flows.
 
-**Multiple placement grids / routing grids / devices / vias** can be
-defined for same technology / layer / device type. For example, users
-can use 2 different types of grids (e.g thin and thick grids) for Metal1
-and Metal2. Or 2 different set of NMOS templates (short channel and
-long channel) can be defined. This gives a flexibility on generated
-layout while still abstracting design rules.
+The way of constructing template and grid cells is up to designer's
+intent. However, there should be some levels of compatibility to
+enable code reusability over different technologies. We propose
+guidelines to architect template and grids cells for the reusability,
+especially for exampler scripts in the generators directory.
 
-The set of template / grid elements depends on user's preference, but
-here are cells that need to be included to generate layout in the
-example documentation.
-
-#### Example template library name
-For generator examples, (tech_lib)_microtemplates_dense is used for the
-primitive template library name
+#### Template library name
+For the generator examples, (tech_lib)_microtemplates_(flavor) is used
+for the primitive template library name. **dense** flavor is used for
+most example cases, which stands for optimized to reduce active area.
+For example, **cds_ff_mpt_microtemplates_dense** is the primitive
+template library name of cds_ff_mpt technology.
 
 ![libname](images/tech_libname.png)
 
-#### Example placement grids
-1. placement_basic : a default placement grid cell. **Contacted Poly
-Pitch(CPO)** for the resolution in **x** direction and **fin
-grid** or **contact pitch** is a good candidate for the
-placement grid. Note that the size of any compatible templates
-should be a multiple of the placement grid.
+#### Placement grids
+1. placement_basic : a default placement grid layout. **Contacted Poly
+Pitch(CPO)** (for **x** axis) and a multiple of **fin grid** (for **y***
+axis) are good candidates for the placement grid. Note that the size of
+any compatible templates should be a multiple of the placement grid.
 
     ![placement_basic](images/tech_placement_basic.png)
 
-    placement_basic example
+The figure above shows the placement_basic example for cds_ff_mpt
+technology. CPO was used for the x-resolution and fin grid was used for
+the y-resolution.
 
-#### Example routing grids and vias
+#### Routing grids and vias
 1. route_M1_M2_basic : a default M1_M2_route grid cell. **Minimum metal
-spacings and widths** are used for the resolution and metal width.
+spacings and widths** are used for the resolution and metal width,
+assuming vias can be placed in diagonal directions.
 
     ![m1_m2_basic](images/tech_m1_m2.png)
 
@@ -202,7 +215,8 @@ spacings and widths** are used for the resolution and metal width.
 
 3. route_M1_M2_mos, route_M1_M2_cmos : M2_M2 grids that are designed
 to be compatible to NMOS/PMOS/CMOS stuctures. Note that grid coordinates
- are aligned to gate/drain/source pins of fets.
+ are aligned to gate/drain/source pins of fets, and 2 horizontal tracks
+ crosses the source and drain region.
 
     ![m1_m2_mos](images/tech_m1_m2_mos.png)
 
