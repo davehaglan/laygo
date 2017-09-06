@@ -1,23 +1,39 @@
 # Laygo setup for new technologies
 
-This section describes how to make a laygo setup for the technology in
-use. This document is assuming BAG is already set up for the technology
-(at least for schematic generations), but no laygo setup is created.
-This document helps users to prepare technology dependent setup files
-and template libraries.
+This section describes how to setup laygo for a new technology.
+This document is written to help users create setup files and template
+libraries.
+
+## Example setup files
+Instead of starting from scratch, you can reuse some parts of example
+files. Check the following repos for reference:
+
+* cds_ff_mpt: [https://github.com/ucb-art/BAG2_cds_ff_mpt](https://github.com/ucb-art/BAG2_cds_ff_mpt)
+* NCSU freePDK45: [https://github.com/ucb-art/BAG2_freePDK45](https://github.com/ucb-art/BAG2_freePDK45)
 
 ## Overview
 
-## Example setup files
-Instead of starting from scratch, example setups for generic
-technologies are provided. You can get files in the following repos.
+Following items are need to be set up for laygo
 
-## laygo_config.yaml
-The only technology file to be described by users is
-**laygo_config.yaml**. It defines basic technology dependent information
-(i.e. layer names for route layers). Here's a example
-**laygo_config.yaml** for **cds_ff_mpt** technology (Cadence generic PDK
-for finfet and multiple patterning technology).
+* BAG
+* config files: laygo_config.yaml, layermap file (GDS only)
+* template and grid library: (tech_name)_microtemplates_dense
+for most example generators, and associated yaml files
+
+## BAG setup
+
+Since BAG exports the generated layout to BAG (unless you are exporting
+to GDS), you need to setup BAG before setting up laygo. Techinfo classes
+related to XBase is not required, since BAG can use a dummy techinfo if
+XBase is not set up for the technology in use.
+
+## Config file (laygo_config.yaml)
+
+Laygo uses **laygo_config.yaml** to store technology specific
+information. For each technology, user need to create/update
+**laygo_config.yaml** to contain correct parameters.
+An example **laygo_config.yaml** file for **cds_ff_mpt**
+technology is shown below.
 
 ```
 #default_laygo_config file
@@ -59,30 +75,28 @@ text_layer: [text, drawing]
 physical_resolution: 0.001
 ```
 
-Here's description on items.
+All fields need to filled in proper format, and contains information
+explained below:
 
-* **metal_layers** (list): contains [*layername*, *layerpurpose*]
+* **metal_layers** (list): list of [*layername*, *layerpurpose*]
  of metal layers to be used for routing, starting from the bottom
  layer to the top layer.
-* **via_layers** (list): contains [*layername*, *layerpurpose*]
+* **via_layers** (list): list of [*layername*, *layerpurpose*]
  of via layers to be used for routing, starting from the bottom
  layer to the top layer.
-* **pin_layers** (list): contains [*layername*, *layerpurpose*]
+* **pin_layers** (list): list of [*layername*, *layerpurpose*]
  of pin layers to be used for routing, starting from the bottom
  layer to the top layer.
-* **prboundary_layer** (list): contains [*layername*, *layerpurpose*]
+* **prboundary_layer** (list): list of [*layername*, *layerpurpose*]
  of the prBoundary layer for placement.
 * **tech_lib** (str): name of technology.
-* **text_layers** (list): contains [*layername*, *layerpurpose*]
+* **text_layers** (list): list of [*layername*, *layerpurpose*]
  of the text layer for annotations.
 * **physical_resolution** (float): minimum layout grid resolution in
 micron. Most advanced nodes have grid resolutions ranging from 0.01
 to 0.001.
 
-As you can see, all parameters are straightforward and can easily be
-filled up.
-
-## (tech_lib).layermap (optional)
+## (tech_lib).layermap (GDS flow only)
 
 For **GDS flow**, a separate layermap file is needed to map the layer
 names to actual layer ids. Usually the layermap file is provided by
@@ -126,7 +140,7 @@ VIA7        drawing 17   0
 VIA8        drawing 18   0
 ```
 
-## template library
+## Template library
 
 This is the most critical part for the setup. Laygo uses handcraft
 templates of primitive devices for layout generations, meaning that
