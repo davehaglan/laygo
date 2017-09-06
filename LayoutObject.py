@@ -180,6 +180,8 @@ class Pin(LayoutObject):
     def set_xy1(self, value): self.xy[1] = self.trim(np.asarray(value))
     xy1 = property(get_xy1, set_xy1)
     """np.array([float, float]): upperRight coordinate of Rect"""
+    elements = [] 
+    """elements for array instances"""
 
     def __init__(self, name, res, xy, netname=None, layer=None, master=None):
         """
@@ -371,6 +373,18 @@ class Instance(LayoutObject):
             self.pins = dict()
             for pn, p in self.template.pins.items():
                 self.pins[pn] = Pin(name=pn, res=res, xy=p['xy'], netname=p['netname'], layer=p['layer'], master=self)
+                #create subelement lists for pins
+                if not np.all(shape==np.array([1, 1])):
+                    elements=[]
+                    for i in range(shape[0]):
+                        elements.append([])
+                        for j in range(shape[1]):
+                            _xy=p['xy']+np.dot(spacing*np.array([i, j]), ut.Mt(transform).T)
+                            pin = Pin(name=pn, res=res, xy=_xy, netname=p['netname'], layer=p['layer'], master=self.elements[i, j])
+                            elements[i].append(pin)
+                    self.pins[pn].elements=elements
+                else:
+                    self.pins[pn].elements=np.array([[self.pins[pn].elements]])
             
 
     def display(self):
