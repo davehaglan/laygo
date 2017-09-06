@@ -142,11 +142,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../tech/tech.html">Technology setup instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../tech/tech.html#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../tech/tech.html#example-setup-files">Example setup files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tech/tech.html#laygo-config-yaml">laygo_config.yaml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tech/tech.html#tech-lib-layermap-optional">(tech_lib).layermap (optional)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tech/tech.html#template-library">template library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tech/tech.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tech/tech.html#bag-setup">BAG setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tech/tech.html#config-file-laygo-config-yaml">Config file (laygo_config.yaml)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tech/tech.html#tech-lib-layermap-gds-flow-only">(tech_lib).layermap (GDS flow only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tech/tech.html#template-library">Template library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">API documentation</a><ul>
@@ -602,7 +603,7 @@
         <span class="n">mod</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">_width</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="c1">#if not isinstance(mod, int):</span>
         <span class="c1">#    print(v, _width, mod)</span>
-        <span class="k">return</span> <span class="n">_width</span><span class="p">[</span><span class="n">mod</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">_width</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">mod</span><span class="p">))]</span>
 
     <span class="k">def</span> <span class="nf">_get_route_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">_layer</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

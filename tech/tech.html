@@ -143,11 +143,12 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Technology setup instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example-setup-files">Example setup files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#laygo-config-yaml">laygo_config.yaml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#tech-lib-layermap-optional">(tech_lib).layermap (optional)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#template-library">template library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bag-setup">BAG setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#config-file-laygo-config-yaml">Config file (laygo_config.yaml)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tech-lib-layermap-gds-flow-only">(tech_lib).layermap (GDS flow only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#template-library">Template library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API documentation</a><ul>
@@ -191,26 +192,42 @@
             
   <div class="section" id="laygo-setup-for-new-technologies">
 <span id="laygo-setup-for-new-technologies"></span><h1>Laygo setup for new technologies<a class="headerlink" href="#laygo-setup-for-new-technologies" title="Permalink to this headline">¶</a></h1>
-<p>This section describes how to make a laygo setup for the technology in
-use. This document is assuming BAG is already set up for the technology
-(at least for schematic generations), but no laygo setup is created.
-This document helps users to prepare technology dependent setup files
-and template libraries.</p>
-<div class="section" id="overview">
-<span id="overview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-</div>
+<p>This section describes how to setup laygo for a new technology.
+This document is written to help users create setup files and template
+libraries.</p>
 <div class="section" id="example-setup-files">
 <span id="example-setup-files"></span><h2>Example setup files<a class="headerlink" href="#example-setup-files" title="Permalink to this headline">¶</a></h2>
-<p>Instead of starting from scratch, example setups for generic
-technologies are provided. You can get files in the following repos.</p>
+<p>Instead of starting from scratch, you can reuse some parts of example
+files. Check the following repos for reference:</p>
+<ul class="simple">
+<li>cds_ff_mpt: <a class="reference external" href="https://github.com/ucb-art/BAG2_cds_ff_mpt">https://github.com/ucb-art/BAG2_cds_ff_mpt</a></li>
+<li>NCSU freePDK45: <a class="reference external" href="https://github.com/ucb-art/BAG2_freePDK45">https://github.com/ucb-art/BAG2_freePDK45</a></li>
+</ul>
 </div>
-<div class="section" id="laygo-config-yaml">
-<span id="laygo-config-yaml"></span><h2>laygo_config.yaml<a class="headerlink" href="#laygo-config-yaml" title="Permalink to this headline">¶</a></h2>
-<p>The only technology file to be described by users is
-<strong>laygo_config.yaml</strong>. It defines basic technology dependent information
-(i.e. layer names for route layers). Here&#8217;s a example
-<strong>laygo_config.yaml</strong> for <strong>cds_ff_mpt</strong> technology (Cadence generic PDK
-for finfet and multiple patterning technology).</p>
+<div class="section" id="overview">
+<span id="overview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Following items are need to be set up for laygo</p>
+<ul class="simple">
+<li>BAG</li>
+<li>config files: laygo_config.yaml, layermap file (GDS only)</li>
+<li>template and grid library: (tech_name)_microtemplates_dense
+for most example generators, and associated yaml files</li>
+</ul>
+</div>
+<div class="section" id="bag-setup">
+<span id="bag-setup"></span><h2>BAG setup<a class="headerlink" href="#bag-setup" title="Permalink to this headline">¶</a></h2>
+<p>Since BAG exports the generated layout to BAG (unless you are exporting
+to GDS), you need to setup BAG before setting up laygo. Techinfo classes
+related to XBase is not required, since BAG can use a dummy techinfo if
+XBase is not set up for the technology in use.</p>
+</div>
+<div class="section" id="config-file-laygo-config-yaml">
+<span id="config-file-laygo-config-yaml"></span><h2>Config file (laygo_config.yaml)<a class="headerlink" href="#config-file-laygo-config-yaml" title="Permalink to this headline">¶</a></h2>
+<p>Laygo uses <strong>laygo_config.yaml</strong> to store technology specific
+information. For each technology, user need to create/update
+<strong>laygo_config.yaml</strong> to contain correct parameters.
+An example <strong>laygo_config.yaml</strong> file for <strong>cds_ff_mpt</strong>
+technology is shown below.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#default_laygo_config file</span>
 <span class="n">metal_layers</span><span class="p">:</span> <span class="c1">#metal layers</span>
 <span class="o">-</span> <span class="p">[</span><span class="n">M0</span><span class="p">,</span> <span class="n">donotuse</span><span class="p">]</span>
@@ -250,31 +267,30 @@ for finfet and multiple patterning technology).</p>
 <span class="n">physical_resolution</span><span class="p">:</span> <span class="mf">0.001</span>
 </pre></div>
 </div>
-<p>Here&#8217;s description on items.</p>
+<p>All fields need to filled in proper format, and contains information
+explained below:</p>
 <ul class="simple">
-<li><strong>metal_layers</strong> (list): contains [<em>layername</em>, <em>layerpurpose</em>]
+<li><strong>metal_layers</strong> (list): list of [<em>layername</em>, <em>layerpurpose</em>]
 of metal layers to be used for routing, starting from the bottom
 layer to the top layer.</li>
-<li><strong>via_layers</strong> (list): contains [<em>layername</em>, <em>layerpurpose</em>]
+<li><strong>via_layers</strong> (list): list of [<em>layername</em>, <em>layerpurpose</em>]
 of via layers to be used for routing, starting from the bottom
 layer to the top layer.</li>
-<li><strong>pin_layers</strong> (list): contains [<em>layername</em>, <em>layerpurpose</em>]
+<li><strong>pin_layers</strong> (list): list of [<em>layername</em>, <em>layerpurpose</em>]
 of pin layers to be used for routing, starting from the bottom
 layer to the top layer.</li>
-<li><strong>prboundary_layer</strong> (list): contains [<em>layername</em>, <em>layerpurpose</em>]
+<li><strong>prboundary_layer</strong> (list): list of [<em>layername</em>, <em>layerpurpose</em>]
 of the prBoundary layer for placement.</li>
 <li><strong>tech_lib</strong> (str): name of technology.</li>
-<li><strong>text_layers</strong> (list): contains [<em>layername</em>, <em>layerpurpose</em>]
+<li><strong>text_layers</strong> (list): list of [<em>layername</em>, <em>layerpurpose</em>]
 of the text layer for annotations.</li>
 <li><strong>physical_resolution</strong> (float): minimum layout grid resolution in
 micron. Most advanced nodes have grid resolutions ranging from 0.01
 to 0.001.</li>
 </ul>
-<p>As you can see, all parameters are straightforward and can easily be
-filled up.</p>
 </div>
-<div class="section" id="tech-lib-layermap-optional">
-<span id="tech-lib-layermap-optional"></span><h2>(tech_lib).layermap (optional)<a class="headerlink" href="#tech-lib-layermap-optional" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="tech-lib-layermap-gds-flow-only">
+<span id="tech-lib-layermap-gds-flow-only"></span><h2>(tech_lib).layermap (GDS flow only)<a class="headerlink" href="#tech-lib-layermap-gds-flow-only" title="Permalink to this headline">¶</a></h2>
 <p>For <strong>GDS flow</strong>, a separate layermap file is needed to map the layer
 names to actual layer ids. Usually the layermap file is provided by
 Foundry and can be found in the PDK library (because the file is used
@@ -317,7 +333,7 @@ is not needed.</p>
 </div>
 </div>
 <div class="section" id="template-library">
-<span id="template-library"></span><h2>template library<a class="headerlink" href="#template-library" title="Permalink to this headline">¶</a></h2>
+<span id="template-library"></span><h2>Template library<a class="headerlink" href="#template-library" title="Permalink to this headline">¶</a></h2>
 <p>This is the most critical part for the setup. Laygo uses handcraft
 templates of primitive devices for layout generations, meaning that
 users need to build the template devices by themselves if not provided.
