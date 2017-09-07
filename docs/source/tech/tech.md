@@ -13,19 +13,20 @@ files. Check the following repos for reference:
 
 ## Overview
 
-Following items are need to be set up for laygo.
+Following items are need to be set up laygo.
 
-* BAG
+* BAG and PDK
 * config files: laygo_config.yaml, layermap file (GDS only)
 * template and grid library: (tech_name)_microtemplates_dense
 for most example generators, and associated yaml files
 
 ## BAG setup
 
-Since BAG exports the generated layout to BAG (unless you are exporting
-to GDS), you need to setup BAG before setting up laygo. Techinfo classes
-related to XBase is not required, since BAG can use a dummy techinfo if
-XBase is not set up for the technology in use.
+Since laygo exports the generated layout to BAG (unless you are
+exporting to GDS), you need to setup BAG before setting up laygo.
+
+> Note: Techinfo in BAG does not need to be set up because DummyTechinfo
+is used by default.
 
 ## Config file (laygo_config.yaml)
 
@@ -236,7 +237,7 @@ example generators.
     **M5_M6 grids**: route_M5_M6_basic, route_M5_M6_basic_thick,
     route_M5_M6_thick
 
-#### Example mosfet templates
+#### Mosfet templates
 
 ##### Basic idea
 
@@ -315,11 +316,21 @@ Equivalent ntap cells need to be implemented as well:
 1. **ntap_fast_center_nf2**: 2 finger ntap core
 1. **ntap_fast_space**: 1x spacing cell
 1. **ntap_fast_space_nf2**: 1x spacing cell
-1. **ntap_fast_space_Nf4**: 1x spacing cell
+1. **ntap_fast_space_nf4**: 1x spacing cell
+
+#### MOMCAP family cells
+
+1. **momcap_boundary_1x**: 1x momcap boundary
+1. **momcap_center_1x**: 1x momcap core
+1. **momcap_dmy_1x**: 1x momcap dummy (place where center cells are not placed)
+1. **momcap_dmyblk_1x**: 1x momcap dummy metal fill block cell
+1. **momcap_dmyptn_mX_1x**: 1x momcap dummy metal fill (mX) cell
+
+![mom_type](images/tech_mom.png)
 
 #### Converting template layout to laygo database
 
-After building those primitive templates, open bag and type
+After building all primitive templates, open bag and type
 
 ```
     run laygo/labs/lab2_a_gridlayoutgenerator_constructtemplate.py
