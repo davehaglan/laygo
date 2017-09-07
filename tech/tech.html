@@ -206,9 +206,9 @@ files. Check the following repos for reference:</p>
 </div>
 <div class="section" id="overview">
 <span id="overview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<p>Following items are need to be set up for laygo.</p>
+<p>Following items are need to be set up laygo.</p>
 <ul class="simple">
-<li>BAG</li>
+<li>BAG and PDK</li>
 <li>config files: laygo_config.yaml, layermap file (GDS only)</li>
 <li>template and grid library: (tech_name)_microtemplates_dense
 for most example generators, and associated yaml files</li>
@@ -216,10 +216,11 @@ for most example generators, and associated yaml files</li>
 </div>
 <div class="section" id="bag-setup">
 <span id="bag-setup"></span><h2>BAG setup<a class="headerlink" href="#bag-setup" title="Permalink to this headline">¶</a></h2>
-<p>Since BAG exports the generated layout to BAG (unless you are exporting
-to GDS), you need to setup BAG before setting up laygo. Techinfo classes
-related to XBase is not required, since BAG can use a dummy techinfo if
-XBase is not set up for the technology in use.</p>
+<p>Since laygo exports the generated layout to BAG (unless you are
+exporting to GDS), you need to setup BAG before setting up laygo.</p>
+<blockquote>
+<div>Note: Techinfo in BAG does not need to be set up because DummyTechinfo
+is used by default.</div></blockquote>
 </div>
 <div class="section" id="config-file-laygo-config-yaml">
 <span id="config-file-laygo-config-yaml"></span><h2>Config file (laygo_config.yaml)<a class="headerlink" href="#config-file-laygo-config-yaml" title="Permalink to this headline">¶</a></h2>
@@ -423,8 +424,8 @@ route_M5_M6_thick</p>
 </li>
 </ol>
 </div>
-<div class="section" id="example-mosfet-templates">
-<span id="example-mosfet-templates"></span><h3>Example mosfet templates<a class="headerlink" href="#example-mosfet-templates" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="mosfet-templates">
+<span id="mosfet-templates"></span><h3>Mosfet templates<a class="headerlink" href="#mosfet-templates" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="basic-idea">
 <span id="basic-idea"></span><h4>Basic idea<a class="headerlink" href="#basic-idea" title="Permalink to this headline">¶</a></h4>
 <p>In order to nicely capture all boundary design rules, all mostfet row
@@ -502,13 +503,24 @@ or guard rings.</p>
 <li><strong>ntap_fast_center_nf2</strong>: 2 finger ntap core</li>
 <li><strong>ntap_fast_space</strong>: 1x spacing cell</li>
 <li><strong>ntap_fast_space_nf2</strong>: 1x spacing cell</li>
-<li><strong>ntap_fast_space_Nf4</strong>: 1x spacing cell</li>
+<li><strong>ntap_fast_space_nf4</strong>: 1x spacing cell</li>
 </ol>
 </div>
 </div>
+<div class="section" id="momcap-family-cells">
+<span id="momcap-family-cells"></span><h3>MOMCAP family cells<a class="headerlink" href="#momcap-family-cells" title="Permalink to this headline">¶</a></h3>
+<ol class="simple">
+<li><strong>momcap_boundary_1x</strong>: 1x momcap boundary</li>
+<li><strong>momcap_center_1x</strong>: 1x momcap core</li>
+<li><strong>momcap_dmy_1x</strong>: 1x momcap dummy (place where center cells are not placed)</li>
+<li><strong>momcap_dmyblk_1x</strong>: 1x momcap dummy metal fill block cell</li>
+<li><strong>momcap_dmyptn_mX_1x</strong>: 1x momcap dummy metal fill (mX) cell</li>
+</ol>
+<p><img alt="mom_type" src="../_images/tech_mom.png" /></p>
+</div>
 <div class="section" id="converting-template-layout-to-laygo-database">
 <span id="converting-template-layout-to-laygo-database"></span><h3>Converting template layout to laygo database<a class="headerlink" href="#converting-template-layout-to-laygo-database" title="Permalink to this headline">¶</a></h3>
-<p>After building those primitive templates, open bag and type</p>
+<p>After building all primitive templates, open bag and type</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>    <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">labs</span><span class="o">/</span><span class="n">lab2_a_gridlayoutgenerator_constructtemplate</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
