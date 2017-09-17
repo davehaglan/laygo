@@ -109,37 +109,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         BaseLayoutGenerator.__init__(self, res=physical_res)
 
     #aux functions
-    def Mt(self, transform):
-        """
-        Get transform matrix
-
-        Parameters
-        ----------
-        transform : str
-            transform parameter. possible values are 'R0', 'MX', 'MY', 'MXY', and 'R180'
-
-        Returns
-        -------
-        np.array([[int, int], [int, int]])
-            transform matrix
-        """
-        return ut.Mt(transform)
-
-    def Md(self, direction):
-        """
-        Get direction/projection matrix
-
-        Parameters
-        ----------
-        direction : str
-            direction/projection parameter. Possible values are 'left', 'right', 'top', 'bottom', 'omni', 'x', 'y'.
-
-        Returns
-        -------
-        np.array([[int, int], [int, int]])
-            directional matrix
-        """
-        return ut.Md(direction)
 
     def sort_rect_xy(self, xy):
         """
