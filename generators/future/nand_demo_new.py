@@ -24,24 +24,23 @@
 
 """Logic layout demo
 """
-
 if __name__ == '__main__':
-
-    import bag, laygo, yaml, os
+    import laygo
     import numpy as np
+    #initialize
+    laygen = laygo.GridLayoutGenerator(config_file="../../labs/laygo_config.yaml")
+    laygen.use_phantom = True  # for abstract generation. False when generating a real layout.
+    # template and grid load
+    utemplib = laygen.tech + '_microtemplates_dense'  # device template library name
+    laygen.load_template(filename='../../labs/' + utemplib + '_templates.yaml', libname=utemplib)
+    laygen.load_grid(filename='../../labs/' + utemplib + '_grids.yaml', libname=utemplib)
+    laygen.templates.sel_library(utemplib)
+    laygen.grids.sel_library(utemplib)
 
-    #instantiate bag and laygo
-    laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
-    prj = bag.BagProject()
-
-    #load primitive template/grid libraries
-    utemplib = laygen.tech+'_microtemplates_dense' #primitive templates / grids
-    laygen.load_template(filename=utemplib+'_templates.yaml', libname=utemplib)
-    laygen.load_grid(filename=utemplib+'_grids.yaml', libname=utemplib)
-    #generate a library and cell to work on
+    # generate a library and cell to work on
     laygen.add_library('laygo_working')
     laygen.add_cell('nand_demo')
-
+    
     # placement parameters
     pg = 'placement_basic'                      # placement grid
     nb = 'nmos4_fast_boundary'                  # nmos boundary cellname
@@ -101,7 +100,8 @@ if __name__ == '__main__':
     laygen.pin_from_rect(name='VDD', layer=laygen.layers['pin'][2], rect=rvdd, gridname=rg12)
     laygen.pin_from_rect(name='VSS', layer=laygen.layers['pin'][2], rect=rvss, gridname=rg12)
     laygen.display()
+    # export
+    laygen.export_GDS('output.gds', cellname='nand_demo', layermapfile="../../labs/laygo_faketech.layermap")
 
-    #export to BAG
-    laygen.export_BAG(prj)
+
 

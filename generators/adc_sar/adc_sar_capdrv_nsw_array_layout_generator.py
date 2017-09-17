@@ -375,12 +375,12 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
     for i in range(num_row):
         for j in range(1, int(pwr_dim_left/2)):
             rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j+1, 0]), xy1=np.array([2*j+1, 0]), gridname0='route_M2_M3_mos',
-                         refinstname0=itapl[i].name, refpinname0='VSS1', refinstindex0=np.array([0, 0]), via0=[[0, 0]],#, addvia0=True,
-                         refinstname1=itapl[i].name, refpinname1='VSS0', refinstindex1=np.array([0, 0]), via1=[[0, 0]]))#, addvia1=True))
+                         refinstname0=itapl[i].name, refpinname0='VSS1', refinstindex0=np.array([0, 0]), via0=[[0, 0]],
+                         refinstname1=itapl[i].name, refpinname1='VSS0', refinstindex1=np.array([0, 0]), via1=[[0, 0]]))
         for j in range(1, int(pwr_dim_right/2)):
             rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j-pwr_dim_delta, 0]), xy1=np.array([2*j-pwr_dim_delta, 0]), gridname0='route_M2_M3_mos',
-                         refinstname0=itapr[i].name, refpinname0='VSS1', refinstindex0=np.array([0, 0]), via0=[[0, 0]],#addvia0=True,
-                         refinstname1=itapr[i].name, refpinname1='VSS0', refinstindex1=np.array([0, 0]), via1=[[0, 0]]))#addvia1=True))
+                         refinstname0=itapr[i].name, refpinname0='VSS1', refinstindex0=np.array([0, 0]), via0=[[0, 0]],
+                         refinstname1=itapr[i].name, refpinname1='VSS0', refinstindex1=np.array([0, 0]), via1=[[0, 0]]))
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")

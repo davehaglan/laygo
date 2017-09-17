@@ -383,7 +383,7 @@ class Instance(LayoutObject):
                             pin = Pin(name=pn, res=res, xy=_xy, netname=p['netname'], layer=p['layer'],
                                       master=self.elements[i, j])
                             elements[i].append(pin)
-                    self.pins[pn].elements = elements
+                    self.pins[pn].elements = np.array(elements)
                 else:
                     self.pins[pn].elements = np.array([[self.pins[pn].elements]])
 

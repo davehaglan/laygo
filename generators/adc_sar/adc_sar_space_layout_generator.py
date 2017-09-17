@@ -297,7 +297,6 @@ def generate_space_wbnd(laygen, objectname_pfix, workinglib, space_name, placeme
     #pins
     space_template = laygen.templates.get_template(space_name, workinglib)
     space_pins=space_template.pins
-    #space_origin_phy = laygen.get_inst_bbox_phygrid(ispace.name)[0]
     space_origin_phy = ispace.bbox[0]
     vddcnt=0
     vsscnt=0

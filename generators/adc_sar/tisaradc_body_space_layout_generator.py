@@ -97,7 +97,7 @@ def generate_tisaradc_space(laygen, objectname_pfix, tisar_libname, space_libnam
     rvss_xy_m3=[]
     space_template = laygen.templates.get_template(space_name, workinglib)
     space_pins=space_template.pins
-    space_origin_phy = laygen.get_inst_bbox_phygrid(ispace[0].name)[0]
+    space_origin_phy = ispace[0].bbox[0]
     vddcnt=0
     vsscnt=0
     for pn, p in space_pins.items():
@@ -340,7 +340,7 @@ def generate_tisaradc_space2(laygen, objectname_pfix,
     rvss_sar_xy_m3=[]
     space_template = laygen.templates.get_template(space_name, workinglib)
     space_pins=space_template.pins
-    space_origin_phy = laygen.get_inst_bbox_phygrid(ispace_sar[0].name)[0]
+    space_origin_phy = ispace_sar[0].bbox[0]
     vddcnt=0
     vsscnt=0
     for pn, p in space_pins.items():
@@ -360,7 +360,7 @@ def generate_tisaradc_space2(laygen, objectname_pfix,
     rvss_samp_xy_m3=[]
     space_template = laygen.templates.get_template(space_name, workinglib)
     space_pins=space_template.pins
-    space_origin_phy = laygen.get_inst_bbox_phygrid(ispace_samp[0].name)[0]
+    space_origin_phy = ispace_samp[0].bbox[0]
     vddcnt=0
     vsscnt=0
     for pn, p in space_pins.items():

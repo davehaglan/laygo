@@ -350,7 +350,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             if template_libname is None:
                 template_libname = self.templates.plib
             ### preprocessing ends ###
-            t=self.templates.get_template(templatename, template_libname)
             t_size_grid = self.get_template_xy(templatename, gridname, libname=template_libname)
             t_size_grid = t_size_grid*shape
             #reference instance check 
@@ -490,7 +489,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
               refinstname0=None, refinstname1=None, refinstindex0=np.array([0, 0]), refinstindex1=np.array([0, 0]),
               refpinname0=None, refpinname1=None, offset0=np.array([0,0]), offset1=None,
               transform0='R0', transform1=None, endstyle0="truncate", endstyle1="truncate",
-              via0=None, via1=None, addvia0=False, addvia1=False, netname=None):
+              via0=None, via1=None, netname=None):
         """
         Route on abstract grid, bound from reference objects. If reference objects are not specified,
         [0, 0]+offset is used as reference points.
@@ -559,10 +558,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             Reference pin of refinstname0 for reference point of xy0. If None, the origin of refinstname0 is used.
         refpinname1 : str, optional, deprecated
             Reference pin of refinstname1 for reference point of xy1. If None, the origin of refinstname1 is used.
-        addvia0 : bool, optional, deprecated
-            True if a via is placed on xy0 (deprecated, use via0=[0] instead)
-        addvia1 : bool, optional, deprecated
-            True if a via is placed on xy1 (deprecated, use via1=[0] instead)
         """
         # exception handling
         if xy0 is None: raise ValueError('GridLayoutGenerator.route - specify xy0')
@@ -643,6 +638,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         xy0_phy=xy_phy[0,:]; xy1_phy=xy_phy[1,:]
         xy0_phy_center=xy_phy_center[0,:]; xy1_phy_center=xy_phy_center[1,:]
         # optional via placements
+        '''
         if addvia0==True:
             print("[WARNING] addvia0 option in GridLayoutGenerator.route deprecated. Use via0=[[0, 0]] instead")
             self.via(None, xy0, gridname0, offset=offset0, refobj=refinst0, refinstindex=refinstindex0,
@@ -651,6 +647,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             print("[WARNING] addvia1 option in GridLayoutGenerator.route deprecated. Use via1=[[0, 0]] instead")
             self.via(None, xy1, gridname1, offset=offset1, refobj=refinst1, refinstindex=refinstindex1,
             refpinname=refpinname1, transform=transform1)
+        '''
         if not via0 is None:
             for vofst in via0:
                 self.via(None, xy0+vofst, gridname0, offset=offset0, refobj=refinst0, refobjindex=refinstindex0,
@@ -668,7 +665,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                         refpinname=refpinname1, transform=transform1)
         #layer handling
         if layer is None:
-            #if xy0_phy_center[0] == xy1_phy_center[0]: #not accurate enough..
+            #if xy0_phy_center[0] == xy1_phy_center[0]: #not accurate sometimes..
             if int(round(xy0_phy_center[0]/self.res)) == int(round(xy1_phy_center[0]/self.res)):
                 layer = self.grids.get_route_xlayer_xy(gridname0, _xy0)
             else:
@@ -1181,6 +1178,25 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         self.grids.sel_library(libname)
 
+    def get_xy(self, obj, gridname=None, sort=False):
+        """
+            get geometric information of an object on the specific coordinate
+
+            Parameters
+            ----------
+            obj : LayoutObject.LayoutObject or TemplateObject.TemplateObject
+                Object to get the xy coordinates
+            gridname : str, optional
+                grid name. If None, physical grid is used
+
+            Returns
+            -------
+            np.ndarray()
+                geometric paramter of the object on gridname
+        """
+        if isinstance(obj, TemplateObject):
+            return self.get_template_xy(name=obj.name, gridname=gridname)
+
     def get_template_size(self, name, gridname=None, libname=None):
         return self.get_template_xy(name=name, gridname=gridname, libname=libname)
     def get_template_xy(self, name, gridname=None, libname=None):
@@ -1198,7 +1214,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         Returns
         -------
-        np.array([int, int])
+        np.ndarray([int, int])
             size of template
         """
         t = self.templates.get_template(name, libname=libname)
@@ -1220,7 +1236,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         Returns
         -------
-        np.array([int, int])
+        np.ndarray([int, int])
             xy coordinate of instance
         """
         i = self.get_inst(name)
@@ -1244,7 +1260,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         Returns
         -------
-        np.array([int, int])
+        np.ndarray([int, int])
             xy coordinates of the Rect object
         """
         r = self.get_rect(name)
@@ -1267,7 +1283,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         Returns
         -------
-        np.array([int, int])
+        np.ndarray([int, int])
             xy coordinates of the Pin object
         """
         r = self.get_rect(name)
@@ -1294,7 +1310,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             library name of template
         Returns
         -------
-        np.array([[int, int], [int, int]])
+        np.ndarray([[int, int], [int, int]])
             Template pin coordinates
         """
         t = self.templates.get_template(name, libname=libname)
@@ -1323,7 +1339,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         Returns
         -------
-        np.array([int, int])
+        np.ndarray([int, int])
             Instance pin coordinates
         """
         index=np.asarray(index)
@@ -1366,33 +1382,17 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         Returns
         -------
-        np.array([[int, int], [int, int]])
+        np.ndarray([[int, int], [int, int]])
             instance bbox in abstract coordinate
         """
         xy = self.get_inst(instname).bbox
-        #xy = self.get_inst_bbox_phygrid(instname)
         if sort == True: xy = self.sort_rect_xy(xy)
         if gridname is None:
             return xy
         else:
             return self.get_absgrid_region(gridname, xy[0], xy[1])
 
-    def get_inst_bbox_phygrid(self, instname):
-        """
-        Get a bounding box of an Instance object, on physical grid
 
-        Parameters
-        ----------
-        instname : str
-            instance name
-
-        Returns
-        -------
-        np.array([[float, float], [float, float]])
-            instance bbox
-        """
-        print("[WARNING] GridLayoutGenerater.get_inst_bbox_phygrid deprecated. Use inst.bbox instead")
-        return self.get_inst(instname).bbox
 
     def get_grid(self, gridname):
         """
@@ -1429,7 +1429,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         Returns
         -------
-        np.array([int, int])
+        np.ndarray([int, int])
             abstract coordinate
         """
         if not refinstname is None:
@@ -1469,7 +1469,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         Returns
         -------
-        np.array([[int, int], [int, int]])
+        np.ndarray([[int, int], [int, int]])
             abstract coordinates
         """
         return self.grids.get_absgrid_region(gridname=gridname, xy0=xy0, xy1=xy1)
@@ -1708,3 +1708,20 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         self.grids.import_yaml(filename=filename, libname=libname)
 
+    #Obsolete functions
+    def get_inst_bbox_phygrid(self, instname):
+        """
+        (Obsolete) Get a bounding box of an Instance object, on physical grid
+
+        Parameters
+        ----------
+        instname : str
+            instance name
+
+        Returns
+        -------
+        np.ndarray([[float, float], [float, float]])
+            instance bbox
+        """
+        raise Exception("GridLayoutGenerater.get_inst_bbox_phygrid deprecated. Use inst.bbox instead")
+        #return self.get_inst(instname).bbox
