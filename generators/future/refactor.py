@@ -87,6 +87,11 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
                         depth -= 1
                     if c == ',' and depth == 1:  # if the comma is argument splitter,
                         trig_refac_arg = 1
+                    elif c == '\n' and depth == 1: # newline
+                        if s_buf == '': #no captured argument, the start of function call or captured well - just copy and paste
+                            pass
+                        else: #maybe the end of function call - do refactoring
+                            trig_refac_arg = 1
                     else:
                         if depth >= 1:
                             s_buf += c
@@ -102,8 +107,11 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
                     s_buf = '' #flush s_buf
                 if trig_copy == 1:
                     l_refac += c
-            print("   before refactoring: "+l)#+l[:-1]) #remove newline for neat plotting
-            print("    after refactoring: "+l_refac)#+l_refac[:-1])
+                #if c=='\n':
+                #    print('newline', depth, trig_copy)
+            print("   before refactoring: "+l[:-1]) #remove newline for neat plotting
+            print("    after refactoring: "+l_refac[:-1])
+            #print(len(l),len(l_refac))
             lines_o.append(l_refac) #
         else: #normal codes, just copy and paste
             lines_o.append(l)
@@ -116,13 +124,14 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
 if __name__ == '__main__':
     '''
     #single run example
-    filename_i = "../logic/logic_templates_layout_generator.py"
-    filename_o = "../logic/logic_templates_layout_generator_refactored.py"
+    #filename_i = "../logic/logic_templates_layout_generator.py"
+    #filename_o = "../logic/logic_templates_layout_generator_refactored.py"
+    filename_i = "../serdes/serdes_layout_generator.py"
+    filename_o = "../serdes/serdes_layout_generator_refactored.py"
     # func_name = "pin_from_rect"
     func_name = "relplace"
     convert_pos_to_named(filename_i=filename_i, filename_o=filename_o, func_name=func_name)
     '''
-
     #massive run over multiple directories, functions
     dir_list=[".", "../adc_sar/", "../golden/", "../logic/", "../serdes/", "../../labs"]
     func_list=["relplace"]
