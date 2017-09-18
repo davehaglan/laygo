@@ -100,7 +100,6 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
                     s_buf = '' #flush s_buf
                 if trig_copy == 1:
                     l_refac += c
-                #if s_buf == '': #if buffer is flushed, keep writing
             print("   before refactoring: "+l[:-1]) #remove newline for neat plotting
             print("    after refactoring: "+l_refac[:-1])
             lines_o.append(l_refac) #
