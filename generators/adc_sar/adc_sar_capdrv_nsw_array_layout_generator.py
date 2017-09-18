@@ -375,12 +375,12 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
         rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+1, 0]), xy1=np.array([2*i+1, 0]), gridname0=rg_m2m3,
                      refinstname0=itapl[0].name, refpinname0='VSS0', refinstindex0=np.array([0, 0]),
                      refinstname1=itapl[-1].name, refpinname1=rp1, refinstindex1=np.array([0, 0])))
-        laygen.pin_from_rect('VSSL'+str(i-1), laygen.layers['pin'][3], rvss[-1], gridname=rg_m2m3, netname='VSS')
+        laygen.pin_from_rect(name = 'VSSL'+str(i-1), layer = laygen.layers['pin'][3], rect = rvss[-1], gridname=rg_m2m3, netname='VSS')
     for i in range(1, int(pwr_dim_right/2)):
         rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i-pwr_dim_delta, 0]), xy1=np.array([2*i-pwr_dim_delta, 0]), gridname0=rg_m2m3,
                      refinstname0=itapr[0].name, refpinname0='VSS0', refinstindex0=np.array([0, 0]),
                      refinstname1=itapr[-1].name, refpinname1=rp1, refinstindex1=np.array([0, 0])))
-        laygen.pin_from_rect('VSSR'+str(i-1), laygen.layers['pin'][3], rvss[-1], gridname=rg_m2m3, netname='VSS')
+        laygen.pin_from_rect(name = 'VSSR'+str(i-1), layer = laygen.layers['pin'][3], rect = rvss[-1], gridname=rg_m2m3, netname='VSS')
     for i in range(num_row):
         for j in range(1, int(pwr_dim_left/2)):
             rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j+1, 0]), xy1=np.array([2*j+1, 0]), gridname0='route_M2_M3_mos',

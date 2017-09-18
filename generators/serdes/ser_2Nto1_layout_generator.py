@@ -100,8 +100,8 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
         subser1_vss_xy=laygen.get_inst_pin_xy(isubser1.name, 'VSS' + str(i), rg_m2m3)
         rvdd.append(laygen.route(None, laygen.layers['metal'][3], xy0=subser0_vdd_xy[0], xy1=subser1_vdd_xy[0], gridname0=rg_m2m3))
         rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=subser0_vss_xy[0], xy1=subser1_vss_xy[0], gridname0=rg_m2m3))
-        laygen.pin_from_rect('VDD'+str(i), laygen.layers['pin'][3], rvdd[-1], gridname=rg_m2m3, netname='VDD')
-        laygen.pin_from_rect('VSS'+str(i), laygen.layers['pin'][3], rvss[-1], gridname=rg_m2m3, netname='VSS')
+        laygen.pin_from_rect(name = 'VDD'+str(i), layer = laygen.layers['pin'][3], rect = rvdd[-1], gridname=rg_m2m3, netname='VDD')
+        laygen.pin_from_rect(name = 'VSS'+str(i), layer = laygen.layers['pin'][3], rect = rvss[-1], gridname=rg_m2m3, netname='VSS')
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")

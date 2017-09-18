@@ -1,5 +1,5 @@
 # refactor
-import re
+import re, os
 
 def convert_pos_to_named(filename_i, filename_o, func_name):
     """
@@ -113,8 +113,22 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
             f.write(l)
 
 if __name__ == '__main__':
+    '''
+    #single run example
     filename_i = "../logic/logic_templates_layout_generator.py"
     filename_o = "../logic/logic_templates_layout_generator_refactored.py"
-    #func_name = "pin_from_rect"
+    # func_name = "pin_from_rect"
     func_name = "relplace"
     convert_pos_to_named(filename_i=filename_i, filename_o=filename_o, func_name=func_name)
+    '''
+
+    #massive run over multiple directories, functions
+    dir_list=["../adc_sar/", "../golden/", "../logic/", "../serdes/"]
+    func_list=["pin_from_rect"]
+    for dir in dir_list:
+        file_list=os.listdir(dir)
+        for file in file_list:
+            if file.endswith('_layout_generator.py'):
+                filename=dir+file
+                for func in func_list:
+                    convert_pos_to_named(filename_i=filename, filename_o=filename, func_name=func)
