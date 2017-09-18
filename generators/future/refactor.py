@@ -60,6 +60,7 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
 
     # refactor
     trig = 0  # trigger for multiline call
+    depth = 0
     lines_o = [] # output buffer
     for i, l in enumerate(lines_i):
         if laygen_instance + '.' + func_name in l:
