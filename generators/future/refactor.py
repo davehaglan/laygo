@@ -64,7 +64,7 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
     for i, l in enumerate(lines_i):
         if laygen_instance + '.' + func_name in l:
             trig = 1
-            print("function " + func_name + " call detected in line:"+ str(i) +" code snapshot: " + l[:-1])
+            print("function " + func_name + " call detected in file: "+ filename_i + ", in line:"+ str(i) +" code snapshot: " + l[:-1])
         if trig == 1:
             l_refac = '' #refactored line
             s_buf = ''   #string buffer to store arguments
@@ -81,7 +81,7 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
                                 pass
                             else:
                                 trig_refac_arg = 1
-                            trig = 0
+                            trig = 0 #end of function call
                         depth -= 1
                     if c == ',' and depth == 1:  # if the comma is argument splitter,
                         trig_refac_arg = 1
@@ -100,8 +100,8 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
                     s_buf = '' #flush s_buf
                 if trig_copy == 1:
                     l_refac += c
-            print("   before refactoring: "+l[:-1]) #remove newline for neat plotting
-            print("    after refactoring: "+l_refac[:-1])
+            print("   before refactoring: "+l)#+l[:-1]) #remove newline for neat plotting
+            print("    after refactoring: "+l_refac)#+l_refac[:-1])
             lines_o.append(l_refac) #
         else: #normal codes, just copy and paste
             lines_o.append(l)
