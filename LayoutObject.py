@@ -370,7 +370,7 @@ class Instance(LayoutObject):
                     elements[i].append(inst)
             self.elements = np.array(elements)
         else:
-            self.elements = self
+            self.elements = np.array([[self]])
         if not template is None:
             # create pin dictionary
             self.pins = dict()

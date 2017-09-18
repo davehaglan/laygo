@@ -85,24 +85,17 @@ if __name__ == '__main__':
         for pn in ['S0', 'S1']:
             laygen.route(gridname0=rg12, refobj0=dev.pins[pn], refobj1=dev, direction='y', via1=[0, 0])
     # power and groud rails
-
     x0 = laygen.get_template_xy(name=nd[5].cellname, gridname=rg12)
     x1 = laygen.get_xy(obj=nd[5].template, gridname=rg12)
     x2 = nd[5].bbox #(gridname=rg12)
     print(x0, x1, x2)
-    x0 = laygen.get_template_xy(name=nd[5].cellname, gridname=rg12)[0]
+    x0 = laygen.get_xy(obj=nd[5].template, gridname=rg12)[0]
     rvdd=laygen.route(xy0=[0, 0], xy1=[x0, 0], gridname0=rg12, refobj0=pd[0], refobj1=pd[5])
     rvss=laygen.route(xy0=[0, 0], xy1=[x0, 0], gridname0=rg12, refobj0=nd[0], refobj1=nd[5])
     #pins
     for pn, pg, pr in zip(['A', 'B', 'O', 'VDD', 'VSS'], [rg12, rg12, rg23, rg12, rg12], [ra, rb, ro, rvdd, rvss]):
         laygen.pin(name=pn, gridname=pg, refobj=pr)
-    '''
-    laygen.pin(name='A', gridname=rg12, refobj=ra)
-    laygen.pin(name='B', gridname=rg12, refobj=rb)
-    laygen.pin(name='O', gridname=rg23, refobj=ro)
-    laygen.pin(name='VDD', gridname=rg12, refobj=rvdd)
-    laygen.pin(name='VSS', gridname=rg12, refobj=rvss)
-    '''
+
     laygen.display()
     # export
     laygen.export_GDS('output.gds', cellname='nand_demo', layermapfile="../../labs/laygo_faketech.layermap")
