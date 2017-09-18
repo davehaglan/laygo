@@ -64,16 +64,16 @@ laygen.sel_cell(mycell) #select the cell to work on
 
 #placement
 imux0=laygen.place(None, 'tinv_4x', pg, xy=np.array([0,0]))
-ispace0=laygen.relplace(None, 'space_1x', pg, imux0.name, shape=np.array([3,1]))
-imux1=laygen.relplace(None, 'tinv_4x', pg, ispace0.name)
-ispace1=laygen.relplace(None, 'space_1x', pg, imux1.name, shape=np.array([2,1]))
-iinv0=laygen.relplace(None, 'inv_4x', pg, ispace1.name)
+ispace0=laygen.relplace(name = None, templatename = 'space_1x', gridname = pg, refinstname = imux0.name, shape=np.array([3,1]))
+imux1=laygen.relplace(name = None, templatename = 'tinv_4x', gridname = pg, refinstname = ispace0.name)
+ispace1=laygen.relplace(name = None, templatename = 'space_1x', gridname = pg, refinstname = imux1.name, shape=np.array([2,1]))
+iinv0=laygen.relplace(name = None, templatename = 'inv_4x', gridname = pg, refinstname = ispace1.name)
 
 #route
-xy_en=laygen.get_template_pin_coord(imux0.cellname, 'EN', rg_m3m4)[0]
-xy_enb=laygen.get_template_pin_coord(imux0.cellname, 'ENB', rg_m3m4)[0]
-xy_o=laygen.get_template_pin_coord(imux0.cellname, 'O', rg_m3m4)[0]
-xy_inv_i=laygen.get_template_pin_coord(iinv0.cellname, 'I', rg_m3m4)[0]
+xy_en=laygen.get_template_pin_xy(imux0.cellname, 'EN', rg_m3m4)[0]
+xy_enb=laygen.get_template_pin_xy(imux0.cellname, 'ENB', rg_m3m4)[0]
+xy_o=laygen.get_template_pin_xy(imux0.cellname, 'O', rg_m3m4)[0]
+xy_inv_i=laygen.get_template_pin_xy(iinv0.cellname, 'I', rg_m3m4)[0]
 laygen.route(None, laygen.layers['metal'][4], xy0=np.array([xy_en[0],xy_enb[1]]), xy1=np.array([xy_enb[0],xy_enb[1]]), gridname0=rg_m3m4, refinstname0=imux0.name, refinstname1=imux1.name)
 laygen.route(None, laygen.layers['metal'][4], xy0=np.array([xy_enb[0],xy_enb[1]+1]), xy1=np.array([xy_en[0],xy_enb[1]+1]), gridname0=rg_m3m4, refinstname0=imux0.name, refinstname1=imux1.name)
 laygen.route(None, laygen.layers['metal'][4], xy0=np.array([xy_o[0],xy_enb[1]+2]), xy1=np.array([xy_inv_i[0],xy_enb[1]+2]), gridname0=rg_m3m4, refinstname0=imux0.name, refinstname1=iinv0.name)

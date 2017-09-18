@@ -34,6 +34,7 @@ __status__ = "Prototype"
 import numpy as np
 from . import PrimitiveUtil as ut
 
+
 class LayoutObject():
     """Layout object class"""
     name = None
@@ -340,9 +341,6 @@ class Instance(LayoutObject):
             transformal parameter
         template: TemplateObject
             template handle (if exist)
-        force_elements_2darray: bool
-            True if you want to force elements arrays to be 2-diminsional ones. Useful if you are generating a 2d array
-            object and either of row and cols can be 1.
         """
         xy = np.asarray(xy)
         shape = np.asarray(shape)
@@ -359,7 +357,6 @@ class Instance(LayoutObject):
         # create subelement list
         if not np.all(shape == np.array([1, 1])):
             elements = []
-            #construct 2d elements array
             for i in range(shape[0]):
                 elements.append([])
                 for j in range(shape[1]):

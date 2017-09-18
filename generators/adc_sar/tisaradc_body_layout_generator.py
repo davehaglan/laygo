@@ -56,23 +56,23 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
     space20_template = laygen.templates.get_template(tisar_space2_name, libname)
     space20_pins=space20_template.pins
     space20_xy=ispace20.xy
-    space0_origin = laygen.get_template_size(ispace20.cellname, gridname=pg, libname=workinglib)*np.array([1, 0])
+    space0_origin = laygen.get_template_xy(ispace20.cellname, gridname=pg, libname=workinglib) * np.array([1, 0])
     ispace0 = laygen.place(name="I" + objectname_pfix + 'SP0', templatename=tisar_space_name,
                       gridname=pg, xy=space0_origin, template_libname=libname)
     space_template = laygen.templates.get_template(tisar_space_name, libname)
     space_pins=space_template.pins
     space0_xy=ispace0.xy
-    sar_origin = space0_origin + laygen.get_template_size(ispace0.cellname, gridname=pg, libname=workinglib)*np.array([1, 0])
+    sar_origin = space0_origin + laygen.get_template_xy(ispace0.cellname, gridname=pg, libname=workinglib) * np.array([1, 0])
     isar = laygen.place(name="I" + objectname_pfix + 'SAR0', templatename=tisar_core_name,
                       gridname=pg, xy=sar_origin, template_libname=libname)
     sar_template = laygen.templates.get_template(tisar_core_name, libname)
     sar_pins=sar_template.pins
     sar_xy=isar.xy
-    space1_origin = sar_origin + laygen.get_template_size(isar.cellname, gridname=pg, libname=workinglib)*np.array([1, 0])
+    space1_origin = sar_origin + laygen.get_template_xy(isar.cellname, gridname=pg, libname=workinglib) * np.array([1, 0])
     ispace1 = laygen.place(name="I" + objectname_pfix + 'SP1', templatename=tisar_space_name,
                       gridname=pg, xy=space1_origin, template_libname=libname)
     space1_xy=ispace1.xy
-    space21_origin = space1_origin + laygen.get_template_size(ispace1.cellname, gridname=pg, libname=workinglib)*np.array([1, 0])
+    space21_origin = space1_origin + laygen.get_template_xy(ispace1.cellname, gridname=pg, libname=workinglib) * np.array([1, 0])
     ispace21 = laygen.place(name="I" + objectname_pfix + 'SP21', templatename=tisar_space2_name,
                       gridname=pg, xy=space21_origin, template_libname=libname)
     space21_xy=ispace21.xy
@@ -303,7 +303,7 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
                 offset_start_index=1, offset_end_index=0)
 
     #osp/osm route
-    pdict_os_m4m5 = laygen.get_inst_pin_coord(None, None, rg_m4m5_basic_thick)
+    pdict_os_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5_basic_thick)
     rosp_m5=[]
     rosm_m5=[]
     for i in range(num_slices):
@@ -313,7 +313,7 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
         rh0, rv0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], 
                         pdict_os_m4m5[isar.name]['OSM'+str(i)][0], pdict_os_m4m5[isar.name]['OSM'+str(i)][0]+np.array([-num_slices-i-2, -10]), gridname=rg_m4m5_basic_thick)
         rosm_m5.append(rv0)
-    pdict_os_m5m6 = laygen.get_inst_pin_coord(None, None, rg_m5m6_thick)
+    pdict_os_m5m6 = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick)
     x0=pdict_os_m5m6[isar.name]['VREF0<0>'][0][0]-4*num_slices
     y0=pdict_os_m5m6[isar.name]['VREF0<0>'][0][1]-8
     rosp_m6=[]
@@ -321,11 +321,13 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
     for i in range(num_slices):
         xy0=laygen.get_rect_xy(rosp_m5[i].name, gridname=rg_m5m6_thick, sort=True)[0]
         rv0, rh0 = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6], xy0, np.array([x0, y0-2*i]), gridname=rg_m5m6_thick)
-        laygen.create_boundary_pin_form_rect(rh0, rg_m5m6_thick, 'OSP'+str(i), laygen.layers['pin'][6], size=6, direction='left')
+        laygen.boundary_pin_from_rect(rh0, rg_m5m6_thick, 'OSP' + str(i), laygen.layers['pin'][6], size=6,
+                                      direction='left')
         rosp_m6.append(rh0)
         xy0=laygen.get_rect_xy(rosm_m5[i].name, gridname=rg_m5m6_thick, sort=True)[0]
         rv0, rh0 = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6], xy0, np.array([x0, y0-2*i-1]), gridname=rg_m5m6_thick)
-        laygen.create_boundary_pin_form_rect(rh0, rg_m5m6_thick, 'OSM'+str(i), laygen.layers['pin'][6], size=6, direction='left')
+        laygen.boundary_pin_from_rect(rh0, rg_m5m6_thick, 'OSM' + str(i), laygen.layers['pin'][6], size=6,
+                                      direction='left')
         rosm_m6.append(rh0)
     
             

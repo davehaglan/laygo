@@ -48,7 +48,6 @@ from . import PrimitiveUtil as ut
 import numpy as np 
 import logging
 
-
 #TODO: support path routing
 
 class GridLayoutGenerator(BaseLayoutGenerator):
@@ -110,37 +109,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         BaseLayoutGenerator.__init__(self, res=physical_res)
 
     #aux functions
-    def Mt(self, transform):
-        """
-        Get transform matrix
-
-        Parameters
-        ----------
-        transform : str
-            transform parameter. possible values are 'R0', 'MX', 'MY', 'MXY', and 'R180'
-
-        Returns
-        -------
-        np.array([[int, int], [int, int]])
-            transform matrix
-        """
-        return ut.Mt(transform)
-
-    def Md(self, direction):
-        """
-        Get direction/projection matrix
-
-        Parameters
-        ----------
-        direction : str
-            direction/projection parameter. Possible values are 'left', 'right', 'top', 'bottom', 'omni', 'x', 'y'.
-
-        Returns
-        -------
-        np.array([[int, int], [int, int]])
-            directional matrix
-        """
-        return ut.Md(direction)
 
     def sort_rect_xy(self, xy):
         """
@@ -222,15 +190,15 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                            spacing=spacing, transform=transform, template=t)
         if not annotate_text==None: #annotation
             self.add_text(None, text=annotate_text, xy=np.vstack((xy_phy, xy_phy+0.5*np.dot(t.size*shape,
-                          self.Mt(transform).T))), layer=self.layers['prbnd'])
+                          ut.Mt(transform).T))), layer=self.layers['prbnd'])
         if self.use_phantom == True: #phantom cell placement
-            self.add_rect(None, xy=np.vstack((xy_phy, xy_phy+np.dot(t.size*shape, self.Mt(transform).T))),
+            self.add_rect(None, xy=np.vstack((xy_phy, xy_phy+np.dot(t.size*shape, ut.Mt(transform).T))),
                       layer=self.layers['prbnd'])
             for pinname, pin in t.pins.items(): #pin abstract
                 for x in range(shape[0]):
                     for y in range(shape[1]):
-                        self.add_rect(None, xy=np.vstack((xy_phy+np.dot(pin['xy'][0]+t.size*np.array([x, y]), self.Mt(transform).T),
-                                                          xy_phy+np.dot(pin['xy'][1]+t.size*np.array([x, y]), self.Mt(transform).T))),
+                        self.add_rect(None, xy=np.vstack((xy_phy+np.dot(pin['xy'][0]+t.size*np.array([x, y]), ut.Mt(transform).T),
+                                                          xy_phy+np.dot(pin['xy'][1]+t.size*np.array([x, y]), ut.Mt(transform).T))),
                                       layer=self.layers['prbnd'])
                         self.add_text(None, text=pinname+'/'+pin['netname'], xy=xy_phy, layer=self.layers['prbnd'])
             self.add_text(None, text=inst.name+"/"+t.name, xy=xy_phy, layer=self.layers['prbnd'])
@@ -350,15 +318,14 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             if template_libname is None:
                 template_libname = self.templates.plib
             ### preprocessing ends ###
-            t=self.templates.get_template(templatename, template_libname)
             t_size_grid = self.get_template_xy(templatename, gridname, libname=template_libname)
             t_size_grid = t_size_grid*shape
             #reference instance check 
             if (refobj is None) and (refinstname is None):
                 ir_xy_grid = np.array([0, t_size_grid[1]/2.0])
                 tr_size_grid = np.array([0, 0])
-                mtr = self.Mt('R0')
-                mti = self.Mt('R0')
+                mtr = ut.Mt('R0')
+                mti = ut.Mt('R0')
             else:
                 if not refobj is None:
                     ir = refobj
@@ -368,10 +335,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 #get abstract grid coordinates
                 ir_xy_grid = self.get_absgrid_xy(gridname, ir.xy)
                 tr_size_grid = self.get_absgrid_xy(gridname, tr.size+(ir.shape-np.array([1,1]))*ir.spacing)
-                mtr = self.Mt(ir.transform)
-                mti = self.Mt(transform)
+                mtr = ut.Mt(ir.transform)
+                mti = ut.Mt(transform)
             #direction
-            md = self.Md(direction)
+            md = ut.Md(direction)
             i_xy_grid=ir_xy_grid + 0.5*(np.dot(tr_size_grid, mtr.T) + np.dot(tr_size_grid+t_size_grid, md.T)
                                         - np.dot(t_size_grid, mti.T))
             return self.place(name=name, templatename=templatename, gridname=gridname, xy=i_xy_grid+xy, offset=offset,
@@ -451,7 +418,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         # need to be refactored
         if not refinst is None:
             reftemplate = self.templates.get_template(refinst.cellname, libname=refinst.libname)
-            offset = offset + refinst.xy + np.dot(refinst.spacing * refinstindex, self.Mt(refinst.transform).T)
+            offset = offset + refinst.xy + np.dot(refinst.spacing * refinstindex, ut.Mt(refinst.transform).T)
             if not refpinname == None: #if pin reference is specified
                 pin_xy_phy=reftemplate.pins[refpinname]['xy']
                 bbox=pin_xy_phy
@@ -473,7 +440,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         vianame = self.grids.get_vianame(gridname, xy)
         if overwrite_xy_phy is None:
-            xy_phy=np.dot(self.grids.get_phygrid_xy(gridname, xy), self.Mt(transform).T)+offset
+            xy_phy=np.dot(self.grids.get_phygrid_xy(gridname, xy), ut.Mt(transform).T)+offset
         else:
             xy_phy=overwrite_xy_phy
         inst=self.add_inst(name=name, libname=self.grids.plib, cellname=vianame, xy=xy_phy, transform=transform)
@@ -490,7 +457,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
               refinstname0=None, refinstname1=None, refinstindex0=np.array([0, 0]), refinstindex1=np.array([0, 0]),
               refpinname0=None, refpinname1=None, offset0=np.array([0,0]), offset1=None,
               transform0='R0', transform1=None, endstyle0="truncate", endstyle1="truncate",
-              via0=None, via1=None, addvia0=False, addvia1=False, netname=None):
+              via0=None, via1=None, netname=None):
         """
         Route on abstract grid, bound from reference objects. If reference objects are not specified,
         [0, 0]+offset is used as reference points.
@@ -559,10 +526,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             Reference pin of refinstname0 for reference point of xy0. If None, the origin of refinstname0 is used.
         refpinname1 : str, optional, deprecated
             Reference pin of refinstname1 for reference point of xy1. If None, the origin of refinstname1 is used.
-        addvia0 : bool, optional, deprecated
-            True if a via is placed on xy0 (deprecated, use via0=[0] instead)
-        addvia1 : bool, optional, deprecated
-            True if a via is placed on xy1 (deprecated, use via1=[0] instead)
         """
         # exception handling
         if xy0 is None: raise ValueError('GridLayoutGenerator.route - specify xy0')
@@ -623,14 +586,14 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 refinst1=self.get_inst(refinstname1)
         if not refinstname0 == None:
             reftemplate0=self.templates.get_template(refinst0.cellname, libname=refinst0.libname)
-            _offset0=offset0+refinst0.xy+np.dot(refinst0.spacing*refinstindex0, self.Mt(refinst0.transform).T)
+            _offset0=offset0+refinst0.xy+np.dot(refinst0.spacing*refinstindex0, ut.Mt(refinst0.transform).T)
             if not refpinname0 == None: # if pin reference is specified
                 pin_xy0_abs=self.get_template_pin_xy(reftemplate0.name, refpinname0, gridname0, libname=refinst0.libname)[0,:]
                 _xy0=xy0+pin_xy0_abs
             transform0=refinst0.transform # overwrite transform variable
         if not refinstname1 == None:
             reftemplate1=self.templates.get_template(refinst1.cellname, libname=refinst1.libname)
-            _offset1=offset1+refinst1.xy+np.dot(refinst1.spacing*refinstindex1, self.Mt(refinst1.transform).T)
+            _offset1=offset1+refinst1.xy+np.dot(refinst1.spacing*refinstindex1, ut.Mt(refinst1.transform).T)
             if not refpinname1 == None: # if pin reference is specified
                 pin_xy1_abs = self.get_template_pin_xy(reftemplate1.name, refpinname1, gridname1, libname=refinst1.libname)[0, :]
                 _xy1=xy1+pin_xy1_abs
@@ -643,6 +606,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         xy0_phy=xy_phy[0,:]; xy1_phy=xy_phy[1,:]
         xy0_phy_center=xy_phy_center[0,:]; xy1_phy_center=xy_phy_center[1,:]
         # optional via placements
+        '''
+        #addvia is obsolete
         if addvia0==True:
             print("[WARNING] addvia0 option in GridLayoutGenerator.route deprecated. Use via0=[[0, 0]] instead")
             self.via(None, xy0, gridname0, offset=offset0, refobj=refinst0, refinstindex=refinstindex0,
@@ -651,6 +616,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             print("[WARNING] addvia1 option in GridLayoutGenerator.route deprecated. Use via1=[[0, 0]] instead")
             self.via(None, xy1, gridname1, offset=offset1, refobj=refinst1, refinstindex=refinstindex1,
             refpinname=refpinname1, transform=transform1)
+        '''
         if not via0 is None:
             for vofst in via0:
                 self.via(None, xy0+vofst, gridname0, offset=offset0, refobj=refinst0, refobjindex=refinstindex0,
@@ -668,7 +634,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                         refpinname=refpinname1, transform=transform1)
         #layer handling
         if layer is None:
-            #if xy0_phy_center[0] == xy1_phy_center[0]: #not accurate enough..
+            #if xy0_phy_center[0] == xy1_phy_center[0]: #not accurate sometimes..
             if int(round(xy0_phy_center[0]/self.res)) == int(round(xy1_phy_center[0]/self.res)):
                 layer = self.grids.get_route_xlayer_xy(gridname0, _xy0)
             else:
@@ -722,13 +688,13 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         if gridname1 == None: gridname1 = gridname0
         if not isinstance(offset1,np.ndarray): offset1 = offset0
         if transform1 == None: transform1 = transform0
-        xy0_phy=np.dot(self.grids.get_phygrid_xy(gridname0, xy0), self.Mt(transform0).T)+offset0
-        xy1_phy=np.dot(self.grids.get_phygrid_xy(gridname1, xy1), self.Mt(transform1).T)+offset1
-        md=self.Md(direction)
+        xy0_phy=np.dot(self.grids.get_phygrid_xy(gridname0, xy0), ut.Mt(transform0).T)+offset0
+        xy1_phy=np.dot(self.grids.get_phygrid_xy(gridname1, xy1), ut.Mt(transform1).T)+offset1
+        md=ut.Md(direction)
         xy1_phy=np.dot(xy1_phy - xy0_phy, md.T) + xy0_phy #adjust xy1_phy to fix routing direction
         if not (xy0_phy==xy1_phy).all(): #xy0_phy and xy1_phy should not be the same
             #generating a rect object by extending in normal directions by width/2 (grid0 is used for route width)
-            vwidth_direction=np.dot((xy1_phy - xy0_phy)/np.linalg.norm(xy1_phy - xy0_phy), self.Mt('MXY').T)
+            vwidth_direction=np.dot((xy1_phy - xy0_phy)/np.linalg.norm(xy1_phy - xy0_phy), ut.Mt('MXY').T)
             vwidth_norm=0.5*self.grids.get_route_width_xy(gridname0, xy0)
             vwidth=vwidth_direction*vwidth_norm
             #endstyles
@@ -1032,7 +998,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         pass
 
     #pin creation functions
-    def pin(self, name, layer, xy=None, gridname=None, netname=None, base_layer=None, refobj=None,
+    def pin(self, name, layer=None, xy=None, gridname=None, netname=None, base_layer=None, refobj=None,
             xy0=np.array([0, 0]), xy1=np.array([0, 0])):
         """
         Pin generation function.
@@ -1041,8 +1007,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         ----------
         name : str
             pin name
-        layer : [str, str]
-            pin layer
+        layer : [str, str], optional
+            pin layer, if None, layer of refobj is used (assuming refobj is Rect)
         xy : np.array([[int, int], [int, int]]), optional, deprecated
             xy coordinate. deprecated. use xy0, xy1 instead
         xy0 : np.array([[int, int]), optional
@@ -1075,13 +1041,17 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         if not refobj is None:
             if type(refobj).__name__ is 'Rect':
                 xy = self.get_rect_xy(name=refobj.name, gridname=gridname)
+                if layer is None:
+                    layer=self.layers['pin'][self.layers['metal'].index(refobj.layer)]
         if netname==None: netname=name
         bx1, bx2 = sorted(xy[:,0].tolist())
         by1, by2 = sorted(xy[:,1].tolist())
         #ll = np.array([bx1, by1])  # lower-left
         #ur = np.array([bx2, by2])  # upper-right
         xy_phy, xy_phy_center=self._route_generate_box_from_abscoord(xy0=xy[0,:], xy1=xy[1,:], gridname0=gridname)
-        if base_layer==None: base_layer=[layer[0], 'drawing']
+        if base_layer==None:
+            base_layer=self.layers['metal'][self.layers['pin'].index(layer)]
+            #base_layer=[layer[0], 'drawing']
         self.db.add_rect(None, xy=xy_phy, layer=base_layer)
         return self.db.add_pin(name=name, netname=netname, xy=xy_phy, layer=layer)
 
@@ -1107,17 +1077,11 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         laygo.LayoutObject.Pin
             generated Pin object
         """
+        print("[WARNING] pin_from_rect function will be deprecated. Use pin function with refobj argument instead")
         if netname == None: netname = name
         xy = rect.xy
         xy = self.get_absgrid_region(gridname, xy[0, :], xy[1, :])
         return self.pin(name, layer, xy, gridname, netname=netname)
-
-    def create_boundary_pin_form_rect(self, rect, gridname, pinname, layer, size=4, direction='left', netname=None):
-        print("[WARNING] create_boundary_pin_form_rect deprecated. Use boundary_pin_from_rect instead")
-        return self.boundary_pin_from_rect(rect=rect, gridname=gridname, name=pinname, layer=layer, size=size, direction=direction, netname=netname)
-
-    def create_boundary_pin_from_rect(self, rect, gridname, pinname, layer, size=4, direction='left', netname=None):
-        return self.boundary_pin_from_rect(rect=rect, gridname=gridname, name=pinname, layer=layer, size=size, direction=direction, netname=netname)
 
     def boundary_pin_from_rect(self, rect, gridname, name, layer, size=4, direction='left', netname=None):
         """
@@ -1158,7 +1122,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         return self.pin(name=name, layer=layer, xy=xy, gridname=gridname, netname=netname)
 
-    #db access function
+    #db access functions
     def sel_template_library(self, libname):
         """
         Select a template library to work on
@@ -1181,8 +1145,63 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         self.grids.sel_library(libname)
 
+    #object geometry related functions
+    def get_xy(self, obj, gridname=None, sort=False):
+        """
+            get xy coordinate of an object on the specific coordinate
+
+            Parameters
+            ----------
+            obj : LayoutObject.LayoutObject or TemplateObject.TemplateObject
+                Object to get the xy coordinates
+            gridname : str, optional
+                grid name. If None, physical grid is used
+
+            Returns
+            -------
+            np.ndarray()
+                geometric paramter of the object on gridname
+        """
+        if isinstance(obj, TemplateObject):
+            return self.get_template_xy(name=obj.name, gridname=gridname)
+        if isinstance(obj, Instance):
+            return self.get_inst_xy(name=obj.name, gridname=gridname)
+        if isinstance(obj, Rect):
+            return self.get_rect_xy(name=obj.name, gridname=gridname, sort=sort)
+        if isinstance(obj, Pin):
+            return self.get_pin_xy(name=obj.name, gridname=gridname, sort=sort)
+
+    def get_bbox(self, obj, gridname=None, sort=False):
+        """
+            get bounding box of an object on the specific coordinate
+
+            Parameters
+            ----------
+            obj : LayoutObject.LayoutObject or TemplateObject.TemplateObject
+                Object to get the xy coordinates
+            gridname : str, optional
+                grid name. If None, physical grid is used
+
+            Returns
+            -------
+            np.ndarray()
+                geometric paramter of the object on gridname
+        """
+        if isinstance(obj, TemplateObject):
+            return np.array([0, 0], self.get_template_xy(name=obj.name, gridname=gridname))
+        if isinstance(obj, Instance):
+            return self.get_inst_bbox(name=obj.name, gridname=gridname)
+        if isinstance(obj, Rect):
+            return self.get_rect_xy(name=obj.name, gridname=gridname, sort=sort)
+        if isinstance(obj, Pin):
+            return self.get_pin_xy(name=obj.name, gridname=gridname, sort=sort)
+
     def get_template_size(self, name, gridname=None, libname=None):
+        """
+            get the size of a template in abstract coordinate. Same with get_template_xy
+        """
         return self.get_template_xy(name=name, gridname=gridname, libname=libname)
+
     def get_template_xy(self, name, gridname=None, libname=None):
         """
         get the size of a template in abstract coordinate
@@ -1198,7 +1217,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         Returns
         -------
-        np.array([int, int])
+        np.ndarray([int, int])
             size of template
         """
         t = self.templates.get_template(name, libname=libname)
@@ -1220,7 +1239,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         Returns
         -------
-        np.array([int, int])
+        np.ndarray([int, int])
             xy coordinate of instance
         """
         i = self.get_inst(name)
@@ -1244,7 +1263,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         Returns
         -------
-        np.array([int, int])
+        np.ndarray([int, int])
             xy coordinates of the Rect object
         """
         r = self.get_rect(name)
@@ -1267,7 +1286,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         Returns
         -------
-        np.array([int, int])
+        np.ndarray([int, int])
             xy coordinates of the Pin object
         """
         r = self.get_rect(name)
@@ -1275,9 +1294,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         if sort==True: xy=self.sort_rect_xy(xy)
         return xy
 
-    def get_template_pin_coord(self, name, pinname, gridname, libname=None):
-        """use get_template_pin_xy instead"""
-        return self.get_template_pin_xy(name, pinname, gridname, libname)
     def get_template_pin_xy(self, name, pinname, gridname, libname=None):
         """
         get xy cooridnate of a template pin in abstract coordinate
@@ -1294,7 +1310,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             library name of template
         Returns
         -------
-        np.array([[int, int], [int, int]])
+        np.ndarray([[int, int], [int, int]])
             Template pin coordinates
         """
         t = self.templates.get_template(name, libname=libname)
@@ -1302,9 +1318,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         pin_xy_abs = self.get_absgrid_region(gridname, pin_xy_phy[0], pin_xy_phy[1])
         return pin_xy_abs
 
-    def get_inst_pin_coord(self, name, pinname, gridname, index=np.array([0, 0]), sort=False):
-        """use get_inst_pin_xy instead"""
-        return self.get_inst_pin_xy(name, pinname, gridname, index, sort)
     def get_inst_pin_xy(self, name, pinname, gridname, index=np.array([0, 0]), sort=False):
         """
         Get xy coordinates of an instance pin in abstract coordinate
@@ -1323,7 +1336,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         Returns
         -------
-        np.array([int, int])
+        np.ndarray([int, int])
             Instance pin coordinates
         """
         index=np.asarray(index)
@@ -1345,19 +1358,19 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                         xy[p]=self.get_inst_pin_xy(name, p, gridname, index, sort)
                     return xy
                 else:
-                    xy0 = i.xy + np.dot(t.size * index + t.pins[pinname]['xy'][0, :], self.Mt(i.transform).T)
-                    xy1 = i.xy + np.dot(t.size * index + t.pins[pinname]['xy'][1, :], self.Mt(i.transform).T)
+                    xy0 = i.xy + np.dot(t.size * index + t.pins[pinname]['xy'][0, :], ut.Mt(i.transform).T)
+                    xy1 = i.xy + np.dot(t.size * index + t.pins[pinname]['xy'][1, :], ut.Mt(i.transform).T)
                     xy=self.get_absgrid_region(gridname, xy0, xy1)
                     if sort == True: xy = self.sort_rect_xy(xy)
                     return xy
 
-    def get_inst_bbox(self, instname, gridname=None, sort=False):
+    def get_inst_bbox(self, name, gridname=None, sort=False):
         """
         Get a bounding box of an Instance object, on abstract grid
 
         Parameters
         ----------
-        instname : str
+        name : str
             instance name
         gridname : str, optional
             grid name. If None, physical grid is used
@@ -1366,34 +1379,17 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         Returns
         -------
-        np.array([[int, int], [int, int]])
+        np.ndarray([[int, int], [int, int]])
             instance bbox in abstract coordinate
         """
-        xy = self.get_inst(instname).bbox
-        #xy = self.get_inst_bbox_phygrid(instname)
+        xy = self.get_inst(name).bbox
         if sort == True: xy = self.sort_rect_xy(xy)
         if gridname is None:
             return xy
         else:
             return self.get_absgrid_region(gridname, xy[0], xy[1])
 
-    def get_inst_bbox_phygrid(self, instname):
-        """
-        Get a bounding box of an Instance object, on physical grid
-
-        Parameters
-        ----------
-        instname : str
-            instance name
-
-        Returns
-        -------
-        np.array([[float, float], [float, float]])
-            instance bbox
-        """
-        print("[WARNING] GridLayoutGenerater.get_inst_bbox_phygrid deprecated. Use inst.bbox instead")
-        return self.get_inst(instname).bbox
-
+    #grid related functions
     def get_grid(self, gridname):
         """
         Get grid object handle
@@ -1429,7 +1425,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         Returns
         -------
-        np.array([int, int])
+        np.ndarray([int, int])
             abstract coordinate
         """
         if not refinstname is None:
@@ -1440,12 +1436,12 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             refinstindex = refobjindex
         if not refinstname is None:
             if not refpinname is None:
-                pxy_ongrid = self.get_template_pin_coord(name=rinst.cellname, pinname=refpinname, gridname=gridname)[0]
+                pxy_ongrid = self.get_template_pin_xy(name=rinst.cellname, pinname=refpinname, gridname=gridname)[0]
                 pxy = self.grids.get_phygrid_xy(gridname=gridname, xy=pxy_ongrid)
-                rxy = rinst.xy + np.dot(self.Mt(rinst.transform), pxy)
+                rxy = rinst.xy + np.dot(ut.Mt(rinst.transform), pxy)
             else:
                 rxy = rinst.xy
-            _xy = np.dot(np.linalg.inv(self.Mt(rinst.transform)), xy - rxy)
+            _xy = np.dot(np.linalg.inv(ut.Mt(rinst.transform)), xy - rxy)
         else:
             _xy = xy
         return self.grids.get_absgrid_xy(gridname=gridname, xy=_xy)
@@ -1469,12 +1465,12 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         Returns
         -------
-        np.array([[int, int], [int, int]])
+        np.ndarray([[int, int], [int, int]])
             abstract coordinates
         """
         return self.grids.get_absgrid_region(gridname=gridname, xy0=xy0, xy1=xy1)
 
-    #template and grid database related functions
+    #template and grid related functions
     def construct_template_and_grid(self, db, libname, cellname=None,
                                     layer_boundary=['prBoundary', 'boundary'], layer_text=['text', 'drawing'],
                                     routegrid_prefix='route', placementgrid_prefix='placement', append=True):
@@ -1708,3 +1704,22 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         self.grids.import_yaml(filename=filename, libname=libname)
 
+    #Obsolete functions
+    '''
+    def get_inst_bbox_phygrid(self, instname):
+        """
+        (Obsolete) Get a bounding box of an Instance object, on physical grid
+
+        Parameters
+        ----------
+        instname : str
+            instance name
+
+        Returns
+        -------
+        np.ndarray([[float, float], [float, float]])
+            instance bbox
+        """
+        #raise Exception("GridLayoutGenerater.get_inst_bbox_phygrid deprecated. Use inst.bbox instead")
+        return self.get_inst(instname).bbox
+    '''

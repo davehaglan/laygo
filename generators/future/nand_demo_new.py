@@ -24,24 +24,23 @@
 
 """Logic layout demo
 """
-
 if __name__ == '__main__':
-
-    import bag, laygo, yaml, os
+    import laygo
     import numpy as np
+    #initialize
+    laygen = laygo.GridLayoutGenerator(config_file="../../labs/laygo_config.yaml")
+    laygen.use_phantom = True  # for abstract generation. False when generating a real layout.
+    # template and grid load
+    utemplib = laygen.tech + '_microtemplates_dense'  # device template library name
+    laygen.load_template(filename='../../labs/' + utemplib + '_templates.yaml', libname=utemplib)
+    laygen.load_grid(filename='../../labs/' + utemplib + '_grids.yaml', libname=utemplib)
+    laygen.templates.sel_library(utemplib)
+    laygen.grids.sel_library(utemplib)
 
-    #instantiate bag and laygo
-    laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
-    prj = bag.BagProject()
-
-    #load primitive template/grid libraries
-    utemplib = laygen.tech+'_microtemplates_dense' #primitive templates / grids
-    laygen.load_template(filename=utemplib+'_templates.yaml', libname=utemplib)
-    laygen.load_grid(filename=utemplib+'_grids.yaml', libname=utemplib)
-    #generate a library and cell to work on
+    # generate a library and cell to work on
     laygen.add_library('laygo_working')
     laygen.add_cell('nand_demo')
-
+    
     # placement parameters
     pg = 'placement_basic'                      # placement grid
     nb = 'nmos4_fast_boundary'                  # nmos boundary cellname
@@ -86,22 +85,20 @@ if __name__ == '__main__':
         for pn in ['S0', 'S1']:
             laygen.route(gridname0=rg12, refobj0=dev.pins[pn], refobj1=dev, direction='y', via1=[0, 0])
     # power and groud rails
-
     x0 = laygen.get_template_xy(name=nd[5].cellname, gridname=rg12)
     x1 = laygen.get_xy(obj=nd[5].template, gridname=rg12)
     x2 = nd[5].bbox #(gridname=rg12)
     print(x0, x1, x2)
-    x0 = laygen.get_template_xy(name=nd[5].cellname, gridname=rg12)[0]
+    x0 = laygen.get_xy(obj=nd[5].template, gridname=rg12)[0]
     rvdd=laygen.route(xy0=[0, 0], xy1=[x0, 0], gridname0=rg12, refobj0=pd[0], refobj1=pd[5])
     rvss=laygen.route(xy0=[0, 0], xy1=[x0, 0], gridname0=rg12, refobj0=nd[0], refobj1=nd[5])
     #pins
-    laygen.pin(name='A', layer=laygen.layers['pin'][2], refobj=ra, gridname=rg12)
-    laygen.pin(name='B', layer=laygen.layers['pin'][2], refobj=rb, gridname=rg12)
-    laygen.pin(name='O', layer=laygen.layers['pin'][3], refobj=ro, gridname=rg23)
-    laygen.pin(name='VDD', layer=laygen.layers['pin'][2], refobj=rvdd, gridname=rg12)
-    laygen.pin(name='VSS', layer=laygen.layers['pin'][2], refobj=rvss, gridname=rg12)
-    laygen.display()
+    for pn, pg, pr in zip(['A', 'B', 'O', 'VDD', 'VSS'], [rg12, rg12, rg23, rg12, rg12], [ra, rb, ro, rvdd, rvss]):
+        laygen.pin(name=pn, gridname=pg, refobj=pr)
 
-    #export to BAG
-    laygen.export_BAG(prj)
+    laygen.display()
+    # export
+    laygen.export_GDS('output.gds', cellname='nand_demo', layermapfile="../../labs/laygo_faketech.layermap")
+
+
 
