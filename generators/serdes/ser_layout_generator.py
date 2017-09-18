@@ -301,27 +301,27 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
     tinv_en_xy=[]
     tinv_enb_xy=[]
     for i in range(sub_ser):
-        ffin_in_xy.append(laygen.get_inst_pin_coord(iffin[i].name, 'I', rg_m3m4))
-        ffin_out_xy.append(laygen.get_inst_pin_coord(iffin[i].name, 'O', rg_m3m4))
-        ffin_clk_xy.append(laygen.get_inst_pin_coord(iffin[i].name, 'CLK', rg_m3m4))
-        ffdiv_in_xy.append(laygen.get_inst_pin_coord(iffdiv[i].name, 'I', rg_m3m4))
-        ffdiv_out_xy.append(laygen.get_inst_pin_coord(iffdiv[i].name, 'O', rg_m3m4))
-        ffdiv_clk_xy.append(laygen.get_inst_pin_coord(iffdiv[i].name, 'CLK', rg_m3m4))
-        ffdiv_rst_xy.append(laygen.get_inst_pin_coord(iffdiv[i].name, 'RST', rg_m3m4))
-        ffdiv_st_xy.append(laygen.get_inst_pin_coord(iffdiv[i].name, 'ST', rg_m3m4))
-        ffdiv_st_xy45.append(laygen.get_inst_pin_coord(iffdiv[i].name, 'ST', rg_m4m5))
-        ffin_in_xy45.append(laygen.get_inst_pin_coord(iffin[i].name, 'I', rg_m4m5))
-        ffdiv_out_xy45.append(laygen.get_inst_pin_coord(iffdiv[i].name, 'O', rg_m4m5))
-        pbuf1_in_xy.append(laygen.get_inst_pin_coord(ipbuf1[i].name, 'I', rg_m3m4))
-        pbuf1_out_xy.append(laygen.get_inst_pin_coord(ipbuf1[i].name, 'O', rg_m3m4))
-        pbuf2_in_xy.append(laygen.get_inst_pin_coord(ipbuf2[i].name, 'I', rg_m3m4))
-        pbuf2_out_xy.append(laygen.get_inst_pin_coord(ipbuf2[i].name, 'O', rg_m3m4))
-        pbuf3_in_xy.append(laygen.get_inst_pin_coord(ipbuf3[i].name, 'I', rg_m3m4))
-        pbuf3_out_xy.append(laygen.get_inst_pin_coord(ipbuf3[i].name, 'O', rg_m3m4))
-        tinv_in_xy.append(laygen.get_inst_pin_coord(itinv[i].name, 'I', rg_m3m4))
-        tinv_out_xy.append(laygen.get_inst_pin_coord(itinv[i].name, 'O', rg_m3m4))
-        tinv_en_xy.append(laygen.get_inst_pin_coord(itinv[i].name, 'EN', rg_m3m4))
-        tinv_enb_xy.append(laygen.get_inst_pin_coord(itinv[i].name, 'ENB', rg_m3m4))
+        ffin_in_xy.append(laygen.get_inst_pin_xy(iffin[i].name, 'I', rg_m3m4))
+        ffin_out_xy.append(laygen.get_inst_pin_xy(iffin[i].name, 'O', rg_m3m4))
+        ffin_clk_xy.append(laygen.get_inst_pin_xy(iffin[i].name, 'CLK', rg_m3m4))
+        ffdiv_in_xy.append(laygen.get_inst_pin_xy(iffdiv[i].name, 'I', rg_m3m4))
+        ffdiv_out_xy.append(laygen.get_inst_pin_xy(iffdiv[i].name, 'O', rg_m3m4))
+        ffdiv_clk_xy.append(laygen.get_inst_pin_xy(iffdiv[i].name, 'CLK', rg_m3m4))
+        ffdiv_rst_xy.append(laygen.get_inst_pin_xy(iffdiv[i].name, 'RST', rg_m3m4))
+        ffdiv_st_xy.append(laygen.get_inst_pin_xy(iffdiv[i].name, 'ST', rg_m3m4))
+        ffdiv_st_xy45.append(laygen.get_inst_pin_xy(iffdiv[i].name, 'ST', rg_m4m5))
+        ffin_in_xy45.append(laygen.get_inst_pin_xy(iffin[i].name, 'I', rg_m4m5))
+        ffdiv_out_xy45.append(laygen.get_inst_pin_xy(iffdiv[i].name, 'O', rg_m4m5))
+        pbuf1_in_xy.append(laygen.get_inst_pin_xy(ipbuf1[i].name, 'I', rg_m3m4))
+        pbuf1_out_xy.append(laygen.get_inst_pin_xy(ipbuf1[i].name, 'O', rg_m3m4))
+        pbuf2_in_xy.append(laygen.get_inst_pin_xy(ipbuf2[i].name, 'I', rg_m3m4))
+        pbuf2_out_xy.append(laygen.get_inst_pin_xy(ipbuf2[i].name, 'O', rg_m3m4))
+        pbuf3_in_xy.append(laygen.get_inst_pin_xy(ipbuf3[i].name, 'I', rg_m3m4))
+        pbuf3_out_xy.append(laygen.get_inst_pin_xy(ipbuf3[i].name, 'O', rg_m3m4))
+        tinv_in_xy.append(laygen.get_inst_pin_xy(itinv[i].name, 'I', rg_m3m4))
+        tinv_out_xy.append(laygen.get_inst_pin_xy(itinv[i].name, 'O', rg_m3m4))
+        tinv_en_xy.append(laygen.get_inst_pin_xy(itinv[i].name, 'EN', rg_m3m4))
+        tinv_enb_xy.append(laygen.get_inst_pin_xy(itinv[i].name, 'ENB', rg_m3m4))
 
     # Route
     for i in range(sub_ser):
@@ -334,8 +334,8 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
                     ffdiv_in_xy[i][0], ffdiv_out_xy[i+1][0], ffdiv_in_xy[i][0][1]+offset, rg_m3m4)
             rclk=laygen.route(None, laygen.layers['metal'][3], xy0=ffdiv_clk_xy[i][0], xy1=ffdiv_clk_xy[i+1][0], gridname0=rg_m3m4) #CLK
             rp0buf=laygen.route(None, laygen.layers['metal'][3], xy0=ffin_clk_xy[i][0], xy1=ffin_clk_xy[i+1][0], gridname0=rg_m3m4) #P0BUF
-            [rh0, rv0] = laygen.route_hv(laygen.layers['metal'][2], laygen.layers['metal'][3], #ST to VSS
-                        laygen.get_inst_pin_coord(iffdiv[i].name,'VSS',rg_m2m3)[0], laygen.get_inst_pin_coord(iffdiv[i].name,'ST',rg_m2m3)[0], rg_m2m3)
+            [rh0, rv0] = laygen.route_hv(laygen.layers['metal'][2], laygen.layers['metal'][3],  #ST to VSS
+                        laygen.get_inst_pin_xy(iffdiv[i].name, 'VSS', rg_m2m3)[0], laygen.get_inst_pin_xy(iffdiv[i].name, 'ST', rg_m2m3)[0], rg_m2m3)
             [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #FFin to tinv
                         ffin_out_xy[i][0], tinv_in_xy[i][1], ffin_out_xy[i][0][1], rg_m3m4)
             if not i==sub_ser-2: #RST routing
@@ -354,30 +354,30 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
             [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #M3-to-M5
                     ffdiv_out_xy[0][0], ffdiv_out_xy45[0][0]+np.array([4,1]), ffdiv_out_xy[0][0][1], rg_m3m4, 
                     layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5)
-            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #Clock
-                    ffdiv_clk_xy[i][0], laygen.get_inst_pin_coord(iclkbuf2.name, 'O', rg_m3m4)[0], ffdiv_clk_xy[i][0][1]+offset+1, rg_m3m4)
-            [rh0, rv0] = laygen.route_hv(laygen.layers['metal'][2], laygen.layers['metal'][3], #RST 
-                        laygen.get_inst_pin_coord(iffdiv[i].name,'VSS',rg_m2m3)[0], laygen.get_inst_pin_coord(iffdiv[i].name,'RST',rg_m2m3)[0], rg_m2m3)
+            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],  #Clock
+                    ffdiv_clk_xy[i][0], laygen.get_inst_pin_xy(iclkbuf2.name, 'O', rg_m3m4)[0], ffdiv_clk_xy[i][0][1] + offset + 1, rg_m3m4)
+            [rh0, rv0] = laygen.route_hv(laygen.layers['metal'][2], laygen.layers['metal'][3],  #RST
+                        laygen.get_inst_pin_xy(iffdiv[i].name, 'VSS', rg_m2m3)[0], laygen.get_inst_pin_xy(iffdiv[i].name, 'RST', rg_m2m3)[0], rg_m2m3)
             [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #p0buf to FFin
                         pbuf2_out_xy[i][0], ffin_clk_xy[i][0], pbuf2_out_xy[i][0][1]+offset_p, rg_m3m4)
             #Latch connections
-            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #Input
-                    laygen.get_inst_pin_coord(ilatch.name, 'I', rg_m3m4)[0], ffin_out_xy[i][0], 
-                    laygen.get_inst_pin_coord(ilatch.name, 'I', rg_m3m4)[0][1]-offset, rg_m3m4)
-            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #p0buf
-                    pbuf2_out_xy[i][0], laygen.get_inst_pin_coord(ilatch.name, 'CLKB', rg_m3m4)[0]-np.array([2,0]), ffin_out_xy[i][0][1]+offset_p, rg_m3m4)
-            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #p0buf
-                    laygen.get_inst_pin_coord(ilatch.name, 'CLKB', rg_m3m4)[0], laygen.get_inst_pin_coord(ilatch.name, 'CLKB', rg_m3m4)[0]-np.array([2,0]), 
-                    laygen.get_inst_pin_coord(ilatch.name, 'CLKB', rg_m3m4)[0][1], rg_m3m4)
-            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #p0bufb
-                    pbuf3_out_xy[i][0], laygen.get_inst_pin_coord(ilatch.name, 'CLK', rg_m3m4)[0]+np.array([2,0]), 
-                    pbuf3_out_xy[i][0][1]+offset_p-(-1)**(i%2), rg_m3m4)
-            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #p0bufb
-                    laygen.get_inst_pin_coord(ilatch.name, 'CLK', rg_m3m4)[0], laygen.get_inst_pin_coord(ilatch.name, 'CLK', rg_m3m4)[0]+np.array([2,0]), 
-                    laygen.get_inst_pin_coord(ilatch.name, 'CLK', rg_m3m4)[0][1], rg_m3m4)
-            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #tinv
-                    laygen.get_inst_pin_coord(ilatch.name, 'O', rg_m3m4)[0], tinv_in_xy[i][0], 
-                    laygen.get_inst_pin_coord(ilatch.name, 'O', rg_m3m4)[0][1], rg_m3m4)
+            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],  #Input
+                    laygen.get_inst_pin_xy(ilatch.name, 'I', rg_m3m4)[0], ffin_out_xy[i][0],
+                                               laygen.get_inst_pin_xy(ilatch.name, 'I', rg_m3m4)[0][1] - offset, rg_m3m4)
+            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],  #p0buf
+                    pbuf2_out_xy[i][0], laygen.get_inst_pin_xy(ilatch.name, 'CLKB', rg_m3m4)[0] - np.array([2, 0]), ffin_out_xy[i][0][1] + offset_p, rg_m3m4)
+            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],  #p0buf
+                    laygen.get_inst_pin_xy(ilatch.name, 'CLKB', rg_m3m4)[0], laygen.get_inst_pin_xy(ilatch.name, 'CLKB', rg_m3m4)[0] - np.array([2, 0]),
+                                               laygen.get_inst_pin_xy(ilatch.name, 'CLKB', rg_m3m4)[0][1], rg_m3m4)
+            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],  #p0bufb
+                    pbuf3_out_xy[i][0], laygen.get_inst_pin_xy(ilatch.name, 'CLK', rg_m3m4)[0] + np.array([2, 0]),
+                                               pbuf3_out_xy[i][0][1] + offset_p - (-1) ** (i%2), rg_m3m4)
+            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],  #p0bufb
+                    laygen.get_inst_pin_xy(ilatch.name, 'CLK', rg_m3m4)[0], laygen.get_inst_pin_xy(ilatch.name, 'CLK', rg_m3m4)[0] + np.array([2, 0]),
+                                               laygen.get_inst_pin_xy(ilatch.name, 'CLK', rg_m3m4)[0][1], rg_m3m4)
+            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],  #tinv
+                    laygen.get_inst_pin_xy(ilatch.name, 'O', rg_m3m4)[0], tinv_in_xy[i][0],
+                                               laygen.get_inst_pin_xy(ilatch.name, 'O', rg_m3m4)[0][1], rg_m3m4)
         #Multiphase buffer
         [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], 
                 ffdiv_out_xy[i][0]+np.array([0,0]), pbuf1_in_xy[i][0], ffdiv_out_xy[i][0][1], rg_m3m4, extendr=2)
@@ -394,33 +394,33 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
         if not i==sub_ser-1:
             routb=laygen.route(None, laygen.layers['metal'][3], xy0=tinv_out_xy[i][0], xy1=tinv_out_xy[i+1][0], gridname0=rg_m3m4) #OUTB
         else:
-            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #OUTINV
-                        tinv_out_xy[i][0], laygen.get_inst_pin_coord(ioutinv.name,'I',rg_m3m4)[1]-np.array([2,0]), 
-                        tinv_out_xy[i][0][1], rg_m3m4)
-            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #OUTINV
-                        laygen.get_inst_pin_coord(ioutinv.name,'I',rg_m3m4)[1], laygen.get_inst_pin_coord(ioutinv.name,'I',rg_m3m4)[1]-np.array([2,0]), 
-                        laygen.get_inst_pin_coord(ioutinv.name,'I',rg_m3m4)[1][1], rg_m3m4, extendr=2)
+            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],  #OUTINV
+                        tinv_out_xy[i][0], laygen.get_inst_pin_xy(ioutinv.name, 'I', rg_m3m4)[1] - np.array([2, 0]),
+                                               tinv_out_xy[i][0][1], rg_m3m4)
+            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],  #OUTINV
+                        laygen.get_inst_pin_xy(ioutinv.name, 'I', rg_m3m4)[1], laygen.get_inst_pin_xy(ioutinv.name, 'I', rg_m3m4)[1] - np.array([2, 0]),
+                                               laygen.get_inst_pin_xy(ioutinv.name, 'I', rg_m3m4)[1][1], rg_m3m4, extendr=2)
     #CLKIN buffer
-    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], 
-            laygen.get_inst_pin_coord(iclkbuf1.name,'O',rg_m3m4)[0], laygen.get_inst_pin_coord(iclkbuf2.name,'I',rg_m3m4)[0], 
-            laygen.get_inst_pin_coord(iclkbuf1.name,'O',rg_m3m4)[0][1], rg_m3m4)
+    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],
+                                       laygen.get_inst_pin_xy(iclkbuf1.name, 'O', rg_m3m4)[0], laygen.get_inst_pin_xy(iclkbuf2.name, 'I', rg_m3m4)[0],
+                                       laygen.get_inst_pin_xy(iclkbuf1.name, 'O', rg_m3m4)[0][1], rg_m3m4)
 
     #Pin
-    clkin_xy=laygen.get_inst_pin_coord(iclkbuf1.name, 'I', rg_m3m4)[1]
+    clkin_xy=laygen.get_inst_pin_xy(iclkbuf1.name, 'I', rg_m3m4)[1]
     [rv0, rclkin] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], 
             clkin_xy, np.array([0,clkin_xy[1]]), rg_m3m4)
     laygen.create_boundary_pin_form_rect(rclkin, rg_m3m4, "clk_in", laygen.layers['pin'][4], size=4, direction='left')
     for i in range(sub_ser):
         if iffin[i].transform=='MX': offset_din=4
         if iffin[i].transform=='R0': offset_din=6
-        din_xy34=laygen.get_inst_pin_coord(iffin[i].name, 'I', rg_m3m4)
+        din_xy34=laygen.get_inst_pin_xy(iffin[i].name, 'I', rg_m3m4)
         [rv0, rh0] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], 
                 din_xy34[1], np.array([0,din_xy34[0][1]+offset_din]), rg_m3m4)
         if not i==sub_ser-1:
             laygen.create_boundary_pin_form_rect(rh0, rg_m3m4, "in<"+str(i+1)+">", laygen.layers['pin'][4], size=4, direction='left')
         else:
             laygen.create_boundary_pin_form_rect(rh0, rg_m3m4, "in<0>", laygen.layers['pin'][4], size=4, direction='left')
-    datao_xy=laygen.get_inst_pin_coord(ioutinv.name, 'O', rg_m3m4)
+    datao_xy=laygen.get_inst_pin_xy(ioutinv.name, 'O', rg_m3m4)
     laygen.pin(name='out', layer=laygen.layers['pin'][3], xy=datao_xy, gridname=rg_m3m4)
     #[rv0, rdatao] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], 
     #        datao_xy[0], datao_xy+np.array([5,0]), rg_m3m4)

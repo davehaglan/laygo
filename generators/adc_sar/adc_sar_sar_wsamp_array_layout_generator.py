@@ -59,11 +59,11 @@ def generate_sar_wsamp_array(laygen, objectname_pfix, workinglib, sar_name,
     pdict_m5m6_thick = []
     pdict_m5m6_thick_basic = []
     for i in range(num_slices):
-        pdict_m3m4.append(laygen.get_inst_pin_coord(None, None, rg_m3m4, index=np.array([i, 0])))
-        pdict_m4m5.append(laygen.get_inst_pin_coord(None, None, rg_m4m5, index=np.array([i, 0])))
-        pdict_m5m6.append(laygen.get_inst_pin_coord(None, None, rg_m5m6, index=np.array([i, 0])))
-        pdict_m5m6_thick.append(laygen.get_inst_pin_coord(None, None, rg_m5m6_thick, index=np.array([i, 0])))
-        pdict_m5m6_thick_basic.append(laygen.get_inst_pin_coord(None, None, rg_m5m6_basic_thick, index=np.array([i, 0])))
+        pdict_m3m4.append(laygen.get_inst_pin_xy(None, None, rg_m3m4, index=np.array([i, 0])))
+        pdict_m4m5.append(laygen.get_inst_pin_xy(None, None, rg_m4m5, index=np.array([i, 0])))
+        pdict_m5m6.append(laygen.get_inst_pin_xy(None, None, rg_m5m6, index=np.array([i, 0])))
+        pdict_m5m6_thick.append(laygen.get_inst_pin_xy(None, None, rg_m5m6_thick, index=np.array([i, 0])))
+        pdict_m5m6_thick_basic.append(laygen.get_inst_pin_xy(None, None, rg_m5m6_basic_thick, index=np.array([i, 0])))
     #vref route
     #comment out for merged route
     '''

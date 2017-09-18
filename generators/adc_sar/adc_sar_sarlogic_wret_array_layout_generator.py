@@ -175,7 +175,7 @@ def generate_sarlogic_wret_array(laygen, objectname_pfix, templib_logic, placeme
                                gridname = pg, refinstname = refi, transform=tf, template_libname = templib_logic))
 
     # internal pins
-    pdict = laygen.get_inst_pin_coord(None, None, rg_m3m4)
+    pdict = laygen.get_inst_pin_xy(None, None, rg_m3m4)
     # rst route
     laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m3m4,
                  refinstname0=islogic[0].name, refpinname0='RST2', refinstindex0=np.array([0, 0]),
@@ -222,8 +222,8 @@ def generate_sarlogic_wret_array(laygen, objectname_pfix, templib_logic, placeme
     laygen.create_boundary_pin_from_rect(rsaom[0], rg_m4m5, "SAOM", laygen.layers['pin'][4], size=6, direction='left')
     y1 = laygen.get_template_size(name=islogic[0].cellname, gridname=rg_m4m5, libname=workinglib)[1]
     y2 = y1*(num_row)
-    pdict2 = laygen.get_inst_pin_coord(None, None, rg_m3m4, sort=True)
-    pdict_m4m5 = laygen.get_inst_pin_coord(None, None, rg_m4m5, sort=True)
+    pdict2 = laygen.get_inst_pin_xy(None, None, rg_m3m4, sort=True)
+    pdict_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5, sort=True)
     for i in range(num_row):
         for j in range(num_bits_row):
             if i*num_bits_row+j < num_bits:
@@ -374,7 +374,7 @@ def generate_sarlogic_wret_v2_array(laygen, objectname_pfix, templib_logic, plac
                                gridname = pg, refinstname = refi, transform=tf, template_libname = templib_logic))
 
     # internal pins
-    pdict = laygen.get_inst_pin_coord(None, None, rg_m3m4)
+    pdict = laygen.get_inst_pin_xy(None, None, rg_m3m4)
     # rst route
     laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m3m4,
                  refinstname0=islogic[0].name, refpinname0='RST2', refinstindex0=np.array([0, 0]),
@@ -421,8 +421,8 @@ def generate_sarlogic_wret_v2_array(laygen, objectname_pfix, templib_logic, plac
     laygen.create_boundary_pin_from_rect(rsaom[0], rg_m4m5, "SAOM", laygen.layers['pin'][4], size=6, direction='left')
     y1 = laygen.get_template_size(name=islogic[0].cellname, gridname=rg_m4m5, libname=workinglib)[1]
     y2 = y1*(num_row)
-    pdict2 = laygen.get_inst_pin_coord(None, None, rg_m3m4, sort=True)
-    pdict_m4m5 = laygen.get_inst_pin_coord(None, None, rg_m4m5, sort=True)
+    pdict2 = laygen.get_inst_pin_xy(None, None, rg_m3m4, sort=True)
+    pdict_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5, sort=True)
     for i in range(num_row):
         for j in range(num_bits_row):
             if i*num_bits_row+j < num_bits:

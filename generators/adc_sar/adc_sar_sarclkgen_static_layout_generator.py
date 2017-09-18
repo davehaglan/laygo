@@ -32,10 +32,10 @@ import os
 
 def create_power_pin_from_inst(laygen, layer, gridname, inst_left, inst_right):
     """create power pin"""
-    rvdd0_pin_xy = laygen.get_inst_pin_coord(inst_left.name, 'VDD', gridname, sort=True)
-    rvdd1_pin_xy = laygen.get_inst_pin_coord(inst_right.name, 'VDD', gridname, sort=True)
-    rvss0_pin_xy = laygen.get_inst_pin_coord(inst_left.name, 'VSS', gridname, sort=True)
-    rvss1_pin_xy = laygen.get_inst_pin_coord(inst_right.name, 'VSS', gridname, sort=True)
+    rvdd0_pin_xy = laygen.get_inst_pin_xy(inst_left.name, 'VDD', gridname, sort=True)
+    rvdd1_pin_xy = laygen.get_inst_pin_xy(inst_right.name, 'VDD', gridname, sort=True)
+    rvss0_pin_xy = laygen.get_inst_pin_xy(inst_left.name, 'VSS', gridname, sort=True)
+    rvss1_pin_xy = laygen.get_inst_pin_xy(inst_right.name, 'VSS', gridname, sort=True)
 
     laygen.pin(name='VDD', layer=layer, xy=np.vstack((rvdd0_pin_xy[0],rvdd1_pin_xy[1])), gridname=gridname)
     laygen.pin(name='VSS', layer=layer, xy=np.vstack((rvss0_pin_xy[0],rvss1_pin_xy[1])), gridname=gridname)
@@ -127,7 +127,7 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
                           gridname = pg, refinstname = refi, template_libname = templib_logic)
 
     # internal pins
-    pdict = laygen.get_inst_pin_coord(None, None, rg_m3m4)
+    pdict = laygen.get_inst_pin_xy(None, None, rg_m3m4)
 
     # internal routes
     #x0 = laygen.get_inst_xy(name=inand0.name, gridname=rg_m3m4)[0] + 1

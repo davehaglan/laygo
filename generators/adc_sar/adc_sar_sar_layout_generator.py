@@ -53,10 +53,10 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
                          gridname=pg, refinstname=iabe.name, direction='top', template_libname=workinglib)
 
     #reference coordinates
-    pdict_m3m4 = laygen.get_inst_pin_coord(None, None, rg_m3m4)
-    pdict_m4m5 = laygen.get_inst_pin_coord(None, None, rg_m4m5)
-    pdict_m5m6 = laygen.get_inst_pin_coord(None, None, rg_m5m6)
-    pdict_m5m6_thick = laygen.get_inst_pin_coord(None, None, rg_m5m6_thick)
+    pdict_m3m4 = laygen.get_inst_pin_xy(None, None, rg_m3m4)
+    pdict_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5)
+    pdict_m5m6 = laygen.get_inst_pin_xy(None, None, rg_m5m6)
+    pdict_m5m6_thick = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick)
 
     #zp/zm/zmid route
     x0=pdict_m5m6[iafe.name]['ENL0<0>'][0][0]+4

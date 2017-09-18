@@ -238,13 +238,13 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
     for i in range(num_row):
         for j in range(num_bits_row):
             if num_bits_row*i+j < num_bits:
-                icdrv_en0_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'EN<0>', rg_m4m5))
-                icdrv_en1_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'EN<1>', rg_m4m5))
-                icdrv_en2_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'EN<2>', rg_m4m5))
-                icdrv_vref0_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'VREF<0>', rg_m4m5))
-                icdrv_vref1_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'VREF<1>', rg_m4m5))
-                icdrv_vref2_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'VREF<2>', rg_m4m5))
-                icdrv_vo_xy.append(laygen.get_inst_pin_coord(icdrv[i*num_bits_row+j].name, 'VO', rg_m4m5))
+                icdrv_en0_xy.append(laygen.get_inst_pin_xy(icdrv[i * num_bits_row + j].name, 'EN<0>', rg_m4m5))
+                icdrv_en1_xy.append(laygen.get_inst_pin_xy(icdrv[i * num_bits_row + j].name, 'EN<1>', rg_m4m5))
+                icdrv_en2_xy.append(laygen.get_inst_pin_xy(icdrv[i * num_bits_row + j].name, 'EN<2>', rg_m4m5))
+                icdrv_vref0_xy.append(laygen.get_inst_pin_xy(icdrv[i * num_bits_row + j].name, 'VREF<0>', rg_m4m5))
+                icdrv_vref1_xy.append(laygen.get_inst_pin_xy(icdrv[i * num_bits_row + j].name, 'VREF<1>', rg_m4m5))
+                icdrv_vref2_xy.append(laygen.get_inst_pin_xy(icdrv[i * num_bits_row + j].name, 'VREF<2>', rg_m4m5))
+                icdrv_vo_xy.append(laygen.get_inst_pin_xy(icdrv[i * num_bits_row + j].name, 'VO', rg_m4m5))
 
     # reference route coordinate
     x0 = icdrv_en0_xy[0][0][0]

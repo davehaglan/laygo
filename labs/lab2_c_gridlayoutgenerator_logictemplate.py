@@ -91,7 +91,7 @@ def generate_inv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, rou
     rvss=laygen.route("R"+objectname_pfix+"VSS0", laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,
                  refinstname0=in0.name, refinstname1=in2.name)
     # power and ground route
-    xy_s0 = laygen.get_template_pin_coord(in1.cellname, 'S0', rg_m1m2)[0, :]
+    xy_s0 = laygen.get_template_pin_xy(in1.cellname, 'S0', rg_m1m2)[0, :]
     for i in range(m):
         laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0*np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
                      refinstname0=in1.name, refinstindex0=np.array([i, 0]), via0=[[0, 0]],
@@ -99,7 +99,7 @@ def generate_inv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, rou
         laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0*np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
                      refinstname0=ip1.name, refinstindex0=np.array([i, 0]), via0=[[0, 0]],
                      refinstname1=ip1.name, refinstindex1=np.array([i, 0]))
-    xy_s1 = laygen.get_template_pin_coord(in1.cellname, 'S1', rg_m1m2)[0, :]
+    xy_s1 = laygen.get_template_pin_xy(in1.cellname, 'S1', rg_m1m2)[0, :]
     laygen.route(None, laygen.layers['metal'][1], xy0=xy_s1 * np.array([1, 0]), xy1=xy_s1, gridname0=rg_m1m2,
                  refinstname0=in1.name, refinstindex0=np.array([m-1, 0]), via0=[[0, 0]],
                  refinstname1=in1.name, refinstindex1=np.array([m-1, 0]))
@@ -198,7 +198,7 @@ def generate_tinv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, ro
     rvss=laygen.route("R"+objectname_pfix+"VSS0", laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,
                  refinstname0=in0.name, refinstname1=in5.name)
     # power and ground route
-    xy_s0 = laygen.get_template_pin_coord(in1.cellname, 'S0', rg_m1m2)[0, :]
+    xy_s0 = laygen.get_template_pin_xy(in1.cellname, 'S0', rg_m1m2)[0, :]
     for i in range(m):
         laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0*np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
                      refinstname0=in1.name, refinstindex0=np.array([i, 0]), via0=[[0, 0]],
@@ -206,7 +206,7 @@ def generate_tinv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, ro
         laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0*np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
                      refinstname0=ip1.name, refinstindex0=np.array([i, 0]), via0=[[0, 0]],
                      refinstname1=ip1.name, refinstindex1=np.array([i, 0]))
-    xy_s1 = laygen.get_template_pin_coord(in1.cellname, 'S1', rg_m1m2)[0, :]
+    xy_s1 = laygen.get_template_pin_xy(in1.cellname, 'S1', rg_m1m2)[0, :]
     laygen.route(None, laygen.layers['metal'][1], xy0=xy_s1 * np.array([1, 0]), xy1=xy_s1, gridname0=rg_m1m2,
                  refinstname0=in1.name, refinstindex0=np.array([m-1, 0]), via0=[[0, 0]],
                  refinstname1=in1.name, refinstindex1=np.array([m-1, 0]))

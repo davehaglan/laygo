@@ -85,12 +85,12 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
     size_y=int((sar_size[1]+ret_size[1]+clkdist_size[1]-9.6-3.84)/space_size[1]+1)*space_size[1] #clkdist_size is not correct.. will be fixed later
     laygen.add_rect(None, np.array([origin, origin+np.array([size_x, size_y])]), laygen.layers['prbnd'])
 
-    pdict_m2m3=laygen.get_inst_pin_coord(None, None, rg_m2m3)
-    pdict_m3m4=laygen.get_inst_pin_coord(None, None, rg_m3m4)
-    pdict_m4m5=laygen.get_inst_pin_coord(None, None, rg_m4m5)
-    pdict_m5m6=laygen.get_inst_pin_coord(None, None, rg_m5m6)
-    pdict_m5m6_thick=laygen.get_inst_pin_coord(None, None, rg_m5m6_thick)
-    pdict_m5m6_thick_basic=laygen.get_inst_pin_coord(None, None, rg_m5m6_thick_basic)
+    pdict_m2m3=laygen.get_inst_pin_xy(None, None, rg_m2m3)
+    pdict_m3m4=laygen.get_inst_pin_xy(None, None, rg_m3m4)
+    pdict_m4m5=laygen.get_inst_pin_xy(None, None, rg_m4m5)
+    pdict_m5m6=laygen.get_inst_pin_xy(None, None, rg_m5m6)
+    pdict_m5m6_thick=laygen.get_inst_pin_xy(None, None, rg_m5m6_thick)
+    pdict_m5m6_thick_basic=laygen.get_inst_pin_xy(None, None, rg_m5m6_thick_basic)
 
     #VDD/VSS pins for sar and ret (just duplicate from lower hierarchy cells)
     vddsampcnt=0
@@ -145,7 +145,7 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
     laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m5m6_thick, gridname_output=rg_m5m6_thick_temp_sig,
                                           instname=isar.name, 
                                           inst_pin_prefix=['INP', 'INM'], xy_grid_type='xgrid')
-    pdict_m5m6_thick_temp_sig = laygen.get_inst_pin_coord(None, None, rg_m5m6_thick_temp_sig)
+    pdict_m5m6_thick_temp_sig = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick_temp_sig)
     inp_x_list=[]
     inm_x_list=[]
     num_input_track=4
@@ -242,7 +242,7 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
     laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m4m5_basic_thick, gridname_output=rg_m4m5_temp,
                                           instname=isar.name, 
                                           inst_pin_prefix=['CLK'], xy_grid_type='xgrid')
-    pdict_m4m5_temp = laygen.get_inst_pin_coord(None, None, rg_m4m5_temp)
+    pdict_m4m5_temp = laygen.get_inst_pin_xy(None, None, rg_m4m5_temp)
     for i in range(num_slices):
         x0=pdict_m4m5[isar.name]['CLK'+str(i)][0][0]
         y1=pdict_m4m5[iclkdist.name]['CLKO'+str(i)+'<0>'][0][1]+4
@@ -294,7 +294,7 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
     laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m3m4, gridname_output=rg_m3m4_temp_clk,
                                           instname=iret.name, 
                                           inst_pin_prefix=['clk'+str(i) for i in ck_phase_buf], xy_grid_type='xgrid')
-    pdict_m3m4_temp_clk = laygen.get_inst_pin_coord(None, None, rg_m3m4_temp_clk)
+    pdict_m3m4_temp_clk = laygen.get_inst_pin_xy(None, None, rg_m3m4_temp_clk)
     for i in ck_phase_buf:
         for j in range(4):
             laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4], 
@@ -310,27 +310,6 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
         r=laygen.route(None, layer=laygen.layers['metal'][3], xy0=pdict_m3m4_temp_clk[iret.name]['clk'+str(i)][0], 
                         xy1=np.array([pdict_m3m4_temp_clk[iret.name]['clk'+str(i)][0][0], 
                                       pdict_m4m5[isar.name]['CLKO00'][0][1]+num_bits*2+2+2*4+1]), gridname0=rg_m3m4_temp_clk)
-    '''    
-    laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m3m4, gridname_output=rg_m3m4_temp_clk,
-                                          instname=iret.name, 
-                                          inst_pin_prefix=['clk'+str(2*i+1) for i in range(int(num_slices/2))], xy_grid_type='xgrid')
-    pdict_m3m4_temp_clk = laygen.get_inst_pin_coord(None, None, rg_m3m4_temp_clk)
-    for i in range(int(num_slices/2)):
-        for j in range(4):
-            laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4], 
-                            xy0=pdict_m4m5[isar.name]['CLKO0'+str(2*i+1)][0], 
-                            xy1=pdict_m3m4_temp_clk[iret.name]['clk'+str(2*i+1)][0], 
-                            track_y=pdict_m4m5[isar.name]['CLKO00'][0][1]+num_bits*2+2+2*j, 
-                            gridname=rg_m4m5, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4_temp_clk, extendl=0, extendr=0)
-            laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4], 
-                            xy0=pdict_m4m5[isar.name]['CLKO1'+str(2*i+1)][0], 
-                            xy1=pdict_m3m4_temp_clk[iret.name]['clk'+str(2*i+1)][0], 
-                            track_y=pdict_m4m5[isar.name]['CLKO00'][0][1]+num_bits*2+2+2*j, 
-                            gridname=rg_m4m5, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4_temp_clk, extendl=0, extendr=0)
-        r=laygen.route(None, layer=laygen.layers['metal'][3], xy0=pdict_m3m4_temp_clk[iret.name]['clk'+str(2*i+1)][0], 
-                        xy1=np.array([pdict_m3m4_temp_clk[iret.name]['clk'+str(2*i+1)][0][0], 
-                                      pdict_m4m5[isar.name]['CLKO00'][0][1]+num_bits*2+2+2*4+1]), gridname0=rg_m3m4_temp_clk)
-    '''
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")

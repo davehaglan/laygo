@@ -35,10 +35,10 @@ import laygo.GridLayoutGeneratorHelper as laygenhelper #utility functions
 
 def create_power_pin_from_inst(laygen, layer, gridname, inst_left, inst_right):
     """create power pin"""
-    rvdd0_pin_xy = laygen.get_inst_pin_coord(inst_left.name, 'VDD', gridname, sort=True)
-    rvdd1_pin_xy = laygen.get_inst_pin_coord(inst_right.name, 'VDD', gridname, sort=True)
-    rvss0_pin_xy = laygen.get_inst_pin_coord(inst_left.name, 'VSS', gridname, sort=True)
-    rvss1_pin_xy = laygen.get_inst_pin_coord(inst_right.name, 'VSS', gridname, sort=True)
+    rvdd0_pin_xy = laygen.get_inst_pin_xy(inst_left.name, 'VDD', gridname, sort=True)
+    rvdd1_pin_xy = laygen.get_inst_pin_xy(inst_right.name, 'VDD', gridname, sort=True)
+    rvss0_pin_xy = laygen.get_inst_pin_xy(inst_left.name, 'VSS', gridname, sort=True)
+    rvss1_pin_xy = laygen.get_inst_pin_xy(inst_right.name, 'VSS', gridname, sort=True)
 
     laygen.pin(name='VDD', layer=layer, xy=np.vstack((rvdd0_pin_xy[0],rvdd1_pin_xy[1])), gridname=gridname)
     laygen.pin(name='VSS', layer=layer, xy=np.vstack((rvss0_pin_xy[0],rvss1_pin_xy[1])), gridname=gridname)
@@ -153,7 +153,7 @@ def generate_space_tap(laygen, objectname_pfix, placement_grid, routing_grid_m1m
                  refinstname0=iptapl.name, refinstname1=iptapr.name)
     rvss=laygen.route("R"+objectname_pfix+"VSS0", laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=xy, gridname0=rg_m1m2,
                  refinstname0=intapl.name, refinstname1=intapr.name)
-    xy_s0 = laygen.get_template_pin_coord(iptap[0].cellname, 'TAP0', rg_m1m2)[0, :]
+    xy_s0 = laygen.get_template_pin_xy(iptap[0].cellname, 'TAP0', rg_m1m2)[0, :]
     # power/ground vertical route
     for i in range(m_tap):
         laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0*np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,

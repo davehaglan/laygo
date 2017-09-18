@@ -607,6 +607,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         xy0_phy_center=xy_phy_center[0,:]; xy1_phy_center=xy_phy_center[1,:]
         # optional via placements
         '''
+        #addvia is obsolete
         if addvia0==True:
             print("[WARNING] addvia0 option in GridLayoutGenerator.route deprecated. Use via0=[[0, 0]] instead")
             self.via(None, xy0, gridname0, offset=offset0, refobj=refinst0, refinstindex=refinstindex0,
@@ -1164,6 +1165,12 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         if isinstance(obj, TemplateObject):
             return self.get_template_xy(name=obj.name, gridname=gridname)
+        if isinstance(obj, Instance):
+            return self.get_inst_xy(name=obj.name, gridname=gridname)
+        if isinstance(obj, Rect):
+            return self.get_rect_xy(name=obj.name, gridname=gridname, sort=sort)
+        if isinstance(obj, Pin):
+            return self.get_pin_xy(name=obj.name, gridname=gridname, sort=sort)
 
     def get_template_size(self, name, gridname=None, libname=None):
         return self.get_template_xy(name=name, gridname=gridname, libname=libname)
@@ -1259,9 +1266,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         if sort==True: xy=self.sort_rect_xy(xy)
         return xy
 
-    def get_template_pin_coord(self, name, pinname, gridname, libname=None):
-        """use get_template_pin_xy instead"""
-        return self.get_template_pin_xy(name, pinname, gridname, libname)
     def get_template_pin_xy(self, name, pinname, gridname, libname=None):
         """
         get xy cooridnate of a template pin in abstract coordinate
@@ -1286,7 +1290,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         pin_xy_abs = self.get_absgrid_region(gridname, pin_xy_phy[0], pin_xy_phy[1])
         return pin_xy_abs
 
-    def get_inst_pin_coord(self, name, pinname, gridname, index=np.array([0, 0]), sort=False):
+    def get_inst_pin_xy(self, name, pinname, gridname, index=np.array([0, 0]), sort=False):
         """use get_inst_pin_xy instead"""
         return self.get_inst_pin_xy(name, pinname, gridname, index, sort)
     def get_inst_pin_xy(self, name, pinname, gridname, index=np.array([0, 0]), sort=False):
@@ -1335,13 +1339,13 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                     if sort == True: xy = self.sort_rect_xy(xy)
                     return xy
 
-    def get_inst_bbox(self, instname, gridname=None, sort=False):
+    def get_inst_bbox(self, name, gridname=None, sort=False):
         """
         Get a bounding box of an Instance object, on abstract grid
 
         Parameters
         ----------
-        instname : str
+        name : str
             instance name
         gridname : str, optional
             grid name. If None, physical grid is used
@@ -1353,7 +1357,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         np.ndarray([[int, int], [int, int]])
             instance bbox in abstract coordinate
         """
-        xy = self.get_inst(instname).bbox
+        xy = self.get_inst(name).bbox
         if sort == True: xy = self.sort_rect_xy(xy)
         if gridname is None:
             return xy
@@ -1408,7 +1412,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             refinstindex = refobjindex
         if not refinstname is None:
             if not refpinname is None:
-                pxy_ongrid = self.get_template_pin_coord(name=rinst.cellname, pinname=refpinname, gridname=gridname)[0]
+                pxy_ongrid = self.get_template_pin_xy(name=rinst.cellname, pinname=refpinname, gridname=gridname)[0]
                 pxy = self.grids.get_phygrid_xy(gridname=gridname, xy=pxy_ongrid)
                 rxy = rinst.xy + np.dot(ut.Mt(rinst.transform), pxy)
             else:
@@ -1677,6 +1681,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         self.grids.import_yaml(filename=filename, libname=libname)
 
     #Obsolete functions
+    '''
     def get_inst_bbox_phygrid(self, instname):
         """
         (Obsolete) Get a bounding box of an Instance object, on physical grid
@@ -1691,5 +1696,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         np.ndarray([[float, float], [float, float]])
             instance bbox
         """
-        raise Exception("GridLayoutGenerater.get_inst_bbox_phygrid deprecated. Use inst.bbox instead")
-        #return self.get_inst(instname).bbox
+        #raise Exception("GridLayoutGenerater.get_inst_bbox_phygrid deprecated. Use inst.bbox instead")
+        return self.get_inst(instname).bbox
+    '''

@@ -268,10 +268,10 @@ def generate_samp(laygen, objectname_pfix, workinglib,
                             origin=origin)
 
     # route
-    x_center=int((laygen.get_inst_bbox(instname=ibuf.name, gridname=rg45bt, sort=True)[1][0] \
-                  -laygen.get_inst_bbox(instname=ibuf.name, gridname=rg45bt, sort=True)[0][0])/2\
-                  +laygen.get_inst_bbox(instname=ibuf.name, gridname=rg45bt, sort=True)[0][0])
-    y_top=int(laygen.get_inst_bbox(instname=ibuf.name, gridname=rg45bt, sort=True)[1][1])
+    x_center=int((laygen.get_inst_bbox(name=ibuf.name, gridname=rg45bt, sort=True)[1][0] \
+                  -laygen.get_inst_bbox(name=ibuf.name, gridname=rg45bt, sort=True)[0][0])/2\
+                  +laygen.get_inst_bbox(name=ibuf.name, gridname=rg45bt, sort=True)[0][0])
+    y_top=int(laygen.get_inst_bbox(name=ibuf.name, gridname=rg45bt, sort=True)[1][1])
     #in
     xy0=laygen.get_inst_pin_xy(name=isamp.name, pinname='IP', gridname=rg45bt, sort=True)[0]
     xy1=[x_center-3, y_top]
@@ -373,7 +373,7 @@ def generate_samp(laygen, objectname_pfix, workinglib,
                 offset_start_index=0, offset_end_index=0)
     #m6
     input_rails_rect = [rvdd_m5[0]+rvdd_m5[1], rvss_m5[0]+rvss_m5[1]]
-    x1 = laygen.get_inst_bbox(instname=ibuf.name, gridname=pg56t)[1][0] + laygen.get_template_size('nmos4_fast_left', gridname=pg56t)[0]
+    x1 = laygen.get_inst_bbox(name=ibuf.name, gridname=pg56t)[1][0] + laygen.get_template_size('nmos4_fast_left', gridname=pg56t)[0]
     rvdd_m6, rvss_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_', 
                 layer=laygen.layers['pin'][6], gridname=pg56t, netnames=['VDD', 'VSS'], direction='x', 
                 input_rails_rect=input_rails_rect, generate_pin=True, overwrite_start_coord=0, overwrite_end_coord=x1,

@@ -251,9 +251,9 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                             origin=origin)
     #route
     #reference coordinates
-    pdict_m3m4 = laygen.get_inst_pin_coord(None, None, rg_m3m4)
-    pdict_m4m5 = laygen.get_inst_pin_coord(None, None, rg_m4m5)
-    pdict_m5m6 = laygen.get_inst_pin_coord(None, None, rg_m5m6)
+    pdict_m3m4 = laygen.get_inst_pin_xy(None, None, rg_m3m4)
+    pdict_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5)
+    pdict_m5m6 = laygen.get_inst_pin_xy(None, None, rg_m5m6)
     x_right = laygen.get_inst_xy(name=ifsm.name, gridname=rg_m5m6)[0]\
              +laygen.get_template_size(name=ifsm.cellname, gridname=rg_m5m6, libname=workinglib)[0] - 1
     y_top = laygen.get_inst_xy(name=ickg.name, gridname=rg_m5m6)[1]-1

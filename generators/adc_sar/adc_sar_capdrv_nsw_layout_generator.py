@@ -32,10 +32,10 @@ import os
 
 def create_power_pin_from_inst(laygen, layer, gridname, inst_left, inst_right):
     """create power pin"""
-    rvdd0_pin_xy = laygen.get_inst_pin_coord(inst_left.name, 'VDD', gridname, sort=True)
-    rvdd1_pin_xy = laygen.get_inst_pin_coord(inst_right.name, 'VDD', gridname, sort=True)
-    rvss0_pin_xy = laygen.get_inst_pin_coord(inst_left.name, 'VSS', gridname, sort=True)
-    rvss1_pin_xy = laygen.get_inst_pin_coord(inst_right.name, 'VSS', gridname, sort=True)
+    rvdd0_pin_xy = laygen.get_inst_pin_xy(inst_left.name, 'VDD', gridname, sort=True)
+    rvdd1_pin_xy = laygen.get_inst_pin_xy(inst_right.name, 'VDD', gridname, sort=True)
+    rvss0_pin_xy = laygen.get_inst_pin_xy(inst_left.name, 'VSS', gridname, sort=True)
+    rvss1_pin_xy = laygen.get_inst_pin_xy(inst_right.name, 'VSS', gridname, sort=True)
 
     laygen.pin(name='VDD', layer=layer, xy=np.vstack((rvdd0_pin_xy[0],rvdd1_pin_xy[1])), gridname=gridname)
     laygen.pin(name='VSS', layer=layer, xy=np.vstack((rvss0_pin_xy[0],rvss1_pin_xy[1])), gridname=gridname)
@@ -84,17 +84,17 @@ def generate_capdrv_nsw(laygen, objectname_pfix, templib_logic, placement_grid, 
         refi = isp1x
 
     # internal pins
-    it0_vdd_xy = laygen.get_inst_pin_coord(it0.name, 'TIEVSS2', rg_m3m4)
-    it0_vss_xy = laygen.get_inst_pin_coord(it0.name, 'TIEVSS', rg_m3m4)
-    i3_en_xy = laygen.get_inst_pin_coord(i3.name, 'EN', rg_m3m4)
-    i3_i_xy = laygen.get_inst_pin_coord(i3.name, 'I', rg_m3m4)
-    i3_o_xy = laygen.get_inst_pin_coord(i3.name, 'O', rg_m3m4)
-    i4_en_xy = laygen.get_inst_pin_coord(i4.name, 'EN', rg_m3m4)
-    i4_i_xy = laygen.get_inst_pin_coord(i4.name, 'I', rg_m3m4)
-    i4_o_xy = laygen.get_inst_pin_coord(i4.name, 'O', rg_m3m4)
-    i5_en_xy = laygen.get_inst_pin_coord(i5.name, 'EN', rg_m3m4)
-    i5_i_xy = laygen.get_inst_pin_coord(i5.name, 'I', rg_m3m4)
-    i5_o_xy = laygen.get_inst_pin_coord(i5.name, 'O', rg_m3m4)
+    it0_vdd_xy = laygen.get_inst_pin_xy(it0.name, 'TIEVSS2', rg_m3m4)
+    it0_vss_xy = laygen.get_inst_pin_xy(it0.name, 'TIEVSS', rg_m3m4)
+    i3_en_xy = laygen.get_inst_pin_xy(i3.name, 'EN', rg_m3m4)
+    i3_i_xy = laygen.get_inst_pin_xy(i3.name, 'I', rg_m3m4)
+    i3_o_xy = laygen.get_inst_pin_xy(i3.name, 'O', rg_m3m4)
+    i4_en_xy = laygen.get_inst_pin_xy(i4.name, 'EN', rg_m3m4)
+    i4_i_xy = laygen.get_inst_pin_xy(i4.name, 'I', rg_m3m4)
+    i4_o_xy = laygen.get_inst_pin_xy(i4.name, 'O', rg_m3m4)
+    i5_en_xy = laygen.get_inst_pin_xy(i5.name, 'EN', rg_m3m4)
+    i5_i_xy = laygen.get_inst_pin_xy(i5.name, 'I', rg_m3m4)
+    i5_o_xy = laygen.get_inst_pin_xy(i5.name, 'O', rg_m3m4)
 
     #reference route coordinate
     y0 = i3_i_xy[0][1]
@@ -136,10 +136,10 @@ def generate_capdrv_nsw(laygen, objectname_pfix, templib_logic, placement_grid, 
     # power pin
     inst_left=it0
     inst_right=refi
-    rvdd0_pin_xy = laygen.get_inst_pin_coord(inst_left.name, 'VSS1', rg_m1m2, sort=True)
-    rvdd1_pin_xy = laygen.get_inst_pin_coord(inst_right.name, 'VSS1', rg_m1m2, sort=True)
-    rvss0_pin_xy = laygen.get_inst_pin_coord(inst_left.name, 'VSS0', rg_m1m2, sort=True)
-    rvss1_pin_xy = laygen.get_inst_pin_coord(inst_right.name, 'VSS0', rg_m1m2, sort=True)
+    rvdd0_pin_xy = laygen.get_inst_pin_xy(inst_left.name, 'VSS1', rg_m1m2, sort=True)
+    rvdd1_pin_xy = laygen.get_inst_pin_xy(inst_right.name, 'VSS1', rg_m1m2, sort=True)
+    rvss0_pin_xy = laygen.get_inst_pin_xy(inst_left.name, 'VSS0', rg_m1m2, sort=True)
+    rvss1_pin_xy = laygen.get_inst_pin_xy(inst_right.name, 'VSS0', rg_m1m2, sort=True)
 
     laygen.pin(name='VSS1', layer=laygen.layers['pin'][2], xy=np.vstack((rvdd0_pin_xy[0],rvdd1_pin_xy[1])), gridname=rg_m1m2, netname='VSS')
     laygen.pin(name='VSS0', layer=laygen.layers['pin'][2], xy=np.vstack((rvss0_pin_xy[0],rvss1_pin_xy[1])), gridname=rg_m1m2, netname='VSS')

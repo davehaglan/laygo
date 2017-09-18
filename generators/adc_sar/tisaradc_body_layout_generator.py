@@ -303,7 +303,7 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
                 offset_start_index=1, offset_end_index=0)
 
     #osp/osm route
-    pdict_os_m4m5 = laygen.get_inst_pin_coord(None, None, rg_m4m5_basic_thick)
+    pdict_os_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5_basic_thick)
     rosp_m5=[]
     rosm_m5=[]
     for i in range(num_slices):
@@ -313,7 +313,7 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
         rh0, rv0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], 
                         pdict_os_m4m5[isar.name]['OSM'+str(i)][0], pdict_os_m4m5[isar.name]['OSM'+str(i)][0]+np.array([-num_slices-i-2, -10]), gridname=rg_m4m5_basic_thick)
         rosm_m5.append(rv0)
-    pdict_os_m5m6 = laygen.get_inst_pin_coord(None, None, rg_m5m6_thick)
+    pdict_os_m5m6 = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick)
     x0=pdict_os_m5m6[isar.name]['VREF0<0>'][0][0]-4*num_slices
     y0=pdict_os_m5m6[isar.name]['VREF0<0>'][0][1]-8
     rosp_m6=[]

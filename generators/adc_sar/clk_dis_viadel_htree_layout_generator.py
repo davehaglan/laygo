@@ -60,12 +60,12 @@ def generate_clkdis_viadel_htree(laygen, objectname_pfix, logictemp_lib, working
     ##place all viadel and h grids
     viadel = laygen.place(name='I'+objectname_pfix+'VIADEL0', templatename='clk_dis_viadel', gridname=pg, xy=origin, 
             template_libname=working_lib)
-    vd_CLKI0_xy = laygen.get_inst_pin_coord(viadel.name, 'CLKI0_'+str(trackm-1), rg_m4m5)[0]
-    vd_CLKI1_xy = laygen.get_inst_pin_coord(viadel.name, 'CLKI1_'+str(trackm-1), rg_m4m5)[0]
+    vd_CLKI0_xy = laygen.get_inst_pin_xy(viadel.name, 'CLKI0_' + str(trackm - 1), rg_m4m5)[0]
+    vd_CLKI1_xy = laygen.get_inst_pin_xy(viadel.name, 'CLKI1_' + str(trackm - 1), rg_m4m5)[0]
     htree0 = laygen.place(name='I'+objectname_pfix+'HTREE0', templatename='clk_dis_htree', gridname=pg, xy=origin, 
             template_libname=working_lib)
-    ht0_WO_xy = laygen.get_inst_pin_coord(htree0.name, 'WO0_0_0', rg_m4m5)[0]
-    ht0_WI_xy = laygen.get_inst_pin_coord(htree0.name, 'WI_0', rg_m4m5)[0]
+    ht0_WO_xy = laygen.get_inst_pin_xy(htree0.name, 'WO0_0_0', rg_m4m5)[0]
+    ht0_WI_xy = laygen.get_inst_pin_xy(htree0.name, 'WI_0', rg_m4m5)[0]
     #move htree0
     res_x=laygen.get_grid(gridname=rg_m4m5).width
     res_y=laygen.get_grid(gridname=rg_m4m5).height
@@ -74,14 +74,13 @@ def generate_clkdis_viadel_htree(laygen, objectname_pfix, logictemp_lib, working
     ht0_WI_xy = np.array([ht0_WI_xy[0]+(vd_CLKI0_xy[0]-ht0_WO_xy[0]), ht0_WI_xy[1]+(vd_CLKI0_xy[1]-ht0_WO_xy[1])])
     htree1 = laygen.place(name='I'+objectname_pfix+'HTREE1', templatename='clk_dis_htree', gridname=pg, xy=origin, 
             template_libname=working_lib)
-    ht1_WO_xy = laygen.get_inst_pin_coord(htree1.name, 'WO0_0_0', rg_m4m5)[0]
-    ht1_WI_xy = laygen.get_inst_pin_coord(htree1.name, 'WI_0', rg_m4m5)[0]
+    ht1_WO_xy = laygen.get_inst_pin_xy(htree1.name, 'WO0_0_0', rg_m4m5)[0]
+    ht1_WI_xy = laygen.get_inst_pin_xy(htree1.name, 'WI_0', rg_m4m5)[0]
     #move htree1
     #htree1.xy = np.array([(vd_CLKI1_xy[0]-ht1_WO_xy[0])*0.08, (vd_CLKI1_xy[1]-ht1_WO_xy[1])*0.08])
     htree1.xy = np.array([(vd_CLKI1_xy[0]-ht1_WO_xy[0])*res_x, (vd_CLKI1_xy[1]-ht1_WO_xy[1])*res_y])
     ht1_WI_xy = np.array([ht1_WI_xy[0]+(vd_CLKI1_xy[0]-ht1_WO_xy[0]), ht1_WI_xy[1]+(vd_CLKI1_xy[1]-ht1_WO_xy[1])])
     #Create input wire
-    #ht0_WI_xy = laygen.get_inst_pin_coord(htree0.name, 'WI_0', rg_m4m5)
     #print(ht0_WI_xy)
     #print(ht1_WI_xy)
 
@@ -115,40 +114,40 @@ def generate_clkdis_viadel_htree(laygen, objectname_pfix, logictemp_lib, working
 
     #Create pins
     #set and rst
-    RST_xy = laygen.get_inst_pin_coord(viadel.name, pinname='RSTP', gridname=rg_m2m3_basic)
+    RST_xy = laygen.get_inst_pin_xy(viadel.name, pinname='RSTP', gridname=rg_m2m3_basic)
     laygen.pin(name='RSTP', layer=laygen.layers['pin'][2], xy=RST_xy, gridname=rg_m2m3_basic)
-    RST_xy = laygen.get_inst_pin_coord(viadel.name, pinname='RSTN', gridname=rg_m2m3_basic)
+    RST_xy = laygen.get_inst_pin_xy(viadel.name, pinname='RSTN', gridname=rg_m2m3_basic)
     laygen.pin(name='RSTN', layer=laygen.layers['pin'][2], xy=RST_xy, gridname=rg_m2m3_basic)
 
     #CLKCAL
     for i in range(num_ways):
         for j in range(num_bits):
-            CAL_xy = laygen.get_inst_pin_coord(viadel.name, pinname='CLKCAL'+str(i)+'<'+str(j)+'>', gridname=rg_m2m3_basic)
+            CAL_xy = laygen.get_inst_pin_xy(viadel.name, pinname='CLKCAL' + str(i) + '<' + str(j) + '>', gridname=rg_m2m3_basic)
             laygen.pin(name='CLKCAL'+str(i)+'<'+str(j)+'>', layer=laygen.layers['pin'][2], xy=CAL_xy, gridname=rg_m2m3_basic)
 
     #CLKO
     for i in range(num_ways):
         for j in range(m_clko):
-            CLKO_xy = laygen.get_inst_pin_coord(viadel.name, pinname='CLKO'+str(i)+'_'+str(j), gridname=rg_m5m6 )
+            CLKO_xy = laygen.get_inst_pin_xy(viadel.name, pinname='CLKO' + str(i) + '_' + str(j), gridname=rg_m5m6)
             laygen.pin(name='CLKO'+str(i)+'<'+str(j)+'>', layer=laygen.layers['pin'][5], xy=CLKO_xy, gridname=rg_m5m6, netname='CLKO<'+str(i)+'>')
 
     #DATAO
     for i in range(num_ways):
-        DATAO_xy = laygen.get_inst_pin_coord(viadel.name, pinname='DATAO<'+str(i)+'>', gridname=rg_m3m4 )
+        DATAO_xy = laygen.get_inst_pin_xy(viadel.name, pinname='DATAO<' + str(i) + '>', gridname=rg_m3m4)
         laygen.pin(name='DATAO<'+str(i)+'>', layer=laygen.layers['pin'][3], xy=DATAO_xy, gridname=rg_m3m4, netname='DATAO<'+str(i)+'>')
 
 
     ##VDD and VSS pin
     for i in range(num_ways):
         for j in range(num_vss_h):
-            vssl_xy = laygen.get_inst_pin_coord(viadel.name, 'VSS0_'+str(i)+'_'+str(j), rg_m3m4_thick2)
+            vssl_xy = laygen.get_inst_pin_xy(viadel.name, 'VSS0_' + str(i) + '_' + str(j), rg_m3m4_thick2)
             laygen.pin(name='VSS0_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vssl_xy, gridname=rg_m3m4_thick2, netname='VSS')
-            vssr_xy = laygen.get_inst_pin_coord(viadel.name, 'VSS1_'+str(i)+'_'+str(j), rg_m3m4_thick2)
+            vssr_xy = laygen.get_inst_pin_xy(viadel.name, 'VSS1_' + str(i) + '_' + str(j), rg_m3m4_thick2)
             laygen.pin(name='VSS1_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vssr_xy, gridname=rg_m3m4_thick2, netname='VSS')
         for j in range(num_vdd_h):
-            vddl_xy = laygen.get_inst_pin_coord(viadel.name, 'VDD0_'+str(i)+'_'+str(j), rg_m3m4_thick2)
+            vddl_xy = laygen.get_inst_pin_xy(viadel.name, 'VDD0_' + str(i) + '_' + str(j), rg_m3m4_thick2)
             laygen.pin(name='VDD0_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vddl_xy, gridname=rg_m3m4_thick2, netname='VDD')
-            vddr_xy = laygen.get_inst_pin_coord(viadel.name, 'VDD1_'+str(i)+'_'+str(j), rg_m3m4_thick2)
+            vddr_xy = laygen.get_inst_pin_xy(viadel.name, 'VDD1_' + str(i) + '_' + str(j), rg_m3m4_thick2)
             laygen.pin(name='VDD1_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vddr_xy, gridname=rg_m3m4_thick2, netname='VDD') 
     
 
