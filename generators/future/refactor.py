@@ -64,6 +64,7 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
     for i, l in enumerate(lines_i):
         if laygen_instance + '.' + func_name in l:
             trig = 1
+            depth = 0
             print("function " + func_name + " call detected in file: "+ filename_i + ", in line:"+ str(i) +" code snapshot: " + l[:-1])
         if trig == 1:
             l_refac = '' #refactored line
@@ -123,7 +124,7 @@ if __name__ == '__main__':
 
     #massive run over multiple directories, functions
     dir_list=[".", "../adc_sar/", "../golden/", "../logic/", "../serdes/", "../../labs"]
-    func_list=["pin_from_rect"]
+    func_list=["relplace"]
     for dir in dir_list:
         file_list=os.listdir(dir)
         for file in file_list:
