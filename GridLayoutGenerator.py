@@ -1077,6 +1077,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         laygo.LayoutObject.Pin
             generated Pin object
         """
+        print("[WARNING] pin_from_rect function will be deprecated. Use pin function with refobj argument instead")
         if netname == None: netname = name
         xy = rect.xy
         xy = self.get_absgrid_region(gridname, xy[0, :], xy[1, :])
