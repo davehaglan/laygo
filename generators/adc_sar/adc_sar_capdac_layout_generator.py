@@ -165,7 +165,6 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
             xy0 = laygen.get_inst_xy(dev0.name, pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
 
-
     #reference route coordinate
     y0 = 1
     #c0 route
@@ -210,11 +209,14 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
                 laygen.via(None, np.array([c_bot_xy3[0], y0+1]), gridname=rg_m6m7)
                 laygen.via(None, np.array([c_bot_xy3[0]+num_bits_vertical*2, y0+1]), gridname=rg_m6m7)
     #pins 
-    laygen.create_boundary_pin_from_rect(rc0, rg_m6m7, "I_C0", laygen.layers['pin'][7], size=4, direction='bottom')
+    laygen.boundary_pin_from_rect(rc0, rg_m6m7, "I_C0", laygen.layers['pin'][7], size=4, direction='bottom')
     for i, r in enumerate(rbot):
-        laygen.create_boundary_pin_from_rect(r, rg_m6m7, "I<"+str(i)+">", laygen.layers['pin'][7], size=4, direction='bottom')
+        laygen.boundary_pin_from_rect(r, rg_m6m7, "I<" + str(i) + ">", laygen.layers['pin'][7], size=4,
+                                      direction='bottom')
     for i, r in enumerate(rbot2_hdac):
-        laygen.create_boundary_pin_from_rect(r, rg_m6m7, "I2<"+str(i+num_bits_vertical)+">", laygen.layers['pin'][7], size=4, direction='bottom', netname="I<"+str(i+num_bits_vertical)+">")
+        laygen.boundary_pin_from_rect(r, rg_m6m7, "I2<" + str(i + num_bits_vertical) + ">",
+                                      laygen.layers['pin'][7], size=4, direction='bottom',
+                                      netname="I<" + str(i + num_bits_vertical) + ">")
     cnt=0
     for i, c in enumerate(ivdac):
         #for j in range(m * 2 ** i): #radix2
@@ -222,7 +224,8 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
         for j in range(m * 2 ** i): #radix2
             c_top_xy = laygen.get_inst_pin_xy(c.name, 'TOP', rg_m6m7, index=np.array([0, j]))
             rtop = laygen.route(None, laygen.layers['metal'][6], xy0=c_top_xy[0], xy1=c_top_xy[1], gridname0=rg_m6m7)
-            laygen.create_boundary_pin_from_rect(rtop, rg_m6m7, "O"+str(cnt), laygen.layers['pin'][6], size=4, direction='left', netname="O")
+            laygen.boundary_pin_from_rect(rtop, rg_m6m7, "O" + str(cnt), laygen.layers['pin'][6], size=4,
+                                          direction='left', netname="O")
             cnt+=1
     #grid alignment
     xy0 = laygen.get_inst_xy(name=ibndtr0.name)+laygen.get_template_xy(name=ibndtr0.cellname)*np.array([num_space_right, num_space_top])
@@ -306,7 +309,7 @@ if __name__ == '__main__':
             num_space_right=sizedict['capdac']['num_space_right']
         #print(m_vertical, m_horizontal)
 
-    yres=laygen.get_template_size(name='nmos4_fast_center_nf2')[1]*2
+    yres= laygen.get_template_xy(name='nmos4_fast_center_nf2')[1] * 2
 
     print(cell_name+" generating")
     mycell_list.append(cell_name)

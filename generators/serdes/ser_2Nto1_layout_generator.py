@@ -89,7 +89,7 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
         laygen.pin(name='in<'+str(2*i+1)+'>', layer=laygen.layers['pin'][4], xy=subser1_in_xy, gridname=rg_m3m4)
 
     # power pin
-    pwr_dim=laygen.get_template_size(name='tap', gridname=rg_m2m3, libname=logictemplib)
+    pwr_dim=laygen.get_template_xy(name='tap', gridname=rg_m2m3, libname=logictemplib)
     rvdd = []
     rvss = []
     print(int(pwr_dim[0]))

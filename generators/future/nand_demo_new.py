@@ -99,6 +99,7 @@ if __name__ == '__main__':
     laygen.pin_from_rect(name='O', layer=laygen.layers['pin'][3], rect=ro, gridname=rg23)
     laygen.pin_from_rect(name='VDD', layer=laygen.layers['pin'][2], rect=rvdd, gridname=rg12)
     laygen.pin_from_rect(name='VSS', layer=laygen.layers['pin'][2], rect=rvss, gridname=rg12)
+    #laygen.pin(name='A', layer=laygen.layers['pin'][2], xy=None, gridname=rg12, refobj=None, xy0=np.array([0, 0]), xy1=np.array([0, 0]))
     laygen.display()
     # export
     laygen.export_GDS('output.gds', cellname='nand_demo', layermapfile="../../labs/laygo_faketech.layermap")

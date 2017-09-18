@@ -100,7 +100,7 @@ def generate_capdrv_nsw(laygen, objectname_pfix, templib_logic, placement_grid, 
     y0 = i3_i_xy[0][1]
     x0 = laygen.get_inst_xy(name=it0.name, gridname=rg_m3m4)[0] + 1
     x1 = laygen.get_inst_xy(name=i5.name, gridname=rg_m3m4)[0]\
-         +laygen.get_template_size(name=i5.cellname, gridname=rg_m3m4, libname=templib_logic)[0] - 1
+         +laygen.get_template_xy(name=i5.cellname, gridname=rg_m3m4, libname=templib_logic)[0] - 1
     #en
     rv0, ren0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i3_en_xy[0], np.array([x0, y0 - 4]), rg_m3m4)
     rv0, ren1 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i4_en_xy[0], np.array([x0, y0 - 3]), rg_m3m4)
@@ -125,13 +125,13 @@ def generate_capdrv_nsw(laygen, objectname_pfix, templib_logic, placement_grid, 
         rv0, rvo2 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i5_o_xy[0]+np.array([2*i, 0]), np.array([x1, y0 + 6]), rg_m3m4)
 
     #pin
-    laygen.create_boundary_pin_from_rect(ren0, rg_m3m4, "EN<0>", laygen.layers['pin'][4], size=4, direction='left')
-    laygen.create_boundary_pin_from_rect(ren1, rg_m3m4, "EN<1>", laygen.layers['pin'][4], size=4, direction='left')
-    laygen.create_boundary_pin_from_rect(ren2, rg_m3m4, "EN<2>", laygen.layers['pin'][4], size=4, direction='left')
-    laygen.create_boundary_pin_from_rect(rvref0, rg_m3m4, "VREF<0>", laygen.layers['pin'][4], size=4, direction='left')
-    laygen.create_boundary_pin_from_rect(rvref1, rg_m3m4, "VREF<1>", laygen.layers['pin'][4], size=4, direction='left')
-    laygen.create_boundary_pin_from_rect(rvref2, rg_m3m4, "VREF<2>", laygen.layers['pin'][4], size=4, direction='left')
-    laygen.create_boundary_pin_from_rect(rvo0, rg_m3m4, "VO", laygen.layers['pin'][4], size=4, direction='right')
+    laygen.boundary_pin_from_rect(ren0, rg_m3m4, "EN<0>", laygen.layers['pin'][4], size=4, direction='left')
+    laygen.boundary_pin_from_rect(ren1, rg_m3m4, "EN<1>", laygen.layers['pin'][4], size=4, direction='left')
+    laygen.boundary_pin_from_rect(ren2, rg_m3m4, "EN<2>", laygen.layers['pin'][4], size=4, direction='left')
+    laygen.boundary_pin_from_rect(rvref0, rg_m3m4, "VREF<0>", laygen.layers['pin'][4], size=4, direction='left')
+    laygen.boundary_pin_from_rect(rvref1, rg_m3m4, "VREF<1>", laygen.layers['pin'][4], size=4, direction='left')
+    laygen.boundary_pin_from_rect(rvref2, rg_m3m4, "VREF<2>", laygen.layers['pin'][4], size=4, direction='left')
+    laygen.boundary_pin_from_rect(rvo0, rg_m3m4, "VO", laygen.layers['pin'][4], size=4, direction='right')
 
     # power pin
     inst_left=it0

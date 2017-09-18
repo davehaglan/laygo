@@ -159,7 +159,7 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
                                                                    transform_right=transform_bnd_right,
                                                                    origin=np.array([0, 0]))
     array_origin = origin + laygen.get_inst_xy(bnd_bottom[0].name, pg) \
-                   + laygen.get_template_size(bnd_bottom[0].cellname, pg)
+                   + laygen.get_template_xy(bnd_bottom[0].cellname, pg)
     # placement
     itapl=[]
     icdrv=[]
@@ -251,7 +251,7 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
     y0 = laygen.get_inst_xy(name=icdrv[0].name, gridname=rg_m4m5)[1]
     y1 = laygen.get_inst_xy(name=icdrv[-1].name, gridname=rg_m4m5)[1]
     if num_row%2==1:
-        y1 += laygen.get_template_size(name=icdrv[-1].cellname, gridname=rg_m4m5, libname=icdrv[-1].libname)[1]
+        y1 += laygen.get_template_xy(name=icdrv[-1].cellname, gridname=rg_m4m5, libname=icdrv[-1].libname)[1]
     # vref route
     rvref0=[]
     rvref1=[]
@@ -330,12 +330,17 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
                                                 np.array([icdrv_en0_xy[num_bits_row * i + j][0][0] + num_row*3 + 6 + i + 12 + k*num_row, y1]), rg_m4m5)
                     rvo.append(_rvo)
                     #output_pin
-                    laygen.create_boundary_pin_from_rect(_rvo, rg_m4m5, "VO"+str(k)+"<"+str(i*num_bits_row+j)+">", laygen.layers['pin'][5], size=6, 
-                                                         direction='top', netname="VO<"+str(i*num_bits_row+j)+">")
+                    laygen.boundary_pin_from_rect(_rvo, rg_m4m5,
+                                                         "VO" + str(k) + "<" + str(i * num_bits_row + j) + ">",
+                                                  laygen.layers['pin'][5], size=6, direction='top',
+                                                  netname="VO<" + str(i * num_bits_row + j) + ">")
     #pins
-    laygen.create_boundary_pin_from_rect(rvref0[0], rg_m4m5, "VREF<0>", laygen.layers['pin'][4], size=4, direction='left')
-    laygen.create_boundary_pin_from_rect(rvref1[0], rg_m4m5, "VREF<1>", laygen.layers['pin'][4], size=4, direction='left')
-    laygen.create_boundary_pin_from_rect(rvref2[0], rg_m4m5, "VREF<2>", laygen.layers['pin'][4], size=4, direction='left')
+    laygen.boundary_pin_from_rect(rvref0[0], rg_m4m5, "VREF<0>", laygen.layers['pin'][4], size=4,
+                                  direction='left')
+    laygen.boundary_pin_from_rect(rvref1[0], rg_m4m5, "VREF<1>", laygen.layers['pin'][4], size=4,
+                                  direction='left')
+    laygen.boundary_pin_from_rect(rvref2[0], rg_m4m5, "VREF<2>", laygen.layers['pin'][4], size=4,
+                                  direction='left')
     laygen.pin(name='VREF_M5<0>', layer=laygen.layers['pin'][5], xy=laygen.get_rect_xy(rvref0v.name, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<0>')
     laygen.pin(name='VREF_M5<1>', layer=laygen.layers['pin'][5], xy=laygen.get_rect_xy(rvref1v.name, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<1>')
     laygen.pin(name='VREF_M5<2>', layer=laygen.layers['pin'][5], xy=laygen.get_rect_xy(rvref2v.name, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<2>')
@@ -344,18 +349,22 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
     laygen.pin(name='VREF_M5_2<2>', layer=laygen.layers['pin'][5], xy=laygen.get_rect_xy(rvref2v2.name, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<2>')
     
     for i, _ren0 in enumerate(ren0):
-        laygen.create_boundary_pin_from_rect(_ren0, rg_m4m5, "EN"+str(i)+"<0>", laygen.layers['pin'][5], size=6, direction='bottom')
+        laygen.boundary_pin_from_rect(_ren0, rg_m4m5, "EN" + str(i) + "<0>", laygen.layers['pin'][5], size=6,
+                                      direction='bottom')
     for i, _ren1 in enumerate(ren1):
-        laygen.create_boundary_pin_from_rect(_ren1, rg_m4m5, "EN"+str(i)+"<1>", laygen.layers['pin'][5], size=6, direction='bottom')
+        laygen.boundary_pin_from_rect(_ren1, rg_m4m5, "EN" + str(i) + "<1>", laygen.layers['pin'][5], size=6,
+                                      direction='bottom')
     for i, _ren2 in enumerate(ren2):
-        laygen.create_boundary_pin_from_rect(_ren2, rg_m4m5, "EN"+str(i)+"<2>", laygen.layers['pin'][5], size=6, direction='bottom')
-    laygen.create_boundary_pin_from_rect(rvc0, rg_m4m5, "VO_C0", laygen.layers['pin'][5], size=6, direction='top', netname="VREF<1>")
+        laygen.boundary_pin_from_rect(_ren2, rg_m4m5, "EN" + str(i) + "<2>", laygen.layers['pin'][5], size=6,
+                                      direction='bottom')
+    laygen.boundary_pin_from_rect(rvc0, rg_m4m5, "VO_C0", laygen.layers['pin'][5], size=6, direction='top',
+                                  netname="VREF<1>")
 
     # power pin
-    pwr_dim_left=laygen.get_template_size(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)[0]
+    pwr_dim_left=laygen.get_template_xy(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)[0]
     pwr_dim_right=pwr_dim_left
     if m_space_4x>1:
-        pwr_dim_right+=laygen.get_template_size(name=isp4x[0].cellname, gridname=rg_m2m3, libname=isp4x[0].libname)[0]*(m_space_4x-1)
+        pwr_dim_right+= laygen.get_template_xy(name=isp4x[0].cellname, gridname=rg_m2m3, libname=isp4x[0].libname)[0] * (m_space_4x - 1)
     pwr_dim_delta=pwr_dim_right-pwr_dim_left
     rvdd = []
     rvss = []

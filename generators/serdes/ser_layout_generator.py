@@ -103,20 +103,20 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
     sub_ser = int(num_ser/2)
 
     #Calculate layout size
-    ff_size=laygen.get_template_size(ff_name,pg,templib_logic)
-    ff_rst_size=laygen.get_template_size(ff_rst_name,pg,templib_logic)
-    latch_size=laygen.get_template_size(latch_name,pg,templib_logic)
-    inv1_size=laygen.get_template_size(inv1_name,pg,templib_logic)
-    inv2_size=laygen.get_template_size(inv2_name,pg,templib_logic)
-    tinv_size=laygen.get_template_size(tinv_name,pg,templib_logic)
-    outinv_size=laygen.get_template_size(outinv_name,pg,templib_logic)
-    tap_size=laygen.get_template_size(tap_name,pg,templib_logic)
+    ff_size=laygen.get_template_xy(ff_name, pg, templib_logic)
+    ff_rst_size=laygen.get_template_xy(ff_rst_name, pg, templib_logic)
+    latch_size=laygen.get_template_xy(latch_name, pg, templib_logic)
+    inv1_size=laygen.get_template_xy(inv1_name, pg, templib_logic)
+    inv2_size=laygen.get_template_xy(inv2_name, pg, templib_logic)
+    tinv_size=laygen.get_template_xy(tinv_name, pg, templib_logic)
+    outinv_size=laygen.get_template_xy(outinv_name, pg, templib_logic)
+    tap_size=laygen.get_template_xy(tap_name, pg, templib_logic)
     x0=ff_size[0]+ff_rst_size[0]+inv1_size[0]+2*inv2_size[0]+tinv_size[0]+2*tap_size[0]
     num_row=int(sub_ser)+1
     print(ff_size)
-    print(laygen.get_template_size(ff_name,None,templib_logic))
+    print(laygen.get_template_xy(ff_name, None, templib_logic))
     #boundaries
-    m_bnd = int(x0 / laygen.get_template_size('boundary_bottom',pg)[0])
+    m_bnd = int(x0 / laygen.get_template_xy('boundary_bottom', pg)[0])
     devname_bnd_left = []
     devname_bnd_right = []
     transform_bnd_left = []
@@ -150,14 +150,14 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
                                                                    origin=np.array([0, 0]))
     #Calculate origins for placement
     tap_origin = origin + laygen.get_inst_xy(bnd_bottom[0].name, pg) \
-                   + laygen.get_template_size(bnd_bottom[0].cellname, pg)
+                   + laygen.get_template_xy(bnd_bottom[0].cellname, pg)
     array_origin = origin + laygen.get_inst_xy(bnd_bottom[0].name, pg) \
-                   + laygen.get_template_size(bnd_bottom[0].cellname, pg) \
-                   + np.array([laygen.get_template_size(tap_name,pg,templib_logic)[0],0])
-    tapr_origin = tap_origin + m_bnd*np.array([laygen.get_template_size('boundary_bottom',pg)[0],0]) \
-                   - np.array([laygen.get_template_size(tap_name,pg,templib_logic)[0],0])
-    FF0_origin = array_origin + np.array([0,laygen.get_template_size('inv_1x',pg,templib_logic)[1]]) + \
-                np.array([0,laygen.get_template_size(ff_name,pg,templib_logic)[1]])
+                   + laygen.get_template_xy(bnd_bottom[0].cellname, pg) \
+                   + np.array([laygen.get_template_xy(tap_name, pg, templib_logic)[0], 0])
+    tapr_origin = tap_origin + m_bnd*np.array([laygen.get_template_xy('boundary_bottom', pg)[0], 0]) \
+                   - np.array([laygen.get_template_xy(tap_name, pg, templib_logic)[0], 0])
+    FF0_origin = array_origin + np.array([0, laygen.get_template_xy('inv_1x', pg, templib_logic)[1]]) + \
+                 np.array([0, laygen.get_template_xy(ff_name, pg, templib_logic)[1]])
     # placement
     iffdiv=[]
     ipbuf1=[]
@@ -255,8 +255,8 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
     #Space placement at the last row
     space_name = 'space_1x'
     space4x_name = 'space_4x'
-    space_width = laygen.get_template_size(space_name,pg,templib_logic)[0]
-    space4_width = laygen.get_template_size(space4x_name,pg,templib_logic)[0]
+    space_width = laygen.get_template_xy(space_name, pg, templib_logic)[0]
+    space4_width = laygen.get_template_xy(space4x_name, pg, templib_logic)[0]
     blank1_width = x0 - (2*tap_size + inv1_size + inv2_size + tinv_size + latch_size)[0]
     blank2_width = (tinv_size - inv1_size)[0]
     m_space4 = int(blank1_width / space4_width)
@@ -409,7 +409,7 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
     clkin_xy=laygen.get_inst_pin_xy(iclkbuf1.name, 'I', rg_m3m4)[1]
     [rv0, rclkin] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], 
             clkin_xy, np.array([0,clkin_xy[1]]), rg_m3m4)
-    laygen.create_boundary_pin_form_rect(rclkin, rg_m3m4, "clk_in", laygen.layers['pin'][4], size=4, direction='left')
+    laygen.boundary_pin_from_rect(rclkin, rg_m3m4, "clk_in", laygen.layers['pin'][4], size=4, direction='left')
     for i in range(sub_ser):
         if iffin[i].transform=='MX': offset_din=4
         if iffin[i].transform=='R0': offset_din=6
@@ -417,20 +417,22 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
         [rv0, rh0] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], 
                 din_xy34[1], np.array([0,din_xy34[0][1]+offset_din]), rg_m3m4)
         if not i==sub_ser-1:
-            laygen.create_boundary_pin_form_rect(rh0, rg_m3m4, "in<"+str(i+1)+">", laygen.layers['pin'][4], size=4, direction='left')
+            laygen.boundary_pin_from_rect(rh0, rg_m3m4, "in<" + str(i + 1) + ">", laygen.layers['pin'][4],
+                                          size=4, direction='left')
         else:
-            laygen.create_boundary_pin_form_rect(rh0, rg_m3m4, "in<0>", laygen.layers['pin'][4], size=4, direction='left')
+            laygen.boundary_pin_from_rect(rh0, rg_m3m4, "in<0>", laygen.layers['pin'][4], size=4,
+                                          direction='left')
     datao_xy=laygen.get_inst_pin_xy(ioutinv.name, 'O', rg_m3m4)
     laygen.pin(name='out', layer=laygen.layers['pin'][3], xy=datao_xy, gridname=rg_m3m4)
     #[rv0, rdatao] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], 
     #        datao_xy[0], datao_xy+np.array([5,0]), rg_m3m4)
-    #laygen.create_boundary_pin_form_rect(rdatao, rg_m3m4, "out", laygen.layers['pin'][4], size=4, direction='right')
+    #laygen.boundary_pin_from_rect(rdatao, rg_m3m4, "out", laygen.layers['pin'][4], size=4, direction='right')
     laygen.pin(name='p1buf', layer=laygen.layers['pin'][3], xy=pbuf2_out_xy[0], gridname=rg_m3m4)
     rrst=laygen.route(None, laygen.layers['metal'][3], xy0=ffdiv_rst_xy[0][0], xy1=np.array([ffdiv_rst_xy[0][0][0],0]), gridname0=rg_m3m4)
-    laygen.create_boundary_pin_form_rect(rrst, rg_m3m4, "RST", laygen.layers['pin'][3], size=4, direction='bottom')
+    laygen.boundary_pin_from_rect(rrst, rg_m3m4, "RST", laygen.layers['pin'][3], size=4, direction='bottom')
 
     # power pin
-    pwr_dim=laygen.get_template_size(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)
+    pwr_dim=laygen.get_template_xy(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)
     rvdd = []
     rvss = []
     if num_row%2==0: rp1='VSS'

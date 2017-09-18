@@ -134,8 +134,9 @@ def generate_clkdis_viadel(laygen, objectname_pfix, logictemp_lib, working_lib, 
             laygen.via(None, xy=np.array([viadel_m2m3_xy[0],viadel_m2m3_xy[1]+9+j+i*num_bits]), gridname=rg_m2m3_basic)
             calpx=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0,viadel_m2m3_xy[1]+9+j+i*num_bits]), 
                     xy1=np.array([m2m3_x*num_ways,viadel_m2m3_xy[1]+9+j+i*num_bits]), gridname0=rg_m2m3_basic)
-            laygen.create_boundary_pin_form_rect(calpx, gridname=rg_m2m3_basic, pinname='CLKCAL'+str(way_order[i])+'<'+str(j)+'>', layer=laygen.layers['pin'][2], 
-                    size=2, direction='right')
+            laygen.boundary_pin_from_rect(calpx, gridname=rg_m2m3_basic,
+                                          name='CLKCAL' + str(way_order[i]) + '<' + str(j) + '>',
+                                          layer=laygen.layers['pin'][2], size=2, direction='right')
 
     ##Route, for set/reset signals
     #STP and RSTP -- even
@@ -156,8 +157,9 @@ def generate_clkdis_viadel(laygen, objectname_pfix, logictemp_lib, working_lib, 
         laygen.route(None, laygen.layers['metal'][3], xy0=viadel_ST_xy, xy1=np.array([viadel_ST_xy[0],viadel_ST_xy[1]+4]), gridname0=rg_m2m3)
         laygen.via(None, xy=np.array([viadel_ST_xy[0],viadel_ST_xy[1]+4]), gridname=rg_m2m3)
 
-    stp=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, viadel_RST_xy[1]+12]), xy1=np.array([m2m3_x*num_ways, viadel_RST_xy[1]+12]), gridname0=rg_m2m3_basic)    
-    laygen.create_boundary_pin_form_rect(stp, gridname=rg_m2m3_basic, pinname='RSTP', layer=laygen.layers['pin'][2], size=2, direction='left')
+    stp=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, viadel_RST_xy[1]+12]), xy1=np.array([m2m3_x*num_ways, viadel_RST_xy[1]+12]), gridname0=rg_m2m3_basic)
+    laygen.boundary_pin_from_rect(stp, gridname=rg_m2m3_basic, name='RSTP', layer=laygen.layers['pin'][2],
+                                  size=2, direction='left')
     
     #STN, RSTN -- odd
     viadel_ST_xy = laygen.get_inst_pin_xy(viacell[way_index_odd[0]].name, 'ST', rg_m2m3_basic)[1]
@@ -176,8 +178,9 @@ def generate_clkdis_viadel(laygen, objectname_pfix, logictemp_lib, working_lib, 
         laygen.route(None, laygen.layers['metal'][3], xy0=viadel_ST_xy, xy1=np.array([viadel_ST_xy[0],viadel_ST_xy[1]+4]), gridname0=rg_m2m3)
         laygen.via(None, xy=np.array([viadel_ST_xy[0],viadel_ST_xy[1]+4]), gridname=rg_m2m3)
       
-    stn=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, viadel_RST_xy[1]+13]), xy1=np.array([m2m3_x*num_ways, viadel_RST_xy[1]+13]), gridname0=rg_m2m3_basic)    
-    laygen.create_boundary_pin_form_rect(stn, gridname=rg_m2m3_basic, pinname='RSTN', layer=laygen.layers['pin'][2], size=2, direction='left')
+    stn=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, viadel_RST_xy[1]+13]), xy1=np.array([m2m3_x*num_ways, viadel_RST_xy[1]+13]), gridname0=rg_m2m3_basic)
+    laygen.boundary_pin_from_rect(stn, gridname=rg_m2m3_basic, name='RSTN', layer=laygen.layers['pin'][2],
+                                  size=2, direction='left')
     
     ##VDD and VSS pin
     for i in range(num_ways):

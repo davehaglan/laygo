@@ -203,16 +203,18 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m3m4,
                 laygen.via(None, np.array([c_bot_xy3[0], y0+2-2]), gridname=rg_m3m4)
  
     #pins 
-    #laygen.create_boundary_pin_form_rect(rc0, rg_m3m4, "I_C0", laygen.layers['pin'][3], size=4, direction='bottom')
+    #laygen.boundary_pin_from_rect(rc0, rg_m3m4, "I_C0", laygen.layers['pin'][3], size=4, direction='bottom')
     for i, r in enumerate(rbot):
-        laygen.create_boundary_pin_form_rect(r, rg_m3m4, "I<"+str(i)+">", laygen.layers['pin'][3], size=4, direction='bottom')
+        laygen.boundary_pin_from_rect(r, rg_m3m4, "I<" + str(i) + ">", laygen.layers['pin'][3], size=4,
+                                      direction='bottom')
     cnt=0
     for i, c in enumerate(ivdac):
         #for j in range(m * 2 ** i): #radix2
         for j in range(m * m_vertical[i]):
             c_top_xy = laygen.get_inst_pin_xy(c.name, 'TOP', rg_m3m4, index=np.array([0, j]))
             rtop = laygen.route(None, laygen.layers['metal'][4], xy0=c_top_xy[0], xy1=c_top_xy[1], gridname0=rg_m3m4)
-            laygen.create_boundary_pin_form_rect(rtop, rg_m3m4, "O"+str(cnt), laygen.layers['pin'][4], size=4, direction='left', netname="O")
+            laygen.boundary_pin_from_rect(rtop, rg_m3m4, "O" + str(cnt), laygen.layers['pin'][4], size=4,
+                                          direction='left', netname="O")
             cnt+=1
     
 

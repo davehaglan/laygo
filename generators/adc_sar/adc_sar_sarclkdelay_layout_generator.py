@@ -76,7 +76,7 @@ def generate_sarclkdelayslice_compact2(laygen, objectname_pfix, templib_logic, p
     # internal routes
     x0 = laygen.get_inst_xy(name=isel0.name, gridname=rg_m3m4)[0] + 1
     x1 = laygen.get_inst_xy(name=imux0.name, gridname=rg_m3m4)[0]\
-         +laygen.get_template_size(name=imux0.cellname, gridname=rg_m3m4, libname=templib_logic)[0] - 1
+         +laygen.get_template_xy(name=imux0.cellname, gridname=rg_m3m4, libname=templib_logic)[0] - 1
     y0 = pdict[isel0.name]['I'][0][1] + 0
 
     #route-sel
@@ -162,7 +162,7 @@ def generate_sarclkdelay_compact_dual(laygen, objectname_pfix, templib_logic, wo
     # internal routes
     x0 = laygen.get_inst_xy(name=islice0.name, gridname=rg_m3m4)[0] + 1
     x1 = laygen.get_inst_xy(name=iinv0.name, gridname=rg_m3m4)[0]\
-         + laygen.get_template_size(name=iinv0.cellname, gridname=rg_m3m4, libname=templib_logic)[0] 
+         + laygen.get_template_xy(name=iinv0.cellname, gridname=rg_m3m4, libname=templib_logic)[0]
     y0 = pdict[islice0.name]['I'][0][1] + 2
 
     #route-backtoback
@@ -203,13 +203,13 @@ def generate_sarclkdelay_compact_dual(laygen, objectname_pfix, templib_logic, wo
     #pins
     laygen.pin(name='I', layer=laygen.layers['pin'][3], xy=pdict[islice0.name]['I'], gridname=rg_m3m4)
     laygen.pin(name='O', layer=laygen.layers['pin'][3], xy=pdict[imux0.name]['O'], gridname=rg_m3m4)
-    laygen.create_boundary_pin_from_rect(rsel0, rg_m3m4, "SEL<0>", laygen.layers['pin'][4], size=6, direction='right')
-    laygen.create_boundary_pin_from_rect(rsel1, rg_m3m4, "SEL<1>", laygen.layers['pin'][4], size=6, direction='right')
-    laygen.create_boundary_pin_from_rect(rsel2, rg_m3m4, "SEL<2>", laygen.layers['pin'][4], size=6, direction='right')
+    laygen.boundary_pin_from_rect(rsel0, rg_m3m4, "SEL<0>", laygen.layers['pin'][4], size=6, direction='right')
+    laygen.boundary_pin_from_rect(rsel1, rg_m3m4, "SEL<1>", laygen.layers['pin'][4], size=6, direction='right')
+    laygen.boundary_pin_from_rect(rsel2, rg_m3m4, "SEL<2>", laygen.layers['pin'][4], size=6, direction='right')
     laygen.pin(name='SHORTB', layer=laygen.layers['pin'][3], xy=pdict[inor0.name]['A'], gridname=rg_m3m4)
     laygen.pin(name='ENB', layer=laygen.layers['pin'][3], xy=pdict[inor0.name]['B'], gridname=rg_m3m4)
-    #laygen.create_boundary_pin_from_rect(rshort0, rg_m3m4, "SHORT", laygen.layers['pin'][4], size=6, direction='right')
-    #laygen.create_boundary_pin_from_rect(ren0, rg_m3m4, "EN", laygen.layers['pin'][4], size=6, direction='right')
+    #laygen.boundary_pin_from_rect(rshort0, rg_m3m4, "SHORT", laygen.layers['pin'][4], size=6, direction='right')
+    #laygen.boundary_pin_from_rect(ren0, rg_m3m4, "EN", laygen.layers['pin'][4], size=6, direction='right')
 
     # power pin
     create_power_pin_from_inst(laygen, layer=laygen.layers['pin'][2], gridname=rg_m1m2, inst_left=islice0, inst_right=iinv0)

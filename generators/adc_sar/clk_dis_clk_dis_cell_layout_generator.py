@@ -157,9 +157,9 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     #####Place Boundary
 
     #Calculate size of boundary cell
-    bnd_left_size_x = laygen.get_template_size(name='nmos4_fast_left', gridname=pg, libname=tech+'_microtemplates_dense')[0]
-    bnd_right_size_x = laygen.get_template_size(name='nmos4_fast_right', gridname=pg, libname=tech+'_microtemplates_dense')[0]
-    tap4_size_x = laygen.get_template_size(name='ptap_fast_space_nf4', gridname=pg, libname=tech+'_microtemplates_dense')[0]
+    bnd_left_size_x = laygen.get_template_xy(name='nmos4_fast_left', gridname=pg, libname=tech + '_microtemplates_dense')[0]
+    bnd_right_size_x = laygen.get_template_xy(name='nmos4_fast_right', gridname=pg, libname=tech + '_microtemplates_dense')[0]
+    tap4_size_x = laygen.get_template_xy(name='ptap_fast_space_nf4', gridname=pg, libname=tech + '_microtemplates_dense')[0]
 
     #Caluclate number of top and bottom cells
     bnd_m = width - bnd_left_size_x - bnd_right_size_x  ##This is all the numbe of the cells, using a lot in code!!
@@ -204,7 +204,7 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     capsw0=laygen.relplace(name='I'+objectname_pfix+'SW0', templatename='cap_sw_array', gridname=pg, 
             refinstname=sw_dmy0.name, template_libname='clk_dis_generated')
     #Calculate number of sw_dmy1
-    capsw0_size_x = laygen.get_template_size(name='cap_sw_array', gridname=pg, libname='clk_dis_generated')[0]
+    capsw0_size_x = laygen.get_template_xy(name='cap_sw_array', gridname=pg, libname='clk_dis_generated')[0]
     sw_dmy1_m = bnd_m-num_capsw_dmy-capsw0_size_x
     #Place sw_dmy1
     sw_dmy1= laygen.relplace(name='I'+objectname_pfix+'SWDM1', templatename='space_1x', gridname=pg, 
@@ -235,7 +235,7 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
             refinstname=inv0.name, template_libname=tech+'_logic_templates', transform='MX')
     #Calculate number of dff_dmy1
     inv1_x = laygen.get_inst_xy(name=inv1.name, gridname=pg)[0]
-    m_inv1_x = laygen.get_template_size(name='inv_'+str(m_inv2)+'x', gridname=pg, libname=tech+'_logic_templates')[0]
+    m_inv1_x = laygen.get_template_xy(name='inv_' + str(m_inv2) + 'x', gridname=pg, libname=tech + '_logic_templates')[0]
     bnd_right_5_x = laygen.get_inst_xy(name=bnd_right[5].name, gridname=pg)[0] #y coodinate
     dff_dmy1_m = bnd_right_5_x-(inv1_x+m_inv1_x)
     ##Calculate coodinate of dff_dmy1
@@ -289,14 +289,16 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
                       refinstname0=dff0.name, refpinname0='I', refinstindex0=np.array([0, 0]),
                       refinstname1=dff0.name, refpinname1='I', refinstindex1=np.array([0, 0])
                       )
-    laygen.create_boundary_pin_form_rect(ipp, gridname=rg_m3m4, pinname='I', layer=laygen.layers['pin'][3], size=1, direction='top')
+    laygen.boundary_pin_from_rect(ipp, gridname=rg_m3m4, name='I', layer=laygen.layers['pin'][3], size=1,
+                                  direction='top')
     #O Pin
     o_xy=laygen.get_inst_pin_xy(dff0.name, 'O', rg_m3m4)
     opp=laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0,0]), xy1=np.array([0,1]), gridname0=rg_m3m4,
                       refinstname0=inv1.name, refpinname0='O', refinstindex0=np.array([0, 0]),
                       refinstname1=inv1.name, refpinname1='O', refinstindex1=np.array([0, 0])
                       )
-    laygen.create_boundary_pin_form_rect(opp, gridname=rg_m3m4, pinname='O', layer=laygen.layers['pin'][3], size=1, direction='top')
+    laygen.boundary_pin_from_rect(opp, gridname=rg_m3m4, name='O', layer=laygen.layers['pin'][3], size=1,
+                                  direction='top')
 
     #CAL signal and pin
     for i in range(num_bits):
@@ -304,7 +306,8 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
                       refinstname0=capsw0.name, refpinname0='EN<'+str(i)+'>', refinstindex0=np.array([0, 0]),
                       refinstname1=capsw0.name, refpinname1='EN<'+str(i)+'>', refinstindex1=np.array([0, 0])
                       )
-        laygen.create_boundary_pin_form_rect(capswp0, gridname=rg_m3m4, pinname='CAL<'+str(i)+'>', layer=laygen.layers['pin'][3], size=1, direction='top')
+        laygen.boundary_pin_from_rect(capswp0, gridname=rg_m3m4, name='CAL<' + str(i) + '>',
+                                      layer=laygen.layers['pin'][3], size=1, direction='top')
 
     #CAPSW signal and pin
     for i in range(num_bits):
@@ -312,7 +315,8 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
                       refinstname0=capsw0.name, refpinname0='VO<'+str(i)+'>', refinstindex0=np.array([0, 0]),
                       refinstname1=capsw0.name, refpinname1='VO<'+str(i)+'>', refinstindex1=np.array([0, 0])
                       )
-        laygen.create_boundary_pin_form_rect(ctrlp0, gridname=rg_m3m4, pinname='CAPSW<'+str(i)+'>', layer=laygen.layers['pin'][3], size=1, direction='bottom')
+        laygen.boundary_pin_from_rect(ctrlp0, gridname=rg_m3m4, name='CAPSW<' + str(i) + '>',
+                                      layer=laygen.layers['pin'][3], size=1, direction='bottom')
 
 
     clki_x = laygen.get_inst_pin_xy(tgated0.name, 'I_0', rg_m3m4)[0]
@@ -329,10 +333,12 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
             [clkh, clkv]=laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], np.array([v_xy[0]-1, v_xy[1]+2*i]), 
                     np.array([v_xy[0]+clki_d+m_clki/2-2*j+1,v_xy[1]+y2_clki]), rg_m4m5)
             if (i==0):
-                laygen.create_boundary_pin_form_rect(clkv, gridname=rg_m4m5, pinname='CLKI_'+str(j), layer=laygen.layers['pin'][5], size=1, direction='top', netname='CLKI')
+                laygen.boundary_pin_from_rect(clkv, gridname=rg_m4m5, name='CLKI_' + str(j),
+                                              layer=laygen.layers['pin'][5], size=1, direction='top',
+                                              netname='CLKI')
 
 
-    #laygen.create_boundary_pin_form_rect(clkv, gridname=rg_m4m5, pinname='CLKI', layer=laygen.layers['pin'][5], size=1, direction='top')
+    #laygen.boundary_pin_from_rect(clkv, gridname=rg_m4m5, pinname='CLKI', layer=laygen.layers['pin'][5], size=1, direction='top')
 
     clko_x = laygen.get_inst_pin_xy(tgated0.name, 'O_0', rg_m3m4)[0]
     ##Create muti tracks to clko and create pin
@@ -347,7 +353,9 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
             [clkh, clkv]=laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], np.array([v_xy[0]-1, v_xy[1]-2*i]), 
                     np.array([v_xy[0]+clko_d-m_clko/2+2*j,v_xy[1]-y2_clko]), rg_m4m5)
             if (i==0):
-                laygen.create_boundary_pin_form_rect(clkv, gridname=rg_m4m5, pinname='CLKO_'+str(j), layer=laygen.layers['pin'][5], size=1, direction='bottom', netname='CLKO')
+                laygen.boundary_pin_from_rect(clkv, gridname=rg_m4m5, name='CLKO_' + str(j),
+                                              layer=laygen.layers['pin'][5], size=1, direction='bottom',
+                                              netname='CLKO')
     
     #####VSS and VDD
     ##Bottom ptap row
@@ -372,7 +380,7 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
         laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 3]), gridname0=rg_m1m2,
                         refinstname0=ptap0_1.name, refpinname0='TAP0', refinstindex0=np.array([i-tap4_size_x+1, 0]),
                         refinstname1=ptap0_1.name, refpinname1='TAP0', refinstindex1=np.array([i-tap4_size_x+1, 0]))
-    #laygen.create_boundary_pin_form_rect(rvss0, gridname=rg_m1m2_thick, pinname='VSS0', layer=laygen.layers['pin'][2], size=1, direction='left', netname='VSS:')   
+    #laygen.boundary_pin_from_rect(rvss0, gridname=rg_m1m2_thick, pinname='VSS0', layer=laygen.layers['pin'][2], size=1, direction='left', netname='VSS:')
     #laygen.pin_from_rect(gridname=rg_m1m2_thick, name='VSS0', layer=laygen.layers['pin'][2], rect=rvss0, netname='VSS:') 
     #laygen.pin_from_rect(gridname=rg_m1m2, name='VSS0_1', layer=laygen.layers['pin'][2], rect=rvss0_1, netname='VSS:') 
     
@@ -401,7 +409,7 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
         laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, -1]), xy1=np.array([0, 3]), gridname0=rg_m1m2,
                         refinstname0=ntap0_1.name, refpinname0='TAP0', refinstindex0=np.array([i, 0]),
                         refinstname1=ntap0_1.name, refpinname1='TAP0', refinstindex1=np.array([i, 0]))
-    #laygen.create_boundary_pin_form_rect(rvdd0, gridname=rg_m1m2_thick, pinname='VDD', layer=laygen.layers['pin'][2], size=1, direction='left')
+    #laygen.boundary_pin_from_rect(rvdd0, gridname=rg_m1m2_thick, pinname='VDD', layer=laygen.layers['pin'][2], size=1, direction='left')
     #laygen.pin_from_rect(gridname=rg_m1m2_thick, name='VDD0', layer=laygen.layers['pin'][2], rect=rvdd0, netname='VDD') 
     #laygen.pin_from_rect(gridname=rg_m1m2, name='VDD0_1', layer=laygen.layers['pin'][2], rect=rvdd0_1, netname='VDD') 
     
@@ -434,13 +442,15 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
                       refinstname0=dff0.name, refpinname0='ST', refinstindex0=np.array([0, 0]),
                       refinstname1=dff0.name, refpinname1='ST', refinstindex1=np.array([0, 0])
                       )
-    laygen.create_boundary_pin_form_rect(stp, gridname=rg_m3m4, pinname='ST', layer=laygen.layers['pin'][3], size=1, direction='top')
+    laygen.boundary_pin_from_rect(stp, gridname=rg_m3m4, name='ST', layer=laygen.layers['pin'][3], size=1,
+                                  direction='top')
     rst_xy=laygen.get_inst_pin_xy(dff0.name, 'RST', rg_m3m4)
     rstp=laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0,0]), xy1=np.array([0,1]), gridname0=rg_m3m4,
                       refinstname0=dff0.name, refpinname0='RST', refinstindex0=np.array([0, 0]),
                       refinstname1=dff0.name, refpinname1='RST', refinstindex1=np.array([0, 0])
                       )
-    laygen.create_boundary_pin_form_rect(rstp, gridname=rg_m3m4, pinname='RST', layer=laygen.layers['pin'][3], size=1, direction='top')
+    laygen.boundary_pin_from_rect(rstp, gridname=rg_m3m4, name='RST', layer=laygen.layers['pin'][3], size=1,
+                                  direction='top')
 
 
     #num_vss_vleft = 2

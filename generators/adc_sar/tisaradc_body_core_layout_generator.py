@@ -53,12 +53,12 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
     # ret/sar/clk
     iret = laygen.place(name="I" + objectname_pfix + 'RET0', templatename=ret_name,
                       gridname=pg, xy=origin, template_libname=ret_libname)
-    sar_xy = origin + (laygen.get_template_size(ret_name, gridname=pg, libname=ret_libname)*np.array([0,1]) )
+    sar_xy = origin + (laygen.get_template_xy(ret_name, gridname=pg, libname=ret_libname) * np.array([0, 1]))
     isar = laygen.relplace(name="I" + objectname_pfix + 'SAR0', templatename=sar_name,
                       gridname=pg, refinstname=iret.name, direction='top', template_libname=sar_libname)
     clkdist_offset_pg=int(clkdist_offset/laygen.get_grid(pg).height)
     clkdist_xy = laygen.get_inst_xy(name=isar.name, gridname=pg) \
-                 + (laygen.get_template_size(sar_name, gridname=pg, libname=sar_libname)*np.array([0,1])) \
+                 + (laygen.get_template_xy(sar_name, gridname=pg, libname=sar_libname) * np.array([0, 1])) \
                  + np.array([0, clkdist_offset_pg])
 
     iclkdist = laygen.place(name="I" + objectname_pfix + 'CLKDIST0', templatename=clkdist_name,
@@ -190,7 +190,8 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
             xy=pdict_m3m4[iret.name][pn]
             xy[0][1]=0
             r=laygen.route(None, layer=laygen.layers['metal'][3], xy0=xy[0], xy1=xy[1], gridname0=rg_m3m4)
-            laygen.create_boundary_pin_form_rect(r, rg_m3m4, pn_out, laygen.layers['pin'][3], size=4, direction='bottom')
+            laygen.boundary_pin_from_rect(r, rg_m3m4, pn_out, laygen.layers['pin'][3], size=4,
+                                          direction='bottom')
     #extclk_sel pins
     for i in range(num_slices):
             pn='EXTSEL_CLK'+str(i)
@@ -198,7 +199,8 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
             xy=pdict_m5m6[isar.name][pn]
             xy[0][1]=0
             r=laygen.route(None, layer=laygen.layers['metal'][5], xy0=xy[0], xy1=xy[1], gridname0=rg_m5m6)
-            laygen.create_boundary_pin_form_rect(r, rg_m5m6, pn_out, laygen.layers['pin'][5], size=4, direction='bottom')
+            laygen.boundary_pin_from_rect(r, rg_m5m6, pn_out, laygen.layers['pin'][5], size=4,
+                                          direction='bottom')
     #asclkd pins
     for i in range(num_slices):
         for j in range(4):
@@ -207,7 +209,8 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
             xy=pdict_m5m6[isar.name][pn]
             xy[0][1]=0 
             r=laygen.route(None, layer=laygen.layers['metal'][5], xy0=xy[0], xy1=xy[1], gridname0=rg_m5m6)
-            laygen.create_boundary_pin_form_rect(r, rg_m5m6, pn_out, laygen.layers['pin'][5], size=4, direction='bottom')
+            laygen.boundary_pin_from_rect(r, rg_m5m6, pn_out, laygen.layers['pin'][5], size=4,
+                                          direction='bottom')
     #osp/osm pins
     for i in range(num_slices):
         laygen.pin(name='OSP' + str(i), layer=laygen.layers['pin'][4], xy=pdict_m4m5[isar.name]['OSP' + str(i)], gridname=rg_m4m5)

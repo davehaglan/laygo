@@ -107,10 +107,12 @@ def generate_clkdis_viadel_htree(laygen, objectname_pfix, logictemp_lib, working
 
         vipx=laygen.route(None, laygen.layers['metal'][5], xy0=np.array([ht0_WI_xy[0]+(len_h*2-2)-2*i, ht0_WI_xy[1]]), xy1=np.array([ht0_WI_xy[0]+(len_h*2-2)-2*i, ht0_WI_xy[1]+len_in]),
                 gridname0=rg_m4m5)
-        laygen.create_boundary_pin_form_rect(vipx, gridname=rg_m4m5, pinname='CLKIP_'+str(i), layer=laygen.layers['pin'][5], size=2, direction='top', netname='CLKIP')       
+        laygen.boundary_pin_from_rect(vipx, gridname=rg_m4m5, name='CLKIP_' + str(i),
+                                      layer=laygen.layers['pin'][5], size=2, direction='top', netname='CLKIP')
         vinx=laygen.route(None, laygen.layers['metal'][5], xy0=np.array([ht1_WI_xy[0]-(len_h*2-2)+2*i, ht1_WI_xy[1]]), xy1=np.array([ht1_WI_xy[0]-(len_h*2-2)+2*i, ht1_WI_xy[1]+len_in]), 
                 gridname0=rg_m4m5)
-        laygen.create_boundary_pin_form_rect(vinx, gridname=rg_m4m5, pinname='CLKIN_'+str(i), layer=laygen.layers['pin'][5], size=2, direction='top', netname='CLKIN')
+        laygen.boundary_pin_from_rect(vinx, gridname=rg_m4m5, name='CLKIN_' + str(i),
+                                      layer=laygen.layers['pin'][5], size=2, direction='top', netname='CLKIN')
 
     #Create pins
     #set and rst

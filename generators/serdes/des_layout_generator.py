@@ -138,14 +138,14 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
                                                                    origin=np.array([0, 0]))
     #Calculate origins for placement
     tap_origin = origin + laygen.get_inst_xy(bnd_bottom[0].name, pg) \
-                   + laygen.get_template_size(bnd_bottom[0].cellname, pg)
+                   + laygen.get_template_xy(bnd_bottom[0].cellname, pg)
     array_origin = origin + laygen.get_inst_xy(bnd_bottom[0].name, pg) \
-                   + laygen.get_template_size(bnd_bottom[0].cellname, pg) \
-                   + np.array([laygen.get_template_size(tap_name,pg,templib_logic)[0],0])
-    tapr_origin = tap_origin + m_bnd*np.array([laygen.get_template_size('boundary_bottom',pg)[0],0]) \
-                   - np.array([laygen.get_template_size(tap_name,pg,templib_logic)[0],0])
-    FF0_origin = array_origin + np.array([0,laygen.get_template_size('inv_1x',pg,templib_logic)[1]]) + \
-                np.array([0,laygen.get_template_size(ff_name,pg,templib_logic)[1]])
+                   + laygen.get_template_xy(bnd_bottom[0].cellname, pg) \
+                   + np.array([laygen.get_template_xy(tap_name, pg, templib_logic)[0], 0])
+    tapr_origin = tap_origin + m_bnd*np.array([laygen.get_template_xy('boundary_bottom', pg)[0], 0]) \
+                   - np.array([laygen.get_template_xy(tap_name, pg, templib_logic)[0], 0])
+    FF0_origin = array_origin + np.array([0, laygen.get_template_xy('inv_1x', pg, templib_logic)[1]]) + \
+                 np.array([0, laygen.get_template_xy(ff_name, pg, templib_logic)[1]])
     # placement
     iffout=[]
     iffin=[]
@@ -274,12 +274,12 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
             if iffout[j].transform=='MX': tf='MX'
             else: tf='R0'
             iffin.append(laygen.relplace(name = "I" + objectname_pfix + 'FFIN'+str(j+1), templatename = ff_name,
-                                   gridname = pg, refinstname = iffout[j].name, transform=tf, shape=np.array([1,1]),
-                                   xy=np.array([laygen.get_template_size(ff_name,pg,templib_logic)[0],0]), template_libname=templib_logic))
+                                         gridname = pg, refinstname = iffout[j].name, transform=tf, shape=np.array([1,1]),
+                                         xy=np.array([laygen.get_template_xy(ff_name, pg, templib_logic)[0], 0]), template_libname=templib_logic))
             if j%2==0:
                 iffdiv.append(laygen.relplace(name = "I" + objectname_pfix + 'FFDIV'+str(int(j/2+1)), templatename = ff_rst_name,
-                                   gridname = pg, refinstname = iffin[j].name, transform=tf, shape=np.array([1,1]),
-                                   xy=np.array([laygen.get_template_size(ff_name,pg,templib_logic)[0],0]), template_libname=templib_logic))
+                                              gridname = pg, refinstname = iffin[j].name, transform=tf, shape=np.array([1,1]),
+                                              xy=np.array([laygen.get_template_xy(ff_name, pg, templib_logic)[0], 0]), template_libname=templib_logic))
         for i in range(num_row, num_des+1): #Right side of FFDIV
             if num_des%2==1:
                 if i%2==0: tf='R0'
@@ -299,11 +299,11 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
     #Space placement at the first row
     space_name = 'space_1x'
     space4x_name = 'space_4x'
-    space_width = laygen.get_template_size(space_name,pg,templib_logic)[0]
-    space4_width = laygen.get_template_size(space4x_name,pg,templib_logic)[0]
+    space_width = laygen.get_template_xy(space_name, pg, templib_logic)[0]
+    space4_width = laygen.get_template_xy(space4x_name, pg, templib_logic)[0]
     inv_width=[]
     for i in (1,2,8,32):
-        inv_width.append(laygen.get_template_size('inv_'+str(i)+'x',pg,templib_logic)[0])
+        inv_width.append(laygen.get_template_xy('inv_' + str(i) + 'x', pg, templib_logic)[0])
     blank_width = tapr_origin[0] - array_origin[0] - 2 * (inv_width[0]+inv_width[1]+inv_width[2]+inv_width[3])
     m_space4 = int(blank_width / space4_width)
     m_space1 = int((blank_width-m_space4*space4_width)/space_width)
@@ -314,8 +314,8 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
                            gridname = pg, refinstname = ispace4.name, transform='R0', shape=np.array([m_space1+4,1]),
                            template_libname=templib_logic)
     #Space placement at the last row for odd num_des
-    m_ff_space = int(laygen.get_template_size(ff_name,pg,templib_logic)[0] / space_width)
-    m_ffrst_space = int(laygen.get_template_size(ff_rst_name,pg,templib_logic)[0] / space_width)
+    m_ff_space = int(laygen.get_template_xy(ff_name, pg, templib_logic)[0] / space_width)
+    m_ffrst_space = int(laygen.get_template_xy(ff_rst_name, pg, templib_logic)[0] / space_width)
     if (num_des%2)==1:
         if num_flop==2:
             ispace_out=laygen.relplace(name = "I" + objectname_pfix + 'SPACEOUT', templatename = space_name,
@@ -442,14 +442,14 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
     #Pin
     clkin_xy=laygen.get_inst_pin_xy(iclkbuf[0].name, 'I', rg_m3m4)
     rclkin=laygen.route(None, laygen.layers['metal'][3], xy0=clkin_xy[0], xy1=np.array([clkin_xy[0][0],0]), gridname0=rg_m3m4)
-    laygen.create_boundary_pin_form_rect(rclkin, rg_m3m4, "clk", laygen.layers['pin'][3], size=0, direction='left')
+    laygen.boundary_pin_from_rect(rclkin, rg_m3m4, "clk", laygen.layers['pin'][3], size=0, direction='left')
     din_xy34=laygen.get_inst_pin_xy(iffin[0].name, 'I', rg_m3m4)
     din_xy45=laygen.get_inst_pin_xy(iffin[0].name, 'I', rg_m4m5)
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], 
             din_xy34[0], np.array([din_xy45[0][0]-2,0]), din_xy34[0][1], 
             rg_m3m4, layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5)
     rdummy = laygen.route(None, laygen.layers['metal'][4], xy0=din_xy34[0], xy1=din_xy34[0]+np.array([2,0]), gridname0=rg_m3m4)
-    laygen.create_boundary_pin_form_rect(rv1, rg_m4m5, "in", laygen.layers['pin'][5], size=4, direction='bottom')
+    laygen.boundary_pin_from_rect(rv1, rg_m4m5, "in", laygen.layers['pin'][5], size=4, direction='bottom')
     for i in range(num_des):
         datao_xy = laygen.get_inst_pin_xy(iffout[i].name, 'O', rg_m3m4)
         laygen.pin(name='dout<'+str(i)+'>', layer=laygen.layers['pin'][3], xy=datao_xy, gridname=rg_m3m4)
@@ -459,10 +459,10 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
             rst_xy34[0], np.array([rst_xy45[0][0]-2,0]), rst_xy34[0][1], 
             rg_m3m4, layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5)
     rdummy = laygen.route(None, laygen.layers['metal'][4], xy0=rst_xy34[0], xy1=rst_xy34[0]+np.array([2,0]), gridname0=rg_m3m4)
-    laygen.create_boundary_pin_form_rect(rv1, rg_m4m5, "RST", laygen.layers['pin'][5], size=4, direction='bottom')
+    laygen.boundary_pin_from_rect(rv1, rg_m4m5, "RST", laygen.layers['pin'][5], size=4, direction='bottom')
 
     # power pin
-    pwr_dim=laygen.get_template_size(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)
+    pwr_dim=laygen.get_template_xy(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)
     rvdd = []
     rvss = []
     if num_row%2==0: rp1='VSS'

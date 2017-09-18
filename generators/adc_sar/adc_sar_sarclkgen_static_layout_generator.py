@@ -133,7 +133,7 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
     #x0 = laygen.get_inst_xy(name=inand0.name, gridname=rg_m3m4)[0] + 1
     x0 = laygen.get_inst_xy(name=iinv7.name, gridname=rg_m3m4)[0] + 1
     x1 = laygen.get_inst_xy(name=refl, gridname=rg_m3m4)[0]\
-         +laygen.get_template_size(name=reflcn, gridname=rg_m3m4, libname=templib_logic)[0] - 1
+         +laygen.get_template_xy(name=reflcn, gridname=rg_m3m4, libname=templib_logic)[0] - 1
     y0 = pdict[inand0.name]['A'][0][1] + 0
     # internal routes - and2
     [rv0, rphi0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[icore0.name]['PHI0'][0],
@@ -204,21 +204,22 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
                                   np.array([x1, y0 + 1]), rg_m3m4)
 
     # pins
-    laygen.create_boundary_pin_from_rect(rsaop0, rg_m3m4, "SAOP", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.create_boundary_pin_from_rect(rsaom0, rg_m3m4, "SAOM", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.create_boundary_pin_from_rect(rphi0, rg_m3m4, "PHI0", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.create_boundary_pin_from_rect(rrst0, rg_m3m4, "RST", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.create_boundary_pin_from_rect(rup0, rg_m3m4, "UP", laygen.layers['pin'][4], size=4, direction='right')
-    laygen.create_boundary_pin_from_rect(rextsel_clk0, rg_m3m4, "EXTSEL_CLK", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.create_boundary_pin_from_rect(rshort0, rg_m3m4, "SHORTB", laygen.layers['pin'][4], size=6, direction='left')
-    #laygen.create_boundary_pin_from_rect(rextclk0, rg_m3m4, "EXTCLK", laygen.layers['pin'][4], size=6, direction='left')
+    laygen.boundary_pin_from_rect(rsaop0, rg_m3m4, "SAOP", laygen.layers['pin'][4], size=6, direction='left')
+    laygen.boundary_pin_from_rect(rsaom0, rg_m3m4, "SAOM", laygen.layers['pin'][4], size=6, direction='left')
+    laygen.boundary_pin_from_rect(rphi0, rg_m3m4, "PHI0", laygen.layers['pin'][4], size=6, direction='left')
+    laygen.boundary_pin_from_rect(rrst0, rg_m3m4, "RST", laygen.layers['pin'][4], size=6, direction='left')
+    laygen.boundary_pin_from_rect(rup0, rg_m3m4, "UP", laygen.layers['pin'][4], size=4, direction='right')
+    laygen.boundary_pin_from_rect(rextsel_clk0, rg_m3m4, "EXTSEL_CLK", laygen.layers['pin'][4], size=6,
+                                  direction='left')
+    laygen.boundary_pin_from_rect(rshort0, rg_m3m4, "SHORTB", laygen.layers['pin'][4], size=6, direction='left')
+    #laygen.boundary_pin_from_rect(rextclk0, rg_m3m4, "EXTCLK", laygen.layers['pin'][4], size=6, direction='left')
 
-    laygen.create_boundary_pin_from_rect(rdone0, rg_m3m4, "DONE", laygen.layers['pin'][4], size=4, direction='right')
-    laygen.create_boundary_pin_from_rect(rclkob0, rg_m3m4, "CLKOB", laygen.layers['pin'][4], size=6, direction='right')
-    laygen.create_boundary_pin_from_rect(rclko0, rg_m3m4, "CLKO", laygen.layers['pin'][4], size=6, direction='right')
-    laygen.create_boundary_pin_from_rect(rsel0, rg_m3m4, "SEL<0>", laygen.layers['pin'][4], size=6, direction='right')
-    laygen.create_boundary_pin_from_rect(rsel1, rg_m3m4, "SEL<1>", laygen.layers['pin'][4], size=6, direction='right')
-    laygen.create_boundary_pin_from_rect(rsel2, rg_m3m4, "SEL<2>", laygen.layers['pin'][4], size=6, direction='right')
+    laygen.boundary_pin_from_rect(rdone0, rg_m3m4, "DONE", laygen.layers['pin'][4], size=4, direction='right')
+    laygen.boundary_pin_from_rect(rclkob0, rg_m3m4, "CLKOB", laygen.layers['pin'][4], size=6, direction='right')
+    laygen.boundary_pin_from_rect(rclko0, rg_m3m4, "CLKO", laygen.layers['pin'][4], size=6, direction='right')
+    laygen.boundary_pin_from_rect(rsel0, rg_m3m4, "SEL<0>", laygen.layers['pin'][4], size=6, direction='right')
+    laygen.boundary_pin_from_rect(rsel1, rg_m3m4, "SEL<1>", laygen.layers['pin'][4], size=6, direction='right')
+    laygen.boundary_pin_from_rect(rsel2, rg_m3m4, "SEL<2>", laygen.layers['pin'][4], size=6, direction='right')
 
     # power route (horizontal)
     #create_power_pin_from_inst(laygen, layer=laygen.layers['pin'][2], gridname=rg_m1m2, inst_left=itapl, inst_right=itapr)
@@ -228,7 +229,7 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
                  refinstname0=itapl.name, refpinname0='VSS', refinstname1=itapr.name, refpinname1='VSS')
 
     # power pin
-    pwr_dim=laygen.get_template_size(name=itapl.cellname, gridname=rg_m2m3, libname=itapl.libname)
+    pwr_dim=laygen.get_template_xy(name=itapl.cellname, gridname=rg_m2m3, libname=itapl.libname)
     rvdd = []
     rvss = []
     rp1='VDD'

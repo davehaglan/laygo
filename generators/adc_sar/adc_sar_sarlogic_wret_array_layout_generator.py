@@ -133,7 +133,7 @@ def generate_sarlogic_wret_array(laygen, objectname_pfix, templib_logic, placeme
                                                transform=tf, template_libname=workinglib))
                 refi = islogic[-1].name
             else:
-                nfill = laygen.get_template_size(name=islogic[0].cellname, gridname=pg, libname=workinglib)[0]
+                nfill = laygen.get_template_xy(name=islogic[0].cellname, gridname=pg, libname=workinglib)[0]
                 #ifill=laygen.relplace(name = "I" + objectname_pfix + 'CLGFILL'+str(i*num_bits_row+j), templatename = space_1x_name,
                 #                               gridname = pg, refinstname = refi, shape=np.array([nfill, 1]),
                 #                               transform=tf, template_libname=templib_logic)
@@ -215,12 +215,12 @@ def generate_sarlogic_wret_array(laygen, objectname_pfix, templib_logic, placeme
 
     #pins
     xy=laygen.get_rect_xy(rrst[0].name, rg_m4m5, sort=True)
-    laygen.create_boundary_pin_from_rect(rrst[0], rg_m4m5, 'RST', laygen.layers['pin'][4], size=6, direction='left')
+    laygen.boundary_pin_from_rect(rrst[0], rg_m4m5, 'RST', laygen.layers['pin'][4], size=6, direction='left')
     #rv0, rrst0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], xy[0], np.array([xy[0][0]+4, 2]), rg_m4m5)
-    #laygen.create_boundary_pin_from_rect(rrst0, rg_m4m5, 'RST', laygen.layers['pin'][5], size=6, direction='bottom')
-    laygen.create_boundary_pin_from_rect(rsaop[0], rg_m4m5, "SAOP", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.create_boundary_pin_from_rect(rsaom[0], rg_m4m5, "SAOM", laygen.layers['pin'][4], size=6, direction='left')
-    y1 = laygen.get_template_size(name=islogic[0].cellname, gridname=rg_m4m5, libname=workinglib)[1]
+    #laygen.boundary_pin_from_rect(rrst0, rg_m4m5, 'RST', laygen.layers['pin'][5], size=6, direction='bottom')
+    laygen.boundary_pin_from_rect(rsaop[0], rg_m4m5, "SAOP", laygen.layers['pin'][4], size=6, direction='left')
+    laygen.boundary_pin_from_rect(rsaom[0], rg_m4m5, "SAOM", laygen.layers['pin'][4], size=6, direction='left')
+    y1 = laygen.get_template_xy(name=islogic[0].cellname, gridname=rg_m4m5, libname=workinglib)[1]
     y2 = y1*(num_row)
     pdict2 = laygen.get_inst_pin_xy(None, None, rg_m3m4, sort=True)
     pdict_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5, sort=True)
@@ -239,14 +239,19 @@ def generate_sarlogic_wret_array(laygen, objectname_pfix, templib_logic, placeme
 
                 rv0, rreto0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], pdict_m4m5[islogic[i*num_bits_row+j].name]['RETO'][0],
                                             np.array([pdict_m4m5[islogic[i*num_bits_row+j].name]['RETO'][0][0]+1+i+0, 0]), rg_m4m5)
-                laygen.create_boundary_pin_from_rect(rsb0, rg_m4m5, 'SB<'+str(i*num_bits_row+j)+'>', laygen.layers['pin'][5], size=6, direction='bottom')
-                laygen.create_boundary_pin_from_rect(rzp0, rg_m4m5, 'ZP<'+str(i*num_bits_row+j)+'>', laygen.layers['pin'][5], size=6, direction='top')
-                laygen.create_boundary_pin_from_rect(rzmid0, rg_m4m5, 'ZMID<'+str(i*num_bits_row+j)+'>', laygen.layers['pin'][5], size=6, direction='top')
-                laygen.create_boundary_pin_from_rect(rzm0, rg_m4m5, 'ZM<'+str(i*num_bits_row+j)+'>', laygen.layers['pin'][5], size=6, direction='top')
-                laygen.create_boundary_pin_from_rect(rreto0, rg_m4m5, 'RETO<'+str(i*num_bits_row+j)+'>', laygen.layers['pin'][5], size=6, direction='bottom')
+                laygen.boundary_pin_from_rect(rsb0, rg_m4m5, 'SB<' + str(i * num_bits_row + j) + '>',
+                                              laygen.layers['pin'][5], size=6, direction='bottom')
+                laygen.boundary_pin_from_rect(rzp0, rg_m4m5, 'ZP<' + str(i * num_bits_row + j) + '>',
+                                              laygen.layers['pin'][5], size=6, direction='top')
+                laygen.boundary_pin_from_rect(rzmid0, rg_m4m5, 'ZMID<' + str(i * num_bits_row + j) + '>',
+                                              laygen.layers['pin'][5], size=6, direction='top')
+                laygen.boundary_pin_from_rect(rzm0, rg_m4m5, 'ZM<' + str(i * num_bits_row + j) + '>',
+                                              laygen.layers['pin'][5], size=6, direction='top')
+                laygen.boundary_pin_from_rect(rreto0, rg_m4m5, 'RETO<' + str(i * num_bits_row + j) + '>',
+                                              laygen.layers['pin'][5], size=6, direction='bottom')
 
     # power pin
-    pwr_dim=laygen.get_template_size(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)
+    pwr_dim=laygen.get_template_xy(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)
     rvdd = []
     rvss = []
     if num_row%2==0: rp1='VSS'
@@ -332,7 +337,7 @@ def generate_sarlogic_wret_v2_array(laygen, objectname_pfix, templib_logic, plac
                                                transform=tf, template_libname=workinglib))
                 refi = islogic[-1].name
             else:
-                nfill = laygen.get_template_size(name=islogic[0].cellname, gridname=pg, libname=workinglib)[0]
+                nfill = laygen.get_template_xy(name=islogic[0].cellname, gridname=pg, libname=workinglib)[0]
                 #ifill=laygen.relplace(name = "I" + objectname_pfix + 'CLGFILL'+str(i*num_bits_row+j), templatename = space_1x_name,
                 #                               gridname = pg, refinstname = refi, shape=np.array([nfill, 1]),
                 #                               transform=tf, template_libname=templib_logic)
@@ -414,12 +419,12 @@ def generate_sarlogic_wret_v2_array(laygen, objectname_pfix, templib_logic, plac
 
     #pins
     xy=laygen.get_rect_xy(rrst[0].name, rg_m4m5, sort=True)
-    laygen.create_boundary_pin_from_rect(rrst[0], rg_m4m5, 'RST', laygen.layers['pin'][4], size=6, direction='left')
+    laygen.boundary_pin_from_rect(rrst[0], rg_m4m5, 'RST', laygen.layers['pin'][4], size=6, direction='left')
     #rv0, rrst0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], xy[0], np.array([xy[0][0]+4, 2]), rg_m4m5)
-    #laygen.create_boundary_pin_from_rect(rrst0, rg_m4m5, 'RST', laygen.layers['pin'][5], size=6, direction='bottom')
-    laygen.create_boundary_pin_from_rect(rsaop[0], rg_m4m5, "SAOP", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.create_boundary_pin_from_rect(rsaom[0], rg_m4m5, "SAOM", laygen.layers['pin'][4], size=6, direction='left')
-    y1 = laygen.get_template_size(name=islogic[0].cellname, gridname=rg_m4m5, libname=workinglib)[1]
+    #laygen.boundary_pin_from_rect(rrst0, rg_m4m5, 'RST', laygen.layers['pin'][5], size=6, direction='bottom')
+    laygen.boundary_pin_from_rect(rsaop[0], rg_m4m5, "SAOP", laygen.layers['pin'][4], size=6, direction='left')
+    laygen.boundary_pin_from_rect(rsaom[0], rg_m4m5, "SAOM", laygen.layers['pin'][4], size=6, direction='left')
+    y1 = laygen.get_template_xy(name=islogic[0].cellname, gridname=rg_m4m5, libname=workinglib)[1]
     y2 = y1*(num_row)
     pdict2 = laygen.get_inst_pin_xy(None, None, rg_m3m4, sort=True)
     pdict_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5, sort=True)
@@ -438,14 +443,19 @@ def generate_sarlogic_wret_v2_array(laygen, objectname_pfix, templib_logic, plac
 
                 rv0, rreto0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], pdict_m4m5[islogic[i*num_bits_row+j].name]['RETO'][0],
                                             np.array([pdict_m4m5[islogic[i*num_bits_row+j].name]['RETO'][0][0]+1+i+2, 0]), rg_m4m5)
-                laygen.create_boundary_pin_from_rect(rsb0, rg_m4m5, 'SB<'+str(i*num_bits_row+j)+'>', laygen.layers['pin'][5], size=6, direction='bottom')
-                laygen.create_boundary_pin_from_rect(rzp0, rg_m4m5, 'ZP<'+str(i*num_bits_row+j)+'>', laygen.layers['pin'][5], size=6, direction='top')
-                laygen.create_boundary_pin_from_rect(rzmid0, rg_m4m5, 'ZMID<'+str(i*num_bits_row+j)+'>', laygen.layers['pin'][5], size=6, direction='top')
-                laygen.create_boundary_pin_from_rect(rzm0, rg_m4m5, 'ZM<'+str(i*num_bits_row+j)+'>', laygen.layers['pin'][5], size=6, direction='top')
-                laygen.create_boundary_pin_from_rect(rreto0, rg_m4m5, 'RETO<'+str(i*num_bits_row+j)+'>', laygen.layers['pin'][5], size=6, direction='bottom')
+                laygen.boundary_pin_from_rect(rsb0, rg_m4m5, 'SB<' + str(i * num_bits_row + j) + '>',
+                                              laygen.layers['pin'][5], size=6, direction='bottom')
+                laygen.boundary_pin_from_rect(rzp0, rg_m4m5, 'ZP<' + str(i * num_bits_row + j) + '>',
+                                              laygen.layers['pin'][5], size=6, direction='top')
+                laygen.boundary_pin_from_rect(rzmid0, rg_m4m5, 'ZMID<' + str(i * num_bits_row + j) + '>',
+                                              laygen.layers['pin'][5], size=6, direction='top')
+                laygen.boundary_pin_from_rect(rzm0, rg_m4m5, 'ZM<' + str(i * num_bits_row + j) + '>',
+                                              laygen.layers['pin'][5], size=6, direction='top')
+                laygen.boundary_pin_from_rect(rreto0, rg_m4m5, 'RETO<' + str(i * num_bits_row + j) + '>',
+                                              laygen.layers['pin'][5], size=6, direction='bottom')
 
     # power pin
-    pwr_dim=laygen.get_template_size(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)
+    pwr_dim=laygen.get_template_xy(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)
     rvdd = []
     rvss = []
     if num_row%2==0: rp1='VSS'

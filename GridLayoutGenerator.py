@@ -1078,13 +1078,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         xy = self.get_absgrid_region(gridname, xy[0, :], xy[1, :])
         return self.pin(name, layer, xy, gridname, netname=netname)
 
-    def create_boundary_pin_form_rect(self, rect, gridname, pinname, layer, size=4, direction='left', netname=None):
-        print("[WARNING] create_boundary_pin_form_rect deprecated. Use boundary_pin_from_rect instead")
-        return self.boundary_pin_from_rect(rect=rect, gridname=gridname, name=pinname, layer=layer, size=size, direction=direction, netname=netname)
-
-    def create_boundary_pin_from_rect(self, rect, gridname, pinname, layer, size=4, direction='left', netname=None):
-        return self.boundary_pin_from_rect(rect=rect, gridname=gridname, name=pinname, layer=layer, size=size, direction=direction, netname=netname)
-
     def boundary_pin_from_rect(self, rect, gridname, name, layer, size=4, direction='left', netname=None):
         """
         Generate a boundary Pin object from a reference Rect object
@@ -1124,7 +1117,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         return self.pin(name=name, layer=layer, xy=xy, gridname=gridname, netname=netname)
 
-    #db access function
+    #db access functions
     def sel_template_library(self, libname):
         """
         Select a template library to work on
@@ -1147,9 +1140,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         self.grids.sel_library(libname)
 
+    #object geometry related functions
     def get_xy(self, obj, gridname=None, sort=False):
         """
-            get geometric information of an object on the specific coordinate
+            get xy coordinate of an object on the specific coordinate
 
             Parameters
             ----------
@@ -1172,8 +1166,37 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         if isinstance(obj, Pin):
             return self.get_pin_xy(name=obj.name, gridname=gridname, sort=sort)
 
+    def get_bbox(self, obj, gridname=None, sort=False):
+        """
+            get bounding box of an object on the specific coordinate
+
+            Parameters
+            ----------
+            obj : LayoutObject.LayoutObject or TemplateObject.TemplateObject
+                Object to get the xy coordinates
+            gridname : str, optional
+                grid name. If None, physical grid is used
+
+            Returns
+            -------
+            np.ndarray()
+                geometric paramter of the object on gridname
+        """
+        if isinstance(obj, TemplateObject):
+            return np.array([0, 0], self.get_template_xy(name=obj.name, gridname=gridname))
+        if isinstance(obj, Instance):
+            return self.get_inst_bbox(name=obj.name, gridname=gridname)
+        if isinstance(obj, Rect):
+            return self.get_rect_xy(name=obj.name, gridname=gridname, sort=sort)
+        if isinstance(obj, Pin):
+            return self.get_pin_xy(name=obj.name, gridname=gridname, sort=sort)
+
     def get_template_size(self, name, gridname=None, libname=None):
+        """
+            get the size of a template in abstract coordinate. Same with get_template_xy
+        """
         return self.get_template_xy(name=name, gridname=gridname, libname=libname)
+
     def get_template_xy(self, name, gridname=None, libname=None):
         """
         get the size of a template in abstract coordinate
@@ -1361,8 +1384,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         else:
             return self.get_absgrid_region(gridname, xy[0], xy[1])
 
-
-
+    #grid related functions
     def get_grid(self, gridname):
         """
         Get grid object handle
@@ -1443,7 +1465,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         return self.grids.get_absgrid_region(gridname=gridname, xy0=xy0, xy1=xy1)
 
-    #template and grid database related functions
+    #template and grid related functions
     def construct_template_and_grid(self, db, libname, cellname=None,
                                     layer_boundary=['prBoundary', 'boundary'], layer_text=['text', 'drawing'],
                                     routegrid_prefix='route', placementgrid_prefix='placement', append=True):

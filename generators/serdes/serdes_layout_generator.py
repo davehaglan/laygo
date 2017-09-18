@@ -171,11 +171,16 @@ def generate_ser2to1(laygen, objectname_pfix, templib_logic, placement_grid, rou
     laygen.via(None, xyo0, gridname=rg_m3m4)
 
     # pin creation
-    laygen.create_boundary_pin_form_rect(rclk0, rg_m3m4, "CLK", laygen.layers['pin'][4], size=num_space_left+6, direction='left')
-    laygen.create_boundary_pin_form_rect(rclkb0, rg_m3m4, "CLKB", laygen.layers['pin'][4], size=num_space_left+6, direction='left')
-    laygen.create_boundary_pin_form_rect(ri0, rg_m3m4, "I<0>", laygen.layers['pin'][4], size=num_space_left+6, direction='left')
-    laygen.create_boundary_pin_form_rect(ri1, rg_m3m4, "I<1>", laygen.layers['pin'][4], size=num_space_left+6, direction='left')
-    laygen.create_boundary_pin_form_rect(ro0, rg_m3m4, "O", laygen.layers['pin'][4], size=num_space_right+6, direction='right')
+    laygen.boundary_pin_from_rect(rclk0, rg_m3m4, "CLK", laygen.layers['pin'][4], size=num_space_left + 6,
+                                  direction='left')
+    laygen.boundary_pin_from_rect(rclkb0, rg_m3m4, "CLKB", laygen.layers['pin'][4], size=num_space_left + 6,
+                                  direction='left')
+    laygen.boundary_pin_from_rect(ri0, rg_m3m4, "I<0>", laygen.layers['pin'][4], size=num_space_left + 6,
+                                  direction='left')
+    laygen.boundary_pin_from_rect(ri1, rg_m3m4, "I<1>", laygen.layers['pin'][4], size=num_space_left + 6,
+                                  direction='left')
+    laygen.boundary_pin_from_rect(ro0, rg_m3m4, "O", laygen.layers['pin'][4], size=num_space_right + 6,
+                                  direction='right')
 
     #power pin
     create_power_pin_from_inst(laygen, layer=laygen.layers['pin'][2], gridname=rg_m1m2, inst_left=itap0, inst_right=itap1)
@@ -188,8 +193,8 @@ def generate_ser_vstack(laygen, objectname_pfix, templib_logic, placement_grid, 
     rg_m4m5 = routing_grid_m4m5
 
     input_size = radix ** num_stages
-    size_ser2to1 = laygen.get_template_size(devname_serslice, pg)
-    size_ser2to1_rg_m4m5 = laygen.get_template_size(devname_serslice, rg_m4m5)
+    size_ser2to1 = laygen.get_template_xy(devname_serslice, pg)
+    size_ser2to1_rg_m4m5 = laygen.get_template_xy(devname_serslice, rg_m4m5)
     # placement
     iser = []
     y_ser = 0
@@ -230,7 +235,8 @@ def generate_ser_vstack(laygen, objectname_pfix, templib_logic, placement_grid, 
 
     #input pin creation
     for i in range(input_size):
-        laygen.create_boundary_pin_form_rect(ri_list[i], rg_m4m5, "I<" + str(int(ri_index_list[i])) + ">", laygen.layers['pin'][5], size=4, direction='bottom')
+        laygen.boundary_pin_from_rect(ri_list[i], rg_m4m5, "I<" + str(int(ri_index_list[i])) + ">",
+                                      laygen.layers['pin'][5], size=4, direction='bottom')
 
     # internal datapath route
     for i in range(num_stages-1):
@@ -264,15 +270,17 @@ def generate_ser_vstack(laygen, objectname_pfix, templib_logic, placement_grid, 
         rh0, rclk0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], xyclk0, np.array([x0 + radix ** (num_stages) + 2*int(i/2) + 2, 0]), rg_m4m5)
         rh0, rclkb0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], xyclkb0, np.array([x0 + radix ** (num_stages) + 2*int(i/2) + 2 + 1, 0]), rg_m4m5)
 
-        laygen.create_boundary_pin_form_rect(rclk0, rg_m4m5, "CLK<" + str(num_stages-i-1) + ">", laygen.layers['pin'][5], size=4, direction='bottom')
-        laygen.create_boundary_pin_form_rect(rclkb0, rg_m4m5, "CLKB<" + str(num_stages-i-1) + ">", laygen.layers['pin'][5], size=4, direction='bottom')
+        laygen.boundary_pin_from_rect(rclk0, rg_m4m5, "CLK<" + str(num_stages - i - 1) + ">",
+                                      laygen.layers['pin'][5], size=4, direction='bottom')
+        laygen.boundary_pin_from_rect(rclkb0, rg_m4m5, "CLKB<" + str(num_stages - i - 1) + ">",
+                                      laygen.layers['pin'][5], size=4, direction='bottom')
 
     # output
     y1 = laygen.get_inst_xy("I" + objectname_pfix + 'SER_' + str(num_stages-1) + '_0', gridname=rg_m4m5)[1]
     y1+=size_ser2to1_rg_m4m5[1]-1
     xyo0 = laygen.get_inst_pin_xy("I" + objectname_pfix + 'SER_' + str(num_stages - 1) + '_0', 'O', gridname=rg_m4m5)[0]
     ro0 = laygen.route(None, laygen.layers['metal'][5], xy0=xyo0, xy1=np.array([xyo0[0], y1]), gridname0=rg_m4m5, via0=[[0, 0]])
-    laygen.create_boundary_pin_form_rect(ro0, rg_m4m5, "O", laygen.layers['pin'][5], size=4, direction='top')
+    laygen.boundary_pin_from_rect(ro0, rg_m4m5, "O", laygen.layers['pin'][5], size=4, direction='top')
     
     #power rails
     xypwrl0 = laygen.get_inst_pin_xy("I" + objectname_pfix + 'SER_0_0', 'VSS', gridname=rg_m2m3_thick_basic)[0]
@@ -321,7 +329,7 @@ def generate_ser_space_vstack(laygen, objectname_pfix, placement_grid, devname_s
                               origin=np.array([0, 0]), num_stages=3, radix=2):
     """generate spacing elements between vstacked serializers"""
     pg = placement_grid
-    size_ser2to1 = laygen.get_template_size(devname_serspace, pg)
+    size_ser2to1 = laygen.get_template_xy(devname_serspace, pg)
 
     # placement
     iser = []

@@ -68,8 +68,8 @@ def generate_clkdis_viadel_cell(laygen, objectname_pfix, logictemp_lib, working_
     for i in range(m_clki):
         viadel_I_xy = laygen.get_inst_pin_xy(viacell.name, 'CLKI_' + str(i), rg_m5m6)[0]
         clkopx=laygen.route(None, laygen.layers['metal'][5], xy0=viadel_I_xy, xy1=np.array([viadel_I_xy[0],clki_y]), gridname0=rg_m5m6)
-        laygen.create_boundary_pin_form_rect(clkopx, gridname=rg_m5m6, pinname='CLKI_'+str(i), layer=laygen.layers['pin'][5], 
-                size=2, direction='top', netname='CLKI')
+        laygen.boundary_pin_from_rect(clkopx, gridname=rg_m5m6, name='CLKI_' + str(i),
+                                      layer=laygen.layers['pin'][5], size=2, direction='top', netname='CLKI')
 
     ##Route, clock connection from TGATE to output
     clko_y =laygen.grids.get_absgrid_coord_y(gridname=rg_m5m6, y=-20)
@@ -78,8 +78,8 @@ def generate_clkdis_viadel_cell(laygen, objectname_pfix, logictemp_lib, working_
         viadel_O_xy = laygen.get_inst_pin_xy(viacell.name, 'CLKO_' + str(i), rg_m5m6)[0]
         clko_xy.append(viadel_O_xy)
         clkopx=laygen.route(None, laygen.layers['metal'][5], xy0=viadel_O_xy, xy1=np.array([viadel_O_xy[0],clko_y]), gridname0=rg_m5m6)
-        laygen.create_boundary_pin_form_rect(clkopx, gridname=rg_m5m6, pinname='CLKO_'+str(i), layer=laygen.layers['pin'][5], 
-                    size=2, direction='bottom', netname='CLKO')
+        laygen.boundary_pin_from_rect(clkopx, gridname=rg_m5m6, name='CLKO_' + str(i),
+                                      layer=laygen.layers['pin'][5], size=2, direction='bottom', netname='CLKO')
     for i in range(0,2**(num_bits+unit_size-1)-2,4):
         capdac_O_xy0 = laygen.get_inst_pin_xy(capdac[0].name, 'O' + str(i), rg_m5m6)[0]
         capdac_O_xy1 = laygen.get_inst_pin_xy(capdac[1].name, 'O' + str(i), rg_m5m6)[0]
