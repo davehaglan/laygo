@@ -147,12 +147,12 @@ def generate_sarlogic(laygen, objectname_pfix, templib_logic, placement_grid, ro
    
     #pins 
     laygen.boundary_pin_from_rect(rsaop0, rg_m3m4, "SAOP", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.pin_from_rect(name = 'SAOP2', layer = laygen.layers['pin'][3], rect = rsaopv0, gridname=rg_m3m4, netname='SAOP')
+    laygen.pin(name = 'SAOP2', layer = laygen.layers['pin'][3], refobj = rsaopv0, gridname=rg_m3m4, netname='SAOP')
     laygen.boundary_pin_from_rect(rsaom0, rg_m3m4, "SAOM", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.pin_from_rect(name = 'SAOM2', layer = laygen.layers['pin'][3], rect = rsaomv0, gridname=rg_m3m4, netname='SAOM')
+    laygen.pin(name = 'SAOM2', layer = laygen.layers['pin'][3], refobj = rsaomv0, gridname=rg_m3m4, netname='SAOM')
     laygen.boundary_pin_from_rect(rsb0, rg_m3m4, "SB", laygen.layers['pin'][4], size=6, direction='left')
     laygen.boundary_pin_from_rect(rrst0, rg_m3m4, "RST", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.pin_from_rect(name = 'RST2', layer = laygen.layers['pin'][3], rect = rrstv1, gridname=rg_m3m4, netname='RST')
+    laygen.pin(name = 'RST2', layer = laygen.layers['pin'][3], refobj = rrstv1, gridname=rg_m3m4, netname='RST')
     laygen.boundary_pin_from_rect(rzp0, rg_m3m4, "ZP", laygen.layers['pin'][4], size=6, direction='right')
     laygen.boundary_pin_from_rect(rzm0, rg_m3m4, "ZM", laygen.layers['pin'][4], size=6, direction='right')
     laygen.boundary_pin_from_rect(rzmid0, rg_m3m4, "ZMID", laygen.layers['pin'][4], size=6, direction='right')
@@ -275,12 +275,12 @@ def generate_sarlogic_wret_v2(laygen, objectname_pfix, templib_logic, placement_
    
     #pins 
     laygen.boundary_pin_from_rect(rsaop0, rg_m3m4, "SAOP", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.pin_from_rect(name = 'SAOP2', layer = laygen.layers['pin'][3], rect = rsaopv0, gridname=rg_m3m4, netname='SAOP')
+    laygen.pin(name = 'SAOP2', layer = laygen.layers['pin'][3], refobj = rsaopv0, gridname=rg_m3m4, netname='SAOP')
     laygen.boundary_pin_from_rect(rsaom0, rg_m3m4, "SAOM", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.pin_from_rect(name = 'SAOM2', layer = laygen.layers['pin'][3], rect = rsaomv0, gridname=rg_m3m4, netname='SAOM')
+    laygen.pin(name = 'SAOM2', layer = laygen.layers['pin'][3], refobj = rsaomv0, gridname=rg_m3m4, netname='SAOM')
     laygen.boundary_pin_from_rect(rsb0, rg_m3m4, "SB", laygen.layers['pin'][4], size=6, direction='left')
     laygen.boundary_pin_from_rect(rrst0, rg_m3m4, "RST", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.pin_from_rect(name = 'RST2', layer = laygen.layers['pin'][3], rect = rrstv1, gridname=rg_m3m4, netname='RST')
+    laygen.pin(name = 'RST2', layer = laygen.layers['pin'][3], refobj = rrstv1, gridname=rg_m3m4, netname='RST')
     laygen.boundary_pin_from_rect(rzp0, rg_m3m4, "ZP", laygen.layers['pin'][4], size=6, direction='right')
     laygen.boundary_pin_from_rect(rzm0, rg_m3m4, "ZM", laygen.layers['pin'][4], size=6, direction='right')
     laygen.boundary_pin_from_rect(rzmid0, rg_m3m4, "ZMID", laygen.layers['pin'][4], size=6, direction='right')

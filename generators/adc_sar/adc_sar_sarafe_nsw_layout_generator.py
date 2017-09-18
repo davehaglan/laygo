@@ -356,11 +356,11 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     #trimming and pinning
     for r in rvdd_sa_m6:
         r.xy1[0]=x1_phy
-        p=laygen.pin_from_rect(name='VDD_M6_'+r.name, layer=laygen.layers['pin'][6], rect=r, gridname=rg_m5m6_thick, netname='VDD')
+        p=laygen.pin(name='VDD_M6_'+r.name, layer=laygen.layers['pin'][6], refobj=r, gridname=rg_m5m6_thick, netname='VDD')
         p.xy1[0]=x1_phy
     for r in rvss_sa_m6:
         r.xy1[0]=x1_phy
-        p=laygen.pin_from_rect(name='VSS_M6_'+r.name, layer=laygen.layers['pin'][6], rect=r, gridname=rg_m5m6_thick, netname='VSS')
+        p=laygen.pin(name='VSS_M6_'+r.name, layer=laygen.layers['pin'][6], refobj=r, gridname=rg_m5m6_thick, netname='VSS')
         p.xy1[0]=x1_phy
     #pins
     pdict_vref=laygen.get_inst_pin_xy(None, None, rg_m5m6_basic_thick)
@@ -405,8 +405,8 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
         laygen.boundary_pin_from_rect(renr2[i], rg_m5m6, "ENR" + str(i) + "<2>", laygen.layers['pin'][5], size=4,
                                       direction='bottom')
 
-    laygen.pin_from_rect(name='SAINP', layer=laygen.layers['pin'][4], rect=rsainp, gridname=rg_m4m5, netname='INP')
-    laygen.pin_from_rect(name='SAINM', layer=laygen.layers['pin'][4], rect=rsainm, gridname=rg_m4m5, netname='INM')
+    laygen.pin(name='SAINP', layer=laygen.layers['pin'][4], refobj=rsainp, gridname=rg_m4m5, netname='INP')
+    laygen.pin(name='SAINM', layer=laygen.layers['pin'][4], refobj=rsainm, gridname=rg_m4m5, netname='INM')
     for i, r in enumerate(rinp):
         laygen.boundary_pin_from_rect(r, rg_m5m6, "INP" + str(i), laygen.layers['pin'][6], size=8,
                                       direction='right', netname="INP")

@@ -500,10 +500,10 @@ def generate_salatch_simple(laygen, objectname_pfix, placement_grid,
                       refobj0=imaininl0.elements[0, 0].pins['G0'], refobj1=imaininl0.elements[0, 0].pins['G0'], via1=[0, 0])
     rinm=laygen.route(None, xy0=[0, -4], xy1=[0, 0], gridname0=rg23,
                       refobj0=imaininr0.elements[0, 0].pins['G0'], refobj1=imaininr0.elements[0, 0].pins['G0'], via1=[0, 0])
-    laygen.pin_from_rect(layer=laygen.layers['pin'][3], rect=rinp, gridname=rg23, name='INP')
-    laygen.pin_from_rect(layer=laygen.layers['pin'][3], rect=rinm, gridname=rg23, name='INM')
-    laygen.pin_from_rect(layer=laygen.layers['pin'][4], rect=rop, gridname=rg34, name='OUTP')
-    laygen.pin_from_rect(layer=laygen.layers['pin'][4], rect=rom, gridname=rg34, name='OUTM')
+    laygen.pin(layer=laygen.layers['pin'][3], refobj=rinp, gridname=rg23, name='INP')
+    laygen.pin(layer=laygen.layers['pin'][3], refobj=rinm, gridname=rg23, name='INM')
+    laygen.pin(layer=laygen.layers['pin'][4], refobj=rop, gridname=rg34, name='OUTP')
+    laygen.pin(layer=laygen.layers['pin'][4], refobj=rom, gridname=rg34, name='OUTM')
     #VDD/VSS
     rvss0 = laygen.route(None, xy0=[0, 1], xy1=[0, 1], gridname0=rg12t,
                         refobj0=imaintap0.elements[0, 0].pins['TAP0'], refobj1=imaintap0.elements[-1, 0].pins['TAP1'])
@@ -511,9 +511,9 @@ def generate_salatch_simple(laygen, objectname_pfix, placement_grid,
                         refobj0=irgntapn0.elements[0, 0].pins['TAP0'], refobj1=irgntapn0.elements[-1, 0].pins['TAP1']) 
     rvdd0 = laygen.route(None, xy0=[0, 1], xy1=[0, 1], gridname0=rg12t,
                         refobj0=irgntap0.elements[0, 0].pins['TAP0'], refobj1=irgntap0.elements[-1, 0].pins['TAP1'])
-    laygen.pin_from_rect(name='VSS0', layer=laygen.layers['pin'][2], rect=rvss0, gridname=rg12t, netname='VSS:')
-    laygen.pin_from_rect(name='VSS1', layer=laygen.layers['pin'][2], rect=rvss1, gridname=rg12t, netname='VSS:')
-    laygen.pin_from_rect(name='VDD0', layer=laygen.layers['pin'][2], rect=rvdd0, gridname=rg12t, netname='VDD')
+    laygen.pin(name='VSS0', layer=laygen.layers['pin'][2], refobj=rvss0, gridname=rg12t, netname='VSS:')
+    laygen.pin(name='VSS1', layer=laygen.layers['pin'][2], refobj=rvss1, gridname=rg12t, netname='VSS:')
+    laygen.pin(name='VDD0', layer=laygen.layers['pin'][2], refobj=rvdd0, gridname=rg12t, netname='VDD')
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")

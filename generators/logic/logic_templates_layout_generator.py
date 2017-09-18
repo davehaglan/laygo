@@ -3374,7 +3374,7 @@ def generate_tgate_dn(laygen, objectname_pfix,
         laygen.via(None, np.array([0, 0]), refinstname=ip1.name, refpinname='S0', refinstindex=np.array([i, 0]), gridname=rg_m2m3)
 
         if create_pin == True:
-            laygen.pin_from_rect(gridname=rg_m2m3, name='I_'+str(i), layer=laygen.layers['pin'][3], rect=rix, netname='I') 
+            laygen.pin(gridname=rg_m2m3, name='I_'+str(i), layer=laygen.layers['pin'][3], refobj=rix, netname='I') 
 
     laygen.route(None, laygen.layers['metal'][2], xy0=np.array([-1, 0]), xy1=np.array([0, 0]), gridname0=rg_m2m3,
                  refinstname0=in1.name, refpinname0='S0', refinstindex0=np.array([0, 0]),
@@ -3399,7 +3399,7 @@ def generate_tgate_dn(laygen, objectname_pfix,
         laygen.via(None, np.array([0, 1]), refinstname=in1.name, refpinname='D0', refinstindex=np.array([m-1-i, 0]), gridname=rg_m2m3)
         laygen.via(None, np.array([0, 1]), refinstname=ip1.name, refpinname='D0', refinstindex=np.array([m-1-i, 0]), gridname=rg_m2m3)
         if create_pin == True:
-            laygen.pin_from_rect(gridname=rg_m2m3, name='O_'+str(i), layer=laygen.layers['pin'][3], rect=rox, netname='O') 
+            laygen.pin(gridname=rg_m2m3, name='O_'+str(i), layer=laygen.layers['pin'][3], refobj=rox, netname='O') 
 
     laygen.route(None, laygen.layers['metal'][2], xy0=np.array([-1, 1]), xy1=np.array([0, 1]), gridname0=rg_m2m3,
                  refinstname0=in1.name, refpinname0='S0', refinstindex0=np.array([0, 0]),

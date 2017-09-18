@@ -83,11 +83,11 @@ if __name__ == '__main__':
     rvdd=laygen.route(xy0=[0, 0], xy1=[x0, 0], gridname0=rg12, refobj0=p0, refobj1=p5)
     rvss=laygen.route(xy0=[0, 0], xy1=[x0, 0], gridname0=rg12, refobj0=n0, refobj1=n5)
     #pins
-    laygen.pin_from_rect(name='A', layer=laygen.layers['pin'][2], rect=ra, gridname=rg12)
-    laygen.pin_from_rect(name='B', layer=laygen.layers['pin'][2], rect=rb, gridname=rg12)
-    laygen.pin_from_rect(name='O', layer=laygen.layers['pin'][3], rect=ro, gridname=rg23)
-    laygen.pin_from_rect(name='VDD', layer=laygen.layers['pin'][2], rect=rvdd, gridname=rg12)
-    laygen.pin_from_rect(name='VSS', layer=laygen.layers['pin'][2], rect=rvss, gridname=rg12)
+    laygen.pin(name='A', layer=laygen.layers['pin'][2], refobj=ra, gridname=rg12)
+    laygen.pin(name='B', layer=laygen.layers['pin'][2], refobj=rb, gridname=rg12)
+    laygen.pin(name='O', layer=laygen.layers['pin'][3], refobj=ro, gridname=rg23)
+    laygen.pin(name='VDD', layer=laygen.layers['pin'][2], refobj=rvdd, gridname=rg12)
+    laygen.pin(name='VSS', layer=laygen.layers['pin'][2], refobj=rvss, gridname=rg12)
     laygen.display()
     # export
     laygen.export_GDS('output.gds', cellname='nand_demo', layermapfile="../../labs/laygo_faketech.layermap")

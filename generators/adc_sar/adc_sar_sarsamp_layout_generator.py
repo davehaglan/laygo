@@ -113,10 +113,10 @@ def generate_samp_body(laygen, objectname_pfix, templib_logic,
     # signal pins 
     for p in pins_diff:
         for r, sfix in zip(routes[p], ['P', 'M']):
-            laygen.pin_from_rect(name=p+str(sfix), layer=laygen.layers['pin'][4], rect=r, gridname=rg34)
+            laygen.pin(name=p+str(sfix), layer=laygen.layers['pin'][4], refobj=r, gridname=rg34)
     for p in pins_se:
         for r in routes[p]:
-            laygen.pin_from_rect(name=p, layer=laygen.layers['pin'][4], rect=r, gridname=rg34)
+            laygen.pin(name=p, layer=laygen.layers['pin'][4], refobj=r, gridname=rg34)
     
     # power routes
     num_pwr= int(laygen.get_template_xy(name=itap[0].cellname, gridname=rg23, libname=itap[0].libname)[0] / 2) * min(tap_m_list)
@@ -129,7 +129,7 @@ def generate_samp_body(laygen, objectname_pfix, templib_logic,
     # power pins
     for rv, sfix in zip(rvss, ['L', 'R']):
         for idx, r in enumerate(rv):
-            laygen.pin_from_rect(name='VSS'+str(sfix)+str(idx), layer=laygen.layers['pin'][3], rect=r, gridname=rg23, netname='VSS')
+            laygen.pin(name='VSS'+str(sfix)+str(idx), layer=laygen.layers['pin'][3], refobj=r, gridname=rg23, netname='VSS')
 
 def generate_samp_buffer(laygen, objectname_pfix, templib_logic, 
                          placement_grid='placement_basic',
@@ -203,7 +203,7 @@ def generate_samp_buffer(laygen, objectname_pfix, templib_logic,
     rv0, rout_buf=laygen.route_vh(xy0=xy0, xy1=xy0+np.array([-4, yofst_obuf]), gridname0=rg34)
     # signal pins 
     for p, r in zip(['IN', 'OUT_SW', 'OUT_BUF'],[rin, rout_sw, rout_buf]):
-        laygen.pin_from_rect(name=p, layer=laygen.layers['pin'][4], rect=r, gridname=rg34)
+        laygen.pin(name=p, layer=laygen.layers['pin'][4], refobj=r, gridname=rg34)
 
     # power routes
     num_pwr= int(laygen.get_template_xy(name=itap[0].cellname, gridname=rg23, libname=itap[0].libname)[0] / 2) * min(tap_m_list)
@@ -220,10 +220,10 @@ def generate_samp_buffer(laygen, objectname_pfix, templib_logic,
     # power pins
     for rv, sfix in zip(rvss, ['L', 'R']):
         for idx, r in enumerate(rv):
-            laygen.pin_from_rect(name='VSS'+str(sfix)+str(idx), layer=laygen.layers['pin'][3], rect=r, gridname=rg23, netname='VSS')
+            laygen.pin(name='VSS'+str(sfix)+str(idx), layer=laygen.layers['pin'][3], refobj=r, gridname=rg23, netname='VSS')
     for rv, sfix in zip(rvdd, ['L', 'R']):
         for idx, r in enumerate(rv):
-            laygen.pin_from_rect(name='VDD'+str(sfix)+str(idx), layer=laygen.layers['pin'][3], rect=r, gridname=rg23, netname='VDD')
+            laygen.pin(name='VDD'+str(sfix)+str(idx), layer=laygen.layers['pin'][3], refobj=r, gridname=rg23, netname='VDD')
 
 def generate_samp(laygen, objectname_pfix, workinglib, 
                   placement_grid='placement_basic',
@@ -301,7 +301,7 @@ def generate_samp(laygen, objectname_pfix, workinglib,
 
     # signal pins 
     for p, r in zip(['inp', 'inn', 'outp', 'outn', 'ckin', 'ckout', 'ckpg'],[rinp0, rinn0, routp0, routn0, rckin0, rckout0, rckpg0]):
-        laygen.pin_from_rect(name=p, layer=laygen.layers['pin'][5], rect=r, gridname=rg45bt)
+        laygen.pin(name=p, layer=laygen.layers['pin'][5], refobj=r, gridname=rg45bt)
 
     #vdd/vss - route
     #samp_m3_xy
@@ -381,11 +381,11 @@ def generate_samp(laygen, objectname_pfix, workinglib,
     x1_phy = laygen.get_inst_bbox(name=ibuf.name)[1][0] + laygen.get_template_xy('nmos4_fast_left')[0]
     for r in rvdd_m6:
         r.xy1[0]=x1_phy
-        p=laygen.pin_from_rect(name='VDD_M6_'+r.name, layer=laygen.layers['pin'][6], rect=r, gridname=pg56t, netname='VDD')
+        p=laygen.pin(name='VDD_M6_'+r.name, layer=laygen.layers['pin'][6], refobj=r, gridname=pg56t, netname='VDD')
         p.xy1[0]=x1_phy
     for r in rvss_m6:
         r.xy1[0]=x1_phy
-        p=laygen.pin_from_rect(name='VSS_M6_'+r.name, layer=laygen.layers['pin'][6], rect=r, gridname=pg56t, netname='VSS')
+        p=laygen.pin(name='VSS_M6_'+r.name, layer=laygen.layers['pin'][6], refobj=r, gridname=pg56t, netname='VSS')
         p.xy1[0]=x1_phy
 
 if __name__ == '__main__':

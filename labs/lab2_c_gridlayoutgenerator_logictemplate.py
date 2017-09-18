@@ -41,8 +41,8 @@ def create_io_pin(laygen, layer, gridname, pinname_list, rect_list, offset_y=np.
 
 def create_power_pin(laygen, layer, gridname, rect_vdd, rect_vss, pinname_vdd='VDD', pinname_vss='VSS'):
     """create power pin"""
-    laygen.pin_from_rect(name=pinname_vdd, layer=layer, rect=rect_vdd, gridname=gridname)
-    laygen.pin_from_rect(name=pinname_vss, layer=layer, rect=rect_vss, gridname=gridname)
+    laygen.pin(name=pinname_vdd, layer=layer, refobj=rect_vdd, gridname=gridname)
+    laygen.pin(name=pinname_vss, layer=layer, refobj=rect_vss, gridname=gridname)
 
 def generate_inv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, routing_grid_m2m3, routing_grid_m2m3_pin,
                  devname_nmos_boundary, devname_nmos_body, devname_pmos_boundary, devname_pmos_body, m=2,
@@ -110,8 +110,8 @@ def generate_inv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, rou
     if create_pin == True:
         create_io_pin(laygen, layer=laygen.layers['pin'][3], gridname=rg_m2m3_pin, pinname_list = ['I', 'O'],
                       rect_list=[ri0, ro0])
-        laygen.pin_from_rect(name='VDD', layer=laygen.layers['pin'][2], rect=rvdd, gridname=rg_m1m2)
-        laygen.pin_from_rect(name='VSS', layer=laygen.layers['pin'][2], rect=rvss, gridname=rg_m1m2)
+        laygen.pin(name='VDD', layer=laygen.layers['pin'][2], refobj=rvdd, gridname=rg_m1m2)
+        laygen.pin(name='VSS', layer=laygen.layers['pin'][2], refobj=rvss, gridname=rg_m1m2)
 
 def generate_tinv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, routing_grid_m2m3, routing_grid_m2m3_pin,
                   devname_nmos_boundary, devname_nmos_body, devname_pmos_boundary, devname_pmos_body, m=2,
@@ -217,8 +217,8 @@ def generate_tinv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, ro
     if create_pin == True:
         create_io_pin(laygen, layer=laygen.layers['pin'][3], gridname=rg_m2m3_pin,
                       pinname_list = ['I', 'EN', 'ENB', 'O'], rect_list=[ri0, ren0, renb0, ro0])
-        laygen.pin_from_rect(name='VDD', layer=laygen.layers['pin'][2], rect=rvdd, gridname=rg_m1m2)
-        laygen.pin_from_rect(name='VSS', layer=laygen.layers['pin'][2], rect=rvss, gridname=rg_m1m2)
+        laygen.pin(name='VDD', layer=laygen.layers['pin'][2], refobj=rvdd, gridname=rg_m1m2)
+        laygen.pin(name='VSS', layer=laygen.layers['pin'][2], refobj=rvss, gridname=rg_m1m2)
 
 def generate_space(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, routing_grid_m2m3, routing_grid_m2m3_pin,
                    devname_nmos_space, devname_pmos_space, m=1, origin=np.array([0,0]), create_pin=False):
@@ -241,8 +241,8 @@ def generate_space(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, r
                  refinstname0=in0.name, refinstname1=in0.name)
     # pin
     if create_pin == True:
-        laygen.pin_from_rect(name='VDD', layer=laygen.layers['pin'][2], rect=rvdd, gridname=rg_m1m2)
-        laygen.pin_from_rect(name='VSS', layer=laygen.layers['pin'][2], rect=rvss, gridname=rg_m1m2)
+        laygen.pin(name='VDD', layer=laygen.layers['pin'][2], refobj=rvdd, gridname=rg_m1m2)
+        laygen.pin(name='VSS', layer=laygen.layers['pin'][2], refobj=rvss, gridname=rg_m1m2)
 
 #setup laygo
 laygen = laygo.GridLayoutGenerator(config_file='laygo_config.yaml')
