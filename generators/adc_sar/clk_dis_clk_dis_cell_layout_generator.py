@@ -37,8 +37,8 @@ def generate_tap(laygen, objectname_pfix, placement_grid, routing_grid_m1m2_thic
 
     # placement
     itapbl0 = laygen.place("I" + objectname_pfix + 'BL0', devname_tap_boundary, pg, xy=origin, transform=transform)
-    itap0 = laygen.relplace("I" + objectname_pfix + '0', devname_tap_body, pg, itapbl0.name, shape=np.array([m, 1]), transform=transform)
-    itapbr0 = laygen.relplace("I" + objectname_pfix + 'BR0', devname_tap_boundary, pg, itap0.name, transform=transform)
+    itap0 = laygen.relplace(name = "I" + objectname_pfix + '0', templatename = devname_tap_body, gridname = pg, refinstname = itapbl0.name, shape=np.array([m, 1]), transform=transform)
+    itapbr0 = laygen.relplace(name = "I" + objectname_pfix + 'BR0', templatename = devname_tap_boundary, gridname = pg, refinstname = itap0.name, transform=transform)
 
     #power route
     laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2_thick,
@@ -81,25 +81,25 @@ def generate_boundary(laygen, objectname_pfix, placement_grid,
     dev_bottom.append(laygen.place("I" + objectname_pfix + 'BNDBTM0', devname_bottom[0], pg, xy=origin,
                       shape=shape_bottom[0], transform=transform_bottom[0]))
     for i, d in enumerate(devname_bottom[1:]):
-        dev_bottom.append(laygen.relplace("I" + objectname_pfix + 'BNDBTM'+str(i+1), d, pg, dev_bottom[-1].name,
+        dev_bottom.append(laygen.relplace(name = "I" + objectname_pfix + 'BNDBTM'+str(i+1), templatename = d, gridname = pg, refinstname = dev_bottom[-1].name,
                                           shape=shape_bottom[i+1], transform=transform_bottom[i+1]))
     dev_left=[]
-    dev_left.append(laygen.relplace("I" + objectname_pfix + 'BNDLFT0', devname_left[0], pg, dev_bottom[0].name, direction='top',
+    dev_left.append(laygen.relplace(name = "I" + objectname_pfix + 'BNDLFT0', templatename = devname_left[0], gridname = pg, refinstname = dev_bottom[0].name, direction='top',
                                     shape=shape_left[0], transform=transform_left[0]))
     for i, d in enumerate(devname_left[1:]):
-        dev_left.append(laygen.relplace("I" + objectname_pfix + 'BNDLFT'+str(i+1), d, pg, dev_left[-1].name, direction='top',
+        dev_left.append(laygen.relplace(name = "I" + objectname_pfix + 'BNDLFT'+str(i+1), templatename = d, gridname = pg, refinstname = dev_left[-1].name, direction='top',
                                         shape=shape_left[i+1], transform=transform_left[i+1]))
     dev_right=[]
-    dev_right.append(laygen.relplace("I" + objectname_pfix + 'BNDRHT0', devname_right[0], pg, dev_bottom[-1].name, direction='top',
+    dev_right.append(laygen.relplace(name = "I" + objectname_pfix + 'BNDRHT0', templatename = devname_right[0], gridname = pg, refinstname = dev_bottom[-1].name, direction='top',
                                      shape=shape_right[0], transform=transform_right[0]))
     for i, d in enumerate(devname_right[1:]):
-        dev_right.append(laygen.relplace("I" + objectname_pfix + 'BNDRHT'+str(i+1), d, pg, dev_right[-1].name, direction='top',
+        dev_right.append(laygen.relplace(name = "I" + objectname_pfix + 'BNDRHT'+str(i+1), templatename = d, gridname = pg, refinstname = dev_right[-1].name, direction='top',
                                          shape=shape_right[i+1], transform=transform_right[i+1]))
     dev_top=[]
-    dev_top.append(laygen.relplace("I" + objectname_pfix + 'BNDTOP0', devname_top[0], pg, dev_left[-1].name, direction='top',
+    dev_top.append(laygen.relplace(name = "I" + objectname_pfix + 'BNDTOP0', templatename = devname_top[0], gridname = pg, refinstname = dev_left[-1].name, direction='top',
                                    shape=shape_top[0], transform=transform_top[0]))
     for i, d in enumerate(devname_top[1:]):
-        dev_top.append(laygen.relplace("I" + objectname_pfix + 'BNDTOP'+str(i+1), d, pg, dev_top[-1].name,
+        dev_top.append(laygen.relplace(name = "I" + objectname_pfix + 'BNDTOP'+str(i+1), templatename = d, gridname = pg, refinstname = dev_top[-1].name,
                                        shape=shape_top[i+1], transform=transform_top[i+1]))
     #dev_right=[]
     return [dev_bottom, dev_top, dev_left, dev_right]

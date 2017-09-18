@@ -61,17 +61,17 @@ def generate_tgate_dn(laygen, objectname_pfix,
 
     # placement
     in_space = laygen.place("I"+objectname_pfix+'NDMY', devname_nmos_space, pg, shape=np.array([2, 1]), xy=origin)
-    in0 = laygen.relplace("I" + objectname_pfix + 'N0', devname_nmos_boundary, pg, in_space.name)
-    in1 = laygen.relplace("I"+objectname_pfix+'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in2 = laygen.relplace("I"+objectname_pfix+'N2', devname_nmos_boundary, pg, in1.name)
-    in3 = laygen.relplace("I"+objectname_pfix+'N3', devname_nmos_body, pg, in2.name)
-    in4 = laygen.relplace("I"+objectname_pfix+'N4', devname_nmos_boundary, pg, in3.name)
+    in0 = laygen.relplace(name = "I" + objectname_pfix + 'N0', templatename = devname_nmos_boundary, gridname = pg, refinstname = in_space.name)
+    in1 = laygen.relplace(name = "I"+objectname_pfix+'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in2 = laygen.relplace(name = "I"+objectname_pfix+'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    in3 = laygen.relplace(name = "I"+objectname_pfix+'N3', templatename = devname_nmos_body, gridname = pg, refinstname = in2.name)
+    in4 = laygen.relplace(name = "I"+objectname_pfix+'N4', templatename = devname_nmos_boundary, gridname = pg, refinstname = in3.name)
 
-    ip_space = laygen.relplace("I"+objectname_pfix+'PDMY', devname_pmos_space, pg, in_space.name, direction='top', transform='MX', shape=np.array([2, 1]))
-    ip0 = laygen.relplace("I"+objectname_pfix+'P0', devname_pmos_boundary, pg, ip_space.name, transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix+'P1', devname_pmos_body, pg, ip0.name, transform='MX', shape=np.array([m, 1]))
-    ip2 = laygen.relplace("I"+objectname_pfix+'P2', devname_pmos_boundary, pg, ip1.name, transform='MX')
-    ip3 = laygen.relplace("I"+objectname_pfix+'P3', 'pmos4_fast_space', pg, ip2.name, shape=np.array([3,1]), transform='MX')
+    ip_space = laygen.relplace(name = "I"+objectname_pfix+'PDMY', templatename = devname_pmos_space, gridname = pg, refinstname = in_space.name, direction='top', transform='MX', shape=np.array([2, 1]))
+    ip0 = laygen.relplace(name = "I"+objectname_pfix+'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip_space.name, transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix+'P1', templatename = devname_pmos_body, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m, 1]))
+    ip2 = laygen.relplace(name = "I"+objectname_pfix+'P2', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
+    ip3 = laygen.relplace(name = "I"+objectname_pfix+'P3', templatename = 'pmos4_fast_space', gridname = pg, refinstname = ip2.name, shape=np.array([3,1]), transform='MX')
 
     # route
     #to vss
@@ -173,7 +173,7 @@ def generate_space_1x(laygen, objectname_pfix, placement_grid, routing_grid_m1m2
 
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', 'nmos4_fast_space', pg, xy=origin)
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', 'pmos4_fast_space', pg, in0.name, direction='top', transform='MX')
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = 'pmos4_fast_space', gridname = pg, refinstname = in0.name, direction='top', transform='MX')
 
     # power and groud rail
     xy = laygen.get_template_xy(in0.cellname, rg_m1m2) * np.array([1, 0])
@@ -195,7 +195,7 @@ def generate_space_2x(laygen, objectname_pfix, placement_grid, routing_grid_m1m2
 
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', 'nmos4_fast_space_2x', pg, xy=origin)
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', 'pmos4_fast_space_2x', pg, in0.name, direction='top', transform='MX')
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = 'pmos4_fast_space_2x', gridname = pg, refinstname = in0.name, direction='top', transform='MX')
 
     # power and groud rail
     xy = laygen.get_template_xy(in0.cellname, rg_m1m2) * np.array([1, 0])
@@ -217,7 +217,7 @@ def generate_space_4x(laygen, objectname_pfix, placement_grid, routing_grid_m1m2
 
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', 'nmos4_fast_space_nf4', pg, xy=origin)
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', 'pmos4_fast_space_nf4', pg, in0.name, direction='top', transform='MX')
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = 'pmos4_fast_space_nf4', gridname = pg, refinstname = in0.name, direction='top', transform='MX')
 
     # power and groud rail
     xy = laygen.get_template_xy(in0.cellname, rg_m1m2) * np.array([1, 0])
@@ -239,7 +239,7 @@ def generate_space_wovdd_1x(laygen, objectname_pfix, placement_grid, routing_gri
 
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', 'nmos4_fast_space', pg, xy=origin)
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', 'nmos4_fast_space', pg, in0.name, direction='top', transform='MX')
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = 'nmos4_fast_space', gridname = pg, refinstname = in0.name, direction='top', transform='MX')
 
     # power and groud rail
     xy = laygen.get_template_xy(in0.cellname, rg_m1m2) * np.array([1, 0])
@@ -261,7 +261,7 @@ def generate_space_wovdd_2x(laygen, objectname_pfix, placement_grid, routing_gri
 
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', 'nmos4_fast_space_2x', pg, xy=origin)
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', 'nmos4_fast_space_2x', pg, in0.name, direction='top', transform='MX')
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = 'nmos4_fast_space_2x', gridname = pg, refinstname = in0.name, direction='top', transform='MX')
 
     # power and groud rail
     xy = laygen.get_template_xy(in0.cellname, rg_m1m2) * np.array([1, 0])
@@ -283,7 +283,7 @@ def generate_space_wovdd_4x(laygen, objectname_pfix, placement_grid, routing_gri
 
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', 'nmos4_fast_space_nf4', pg, xy=origin)
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', 'nmos4_fast_space_nf4', pg, in0.name, direction='top', transform='MX')
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = 'nmos4_fast_space_nf4', gridname = pg, refinstname = in0.name, direction='top', transform='MX')
 
     # power and groud rail
     xy = laygen.get_template_xy(in0.cellname, rg_m1m2) * np.array([1, 0])
@@ -306,7 +306,7 @@ def generate_tap(laygen, objectname_pfix, placement_grid, routing_grid_m1m2,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', devname_nmos_tap, pg, xy=origin)
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', devname_pmos_tap, pg, in0.name, direction='top', transform='MX')
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = devname_pmos_tap, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
 
     #tap route
     xy_tap0 = laygen.get_template_pin_xy(in0.cellname, 'TAP0', rg_m1m2)[0, :]
@@ -345,7 +345,7 @@ def generate_tap_wovdd(laygen, objectname_pfix, placement_grid, routing_grid_m1m
 
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', devname_nmos_tap, pg, xy=origin)
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', devname_nmos_tap, pg, in0.name, direction='top', transform='MX')
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = devname_nmos_tap, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
 
     #tap route
     xy_tap0 = laygen.get_template_pin_xy(in0.cellname, 'TAP0', rg_m1m2)[0, :]
@@ -385,7 +385,7 @@ def generate_plugged_tap(laygen, objectname_pfix, placement_grid, routing_grid_m
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', devname_nmos_tap, pg, xy=origin)
     iplug0 = laygen.place("I"+objectname_pfix + 'PLUG0', devname_plug, pg, xy=origin)
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', devname_pmos_tap, pg, in0.name, direction='top', transform='MX')
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = devname_pmos_tap, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
 
     #tap route
     xy_tap0 = laygen.get_template_pin_xy(in0.cellname, 'TAP0', rg_m1m2)[0, :]
@@ -431,11 +431,11 @@ def generate_tie(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix+'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix+'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in2 = laygen.relplace("I"+objectname_pfix+'N2', devname_nmos_boundary, pg, in1.name)
-    ip0 = laygen.relplace("I"+objectname_pfix+'P0', devname_pmos_boundary, pg, in0.name, direction='top', transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix+'P1', devname_pmos_body, pg, ip0.name, transform='MX', shape=np.array([m, 1]))
-    ip2 = laygen.relplace("I"+objectname_pfix+'P3', devname_pmos_boundary, pg, ip1.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix+'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in2 = laygen.relplace(name = "I"+objectname_pfix+'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    ip0 = laygen.relplace(name = "I"+objectname_pfix+'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix+'P1', templatename = devname_pmos_body, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m, 1]))
+    ip2 = laygen.relplace(name = "I"+objectname_pfix+'P3', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
 
     # route
     # horizontal route style
@@ -547,11 +547,11 @@ def generate_tie_wovdd(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix+'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix+'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in2 = laygen.relplace("I"+objectname_pfix+'N2', devname_nmos_boundary, pg, in1.name)
-    in0b = laygen.relplace("I"+objectname_pfix+'N0B', devname_nmos_boundary, pg, in0.name, direction='top', transform='MX')
-    in1b = laygen.relplace("I"+objectname_pfix+'N1B', devname_nmos_body, pg, in0b.name, transform='MX', shape=np.array([m, 1]))
-    in2b = laygen.relplace("I"+objectname_pfix+'N2B', devname_nmos_boundary, pg, in1b.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix+'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in2 = laygen.relplace(name = "I"+objectname_pfix+'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    in0b = laygen.relplace(name = "I"+objectname_pfix+'N0B', templatename = devname_nmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    in1b = laygen.relplace(name = "I"+objectname_pfix+'N1B', templatename = devname_nmos_body, gridname = pg, refinstname = in0b.name, transform='MX', shape=np.array([m, 1]))
+    in2b = laygen.relplace(name = "I"+objectname_pfix+'N2B', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1b.name, transform='MX')
 
     # route
     # horizontal route style
@@ -660,11 +660,11 @@ def generate_bcap(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix+'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix+'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in2 = laygen.relplace("I"+objectname_pfix+'N2', devname_nmos_boundary, pg, in1.name)
-    ip0 = laygen.relplace("I"+objectname_pfix+'P0', devname_pmos_space, pg, in0.name, direction='top', transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix+'P1', devname_pmos_space, pg, ip0.name, transform='MX', shape=np.array([m*2, 1]))
-    ip2 = laygen.relplace("I"+objectname_pfix+'P3', devname_pmos_space, pg, ip1.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix+'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in2 = laygen.relplace(name = "I"+objectname_pfix+'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    ip0 = laygen.relplace(name = "I"+objectname_pfix+'P0', templatename = devname_pmos_space, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix+'P1', templatename = devname_pmos_space, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m*2, 1]))
+    ip2 = laygen.relplace(name = "I"+objectname_pfix+'P3', templatename = devname_pmos_space, gridname = pg, refinstname = ip1.name, transform='MX')
 
     # route
     #pdict = [laygen.get_inst_pin_xy(None, None, rg_m1m2, index=np.array([i, 0])) for i in range(m)]
@@ -720,13 +720,13 @@ def generate_dcap(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix+'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix+'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in2 = laygen.relplace("I"+objectname_pfix+'N2', devname_nmos_boundary, pg, in1.name)
-    ip0 = laygen.relplace("I"+objectname_pfix+'P0', devname_pmos_boundary, pg, in0.name, direction='top', transform='MX')
-    #ip1 = laygen.relplace("I"+objectname_pfix+'P1', devname_pmos_space, pg, ip0.name, transform='MX', shape=np.array([m*2, 1]))
-    ip1 = laygen.relplace("I"+objectname_pfix+'P1', devname_pmos_space, pg, ip0.name, transform='MX', shape=np.array([m, 1]))
-    ip1b = laygen.relplace("I"+objectname_pfix+'P1B', devname_pmos_boundary, pg, ip0.name, transform='MX', shape=np.array([m*2, 1]))
-    ip2 = laygen.relplace("I"+objectname_pfix+'P3', devname_pmos_boundary, pg, ip1.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix+'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in2 = laygen.relplace(name = "I"+objectname_pfix+'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    ip0 = laygen.relplace(name = "I"+objectname_pfix+'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    #ip1 = laygen.relplace(name = "I"+objectname_pfix+'P1', templatename = devname_pmos_space, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m*2, 1]))
+    ip1 = laygen.relplace(name = "I"+objectname_pfix+'P1', templatename = devname_pmos_space, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m, 1]))
+    ip1b = laygen.relplace(name = "I"+objectname_pfix+'P1B', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m*2, 1]))
+    ip2 = laygen.relplace(name = "I"+objectname_pfix+'P3', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
 
     # route
     #pdict = [laygen.get_inst_pin_xy(None, None, rg_m1m2, index=np.array([i, 0])) for i in range(m)]
@@ -776,11 +776,11 @@ def generate_dcap2(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix+'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix+'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in2 = laygen.relplace("I"+objectname_pfix+'N2', devname_nmos_boundary, pg, in1.name)
-    ip0 = laygen.relplace("I"+objectname_pfix+'P0', devname_pmos_boundary, pg, in0.name, direction='top', transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix+'P1', devname_pmos_body, pg, ip0.name, transform='MX', shape=np.array([m, 1]))
-    ip2 = laygen.relplace("I"+objectname_pfix+'P2', devname_pmos_boundary, pg, ip1.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix+'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in2 = laygen.relplace(name = "I"+objectname_pfix+'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    ip0 = laygen.relplace(name = "I"+objectname_pfix+'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix+'P1', templatename = devname_pmos_body, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m, 1]))
+    ip2 = laygen.relplace(name = "I"+objectname_pfix+'P2', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
 
     # route
     #pdict = [laygen.get_inst_pin_xy(None, None, rg_m1m2, index=np.array([i, 0])) for i in range(m)]
@@ -859,13 +859,13 @@ def generate_dcap3(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix+'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix+'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in2 = laygen.relplace("I"+objectname_pfix+'N2', devname_nmos_boundary, pg, in1.name)
-    ip0 = laygen.relplace("I"+objectname_pfix+'P0', devname_pmos_boundary, pg, in0.name, direction='top', transform='MX')
-    #ip1 = laygen.relplace("I"+objectname_pfix+'P1', devname_pmos_space, pg, ip0.name, transform='MX', shape=np.array([m*2, 1]))
-    ip1 = laygen.relplace("I"+objectname_pfix+'P1', devname_pmos_space, pg, ip0.name, transform='MX', shape=np.array([m, 1]))
-    ip1b = laygen.relplace("I"+objectname_pfix+'P1B', devname_pmos_boundary, pg, ip0.name, transform='MX', shape=np.array([m*2, 1]))
-    ip2 = laygen.relplace("I"+objectname_pfix+'P3', devname_pmos_boundary, pg, ip1.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix+'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in2 = laygen.relplace(name = "I"+objectname_pfix+'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    ip0 = laygen.relplace(name = "I"+objectname_pfix+'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    #ip1 = laygen.relplace(name = "I"+objectname_pfix+'P1', templatename = devname_pmos_space, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m*2, 1]))
+    ip1 = laygen.relplace(name = "I"+objectname_pfix+'P1', templatename = devname_pmos_space, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m, 1]))
+    ip1b = laygen.relplace(name = "I"+objectname_pfix+'P1B', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m*2, 1]))
+    ip2 = laygen.relplace(name = "I"+objectname_pfix+'P3', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
 
     # route
     #pdict = [laygen.get_inst_pin_xy(None, None, rg_m1m2, index=np.array([i, 0])) for i in range(m)]
@@ -940,11 +940,11 @@ def generate_bcap2(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix+'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix+'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in2 = laygen.relplace("I"+objectname_pfix+'N2', devname_nmos_boundary, pg, in1.name)
-    ip0 = laygen.relplace("I"+objectname_pfix+'P0', devname_pmos_boundary, pg, in0.name, direction='top', transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix+'P1', devname_pmos_body, pg, ip0.name, transform='MX', shape=np.array([m, 1]))
-    ip2 = laygen.relplace("I"+objectname_pfix+'P2', devname_pmos_boundary, pg, ip1.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix+'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in2 = laygen.relplace(name = "I"+objectname_pfix+'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    ip0 = laygen.relplace(name = "I"+objectname_pfix+'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix+'P1', templatename = devname_pmos_body, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m, 1]))
+    ip2 = laygen.relplace(name = "I"+objectname_pfix+'P2', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
 
     # route
     #pdict = [laygen.get_inst_pin_xy(None, None, rg_m1m2, index=np.array([i, 0])) for i in range(m)]
@@ -1031,11 +1031,11 @@ def generate_inv(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix+'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix+'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in2 = laygen.relplace("I"+objectname_pfix+'N2', devname_nmos_boundary, pg, in1.name)
-    ip0 = laygen.relplace("I"+objectname_pfix+'P0', devname_pmos_boundary, pg, in0.name, direction='top', transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix+'P1', devname_pmos_body, pg, ip0.name, transform='MX', shape=np.array([m, 1]))
-    ip2 = laygen.relplace("I"+objectname_pfix+'P3', devname_pmos_boundary, pg, ip1.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix+'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in2 = laygen.relplace(name = "I"+objectname_pfix+'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    ip0 = laygen.relplace(name = "I"+objectname_pfix+'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix+'P1', templatename = devname_pmos_body, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m, 1]))
+    ip2 = laygen.relplace(name = "I"+objectname_pfix+'P3', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
 
     # route
     # horizontal route style
@@ -1142,13 +1142,13 @@ def generate_inv_1x(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix + 'N1', devname_nmos_body, pg, in0.name)
-    in2 = laygen.relplace("I"+objectname_pfix + 'N2', devname_nmos_boundary, pg, in1.name)
-    in3 = laygen.relplace("I"+objectname_pfix + 'N3', devname_nmos_space, pg, in2.name)
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', devname_pmos_boundary, pg, in0.name, direction='top', transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix + 'P1', devname_pmos_body, pg, ip0.name, transform='MX')
-    ip2 = laygen.relplace("I"+objectname_pfix + 'P2', devname_pmos_boundary, pg, ip1.name, transform='MX')
-    ip3 = laygen.relplace("I"+objectname_pfix + 'P3', devname_pmos_space, pg, ip2.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix + 'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name)
+    in2 = laygen.relplace(name = "I"+objectname_pfix + 'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    in3 = laygen.relplace(name = "I"+objectname_pfix + 'N3', templatename = devname_nmos_space, gridname = pg, refinstname = in2.name)
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix + 'P1', templatename = devname_pmos_body, gridname = pg, refinstname = ip0.name, transform='MX')
+    ip2 = laygen.relplace(name = "I"+objectname_pfix + 'P2', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
+    ip3 = laygen.relplace(name = "I"+objectname_pfix + 'P3', templatename = devname_pmos_space, gridname = pg, refinstname = ip2.name, transform='MX')
 
     # route
     # input
@@ -1214,13 +1214,13 @@ def generate_tgate(laygen, objectname_pfix,
 
     # placement
     in_space = laygen.place("I"+objectname_pfix+'NDMY', devname_nmos_space, pg, shape=np.array([2, 1]), xy=origin)
-    in0 = laygen.relplace("I" + objectname_pfix + 'N0', devname_nmos_boundary, pg, in_space.name)
-    in1 = laygen.relplace("I"+objectname_pfix+'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in2 = laygen.relplace("I"+objectname_pfix+'N2', devname_nmos_boundary, pg, in1.name)
-    ip_space = laygen.relplace("I"+objectname_pfix+'PDMY', devname_pmos_space, pg, in_space.name, direction='top', transform='MX', shape=np.array([2, 1]))
-    ip0 = laygen.relplace("I"+objectname_pfix+'P0', devname_pmos_boundary, pg, ip_space.name, transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix+'P2', devname_pmos_body, pg, ip0.name, transform='MX', shape=np.array([m, 1]))
-    ip2 = laygen.relplace("I"+objectname_pfix+'P3', devname_pmos_boundary, pg, ip1.name, transform='MX')
+    in0 = laygen.relplace(name = "I" + objectname_pfix + 'N0', templatename = devname_nmos_boundary, gridname = pg, refinstname = in_space.name)
+    in1 = laygen.relplace(name = "I"+objectname_pfix+'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in2 = laygen.relplace(name = "I"+objectname_pfix+'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    ip_space = laygen.relplace(name = "I"+objectname_pfix+'PDMY', templatename = devname_pmos_space, gridname = pg, refinstname = in_space.name, direction='top', transform='MX', shape=np.array([2, 1]))
+    ip0 = laygen.relplace(name = "I"+objectname_pfix+'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip_space.name, transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix+'P2', templatename = devname_pmos_body, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m, 1]))
+    ip2 = laygen.relplace(name = "I"+objectname_pfix+'P3', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
 
     # route
     # en, enb
@@ -1305,14 +1305,14 @@ def generate_nsw(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I" + objectname_pfix + 'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix+'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in2 = laygen.relplace("I"+objectname_pfix+'N2', devname_nmos_boundary, pg, in1.name)
-    ip0 = laygen.relplace("I"+objectname_pfix+'P0', devname_pmos_space, pg, in0.name, direction='top', transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix+'P2', devname_pmos_space, pg, ip0.name, transform='MX', shape=np.array([m*2, 1]))
-    ip2 = laygen.relplace("I"+objectname_pfix+'P3', devname_pmos_space, pg, ip1.name, transform='MX')
-    #ip0 = laygen.relplace("I"+objectname_pfix+'P0', devname_pmos_space, pg, in0.name, direction='top', transform='MX')
-    #ip1 = laygen.relplace("I"+objectname_pfix+'P2', devname_pmos_space, pg, ip0.name, transform='MX', shape=np.array([m*2, 1]))
-    #ip2 = laygen.relplace("I"+objectname_pfix+'P3', devname_pmos_space, pg, ip1.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix+'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in2 = laygen.relplace(name = "I"+objectname_pfix+'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    ip0 = laygen.relplace(name = "I"+objectname_pfix+'P0', templatename = devname_pmos_space, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix+'P2', templatename = devname_pmos_space, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m*2, 1]))
+    ip2 = laygen.relplace(name = "I"+objectname_pfix+'P3', templatename = devname_pmos_space, gridname = pg, refinstname = ip1.name, transform='MX')
+    #ip0 = laygen.relplace(name = "I"+objectname_pfix+'P0', templatename = devname_pmos_space, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    #ip1 = laygen.relplace(name = "I"+objectname_pfix+'P2', templatename = devname_pmos_space, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m*2, 1]))
+    #ip2 = laygen.relplace(name = "I"+objectname_pfix+'P3', templatename = devname_pmos_space, gridname = pg, refinstname = ip1.name, transform='MX')
 
     # route
     # en, enb
@@ -1382,11 +1382,11 @@ def generate_nsw_wovdd(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix+'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix+'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in2 = laygen.relplace("I"+objectname_pfix+'N2', devname_nmos_boundary, pg, in1.name)
-    in0b= laygen.relplace("I"+objectname_pfix+'N0B', devname_nmos_boundary, pg, in0.name, direction='top', transform='MX')
-    in1b= laygen.relplace("I"+objectname_pfix+'N2B', devname_nmos_body, pg, in0b.name, transform='MX', shape=np.array([m, 1]))
-    in2b= laygen.relplace("I"+objectname_pfix+'N3B', devname_nmos_boundary, pg, in1b.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix+'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in2 = laygen.relplace(name = "I"+objectname_pfix+'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    in0b= laygen.relplace(name = "I"+objectname_pfix+'N0B', templatename = devname_nmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    in1b= laygen.relplace(name = "I"+objectname_pfix+'N2B', templatename = devname_nmos_body, gridname = pg, refinstname = in0b.name, transform='MX', shape=np.array([m, 1]))
+    in2b= laygen.relplace(name = "I"+objectname_pfix+'N3B', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1b.name, transform='MX')
 
     # route
     # en, enb
@@ -1488,18 +1488,18 @@ def generate_nor(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix + 'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in2 = laygen.relplace("I" + objectname_pfix + 'N2', devname_nmos_boundary, pg, in1.name)
-    in3 = laygen.relplace("I" + objectname_pfix + 'N3', devname_nmos_boundary, pg, in2.name)
-    in4 = laygen.relplace("I"+objectname_pfix + 'N4', devname_nmos_body, pg, in3.name, shape=np.array([m, 1]))
-    in5 = laygen.relplace("I"+objectname_pfix + 'N5', devname_nmos_boundary, pg, in4.name)
+    in1 = laygen.relplace(name = "I"+objectname_pfix + 'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in2 = laygen.relplace(name = "I" + objectname_pfix + 'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    in3 = laygen.relplace(name = "I" + objectname_pfix + 'N3', templatename = devname_nmos_boundary, gridname = pg, refinstname = in2.name)
+    in4 = laygen.relplace(name = "I"+objectname_pfix + 'N4', templatename = devname_nmos_body, gridname = pg, refinstname = in3.name, shape=np.array([m, 1]))
+    in5 = laygen.relplace(name = "I"+objectname_pfix + 'N5', templatename = devname_nmos_boundary, gridname = pg, refinstname = in4.name)
 
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', devname_pmos_boundary, pg, in0.name, direction='top', transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix + 'P1', devname_pmos_body, pg, ip0.name, transform='MX', shape=np.array([m, 1]))
-    ip2 = laygen.relplace("I"+objectname_pfix + 'P2', devname_pmos_boundary, pg, ip1.name, transform='MX')
-    ip3 = laygen.relplace("I"+objectname_pfix + 'P3', devname_pmos_boundary, pg, ip2.name, transform='MX')
-    ip4 = laygen.relplace("I"+objectname_pfix + 'P4', devname_pmos_body, pg, ip3.name, transform='MX', shape=np.array([m, 1]))
-    ip5 = laygen.relplace("I"+objectname_pfix + 'P5', devname_pmos_boundary, pg, ip4.name, transform='MX')
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix + 'P1', templatename = devname_pmos_body, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m, 1]))
+    ip2 = laygen.relplace(name = "I"+objectname_pfix + 'P2', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
+    ip3 = laygen.relplace(name = "I"+objectname_pfix + 'P3', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip2.name, transform='MX')
+    ip4 = laygen.relplace(name = "I"+objectname_pfix + 'P4', templatename = devname_pmos_body, gridname = pg, refinstname = ip3.name, transform='MX', shape=np.array([m, 1]))
+    ip5 = laygen.relplace(name = "I"+objectname_pfix + 'P5', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip4.name, transform='MX')
 
     # route
     # b0
@@ -1644,18 +1644,18 @@ def generate_nand(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix + 'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in2 = laygen.relplace("I" + objectname_pfix + 'N2', devname_nmos_boundary, pg, in1.name)
-    in3 = laygen.relplace("I" + objectname_pfix + 'N3', devname_nmos_boundary, pg, in2.name)
-    in4 = laygen.relplace("I"+objectname_pfix + 'N4', devname_nmos_body, pg, in3.name, shape=np.array([m, 1]))
-    in5 = laygen.relplace("I"+objectname_pfix + 'N5', devname_nmos_boundary, pg, in4.name)
+    in1 = laygen.relplace(name = "I"+objectname_pfix + 'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in2 = laygen.relplace(name = "I" + objectname_pfix + 'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    in3 = laygen.relplace(name = "I" + objectname_pfix + 'N3', templatename = devname_nmos_boundary, gridname = pg, refinstname = in2.name)
+    in4 = laygen.relplace(name = "I"+objectname_pfix + 'N4', templatename = devname_nmos_body, gridname = pg, refinstname = in3.name, shape=np.array([m, 1]))
+    in5 = laygen.relplace(name = "I"+objectname_pfix + 'N5', templatename = devname_nmos_boundary, gridname = pg, refinstname = in4.name)
 
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', devname_pmos_boundary, pg, in0.name, direction='top', transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix + 'P1', devname_pmos_body, pg, ip0.name, transform='MX', shape=np.array([m, 1]))
-    ip2 = laygen.relplace("I"+objectname_pfix + 'P2', devname_pmos_boundary, pg, ip1.name, transform='MX')
-    ip3 = laygen.relplace("I"+objectname_pfix + 'P3', devname_pmos_boundary, pg, ip2.name, transform='MX')
-    ip4 = laygen.relplace("I"+objectname_pfix + 'P4', devname_pmos_body, pg, ip3.name, transform='MX', shape=np.array([m, 1]))
-    ip5 = laygen.relplace("I"+objectname_pfix + 'P5', devname_pmos_boundary, pg, ip4.name, transform='MX')
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix + 'P1', templatename = devname_pmos_body, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m, 1]))
+    ip2 = laygen.relplace(name = "I"+objectname_pfix + 'P2', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
+    ip3 = laygen.relplace(name = "I"+objectname_pfix + 'P3', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip2.name, transform='MX')
+    ip4 = laygen.relplace(name = "I"+objectname_pfix + 'P4', templatename = devname_pmos_body, gridname = pg, refinstname = ip3.name, transform='MX', shape=np.array([m, 1]))
+    ip5 = laygen.relplace(name = "I"+objectname_pfix + 'P5', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip4.name, transform='MX')
 
     # route
     # b0
@@ -1800,13 +1800,13 @@ def generate_nand_1x(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix + 'N1', devname_nmos_body_2stack, pg, in0.name)
-    #in2 = laygen.relplace("I"+objectname_pfix + 'N2', devname_nmos_body_right, pg, in1.name)
-    in2 = laygen.relplace("I"+objectname_pfix + 'N3', devname_nmos_boundary, pg, in1.name)
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', devname_pmos_boundary, pg, in0.name, direction='top', transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix + 'P1', devname_pmos_body_left, pg, ip0.name, transform='MX')
-    ip2 = laygen.relplace("I"+objectname_pfix + 'P2', devname_pmos_body_right, pg, ip1.name, transform='MX')
-    ip3 = laygen.relplace("I"+objectname_pfix + 'P3', devname_pmos_boundary, pg, ip2.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix + 'N1', templatename = devname_nmos_body_2stack, gridname = pg, refinstname = in0.name)
+    #in2 = laygen.relplace(name = "I"+objectname_pfix + 'N2', templatename = devname_nmos_body_right, gridname = pg, refinstname = in1.name)
+    in2 = laygen.relplace(name = "I"+objectname_pfix + 'N3', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix + 'P1', templatename = devname_pmos_body_left, gridname = pg, refinstname = ip0.name, transform='MX')
+    ip2 = laygen.relplace(name = "I"+objectname_pfix + 'P2', templatename = devname_pmos_body_right, gridname = pg, refinstname = ip1.name, transform='MX')
+    ip3 = laygen.relplace(name = "I"+objectname_pfix + 'P3', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip2.name, transform='MX')
 
     # route
     # B
@@ -1881,18 +1881,18 @@ def generate_tinv(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix + 'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in2 = laygen.relplace("I" + objectname_pfix + 'N2', devname_nmos_boundary, pg, in1.name)
-    in3 = laygen.relplace("I" + objectname_pfix + 'N3', devname_nmos_boundary, pg, in2.name)
-    in4 = laygen.relplace("I"+objectname_pfix + 'N4', devname_nmos_body, pg, in3.name, shape=np.array([m, 1]))
-    in5 = laygen.relplace("I"+objectname_pfix + 'N5', devname_nmos_boundary, pg, in4.name)
+    in1 = laygen.relplace(name = "I"+objectname_pfix + 'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in2 = laygen.relplace(name = "I" + objectname_pfix + 'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    in3 = laygen.relplace(name = "I" + objectname_pfix + 'N3', templatename = devname_nmos_boundary, gridname = pg, refinstname = in2.name)
+    in4 = laygen.relplace(name = "I"+objectname_pfix + 'N4', templatename = devname_nmos_body, gridname = pg, refinstname = in3.name, shape=np.array([m, 1]))
+    in5 = laygen.relplace(name = "I"+objectname_pfix + 'N5', templatename = devname_nmos_boundary, gridname = pg, refinstname = in4.name)
 
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', devname_pmos_boundary, pg, in0.name, direction='top', transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix + 'P1', devname_pmos_body, pg, ip0.name, transform='MX', shape=np.array([m, 1]))
-    ip2 = laygen.relplace("I"+objectname_pfix + 'P2', devname_pmos_boundary, pg, ip1.name, transform='MX')
-    ip3 = laygen.relplace("I"+objectname_pfix + 'P3', devname_pmos_boundary, pg, ip2.name, transform='MX')
-    ip4 = laygen.relplace("I"+objectname_pfix + 'P4', devname_pmos_body, pg, ip3.name, transform='MX', shape=np.array([m, 1]))
-    ip5 = laygen.relplace("I"+objectname_pfix + 'P5', devname_pmos_boundary, pg, ip4.name, transform='MX')
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix + 'P1', templatename = devname_pmos_body, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m, 1]))
+    ip2 = laygen.relplace(name = "I"+objectname_pfix + 'P2', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
+    ip3 = laygen.relplace(name = "I"+objectname_pfix + 'P3', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip2.name, transform='MX')
+    ip4 = laygen.relplace(name = "I"+objectname_pfix + 'P4', templatename = devname_pmos_body, gridname = pg, refinstname = ip3.name, transform='MX', shape=np.array([m, 1]))
+    ip5 = laygen.relplace(name = "I"+objectname_pfix + 'P5', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip4.name, transform='MX')
 
     # route
     # in0
@@ -2058,15 +2058,15 @@ def generate_tinv_1x(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix+'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix+'N1', devname_nmos_body_2stack, pg, in0.name)
-    in2 = laygen.relplace("I"+objectname_pfix+'N2', devname_nmos_boundary, pg, in1.name)
-    in3 = laygen.relplace("I"+objectname_pfix + 'N3', devname_nmos_space, pg, in2.name)
-    in4 = laygen.relplace("I" + objectname_pfix + 'N4', devname_nmos_space, pg, in3.name)
-    ip0 = laygen.relplace("I"+objectname_pfix+'P0', devname_pmos_boundary, pg, in0.name, direction='top', transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix+'P1', devname_pmos_body_2stack, pg, ip0.name, transform='MX')
-    ip2 = laygen.relplace("I"+objectname_pfix+'P2', devname_pmos_boundary, pg, ip1.name, transform='MX')
-    ip3 = laygen.relplace("I"+objectname_pfix + 'P3', devname_pmos_space, pg, ip2.name, transform='MX')
-    ip4 = laygen.relplace("I" + objectname_pfix + 'P4', devname_pmos_space, pg, ip3.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix+'N1', templatename = devname_nmos_body_2stack, gridname = pg, refinstname = in0.name)
+    in2 = laygen.relplace(name = "I"+objectname_pfix+'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    in3 = laygen.relplace(name = "I"+objectname_pfix + 'N3', templatename = devname_nmos_space, gridname = pg, refinstname = in2.name)
+    in4 = laygen.relplace(name = "I" + objectname_pfix + 'N4', templatename = devname_nmos_space, gridname = pg, refinstname = in3.name)
+    ip0 = laygen.relplace(name = "I"+objectname_pfix+'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix+'P1', templatename = devname_pmos_body_2stack, gridname = pg, refinstname = ip0.name, transform='MX')
+    ip2 = laygen.relplace(name = "I"+objectname_pfix+'P2', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
+    ip3 = laygen.relplace(name = "I"+objectname_pfix + 'P3', templatename = devname_pmos_space, gridname = pg, refinstname = ip2.name, transform='MX')
+    ip4 = laygen.relplace(name = "I" + objectname_pfix + 'P4', templatename = devname_pmos_space, gridname = pg, refinstname = ip3.name, transform='MX')
 
 
     # route
@@ -2148,15 +2148,15 @@ def generate_tinv_small_1x(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix+'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix+'N1', devname_nmos_body_2stack, pg, in0.name)
-    in2 = laygen.relplace("I"+objectname_pfix+'N2', devname_nmos_boundary, pg, in1.name)
-    in3 = laygen.relplace("I"+objectname_pfix + 'N3', devname_nmos_space, pg, in2.name)
-    in4 = laygen.relplace("I" + objectname_pfix + 'N4', devname_nmos_space, pg, in3.name)
-    ip0 = laygen.relplace("I"+objectname_pfix+'P0', devname_pmos_boundary, pg, in0.name, direction='top', transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix+'P1', devname_pmos_body_2stack, pg, ip0.name, transform='MX')
-    ip2 = laygen.relplace("I"+objectname_pfix+'P2', devname_pmos_boundary, pg, ip1.name, transform='MX')
-    ip3 = laygen.relplace("I"+objectname_pfix + 'P3', devname_pmos_space, pg, ip2.name, transform='MX')
-    ip4 = laygen.relplace("I" + objectname_pfix + 'P4', devname_pmos_space, pg, ip3.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix+'N1', templatename = devname_nmos_body_2stack, gridname = pg, refinstname = in0.name)
+    in2 = laygen.relplace(name = "I"+objectname_pfix+'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    in3 = laygen.relplace(name = "I"+objectname_pfix + 'N3', templatename = devname_nmos_space, gridname = pg, refinstname = in2.name)
+    in4 = laygen.relplace(name = "I" + objectname_pfix + 'N4', templatename = devname_nmos_space, gridname = pg, refinstname = in3.name)
+    ip0 = laygen.relplace(name = "I"+objectname_pfix+'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix+'P1', templatename = devname_pmos_body_2stack, gridname = pg, refinstname = ip0.name, transform='MX')
+    ip2 = laygen.relplace(name = "I"+objectname_pfix+'P2', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
+    ip3 = laygen.relplace(name = "I"+objectname_pfix + 'P3', templatename = devname_pmos_space, gridname = pg, refinstname = ip2.name, transform='MX')
+    ip4 = laygen.relplace(name = "I" + objectname_pfix + 'P4', templatename = devname_pmos_space, gridname = pg, refinstname = ip3.name, transform='MX')
 
 
     # route
@@ -2237,25 +2237,25 @@ def generate_mux2to1_1x(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', devname_nmos_boundary, pg, xy=origin)
-    #in1 = laygen.relplace("I"+objectname_pfix + 'N1', devname_nmos_body_left, pg, in0.name)
-    #in2 = laygen.relplace("I"+objectname_pfix + 'N2', devname_nmos_body_right, pg, in1.name)
-    in1 = laygen.relplace("I"+objectname_pfix + 'N1', devname_nmos_body_2stack, pg, in0.name)
-    in3 = laygen.relplace("I"+objectname_pfix + 'N3', devname_nmos_boundary, pg, in1.name)
-    in4 = laygen.relplace("I"+objectname_pfix + 'N4', devname_nmos_boundary, pg, in3.name, transform='MY')
-    #in5 = laygen.relplace("I"+objectname_pfix + 'N5', devname_nmos_body_right, pg, in4.name, transform='MY')
-    #in6 = laygen.relplace("I"+objectname_pfix + 'N6', devname_nmos_body_left, pg, in5.name, transform='MY')
-    in6 = laygen.relplace("I"+objectname_pfix + 'N6', devname_nmos_body_2stack, pg, in4.name, transform='MY')
-    in7 = laygen.relplace("I"+objectname_pfix + 'N7', devname_nmos_boundary, pg, in6.name, transform='MY')
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', devname_pmos_boundary, pg, in0.name, direction='top', transform='MX')
-    #ip1 = laygen.relplace("I"+objectname_pfix + 'P1', devname_pmos_body_left, pg, ip0.name, transform='MX')
-    #ip2 = laygen.relplace("I"+objectname_pfix + 'P2', devname_pmos_body_right, pg, ip1.name, transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix + 'P1', devname_pmos_body_2stack, pg, ip0.name, transform='MX')
-    ip3 = laygen.relplace("I"+objectname_pfix + 'P3', devname_pmos_boundary, pg, ip1.name, transform='MX')
-    ip4 = laygen.relplace("I"+objectname_pfix + 'P4', devname_pmos_boundary, pg, ip3.name, transform='R180')
-    #ip5 = laygen.relplace("I"+objectname_pfix + 'P5', devname_pmos_body_right, pg, ip4.name, transform='R180')
-    #ip6 = laygen.relplace("I"+objectname_pfix + 'P6', devname_pmos_body_left, pg, ip5.name, transform='R180')
-    ip6 = laygen.relplace("I"+objectname_pfix + 'P6', devname_pmos_body_2stack, pg, ip4.name, transform='R180')
-    ip7 = laygen.relplace("I"+objectname_pfix + 'P7', devname_pmos_boundary, pg, ip6.name, transform='R180')
+    #in1 = laygen.relplace(name = "I"+objectname_pfix + 'N1', templatename = devname_nmos_body_left, gridname = pg, refinstname = in0.name)
+    #in2 = laygen.relplace(name = "I"+objectname_pfix + 'N2', templatename = devname_nmos_body_right, gridname = pg, refinstname = in1.name)
+    in1 = laygen.relplace(name = "I"+objectname_pfix + 'N1', templatename = devname_nmos_body_2stack, gridname = pg, refinstname = in0.name)
+    in3 = laygen.relplace(name = "I"+objectname_pfix + 'N3', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    in4 = laygen.relplace(name = "I"+objectname_pfix + 'N4', templatename = devname_nmos_boundary, gridname = pg, refinstname = in3.name, transform='MY')
+    #in5 = laygen.relplace(name = "I"+objectname_pfix + 'N5', templatename = devname_nmos_body_right, gridname = pg, refinstname = in4.name, transform='MY')
+    #in6 = laygen.relplace(name = "I"+objectname_pfix + 'N6', templatename = devname_nmos_body_left, gridname = pg, refinstname = in5.name, transform='MY')
+    in6 = laygen.relplace(name = "I"+objectname_pfix + 'N6', templatename = devname_nmos_body_2stack, gridname = pg, refinstname = in4.name, transform='MY')
+    in7 = laygen.relplace(name = "I"+objectname_pfix + 'N7', templatename = devname_nmos_boundary, gridname = pg, refinstname = in6.name, transform='MY')
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    #ip1 = laygen.relplace(name = "I"+objectname_pfix + 'P1', templatename = devname_pmos_body_left, gridname = pg, refinstname = ip0.name, transform='MX')
+    #ip2 = laygen.relplace(name = "I"+objectname_pfix + 'P2', templatename = devname_pmos_body_right, gridname = pg, refinstname = ip1.name, transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix + 'P1', templatename = devname_pmos_body_2stack, gridname = pg, refinstname = ip0.name, transform='MX')
+    ip3 = laygen.relplace(name = "I"+objectname_pfix + 'P3', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
+    ip4 = laygen.relplace(name = "I"+objectname_pfix + 'P4', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip3.name, transform='R180')
+    #ip5 = laygen.relplace(name = "I"+objectname_pfix + 'P5', templatename = devname_pmos_body_right, gridname = pg, refinstname = ip4.name, transform='R180')
+    #ip6 = laygen.relplace(name = "I"+objectname_pfix + 'P6', templatename = devname_pmos_body_left, gridname = pg, refinstname = ip5.name, transform='R180')
+    ip6 = laygen.relplace(name = "I"+objectname_pfix + 'P6', templatename = devname_pmos_body_2stack, gridname = pg, refinstname = ip4.name, transform='R180')
+    ip7 = laygen.relplace(name = "I"+objectname_pfix + 'P7', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip6.name, transform='R180')
     generate_inv_1x(laygen, objectname_pfix=objectname_pfix+'INV0',
                     placement_grid=pg, routing_grid_m1m2=rg_m1m2, routing_grid_m2m3=rg_m2m3,
                     routing_grid_m1m2_pin=rg_m1m2_pin, routing_grid_m2m3_pin=rg_m2m3_pin,
@@ -2448,37 +2448,37 @@ def generate_mux2to1(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix + 'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in1a = laygen.relplace("I"+objectname_pfix + 'N1A', devname_nmos_boundary, pg, in1.name)
-    in1b = laygen.relplace("I"+objectname_pfix + 'N1B', devname_nmos_boundary, pg, in1a.name)
-    in2 = laygen.relplace("I"+objectname_pfix + 'N2', devname_nmos_body, pg, in1b.name, shape=np.array([m, 1]))
-    in3 = laygen.relplace("I"+objectname_pfix + 'N3', devname_nmos_boundary, pg, in2.name)
-    in_rte = laygen.relplace("I"+objectname_pfix + 'NRTE', devname_nmos_space, pg, in3.name, shape=np.array([4, 1]))
-    in4 = laygen.relplace("I"+objectname_pfix + 'N4', devname_nmos_boundary, pg, in_rte.name, transform='MY')
-    in5 = laygen.relplace("I"+objectname_pfix + 'N5', devname_nmos_body, pg, in4.name, transform='MY', shape=np.array([m, 1]))
-    in5a = laygen.relplace("I"+objectname_pfix + 'N5A', devname_nmos_boundary, pg, in5.name, transform='MY')
-    in5b = laygen.relplace("I"+objectname_pfix + 'N5B', devname_nmos_boundary, pg, in5a.name, transform='MY')
-    in6 = laygen.relplace("I"+objectname_pfix + 'N6', devname_nmos_body, pg, in5b.name, transform='MY', shape=np.array([m, 1]))
-    in7 = laygen.relplace("I"+objectname_pfix + 'N7', devname_nmos_boundary, pg, in6.name, transform='MY')
-    in8 = laygen.relplace("I"+objectname_pfix + 'N8', devname_nmos_boundary, pg, in7.name)
-    in9 = laygen.relplace("I"+objectname_pfix + 'N9', devname_nmos_body, pg, in8.name, shape=np.array([m, 1]))
-    in10 = laygen.relplace("I"+objectname_pfix + 'N10', devname_nmos_boundary, pg, in9.name)
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', devname_pmos_boundary, pg, in0.name, direction='top', transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix + 'P1', devname_pmos_body, pg, ip0.name, transform='MX', shape=np.array([m, 1]))
-    ip1a = laygen.relplace("I"+objectname_pfix + 'P1A', devname_pmos_boundary, pg, ip1.name, transform='MX')
-    ip1b = laygen.relplace("I"+objectname_pfix + 'P1B', devname_pmos_boundary, pg, ip1a.name, transform='MX')
-    ip2 = laygen.relplace("I"+objectname_pfix + 'P2', devname_pmos_body, pg, ip1b.name, transform='MX', shape=np.array([m, 1]))
-    ip3 = laygen.relplace("I"+objectname_pfix + 'P3', devname_pmos_boundary, pg, ip2.name, transform='MX')
-    ip_rte = laygen.relplace("I"+objectname_pfix + 'PRTE', devname_pmos_space, pg, ip3.name, shape=np.array([4, 1]), transform='MX')
-    ip4 = laygen.relplace("I"+objectname_pfix + 'P4', devname_pmos_boundary, pg, ip_rte.name, transform='R180')
-    ip5 = laygen.relplace("I"+objectname_pfix + 'P5', devname_pmos_body, pg, ip4.name, transform='R180', shape=np.array([m, 1]))
-    ip5a = laygen.relplace("I"+objectname_pfix + 'P5A', devname_pmos_boundary, pg, ip5.name, transform='R180')
-    ip5b = laygen.relplace("I"+objectname_pfix + 'P5B', devname_pmos_boundary, pg, ip5a.name, transform='R180')
-    ip6 = laygen.relplace("I"+objectname_pfix + 'P6', devname_pmos_body, pg, ip5b.name, transform='R180', shape=np.array([m, 1]))
-    ip7 = laygen.relplace("I"+objectname_pfix + 'P7', devname_pmos_boundary, pg, ip6.name, transform='R180')
-    ip8 = laygen.relplace("I"+objectname_pfix + 'P8', devname_pmos_boundary, pg, ip7.name, transform='MX')
-    ip9 = laygen.relplace("I"+objectname_pfix + 'P9', devname_pmos_body, pg, ip8.name, transform='MX', shape=np.array([m, 1]))
-    ip10 = laygen.relplace("I"+objectname_pfix + 'P10', devname_pmos_boundary, pg, ip9.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix + 'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in1a = laygen.relplace(name = "I"+objectname_pfix + 'N1A', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    in1b = laygen.relplace(name = "I"+objectname_pfix + 'N1B', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1a.name)
+    in2 = laygen.relplace(name = "I"+objectname_pfix + 'N2', templatename = devname_nmos_body, gridname = pg, refinstname = in1b.name, shape=np.array([m, 1]))
+    in3 = laygen.relplace(name = "I"+objectname_pfix + 'N3', templatename = devname_nmos_boundary, gridname = pg, refinstname = in2.name)
+    in_rte = laygen.relplace(name = "I"+objectname_pfix + 'NRTE', templatename = devname_nmos_space, gridname = pg, refinstname = in3.name, shape=np.array([4, 1]))
+    in4 = laygen.relplace(name = "I"+objectname_pfix + 'N4', templatename = devname_nmos_boundary, gridname = pg, refinstname = in_rte.name, transform='MY')
+    in5 = laygen.relplace(name = "I"+objectname_pfix + 'N5', templatename = devname_nmos_body, gridname = pg, refinstname = in4.name, transform='MY', shape=np.array([m, 1]))
+    in5a = laygen.relplace(name = "I"+objectname_pfix + 'N5A', templatename = devname_nmos_boundary, gridname = pg, refinstname = in5.name, transform='MY')
+    in5b = laygen.relplace(name = "I"+objectname_pfix + 'N5B', templatename = devname_nmos_boundary, gridname = pg, refinstname = in5a.name, transform='MY')
+    in6 = laygen.relplace(name = "I"+objectname_pfix + 'N6', templatename = devname_nmos_body, gridname = pg, refinstname = in5b.name, transform='MY', shape=np.array([m, 1]))
+    in7 = laygen.relplace(name = "I"+objectname_pfix + 'N7', templatename = devname_nmos_boundary, gridname = pg, refinstname = in6.name, transform='MY')
+    in8 = laygen.relplace(name = "I"+objectname_pfix + 'N8', templatename = devname_nmos_boundary, gridname = pg, refinstname = in7.name)
+    in9 = laygen.relplace(name = "I"+objectname_pfix + 'N9', templatename = devname_nmos_body, gridname = pg, refinstname = in8.name, shape=np.array([m, 1]))
+    in10 = laygen.relplace(name = "I"+objectname_pfix + 'N10', templatename = devname_nmos_boundary, gridname = pg, refinstname = in9.name)
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix + 'P1', templatename = devname_pmos_body, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m, 1]))
+    ip1a = laygen.relplace(name = "I"+objectname_pfix + 'P1A', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
+    ip1b = laygen.relplace(name = "I"+objectname_pfix + 'P1B', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1a.name, transform='MX')
+    ip2 = laygen.relplace(name = "I"+objectname_pfix + 'P2', templatename = devname_pmos_body, gridname = pg, refinstname = ip1b.name, transform='MX', shape=np.array([m, 1]))
+    ip3 = laygen.relplace(name = "I"+objectname_pfix + 'P3', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip2.name, transform='MX')
+    ip_rte = laygen.relplace(name = "I"+objectname_pfix + 'PRTE', templatename = devname_pmos_space, gridname = pg, refinstname = ip3.name, shape=np.array([4, 1]), transform='MX')
+    ip4 = laygen.relplace(name = "I"+objectname_pfix + 'P4', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip_rte.name, transform='R180')
+    ip5 = laygen.relplace(name = "I"+objectname_pfix + 'P5', templatename = devname_pmos_body, gridname = pg, refinstname = ip4.name, transform='R180', shape=np.array([m, 1]))
+    ip5a = laygen.relplace(name = "I"+objectname_pfix + 'P5A', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip5.name, transform='R180')
+    ip5b = laygen.relplace(name = "I"+objectname_pfix + 'P5B', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip5a.name, transform='R180')
+    ip6 = laygen.relplace(name = "I"+objectname_pfix + 'P6', templatename = devname_pmos_body, gridname = pg, refinstname = ip5b.name, transform='R180', shape=np.array([m, 1]))
+    ip7 = laygen.relplace(name = "I"+objectname_pfix + 'P7', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip6.name, transform='R180')
+    ip8 = laygen.relplace(name = "I"+objectname_pfix + 'P8', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip7.name, transform='MX')
+    ip9 = laygen.relplace(name = "I"+objectname_pfix + 'P9', templatename = devname_pmos_body, gridname = pg, refinstname = ip8.name, transform='MX', shape=np.array([m, 1]))
+    ip10 = laygen.relplace(name = "I"+objectname_pfix + 'P10', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip9.name, transform='MX')
 
     # in0
     for i in range(m):
@@ -2752,10 +2752,10 @@ def generate_latch_2ck(laygen, objectname_pfix, placement_grid, routing_grid_m1m
 
     # placement
     i0 = laygen.place("I"+objectname_pfix + 'TINV0', "tinv_"+str(m)+"x", pg, xy=origin)
-    #i1 = laygen.relplace("I"+objectname_pfix + 'TINV1', "tinv_1x_nmosinput", pg, i0.name) #used minimum size
-    #i2 = laygen.relplace("I"+objectname_pfix + 'INV0', "inv_"+str(m)+"x_pmosinput", pg, i1.name)
-    i1 = laygen.relplace("I"+objectname_pfix + 'TINV1', "tinv_small_1x", pg, i0.name) #used minimum size
-    i2 = laygen.relplace("I"+objectname_pfix + 'INV0', "inv_"+str(m)+"x", pg, i1.name)
+    #i1 = laygen.relplace(name = "I"+objectname_pfix + 'TINV1', templatename = "tinv_1x_nmosinput", gridname = pg, refinstname = i0.name) #used minimum size
+    #i2 = laygen.relplace(name = "I"+objectname_pfix + 'INV0', templatename = "inv_"+str(m)+"x_pmosinput", gridname = pg, refinstname = i1.name)
+    i1 = laygen.relplace(name = "I"+objectname_pfix + 'TINV1', templatename = "tinv_small_1x", gridname = pg, refinstname = i0.name) #used minimum size
+    i2 = laygen.relplace(name = "I"+objectname_pfix + 'INV0', templatename = "inv_"+str(m)+"x", gridname = pg, refinstname = i1.name)
 
     # internal pins
     tinv0_i_xy = laygen.get_inst_pin_xy(i0.name, 'I', rg_m3m4)
@@ -2825,8 +2825,8 @@ def generate_latch_2ck_rstbh(laygen, objectname_pfix, placement_grid, routing_gr
 
     # placement
     i0 = laygen.place("I"+objectname_pfix + 'TINV0', "tinv_"+str(m)+"x", pg, xy=origin)
-    i1 = laygen.relplace("I"+objectname_pfix + 'TINV1', "tinv_small_1x", pg, i0.name) #used minimum size
-    i2 = laygen.relplace("I"+objectname_pfix + 'ND0', "nand_"+str(m)+"x", pg, i1.name)
+    i1 = laygen.relplace(name = "I"+objectname_pfix + 'TINV1', templatename = "tinv_small_1x", gridname = pg, refinstname = i0.name) #used minimum size
+    i2 = laygen.relplace(name = "I"+objectname_pfix + 'ND0', templatename = "nand_"+str(m)+"x", gridname = pg, refinstname = i1.name)
 
     # internal pins
     tinv0_i_xy = laygen.get_inst_pin_xy(i0.name, 'I', rg_m3m4)
@@ -2897,7 +2897,7 @@ def generate_dff(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, rou
 
     # placement
     i0 = laygen.place("I" + objectname_pfix + 'INV0', "inv_" + str(m) + "x", pg, xy=origin)
-    i1 = laygen.relplace("I" + objectname_pfix + 'INV1', "inv_" + str(m) + "x", pg, i0.name)
+    i1 = laygen.relplace(name = "I" + objectname_pfix + 'INV1', templatename = "inv_" + str(m) + "x", gridname = pg, refinstname = i0.name)
     org=origin+laygen.get_inst_xy('I'+objectname_pfix+'INV1', pg)+ laygen.get_template_xy(i1.cellname, pg) * np.array([1, 0])
     generate_latch_2ck(laygen, objectname_pfix+'LCH0', placement_grid, routing_grid_m1m2, routing_grid_m2m3, routing_grid_m3m4,
                        origin=org, m=m, pin_clk_y=3, pin_clkb_y=2, route_mem_y=4, pin_o_y=5, create_pin=False)
@@ -2948,8 +2948,8 @@ def generate_dff_rsth(laygen, objectname_pfix, placement_grid, routing_grid_m1m2
 
     # placement
     i0 = laygen.place("I" + objectname_pfix + 'INV0', "inv_" + str(m) + "x", pg, xy=origin)
-    i1 = laygen.relplace("I" + objectname_pfix + 'INV1', "inv_" + str(m) + "x", pg, i0.name)
-    i2 = laygen.relplace("I" + objectname_pfix + 'INV2', "inv_" + str(m) + "x", pg, i1.name) #rstb
+    i1 = laygen.relplace(name = "I" + objectname_pfix + 'INV1', templatename = "inv_" + str(m) + "x", gridname = pg, refinstname = i0.name)
+    i2 = laygen.relplace(name = "I" + objectname_pfix + 'INV2', templatename = "inv_" + str(m) + "x", gridname = pg, refinstname = i1.name) #rstb
     org=origin+laygen.get_inst_xy('I'+objectname_pfix+'INV2', pg)+ laygen.get_template_xy(i1.cellname, pg) * np.array([1, 0])
     generate_latch_2ck_rstbh(laygen, objectname_pfix+'LCH0', placement_grid, routing_grid_m1m2, routing_grid_m2m3, routing_grid_m3m4,
                        origin=org, m=m, pin_clk_y=3, pin_clkb_y=2, route_mem_y=4, pin_o_y=5, create_pin=False)
@@ -3015,19 +3015,19 @@ def generate_oai22_1x(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix + 'N1', devname_nmos_body_left, pg, in0.name)
-    in2 = laygen.relplace("I"+objectname_pfix + 'N2', devname_nmos_body_right, pg, in1.name)
-    in3 = laygen.relplace("I"+objectname_pfix + 'N3', devname_nmos_boundary, pg, in2.name)
-    in4 = laygen.relplace("I"+objectname_pfix + 'N4', devname_nmos_boundary, pg, in3.name)
-    in5 = laygen.relplace("I"+objectname_pfix + 'N5', devname_nmos_body_left, pg, in4.name)
-    in6 = laygen.relplace("I"+objectname_pfix + 'N6', devname_nmos_body_right, pg, in5.name)
-    in7 = laygen.relplace("I"+objectname_pfix + 'N7', devname_nmos_boundary, pg, in6.name)
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', devname_pmos_boundary, pg, in0.name, direction='top', transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix + 'P1', devname_pmos_body_2stack, pg, ip0.name, transform='MX')
-    ip3 = laygen.relplace("I"+objectname_pfix + 'P3', devname_pmos_boundary, pg, ip1.name, transform='MX')
-    ip4 = laygen.relplace("I"+objectname_pfix + 'P4', devname_pmos_boundary, pg, ip3.name, transform='MX')
-    ip5 = laygen.relplace("I"+objectname_pfix + 'P5', devname_pmos_body_2stack, pg, ip4.name, transform='MX')
-    ip7 = laygen.relplace("I"+objectname_pfix + 'P7', devname_pmos_boundary, pg, ip5.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix + 'N1', templatename = devname_nmos_body_left, gridname = pg, refinstname = in0.name)
+    in2 = laygen.relplace(name = "I"+objectname_pfix + 'N2', templatename = devname_nmos_body_right, gridname = pg, refinstname = in1.name)
+    in3 = laygen.relplace(name = "I"+objectname_pfix + 'N3', templatename = devname_nmos_boundary, gridname = pg, refinstname = in2.name)
+    in4 = laygen.relplace(name = "I"+objectname_pfix + 'N4', templatename = devname_nmos_boundary, gridname = pg, refinstname = in3.name)
+    in5 = laygen.relplace(name = "I"+objectname_pfix + 'N5', templatename = devname_nmos_body_left, gridname = pg, refinstname = in4.name)
+    in6 = laygen.relplace(name = "I"+objectname_pfix + 'N6', templatename = devname_nmos_body_right, gridname = pg, refinstname = in5.name)
+    in7 = laygen.relplace(name = "I"+objectname_pfix + 'N7', templatename = devname_nmos_boundary, gridname = pg, refinstname = in6.name)
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix + 'P1', templatename = devname_pmos_body_2stack, gridname = pg, refinstname = ip0.name, transform='MX')
+    ip3 = laygen.relplace(name = "I"+objectname_pfix + 'P3', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
+    ip4 = laygen.relplace(name = "I"+objectname_pfix + 'P4', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip3.name, transform='MX')
+    ip5 = laygen.relplace(name = "I"+objectname_pfix + 'P5', templatename = devname_pmos_body_2stack, gridname = pg, refinstname = ip4.name, transform='MX')
+    ip7 = laygen.relplace(name = "I"+objectname_pfix + 'P7', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip5.name, transform='MX')
 
     # route
     # A
@@ -3125,23 +3125,23 @@ def generate_oai22_skewed_1x(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I"+objectname_pfix + 'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix + 'N1', devname_nmos_body_left, pg, in0.name)
-    in2 = laygen.relplace("I"+objectname_pfix + 'N2', devname_nmos_body_right, pg, in1.name)
-    in3 = laygen.relplace("I"+objectname_pfix + 'N3', devname_nmos_boundary, pg, in2.name)
-    in4 = laygen.relplace("I"+objectname_pfix + 'N4', devname_nmos_boundary, pg, in3.name)
-    in5 = laygen.relplace("I"+objectname_pfix + 'N5', devname_nmos_body_left, pg, in4.name)
-    in6 = laygen.relplace("I"+objectname_pfix + 'N6', devname_nmos_body_right, pg, in5.name)
-    in7 = laygen.relplace("I"+objectname_pfix + 'N7', devname_nmos_boundary, pg, in6.name)
-    in8 = laygen.relplace("I"+objectname_pfix + 'N8', devname_nmos_space, pg, in7.name, shape=np.array([4, 1]))
-    ip0 = laygen.relplace("I"+objectname_pfix + 'P0', devname_pmos_boundary, pg, in0.name, direction='top', transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix + 'P1', devname_pmos_body_2stack, pg, ip0.name, transform='MX')
-    ip3 = laygen.relplace("I"+objectname_pfix + 'P3', devname_pmos_boundary, pg, ip1.name, transform='MX')
-    ip4 = laygen.relplace("I"+objectname_pfix + 'P4', devname_pmos_boundary, pg, ip3.name, transform='MX')
-    ip5 = laygen.relplace("I"+objectname_pfix + 'P5', devname_pmos_body_2stack, pg, ip4.name, transform='MX')
-    ip5a = laygen.relplace("I"+objectname_pfix + 'P5a', devname_pmos_boundary, pg, ip5.name, transform='MX')
-    ip5b = laygen.relplace("I"+objectname_pfix + 'P5b', devname_pmos_boundary, pg, ip5a.name, transform='MX')
-    ip6 = laygen.relplace("I"+objectname_pfix + 'P6', devname_pmos_body_2stack, pg, ip5b.name, transform='MX')
-    ip7 = laygen.relplace("I"+objectname_pfix + 'P7', devname_pmos_boundary, pg, ip6.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix + 'N1', templatename = devname_nmos_body_left, gridname = pg, refinstname = in0.name)
+    in2 = laygen.relplace(name = "I"+objectname_pfix + 'N2', templatename = devname_nmos_body_right, gridname = pg, refinstname = in1.name)
+    in3 = laygen.relplace(name = "I"+objectname_pfix + 'N3', templatename = devname_nmos_boundary, gridname = pg, refinstname = in2.name)
+    in4 = laygen.relplace(name = "I"+objectname_pfix + 'N4', templatename = devname_nmos_boundary, gridname = pg, refinstname = in3.name)
+    in5 = laygen.relplace(name = "I"+objectname_pfix + 'N5', templatename = devname_nmos_body_left, gridname = pg, refinstname = in4.name)
+    in6 = laygen.relplace(name = "I"+objectname_pfix + 'N6', templatename = devname_nmos_body_right, gridname = pg, refinstname = in5.name)
+    in7 = laygen.relplace(name = "I"+objectname_pfix + 'N7', templatename = devname_nmos_boundary, gridname = pg, refinstname = in6.name)
+    in8 = laygen.relplace(name = "I"+objectname_pfix + 'N8', templatename = devname_nmos_space, gridname = pg, refinstname = in7.name, shape=np.array([4, 1]))
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix + 'P1', templatename = devname_pmos_body_2stack, gridname = pg, refinstname = ip0.name, transform='MX')
+    ip3 = laygen.relplace(name = "I"+objectname_pfix + 'P3', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
+    ip4 = laygen.relplace(name = "I"+objectname_pfix + 'P4', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip3.name, transform='MX')
+    ip5 = laygen.relplace(name = "I"+objectname_pfix + 'P5', templatename = devname_pmos_body_2stack, gridname = pg, refinstname = ip4.name, transform='MX')
+    ip5a = laygen.relplace(name = "I"+objectname_pfix + 'P5a', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip5.name, transform='MX')
+    ip5b = laygen.relplace(name = "I"+objectname_pfix + 'P5b', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip5a.name, transform='MX')
+    ip6 = laygen.relplace(name = "I"+objectname_pfix + 'P6', templatename = devname_pmos_body_2stack, gridname = pg, refinstname = ip5b.name, transform='MX')
+    ip7 = laygen.relplace(name = "I"+objectname_pfix + 'P7', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip6.name, transform='MX')
 
     # route
     # A
@@ -3245,9 +3245,9 @@ def generate_ndsr(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, ro
 
     # placement
     i0 = laygen.place("I"+objectname_pfix + 'ND0', "nand_"+str(m)+"x", pg, xy=origin)
-    i1 = laygen.relplace("I"+objectname_pfix + 'ND1', "nand_"+str(m)+"x", pg, i0.name)
-    i2 = laygen.relplace("I"+objectname_pfix + 'INV0', "inv_"+str(m)+"x", pg, i1.name)
-    i3 = laygen.relplace("I"+objectname_pfix + 'INV1', "inv_"+str(m)+"x", pg, i2.name)
+    i1 = laygen.relplace(name = "I"+objectname_pfix + 'ND1', templatename = "nand_"+str(m)+"x", gridname = pg, refinstname = i0.name)
+    i2 = laygen.relplace(name = "I"+objectname_pfix + 'INV0', templatename = "inv_"+str(m)+"x", gridname = pg, refinstname = i1.name)
+    i3 = laygen.relplace(name = "I"+objectname_pfix + 'INV1', templatename = "inv_"+str(m)+"x", gridname = pg, refinstname = i2.name)
 
     # internal pins
     nd0_a_xy = laygen.get_inst_pin_xy(i0.name, 'A', rg_m3m4)
@@ -3309,17 +3309,17 @@ def generate_tgate_dn(laygen, objectname_pfix,
 
     # placement
     in_space = laygen.place("I"+objectname_pfix+'NDMY', devname_nmos_space, pg, shape=np.array([2, 1]), xy=origin)
-    in0 = laygen.relplace("I" + objectname_pfix + 'N0', devname_nmos_boundary, pg, in_space.name)
-    in1 = laygen.relplace("I"+objectname_pfix+'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in2 = laygen.relplace("I"+objectname_pfix+'N2', devname_nmos_boundary, pg, in1.name, shape=np.array([2, 1]))
-    in3 = laygen.relplace("I"+objectname_pfix+'N3', devname_nmos_body, pg, in2.name, shape=np.array([n, 1]))
-    in4 = laygen.relplace("I"+objectname_pfix+'N4', devname_nmos_boundary, pg, in3.name)
+    in0 = laygen.relplace(name = "I" + objectname_pfix + 'N0', templatename = devname_nmos_boundary, gridname = pg, refinstname = in_space.name)
+    in1 = laygen.relplace(name = "I"+objectname_pfix+'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in2 = laygen.relplace(name = "I"+objectname_pfix+'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name, shape=np.array([2, 1]))
+    in3 = laygen.relplace(name = "I"+objectname_pfix+'N3', templatename = devname_nmos_body, gridname = pg, refinstname = in2.name, shape=np.array([n, 1]))
+    in4 = laygen.relplace(name = "I"+objectname_pfix+'N4', templatename = devname_nmos_boundary, gridname = pg, refinstname = in3.name)
 
-    ip_space = laygen.relplace("I"+objectname_pfix+'PDMY', devname_pmos_space, pg, in_space.name, direction='top', transform='MX', shape=np.array([2, 1]))
-    ip0 = laygen.relplace("I"+objectname_pfix+'P0', devname_pmos_boundary, pg, ip_space.name, transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix+'P1', devname_pmos_body, pg, ip0.name, transform='MX', shape=np.array([m, 1]))
-    ip2 = laygen.relplace("I"+objectname_pfix+'P2', devname_pmos_boundary, pg, ip1.name, transform='MX')
-    ip3 = laygen.relplace("I"+objectname_pfix+'P3', 'pmos4_fast_space', pg, ip2.name, shape=np.array([n+4,1]), transform='MX')
+    ip_space = laygen.relplace(name = "I"+objectname_pfix+'PDMY', templatename = devname_pmos_space, gridname = pg, refinstname = in_space.name, direction='top', transform='MX', shape=np.array([2, 1]))
+    ip0 = laygen.relplace(name = "I"+objectname_pfix+'P0', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip_space.name, transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix+'P1', templatename = devname_pmos_body, gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m, 1]))
+    ip2 = laygen.relplace(name = "I"+objectname_pfix+'P2', templatename = devname_pmos_boundary, gridname = pg, refinstname = ip1.name, transform='MX')
+    ip3 = laygen.relplace(name = "I"+objectname_pfix+'P3', templatename = 'pmos4_fast_space', gridname = pg, refinstname = ip2.name, shape=np.array([n+4,1]), transform='MX')
 
     # route
     #to vss
@@ -3450,11 +3450,11 @@ def generate_cap_sw(laygen, objectname_pfix,
 
     # placement
     in0 = laygen.place("I" + objectname_pfix + 'N0', devname_nmos_boundary, pg, xy=origin)
-    in1 = laygen.relplace("I"+objectname_pfix+'N1', devname_nmos_body, pg, in0.name, shape=np.array([m, 1]))
-    in2 = laygen.relplace("I"+objectname_pfix+'N2', devname_nmos_boundary, pg, in1.name)
-    ip0 = laygen.relplace("I"+objectname_pfix+'P0', 'pmos4_fast_space', pg, in0.name, direction='top', transform='MX')
-    ip1 = laygen.relplace("I"+objectname_pfix+'P2', 'pmos4_fast_space', pg, ip0.name, transform='MX', shape=np.array([m*2, 1]))
-    ip2 = laygen.relplace("I"+objectname_pfix+'P3', 'pmos4_fast_space', pg, ip1.name, transform='MX')
+    in1 = laygen.relplace(name = "I"+objectname_pfix+'N1', templatename = devname_nmos_body, gridname = pg, refinstname = in0.name, shape=np.array([m, 1]))
+    in2 = laygen.relplace(name = "I"+objectname_pfix+'N2', templatename = devname_nmos_boundary, gridname = pg, refinstname = in1.name)
+    ip0 = laygen.relplace(name = "I"+objectname_pfix+'P0', templatename = 'pmos4_fast_space', gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+    ip1 = laygen.relplace(name = "I"+objectname_pfix+'P2', templatename = 'pmos4_fast_space', gridname = pg, refinstname = ip0.name, transform='MX', shape=np.array([m*2, 1]))
+    ip2 = laygen.relplace(name = "I"+objectname_pfix+'P3', templatename = 'pmos4_fast_space', gridname = pg, refinstname = ip1.name, transform='MX')
 
     # route
     # to ground
@@ -3522,9 +3522,9 @@ def generate_latch_2ck_strstbh(laygen, objectname_pfix, placement_grid, routing_
 
     # placement
     i0 = laygen.place("I"+objectname_pfix + 'TINV0', "tinv_"+str(m)+"x", pg, xy=origin)
-    i2 = laygen.relplace("I"+objectname_pfix + 'TGAT0', "tgate_2x", pg, i0.name) #used minimum size
-    i3 = laygen.relplace("I"+objectname_pfix + 'ND1', "nand_2x", pg, i2.name) #used minimum size
-    i1 = laygen.relplace("I"+objectname_pfix + 'ND0', "nand_"+str(m)+"x", pg, i3.name)
+    i2 = laygen.relplace(name = "I"+objectname_pfix + 'TGAT0', templatename = "tgate_2x", gridname = pg, refinstname = i0.name) #used minimum size
+    i3 = laygen.relplace(name = "I"+objectname_pfix + 'ND1', templatename = "nand_2x", gridname = pg, refinstname = i2.name) #used minimum size
+    i1 = laygen.relplace(name = "I"+objectname_pfix + 'ND0', templatename = "nand_"+str(m)+"x", gridname = pg, refinstname = i3.name)
 
     # internal pins
     tinv0_i_xy = laygen.get_inst_pin_xy(i0.name, 'I', rg_m3m4)
@@ -3592,9 +3592,9 @@ def generate_dff_strsth(laygen, objectname_pfix, placement_grid, routing_grid_m1
 
     # placement
     i8 = laygen.place("I" + objectname_pfix + 'INV8', "inv_" + str(m) + "x", pg, xy=origin)  
-    i9 = laygen.relplace("I" + objectname_pfix + 'INV9', "inv_" + str(m) + "x", pg, i8.name) 
-    i10= laygen.relplace("I" + objectname_pfix + 'INV10', "inv_" + str(m) + "x", pg, i9.name) #stb
-    i11= laygen.relplace("I" + objectname_pfix + 'INV11', "inv_" + str(m) + "x", pg, i10.name) #rstb
+    i9 = laygen.relplace(name = "I" + objectname_pfix + 'INV9', templatename = "inv_" + str(m) + "x", gridname = pg, refinstname = i8.name) 
+    i10= laygen.relplace(name = "I" + objectname_pfix + 'INV10', templatename = "inv_" + str(m) + "x", gridname = pg, refinstname = i9.name) #stb
+    i11= laygen.relplace(name = "I" + objectname_pfix + 'INV11', templatename = "inv_" + str(m) + "x", gridname = pg, refinstname = i10.name) #rstb
     org=origin+laygen.get_inst_xy('I'+objectname_pfix+'INV11', pg)+ laygen.get_template_xy(i10.cellname, pg) * np.array([1, 0])
     generate_latch_2ck_strstbh(laygen, objectname_pfix+'LCH0', placement_grid, routing_grid_m1m2, routing_grid_m2m3, routing_grid_m3m4, 
                        origin=org, m=m, pin_clk_y=3, pin_clkb_y=2, route_mem_y=4, route_rstm_y = 8, pin_o_y=5, create_pin=False)      ##These two lines use different position for clk and clkb
@@ -3671,10 +3671,10 @@ def generate_dff_strsth_ckb(laygen, objectname_pfix, placement_grid, routing_gri
 
     # placement
     i12 = laygen.place("I" + objectname_pfix + 'INV12', "inv_" + str(m) + "x", pg, xy=origin)
-    i8 = laygen.relplace("I" + objectname_pfix + 'INV8', "inv_" + str(m) + "x", pg, i12.name)  #clk buffers -- try to make sure the number is same with schematic
-    i9 = laygen.relplace("I" + objectname_pfix + 'INV9', "inv_" + str(m) + "x", pg, i8.name) #that is why it's not start from '0'
-    i10= laygen.relplace("I" + objectname_pfix + 'INV10', "inv_" + str(m) + "x", pg, i9.name) #stb
-    i11= laygen.relplace("I" + objectname_pfix + 'INV11', "inv_" + str(m) + "x", pg, i10.name) #rstb
+    i8 = laygen.relplace(name = "I" + objectname_pfix + 'INV8', templatename = "inv_" + str(m) + "x", gridname = pg, refinstname = i12.name)  #clk buffers -- try to make sure the number is same with schematic
+    i9 = laygen.relplace(name = "I" + objectname_pfix + 'INV9', templatename = "inv_" + str(m) + "x", gridname = pg, refinstname = i8.name) #that is why it's not start from '0'
+    i10= laygen.relplace(name = "I" + objectname_pfix + 'INV10', templatename = "inv_" + str(m) + "x", gridname = pg, refinstname = i9.name) #stb
+    i11= laygen.relplace(name = "I" + objectname_pfix + 'INV11', templatename = "inv_" + str(m) + "x", gridname = pg, refinstname = i10.name) #rstb
     org=origin+laygen.get_inst_xy('I'+objectname_pfix+'INV11', pg)+ laygen.get_template_xy(i10.cellname, pg) * np.array([1, 0])
     generate_latch_2ck_strstbh(laygen, objectname_pfix+'LCH0', placement_grid, routing_grid_m1m2, routing_grid_m2m3, routing_grid_m3m4, #Can we return the object of it as before? -- Zhongkai
                        origin=org, m=m, pin_clk_y=3, pin_clkb_y=2, route_mem_y=4, route_rstm_y = 8, pin_o_y=5, create_pin=False)      ##These two lines use different position for clk and clkb

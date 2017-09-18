@@ -20,7 +20,7 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
             if 'def '+func_name+'(' in l:  # end of function call
                 l_token_arg = [] #tokens for arguments
                 trig = 1  #trig to readout arguments over multiple lines
-                depth = 0 #depth variable to figure out argument definitions
+                depth = 0 # depth variable to figure out argument definitions
                 print("function " + func_name + " definition detected. code snapshot: " + l[:-1])
             if trig == 1:
                 s_buf=''
@@ -60,12 +60,13 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
 
     # refactor
     trig = 0  # trigger for multiline call
-    depth = 0
+    depth = 0 # depth variable to find out arguments
     lines_o = [] # output buffer
     for i, l in enumerate(lines_i):
         if laygen_instance + '.' + func_name in l:
             trig = 1
-            depth = 0
+            l_header = l.split(laygen_instance + '.' + func_name)[0]
+            depth = -1*(l_header.count('(') + l_header.count('[')) #if brackets are before the function call, need to decrease initial depth value
             print("function " + func_name + " call detected in file: "+ filename_i + ", in line:"+ str(i) +" code snapshot: " + l[:-1])
         if trig == 1:
             l_refac = '' #refactored line
@@ -90,7 +91,7 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
                     elif c == '\n' and depth == 1: # newline
                         if s_buf == '': #no captured argument, the start of function call or captured well - just copy and paste
                             pass
-                        else: #maybe the end of function call - do refactoring
+                        else: # maybe the end of function call - do refactoring
                             trig_refac_arg = 1
                     else:
                         if depth >= 1:
