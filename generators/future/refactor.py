@@ -123,7 +123,7 @@ if __name__ == '__main__':
     '''
 
     #massive run over multiple directories, functions
-    dir_list=["../adc_sar/", "../golden/", "../logic/", "../serdes/"]
+    dir_list=[".", "../adc_sar/", "../golden/", "../logic/", "../serdes/", "../../labs"]
     func_list=["pin_from_rect"]
     for dir in dir_list:
         file_list=os.listdir(dir)
