@@ -998,7 +998,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         pass
 
     #pin creation functions
-    def pin(self, name, layer, xy=None, gridname=None, netname=None, base_layer=None, refobj=None,
+    def pin(self, name, layer=None, xy=None, gridname=None, netname=None, base_layer=None, refobj=None,
             xy0=np.array([0, 0]), xy1=np.array([0, 0])):
         """
         Pin generation function.
@@ -1007,8 +1007,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         ----------
         name : str
             pin name
-        layer : [str, str]
-            pin layer
+        layer : [str, str], optional
+            pin layer, if None, layer of refobj is used (assuming refobj is Rect)
         xy : np.array([[int, int], [int, int]]), optional, deprecated
             xy coordinate. deprecated. use xy0, xy1 instead
         xy0 : np.array([[int, int]), optional
@@ -1041,13 +1041,17 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         if not refobj is None:
             if type(refobj).__name__ is 'Rect':
                 xy = self.get_rect_xy(name=refobj.name, gridname=gridname)
+                if layer is None:
+                    layer=self.layers['pin'][self.layers['metal'].index(refobj.layer)]
         if netname==None: netname=name
         bx1, bx2 = sorted(xy[:,0].tolist())
         by1, by2 = sorted(xy[:,1].tolist())
         #ll = np.array([bx1, by1])  # lower-left
         #ur = np.array([bx2, by2])  # upper-right
         xy_phy, xy_phy_center=self._route_generate_box_from_abscoord(xy0=xy[0,:], xy1=xy[1,:], gridname0=gridname)
-        if base_layer==None: base_layer=[layer[0], 'drawing']
+        if base_layer==None:
+            base_layer=self.layers['metal'][self.layers['pin'].index(layer)]
+            #base_layer=[layer[0], 'drawing']
         self.db.add_rect(None, xy=xy_phy, layer=base_layer)
         return self.db.add_pin(name=name, netname=netname, xy=xy_phy, layer=layer)
 
