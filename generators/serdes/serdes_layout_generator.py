@@ -193,8 +193,8 @@ def generate_ser_vstack(laygen, objectname_pfix, templib_logic, placement_grid, 
     rg_m4m5 = routing_grid_m4m5
 
     input_size = radix ** num_stages
-    size_ser2to1 = laygen.get_template_xy(devname_serslice, pg)
-    size_ser2to1_rg_m4m5 = laygen.get_template_xy(devname_serslice, rg_m4m5)
+    size_ser2to1 = laygen.get_template_xy(name = devname_serslice, gridname = pg)
+    size_ser2to1_rg_m4m5 = laygen.get_template_xy(name = devname_serslice, gridname = rg_m4m5)
     # placement
     iser = []
     y_ser = 0
@@ -276,7 +276,7 @@ def generate_ser_vstack(laygen, objectname_pfix, templib_logic, placement_grid, 
                                       laygen.layers['pin'][5], size=4, direction='bottom')
 
     # output
-    y1 = laygen.get_inst_xy("I" + objectname_pfix + 'SER_' + str(num_stages-1) + '_0', gridname=rg_m4m5)[1]
+    y1 = laygen.get_inst_xy(name = "I" + objectname_pfix + 'SER_' + str(num_stages-1) + '_0', gridname=rg_m4m5)[1]
     y1+=size_ser2to1_rg_m4m5[1]-1
     xyo0 = laygen.get_inst_pin_xy("I" + objectname_pfix + 'SER_' + str(num_stages - 1) + '_0', 'O', gridname=rg_m4m5)[0]
     ro0 = laygen.route(None, laygen.layers['metal'][5], xy0=xyo0, xy1=np.array([xyo0[0], y1]), gridname0=rg_m4m5, via0=[[0, 0]])
@@ -329,7 +329,7 @@ def generate_ser_space_vstack(laygen, objectname_pfix, placement_grid, devname_s
                               origin=np.array([0, 0]), num_stages=3, radix=2):
     """generate spacing elements between vstacked serializers"""
     pg = placement_grid
-    size_ser2to1 = laygen.get_template_xy(devname_serspace, pg)
+    size_ser2to1 = laygen.get_template_xy(name = devname_serspace, gridname = pg)
 
     # placement
     iser = []

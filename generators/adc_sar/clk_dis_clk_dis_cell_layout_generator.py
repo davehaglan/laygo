@@ -327,7 +327,7 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
             clkiv=laygen.via(None, np.array([clki_x[0]-2*j, clki_x[1]+y1_clki+2*i]), gridname=rg_m3m4)
             laygen.route(None, laygen.layers['metal'][3], xy0=np.array([clki_x[0]-2*j, clki_x[1]]), xy1=np.array([clki_x[0]-2*j, clki_x[1]+y1_clki+2*(m_clki-1)]), gridname0=rg_m3m4)
             if i==0 and j==m_in-1:
-                v_xy=laygen.get_inst_xy(clkiv.name, rg_m4m5)
+                v_xy=laygen.get_inst_xy(name = clkiv.name, gridname = rg_m4m5)
         clki_d=clkp_x-v_xy[0] 
         for j in range(m_clki):
             [clkh, clkv]=laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], np.array([v_xy[0]-1, v_xy[1]+2*i]), 
@@ -347,7 +347,7 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
             clkov=laygen.via(None, np.array([clko_x[0]+2*j, clko_x[1]-y1_clko-2*i]), gridname=rg_m3m4)
             laygen.route(None, laygen.layers['metal'][3], xy0=np.array([clko_x[0]+2*j, clko_x[1]]), xy1=np.array([clko_x[0]+2*j, clko_x[1]-y1_clko-2*(m_clko-1)]), gridname0=rg_m3m4)
             if i==0 and j==0:
-                v_xy=laygen.get_inst_xy(clkov.name, rg_m4m5)
+                v_xy=laygen.get_inst_xy(name = clkov.name, gridname = rg_m4m5)
         clko_d=clkp_x-v_xy[0]
         for j in range(m_clko):
             [clkh, clkv]=laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], np.array([v_xy[0]-1, v_xy[1]-2*i]), 

@@ -78,9 +78,9 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
                 #mystr="    rect_xy_list = [laygen.get_rect_xy(name=r.name, gridname=gridname, sort=True) for r in rect_list]"
                 #mystr="    laygen.pin(name='VREF_M5_2<2>', layer=laygen.layers['pin'][5], xy=laygen.get_rect_xy(rvref2v2.name, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<2>')"
                 #mystr="    diffpair_origin = laygen.get_inst_xy(itapbl0.name, pg) + laygen.get_template_xy(itapbl0.cellname, pg) * np.array([0, 1])"
-                mystr="org=origin+laygen.get_inst_xy('I'+objectname_pfix+'INV1', pg)+ laygen.get_template_xy(i1.cellname, pg) * np.array([1, 0])"
-                if l_vanilla.startswith(mystr):
-                    print(c, depth, s_buf)
+                #mystr="    org=origin+laygen.get_inst_xy('I'+objectname_pfix+'INV1', pg)+ laygen.get_template_xy(i1.cellname, pg) * np.array([1, 0])"
+                #if l_vanilla.startswith(mystr):
+                #    print(c, depth, trig_refac_arg_readout, trig_refac_arg, s_buf)
                 trig_copy = 1  # trigger to copy c to l_refac without modifications
                 trig_refac_arg = 0 # trigger to refactor arguments after readout
                 if c == ' ' and s_buf == '':  # ignore spaces between commas and indents
@@ -91,17 +91,19 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
                             if s_buf == '':  # some functions have something like , ):
                                 pass
                             else:
-                                trig_refac_arg = 1
+                                if trig_refac_arg_readout == 1:
+                                    trig_refac_arg = 1
                             trig = 0 #end of function call
-                        if (depth == 1): trig_refac_arg_readout = 0  # reset readout trigger
+                            trig_refac_arg_readout = 0  # reset readout trigger
                         depth -= 1
-                    if c == ',' and depth == 1:  # if the comma is argument splitter,
+                    if c == ',' and depth == 1 and trig_refac_arg_readout==1:  # if the comma is argument splitter,
                         trig_refac_arg = 1
                     elif c == '\n' and depth == 1: # newline
                         if s_buf == '': #no captured argument, the start of function call or captured well - just copy and paste
                             pass
                         else: # maybe the end of function call - do refactoring
-                            trig_refac_arg = 1
+                            if trig_refac_arg_readout == 1:
+                                trig_refac_arg = 1
                     else:
                         if (depth >= 1) and (trig_refac_arg_readout == 1):
                             s_buf += c
@@ -266,7 +268,6 @@ if __name__ == '__main__':
 
     #positional to named - massive run over multiple directories, functions
     dir_list = ["./", "../adc_sar/", "../golden/", "../logic/", "../serdes/", "../../labs/"]
-    dir_list = ["../logic/"]
     func_list=["get_template_xy", "get_inst_xy", "get_rect_xy", "get_pin_xy"]
     for dir in dir_list:
         file_list=os.listdir(dir)

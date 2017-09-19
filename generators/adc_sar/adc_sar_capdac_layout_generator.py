@@ -137,32 +137,32 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
     for dev in devname_list_overlay_boundary_left:
         dev0_list=[ibndl0]
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(dev0.name, pg)
+            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_boundary_bottom:
         dev0_list=[ibndbl0] + ibndb + [ibndbr0] 
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(dev0.name, pg)
+            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_boundary_right:
         dev0_list=[ibndr0]
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(dev0.name, pg)
+            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_boundary_top:
         dev0_list=[ibndtl0] + ibndt + [ibndtr0] 
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(dev0.name, pg)
+            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_body:
         dev0_list=ivdac+[ic0]+ihdac 
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(dev0.name, pg)
+            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_dmy:
         dev0_list=idmydac
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(dev0.name, pg)
+            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
 
     #reference route coordinate
