@@ -424,6 +424,28 @@ route_M5_M6_thick</p>
 </li>
 </ol>
 </div>
+<div class="section" id="template-structure">
+<span id="template-structure"></span><h3>Template structure<a class="headerlink" href="#template-structure" title="Permalink to this headline">¶</a></h3>
+<p>Typical template structures are composed of the following elements.</p>
+<p><strong>Template body</strong>: Physical structure of the template. For example,
+transistor templates have poly, diffusion, contact, metal, and so on.</p>
+<p><strong>Pin region</strong>: Define pin regions by drawing rect objects with pin
+layers (layer defined in laygo_config.yaml).</p>
+<p><strong>Pin label</strong>: Assign pin names by drawing labels with pin layers
+(layer defined in laygo_config.yaml). You need to place pin label in
+side the pin region you want to assign the pin name.</p>
+<p><strong>Placement boundry</strong>: After template completion, place a rect object with
+prBoundry layer (layer defined in laygo_config.yaml).</p>
+<p><img alt="template_structure" src="../_images/tech_template1.png" /></p>
+<p>In most cases, pin names are same with actual net names. However, if
+multiple pin structures are created for the same nets, you need to assign
+different pin names for each pin structure.
+The example shown below is a tap template for body connections. The 2
+pins are all connected to VSS net, but they need to have separate pin
+names, to be accessed in laygo separately. For this case, you can
+assign pin names using text pins, at the same coordinates.</p>
+<p><img alt="template_structure2" src="../_images/tech_template2.png" /></p>
+</div>
 <div class="section" id="mosfet-templates">
 <span id="mosfet-templates"></span><h3>Mosfet templates<a class="headerlink" href="#mosfet-templates" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="basic-idea">
@@ -438,8 +460,10 @@ structures are divided into 3 parts:</p>
 <p>Any device row can be constructed by combining those element cells into
 one row.</p>
 <p><img alt="nmos" src="../_images/tech_nmos.png" /></p>
-<p>For generator examples, these types of cells need to be implemented:
-nmos4_fast, pmos4_fast, ntap_fast, ptap_fast</p>
+<p>Again, it&#8217;s designer&#8217;s choice to construnct the template dictionary,
+but if you want to use example codes in generator directory, these
+types of cells need to be implemented: <strong>nmos4_fast, pmos4_fast,
+ntap_fast, ptap_fast</strong></p>
 </div>
 <div class="section" id="nmos4-fast-family-cells">
 <span id="nmos4-fast-family-cells"></span><h4>nmos4_fast family cells<a class="headerlink" href="#nmos4-fast-family-cells" title="Permalink to this headline">¶</a></h4>
