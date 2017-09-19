@@ -66,15 +66,23 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
         if laygen_instance + '.' + func_name in l:
             trig = 1
             l_header = l.split(laygen_instance + '.' + func_name)[0]
-            depth = -1*(l_header.count('(') + l_header.count('[')) #if brackets are before the function call, need to decrease initial depth value
+            depth = -1*(l_header.count('(') + l_header.count('[')) + (l_header.count(')') + l_header.count(']')) #if brackets are before the function call, need to decrease initial depth value
             print("function " + func_name + " call detected in file: "+ filename_i + ", in line:"+ str(i) +" code snapshot: " + l[:-1])
         if trig == 1:
+            l_vanilla = l #copy original one
             l_refac = '' #refactored line
             s_buf = ''   #string buffer to store arguments
             arg_index = 0 #argument index to map positional arguments
+            trig_refac_arg_readout = 0  # trigger to readout arguments
             for c in l:
+                #mystr="    rect_xy_list = [laygen.get_rect_xy(name=r.name, gridname=gridname, sort=True) for r in rect_list]"
+                #mystr="    laygen.pin(name='VREF_M5_2<2>', layer=laygen.layers['pin'][5], xy=laygen.get_rect_xy(rvref2v2.name, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<2>')"
+                #mystr="    diffpair_origin = laygen.get_inst_xy(itapbl0.name, pg) + laygen.get_template_xy(itapbl0.cellname, pg) * np.array([0, 1])"
+                mystr="org=origin+laygen.get_inst_xy('I'+objectname_pfix+'INV1', pg)+ laygen.get_template_xy(i1.cellname, pg) * np.array([1, 0])"
+                if l_vanilla.startswith(mystr):
+                    print(c, depth, s_buf)
                 trig_copy = 1  # trigger to copy c to l_refac without modifications
-                trig_refac_arg = 0 # trigger to refactor arguements after readout
+                trig_refac_arg = 0 # trigger to refactor arguments after readout
                 if c == ' ' and s_buf == '':  # ignore spaces between commas and indents
                     pass
                 else:
@@ -85,6 +93,7 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
                             else:
                                 trig_refac_arg = 1
                             trig = 0 #end of function call
+                        if (depth == 1): trig_refac_arg_readout = 0  # reset readout trigger
                         depth -= 1
                     if c == ',' and depth == 1:  # if the comma is argument splitter,
                         trig_refac_arg = 1
@@ -94,11 +103,13 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
                         else: # maybe the end of function call - do refactoring
                             trig_refac_arg = 1
                     else:
-                        if depth >= 1:
+                        if (depth >= 1) and (trig_refac_arg_readout == 1):
                             s_buf += c
                             trig_copy = 0
                     if c == '(' or c == '[':  # go inside bracket. increase depth
                         depth += 1
+                        if (depth == 1) and (l_refac[(-1*len(func_name)):]==func_name):
+                            trig_refac_arg_readout = 1 #found the right spot. Start readout
                 if trig_refac_arg == 1: #s_buf filled, do refactoring
                     if '=' in s_buf: #named argument, just copy and paste
                         l_refac += s_buf
@@ -110,7 +121,7 @@ def convert_pos_to_named(filename_i, filename_o, func_name):
                     l_refac += c
                 #if c=='\n':
                 #    print('newline', depth, trig_copy)
-            print("   before refactoring: "+l[:-1]) #remove newline for neat plotting
+            print("   before refactoring: "+l_vanilla[:-1]) #remove newline for neat plotting
             print("    after refactoring: "+l_refac[:-1])
             #print(len(l),len(l_refac))
             lines_o.append(l_refac) #
@@ -161,15 +172,15 @@ def convert_pin_from_rect_to_pin(filename_i, filename_o):
     lines_o = []  # output buffer
     for i, l in enumerate(lines_i):
         if laygen_instance + '.' + func_name in l:
-            l_vanila = l # copy original one
             trig = 1
             l_header = l.split(laygen_instance + '.' + func_name)[0]
             depth = -1 * (l_header.count('(') + l_header.count(
                 '['))  # if brackets are before the function call, need to decrease initial depth value
-            l = l.replace(laygen_instance + '.' + func_name, laygen_instance + '.' + func_name_new)
             print("function " + func_name + " call detected in file: " + filename_i + ", in line:" + str(
-                i) + " code snapshot: " + l_vanila[:-1])
+                i) + " code snapshot: " + l[:-1])
         if trig == 1:
+            l_vanilla = l # copy original one
+            l = l.replace(laygen_instance + '.' + func_name, laygen_instance + '.' + func_name_new)
             l_refac = ''  # refactored line
             s_buf = ''  # string buffer to store arguments
             for c in l:
@@ -213,7 +224,7 @@ def convert_pin_from_rect_to_pin(filename_i, filename_o):
                     l_refac += c
                     # if c=='\n':
                     #    print('newline', depth, trig_copy)
-            print("   before refactoring: " + l_vanila[:-1])  # remove newline for neat plotting
+            print("   before refactoring: " + l_vanilla[:-1])  # remove newline for neat plotting
             print("    after refactoring: " + l_refac[:-1])
             # print(len(l),len(l_refac))
             lines_o.append(l_refac)  #
@@ -253,9 +264,9 @@ if __name__ == '__main__':
     convert_pos_to_named(filename_i=filename_i, filename_o=filename_o, func_name=func_name)
     '''
 
-
     #positional to named - massive run over multiple directories, functions
     dir_list = ["./", "../adc_sar/", "../golden/", "../logic/", "../serdes/", "../../labs/"]
+    dir_list = ["../logic/"]
     func_list=["get_template_xy", "get_inst_xy", "get_rect_xy", "get_pin_xy"]
     for dir in dir_list:
         file_list=os.listdir(dir)
@@ -264,7 +275,6 @@ if __name__ == '__main__':
                 filename=dir+file
                 for func in func_list:
                     convert_pos_to_named(filename_i=filename, filename_o=filename, func_name=func)
-
 
     '''
     #pin_from_rect to pin - single run example
