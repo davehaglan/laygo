@@ -436,7 +436,7 @@ def get_xy_hotfix(filename_i, filename_o):
                                 if func_name == 'get_inst_xy':
                                     l_refac += 'obj='+laygen_instance+'.get_inst('+s_buf+')'
                                 elif func_name == 'get_template_xy':
-                                    l_refac += 'obj='+laygen_instance+'.get_template('+s_buf+')'
+                                    l_refac += 'obj='+laygen_instance+'.get_template('+s_buf+'%%SAVE_FOR_LIBNAME%%)'
                                 elif func_name == 'get_rect_xy':
                                     l_refac += 'obj='+laygen_instance+'.get_rect('+s_buf+')'
                                 else:
