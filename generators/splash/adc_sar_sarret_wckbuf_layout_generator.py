@@ -34,10 +34,10 @@ import os
 
 def create_power_pin_from_inst(laygen, layer, gridname, inst_left, inst_right):
     """create power pin"""
-    rvdd0_pin_xy = laygen.get_inst_pin_coord(inst_left.name, 'VDD', gridname, sort=True)
-    rvdd1_pin_xy = laygen.get_inst_pin_coord(inst_right.name, 'VDD', gridname, sort=True)
-    rvss0_pin_xy = laygen.get_inst_pin_coord(inst_left.name, 'VSS', gridname, sort=True)
-    rvss1_pin_xy = laygen.get_inst_pin_coord(inst_right.name, 'VSS', gridname, sort=True)
+    rvdd0_pin_xy = laygen.get_inst_pin_xy(inst_left.name, 'VDD', gridname, sort=True)
+    rvdd1_pin_xy = laygen.get_inst_pin_xy(inst_right.name, 'VDD', gridname, sort=True)
+    rvss0_pin_xy = laygen.get_inst_pin_xy(inst_left.name, 'VSS', gridname, sort=True)
+    rvss1_pin_xy = laygen.get_inst_pin_xy(inst_right.name, 'VSS', gridname, sort=True)
 
     laygen.pin(name='VDD', layer=layer, xy=np.vstack((rvdd0_pin_xy[0],rvdd1_pin_xy[1])), gridname=gridname)
     laygen.pin(name='VSS', layer=layer, xy=np.vstack((rvss0_pin_xy[0],rvss1_pin_xy[1])), gridname=gridname)
@@ -63,7 +63,7 @@ def generate_sarretslice(laygen, objectname_pfix, templib_logic, placement_grid,
                              gridname=pg, refinstname=iinv1.name, template_libname=templib_logic)
 
     # internal pins
-    pdict = laygen.get_inst_pin_coord(None, None, rg_m3m4)
+    pdict = laygen.get_inst_pin_xy(None, None, rg_m3m4)
 
     # internal routes
     x0 = laygen.get_inst_xy(name=iinv0.name, gridname=rg_m3m4)[0] + 1
@@ -90,9 +90,9 @@ def generate_sarretslice(laygen, objectname_pfix, templib_logic, placement_grid,
                                 np.array([x1, y0-2]), rg_m3m4)
 
     #pins
-    laygen.create_boundary_pin_from_rect(rin0, rg_m3m4, "I", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.create_boundary_pin_from_rect(rclk0, rg_m3m4, "CLK", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.create_boundary_pin_from_rect(rout0, rg_m3m4, "O", laygen.layers['pin'][4], size=6, direction='right')
+    laygen.boundary_pin_from_rect(rin0, rg_m3m4, "I", laygen.layers['pin'][4], size=6, direction='left')
+    laygen.boundary_pin_from_rect(rclk0, rg_m3m4, "CLK", laygen.layers['pin'][4], size=6, direction='left')
+    laygen.boundary_pin_from_rect(rout0, rg_m3m4, "O", laygen.layers['pin'][4], size=6, direction='right')
 
     # power pin
     create_power_pin_from_inst(laygen, layer=laygen.layers['pin'][2], gridname=rg_m1m2, inst_left=iinv0, inst_right=iinv2)
@@ -224,8 +224,8 @@ def generate_sarret2_wckbuf(laygen, objectname_pfix, templib_logic, placement_gr
                                      gridname = pg, refinstname = refi, transform=tf, template_libname = templib_logic))
 
     #internal pins
-    pdict = laygen.get_inst_pin_coord(None, None, rg_m3m4)
-    pdict_m4m5 = laygen.get_inst_pin_coord(None, None, rg_m4m5)
+    pdict = laygen.get_inst_pin_xy(None, None, rg_m3m4)
+    pdict_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5)
 
     y0 = pdict[islice[0].name]['I'][0][1]+2
     x1 = laygen.get_inst_xy(name=islice[-1].name, gridname=rg_m3m4)[0]\
@@ -260,15 +260,15 @@ def generate_sarret2_wckbuf(laygen, objectname_pfix, templib_logic, placement_gr
     #xy=laygen.get_rect_xy(rclk0.name, rg_m4m5, sort=True)
     #rh0, rclk0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], xy[0],
     #                             np.array([xy[0][0]+6-6, y1_m4m5]), rg_m4m5)
-    #laygen.create_boundary_pin_from_rect(rclk0, rg_m4m5, 'CLK',
+    #laygen.boundary_pin_from_rect(rclk0, rg_m4m5, 'CLK',
     #                                     laygen.layers['pin'][5], size=6, direction='top')
-    laygen.create_boundary_pin_from_rect(rclk0, rg_m4m5, 'CLK',
+    laygen.boundary_pin_from_rect(rclk0, rg_m4m5, 'CLK',
                                          laygen.layers['pin'][4], size=6, direction='left')
     xy=laygen.get_rect_xy(rclko0.name, rg_m4m5, sort=True)
     for i in range(2):
         rh0, rclko0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], xy[0],
                                      np.array([xy[0][0]-2+2*i, y1_m4m5]), rg_m4m5)
-        laygen.create_boundary_pin_from_rect(rclko0, rg_m4m5, 'CLKO'+str(i),
+        laygen.boundary_pin_from_rect(rclko0, rg_m4m5, 'CLKO'+str(i),
                                              laygen.layers['pin'][5], size=6, direction='top', netname='CLKO')
     #clk route
     rclk=[]
@@ -287,12 +287,12 @@ def generate_sarret2_wckbuf(laygen, objectname_pfix, templib_logic, placement_gr
     for i in range(num_bits):
         rh0, rin0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], pdict_m4m5[islice[i].name]['I'][0],
                                     np.array([pdict_m4m5[islice[i].name]['I'][0][0]+2+2*int(i/num_bits_row), y1_m4m5]), rg_m4m5)
-        laygen.create_boundary_pin_from_rect(rin0, rg_m4m5, 'IN<' + str(i) + '>',
+        laygen.boundary_pin_from_rect(rin0, rg_m4m5, 'IN<' + str(i) + '>',
                                              laygen.layers['pin'][5], size=6, direction='top')
     for i in range(num_bits):
         rh0, rout0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], pdict_m4m5[islice[i].name]['O'][0],
                                      np.array([pdict_m4m5[islice[i].name]['O'][0][0]+2+2*int(i/num_bits_row), 2]), rg_m4m5)
-        laygen.create_boundary_pin_from_rect(rout0, rg_m4m5, 'OUT<' + str(i) + '>',
+        laygen.boundary_pin_from_rect(rout0, rg_m4m5, 'OUT<' + str(i) + '>',
                                              laygen.layers['pin'][5], size=6, direction='bottom')
     # power pin
     pwr_dim=laygen.get_template_size(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)

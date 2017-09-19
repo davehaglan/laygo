@@ -131,7 +131,7 @@ def generate_sarclkgen_core2(laygen, objectname_pfix,
                        refinstname0=in1.name, refpinname0='D0', refinstindex0=np.array([2*m - 1, 0]), via0=[[0, 0]],
                        refinstname1=ip4.name, refpinname1='D0', refinstindex1=np.array([m - 1, 0]), via1=[[0, 0]])
     # power and ground route
-    xy_s0 = laygen.get_template_pin_coord(in1.cellname, 'S0', rg_m1m2)[0, :]
+    xy_s0 = laygen.get_template_pin_xy(in1.cellname, 'S0', rg_m1m2)[0, :]
     for i in range(m):
         laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0 * np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
                      refinstname0=in1.name, refinstindex0=np.array([i, 0]), via0=[[0, 0]],
@@ -145,7 +145,7 @@ def generate_sarclkgen_core2(laygen, objectname_pfix,
         laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0 * np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
                      refinstname0=ip4.name, refinstindex0=np.array([i, 0]), via0=[[0, 0]],
                      refinstname1=ip4.name, refinstindex1=np.array([i, 0]))
-    xy_s1 = laygen.get_template_pin_coord(in1.cellname, 'S1', rg_m1m2)[0, :]
+    xy_s1 = laygen.get_template_pin_xy(in1.cellname, 'S1', rg_m1m2)[0, :]
     for i in range(m):
         laygen.route(None, laygen.layers['metal'][1], xy0=xy_s1 * np.array([1, 0]), xy1=xy_s1, gridname0=rg_m1m2,
                      refinstname0=in1.name, refinstindex0=np.array([i, 0]), via0=[[0, 0]],
@@ -315,7 +315,7 @@ def generate_sarclkgen_core_static(laygen, objectname_pfix,
                        refinstname0=in4.name, refpinname0='D0', refinstindex0=np.array([m - 1, 0]), via0=[[0, 0]],
                        refinstname1=ip4.name, refpinname1='D0', refinstindex1=np.array([m - 1, 0]), via1=[[0, 0]])
     # power and ground route
-    xy_s0 = laygen.get_template_pin_coord(in1.cellname, 'S0', rg_m1m2)[0, :]
+    xy_s0 = laygen.get_template_pin_xy(in1.cellname, 'S0', rg_m1m2)[0, :]
     for i in range(m_small):
         laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0 * np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
                      refinstname0=in1.name, refinstindex0=np.array([i, 0]),
@@ -333,7 +333,7 @@ def generate_sarclkgen_core_static(laygen, objectname_pfix,
                    refinstindex=np.array([i, 0]))
         laygen.via(None, xy_s0 * np.array([1, 0]), refinstname=ip1.name, gridname=rg_m1m2,
                    refinstindex=np.array([i, 0]))
-    xy_s1 = laygen.get_template_pin_coord(in1.cellname, 'S1', rg_m1m2)[0, :]
+    xy_s1 = laygen.get_template_pin_xy(in1.cellname, 'S1', rg_m1m2)[0, :]
     for i in range(m_small):
         laygen.route(None, laygen.layers['metal'][1], xy0=xy_s1 * np.array([1, 0]), xy1=xy_s1, gridname0=rg_m1m2,
                      refinstname0=in1.name, refinstindex0=np.array([i, 0]),

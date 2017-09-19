@@ -64,9 +64,9 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
     samp_template = laygen.templates.get_template(samp_name, samp_lib)
 
     #reference coordinates
-    pdict_m5m6=laygen.get_inst_pin_coord(None, None, rg_m5m6)
-    pdict_m5m6_thick=laygen.get_inst_pin_coord(None, None, rg_m5m6_thick)
-    pdict_m5m6_thick_basic=laygen.get_inst_pin_coord(None, None, rg_m5m6_thick_basic)
+    pdict_m5m6=laygen.get_inst_pin_xy(None, None, rg_m5m6)
+    pdict_m5m6_thick=laygen.get_inst_pin_xy(None, None, rg_m5m6_thick)
+    pdict_m5m6_thick_basic=laygen.get_inst_pin_xy(None, None, rg_m5m6_thick_basic)
     sar_pins=sar_template.pins
     samp_pins=samp_template.pins
     #sar_xy=isar.xy[0]
@@ -80,12 +80,12 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
     laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m5m6_thick_basic, gridname_output=rg_m5m6_thick_basic_temp_sig,
                                           instname=isamp.name, 
                                           inst_pin_prefix=['ckout'], xy_grid_type='xgrid')
-    pdict_m5m6_thick_basic_temp_sig = laygen.get_inst_pin_coord(None, None, rg_m5m6_thick_basic_temp_sig)
+    pdict_m5m6_thick_basic_temp_sig = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick_basic_temp_sig)
     rg_m4m5_basic_thick_temp_sig='route_M4_M5_basic_thick_temp_sig'
     laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m4m5_basic_thick, gridname_output=rg_m4m5_basic_thick_temp_sig,
                                           instname=isamp.name, 
                                           inst_pin_prefix=['outp', 'outn'], xy_grid_type='xgrid')
-    pdict_m4m5_basic_thick_temp_sig = laygen.get_inst_pin_coord(None, None, rg_m4m5_basic_thick_temp_sig)
+    pdict_m4m5_basic_thick_temp_sig = laygen.get_inst_pin_xy(None, None, rg_m4m5_basic_thick_temp_sig)
     #clock
     rclk0 = laygen.route(None, laygen.layers['metal'][5],
                          xy0=pdict_m5m6_thick_basic_temp_sig[isamp.name]['ckout'][0],
@@ -216,7 +216,7 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
     laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m5m6_thick, gridname_output=rg_m5m6_thick_temp_samp,
                                           instname=isamp.name, 
                                           inst_pin_prefix=['VDD', 'VSS'], xy_grid_type='ygrid')
-    pdict_m5m6_thick_temp_samp = laygen.get_inst_pin_coord(None, None, rg_m5m6_thick_temp_samp)
+    pdict_m5m6_thick_temp_samp = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick_temp_samp)
     vddcnt=0
     vsscnt=0
     for p in pdict_m5m6_thick_temp_samp[isamp.name]:
