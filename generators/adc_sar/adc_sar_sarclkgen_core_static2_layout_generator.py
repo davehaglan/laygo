@@ -32,7 +32,7 @@ import os
 
 def create_io_pin(laygen, layer, gridname, pinname_list, rect_list, offset_y=np.array([-1, 1])):
     """create digital io pin"""
-    rect_xy_list = [laygen.get_rect_xy(name=r.name, gridname=gridname, sort=True) for r in rect_list]
+    rect_xy_list = [laygen.get_xy(obj =r, gridname=gridname, sort=True) for r in rect_list]
     #align pins
     ry = rect_xy_list[0][:, 1] + offset_y.T
     for i, xy_rect in enumerate(rect_xy_list):
@@ -41,8 +41,8 @@ def create_io_pin(laygen, layer, gridname, pinname_list, rect_list, offset_y=np.
 
 def create_power_pin(laygen, layer, gridname, rect_vdd, rect_vss):
     """create power pin"""
-    rvdd_pin_xy = laygen.get_rect_xy(name = rect_vdd.name, gridname = gridname)
-    rvss_pin_xy = laygen.get_rect_xy(name = rect_vss.name, gridname = gridname)
+    rvdd_pin_xy = laygen.get_xy(obj = rect_vdd, gridname = gridname)
+    rvss_pin_xy = laygen.get_xy(obj = rect_vss, gridname = gridname)
     laygen.pin(name='VDD', layer=layer, xy=rvdd_pin_xy, gridname=gridname)
     laygen.pin(name='VSS', layer=layer, xy=rvss_pin_xy, gridname=gridname)
 

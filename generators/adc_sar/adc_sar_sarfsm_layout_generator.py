@@ -194,10 +194,10 @@ def generate_sarfsm(laygen, objectname_pfix, templib_logic, placement_grid,
     pdict = laygen.get_inst_pin_xy(None, None, rg_m3m4)
 
     # internal route references
-    x0 = laygen.get_inst_xy(name=itie0.name, gridname=rg_m3m4)[0] + 1
-    x1 = laygen.get_inst_xy(name=idff[-1].name, gridname=rg_m3m4)[0]\
+    x0 = laygen.get_xy(obj =itie0, gridname=rg_m3m4)[0] + 1
+    x1 = laygen.get_xy(obj =idff[-1], gridname=rg_m3m4)[0]\
          +laygen.get_template_xy(name=idff[-1].cellname, gridname=rg_m3m4, libname=templib_logic)[0] - 1
-    x2 = laygen.get_inst_xy(name=itapr[-1].name, gridname=rg_m4m5)[0] - 2 -2
+    x2 = laygen.get_xy(obj =itapr[-1], gridname=rg_m4m5)[0] - 2 -2
     y0 = pdict[idff0.name]['I'][0][1] + 2
     y1 = laygen.get_template_xy(name=itie0.cellname, gridname=rg_m3m4, libname=templib_logic)[1]
     y2 = y1*(num_row+1)
@@ -246,7 +246,7 @@ def generate_sarfsm(laygen, objectname_pfix, templib_logic, placement_grid,
                 if i*num_bits_row+j+1 < num_bits:
                     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[idff[i*num_bits_row+j].name]['O'][0],
                                                        pdict[idff[i*num_bits_row+j+1].name]['I'][0], y, rg_m3m4)
-                    xy=laygen.get_rect_xy(name = rh0.name, gridname = rg_m4m5, sort=True)
+                    xy=laygen.get_xy(obj = rh0, gridname = rg_m4m5, sort=True)
                     rsb0=laygen.route(None, laygen.layers['metal'][5], xy0=xy[0]+np.array([i, 0]), xy1=np.array([xy[0][0]+i, y2]),
                                       gridname0=rg_m4m5, via0=[[0, 0]])
                     laygen.boundary_pin_from_rect(rsb0, rg_m4m5,
@@ -256,7 +256,7 @@ def generate_sarfsm(laygen, objectname_pfix, templib_logic, placement_grid,
     for i in range(num_row-1):
         [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[idff[(i+1)*num_bits_row-1].name]['O'][0],
                                            pdict[idff[(i+1)*num_bits_row].name]['I'][0], y1*(i+2)-1, rg_m3m4)
-        xy=laygen.get_rect_xy(name = rh0.name, gridname = rg_m4m5, sort=True)
+        xy=laygen.get_xy(obj = rh0, gridname = rg_m4m5, sort=True)
         rsb0=laygen.route(None, laygen.layers['metal'][5], xy0=xy[0]+np.array([i, 0]), xy1=np.array([xy[0][0]+i, y2]),
                           gridname0=rg_m4m5, via0=[[0, 0]])
         laygen.boundary_pin_from_rect(rsb0, rg_m4m5, "SB<" + str(num_bits - (i + 1) * num_bits_row) + ">",
@@ -264,12 +264,12 @@ def generate_sarfsm(laygen, objectname_pfix, templib_logic, placement_grid,
     #sb (lsb)
     rv0, rh0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[idff[num_bits-1].name]['O'][0],
                                 np.array([pdict[idff[num_bits-1].name]['O'][0][0]-6, y]), rg_m3m4)
-    xy=laygen.get_rect_xy(name = rh0.name, gridname = rg_m4m5, sort=True)
+    xy=laygen.get_xy(obj = rh0, gridname = rg_m4m5, sort=True)
     rsb0=laygen.route(None, laygen.layers['metal'][5], xy0=xy[0]+np.array([0, 0]), xy1=np.array([xy[0][0]+0, y2]),
                       gridname0=rg_m4m5, via0=[[0, 0]])
     laygen.boundary_pin_from_rect(rsb0, rg_m4m5, "SB<0>", laygen.layers['pin'][5], size=6, direction='top')
     # pins
-    #xy=laygen.get_rect_xy(name = rrst0.name, gridname = rg_m4m5, sort=True)
+    #xy=laygen.get_xy(obj = rrst0, gridname = rg_m4m5, sort=True)
     #rv0, rrst0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], xy[0],
     #                             np.array([xy[0][0]+6, 2]), rg_m4m5)
     #laygen.boundary_pin_from_rect(rrst0, rg_m4m5, 'RST',

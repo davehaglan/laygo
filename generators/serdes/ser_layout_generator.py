@@ -149,9 +149,9 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
                                                                    transform_right=transform_bnd_right,
                                                                    origin=np.array([0, 0]))
     #Calculate origins for placement
-    tap_origin = origin + laygen.get_inst_xy(name = bnd_bottom[0].name, gridname = pg) \
+    tap_origin = origin + laygen.get_xy(obj = bnd_bottom[0], gridname = pg) \
                    + laygen.get_template_xy(name = bnd_bottom[0].cellname, gridname = pg)
-    array_origin = origin + laygen.get_inst_xy(name = bnd_bottom[0].name, gridname = pg) \
+    array_origin = origin + laygen.get_xy(obj = bnd_bottom[0], gridname = pg) \
                    + laygen.get_template_xy(name = bnd_bottom[0].cellname, gridname = pg) \
                    + np.array([laygen.get_template_xy(name = tap_name, gridname = pg, libname = templib_logic)[0], 0])
     tapr_origin = tap_origin + m_bnd*np.array([laygen.get_template_xy(name = 'boundary_bottom', gridname = pg)[0], 0]) \

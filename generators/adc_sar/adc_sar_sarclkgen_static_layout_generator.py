@@ -130,9 +130,9 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
     pdict = laygen.get_inst_pin_xy(None, None, rg_m3m4)
 
     # internal routes
-    #x0 = laygen.get_inst_xy(name=inand0.name, gridname=rg_m3m4)[0] + 1
-    x0 = laygen.get_inst_xy(name=iinv7.name, gridname=rg_m3m4)[0] + 1
-    x1 = laygen.get_inst_xy(name=refl, gridname=rg_m3m4)[0]\
+    #x0 = laygen.get_xy(obj =inand0, gridname=rg_m3m4)[0] + 1
+    x0 = laygen.get_xy(obj =iinv7, gridname=rg_m3m4)[0] + 1
+    x1 = laygen.get_xy(obj =laygen.get_inst(name=refl), gridname=rg_m3m4)[0]\
          +laygen.get_template_xy(name=reflcn, gridname=rg_m3m4, libname=templib_logic)[0] - 1
     y0 = pdict[inand0.name]['A'][0][1] + 0
     # internal routes - and2

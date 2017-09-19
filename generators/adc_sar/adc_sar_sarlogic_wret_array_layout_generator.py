@@ -214,7 +214,7 @@ def generate_sarlogic_wret_array(laygen, objectname_pfix, templib_logic, placeme
                          refinstindex1=np.array([0, 0])))
 
     #pins
-    xy=laygen.get_rect_xy(name = rrst[0].name, gridname = rg_m4m5, sort=True)
+    xy=laygen.get_xy(obj = rrst[0], gridname = rg_m4m5, sort=True)
     laygen.boundary_pin_from_rect(rrst[0], rg_m4m5, 'RST', laygen.layers['pin'][4], size=6, direction='left')
     #rv0, rrst0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], xy[0], np.array([xy[0][0]+4, 2]), rg_m4m5)
     #laygen.boundary_pin_from_rect(rrst0, rg_m4m5, 'RST', laygen.layers['pin'][5], size=6, direction='bottom')
@@ -418,7 +418,7 @@ def generate_sarlogic_wret_v2_array(laygen, objectname_pfix, templib_logic, plac
                          refinstindex1=np.array([0, 0])))
 
     #pins
-    xy=laygen.get_rect_xy(name = rrst[0].name, gridname = rg_m4m5, sort=True)
+    xy=laygen.get_xy(obj = rrst[0], gridname = rg_m4m5, sort=True)
     laygen.boundary_pin_from_rect(rrst[0], rg_m4m5, 'RST', laygen.layers['pin'][4], size=6, direction='left')
     #rv0, rrst0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], xy[0], np.array([xy[0][0]+4, 2]), rg_m4m5)
     #laygen.boundary_pin_from_rect(rrst0, rg_m4m5, 'RST', laygen.layers['pin'][5], size=6, direction='bottom')

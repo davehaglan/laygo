@@ -156,8 +156,8 @@ def generate_ser2to1(laygen, objectname_pfix, templib_logic, placement_grid, rou
 
     # reference route coordinates
     y0=i2_clk_xy[0][1]
-    x0 = laygen.get_inst_xy(name=ispace_l0.name, gridname=rg_m3m4)[0] + 1
-    x1 = laygen.get_inst_xy(name=ispace_r0.name, gridname=rg_m3m4)[0] - 1
+    x0 = laygen.get_xy(obj =ispace_l0, gridname=rg_m3m4)[0] + 1
+    x1 = laygen.get_xy(obj =ispace_r0, gridname=rg_m3m4)[0] - 1
 
     # in0 / in1 / clk / clkb route
     rv0, ri0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i2_a_xy[0], np.array([x0, y0 + 3]), rg_m3m4)
@@ -276,7 +276,7 @@ def generate_ser_vstack(laygen, objectname_pfix, templib_logic, placement_grid, 
                                       laygen.layers['pin'][5], size=4, direction='bottom')
 
     # output
-    y1 = laygen.get_inst_xy(name = "I" + objectname_pfix + 'SER_' + str(num_stages-1) + '_0', gridname=rg_m4m5)[1]
+    y1 = laygen.get_xy(obj =laygen.get_inst(name = "I" + objectname_pfix + 'SER_' + str(num_stages-1) + '_0'), gridname=rg_m4m5)[1]
     y1+=size_ser2to1_rg_m4m5[1]-1
     xyo0 = laygen.get_inst_pin_xy("I" + objectname_pfix + 'SER_' + str(num_stages - 1) + '_0', 'O', gridname=rg_m4m5)[0]
     ro0 = laygen.route(None, laygen.layers['metal'][5], xy0=xyo0, xy1=np.array([xyo0[0], y1]), gridname0=rg_m4m5, via0=[[0, 0]])

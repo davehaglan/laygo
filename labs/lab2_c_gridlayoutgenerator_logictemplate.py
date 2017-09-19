@@ -32,7 +32,7 @@ import numpy as np
 
 def create_io_pin(laygen, layer, gridname, pinname_list, rect_list, offset_y=np.array([-1, 1])):
     """create digital io pin"""
-    rect_xy_list = [laygen.get_rect_xy(name=r.name, gridname=gridname, sort=True) for r in rect_list]
+    rect_xy_list = [laygen.get_xy(obj =r, gridname=gridname, sort=True) for r in rect_list]
     #align pins
     ry = rect_xy_list[0][:, 1] + offset_y.T
     for i, xy_rect in enumerate(rect_xy_list):

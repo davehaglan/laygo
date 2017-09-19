@@ -106,10 +106,10 @@ def generate_sarlogic(laygen, objectname_pfix, templib_logic, placement_grid, ro
 
     #reference route coordinate
     y0 = ioai0_a_xy[0][1]
-    x0 = laygen.get_inst_xy(name=ioai0.name, gridname=rg_m3m4)[0] + 1
-    x1 = laygen.get_inst_xy(name=izm0.name, gridname=rg_m3m4)[0]\
+    x0 = laygen.get_xy(obj =ioai0, gridname=rg_m3m4)[0] + 1
+    x1 = laygen.get_xy(obj =izm0, gridname=rg_m3m4)[0]\
          + laygen.get_template_xy(name=izm0.cellname, gridname=rg_m3m4, libname=templib_logic)[0] * 2 - 1
-    x2 = laygen.get_inst_xy(name=idff0.name, gridname=rg_m3m4)[0]\
+    x2 = laygen.get_xy(obj =idff0, gridname=rg_m3m4)[0]\
          +laygen.get_template_xy(name=idff0.cellname, gridname=rg_m3m4, libname=templib_logic)[0] - 1
     #saop/saom
     rsaopv0, rsaop0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], ioai0_c_xy[0], np.array([x0, y0 + 3]), rg_m3m4)
@@ -233,12 +233,12 @@ def generate_sarlogic_wret_v2(laygen, objectname_pfix, templib_logic, placement_
 
     #reference route coordinate
     y0 = ioai0_a_xy[0][1]
-    x0 = laygen.get_inst_xy(name=ioai0.name, gridname=rg_m3m4)[0] + 1
-    x1 = laygen.get_inst_xy(name=izm0.name, gridname=rg_m3m4)[0]\
+    x0 = laygen.get_xy(obj =ioai0, gridname=rg_m3m4)[0] + 1
+    x1 = laygen.get_xy(obj =izm0, gridname=rg_m3m4)[0]\
          + laygen.get_template_xy(name=izm0.cellname, gridname=rg_m3m4, libname=templib_logic)[0] * 2 - 1
-    #x2 = laygen.get_inst_xy(name=idff0.name, gridname=rg_m3m4)[0]\
+    #x2 = laygen.get_xy(obj =idff0, gridname=rg_m3m4)[0]\
     #     +laygen.get_template_xy(name=idff0.cellname, gridname=rg_m3m4, libname=templib_logic)[0] - 1
-    x2 = laygen.get_inst_xy(name=ilatch0.name, gridname=rg_m3m4)[0]\
+    x2 = laygen.get_xy(obj =ilatch0, gridname=rg_m3m4)[0]\
          +laygen.get_template_xy(name=ilatch0.cellname, gridname=rg_m3m4, libname=templib_logic)[0] - 1
     #saop/saom
     rsaopv0, rsaop0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], ioai0_c_xy[0], np.array([x0, y0 + 3]), rg_m3m4)

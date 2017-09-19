@@ -158,7 +158,7 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
                                                                    devname_right=devname_bnd_right,
                                                                    transform_right=transform_bnd_right,
                                                                    origin=np.array([0, 0]))
-    array_origin = origin + laygen.get_inst_xy(name = bnd_bottom[0].name, gridname = pg) \
+    array_origin = origin + laygen.get_xy(obj = bnd_bottom[0], gridname = pg) \
                    + laygen.get_template_xy(name = bnd_bottom[0].cellname, gridname = pg)
     # placement
     itapl=[]
@@ -248,8 +248,8 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
 
     # reference route coordinate
     x0 = icdrv_en0_xy[0][0][0]
-    y0 = laygen.get_inst_xy(name=icdrv[0].name, gridname=rg_m4m5)[1]
-    y1 = laygen.get_inst_xy(name=icdrv[-1].name, gridname=rg_m4m5)[1]
+    y0 = laygen.get_xy(obj =icdrv[0], gridname=rg_m4m5)[1]
+    y1 = laygen.get_xy(obj =icdrv[-1], gridname=rg_m4m5)[1]
     if num_row%2==1:
         y1 += laygen.get_template_xy(name=icdrv[-1].cellname, gridname=rg_m4m5, libname=icdrv[-1].libname)[1]
     # vref route
@@ -273,9 +273,9 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
             [rh0, rv1, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5], icdrv_vref1_xy[0][0], icdrv_vref1_xy[i*num_bits_row][0], x0-8, rg_m4m5)
             [rh0, rv2, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5], icdrv_vref2_xy[0][0], icdrv_vref2_xy[i*num_bits_row][0], x0-10, rg_m4m5)
             #equalize vertical route for pin generation
-            rv0_xy=laygen.get_rect_xy(name = rv0.name, gridname = rg_m4m5, sort=True)
-            rv1_xy=laygen.get_rect_xy(name = rv1.name, gridname = rg_m4m5, sort=True)
-            rv2_xy=laygen.get_rect_xy(name = rv2.name, gridname = rg_m4m5, sort=True)
+            rv0_xy=laygen.get_xy(obj = rv0, gridname = rg_m4m5, sort=True)
+            rv1_xy=laygen.get_xy(obj = rv1, gridname = rg_m4m5, sort=True)
+            rv2_xy=laygen.get_xy(obj = rv2, gridname = rg_m4m5, sort=True)
             rv_y0=min((2, rv0_xy[0][1], rv1_xy[0][1], rv2_xy[0][1]))
             rv_y1=max((rv0_xy[1][1], rv1_xy[1][1], rv2_xy[1][1]))
             rvref0v=laygen.route(None, laygen.layers['metal'][5], xy0=np.array([rv0_xy[0][0], rv_y0]), xy1=np.array([rv0_xy[1][0], rv_y1]), gridname0=rg_m4m5)
@@ -286,9 +286,9 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
             [rh0, rv1, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5], icdrv_vref1_xy[0][0], icdrv_vref1_xy[i*num_bits_row][0], x0-2, rg_m4m5)
             [rh0, rv2, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5], icdrv_vref2_xy[0][0], icdrv_vref2_xy[i*num_bits_row][0], x0-4, rg_m4m5)
             #equalize vertical route for pin generation
-            rv0_xy=laygen.get_rect_xy(name = rv0.name, gridname = rg_m4m5, sort=True)
-            rv1_xy=laygen.get_rect_xy(name = rv1.name, gridname = rg_m4m5, sort=True)
-            rv2_xy=laygen.get_rect_xy(name = rv2.name, gridname = rg_m4m5, sort=True)
+            rv0_xy=laygen.get_xy(obj = rv0, gridname = rg_m4m5, sort=True)
+            rv1_xy=laygen.get_xy(obj = rv1, gridname = rg_m4m5, sort=True)
+            rv2_xy=laygen.get_xy(obj = rv2, gridname = rg_m4m5, sort=True)
             rv_y0=min((2, rv0_xy[0][1], rv1_xy[0][1], rv2_xy[0][1]))
             rv_y1=max((rv0_xy[1][1], rv1_xy[1][1], rv2_xy[1][1]))
             rvref0v2=laygen.route(None, laygen.layers['metal'][5], xy0=np.array([rv0_xy[0][0], rv_y0]), xy1=np.array([rv0_xy[1][0], rv_y1]), gridname0=rg_m4m5)
@@ -341,12 +341,12 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
                                   direction='left')
     laygen.boundary_pin_from_rect(rvref2[0], rg_m4m5, "VREF<2>", laygen.layers['pin'][4], size=4,
                                   direction='left')
-    laygen.pin(name='VREF_M5<0>', layer=laygen.layers['pin'][5], xy=laygen.get_rect_xy(name = rvref0v.name, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<0>')
-    laygen.pin(name='VREF_M5<1>', layer=laygen.layers['pin'][5], xy=laygen.get_rect_xy(name = rvref1v.name, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<1>')
-    laygen.pin(name='VREF_M5<2>', layer=laygen.layers['pin'][5], xy=laygen.get_rect_xy(name = rvref2v.name, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<2>')
-    laygen.pin(name='VREF_M5_2<0>', layer=laygen.layers['pin'][5], xy=laygen.get_rect_xy(name = rvref0v2.name, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<0>')
-    laygen.pin(name='VREF_M5_2<1>', layer=laygen.layers['pin'][5], xy=laygen.get_rect_xy(name = rvref1v2.name, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<1>')
-    laygen.pin(name='VREF_M5_2<2>', layer=laygen.layers['pin'][5], xy=laygen.get_rect_xy(name = rvref2v2.name, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<2>')
+    laygen.pin(name='VREF_M5<0>', layer=laygen.layers['pin'][5], xy=laygen.get_xy(obj = rvref0v, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<0>')
+    laygen.pin(name='VREF_M5<1>', layer=laygen.layers['pin'][5], xy=laygen.get_xy(obj = rvref1v, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<1>')
+    laygen.pin(name='VREF_M5<2>', layer=laygen.layers['pin'][5], xy=laygen.get_xy(obj = rvref2v, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<2>')
+    laygen.pin(name='VREF_M5_2<0>', layer=laygen.layers['pin'][5], xy=laygen.get_xy(obj = rvref0v2, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<0>')
+    laygen.pin(name='VREF_M5_2<1>', layer=laygen.layers['pin'][5], xy=laygen.get_xy(obj = rvref1v2, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<1>')
+    laygen.pin(name='VREF_M5_2<2>', layer=laygen.layers['pin'][5], xy=laygen.get_xy(obj = rvref2v2, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<2>')
     
     for i, _ren0 in enumerate(ren0):
         laygen.boundary_pin_from_rect(_ren0, rg_m4m5, "EN" + str(i) + "<0>", laygen.layers['pin'][5], size=6,

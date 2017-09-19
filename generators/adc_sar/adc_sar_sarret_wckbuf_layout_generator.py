@@ -66,8 +66,8 @@ def generate_sarretslice(laygen, objectname_pfix, templib_logic, placement_grid,
     pdict = laygen.get_inst_pin_xy(None, None, rg_m3m4)
 
     # internal routes
-    x0 = laygen.get_inst_xy(name=iinv0.name, gridname=rg_m3m4)[0] + 1
-    x1 = laygen.get_inst_xy(name=iinv2.name, gridname=rg_m3m4)[0]\
+    x0 = laygen.get_xy(obj =iinv0, gridname=rg_m3m4)[0] + 1
+    x1 = laygen.get_xy(obj =iinv2, gridname=rg_m3m4)[0]\
          +laygen.get_template_xy(name=iinv2.cellname, gridname=rg_m3m4, libname=templib_logic)[0] - 1
     y0 = pdict[iinv0.name]['I'][0][1] + 0
 
@@ -228,9 +228,9 @@ def generate_sarret2_wckbuf(laygen, objectname_pfix, templib_logic, placement_gr
     pdict_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5)
 
     y0 = pdict[islice[0].name]['I'][0][1]+2
-    x1 = laygen.get_inst_xy(name=islice[-1].name, gridname=rg_m3m4)[0]\
+    x1 = laygen.get_xy(obj =islice[-1], gridname=rg_m3m4)[0]\
          +laygen.get_template_xy(name=islice[-1].cellname, gridname=rg_m3m4, libname=workinglib)[0] - 1
-    y1_m4m5 = laygen.get_inst_xy(name=islice[-1].name, gridname=rg_m4m5)[1] - 2
+    y1_m4m5 = laygen.get_xy(obj =islice[-1], gridname=rg_m4m5)[1] - 2
     if num_row%2==1:
          y1_m4m5 +=laygen.get_template_xy(name=islice[-1].cellname, gridname=rg_m3m4, libname=workinglib)[1]
     #ckbuf route
@@ -257,13 +257,13 @@ def generate_sarret2_wckbuf(laygen, objectname_pfix, templib_logic, placement_gr
                                        pdict[ickbuf3.name]['O'][0]+np.array([-3,-1]), rg_m3m4)
     [rv0, rclko0] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[ickbuf3.name]['O'][0],
                                        pdict[ickbuf3.name]['O'][0]+np.array([2,-1]), rg_m3m4)
-    #xy=laygen.get_rect_xy(name = rclk0.name, gridname = rg_m4m5, sort=True)
+    #xy=laygen.get_xy(obj = rclk0, gridname = rg_m4m5, sort=True)
     #rh0, rclk0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], xy[0],
     #                             np.array([xy[0][0]+6-6, y1_m4m5]), rg_m4m5)
     #laygen.boundary_pin_from_rect(rclk0, rg_m4m5, 'CLK',
     #                                     laygen.layers['pin'][5], size=6, direction='top')
     laygen.boundary_pin_from_rect(rclk0, rg_m4m5, 'CLK', laygen.layers['pin'][4], size=6, direction='left')
-    xy=laygen.get_rect_xy(name = rclko0.name, gridname = rg_m4m5, sort=True)
+    xy=laygen.get_xy(obj = rclko0, gridname = rg_m4m5, sort=True)
     for i in range(2):
         rh0, rclko0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], xy[0],
                                      np.array([xy[0][0]-2+2*i, y1_m4m5]), rg_m4m5)

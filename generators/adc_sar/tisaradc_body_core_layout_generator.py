@@ -57,7 +57,7 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
     isar = laygen.relplace(name="I" + objectname_pfix + 'SAR0', templatename=sar_name,
                       gridname=pg, refinstname=iret.name, direction='top', template_libname=sar_libname)
     clkdist_offset_pg=int(clkdist_offset/laygen.get_grid(pg).height)
-    clkdist_xy = laygen.get_inst_xy(name=isar.name, gridname=pg) \
+    clkdist_xy = laygen.get_xy(obj =isar, gridname=pg) \
                  + (laygen.get_template_xy(name = sar_name, gridname=pg, libname=sar_libname) * np.array([0, 1])) \
                  + np.array([0, clkdist_offset_pg])
 
