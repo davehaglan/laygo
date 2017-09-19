@@ -148,7 +148,7 @@ def generate_space_tap(laygen, objectname_pfix, placement_grid, routing_grid_m1m
     intapr=laygen.relplace(name = "I" + objectname_pfix + 'NTAPR0', templatename = ntap_boundary_name,
                            gridname = pg, refinstname = refi, transform = 'MX')
     # power pin
-    xy = laygen.get_template_xy(iptapr.cellname, rg_m1m2) * np.array([1, 0])
+    xy = laygen.get_template_xy(name = iptapr.cellname, gridname = rg_m1m2) * np.array([1, 0])
     rvdd=laygen.route("R"+objectname_pfix+"VDD0", laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=xy, gridname0=rg_m1m2,
                  refinstname0=iptapl.name, refinstname1=iptapr.name)
     rvss=laygen.route("R"+objectname_pfix+"VSS0", laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=xy, gridname0=rg_m1m2,
@@ -276,13 +276,13 @@ def generate_space_dcap(laygen, objectname_pfix, templib_logic, placement_grid, 
 
 
 def generate_space_wbnd(laygen, objectname_pfix, workinglib, space_name, placement_grid, origin=np.array([0, 0])):
-    space_origin = origin + laygen.get_template_xy('boundary_bottomleft', pg)
+    space_origin = origin + laygen.get_template_xy(name = 'boundary_bottomleft', gridname = pg)
     ispace=laygen.place(name="I" + objectname_pfix + 'SP0', templatename=space_name,
                          gridname=pg, xy=space_origin, template_libname=workinglib)
     xy0=laygen.get_template_xy(name=space_name, gridname=pg, libname=workinglib)
     xsp=xy0[0]
     #ysp=xy0[1]
-    m_bnd = int(xsp / laygen.get_template_xy('boundary_bottom', gridname=pg)[0])
+    m_bnd = int(xsp / laygen.get_template_xy(name = 'boundary_bottom', gridname=pg)[0])
     [bnd_bottom, bnd_top, bnd_left, bnd_right] \
         = laygenhelper.generate_boundary(laygen, objectname_pfix='BND0', placement_grid=pg,
                             devname_bottom=['boundary_bottomleft', 'boundary_bottom', 'boundary_bottomright'],

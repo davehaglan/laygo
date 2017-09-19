@@ -112,7 +112,7 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     ysp=xy0[1]
 
     # placement
-    core_origin = origin + laygen.get_template_xy('boundary_bottomleft', pg)
+    core_origin = origin + laygen.get_template_xy(name = 'boundary_bottomleft', gridname = pg)
     isp=[]
     devname_bnd_left = []
     devname_bnd_right = []
@@ -254,7 +254,7 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
         transform_bnd_right += ['R0', 'MX']
     
     # boundaries
-    m_bnd = int(xsp / laygen.get_template_xy('boundary_bottom', gridname=pg)[0])
+    m_bnd = int(xsp / laygen.get_template_xy(name = 'boundary_bottom', gridname=pg)[0])
     [bnd_bottom, bnd_top, bnd_left, bnd_right] \
         = generate_boundary(laygen, objectname_pfix='BND0', placement_grid=pg,
                             devname_bottom=['boundary_bottomleft', 'boundary_bottom', 'boundary_bottomright'],
@@ -368,8 +368,8 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                                            pdict_m5m6[isl.name]['SAOM'][0],
                                            pdict_m5m6[ickg.name]['SAOM'][0][0]+1, rg_m4m5)
     #equalize vertical route for pin generation
-    rsaop0_xy=laygen.get_rect_xy(rsaop0.name, rg_m4m5, sort=True)
-    rsaom0_xy=laygen.get_rect_xy(rsaom0.name, rg_m4m5, sort=True)
+    rsaop0_xy=laygen.get_rect_xy(name = rsaop0.name, gridname = rg_m4m5, sort=True)
+    rsaom0_xy=laygen.get_rect_xy(name = rsaom0.name, gridname = rg_m4m5, sort=True)
     rsao_y0=min((rsaop0_xy[0][1], rsaom0_xy[0][1]))
     rsao_y1=max((rsaop0_xy[1][1], rsaom0_xy[1][1]))
     rsaop0=laygen.route(None, laygen.layers['metal'][5], xy0=np.array([rsaop0_xy[0][0], rsao_y0]), xy1=np.array([rsaop0_xy[1][0], rsao_y1]), gridname0=rg_m4m5)
