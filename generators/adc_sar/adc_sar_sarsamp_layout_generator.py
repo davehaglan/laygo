@@ -249,7 +249,9 @@ def generate_samp(laygen, objectname_pfix, workinglib,
     ibuf = laygen.relplace(name=None, templatename='sarsamp_buf', gridname=pg, refobj=isamp,
                            direction='top', template_libname=workinglib, transform='R0')
     # boundaries
-    m_bnd = int(laygen.get_template_xy(name = 'sarsamp_body', gridname=pg, libname=workinglib)[0] / laygen.get_template_xy(gridname = 'boundary_bottom', gridname=pg)[0])
+    a = laygen.get_template_xy(name = 'sarsamp_body', gridname=pg, libname=workinglib)[0]
+    b = laygen.get_template_xy(name = 'boundary_bottom', gridname=pg)[0]
+    m_bnd = int(a/b)
     devname_bnd_left = ['nmos4_fast_left', 'nmos4_fast_left'] + ['nmos4_fast_left', 'pmos4_fast_left']
     devname_bnd_right = ['nmos4_fast_right', 'nmos4_fast_right'] + ['nmos4_fast_right', 'pmos4_fast_right']
     transform_bnd_left = ['R0', 'MX'] + ['R0', 'MX']
