@@ -85,7 +85,7 @@ def generate_inv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, rou
                        refinstname0=in1.name, refpinname0='D0', refinstindex0=[m-1, 0], via0=[[0, 0]],
                        refinstname1=ip1.name, refpinname1='D0', refinstindex1=[m-1, 0], via1=[[0, 0]])
     # power and groud rail
-    xy = laygen.get_template_xy(name = in2.cellname, gridname = rg_m1m2) * np.array([1, 0])
+    xy = laygen.get_xy(obj = in2.template, gridname = rg_m1m2) * np.array([1, 0])
     rvdd=laygen.route("R"+objectname_pfix+"VDD0", laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,
                  refinstname0=ip0.name, refinstname1=ip2.name)
     rvss=laygen.route("R"+objectname_pfix+"VSS0", laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,
@@ -192,7 +192,7 @@ def generate_tinv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, ro
                        refinstname0=in4.name, refpinname0='D0', refinstindex0=[m-1, 0], via0=[[0, 0]],
                        refinstname1=ip4.name, refpinname1='D0', refinstindex1=[m-1, 0], via1=[[0, 0]])
     # power and groud rail
-    xy = laygen.get_template_xy(name = in2.cellname, gridname = rg_m1m2) * np.array([1, 0])
+    xy = laygen.get_xy(obj = in2.template, gridname = rg_m1m2) * np.array([1, 0])
     rvdd=laygen.route("R"+objectname_pfix+"VDD0", laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,
                  refinstname0=ip0.name, refinstname1=ip5.name)
     rvss=laygen.route("R"+objectname_pfix+"VSS0", laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,
@@ -234,7 +234,7 @@ def generate_space(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, r
                           refinstname=in0.name, shape=[m, 1], direction='top', transform='MX')
 
     # power and groud rail
-    xy = laygen.get_template_xy(name = in0.cellname, gridname = rg_m1m2) * np.array([1, 0]) * m
+    xy = laygen.get_xy(obj = in0.template, gridname = rg_m1m2) * np.array([1, 0]) * m
     rvdd=laygen.route("R"+objectname_pfix+"VDD0", laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,
                  refinstname0=ip0.name, refinstname1=ip0.name)
     rvss=laygen.route("R"+objectname_pfix+"VSS0", laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,

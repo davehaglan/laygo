@@ -46,7 +46,7 @@ def generate_tisaradc_space(laygen, objectname_pfix, tisar_libname, space_libnam
     num_space=int((ttisar.size[1]-2*tbnd_bottom.size[1])/tspace.size[1])
     #space_xy=np.array([tspace.size[0], 56.88]) #change it after finishing the clock part
     #num_space=int((56.88-2*tbnd_bottom.size[1])/tspace.size[1]) #should be changed after finishing the clock part
-    space_origin = origin + laygen.get_template_xy(name = 'boundary_bottomleft', gridname = pg)
+    space_origin = origin + laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottomleft'), gridname = pg)
     ispace = [laygen.place(name="I" + objectname_pfix + 'SP0', templatename=space_name,
                           gridname=pg, xy=space_origin, template_libname=space_libname)]
     #devname_bnd_left = ['nmos4_fast_left', 'pmos4_fast_left']
@@ -255,7 +255,7 @@ def generate_tisaradc_space2(laygen, objectname_pfix,
 
     #vddsar cap
     num_space_sar=int((y_vss_th-2*tbnd_bottom.size[1])/tspace.size[1])+4
-    space_origin = origin + laygen.get_template_xy(name = 'boundary_bottomleft', gridname = pg)
+    space_origin = origin + laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottomleft'), gridname = pg)
     ispace_sar = [laygen.place(name="I" + objectname_pfix + 'SPSAR0', templatename=space_name,
                           gridname=pg, xy=space_origin, template_libname=space_libname)]
     devname_bnd_left = ['nmos4_fast_left', 'pmos4_fast_left']
@@ -296,7 +296,7 @@ def generate_tisaradc_space2(laygen, objectname_pfix,
 
     #vddsamp cap
     num_space_samp=num_space_tot-num_space_sar-1
-    space_origin = origin + laygen.get_template_xy(name = 'boundary_bottomleft', gridname = pg) * np.array([1, (3 + 2 * num_space_sar)])
+    space_origin = origin + laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottomleft'), gridname = pg) * np.array([1, (3 + 2 * num_space_sar)])
     ispace_samp = [laygen.place(name="I" + objectname_pfix + 'SPSAMP0', templatename=space_name,
                           gridname=pg, xy=space_origin, template_libname=space_libname)]
     devname_bnd_left = ['nmos4_fast_left', 'pmos4_fast_left']
@@ -333,7 +333,7 @@ def generate_tisaradc_space2(laygen, objectname_pfix,
                                          transform_left=transform_bnd_left,
                                          devname_right=devname_bnd_right,
                                          transform_right=transform_bnd_right,
-                                         origin=space_origin-laygen.get_template_xy(name = 'boundary_bottomleft', gridname = pg))
+                                         origin=space_origin-laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottomleft'), gridname = pg))
     #vdd/vss
     #m3
     rvdd_sar_xy_m3=[]

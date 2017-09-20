@@ -159,7 +159,7 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
                                                                    transform_right=transform_bnd_right,
                                                                    origin=np.array([0, 0]))
     array_origin = origin + laygen.get_xy(obj = bnd_bottom[0], gridname = pg) \
-                   + laygen.get_template_xy(name = bnd_bottom[0].cellname, gridname = pg)
+                   + laygen.get_xy(obj = bnd_bottom[0].template, gridname = pg)
     # placement
     itapl=[]
     icdrv=[]
@@ -251,7 +251,7 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
     y0 = laygen.get_xy(obj =icdrv[0], gridname=rg_m4m5)[1]
     y1 = laygen.get_xy(obj =icdrv[-1], gridname=rg_m4m5)[1]
     if num_row%2==1:
-        y1 += laygen.get_template_xy(name=icdrv[-1].cellname, gridname=rg_m4m5, libname=icdrv[-1].libname)[1]
+        y1 += laygen.get_xy(obj =icdrv[-1].template, gridname=rg_m4m5)[1]
     # vref route
     rvref0=[]
     rvref1=[]
@@ -361,10 +361,10 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
                                   netname="VREF<1>")
 
     # power pin
-    pwr_dim_left=laygen.get_template_xy(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)[0]
+    pwr_dim_left=laygen.get_xy(obj =itapl[-1].template, gridname=rg_m2m3)[0]
     pwr_dim_right=pwr_dim_left
     if m_space_4x>1:
-        pwr_dim_right+= laygen.get_template_xy(name=isp4x[0].cellname, gridname=rg_m2m3, libname=isp4x[0].libname)[0] * (m_space_4x - 1)
+        pwr_dim_right+= laygen.get_xy(obj =isp4x[0].template, gridname=rg_m2m3)[0] * (m_space_4x - 1)
     pwr_dim_delta=pwr_dim_right-pwr_dim_left
     rvdd = []
     rvss = []

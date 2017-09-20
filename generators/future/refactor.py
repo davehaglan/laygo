@@ -325,11 +325,14 @@ def convert_get_obj_xy_to_get_xy(filename_i, filename_o, func_name):
                                 if func_name == 'get_inst_xy':
                                     l_refac += 'obj ='+laygen_instance+'.get_inst('+s_buf+')'
                                 elif func_name == 'get_template_xy':
-                                    l_refac += 'obj ='+laygen_instance+'.get_template('+s_buf+')'
+                                    l_refac += 'obj=' + laygen_instance + '.get_template(' + s_buf + '%%PLACEHOLDER_FOR_LIBNAME%%)'
                                 elif func_name == 'get_rect_xy':
                                     l_refac += 'obj ='+laygen_instance+'.get_rect('+s_buf+')'
                                 else:
                                     raise Exception("check this")
+                        elif token_s_buf[0].strip()=='libname':
+                            if func_name == 'get_template_xy':
+                                l_refac = l_refac.replace('%%PLACEHOLDER_FOR_LIBNAME%%', ', '+s_buf)
                         else:
                             l_refac += s_buf
                     else: #positional argument, ERROR!
@@ -340,120 +343,13 @@ def convert_get_obj_xy_to_get_xy(filename_i, filename_o, func_name):
                     l_refac += c
                 #if c=='\n':
                 #    print('newline', depth, trig_copy)
+            if func_name == 'get_template_xy':
+                l_refac = l_refac.replace('%%PLACEHOLDER_FOR_LIBNAME%%','')
+                l_refac = l_refac.replace(', )', ')')
             print("   before refactoring: "+l_vanilla[:-1]) #remove newline for neat plotting
             print("    after refactoring: "+l_refac[:-1])
             #print(len(l),len(l_refac))
-            lines_o.append(l_refac) #
-        else: #normal codes, just copy and paste
-            lines_o.append(l)
 
-    # write source code
-    with open(filename_o, 'w') as f:
-        for l in lines_o:
-            f.write(l)
-
-def get_xy_hotfix(filename_i, filename_o):
-    """
-        get_xy not working well with libname
-    """
-    # GridLayoutGenerator parameters
-    laygen_path="../../GridLayoutGenerator.py"
-    laygen_instance="laygen"
-    func_name="get_xy"
-
-    # read source code
-    with open(filename_i, 'r') as f:
-        lines_i = f.readlines()
-    print("file " + filename_i + " loaded")
-
-    # refactor
-    trig = 0  # trigger for multiline call
-    depth = 0 # depth variable to find out arguments
-    lines_o = [] # output buffer
-    for i, l in enumerate(lines_i):
-        if laygen_instance + '.' + func_name in l:
-            trig = 1
-            l_header = l.split(laygen_instance + '.' + func_name)[0]
-            depth = -1*(l_header.count('(') + l_header.count('[')) + (l_header.count(')') + l_header.count(']')) #if brackets are before the function call, need to decrease initial depth value
-            print("function " + func_name + " call detected in file: "+ filename_i + ", in line:"+ str(i) +" code snapshot: " + l[:-1])
-        if trig == 1:
-            l_vanilla = l #copy original one
-            l_refac = '' #refactored line
-            s_buf = ''   #string buffer to store arguments
-            trig_refac_arg_readout = 0  # trigger to readout arguments
-            for c in l:
-                #mystr="    rect_xy_list = [laygen.get_rect_xy(name=r.name, gridname=gridname, sort=True) for r in rect_list]"
-                #mystr="    laygen.pin(name='VREF_M5_2<2>', layer=laygen.layers['pin'][5], xy=laygen.get_rect_xy(rvref2v2.name, gridname=rg_m4m5), gridname=rg_m4m5, netname='VREF<2>')"
-                #mystr="    diffpair_origin = laygen.get_inst_xy(itapbl0.name, pg) + laygen.get_template_xy(itapbl0.cellname, pg) * np.array([0, 1])"
-                #mystr="    org=origin+laygen.get_inst_xy('I'+objectname_pfix+'INV1', pg)+ laygen.get_template_xy(i1.cellname, pg) * np.array([1, 0])"
-                #if l_vanilla.startswith(mystr):
-                #    print(c, depth, trig_refac_arg_readout, trig_refac_arg, s_buf)
-                trig_copy = 1  # trigger to copy c to l_refac without modifications
-                trig_refac_arg = 0 # trigger to refactor arguments after readout
-                if c == ' ' and s_buf == '':  # ignore spaces between commas and indents
-                    pass
-                else:
-                    if c == ')' or c == ']':  # exit bracket decrease depth
-                        if depth == 1:  # end of function call
-                            if s_buf == '':  # some functions have something like , ):
-                                pass
-                            else:
-                                if trig_refac_arg_readout == 1:
-                                    trig_refac_arg = 1
-                            trig = 0 #end of function call
-                            trig_refac_arg_readout = 0  # reset readout trigger
-                        depth -= 1
-                    if c == ',' and depth == 1 and trig_refac_arg_readout==1:  # if the comma is argument splitter,
-                        trig_refac_arg = 1
-                    elif c == '\n' and depth == 1: # newline
-                        if s_buf == '': #no captured argument, the start of function call or captured well - just copy and paste
-                            pass
-                        else: # maybe the end of function call - do refactoring
-                            if trig_refac_arg_readout == 1:
-                                trig_refac_arg = 1
-                    else:
-                        if (depth >= 1) and (trig_refac_arg_readout == 1):
-                            s_buf += c
-                            trig_copy = 0
-                    if c == '(' or c == '[':  # go inside bracket. increase depth
-                        depth += 1
-                        if (depth == 1) and (l_refac[(-1*len(func_name)):]==func_name):
-                            trig_refac_arg_readout = 1 #found the right spot. Start readout
-                if trig_refac_arg == 1: #s_buf filled, do refactoring
-                    if '=' in s_buf: #named argument
-                        token_s_buf = s_buf.split('=')
-                        print(token_s_buf)
-                        if token_s_buf[0].strip()=='name':
-                            if '.name' in token_s_buf[1]:
-                                token_s_buf[1] = token_s_buf[1].replace('.name', '')
-                                token_s_buf[0] = 'obj ='
-                                l_refac += "".join(token_s_buf)
-                            elif '.cellname' in token_s_buf[1]:
-                                token_s_buf[1] = token_s_buf[1].replace('.cellname', '.template')
-                                token_s_buf[0] = 'obj ='
-                                l_refac += "".join(token_s_buf)
-                            else:
-                                if func_name == 'get_inst_xy':
-                                    l_refac += 'obj='+laygen_instance+'.get_inst('+s_buf+')'
-                                elif func_name == 'get_template_xy':
-                                    l_refac += 'obj='+laygen_instance+'.get_template('+s_buf+'%%SAVE_FOR_LIBNAME%%)'
-                                elif func_name == 'get_rect_xy':
-                                    l_refac += 'obj='+laygen_instance+'.get_rect('+s_buf+')'
-                                else:
-                                    raise Exception("check this")
-                        else:
-                            l_refac += s_buf
-                    else: #positional argument, ERROR!
-                        raise Exception(
-                            "This refactoring function assumes function calls named arguments only. Exiting (do revert)")
-                    s_buf = '' #flush s_buf
-                if trig_copy == 1:
-                    l_refac += c
-                #if c=='\n':
-                #    print('newline', depth, trig_copy)
-            print("   before refactoring: "+l_vanilla[:-1]) #remove newline for neat plotting
-            print("    after refactoring: "+l_refac[:-1])
-            #print(len(l),len(l_refac))
             lines_o.append(l_refac) #
         else: #normal codes, just copy and paste
             lines_o.append(l)
@@ -524,7 +420,8 @@ if __name__ == '__main__':
     #get_(obj)_xy to get_obj - massive run over multiple directories, functions
     dir_list=["./", "../adc_sar/", "../golden/", "../logic/", "../serdes/", "../../labs/"]
     #func_list = ["get_template_xy", "get_inst_xy", "get_rect_xy", "get_pin_xy"]
-    func_list = ["get_inst_xy", "get_rect_xy", "get_pin_xy"]
+    #func_list = ["get_inst_xy", "get_rect_xy", "get_pin_xy"]
+    func_list = ["get_template_xy"]
     for dir in dir_list:
         file_list=os.listdir(dir)
         for file in file_list:

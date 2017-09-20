@@ -196,11 +196,11 @@ def generate_clkdiffpair(laygen, objectname_pfix, placement_grid, routing_grid_m
                                              routing_grid_m1m2_thick=rg12t,
                                              devname_tap_boundary=devname_tap_boundary, devname_tap_body=devname_tap_body,
                                              m=m_tap, origin=origin)
-    diffpair_origin = laygen.get_xy(obj = itapbl0, gridname = pg) + laygen.get_template_xy(name = itapbl0.cellname, gridname = pg) * np.array([0, 1])
+    diffpair_origin = laygen.get_xy(obj = itapbl0, gridname = pg) + laygen.get_xy(obj = itapbl0.template, gridname = pg) * np.array([0, 1])
     [ickbl0, ickdmyl0, ick0, ickdmyr0, ickbr0]=generate_mos(laygen, objectname_pfix +'CK0', placement_grid=pg, routing_grid_m1m2=rg12,
                                         devname_mos_boundary=devname_mos_boundary, devname_mos_body=devname_mos_body,
                                         devname_mos_dmy=devname_mos_dmy, m=m_clkh*2, m_dmy=m_clkh_dmy, origin=diffpair_origin)
-    in_origin=laygen.get_xy(obj = ickbl0, gridname = pg)+ laygen.get_template_xy(name = ickbl0.cellname, gridname = pg) * np.array([0, 1])
+    in_origin=laygen.get_xy(obj = ickbl0, gridname = pg)+ laygen.get_xy(obj = ickbl0.template, gridname = pg) * np.array([0, 1])
     [iinbl0, iindmyl0, iinl0, iinr0, iindmyr0, iinbr0] = \
         generate_diff_mos(laygen, objectname_pfix+'IN0', placement_grid=pg, routing_grid_m1m2=rg12,
                           devname_mos_boundary=devname_mos_boundary, devname_mos_body=devname_mos_body,
@@ -255,7 +255,7 @@ def generate_salatch_regen(laygen, objectname_pfix, placement_grid, routing_grid
                                                 placement_grid=pg, routing_grid_m1m2_thick=rg12t,
                                                 devname_tap_boundary=devname_ptap_boundary, devname_tap_body=devname_ptap_body,
                                                 m=m_tap, origin=origin)
-    rgnbody_origin = laygen.get_xy(obj = itapbln0, gridname = pg) + laygen.get_template_xy(name = itapbln0.cellname, gridname = pg) * np.array([0, 1])
+    rgnbody_origin = laygen.get_xy(obj = itapbln0, gridname = pg) + laygen.get_xy(obj = itapbln0.template, gridname = pg) * np.array([0, 1])
     #nmos row
     imbln0 = laygen.relplace(name="I" + pfix + 'BLN0', templatename=devname_nmos_boundary, gridname=pg, xy=rgnbody_origin)
     imdmyln0 = laygen.relplace(name="I" + pfix + 'DMYLN0', templatename=devname_nmos_dmy, gridname=pg, refobj=imbln0, shape=[m_rgnn_dmy, 1])
@@ -277,7 +277,7 @@ def generate_salatch_regen(laygen, objectname_pfix, placement_grid, routing_grid
     imdmyrp0 = laygen.relplace(name="I" + pfix + 'DMYRP0', templatename=devname_pmos_dmy, gridname=pg, refobj=imrp0, shape=[m_rgnp_dmy, 1], transform='R180')
     imbrp0 = laygen.relplace(name="I" + pfix + 'BRP0', templatename=devname_pmos_boundary, gridname=pg, refobj=imdmyrp0, transform='R180')
     #tap
-    tap_origin = laygen.get_xy(obj = imblp0, gridname = pg) + laygen.get_template_xy(name = devname_ntap_boundary, gridname = pg) * np.array([0, 1])
+    tap_origin = laygen.get_xy(obj = imblp0, gridname = pg) + laygen.get_xy(obj=laygen.get_template(name = devname_ntap_boundary), gridname = pg) * np.array([0, 1])
     [itapbl0, itap0, itapbr0] = generate_tap(laygen, objectname_pfix=pfix+'PTAP0', placement_grid=pg, routing_grid_m1m2_thick=rg12t,
                                              devname_tap_boundary=devname_ntap_boundary, devname_tap_body=devname_ntap_body,
                                              m=m_tap, origin=tap_origin, transform='MX')
@@ -452,7 +452,7 @@ def generate_salatch_simple(laygen, objectname_pfix, placement_grid,
                          devname_tap_boundary=devname_ptap_boundary, devname_tap_body=devname_ptap_body,
                          m_in=m_in, m_in_dmy=m_in_dmy, m_clkh=m_clkh, m_clkh_dmy=m_clkh_dmy, m_tap=m_tap, origin=mainpair_origin)
     #regen
-    regen_origin = laygen.get_xy(obj = imaininbl0, gridname = pg) + laygen.get_template_xy(name = imaininbl0.cellname, gridname = pg) * np.array([0, 1])
+    regen_origin = laygen.get_xy(obj = imaininbl0, gridname = pg) + laygen.get_xy(obj = imaininbl0.template, gridname = pg) * np.array([0, 1])
 
     [irgntapbln0, irgntapn0, irgntapbrn0,
      irgnbln0, irgndmyln0, irgnln0, irgnln1, irgnrn1, irgnrn0, irgndmyrn0, irgnbrn0,

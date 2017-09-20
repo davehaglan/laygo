@@ -119,7 +119,7 @@ def generate_samp_body(laygen, objectname_pfix, templib_logic,
             laygen.pin(name=p, layer=laygen.layers['pin'][4], refobj=r, gridname=rg34)
     
     # power routes
-    num_pwr= int(laygen.get_template_xy(name=itap[0].cellname, gridname=rg23, libname=itap[0].libname)[0] / 2) * min(tap_m_list)
+    num_pwr= int(laygen.get_xy(obj =itap[0].template, gridname=rg23)[0] / 2) * min(tap_m_list)
     rvss=[]
     for _itap, pfix in zip(itap, ['L', 'R']):
         rvss.append([])
@@ -206,7 +206,7 @@ def generate_samp_buffer(laygen, objectname_pfix, templib_logic,
         laygen.pin(name=p, layer=laygen.layers['pin'][4], refobj=r, gridname=rg34)
 
     # power routes
-    num_pwr= int(laygen.get_template_xy(name=itap[0].cellname, gridname=rg23, libname=itap[0].libname)[0] / 2) * min(tap_m_list)
+    num_pwr= int(laygen.get_xy(obj =itap[0].template, gridname=rg23)[0] / 2) * min(tap_m_list)
     rvdd=[]
     rvss=[]
     for _itap, pfix in zip(itap, ['L', 'R']):
@@ -242,15 +242,15 @@ def generate_samp(laygen, objectname_pfix, workinglib,
     pg56t = power_grid_m5m6
 
     # placement
-    core_origin = origin + laygen.get_template_xy(name = 'boundary_bottomleft', gridname = pg)
+    core_origin = origin + laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottomleft'), gridname = pg)
     # sampler body
     isamp = laygen.relplace(name=None, templatename='sarsamp_body', gridname=pg, template_libname=workinglib, transform='R0', xy=core_origin)
     # clock buffer
     ibuf = laygen.relplace(name=None, templatename='sarsamp_buf', gridname=pg, refobj=isamp,
                            direction='top', template_libname=workinglib, transform='R0')
     # boundaries
-    a = laygen.get_template_xy(name = 'sarsamp_body', gridname=pg, libname=workinglib)[0]
-    b = laygen.get_template_xy(name = 'boundary_bottom', gridname=pg)[0]
+    a = laygen.get_xy(obj=laygen.get_template(name = 'sarsamp_body', libname=workinglib), gridname=pg)[0]
+    b = laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottom'), gridname=pg)[0]
     m_bnd = int(a/b)
     devname_bnd_left = ['nmos4_fast_left', 'nmos4_fast_left'] + ['nmos4_fast_left', 'pmos4_fast_left']
     devname_bnd_right = ['nmos4_fast_right', 'nmos4_fast_right'] + ['nmos4_fast_right', 'pmos4_fast_right']
@@ -374,13 +374,13 @@ def generate_samp(laygen, objectname_pfix, workinglib,
                 offset_start_index=0, offset_end_index=0)
     #m6
     input_rails_rect = [rvdd_m5[0]+rvdd_m5[1], rvss_m5[0]+rvss_m5[1]]
-    x1 = laygen.get_inst_bbox(name=ibuf.name, gridname=pg56t)[1][0] + laygen.get_template_xy(name = 'nmos4_fast_left', gridname=pg56t)[0]
+    x1 = laygen.get_inst_bbox(name=ibuf.name, gridname=pg56t)[1][0] + laygen.get_xy(obj=laygen.get_template(name = 'nmos4_fast_left'), gridname=pg56t)[0]
     rvdd_m6, rvss_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_', 
                 layer=laygen.layers['metal'][6], gridname=pg56t, netnames=['VDD', 'VSS'], direction='x', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=x1,
                 offset_start_index=0, offset_end_index=0)
     #trimming and pinning
-    x1_phy = laygen.get_inst_bbox(name=ibuf.name)[1][0] + laygen.get_template_xy(name = 'nmos4_fast_left')[0]
+    x1_phy = laygen.get_inst_bbox(name=ibuf.name)[1][0] + laygen.get_xy(obj=laygen.get_template(name = 'nmos4_fast_left'))[0]
     for r in rvdd_m6:
         r.xy1[0]=x1_phy
         p=laygen.pin(name='VDD_M6_'+r.name, layer=laygen.layers['pin'][6], refobj=r, gridname=pg56t, netname='VDD')

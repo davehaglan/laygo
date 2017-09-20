@@ -85,7 +85,7 @@ if __name__ == '__main__':
         for pn in ['S0', 'S1']:
             laygen.route(gridname0=rg12, refobj0=dev.pins[pn], refobj1=dev, direction='y', via1=[0, 0])
     # power and groud rails
-    x0 = laygen.get_template_xy(name=nd[5].cellname, gridname=rg12)
+    x0 = laygen.get_xy(obj =nd[5].template, gridname=rg12)
     x1 = laygen.get_xy(obj=nd[5].template, gridname=rg12)
     x2 = nd[5].bbox #(gridname=rg12)
     print(x0, x1, x2)

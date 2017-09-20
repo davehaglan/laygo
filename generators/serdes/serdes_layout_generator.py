@@ -193,8 +193,8 @@ def generate_ser_vstack(laygen, objectname_pfix, templib_logic, placement_grid, 
     rg_m4m5 = routing_grid_m4m5
 
     input_size = radix ** num_stages
-    size_ser2to1 = laygen.get_template_xy(name = devname_serslice, gridname = pg)
-    size_ser2to1_rg_m4m5 = laygen.get_template_xy(name = devname_serslice, gridname = rg_m4m5)
+    size_ser2to1 = laygen.get_xy(obj=laygen.get_template(name = devname_serslice), gridname = pg)
+    size_ser2to1_rg_m4m5 = laygen.get_xy(obj=laygen.get_template(name = devname_serslice), gridname = rg_m4m5)
     # placement
     iser = []
     y_ser = 0
@@ -329,7 +329,7 @@ def generate_ser_space_vstack(laygen, objectname_pfix, placement_grid, devname_s
                               origin=np.array([0, 0]), num_stages=3, radix=2):
     """generate spacing elements between vstacked serializers"""
     pg = placement_grid
-    size_ser2to1 = laygen.get_template_xy(name = devname_serspace, gridname = pg)
+    size_ser2to1 = laygen.get_xy(obj=laygen.get_template(name = devname_serspace), gridname = pg)
 
     # placement
     iser = []

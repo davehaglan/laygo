@@ -160,7 +160,7 @@ def generate_sarclkgen_core2(laygen, objectname_pfix,
                      refinstname0=ip4.name, refinstindex0=np.array([i, 0]), via0=[[0, 0]],
                      refinstname1=ip4.name, refinstindex1=np.array([i, 0]))
     # power and groud rail
-    xy = laygen.get_template_xy(name = in5.cellname, gridname = rg_m1m2) * np.array([1, 0])
+    xy = laygen.get_xy(obj = in5.template, gridname = rg_m1m2) * np.array([1, 0])
     rvdd=laygen.route("R"+objectname_pfix+"VDD0", laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=xy, gridname0=rg_m1m2,
                  refinstname0=ip0.name, refinstname1=ip5.name)
     rvss=laygen.route("R"+objectname_pfix+"VSS0", laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=xy, gridname0=rg_m1m2,
@@ -201,7 +201,7 @@ def generate_sarclkgen_core_static(laygen, objectname_pfix,
     in7 = laygen.relplace(name = "I"+objectname_pfix + 'N7', templatename = devname_nmos_body, gridname = pg, refinstname = in6.name, shape=np.array([m, 1]))
     in8 = laygen.relplace(name = "I"+objectname_pfix + 'N8', templatename = devname_nmos_boundary, gridname = pg, refinstname = in7.name)
 
-    ip0_xy = laygen.get_template_xy(name = in1s.cellname, gridname=pg, libname=utemplib)
+    ip0_xy = laygen.get_xy(obj = in1s.template, gridname=pg)
     ip0_xy[0] = 0
     ip0_xy[1] = 2*ip0_xy[1]
     ip0_xy += origin
@@ -352,7 +352,7 @@ def generate_sarclkgen_core_static(laygen, objectname_pfix,
         laygen.via(None, xy_s1 * np.array([1, 0]), refinstname=ip1.name, gridname=rg_m1m2,
                    refinstindex=np.array([i, 0]))
     # power and groud rail
-    xy = laygen.get_template_xy(name = in5.cellname, gridname = rg_m1m2) * np.array([1, 0])
+    xy = laygen.get_xy(obj = in5.template, gridname = rg_m1m2) * np.array([1, 0])
     rvdd=laygen.route("R"+objectname_pfix+"VDD0", laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=xy, gridname0=rg_m1m2,
                  refinstname0=ip0.name, refinstname1=ip8.name)
     #rvss=laygen.route("R"+objectname_pfix+"VSS0", laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=xy, gridname0=rg_m1m2,

@@ -56,23 +56,23 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
     space20_template = laygen.templates.get_template(tisar_space2_name, libname)
     space20_pins=space20_template.pins
     space20_xy=ispace20.xy
-    space0_origin = laygen.get_template_xy(name = ispace20.cellname, gridname=pg, libname=workinglib) * np.array([1, 0])
+    space0_origin = laygen.get_xy(obj = ispace20.template, gridname=pg) * np.array([1, 0])
     ispace0 = laygen.place(name="I" + objectname_pfix + 'SP0', templatename=tisar_space_name,
                       gridname=pg, xy=space0_origin, template_libname=libname)
     space_template = laygen.templates.get_template(tisar_space_name, libname)
     space_pins=space_template.pins
     space0_xy=ispace0.xy
-    sar_origin = space0_origin + laygen.get_template_xy(name = ispace0.cellname, gridname=pg, libname=workinglib) * np.array([1, 0])
+    sar_origin = space0_origin + laygen.get_xy(obj = ispace0.template, gridname=pg) * np.array([1, 0])
     isar = laygen.place(name="I" + objectname_pfix + 'SAR0', templatename=tisar_core_name,
                       gridname=pg, xy=sar_origin, template_libname=libname)
     sar_template = laygen.templates.get_template(tisar_core_name, libname)
     sar_pins=sar_template.pins
     sar_xy=isar.xy
-    space1_origin = sar_origin + laygen.get_template_xy(name = isar.cellname, gridname=pg, libname=workinglib) * np.array([1, 0])
+    space1_origin = sar_origin + laygen.get_xy(obj = isar.template, gridname=pg) * np.array([1, 0])
     ispace1 = laygen.place(name="I" + objectname_pfix + 'SP1', templatename=tisar_space_name,
                       gridname=pg, xy=space1_origin, template_libname=libname)
     space1_xy=ispace1.xy
-    space21_origin = space1_origin + laygen.get_template_xy(name = ispace1.cellname, gridname=pg, libname=workinglib) * np.array([1, 0])
+    space21_origin = space1_origin + laygen.get_xy(obj = ispace1.template, gridname=pg) * np.array([1, 0])
     ispace21 = laygen.place(name="I" + objectname_pfix + 'SP21', templatename=tisar_space2_name,
                       gridname=pg, xy=space21_origin, template_libname=libname)
     space21_xy=ispace21.xy

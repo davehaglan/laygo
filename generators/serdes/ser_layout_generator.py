@@ -103,20 +103,20 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
     sub_ser = int(num_ser/2)
 
     #Calculate layout size
-    ff_size=laygen.get_template_xy(name = ff_name, gridname = pg, libname = templib_logic)
-    ff_rst_size=laygen.get_template_xy(name = ff_rst_name, gridname = pg, libname = templib_logic)
-    latch_size=laygen.get_template_xy(name = latch_name, gridname = pg, libname = templib_logic)
-    inv1_size=laygen.get_template_xy(name = inv1_name, gridname = pg, libname = templib_logic)
-    inv2_size=laygen.get_template_xy(name = inv2_name, gridname = pg, libname = templib_logic)
-    tinv_size=laygen.get_template_xy(name = tinv_name, gridname = pg, libname = templib_logic)
-    outinv_size=laygen.get_template_xy(name = outinv_name, gridname = pg, libname = templib_logic)
-    tap_size=laygen.get_template_xy(name = tap_name, gridname = pg, libname = templib_logic)
+    ff_size=laygen.get_xy(obj=laygen.get_template(name = ff_name, libname = templib_logic), gridname = pg)
+    ff_rst_size=laygen.get_xy(obj=laygen.get_template(name = ff_rst_name, libname = templib_logic), gridname = pg)
+    latch_size=laygen.get_xy(obj=laygen.get_template(name = latch_name, libname = templib_logic), gridname = pg)
+    inv1_size=laygen.get_xy(obj=laygen.get_template(name = inv1_name, libname = templib_logic), gridname = pg)
+    inv2_size=laygen.get_xy(obj=laygen.get_template(name = inv2_name, libname = templib_logic), gridname = pg)
+    tinv_size=laygen.get_xy(obj=laygen.get_template(name = tinv_name, libname = templib_logic), gridname = pg)
+    outinv_size=laygen.get_xy(obj=laygen.get_template(name = outinv_name, libname = templib_logic), gridname = pg)
+    tap_size=laygen.get_xy(obj=laygen.get_template(name = tap_name, libname = templib_logic), gridname = pg)
     x0=ff_size[0]+ff_rst_size[0]+inv1_size[0]+2*inv2_size[0]+tinv_size[0]+2*tap_size[0]
     num_row=int(sub_ser)+1
     print(ff_size)
-    print(laygen.get_template_xy(name = ff_name, gridname = None, libname = templib_logic))
+    print(laygen.get_xy(obj=laygen.get_template(name = ff_name, libname = templib_logic), gridname = None))
     #boundaries
-    m_bnd = int(x0 / laygen.get_template_xy(name = 'boundary_bottom', gridname = pg)[0])
+    m_bnd = int(x0 / laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottom'), gridname = pg)[0])
     devname_bnd_left = []
     devname_bnd_right = []
     transform_bnd_left = []
@@ -150,14 +150,14 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
                                                                    origin=np.array([0, 0]))
     #Calculate origins for placement
     tap_origin = origin + laygen.get_xy(obj = bnd_bottom[0], gridname = pg) \
-                   + laygen.get_template_xy(name = bnd_bottom[0].cellname, gridname = pg)
+                   + laygen.get_xy(obj = bnd_bottom[0].template, gridname = pg)
     array_origin = origin + laygen.get_xy(obj = bnd_bottom[0], gridname = pg) \
-                   + laygen.get_template_xy(name = bnd_bottom[0].cellname, gridname = pg) \
-                   + np.array([laygen.get_template_xy(name = tap_name, gridname = pg, libname = templib_logic)[0], 0])
-    tapr_origin = tap_origin + m_bnd*np.array([laygen.get_template_xy(name = 'boundary_bottom', gridname = pg)[0], 0]) \
-                   - np.array([laygen.get_template_xy(name = tap_name, gridname = pg, libname = templib_logic)[0], 0])
-    FF0_origin = array_origin + np.array([0, laygen.get_template_xy(name = 'inv_1x', gridname = pg, libname = templib_logic)[1]]) + \
-                 np.array([0, laygen.get_template_xy(name = ff_name, gridname = pg, libname = templib_logic)[1]])
+                   + laygen.get_xy(obj = bnd_bottom[0].template, gridname = pg) \
+                   + np.array([laygen.get_xy(obj=laygen.get_template(name = tap_name, libname = templib_logic), gridname = pg)[0], 0])
+    tapr_origin = tap_origin + m_bnd*np.array([laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottom'), gridname = pg)[0], 0]) \
+                   - np.array([laygen.get_xy(obj=laygen.get_template(name = tap_name, libname = templib_logic), gridname = pg)[0], 0])
+    FF0_origin = array_origin + np.array([0, laygen.get_xy(obj=laygen.get_template(name = 'inv_1x', libname = templib_logic), gridname = pg)[1]]) + \
+                 np.array([0, laygen.get_xy(obj=laygen.get_template(name = ff_name, libname = templib_logic), gridname = pg)[1]])
     # placement
     iffdiv=[]
     ipbuf1=[]
@@ -255,8 +255,8 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
     #Space placement at the last row
     space_name = 'space_1x'
     space4x_name = 'space_4x'
-    space_width = laygen.get_template_xy(name = space_name, gridname = pg, libname = templib_logic)[0]
-    space4_width = laygen.get_template_xy(name = space4x_name, gridname = pg, libname = templib_logic)[0]
+    space_width = laygen.get_xy(obj=laygen.get_template(name = space_name, libname = templib_logic), gridname = pg)[0]
+    space4_width = laygen.get_xy(obj=laygen.get_template(name = space4x_name, libname = templib_logic), gridname = pg)[0]
     blank1_width = x0 - (2*tap_size + inv1_size + inv2_size + tinv_size + latch_size)[0]
     blank2_width = (tinv_size - inv1_size)[0]
     m_space4 = int(blank1_width / space4_width)
@@ -432,7 +432,7 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
     laygen.boundary_pin_from_rect(rrst, rg_m3m4, "RST", laygen.layers['pin'][3], size=4, direction='bottom')
 
     # power pin
-    pwr_dim=laygen.get_template_xy(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)
+    pwr_dim=laygen.get_xy(obj =itapl[-1].template, gridname=rg_m2m3)
     rvdd = []
     rvss = []
     if num_row%2==0: rp1='VSS'

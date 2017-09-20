@@ -133,7 +133,7 @@ def generate_sarlogic_wret_array(laygen, objectname_pfix, templib_logic, placeme
                                                transform=tf, template_libname=workinglib))
                 refi = islogic[-1].name
             else:
-                nfill = laygen.get_template_xy(name=islogic[0].cellname, gridname=pg, libname=workinglib)[0]
+                nfill = laygen.get_xy(obj =islogic[0].template, gridname=pg)[0]
                 #ifill=laygen.relplace(name = "I" + objectname_pfix + 'CLGFILL'+str(i*num_bits_row+j), templatename = space_1x_name,
                 #                               gridname = pg, refinstname = refi, shape=np.array([nfill, 1]),
                 #                               transform=tf, template_libname=templib_logic)
@@ -220,7 +220,7 @@ def generate_sarlogic_wret_array(laygen, objectname_pfix, templib_logic, placeme
     #laygen.boundary_pin_from_rect(rrst0, rg_m4m5, 'RST', laygen.layers['pin'][5], size=6, direction='bottom')
     laygen.boundary_pin_from_rect(rsaop[0], rg_m4m5, "SAOP", laygen.layers['pin'][4], size=6, direction='left')
     laygen.boundary_pin_from_rect(rsaom[0], rg_m4m5, "SAOM", laygen.layers['pin'][4], size=6, direction='left')
-    y1 = laygen.get_template_xy(name=islogic[0].cellname, gridname=rg_m4m5, libname=workinglib)[1]
+    y1 = laygen.get_xy(obj =islogic[0].template, gridname=rg_m4m5)[1]
     y2 = y1*(num_row)
     pdict2 = laygen.get_inst_pin_xy(None, None, rg_m3m4, sort=True)
     pdict_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5, sort=True)
@@ -251,7 +251,7 @@ def generate_sarlogic_wret_array(laygen, objectname_pfix, templib_logic, placeme
                                               laygen.layers['pin'][5], size=6, direction='bottom')
 
     # power pin
-    pwr_dim=laygen.get_template_xy(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)
+    pwr_dim=laygen.get_xy(obj =itapl[-1].template, gridname=rg_m2m3)
     rvdd = []
     rvss = []
     if num_row%2==0: rp1='VSS'
@@ -337,7 +337,7 @@ def generate_sarlogic_wret_v2_array(laygen, objectname_pfix, templib_logic, plac
                                                transform=tf, template_libname=workinglib))
                 refi = islogic[-1].name
             else:
-                nfill = laygen.get_template_xy(name=islogic[0].cellname, gridname=pg, libname=workinglib)[0]
+                nfill = laygen.get_xy(obj =islogic[0].template, gridname=pg)[0]
                 #ifill=laygen.relplace(name = "I" + objectname_pfix + 'CLGFILL'+str(i*num_bits_row+j), templatename = space_1x_name,
                 #                               gridname = pg, refinstname = refi, shape=np.array([nfill, 1]),
                 #                               transform=tf, template_libname=templib_logic)
@@ -424,7 +424,7 @@ def generate_sarlogic_wret_v2_array(laygen, objectname_pfix, templib_logic, plac
     #laygen.boundary_pin_from_rect(rrst0, rg_m4m5, 'RST', laygen.layers['pin'][5], size=6, direction='bottom')
     laygen.boundary_pin_from_rect(rsaop[0], rg_m4m5, "SAOP", laygen.layers['pin'][4], size=6, direction='left')
     laygen.boundary_pin_from_rect(rsaom[0], rg_m4m5, "SAOM", laygen.layers['pin'][4], size=6, direction='left')
-    y1 = laygen.get_template_xy(name=islogic[0].cellname, gridname=rg_m4m5, libname=workinglib)[1]
+    y1 = laygen.get_xy(obj =islogic[0].template, gridname=rg_m4m5)[1]
     y2 = y1*(num_row)
     pdict2 = laygen.get_inst_pin_xy(None, None, rg_m3m4, sort=True)
     pdict_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5, sort=True)
@@ -455,7 +455,7 @@ def generate_sarlogic_wret_v2_array(laygen, objectname_pfix, templib_logic, plac
                                               laygen.layers['pin'][5], size=6, direction='bottom')
 
     # power pin
-    pwr_dim=laygen.get_template_xy(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)
+    pwr_dim=laygen.get_xy(obj =itapl[-1].template, gridname=rg_m2m3)
     rvdd = []
     rvss = []
     if num_row%2==0: rp1='VSS'

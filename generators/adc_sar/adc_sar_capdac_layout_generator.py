@@ -228,7 +228,7 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
                                           direction='left', netname="O")
             cnt+=1
     #grid alignment
-    xy0 = laygen.get_xy(obj =ibndtr0)+laygen.get_template_xy(name=ibndtr0.cellname)*np.array([num_space_right, num_space_top])
+    xy0 = laygen.get_xy(obj =ibndtr0)+laygen.get_xy(obj =ibndtr0.template)*np.array([num_space_right, num_space_top])
     if not placement_resolution[0] is None:
         xy0[0] = ceil(xy0[0] / placement_resolution[0])*placement_resolution[0]
     if not placement_resolution[1] is None:
@@ -309,7 +309,7 @@ if __name__ == '__main__':
             num_space_right=sizedict['capdac']['num_space_right']
         #print(m_vertical, m_horizontal)
 
-    yres= laygen.get_template_xy(name='nmos4_fast_center_nf2')[1] * 2
+    yres= laygen.get_xy(obj=laygen.get_template(name='nmos4_fast_center_nf2'))[1] * 2
 
     print(cell_name+" generating")
     mycell_list.append(cell_name)

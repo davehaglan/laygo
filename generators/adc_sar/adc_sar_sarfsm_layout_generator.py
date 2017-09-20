@@ -85,9 +85,9 @@ def generate_sarfsm(laygen, objectname_pfix, templib_logic, placement_grid,
                             gridname = pg, refinstname = idff0.name, template_libname = templib_logic)
     refi = iinv0.name
     #fill insertion
-    fill_tie_x = laygen.get_template_xy(name = tie_name, gridname = pg, libname=templib_logic)[0]
-    fill_x = (laygen.get_template_xy(name = dff_name, gridname = pg, libname = templib_logic) * np.array([num_bits_row - 1, 1]) \
-              - laygen.get_template_xy(name = inv_name, gridname = pg, libname = templib_logic))[0]
+    fill_tie_x = laygen.get_xy(obj=laygen.get_template(name = tie_name, libname=templib_logic), gridname = pg)[0]
+    fill_x = (laygen.get_xy(obj=laygen.get_template(name = dff_name, libname = templib_logic), gridname = pg) * np.array([num_bits_row - 1, 1]) \
+              - laygen.get_xy(obj=laygen.get_template(name = inv_name, libname = templib_logic), gridname = pg))[0]
     m_fill_4x=int(fill_x/4)
     fill_x=fill_x-m_fill_4x*4
     m_fill_2x=int(fill_x/2)
@@ -149,7 +149,7 @@ def generate_sarfsm(laygen, objectname_pfix, templib_logic, placement_grid,
                                            transform=tf, template_libname=templib_logic))
                 refi = idff[-1].name
             else:
-                nfill = laygen.get_template_xy(name=idff[0].cellname, gridname=pg, libname=templib_logic)[0]
+                nfill = laygen.get_xy(obj =idff[0].template, gridname=pg)[0]
                 #ifill=laygen.relplace(name = "I" + objectname_pfix + 'FSMFILL'+str(i*num_bits_row+j), templatename = space_1x_name,
                 #                               gridname = pg, refinstname = refi, shape=np.array([nfill, 1]),
                 #                               transform=tf, template_libname=templib_logic)
@@ -196,10 +196,10 @@ def generate_sarfsm(laygen, objectname_pfix, templib_logic, placement_grid,
     # internal route references
     x0 = laygen.get_xy(obj =itie0, gridname=rg_m3m4)[0] + 1
     x1 = laygen.get_xy(obj =idff[-1], gridname=rg_m3m4)[0]\
-         +laygen.get_template_xy(name=idff[-1].cellname, gridname=rg_m3m4, libname=templib_logic)[0] - 1
+         +laygen.get_xy(obj =idff[-1].template, gridname=rg_m3m4)[0] - 1
     x2 = laygen.get_xy(obj =itapr[-1], gridname=rg_m4m5)[0] - 2 -2
     y0 = pdict[idff0.name]['I'][0][1] + 2
-    y1 = laygen.get_template_xy(name=itie0.cellname, gridname=rg_m3m4, libname=templib_logic)[1]
+    y1 = laygen.get_xy(obj =itie0.template, gridname=rg_m3m4)[1]
     y2 = y1*(num_row+1)
 
     # internal routes
@@ -280,7 +280,7 @@ def generate_sarfsm(laygen, objectname_pfix, templib_logic, placement_grid,
                                   direction='right')
 
     # power pin
-    pwr_dim=laygen.get_template_xy(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)
+    pwr_dim=laygen.get_xy(obj =itapl[-1].template, gridname=rg_m2m3)
     rvdd = []
     rvss = []
     if num_row%2==0: rp1='VDD'
