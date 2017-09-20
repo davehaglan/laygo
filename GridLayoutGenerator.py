@@ -1163,13 +1163,27 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 geometric paramter of the object on gridname
         """
         if isinstance(obj, TemplateObject):
-            return self.get_template_xy(name=obj.name, gridname=gridname)
+            if gridname is None:
+                return obj.size
+            else:
+                return self.get_absgrid_xy(gridname, obj.size)
+            #return self.get_template_xy(name=obj.name, gridname=gridname)
         if isinstance(obj, Instance):
-            return self.get_inst_xy(name=obj.name, gridname=gridname)
+            if gridname == None:
+                return obj.xy
+            else:
+                return self.get_absgrid_xy(gridname, obj.xy)
+            #return self.get_inst_xy(name=obj.name, gridname=gridname)
         if isinstance(obj, Rect):
-            return self.get_rect_xy(name=obj.name, gridname=gridname, sort=sort)
+            xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
+            if sort == True: xy = self.sort_rect_xy(xy)
+            return xy
+            #return self.get_rect_xy(name=obj.name, gridname=gridname, sort=sort)
         if isinstance(obj, Pin):
-            return self.get_pin_xy(name=obj.name, gridname=gridname, sort=sort)
+            xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
+            if sort == True: xy = self.sort_rect_xy(xy)
+            return xy
+            #return self.get_pin_xy(name=obj.name, gridname=gridname, sort=sort)
 
     def get_bbox(self, obj, gridname=None, sort=False):
         """
