@@ -1389,7 +1389,25 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         else:
             return self.get_absgrid_region(gridname, xy[0], xy[1])
 
-    #grid related functions
+    #template and grid related functions
+    def get_template(self, name, libname=None):
+        """
+            Get template object handle
+
+            Parameters
+            ----------
+            name : str
+                template name
+            libname : str, optional
+                library name
+
+            Returns
+            -------
+            laygo.TemplateObject.TemplateObject
+                template object
+        """
+        return self.templates.get_template(name, libname)
+
     def get_grid(self, gridname):
         """
         Get grid object handle
@@ -1470,7 +1488,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         return self.grids.get_absgrid_region(gridname=gridname, xy0=xy0, xy1=xy1)
 
-    #template and grid related functions
     def construct_template_and_grid(self, db, libname, cellname=None,
                                     layer_boundary=['prBoundary', 'boundary'], layer_text=['text', 'drawing'],
                                     routegrid_prefix='route', placementgrid_prefix='placement', append=True):
