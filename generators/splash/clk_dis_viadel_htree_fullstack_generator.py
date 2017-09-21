@@ -10,15 +10,15 @@ def execfile(filepath, globals=None, locals=None):
         exec(compile(file.read(), filepath, 'exec'), globals, locals)
 
 files=[
-    'laygo/generators/adc_sar/clk_dis_capsw_array_layout_generator.py',
-    'laygo/generators/adc_sar/clk_dis_clk_dis_cell_layout_generator.py',
-    'laygo/generators/adc_sar/clk_dis_capdac_layout_generator.py',
-    'laygo/generators/adc_sar/clk_dis_viadel_cell_layout_generator.py',
-    'laygo/generators/adc_sar/clk_dis_viadel_layout_generator.py',
-    'laygo/generators/adc_sar/clk_dis_htree_layout_generator.py',
-    'laygo/generators/adc_sar/clk_dis_viadel_htree_layout_generator.py',
-    'laygo/generators/adc_sar/clk_dis_viadel_htree_schematic_generator.py',
-    'laygo/generators/adc_sar/clk_dis_viadel_htree_lvs.py',
+    'laygo/generators/splash/clk_dis_capsw_array_layout_generator.py',
+    'laygo/generators/splash/clk_dis_clk_dis_cell_layout_generator.py',
+    'laygo/generators/splash/clk_dis_capdac_layout_generator.py',
+    'laygo/generators/splash/clk_dis_viadel_cell_layout_generator.py',
+    'laygo/generators/splash/clk_dis_viadel_layout_generator.py',
+    'laygo/generators/splash/clk_dis_htree_layout_generator.py',
+    'laygo/generators/splash/clk_dis_viadel_htree_layout_generator.py',
+    'laygo/generators/splash/clk_dis_viadel_htree_schematic_generator.py',
+    'laygo/generators/splash/clk_dis_viadel_htree_lvs.py',
     ]
 
 for f in files:

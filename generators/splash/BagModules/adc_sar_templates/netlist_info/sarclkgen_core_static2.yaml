@@ -76,7 +76,7 @@ instances:
         num_bits: 1
       B:
         direction: inputOutput
-        net_name: "VDD"
+        net_name: "VSS"
         num_bits: 1
       G:
         direction: inputOutput
@@ -96,7 +96,7 @@ instances:
         num_bits: 1
       B:
         direction: inputOutput
-        net_name: "VDD"
+        net_name: "VSS"
         num_bits: 1
       G:
         direction: inputOutput
@@ -116,7 +116,7 @@ instances:
         num_bits: 1
       B:
         direction: inputOutput
-        net_name: "VDD"
+        net_name: "VSS"
         num_bits: 1
       G:
         direction: inputOutput
