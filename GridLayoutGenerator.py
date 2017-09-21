@@ -75,18 +75,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     use_phantom=False #phantom cell usage
     """bool: true if phantom cells are exported (not real cells)"""
     layers = {'metal':[], 'pin':[], 'text':[], 'prbnd':[]}
-    """dict: layer dictionary. metal, pin, text, prbnd are used as keys"""
-
-    #physical resolution
-    @property
-    def physical_res(self):
-        """float: physical resolution"""
-        return self.res
-
-    @physical_res.setter
-    def physical_res(self, value):
-        """float: physical resolution"""
-        self.res = value
+    """dict: layer dictionary. Keys are metal, pin, text, prbnd"""
 
     def __init__(self, physical_res=0.005, config_file=None):
         """
@@ -109,10 +98,9 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         BaseLayoutGenerator.__init__(self, res=physical_res)
 
     #aux functions
-
-    def sort_rect_xy(self, xy):
+    def _bbox_xy(self, xy):
         """
-        Sort xy coordinates. ex) sort_rect_xy([[4, 3], [2, 1]])=np.array([[2, 1], [4, 3]])
+        Find a bbox of xy coordinates. ex) _bbox_xy([[4, 1], [3, 5], [2, 3]])=np.array([[2, 1], [4, 5]])
 
         Parameters
         ----------
@@ -122,13 +110,13 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         Returns
         -------
         np.array([[int, int], [int, int]])
-            sorted matrix
+            bbox matrix
         """
         xy = np.asarray(xy)
-        bx1, bx2 = sorted(xy[:, 0].tolist())
-        by1, by2 = sorted(xy[:, 1].tolist())
-        ll = np.array([bx1, by1])  # lower-left
-        ur = np.array([bx2, by2])  # upper-right
+        bx = sorted(xy[:, 0].tolist())
+        by = sorted(xy[:, 1].tolist())
+        ll = np.array([bx[0], by[0]])  # lower-left
+        ur = np.array([bx[-1], by[-1]])  # upper-right
         bnd = np.vstack([ll, ur])
         return bnd
 
@@ -641,7 +629,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 layer = self.grids.get_route_ylayer_xy(gridname0, _xy0)
         return self.add_rect(name, np.vstack((xy0_phy, xy1_phy)), layer, netname)
 
-
     def _route_generate_box_from_abscoord(self, xy0, xy1, gridname0, gridname1=None, direction='omni',
                                           offset0=np.array([0, 0]), offset1=None, transform0='R0', transform1=None,
                                           endstyle0="truncate", endstyle1="truncate"):
@@ -990,13 +977,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             self.via(None, xy1, gridname=gridname0)
         return [rh0, rv0, rh1]
 
-    #annotation
-    def annotate_instance(self, name, annotation):
-        pass
-
-    def annotate_route(self, name, annotation):
-        pass
-
     #pin creation functions
     def pin(self, name, layer=None, xy=None, gridname=None, netname=None, base_layer=None, refobj=None,
             xy0=np.array([0, 0]), xy1=np.array([0, 0])):
@@ -1054,34 +1034,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             #base_layer=[layer[0], 'drawing']
         self.db.add_rect(None, xy=xy_phy, layer=base_layer)
         return self.db.add_pin(name=name, netname=netname, xy=xy_phy, layer=layer)
-
-    def pin_from_rect(self, name, layer, rect, gridname, netname=None):
-        """
-        Generate a Pin object from a Rect object
-
-        Parameters
-        ----------
-        name : str
-            Pin name
-        layer : [str, str]
-            Pin layer
-        rect : laygo.GridObject.Rect
-            Rect object
-        gridname : str
-            Gridname
-        netname : str, optional
-            net name. If None, pin name is used. Used when multiple pin objects are attached to the same net.
-
-        Returns
-        -------
-        laygo.LayoutObject.Pin
-            generated Pin object
-        """
-        print("[WARNING] pin_from_rect function will be deprecated. Use pin function with refobj argument instead")
-        if netname == None: netname = name
-        xy = rect.xy
-        xy = self.get_absgrid_region(gridname, xy[0, :], xy[1, :])
-        return self.pin(name, layer, xy, gridname, netname=netname)
 
     def boundary_pin_from_rect(self, rect, gridname, name, layer, size=4, direction='left', netname=None):
         """
@@ -1167,25 +1119,21 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 return obj.size
             else:
                 return self.get_absgrid_xy(gridname, obj.size)
-            #return self.get_template_xy(name=obj.name, gridname=gridname)
         if isinstance(obj, Instance):
             if gridname == None:
                 return obj.xy
             else:
                 return self.get_absgrid_xy(gridname, obj.xy)
-            #return self.get_inst_xy(name=obj.name, gridname=gridname)
         if isinstance(obj, Rect):
             xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
-            if sort == True: xy = self.sort_rect_xy(xy)
+            if sort == True: xy = self._bbox_xy(xy)
             return xy
-            #return self.get_rect_xy(name=obj.name, gridname=gridname, sort=sort)
         if isinstance(obj, Pin):
             xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
-            if sort == True: xy = self.sort_rect_xy(xy)
+            if sort == True: xy = self._bbox_xy(xy)
             return xy
-            #return self.get_pin_xy(name=obj.name, gridname=gridname, sort=sort)
 
-    def get_bbox(self, obj, gridname=None, sort=False):
+    def get_bbox(self, obj, gridname=None):
         """
             get bounding box of an object on the specific coordinate
 
@@ -1202,206 +1150,30 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 geometric paramter of the object on gridname
         """
         if isinstance(obj, TemplateObject):
-            return np.array([0, 0], self.get_template_xy(name=obj.name, gridname=gridname))
+            if gridname is None:
+                xy = obj.size
+            else:
+                xy = self.get_absgrid_xy(gridname, obj.size)
+            return np.array([0, 0], xy)
         if isinstance(obj, Instance):
-            return self.get_inst_bbox(name=obj.name, gridname=gridname)
+            if gridname == None:
+                return obj.xy
+            else:
+                return self.get_absgrid_xy(gridname, obj.xy)
         if isinstance(obj, Rect):
-            return self.get_rect_xy(name=obj.name, gridname=gridname, sort=sort)
+            xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
+            xy = self._bbox_xy(xy)
+            return xy
         if isinstance(obj, Pin):
-            return self.get_pin_xy(name=obj.name, gridname=gridname, sort=sort)
+            xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
+            xy = self._bbox_xy(xy)
+            return xy
 
     def get_template_size(self, name, gridname=None, libname=None):
         """
             get the size of a template in abstract coordinate. Same with get_template_xy
         """
         return self.get_template_xy(name=name, gridname=gridname, libname=libname)
-
-    def get_template_xy(self, name, gridname=None, libname=None):
-        """
-        get the size of a template in abstract coordinate
-
-        Parameters
-        ----------
-        name : str
-            template name
-        gridname : str, optional
-            grid name. If None, physical grid is used
-        libname : str, optional
-            library name. If None, GridLayoutGenerator.TemplateDB.TemplateDB.plib is uesd
-
-        Returns
-        -------
-        np.ndarray([int, int])
-            size of template
-        """
-        t = self.templates.get_template(name, libname=libname)
-        if gridname is None:
-            return t.size
-        else:
-            return self.get_absgrid_xy(gridname, t.size)
-
-    def get_inst_xy(self, name, gridname=None):
-        """
-        Get xy coordinate values of an Instance object in abstract coordinate
-
-        Parameters
-        ----------
-        name : str
-            instance name
-        gridname : str, optional
-            grid name. If None, physical grid is used
-
-        Returns
-        -------
-        np.ndarray([int, int])
-            xy coordinate of instance
-        """
-        i = self.get_inst(name)
-        if gridname==None:
-            return i.xy
-        else:
-            return self.get_absgrid_xy(gridname, i.xy)
-
-    def get_rect_xy(self, name, gridname, sort=False):
-        """
-        get xy coordinate values of a Rect object in abstract coordinate
-
-        Parameters
-        ----------
-        name : str
-            rect name
-        gridname : str
-            grid name
-        sort : bool, optional
-            if True, the coordinates are sorted
-
-        Returns
-        -------
-        np.ndarray([int, int])
-            xy coordinates of the Rect object
-        """
-        r = self.get_rect(name)
-        xy=self.get_absgrid_region(gridname, r.xy[0,:], r.xy[1,:])
-        if sort==True: xy=self.sort_rect_xy(xy)
-        return xy
-
-    def get_pin_xy(self, name, gridname, sort=False):
-        """
-        get xy coordinates of a Pin object in abstract coordinate
-
-        Parameters
-        ----------
-        name : str
-            rect name
-        gridname : str
-            grid name
-        sort : bool, optional
-            if True, the coordinates are sorted
-
-        Returns
-        -------
-        np.ndarray([int, int])
-            xy coordinates of the Pin object
-        """
-        r = self.get_rect(name)
-        xy=self.get_absgrid_region(gridname, r.xy[0,:], r.xy[1,:])
-        if sort==True: xy=self.sort_rect_xy(xy)
-        return xy
-
-    def get_template_pin_xy(self, name, pinname, gridname, libname=None):
-        """
-        get xy cooridnate of a template pin in abstract coordinate
-
-        Parameters
-        ----------
-        name : str
-            template cellname
-        pinname : str
-            template pinname
-        gridname : str
-            grid name
-        libname : str, optional
-            library name of template
-        Returns
-        -------
-        np.ndarray([[int, int], [int, int]])
-            Template pin coordinates
-        """
-        t = self.templates.get_template(name, libname=libname)
-        pin_xy_phy = t.pins[pinname]['xy']
-        pin_xy_abs = self.get_absgrid_region(gridname, pin_xy_phy[0], pin_xy_phy[1])
-        return pin_xy_abs
-
-    def get_inst_pin_xy(self, name, pinname, gridname, index=np.array([0, 0]), sort=False):
-        """
-        Get xy coordinates of an instance pin in abstract coordinate
-
-        Parameters
-        ----------
-        name : str
-            instance name
-            if None, return all pin coordinates of all instances in dict format
-        pinname : str
-            template pinname
-            if None, return all pin coordinates of specified instance in dict format
-        gridname : str
-            grid name
-        index : np.array([int, int])
-
-        Returns
-        -------
-        np.ndarray([int, int])
-            Instance pin coordinates
-        """
-        index=np.asarray(index)
-        if name == None:
-            xy=dict()
-            for i in self.get_inst():
-                xy[i]=self.get_inst_pin_xy(i, pinname, gridname, index, sort)
-            return xy
-        else:
-            i = self.get_inst(name)
-            if not i.cellname in self.templates.templates[i.libname].keys():
-                print(i.cellname+" template is not in "+i.libname+'. pin coordinates will not be extracted')
-                return dict()
-            else:
-                t = self.templates.get_template(i.cellname, libname=i.libname)
-                if pinname==None:
-                    xy=dict()
-                    for p in t.pins:
-                        xy[p]=self.get_inst_pin_xy(name, p, gridname, index, sort)
-                    return xy
-                else:
-                    xy0 = i.xy + np.dot(t.size * index + t.pins[pinname]['xy'][0, :], ut.Mt(i.transform).T)
-                    xy1 = i.xy + np.dot(t.size * index + t.pins[pinname]['xy'][1, :], ut.Mt(i.transform).T)
-                    xy=self.get_absgrid_region(gridname, xy0, xy1)
-                    if sort == True: xy = self.sort_rect_xy(xy)
-                    return xy
-
-    def get_inst_bbox(self, name, gridname=None, sort=False):
-        """
-        Get a bounding box of an Instance object, on abstract grid
-
-        Parameters
-        ----------
-        name : str
-            instance name
-        gridname : str, optional
-            grid name. If None, physical grid is used
-        sort : bool, optional
-            if True, the return coordinates are sorted
-
-        Returns
-        -------
-        np.ndarray([[int, int], [int, int]])
-            instance bbox in abstract coordinate
-        """
-        xy = self.get_inst(name).bbox
-        if sort == True: xy = self.sort_rect_xy(xy)
-        if gridname is None:
-            return xy
-        else:
-            return self.get_absgrid_region(gridname, xy[0], xy[1])
 
     #template and grid related functions
     def get_template(self, name, libname=None):
@@ -1735,7 +1507,222 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         self.grids.import_yaml(filename=filename, libname=libname)
 
-    #Obsolete functions
+    #Deprecated functions. Do not use for future generators
+    def pin_from_rect(self, name, layer, rect, gridname, netname=None):
+        """
+        Generate a Pin object from a Rect object
+
+        Parameters
+        ----------
+        name : str
+            Pin name
+        layer : [str, str]
+            Pin layer
+        rect : laygo.GridObject.Rect
+            Rect object
+        gridname : str
+            Gridname
+        netname : str, optional
+            net name. If None, pin name is used. Used when multiple pin objects are attached to the same net.
+
+        Returns
+        -------
+        laygo.LayoutObject.Pin
+            generated Pin object
+        """
+        print("[WARNING] pin_from_rect function will be deprecated. Use pin function with refobj argument instead")
+        if netname == None: netname = name
+        xy = rect.xy
+        xy = self.get_absgrid_region(gridname, xy[0, :], xy[1, :])
+        return self.pin(name, layer, xy, gridname, netname=netname)
+
+    def get_template_xy(self, name, gridname=None, libname=None):
+        """
+        get the size of a template in abstract coordinate
+
+        Parameters
+        ----------
+        name : str
+            template name
+        gridname : str, optional
+            grid name. If None, physical grid is used
+        libname : str, optional
+            library name. If None, GridLayoutGenerator.TemplateDB.TemplateDB.plib is uesd
+
+        Returns
+        -------
+        np.ndarray([int, int])
+            size of template
+        """
+        t = self.templates.get_template(name, libname=libname)
+        if gridname is None:
+            return t.size
+        else:
+            return self.get_absgrid_xy(gridname, t.size)
+
+    def get_inst_xy(self, name, gridname=None):
+        """
+        Get xy coordinate values of an Instance object in abstract coordinate
+
+        Parameters
+        ----------
+        name : str
+            instance name
+        gridname : str, optional
+            grid name. If None, physical grid is used
+
+        Returns
+        -------
+        np.ndarray([int, int])
+            xy coordinate of instance
+        """
+        i = self.get_inst(name)
+        if gridname==None:
+            return i.xy
+        else:
+            return self.get_absgrid_xy(gridname, i.xy)
+
+    def get_rect_xy(self, name, gridname, sort=False):
+        """
+        get xy coordinate values of a Rect object in abstract coordinate
+
+        Parameters
+        ----------
+        name : str
+            rect name
+        gridname : str
+            grid name
+        sort : bool, optional
+            if True, the coordinates are sorted
+
+        Returns
+        -------
+        np.ndarray([int, int])
+            xy coordinates of the Rect object
+        """
+        r = self.get_rect(name)
+        xy=self.get_absgrid_region(gridname, r.xy[0,:], r.xy[1,:])
+        if sort==True: xy=self._bbox_xy(xy)
+        return xy
+
+    def get_pin_xy(self, name, gridname, sort=False):
+        """
+        get xy coordinates of a Pin object in abstract coordinate
+
+        Parameters
+        ----------
+        name : str
+            rect name
+        gridname : str
+            grid name
+        sort : bool, optional
+            if True, the coordinates are sorted
+
+        Returns
+        -------
+        np.ndarray([int, int])
+            xy coordinates of the Pin object
+        """
+        r = self.get_rect(name)
+        xy=self.get_absgrid_region(gridname, r.xy[0,:], r.xy[1,:])
+        if sort==True: xy=self._bbox_xy(xy)
+        return xy
+
+    def get_template_pin_xy(self, name, pinname, gridname, libname=None):
+        """
+        get xy cooridnate of a template pin in abstract coordinate
+
+        Parameters
+        ----------
+        name : str
+            template cellname
+        pinname : str
+            template pinname
+        gridname : str
+            grid name
+        libname : str, optional
+            library name of template
+        Returns
+        -------
+        np.ndarray([[int, int], [int, int]])
+            Template pin coordinates
+        """
+        t = self.templates.get_template(name, libname=libname)
+        pin_xy_phy = t.pins[pinname]['xy']
+        pin_xy_abs = self.get_absgrid_region(gridname, pin_xy_phy[0], pin_xy_phy[1])
+        return pin_xy_abs
+
+    def get_inst_pin_xy(self, name, pinname, gridname, index=np.array([0, 0]), sort=False):
+        """
+        Get xy coordinates of an instance pin in abstract coordinate
+
+        Parameters
+        ----------
+        name : str
+            instance name
+            if None, return all pin coordinates of all instances in dict format
+        pinname : str
+            template pinname
+            if None, return all pin coordinates of specified instance in dict format
+        gridname : str
+            grid name
+        index : np.array([int, int])
+
+        Returns
+        -------
+        np.ndarray([int, int])
+            Instance pin coordinates
+        """
+        index=np.asarray(index)
+        if name == None:
+            xy=dict()
+            for i in self.get_inst():
+                xy[i]=self.get_inst_pin_xy(i, pinname, gridname, index, sort)
+            return xy
+        else:
+            i = self.get_inst(name)
+            if not i.cellname in self.templates.templates[i.libname].keys():
+                print(i.cellname+" template is not in "+i.libname+'. pin coordinates will not be extracted')
+                return dict()
+            else:
+                t = self.templates.get_template(i.cellname, libname=i.libname)
+                if pinname==None:
+                    xy=dict()
+                    for p in t.pins:
+                        xy[p]=self.get_inst_pin_xy(name, p, gridname, index, sort)
+                    return xy
+                else:
+                    xy0 = i.xy + np.dot(t.size * index + t.pins[pinname]['xy'][0, :], ut.Mt(i.transform).T)
+                    xy1 = i.xy + np.dot(t.size * index + t.pins[pinname]['xy'][1, :], ut.Mt(i.transform).T)
+                    xy=self.get_absgrid_region(gridname, xy0, xy1)
+                    if sort == True: xy = self._bbox_xy(xy)
+                    return xy
+
+    def get_inst_bbox(self, name, gridname=None, sort=False):
+        """
+        Get a bounding box of an Instance object, on abstract grid
+
+        Parameters
+        ----------
+        name : str
+            instance name
+        gridname : str, optional
+            grid name. If None, physical grid is used
+        sort : bool, optional
+            if True, the return coordinates are sorted
+
+        Returns
+        -------
+        np.ndarray([[int, int], [int, int]])
+            instance bbox in abstract coordinate
+        """
+        xy = self.get_inst(name).bbox
+        if sort == True: xy = self._bbox_xy(xy)
+        if gridname is None:
+            return xy
+        else:
+            return self.get_absgrid_region(gridname, xy[0], xy[1])
+
     '''
     def get_inst_bbox_phygrid(self, instname):
         """

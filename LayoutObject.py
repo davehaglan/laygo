@@ -242,6 +242,12 @@ class Text(LayoutObject):
         print("  [Text]" + self.name + " text:" + self.text +
               " layer:" + str(self.layer) + " xy:" + str(np.around(self.xy, decimals=10).tolist()))
 
+class Orientation(LayoutObject):
+    """Orientation class attached to other LayoutObjects"""
+    master = None
+    """LayoutObject.Instance: master instance that the tag is attached"""
+    value = None
+    """str: tag value"""
 
 class Instance(LayoutObject):
     """Instance object class"""
@@ -267,15 +273,17 @@ class Instance(LayoutObject):
     """str: transform parameter"""
 
     template = None
-    """str: original template name"""
+    """TemplateObject.TemplateObject: original template object"""
 
     pins = None
     """dict(): pin dictionary"""
 
+    orientations = None
+    """dict(): orientations dictionary"""
+
     @property
     def xy0(self):
         return self.xy
-
     """np.array([float, float]): Object location"""
 
     @property
@@ -284,7 +292,6 @@ class Instance(LayoutObject):
             return self.xy
         else:
             return self.xy + np.dot(self.template.xy[1], ut.Mt(self.transform).T)
-
     """np.array([float, float]): the opposite corner of xy (or xy0)"""
 
     @property
@@ -372,6 +379,7 @@ class Instance(LayoutObject):
         else:
             self.elements = np.array([[self]])
         if not template is None:
+            # crate orientation dictionary
             # create pin dictionary
             self.pins = dict()
             for pn, p in self.template.pins.items():
