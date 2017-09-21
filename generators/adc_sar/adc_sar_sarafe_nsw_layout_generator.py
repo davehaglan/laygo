@@ -54,23 +54,23 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     sa_name='salatch_pmos'
 
     # placement
-    xy0 = origin + (laygen.get_template_xy(name = cdrv_name, gridname=pg, libname=workinglib) * np.array([1, 0]))
+    xy0 = origin + (laygen.get_xy(obj=laygen.get_template(name = cdrv_name, libname=workinglib), gridname=pg) * np.array([1, 0]))
     icdrvl = laygen.place(name="I" + objectname_pfix + 'CDRVL0', templatename=cdrv_name, gridname=pg,
                           xy=xy0, template_libname = workinglib, transform='MY')
     icdrvr = laygen.place(name="I" + objectname_pfix + 'CDRVR0', templatename=cdrv_name, gridname=pg,
                           xy=xy0, template_libname = workinglib)
-    xy0 = origin + laygen.get_template_xy(name = cdrv_name, gridname=pg, libname=workinglib) * np.array([0, 1]) \
-                 + laygen.get_template_xy(name = sa_name, gridname=pg, libname=workinglib) * np.array([0, 1])
+    xy0 = origin + laygen.get_xy(obj=laygen.get_template(name = cdrv_name, libname=workinglib), gridname=pg) * np.array([0, 1]) \
+                 + laygen.get_xy(obj=laygen.get_template(name = sa_name, libname=workinglib), gridname=pg) * np.array([0, 1])
     isa = laygen.place(name="I" + objectname_pfix + 'SA0', templatename=sa_name, gridname=pg,
                        xy=xy0, template_libname = workinglib, transform='MX')
-    xy0 = origin + laygen.get_template_xy(name = cdrv_name, gridname=pg, libname=workinglib) * np.array([0, 1]) \
-                 + laygen.get_template_xy(name = sa_name, gridname=pg, libname=workinglib) * np.array([0, 1]) \
-                 + laygen.get_template_xy(name = cdac_name, gridname=pg, libname=workinglib) * np.array([1, 0])
+    xy0 = origin + laygen.get_xy(obj=laygen.get_template(name = cdrv_name, libname=workinglib), gridname=pg) * np.array([0, 1]) \
+                 + laygen.get_xy(obj=laygen.get_template(name = sa_name, libname=workinglib), gridname=pg) * np.array([0, 1]) \
+                 + laygen.get_xy(obj=laygen.get_template(name = cdac_name, libname=workinglib), gridname=pg) * np.array([1, 0])
     icdacl = laygen.place(name="I" + objectname_pfix + 'CDACL0', templatename=cdac_name, gridname=pg,
                           xy=xy0, template_libname = workinglib, transform='MY')
-    xy0 = origin + laygen.get_template_xy(name = cdrv_name, gridname=pg, libname=workinglib) * np.array([2, 1]) \
-                 + laygen.get_template_xy(name = sa_name, gridname=pg, libname=workinglib) * np.array([0, 1]) \
-                 - laygen.get_template_xy(name = cdac_name, gridname=pg, libname=workinglib) * np.array([1, 0])
+    xy0 = origin + laygen.get_xy(obj=laygen.get_template(name = cdrv_name, libname=workinglib), gridname=pg) * np.array([2, 1]) \
+                 + laygen.get_xy(obj=laygen.get_template(name = sa_name, libname=workinglib), gridname=pg) * np.array([0, 1]) \
+                 - laygen.get_xy(obj=laygen.get_template(name = cdac_name, libname=workinglib), gridname=pg) * np.array([1, 0])
     icdacr = laygen.place(name="I" + objectname_pfix + 'CDACR0', templatename=cdac_name, gridname=pg,
                           xy=xy0, template_libname = workinglib)
 
@@ -103,9 +103,9 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
 
     #route
     #capdrv to capdac
-    #y0 = origin[1] + laygen.get_template_xy(name = cdrv_name, gridname=rg_m5m6, libname=workinglib)[1]-2 #refer to capdrv
-    y0 = origin[1] + laygen.get_template_xy(name = cdrv_name, gridname=rg_m5m6, libname=workinglib)[1] \
-         + laygen.get_template_xy(name = sa_name, gridname=rg_m5m6, libname=workinglib)[1] - 4 #refer to sa
+    #y0 = origin[1] + laygen.get_xy(obj=laygen.get_template(name = cdrv_name, libname=workinglib), gridname=rg_m5m6)[1]-2 #refer to capdrv
+    y0 = origin[1] + laygen.get_xy(obj=laygen.get_template(name = cdrv_name, libname=workinglib), gridname=rg_m5m6)[1] \
+         + laygen.get_xy(obj=laygen.get_template(name = sa_name, libname=workinglib), gridname=rg_m5m6)[1] - 4 #refer to sa
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvl_vo_c0_xy[0],
                                        icdacl_i_c0_xy[0], y0 + 1, rg_m5m6, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7)
     laygen.boundary_pin_from_rect(rv0, rg_m5m6, "VOL_C0", laygen.layers['pin'][5], size=4, direction='bottom',
@@ -161,8 +161,8 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     #rosm=laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 0]),
     #                  refinstname0=isa.name, refpinname0='OSM', gridname0=rg_m2m3, direction='y')
     pdict_m3m4 = laygen.get_inst_pin_xy(None, None, rg_m3m4)
-    yos=laygen.get_inst_xy(name = isa.name, gridname = rg_m3m4)[1] \
-        - laygen.get_template_xy(name=isa.cellname, gridname=rg_m3m4, libname=workinglib)[1]
+    yos=laygen.get_xy(obj = isa, gridname = rg_m3m4)[1] \
+        - laygen.get_xy(obj =isa.template, gridname=rg_m3m4)[1]
     [rv0, rh0, rosp] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict_m3m4[isa.name]['OSP'][0],
                                        np.array([pdict_m3m4[isa.name]['OSP'][0][0]+m_sa, 0]), yos, rg_m3m4)
     [rv0, rh0, rosm] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict_m3m4[isa.name]['OSM'][0],
@@ -192,8 +192,8 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     for pn in pdict_m5m6[icdacl.name]:
         if pn.startswith('O'): #out pin
             outcnt+=1
-    _x0 = laygen.get_inst_xy(name = icdacl.name, gridname = rg_m5m6)[0] 
-    _x1 = laygen.get_inst_xy(name = icdacr.name, gridname = rg_m5m6)[0] 
+    _x0 = laygen.get_xy(obj = icdacl, gridname = rg_m5m6)[0] 
+    _x1 = laygen.get_xy(obj = icdacr, gridname = rg_m5m6)[0] 
     x0 = _x0+(_x1-_x0)-4
     x1 = _x1-(_x1-_x0)+4
     nrin_sa = 4  # number of M6 horizontal route stacks for cdac to sa
@@ -245,8 +245,8 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     for j in range(4):
         laygen.via(None, [x0 - 2 * j, xy0[1]], rg_m4m5)
         laygen.via(None, [x1 + 2 * j, xy1[1]], rg_m4m5)
-    x0 = laygen.get_inst_xy(name = icdacl.name, gridname = rg_m3m4)[0] - 1
-    x1 = laygen.get_inst_xy(name = icdacr.name, gridname = rg_m3m4)[0] + 1
+    x0 = laygen.get_xy(obj = icdacl, gridname = rg_m3m4)[0] - 1
+    x1 = laygen.get_xy(obj = icdacr, gridname = rg_m3m4)[0] + 1
     xy0 = laygen.get_inst_pin_xy(isa.name, "INP", rg_m3m4, index=np.array([0, 0]), sort=True)[0]
     xy1 = laygen.get_inst_pin_xy(isa.name, "INM", rg_m3m4, index=np.array([0, 0]), sort=True)[0]
     laygen.route(None, laygen.layers['metal'][4], xy0=np.array([x0, xy0[1]]), xy1=xy0, gridname0=rg_m3m4, via1=[[0, 0]])
@@ -266,8 +266,8 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
                 offset_start_index=0, offset_end_index=0)
     rvss_cdrvl_m4=rvss_cdrvl_m4[0]
     #cdrv_right_m4
-    x1 = laygen.get_inst_xy(name=icdrvr.name, gridname=rg_m3m4_thick)[0]\
-         +laygen.get_template_xy(name=icdrvr.cellname, gridname=rg_m3m4_thick, libname=workinglib)[0]
+    x1 = laygen.get_xy(obj =icdrvr, gridname=rg_m3m4_thick)[0]\
+         +laygen.get_xy(obj =icdrvr.template, gridname=rg_m3m4_thick)[0]
     rvdd_cdrvr_m3=[]
     rvss_cdrvr_m3=[]
     for pn, p in pdict_m3m4_thick[icdrvr.name].items():
@@ -299,8 +299,8 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=None,
                 offset_start_index=1, offset_end_index=0)
     #sa_right_m4_m5
-    x1 = laygen.get_inst_xy(name=isa.name, gridname=rg_m3m4_thick)[0]\
-         +laygen.get_template_xy(name=isa.cellname, gridname=rg_m3m4_thick, libname=workinglib)[0]
+    x1 = laygen.get_xy(obj =isa, gridname=rg_m3m4_thick)[0]\
+         +laygen.get_xy(obj =isa.template, gridname=rg_m3m4_thick)[0]
     rvdd_sar_m3=[]
     rvss_sar_m3=[]
     for pn, p in pdict_m3m4_thick[isa.name].items():
@@ -321,11 +321,11 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
                 offset_start_index=0, offset_end_index=0)
     #sa_m6
     num_vref_routes_m6=4
-    x1 = laygen.get_inst_xy(name=isa.name, gridname=rg_m5m6_thick)[0]\
-         +laygen.get_template_xy(name=isa.cellname, gridname=rg_m5m6_thick, libname=workinglib)[0]
-    x1_phy = laygen.get_inst_xy(name=isa.name)[0]\
-         +laygen.get_template_xy(name=isa.cellname, libname=workinglib)[0]
-    y1 = laygen.get_inst_xy(name=isa.name, gridname=rg_m5m6_thick)[1]
+    x1 = laygen.get_xy(obj =isa, gridname=rg_m5m6_thick)[0]\
+         +laygen.get_xy(obj =isa.template, gridname=rg_m5m6_thick)[0]
+    x1_phy = laygen.get_xy(obj =isa)[0]\
+         +laygen.get_xy(obj =isa.template)[0]
+    y1 = laygen.get_xy(obj =isa, gridname=rg_m5m6_thick)[1]
     input_rails_rect = [rvdd_sal_m5+rvdd_sar_m5, rvss_sal_m5+rvss_sar_m5]
     #sa_m6_bottom_shield
     rvdd_sa_m6, rvss_sa_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_0_', 
@@ -364,8 +364,8 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
         p.xy1[0]=x1_phy
     #pins
     pdict_vref=laygen.get_inst_pin_xy(None, None, rg_m5m6_basic_thick)
-    x1 = laygen.get_inst_xy(name=isa.name, gridname=rg_m5m6_basic_thick)[0]\
-         +laygen.get_template_xy(name=isa.cellname, gridname=rg_m5m6_basic_thick, libname=workinglib)[0]
+    x1 = laygen.get_xy(obj =isa, gridname=rg_m5m6_basic_thick)[0]\
+         +laygen.get_xy(obj =isa.template, gridname=rg_m5m6_basic_thick)[0]
     for i in range(3):
         laygen.route(None, laygen.layers['metal'][5], gridname0=rg_m5m6_basic_thick,
                      xy0=pdict_vref[icdrvl.name]['VREF_M5<'+str(i)+'>'][0], 

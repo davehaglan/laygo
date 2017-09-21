@@ -74,9 +74,9 @@ def generate_sarclkdelayslice_compact2(laygen, objectname_pfix, templib_logic, p
     pdict = laygen.get_inst_pin_xy(None, None, rg_m3m4)
 
     # internal routes
-    x0 = laygen.get_inst_xy(name=isel0.name, gridname=rg_m3m4)[0] + 1
-    x1 = laygen.get_inst_xy(name=imux0.name, gridname=rg_m3m4)[0]\
-         +laygen.get_template_xy(name=imux0.cellname, gridname=rg_m3m4, libname=templib_logic)[0] - 1
+    x0 = laygen.get_xy(obj =isel0, gridname=rg_m3m4)[0] + 1
+    x1 = laygen.get_xy(obj =imux0, gridname=rg_m3m4)[0]\
+         +laygen.get_xy(obj =imux0.template, gridname=rg_m3m4)[0] - 1
     y0 = pdict[isel0.name]['I'][0][1] + 0
 
     #route-sel
@@ -160,9 +160,9 @@ def generate_sarclkdelay_compact_dual(laygen, objectname_pfix, templib_logic, wo
     pdict = laygen.get_inst_pin_xy(None, None, rg_m3m4)
 
     # internal routes
-    x0 = laygen.get_inst_xy(name=islice0.name, gridname=rg_m3m4)[0] + 1
-    x1 = laygen.get_inst_xy(name=iinv0.name, gridname=rg_m3m4)[0]\
-         + laygen.get_template_xy(name=iinv0.cellname, gridname=rg_m3m4, libname=templib_logic)[0]
+    x0 = laygen.get_xy(obj =islice0, gridname=rg_m3m4)[0] + 1
+    x1 = laygen.get_xy(obj =iinv0, gridname=rg_m3m4)[0]\
+         + laygen.get_xy(obj =iinv0.template, gridname=rg_m3m4)[0]
     y0 = pdict[islice0.name]['I'][0][1] + 2
 
     #route-backtoback

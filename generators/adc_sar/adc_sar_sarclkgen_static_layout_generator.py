@@ -130,10 +130,10 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
     pdict = laygen.get_inst_pin_xy(None, None, rg_m3m4)
 
     # internal routes
-    #x0 = laygen.get_inst_xy(name=inand0.name, gridname=rg_m3m4)[0] + 1
-    x0 = laygen.get_inst_xy(name=iinv7.name, gridname=rg_m3m4)[0] + 1
-    x1 = laygen.get_inst_xy(name=refl, gridname=rg_m3m4)[0]\
-         +laygen.get_template_xy(name=reflcn, gridname=rg_m3m4, libname=templib_logic)[0] - 1
+    #x0 = laygen.get_xy(obj =inand0, gridname=rg_m3m4)[0] + 1
+    x0 = laygen.get_xy(obj =iinv7, gridname=rg_m3m4)[0] + 1
+    x1 = laygen.get_xy(obj =laygen.get_inst(name=refl), gridname=rg_m3m4)[0]\
+         +laygen.get_xy(obj=laygen.get_template(name=reflcn, libname=templib_logic), gridname=rg_m3m4)[0] - 1
     y0 = pdict[inand0.name]['A'][0][1] + 0
     # internal routes - and2
     [rv0, rphi0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[icore0.name]['PHI0'][0],
@@ -229,7 +229,7 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
                  refinstname0=itapl.name, refpinname0='VSS', refinstname1=itapr.name, refpinname1='VSS')
 
     # power pin
-    pwr_dim=laygen.get_template_xy(name=itapl.cellname, gridname=rg_m2m3, libname=itapl.libname)
+    pwr_dim=laygen.get_xy(obj =itapl.template, gridname=rg_m2m3)
     rvdd = []
     rvss = []
     rp1='VDD'

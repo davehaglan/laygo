@@ -98,9 +98,9 @@ def generate_capdrv_nsw(laygen, objectname_pfix, templib_logic, placement_grid, 
 
     #reference route coordinate
     y0 = i3_i_xy[0][1]
-    x0 = laygen.get_inst_xy(name=it0.name, gridname=rg_m3m4)[0] + 1
-    x1 = laygen.get_inst_xy(name=i5.name, gridname=rg_m3m4)[0]\
-         +laygen.get_template_xy(name=i5.cellname, gridname=rg_m3m4, libname=templib_logic)[0] - 1
+    x0 = laygen.get_xy(obj =it0, gridname=rg_m3m4)[0] + 1
+    x1 = laygen.get_xy(obj =i5, gridname=rg_m3m4)[0]\
+         +laygen.get_xy(obj =i5.template, gridname=rg_m3m4)[0] - 1
     #en
     rv0, ren0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i3_en_xy[0], np.array([x0, y0 - 4]), rg_m3m4)
     rv0, ren1 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i4_en_xy[0], np.array([x0, y0 - 3]), rg_m3m4)

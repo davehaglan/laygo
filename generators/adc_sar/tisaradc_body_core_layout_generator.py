@@ -53,12 +53,12 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
     # ret/sar/clk
     iret = laygen.place(name="I" + objectname_pfix + 'RET0', templatename=ret_name,
                       gridname=pg, xy=origin, template_libname=ret_libname)
-    sar_xy = origin + (laygen.get_template_xy(name = ret_name, gridname=pg, libname=ret_libname) * np.array([0, 1]))
+    sar_xy = origin + (laygen.get_xy(obj=laygen.get_template(name = ret_name, libname=ret_libname), gridname=pg) * np.array([0, 1]))
     isar = laygen.relplace(name="I" + objectname_pfix + 'SAR0', templatename=sar_name,
                       gridname=pg, refinstname=iret.name, direction='top', template_libname=sar_libname)
     clkdist_offset_pg=int(clkdist_offset/laygen.get_grid(pg).height)
-    clkdist_xy = laygen.get_inst_xy(name=isar.name, gridname=pg) \
-                 + (laygen.get_template_xy(name = sar_name, gridname=pg, libname=sar_libname) * np.array([0, 1])) \
+    clkdist_xy = laygen.get_xy(obj =isar, gridname=pg) \
+                 + (laygen.get_xy(obj=laygen.get_template(name = sar_name, libname=sar_libname), gridname=pg) * np.array([0, 1])) \
                  + np.array([0, clkdist_offset_pg])
 
     iclkdist = laygen.place(name="I" + objectname_pfix + 'CLKDIST0', templatename=clkdist_name,

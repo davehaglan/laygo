@@ -47,7 +47,7 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
     #abe
     iabe=laygen.place(name="I" + objectname_pfix + 'ABE0', templatename=sarabe_name,
                       gridname=pg, xy=origin, template_libname=workinglib)
-    yabe=laygen.get_template_xy(name=sarabe_name, gridname=pg, libname=workinglib)[1]
+    yabe=laygen.get_xy(obj=laygen.get_template(name=sarabe_name, libname=workinglib), gridname=pg)[1]
     #afe
     iafe=laygen.relplace(name="I" + objectname_pfix + 'AFE0', templatename=sarafe_name,
                          gridname=pg, refinstname=iabe.name, direction='top', template_libname=workinglib)
@@ -145,7 +145,7 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
     #                                   pdict_m5m6[iabe.name]['SARCLKB'][0], pdict_m5m6[iafe.name]['CLKB'][0],
     #                                   y0 + 6*num_bits+6, rg_m5m6)
     #clk
-    x0=int(laygen.get_template_xy(name=sarabe_name, gridname=rg_m5m6, libname=workinglib)[0] / 2)
+    x0=int(laygen.get_xy(obj=laygen.get_template(name=sarabe_name, libname=workinglib), gridname=rg_m5m6)[0] / 2)
     [rv0, rclk0] = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6],
                                        pdict_m5m6[iabe.name]['RST0'][0], np.array([x0+3, y0 + 6*num_bits+3-3+8]), rg_m5m6)
     [rv0, rclk1] = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6],
@@ -215,7 +215,7 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
         laygen.pin(name='ADCOUT<'+str(i)+'>', layer=laygen.layers['pin'][5], xy=pdict_m5m6[iabe.name]['ADCOUT<'+str(i)+'>'], gridname=rg_m5m6)
     #clk
     #laygen.pin(name='CLK', layer=laygen.layers['pin'][5], xy=pdict_m5m6[iabe.name]['RST'], gridname=rg_m5m6)
-    #laygen.pin(name='CLK', layer=laygen.layers['pin'][5], xy=laygen.get_rect_xy(name = rclk0.name, gridname=rg_m5m6), gridname=rg_m5m6)
+    #laygen.pin(name='CLK', layer=laygen.layers['pin'][5], xy=laygen.get_xy(obj = rclk0, gridname=rg_m5m6), gridname=rg_m5m6)
     laygen.boundary_pin_from_rect(rclk0, rg_m5m6, 'CLK0', laygen.layers['pin'][6], size=6, direction='right',
                                   netname='CLK')
     laygen.boundary_pin_from_rect(rclk1, rg_m5m6, 'CLK1', laygen.layers['pin'][6], size=6, direction='right',

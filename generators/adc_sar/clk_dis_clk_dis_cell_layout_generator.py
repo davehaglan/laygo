@@ -157,9 +157,9 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     #####Place Boundary
 
     #Calculate size of boundary cell
-    bnd_left_size_x = laygen.get_template_xy(name='nmos4_fast_left', gridname=pg, libname=tech + '_microtemplates_dense')[0]
-    bnd_right_size_x = laygen.get_template_xy(name='nmos4_fast_right', gridname=pg, libname=tech + '_microtemplates_dense')[0]
-    tap4_size_x = laygen.get_template_xy(name='ptap_fast_space_nf4', gridname=pg, libname=tech + '_microtemplates_dense')[0]
+    bnd_left_size_x = laygen.get_xy(obj=laygen.get_template(name='nmos4_fast_left', libname=tech + '_microtemplates_dense'), gridname=pg)[0]
+    bnd_right_size_x = laygen.get_xy(obj=laygen.get_template(name='nmos4_fast_right', libname=tech + '_microtemplates_dense'), gridname=pg)[0]
+    tap4_size_x = laygen.get_xy(obj=laygen.get_template(name='ptap_fast_space_nf4', libname=tech + '_microtemplates_dense'), gridname=pg)[0]
 
     #Caluclate number of top and bottom cells
     bnd_m = width - bnd_left_size_x - bnd_right_size_x  ##This is all the numbe of the cells, using a lot in code!!
@@ -196,7 +196,7 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
 
     ##CAP switch row
     #Calculate coodinate of sw_dmy0
-    bnd_left_1_y=laygen.get_inst_xy(name=bnd_left[1].name, gridname=pg)[1] #y coodinate
+    bnd_left_1_y=laygen.get_xy(obj =bnd_left[1], gridname=pg)[1] #y coodinate
     sw_dmy_xy=np.array([bnd_left_size_x, bnd_left_1_y]) #xy coodinate
     #Place sw_dmy0 and capsw0
     sw_dmy0= laygen.place(name='I'+objectname_pfix+'SWDM0', templatename='space_1x', gridname=pg, xy=sw_dmy_xy, 
@@ -204,7 +204,7 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     capsw0=laygen.relplace(name='I'+objectname_pfix+'SW0', templatename='cap_sw_array', gridname=pg, 
             refinstname=sw_dmy0.name, template_libname='clk_dis_generated')
     #Calculate number of sw_dmy1
-    capsw0_size_x = laygen.get_template_xy(name='cap_sw_array', gridname=pg, libname='clk_dis_generated')[0]
+    capsw0_size_x = laygen.get_xy(obj=laygen.get_template(name='cap_sw_array', libname='clk_dis_generated'), gridname=pg)[0]
     sw_dmy1_m = bnd_m-num_capsw_dmy-capsw0_size_x
     #Place sw_dmy1
     sw_dmy1= laygen.relplace(name='I'+objectname_pfix+'SWDM1', templatename='space_1x', gridname=pg, 
@@ -220,7 +220,7 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     
     ##DFF row
     #Calculate coodinate of dff_dmy0
-    bnd_left_5_y = laygen.get_inst_xy(name=bnd_left[5].name, gridname=pg)[1] #y coodinate
+    bnd_left_5_y = laygen.get_xy(obj =bnd_left[5], gridname=pg)[1] #y coodinate
     dff_dmy0_xy = np.array([bnd_left_size_x, bnd_left_5_y]) #xy coodinate
     #Place dff_dmy0, tgated0, dff0, inv0, and inv1 
     dff_dmy0 = laygen.place(name='I'+objectname_pfix+'DFFDM0', templatename='space_1x', gridname=pg, xy=dff_dmy0_xy, 
@@ -234,9 +234,9 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     inv1=laygen.relplace(name='I'+objectname_pfix+'INV1', templatename='inv_'+str(m_inv2)+'x', gridname=pg, 
             refinstname=inv0.name, template_libname=tech+'_logic_templates', transform='MX')
     #Calculate number of dff_dmy1
-    inv1_x = laygen.get_inst_xy(name=inv1.name, gridname=pg)[0]
-    m_inv1_x = laygen.get_template_xy(name='inv_' + str(m_inv2) + 'x', gridname=pg, libname=tech + '_logic_templates')[0]
-    bnd_right_5_x = laygen.get_inst_xy(name=bnd_right[5].name, gridname=pg)[0] #y coodinate
+    inv1_x = laygen.get_xy(obj =inv1, gridname=pg)[0]
+    m_inv1_x = laygen.get_xy(obj=laygen.get_template(name='inv_' + str(m_inv2) + 'x', libname=tech + '_logic_templates'), gridname=pg)[0]
+    bnd_right_5_x = laygen.get_xy(obj =bnd_right[5], gridname=pg)[0] #y coodinate
     dff_dmy1_m = bnd_right_5_x-(inv1_x+m_inv1_x)
     ##Calculate coodinate of dff_dmy1
     dff_dmy1_x = inv1_x+m_inv1_x
@@ -327,7 +327,7 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
             clkiv=laygen.via(None, np.array([clki_x[0]-2*j, clki_x[1]+y1_clki+2*i]), gridname=rg_m3m4)
             laygen.route(None, laygen.layers['metal'][3], xy0=np.array([clki_x[0]-2*j, clki_x[1]]), xy1=np.array([clki_x[0]-2*j, clki_x[1]+y1_clki+2*(m_clki-1)]), gridname0=rg_m3m4)
             if i==0 and j==m_in-1:
-                v_xy=laygen.get_inst_xy(name = clkiv.name, gridname = rg_m4m5)
+                v_xy=laygen.get_xy(obj = clkiv, gridname = rg_m4m5)
         clki_d=clkp_x-v_xy[0] 
         for j in range(m_clki):
             [clkh, clkv]=laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], np.array([v_xy[0]-1, v_xy[1]+2*i]), 
@@ -347,7 +347,7 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
             clkov=laygen.via(None, np.array([clko_x[0]+2*j, clko_x[1]-y1_clko-2*i]), gridname=rg_m3m4)
             laygen.route(None, laygen.layers['metal'][3], xy0=np.array([clko_x[0]+2*j, clko_x[1]]), xy1=np.array([clko_x[0]+2*j, clko_x[1]-y1_clko-2*(m_clko-1)]), gridname0=rg_m3m4)
             if i==0 and j==0:
-                v_xy=laygen.get_inst_xy(name = clkov.name, gridname = rg_m4m5)
+                v_xy=laygen.get_xy(obj = clkov, gridname = rg_m4m5)
         clko_d=clkp_x-v_xy[0]
         for j in range(m_clko):
             [clkh, clkv]=laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], np.array([v_xy[0]-1, v_xy[1]-2*i]), 
@@ -582,7 +582,7 @@ if __name__ == '__main__':
     load_from_file=True
     if load_from_file==True:
         #load parameters
-        params['phy_width']=laygen.get_template_xy(name='sar_wsamp', libname='adc_sar_generated')[0]
+        params['phy_width']=laygen.get_xy(obj=laygen.get_template(name='sar_wsamp', libname='adc_sar_generated'))[0]
     #grid
     grid = dict(
         pg = 'placement_basic', #placement grid

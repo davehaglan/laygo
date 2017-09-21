@@ -216,7 +216,7 @@ if __name__ == '__main__':
         rg_m2m3_pin = 'route_M2_M3_basic',
     )
     #parameters
-    pitch_x=laygen.get_template_xy(name='clk_dis_viadel_cell', libname=workinglib)[0]
+    pitch_x=laygen.get_xy(obj=laygen.get_template(name='clk_dis_viadel_cell', libname=workinglib))[0]
     params = dict(
         #stage
         level = 2,

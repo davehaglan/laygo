@@ -1163,13 +1163,27 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 geometric paramter of the object on gridname
         """
         if isinstance(obj, TemplateObject):
-            return self.get_template_xy(name=obj.name, gridname=gridname)
+            if gridname is None:
+                return obj.size
+            else:
+                return self.get_absgrid_xy(gridname, obj.size)
+            #return self.get_template_xy(name=obj.name, gridname=gridname)
         if isinstance(obj, Instance):
-            return self.get_inst_xy(name=obj.name, gridname=gridname)
+            if gridname == None:
+                return obj.xy
+            else:
+                return self.get_absgrid_xy(gridname, obj.xy)
+            #return self.get_inst_xy(name=obj.name, gridname=gridname)
         if isinstance(obj, Rect):
-            return self.get_rect_xy(name=obj.name, gridname=gridname, sort=sort)
+            xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
+            if sort == True: xy = self.sort_rect_xy(xy)
+            return xy
+            #return self.get_rect_xy(name=obj.name, gridname=gridname, sort=sort)
         if isinstance(obj, Pin):
-            return self.get_pin_xy(name=obj.name, gridname=gridname, sort=sort)
+            xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
+            if sort == True: xy = self.sort_rect_xy(xy)
+            return xy
+            #return self.get_pin_xy(name=obj.name, gridname=gridname, sort=sort)
 
     def get_bbox(self, obj, gridname=None, sort=False):
         """
@@ -1389,7 +1403,25 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         else:
             return self.get_absgrid_region(gridname, xy[0], xy[1])
 
-    #grid related functions
+    #template and grid related functions
+    def get_template(self, name, libname=None):
+        """
+            Get template object handle
+
+            Parameters
+            ----------
+            name : str
+                template name
+            libname : str, optional
+                library name
+
+            Returns
+            -------
+            laygo.TemplateObject.TemplateObject
+                template object
+        """
+        return self.templates.get_template(name, libname)
+
     def get_grid(self, gridname):
         """
         Get grid object handle
@@ -1470,7 +1502,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         return self.grids.get_absgrid_region(gridname=gridname, xy0=xy0, xy1=xy1)
 
-    #template and grid related functions
     def construct_template_and_grid(self, db, libname, cellname=None,
                                     layer_boundary=['prBoundary', 'boundary'], layer_text=['text', 'drawing'],
                                     routegrid_prefix='route', placementgrid_prefix='placement', append=True):

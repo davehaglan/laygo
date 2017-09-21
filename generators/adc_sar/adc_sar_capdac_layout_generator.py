@@ -137,32 +137,32 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
     for dev in devname_list_overlay_boundary_left:
         dev0_list=[ibndl0]
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
+            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_boundary_bottom:
         dev0_list=[ibndbl0] + ibndb + [ibndbr0] 
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
+            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_boundary_right:
         dev0_list=[ibndr0]
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
+            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_boundary_top:
         dev0_list=[ibndtl0] + ibndt + [ibndtr0] 
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
+            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_body:
         dev0_list=ivdac+[ic0]+ihdac 
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
+            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_dmy:
         dev0_list=idmydac
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
+            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
 
     #reference route coordinate
@@ -228,7 +228,7 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
                                           direction='left', netname="O")
             cnt+=1
     #grid alignment
-    xy0 = laygen.get_inst_xy(name=ibndtr0.name)+laygen.get_template_xy(name=ibndtr0.cellname)*np.array([num_space_right, num_space_top])
+    xy0 = laygen.get_xy(obj =ibndtr0)+laygen.get_xy(obj =ibndtr0.template)*np.array([num_space_right, num_space_top])
     if not placement_resolution[0] is None:
         xy0[0] = ceil(xy0[0] / placement_resolution[0])*placement_resolution[0]
     if not placement_resolution[1] is None:
@@ -309,7 +309,7 @@ if __name__ == '__main__':
             num_space_right=sizedict['capdac']['num_space_right']
         #print(m_vertical, m_horizontal)
 
-    yres= laygen.get_template_xy(name='nmos4_fast_center_nf2')[1] * 2
+    yres= laygen.get_xy(obj=laygen.get_template(name='nmos4_fast_center_nf2'))[1] * 2
 
     print(cell_name+" generating")
     mycell_list.append(cell_name)

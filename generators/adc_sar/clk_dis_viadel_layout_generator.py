@@ -242,7 +242,7 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         params['way_order']=sizedict['slice_order']
-        params['pitch_x']=laygen.get_template_xy(name='clk_dis_viadel_cell', libname=workinglib)[0]
+        params['pitch_x']=laygen.get_xy(obj=laygen.get_template(name='clk_dis_viadel_cell', libname=workinglib))[0]
 
     #grid
     grid = dict(
