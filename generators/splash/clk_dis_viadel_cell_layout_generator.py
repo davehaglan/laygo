@@ -66,66 +66,66 @@ def generate_clkdis_viadel_cell(laygen, objectname_pfix, logictemp_lib, working_
     ##Route, clock connection from TGATE to input
     clki_y =laygen.grids.get_absgrid_coord_y(gridname=rg_m5m6, y=4)
     for i in range(m_clki):
-        viadel_I_xy = laygen.get_inst_pin_coord(viacell.name, 'CLKI_'+str(i), rg_m5m6)[0]
+        viadel_I_xy = laygen.get_inst_pin_xy(viacell.name, 'CLKI_' + str(i), rg_m5m6)[0]
         clkopx=laygen.route(None, laygen.layers['metal'][5], xy0=viadel_I_xy, xy1=np.array([viadel_I_xy[0],clki_y]), gridname0=rg_m5m6)
-        laygen.create_boundary_pin_form_rect(clkopx, gridname=rg_m5m6, pinname='CLKI_'+str(i), layer=laygen.layers['pin'][5], 
-                size=2, direction='top', netname='CLKI')
+        laygen.boundary_pin_from_rect(clkopx, gridname=rg_m5m6, name='CLKI_' + str(i),
+                                      layer=laygen.layers['pin'][5], size=2, direction='top', netname='CLKI')
 
     ##Route, clock connection from TGATE to output
     clko_y =laygen.grids.get_absgrid_coord_y(gridname=rg_m5m6, y=-20)
     clko_xy = []
     for i in range(m_clko):
-        viadel_O_xy = laygen.get_inst_pin_coord(viacell.name, 'CLKO_'+str(i), rg_m5m6)[0]
+        viadel_O_xy = laygen.get_inst_pin_xy(viacell.name, 'CLKO_' + str(i), rg_m5m6)[0]
         clko_xy.append(viadel_O_xy)
         clkopx=laygen.route(None, laygen.layers['metal'][5], xy0=viadel_O_xy, xy1=np.array([viadel_O_xy[0],clko_y]), gridname0=rg_m5m6)
-        laygen.create_boundary_pin_form_rect(clkopx, gridname=rg_m5m6, pinname='CLKO_'+str(i), layer=laygen.layers['pin'][5], 
-                    size=2, direction='bottom', netname='CLKO')
+        laygen.boundary_pin_from_rect(clkopx, gridname=rg_m5m6, name='CLKO_' + str(i),
+                                      layer=laygen.layers['pin'][5], size=2, direction='bottom', netname='CLKO')
     for i in range(0,2**(num_bits+unit_size-1)-2,4):
-        capdac_O_xy0 = laygen.get_inst_pin_coord(capdac[0].name, 'O'+str(i), rg_m5m6)[0]
-        capdac_O_xy1 = laygen.get_inst_pin_coord(capdac[1].name, 'O'+str(i), rg_m5m6)[0]
+        capdac_O_xy0 = laygen.get_inst_pin_xy(capdac[0].name, 'O' + str(i), rg_m5m6)[0]
+        capdac_O_xy1 = laygen.get_inst_pin_xy(capdac[1].name, 'O' + str(i), rg_m5m6)[0]
         laygen.route(None, laygen.layers['metal'][4], xy0=capdac_O_xy0, xy1=capdac_O_xy1, gridname0=rg_m4m5)
         for j in range(m_clko):
             laygen.via(None, xy=np.array([clko_xy[j][0],capdac_O_xy0[1]]), gridname=rg_m4m5)
 
     ## Route, for inside connection between capdac and viadel
     for i in range(0,num_bits):
-        capdac_C_xy0 = laygen.get_inst_pin_coord(capdac[0].name, 'I<'+str(i)+'>', rg_m3m4_dense)[0]
-        capdac_C_xy1 = laygen.get_inst_pin_coord(capdac[1].name, 'I<'+str(i)+'>', rg_m3m4_dense)[0]
+        capdac_C_xy0 = laygen.get_inst_pin_xy(capdac[0].name, 'I<' + str(i) + '>', rg_m3m4_dense)[0]
+        capdac_C_xy1 = laygen.get_inst_pin_xy(capdac[1].name, 'I<' + str(i) + '>', rg_m3m4_dense)[0]
         laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], capdac_C_xy0, capdac_C_xy1, -1-2*i, rg_m3m4_dense)
-        viadel_SW_xy = laygen.get_inst_pin_coord(viacell.name, 'CAPSW<'+str(i)+'>', rg_m3m4)[0]
+        viadel_SW_xy = laygen.get_inst_pin_xy(viacell.name, 'CAPSW<' + str(i) + '>', rg_m3m4)[0]
         laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], capdac_C_xy0, viadel_SW_xy, -1-2*i, rg_m3m4_dense, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4)
 
 
     ##Route, for calibration signals
     #Get the right coodinate on grid m3m4
     for i in range(num_bits):
-        viadel_CAL_xy = laygen.get_inst_pin_coord(viacell.name, 'CAL<'+str(i)+'>', rg_m2m3_basic)
+        viadel_CAL_xy = laygen.get_inst_pin_xy(viacell.name, 'CAL<' + str(i) + '>', rg_m2m3_basic)
         laygen.pin(name='CAL<'+str(i)+'>', layer=laygen.layers['pin'][3], xy=viadel_CAL_xy, gridname=rg_m2m3_basic) 
 
     
     ##Route, for set/reset signals
     #ST, RST
-    viadel_ST_xy = laygen.get_inst_pin_coord(viacell.name, 'ST', rg_m2m3_basic)
-    viadel_RST_xy = laygen.get_inst_pin_coord(viacell.name, 'RST', rg_m2m3_basic)
+    viadel_ST_xy = laygen.get_inst_pin_xy(viacell.name, 'ST', rg_m2m3_basic)
+    viadel_RST_xy = laygen.get_inst_pin_xy(viacell.name, 'RST', rg_m2m3_basic)
     laygen.pin(name='ST', layer=laygen.layers['pin'][3], xy=viadel_ST_xy, gridname=rg_m2m3_basic) 
     laygen.pin(name='RST', layer=laygen.layers['pin'][3], xy=viadel_RST_xy, gridname=rg_m2m3_basic) 
 
     ##DATAI and DATAO pin
-    viadel_I_xy = laygen.get_inst_pin_coord(viacell.name, 'I', rg_m2m3_basic)
-    viadel_O_xy = laygen.get_inst_pin_coord(viacell.name, 'O', rg_m2m3_basic)
+    viadel_I_xy = laygen.get_inst_pin_xy(viacell.name, 'I', rg_m2m3_basic)
+    viadel_O_xy = laygen.get_inst_pin_xy(viacell.name, 'O', rg_m2m3_basic)
     laygen.pin(name='DATAI', layer=laygen.layers['pin'][3], xy=viadel_I_xy, gridname=rg_m2m3_basic) 
     laygen.pin(name='DATAO', layer=laygen.layers['pin'][3], xy=viadel_O_xy, gridname=rg_m2m3_basic) 
     
     ##VDD and VSS pin
     for i in range(num_vss_h):
-        vssl_xy = laygen.get_inst_pin_coord(viacell.name, 'VSS0_'+str(i), rg_m3m4_thick2)
+        vssl_xy = laygen.get_inst_pin_xy(viacell.name, 'VSS0_' + str(i), rg_m3m4_thick2)
         laygen.pin(name='VSS0_'+str(i), layer=laygen.layers['pin'][4], xy=vssl_xy, gridname=rg_m3m4_thick2, netname='VSS')
-        vssr_xy = laygen.get_inst_pin_coord(viacell.name, 'VSS1_'+str(i), rg_m3m4_thick2)
+        vssr_xy = laygen.get_inst_pin_xy(viacell.name, 'VSS1_' + str(i), rg_m3m4_thick2)
         laygen.pin(name='VSS1_'+str(i), layer=laygen.layers['pin'][4], xy=vssr_xy, gridname=rg_m3m4_thick2, netname='VSS')
     for i in range(num_vdd_h):
-        vddl_xy = laygen.get_inst_pin_coord(viacell.name, 'VDD0_'+str(i), rg_m3m4_thick2)
+        vddl_xy = laygen.get_inst_pin_xy(viacell.name, 'VDD0_' + str(i), rg_m3m4_thick2)
         laygen.pin(name='VDD0_'+str(i), layer=laygen.layers['pin'][4], xy=vddl_xy, gridname=rg_m3m4_thick2, netname='VDD')
-        vddr_xy = laygen.get_inst_pin_coord(viacell.name, 'VDD1_'+str(i), rg_m3m4_thick2)
+        vddr_xy = laygen.get_inst_pin_xy(viacell.name, 'VDD1_' + str(i), rg_m3m4_thick2)
         laygen.pin(name='VDD1_'+str(i), layer=laygen.layers['pin'][4], xy=vddr_xy, gridname=rg_m3m4_thick2, netname='VDD')
     
 
