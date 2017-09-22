@@ -198,6 +198,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         Place an instance on abstract grid, bound from a reference object. If reference object is not specified,
         [0, 0]+offset is used as the reference point.
+        Placement coordiate will be xy+refobj_xy+0.5*(Mt@refobj_size+Md@(refobj_size+inst_size)-Mti@inst_size).
 
         Parameters
         ----------
@@ -589,7 +590,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             reftemplate0=self.templates.get_template(refinst0.cellname, libname=refinst0.libname)
             _offset0=offset0+refinst0.xy+np.dot(refinst0.spacing*refinstindex0, ut.Mt(refinst0.transform).T)
             #corner
-            _xy0_corner_abs=_xy0_corner_pointer*self.get_xy(obj=reftemplate0, gridname=gridname0)
+            _xy0_corner_abs = np.dot(_xy0_corner_pointer * self.get_xy(obj=reftemplate0, gridname=gridname0),
+                                     ut.Mt(refinst0.transform).T)
             _xy0=_xy0+_xy0_corner_abs
             #pin
             if not refpinname0 == None: # if pin reference is specified
@@ -601,7 +603,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             reftemplate1=self.templates.get_template(refinst1.cellname, libname=refinst1.libname)
             _offset1=offset1+refinst1.xy+np.dot(refinst1.spacing*refinstindex1, ut.Mt(refinst1.transform).T)
             #corner
-            _xy1_corner_abs = _xy1_corner_pointer * self.get_xy(obj=reftemplate1, gridname=gridname1)
+            _xy1_corner_abs = np.dot(_xy1_corner_pointer * self.get_xy(obj=reftemplate1, gridname=gridname1),
+                                     ut.Mt(refinst1.transform).T)
             _xy1 = _xy1 + _xy1_corner_abs
             #pin
             if not refpinname1 == None: # if pin reference is specified
