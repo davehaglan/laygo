@@ -160,6 +160,8 @@ class Pin(LayoutObject):
     """str: net name"""
     master = None
     """LayoutObject.Instance: master instance, only for instance pins"""
+    elements = None
+    """np.array([[Pin]]): array elements"""
 
     _xy = np.zeros((2, 2), dtype=np.int)
     """np.array([[int, int], [int, int]]): Object xy coordinate (normalized to res)"""
@@ -242,44 +244,66 @@ class Text(LayoutObject):
         print("  [Text]" + self.name + " text:" + self.text +
               " layer:" + str(self.layer) + " xy:" + str(np.around(self.xy, decimals=10).tolist()))
 
-class Orientation(LayoutObject):
-    """Orientation class attached to other LayoutObjects"""
+
+class Pointer(LayoutObject):
+    """Pointer class attached to other LayoutObjects"""
     master = None
     """LayoutObject.Instance: master instance that the tag is attached"""
-    value = None
-    """str: tag value"""
+    type = 'corner' #Pointer type
+    #corner: it will be corner of objects
+    #xy_on_absgrid: it will be offset coordinate of master on abstract grid
+    #xy_on_phygrid:
+
+    def __init__(self, name, res, xy, type='corner', master=None):
+        """
+        Constructor
+
+        Parameters
+        ----------
+        name : str
+            object name
+        res : float
+            grid resolution
+        xy : np.array([x0, y0]), optional
+            xy coorinates
+        master : LayoutObject.Instance
+            master instance handle
+        """
+        self.master = master
+        self.type = type
+        LayoutObject.__init__(self, name, res, xy)
+
 
 class Instance(LayoutObject):
     """Instance object class"""
 
     libname = None
     """str: library name"""
-
     cellname = None
     """str: cell name"""
-
     shape = np.array([1, 1])
     """np.array([int, int]): array shape"""
-
     _spacing = np.zeros((2), dtype=np.int)
     """Array spacing (actually this is a pitch, but I just followed GDS's notations)"""
-
     def get_spacing(self): return self._spacing * self.res
     def set_spacing(self, value): self._spacing = np.array(np.round(value / self.res), dtype=np.int)
     spacing = property(get_spacing, set_spacing)
     """Array spacing (actually this is a pitch, but I just followed GDS's notations)"""
-
     transform = 'R0'
     """str: transform parameter"""
-
     template = None
     """TemplateObject.TemplateObject: original template object"""
-
     pins = None
     """dict(): pin dictionary"""
-
-    orientations = None
-    """dict(): orientations dictionary"""
+    elements = None
+    """np.array([[Instance]]): array elements"""
+    pointers = None
+    """dict(): pointer dictionary"""
+    #frequenctly used pointers
+    lower_left = None
+    lower_right = None
+    upper_left = None
+    upper_right = None
 
     @property
     def xy0(self):
@@ -379,7 +403,16 @@ class Instance(LayoutObject):
         else:
             self.elements = np.array([[self]])
         if not template is None:
-            # crate orientation dictionary
+            # crate pointers
+            self.pointers['lower_left'] = Pointer(name='lower_left', res=res, xy=[0, 0], type='index', master=self)
+            self.pointers['lower_right'] = Pointer(name='lower_right', res=res, xy=[1, 0], type='index', master=self)
+            self.pointers['upper_left'] = Pointer(name='lower_left', res=res, xy=[0, 1], type='index', master=self)
+            self.pointers['upper_right'] = Pointer(name='lower_right', res=res, xy=[1, 1], type='index', master=self)
+            self.lower_left = self.pointers['lower_left']
+            self.lower_right = self.pointers['lower_right']
+            self.upper_left = self.pointers['upper_left']
+            self.upper_right = self.pointers['upper_right']
+
             # create pin dictionary
             self.pins = dict()
             for pn, p in self.template.pins.items():

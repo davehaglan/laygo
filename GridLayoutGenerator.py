@@ -544,6 +544,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         _xy1=xy1
         _offset0=offset0
         _offset1=offset1
+        _xy0_corner_pointer = np.array([0, 0])  # [0, 0] means lower_left
+        _xy1_corner_pointer = np.array([0, 0])  # [0, 0] means lower_left
         # reading coordinate information from the reference objects
         # this needs to be cleaned up
         if not refobj0 is None:
@@ -556,6 +558,11 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 refinstname0=refobj0.master.name
                 refinstindex0=refobjindex0
                 refpinname0=refobj0.name
+            if type(refobj0).__name__ is 'Pointer':
+                refinst0=refobj0.master
+                refinstname0=refobj0.master.name
+                refinstindex0=refobjindex0
+                _xy0_corner_pointer=refobj0.xy
         else:
             if not refinstname0 == None:
                 refinst0=self.get_inst(refinstname0)
@@ -569,22 +576,37 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 refinstname1=refobj1.master.name
                 refinstindex1=refobjindex1
                 refpinname1=refobj1.name
+            if type(refobj1).__name__ is 'Pointer':
+                refinst1=refobj1.master
+                refinstname1=refobj1.master.name
+                refinstindex1=refobjindex1
+                _xy1_corner_pointer=refobj1.xy
         else:
             if not refinstname1 == None:
                 refinst1=self.get_inst(refinstname1)
         if not refinstname0 == None:
+            #instance offset
             reftemplate0=self.templates.get_template(refinst0.cellname, libname=refinst0.libname)
             _offset0=offset0+refinst0.xy+np.dot(refinst0.spacing*refinstindex0, ut.Mt(refinst0.transform).T)
+            #corner
+            _xy0_corner_abs=_xy0_corner_pointer*self.get_xy(obj=reftemplate0, gridname=gridname0)
+            _xy0=_xy0+_xy0_corner_abs
+            #pin
             if not refpinname0 == None: # if pin reference is specified
                 pin_xy0_abs=self.get_template_pin_xy(reftemplate0.name, refpinname0, gridname0, libname=refinst0.libname)[0,:]
-                _xy0=xy0+pin_xy0_abs
+                _xy0=_xy0+pin_xy0_abs
             transform0=refinst0.transform # overwrite transform variable
         if not refinstname1 == None:
+            #instance offset
             reftemplate1=self.templates.get_template(refinst1.cellname, libname=refinst1.libname)
             _offset1=offset1+refinst1.xy+np.dot(refinst1.spacing*refinstindex1, ut.Mt(refinst1.transform).T)
+            #corner
+            _xy1_corner_abs = _xy1_corner_pointer * self.get_xy(obj=reftemplate1, gridname=gridname1)
+            _xy1 = _xy1 + _xy1_corner_abs
+            #pin
             if not refpinname1 == None: # if pin reference is specified
                 pin_xy1_abs = self.get_template_pin_xy(reftemplate1.name, refpinname1, gridname1, libname=refinst1.libname)[0, :]
-                _xy1=xy1+pin_xy1_abs
+                _xy1=_xy1+pin_xy1_abs
             transform1=refinst1.transform # overwrite transform variable
         # get physical grid coordinates
         xy_phy, xy_phy_center=self._route_generate_box_from_abscoord(xy0=_xy0, xy1=_xy1, gridname0=gridname0, gridname1=gridname1,
@@ -594,17 +616,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         xy0_phy=xy_phy[0,:]; xy1_phy=xy_phy[1,:]
         xy0_phy_center=xy_phy_center[0,:]; xy1_phy_center=xy_phy_center[1,:]
         # optional via placements
-        '''
-        #addvia is obsolete
-        if addvia0==True:
-            print("[WARNING] addvia0 option in GridLayoutGenerator.route deprecated. Use via0=[[0, 0]] instead")
-            self.via(None, xy0, gridname0, offset=offset0, refobj=refinst0, refinstindex=refinstindex0,
-            refpinname=refpinname0, transform=transform0)
-        if addvia1==True:
-            print("[WARNING] addvia1 option in GridLayoutGenerator.route deprecated. Use via1=[[0, 0]] instead")
-            self.via(None, xy1, gridname1, offset=offset1, refobj=refinst1, refinstindex=refinstindex1,
-            refpinname=refpinname1, transform=transform1)
-        '''
         if not via0 is None:
             for vofst in via0:
                 self.via(None, xy0+vofst, gridname0, offset=offset0, refobj=refinst0, refobjindex=refinstindex0,
@@ -1157,15 +1168,23 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             return np.array([0, 0], xy)
         if isinstance(obj, Instance):
             if gridname == None:
-                return obj.xy
+                xy = obj.bbox
             else:
-                return self.get_absgrid_xy(gridname, obj.xy)
+                xy = self.get_absgrid_xy(gridname, obj.bbox)
+            xy = self._bbox_xy(xy)
+            return xy
         if isinstance(obj, Rect):
-            xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
+            if gridname == None:
+                xy = obj.xy
+            else:
+                xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
             xy = self._bbox_xy(xy)
             return xy
         if isinstance(obj, Pin):
-            xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
+            if gridname == None:
+                xy = obj.xy
+            else:
+                xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
             xy = self._bbox_xy(xy)
             return xy
 
