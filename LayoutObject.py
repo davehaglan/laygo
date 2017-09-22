@@ -297,7 +297,7 @@ class Instance(LayoutObject):
     """dict(): pin dictionary"""
     elements = None
     """np.array([[Instance]]): array elements"""
-    pointers = None
+    pointers = dict()
     """dict(): pointer dictionary"""
     #frequenctly used pointers
     lower_left = None
