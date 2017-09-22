@@ -50,11 +50,19 @@ if __name__ == '__main__':
     nname=[nb, nc, nb, nb, nc, nb]              # nmos device names
     pname=[pb, pc, pb, pb, pc, pb]              # pmos device names
     shape=[[i, 1] for i in [1, 2, 1, 1, 2, 1]]  # device shapes
+    pdir=['top']+['right']*5                    # pmos placement direction
 
     # placements
-    nd = laygen.relplace(cellname=nname, gridname=pg, shape=shape) #default direction is right
-    pd = laygen.relplace(cellname=pname, gridname=pg, refobj=nd[0], direction=['top'] + ['right'] * 5,
-                         shape=shape, transform='MX')
+    nd=[] #nmos
+    robj=None
+    for _dev, _shape in zip(nname, shape):
+        nd += [laygen.relplace(cellname=_dev, gridname=pg, refobj=robj, shape=_shape)] #default direction is right
+        robj=nd[-1]
+    pd=[] #pmos
+    robj=nd[0]
+    for _dev, _shape, _dir in zip(pname, shape, pdir):
+        pd += [laygen.relplace(cellname=_dev, gridname=pg, refobj=robj, shape=_shape, direction=_dir, transform='MX')]
+        robj=pd[-1]
 
     # route parameters
     rg12 = 'route_M1_M2_cmos' #grids
@@ -83,15 +91,10 @@ if __name__ == '__main__':
     # power and ground route
     for dev in np.concatenate((nd[1].elements[:, 0], pd[1].elements[:, 0], pd[4].elements[:, 0])):
         for pn in ['S0', 'S1']:
-            laygen.route(gridname0=rg12, refobj0=dev.pins[pn], refobj1=dev, direction='y', via1=[0, 0])
+            laygen.route(gridname0=rg12, refobj0=dev.pins[pn], refobj1=dev.lower_left, direction='y', via1=[0, 0])
     # power and groud rails
-    x0 = laygen.get_xy(obj =nd[5].template, gridname=rg12)
-    x1 = laygen.get_xy(obj=nd[5].template, gridname=rg12)
-    x2 = nd[5].bbox #(gridname=rg12)
-    print(x0, x1, x2)
-    x0 = laygen.get_xy(obj=nd[5].template, gridname=rg12)[0]
-    rvdd=laygen.route(xy0=[0, 0], xy1=[x0, 0], gridname0=rg12, refobj0=pd[0], refobj1=pd[5])
-    rvss=laygen.route(xy0=[0, 0], xy1=[x0, 0], gridname0=rg12, refobj0=nd[0], refobj1=nd[5])
+    rvdd = laygen.route(gridname0=rg12, refobj0=pd[0].lower_left, refobj1=pd[5].lower_right)
+    rvss = laygen.route(gridname0=rg12, refobj0=nd[0].lower_left, refobj1=nd[5].lower_right)
     #pins
     for pn, pg, pr in zip(['A', 'B', 'O', 'VDD', 'VSS'], [rg12, rg12, rg23, rg12, rg12], [ra, rb, ro, rvdd, rvss]):
         laygen.pin(name=pn, gridname=pg, refobj=pr)
