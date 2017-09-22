@@ -41,13 +41,13 @@ Setup for SARADC generation using Laygo in 28FDSOI
 
 7. Generate logic template library
 	run laygo/generators/logic/logic_import.py
-	run laygo/generators/logic/logic_templates_layout_generator.py
+	run laygo/generators/splash/logic_templates_layout_generator_lvt.py
 
 8. For generating ADC, follow instruction in https://ucb-art.github.io/laygo/example/tisar.html
 	Note that you should run scripts in laygo/generators/splash, instead in laygo/generators/adc_sar!!!
 
 	## quick check:
 	run laygo/generators/splash/adc_sar_import.py
-	run laygo/generators/splash/adc_sar_sar_wsamp_fullstack_generator.py
+	run laygo/generators/splash/adc_sar_sar_wsamp_fullstack_generator_lvt.py
 	It will generate a sub SARADC unit
 	
