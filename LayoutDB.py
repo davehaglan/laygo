@@ -42,7 +42,6 @@ class LayoutDB(dict):
     """
     Layout database class
     """
-    #design = dict()
     design = None
     """dict: core database"""
     plib = None
