@@ -1457,7 +1457,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         ur = np.array([0.0, 0.0])
         for instname in self.db.design[libname][cellname]['instances'].keys():
             i=self.db.design[libname][cellname]['instances'][instname]
-            if i.cellname in self.templates.templates[i.libname].keys():
+            if i.cellname in self.templates[i.libname].keys():
                 t = self.templates.get_template(i.cellname, i.libname)
                 if not (t.size[0]==0 and t.size[1]==0): #zero size then waive (no valid prBoundary)
                     xy=self.get_inst(instname).bbox
@@ -1711,7 +1711,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             return xy
         else:
             i = self.get_inst(name)
-            if not i.cellname in self.templates.templates[i.libname].keys():
+            if not i.cellname in self.templates[i.libname].keys():
                 print(i.cellname+" template is not in "+i.libname+'. pin coordinates will not be extracted')
                 return dict()
             else:
