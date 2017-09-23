@@ -38,11 +38,12 @@ import numpy as np
 import yaml
 import logging
 
-class LayoutDB():
+class LayoutDB(dict):
     """
     Layout database class
     """
-    design = dict()
+    #design = dict()
+    design = None
     """dict: core database"""
     plib = None
     """str: current library handle"""
@@ -65,7 +66,8 @@ class LayoutDB():
         res : float
             physical resolution
         """
-        self.design = dict()
+        #self.design = dict()
+        self.design = self
         self.res = res
 
     # aux functions
@@ -90,14 +92,14 @@ class LayoutDB():
             cellstr = "cell:" + cellname
         print('Display ' + libstr + cellstr)
         if libname == None:
-            liblist=self.design.keys()
+            liblist=self.keys()
         elif isinstance(libname, list):
             liblist=libname
         else:
             liblist=[libname]
 
         for ln in liblist:
-            l=self.design[ln]
+            l=self[ln]
             print('[Library]' + ln)
             if cellname == None:
                 celllist=l.keys()
@@ -135,11 +137,11 @@ class LayoutDB():
         """
         n = 0
         trig = 0
-        if not type + 's' in self.design[self.plib][self.pcell]:
+        if not type + 's' in self[self.plib][self.pcell]:
             return pfix + str(0) + sfix
         while (n < max_index and trig == 0):
             id = pfix + str(n) + sfix
-            if not id in self.design[self.plib][self.pcell][type + 's']:
+            if not id in self[self.plib][self.pcell][type + 's']:
                 trig = 1
             n = n + 1
         if n == max_index:
@@ -162,7 +164,7 @@ class LayoutDB():
             added library dictionary
         """
         l = dict()
-        self.design[name] = l
+        self[name] = l
         return l
 
     def add_cell(self, name, libname=None):
@@ -184,7 +186,7 @@ class LayoutDB():
         if libname == None: libname = self.plib
         s = {'instances': dict(), 'rects': dict(), 'vias': dict(),
              'paths': dict(), 'pins': dict(), 'texts': dict()}
-        self.design[libname][name] = s
+        self[libname][name] = s
         return s
 
     def sel_library(self, libname):
@@ -231,7 +233,7 @@ class LayoutDB():
         if name == None: name = self.genid(type='rect', pfix='R')
         xy = np.asarray(xy)
         r = Rect(name=name, res=self.res, xy=xy, layer=layer, netname=netname)
-        self.design[self.plib][self.pcell]['rects'][name] = r
+        self[self.plib][self.pcell]['rects'][name] = r
         logging.debug('Rect added - Name:' + r.name + ', layer:' + str(layer) + ', xy:' +
                       str(np.round(r.xy, self.res_exp).tolist()[0]))
         return r
@@ -259,7 +261,7 @@ class LayoutDB():
         if name == None: name = self.genid(type='pin', pfix='P')
         xy = np.asarray(xy)
         p = Pin(name=name, res=self.res, xy=xy, netname=netname, layer=layer) #how to handle master?
-        self.design[self.plib][self.pcell]['pins'][name] = p
+        self[self.plib][self.pcell]['pins'][name] = p
         logging.debug('Pin added - Name:' + p.name + ', layer:' + str(layer) +
                       ', netname:' + p.netname + ', xy:' + str(p.xy.tolist()))
         return p
@@ -287,7 +289,7 @@ class LayoutDB():
         if name == None: name = self.genid(type='text', pfix='T')
         xy = np.asarray(xy)
         t = Text(name=name, res=self.res, xy=xy, text=text, layer=layer)
-        self.design[self.plib][self.pcell]['texts'][name] = t
+        self[self.plib][self.pcell]['texts'][name] = t
         logging.debug('Text added - Name:' + t.name + ', layer:' + str(layer) +
                       ', text:' + t.text + ', xy:' + str(np.round(t.xy, self.res_exp).tolist()))
         return t
@@ -328,7 +330,7 @@ class LayoutDB():
         if isinstance(xy, list): xy = np.array(xy)
         i = Instance(name=name, res=self.res, xy=xy, libname=libname, cellname=cellname, shape=shape,
                      spacing=spacing, transform=transform, template=template)
-        self.design[self.plib][self.pcell]['instances'][name] = i
+        self[self.plib][self.pcell]['instances'][name] = i
         logging.debug('Instance added - Name:' + name + ', lib:' + libname +
                       ', cell:' + cellname + ', xy:' + str(np.round(i.xy, self.res_exp).tolist()))
         return i
@@ -349,7 +351,7 @@ class LayoutDB():
         laygo.LayoutObject.Rect
         """
         if libname==None: libname=self.plib
-        return self.design[libname][self.pcell]['rects'][name]
+        return self[libname][self.pcell]['rects'][name]
 
     def get_inst(self, name=None, libname=None, index=np.array([0, 0])):
         """
@@ -369,9 +371,9 @@ class LayoutDB():
         #TODO: implement index handling
         if libname==None: libname=self.plib
         if name==None:
-            return self.design[libname][self.pcell]['instances']
+            return self[libname][self.pcell]['instances']
         else:
-            return self.design[libname][self.pcell]['instances'][name]
+            return self[libname][self.pcell]['instances'][name]
 
     def get_pin(self, name, libname=None):
         """
@@ -389,7 +391,7 @@ class LayoutDB():
         laygo.LayoutObject.Pin
         """
         if libname==None: libname=self.plib
-        return self.design[libname][self.pcell]['pins'][name]
+        return self[libname][self.pcell]['pins'][name]
 
     def merge(self, db):
         """
@@ -400,12 +402,12 @@ class LayoutDB():
         db : laygo.LayoutDB.LayoutDB
             layout database to be merged to self.db
         """
-        for ln, l in db.design.items():
-            if not ln in self.design:
+        for ln, l in db.items():
+            if not ln in self:
                 self.add_library(ln)
             self.sel_library(ln)
             for sn, s in l.items():
-                if not sn in self.design[ln]:
+                if not sn in self[ln]:
                     self.add_cell(sn, ln)
                 self.sel_cell(sn)
                 for r in s['rects'].values():
