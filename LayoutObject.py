@@ -249,12 +249,10 @@ class Pointer(LayoutObject):
     """Pointer class attached to other LayoutObjects"""
     master = None
     """LayoutObject.Instance: master instance that the tag is attached"""
-    type = 'corner' #Pointer type
-    #corner: it will be corner of objects
-    #xy_on_absgrid: it will be offset coordinate of master on abstract grid
-    #xy_on_phygrid:
+    type = 'boundary' #Pointer type
+    #boundary : boundary pointer of instances, name will be used for direction in relplace, xy will be used in route
 
-    def __init__(self, name, res, xy, type='corner', master=None):
+    def __init__(self, name, res, xy, type='direction', master=None):
         """
         Constructor
 
@@ -300,10 +298,14 @@ class Instance(LayoutObject):
     pointers = dict()
     """dict(): pointer dictionary"""
     #frequenctly used pointers
-    lower_left = None
-    lower_right = None
-    upper_left = None
-    upper_right = None
+    left = None
+    right = None
+    top = None
+    bottom = None
+    bottom_left = None
+    bottom_right = None
+    top_left = None
+    top_right = None
 
     @property
     def xy0(self):
@@ -404,14 +406,22 @@ class Instance(LayoutObject):
             self.elements = np.array([[self]])
         if not template is None:
             # crate pointers
-            self.pointers['lower_left'] = Pointer(name='lower_left', res=res, xy=[0, 0], type='index', master=self)
-            self.pointers['lower_right'] = Pointer(name='lower_right', res=res, xy=[1, 0], type='index', master=self)
-            self.pointers['upper_left'] = Pointer(name='lower_left', res=res, xy=[0, 1], type='index', master=self)
-            self.pointers['upper_right'] = Pointer(name='lower_right', res=res, xy=[1, 1], type='index', master=self)
-            self.lower_left = self.pointers['lower_left']
-            self.lower_right = self.pointers['lower_right']
-            self.upper_left = self.pointers['upper_left']
-            self.upper_right = self.pointers['upper_right']
+            self.pointers['left'] = Pointer(name='left', res=res, xy=[0, 0.5], type='boundary', master=self)
+            self.pointers['right'] = Pointer(name='right', res=res, xy=[1, 0.5], type='boundary', master=self)
+            self.pointers['bottom'] = Pointer(name='bottom', res=res, xy=[0.5, 0], type='boundary', master=self)
+            self.pointers['top'] = Pointer(name='top', res=res, xy=[0.5, 1], type='boundary', master=self)
+            self.pointers['bottom_left'] = Pointer(name='bottom_left', res=res, xy=[0, 0], type='boundary', master=self)
+            self.pointers['bottom_right'] = Pointer(name='bottom_right', res=res, xy=[1, 0], type='boundary', master=self)
+            self.pointers['top_left'] = Pointer(name='top_left', res=res, xy=[0, 1], type='boundary', master=self)
+            self.pointers['top_right'] = Pointer(name='top_right', res=res, xy=[1, 1], type='boundary', master=self)
+            self.left = self.pointers['left']
+            self.right = self.pointers['right']
+            self.bottom = self.pointers['bottom']
+            self.top = self.pointers['top']
+            self.bottom_left = self.pointers['bottom_left']
+            self.bottom_right = self.pointers['bottom_right']
+            self.top_left = self.pointers['top_left']
+            self.top_right = self.pointers['top_right']
 
             # create pin dictionary
             self.pins = dict()

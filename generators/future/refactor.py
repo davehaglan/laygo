@@ -362,7 +362,6 @@ def convert_get_obj_xy_to_get_xy(filename_i, filename_o, func_name):
 if __name__ == '__main__':
     files_include_special = [
         'nand_demo.py',
-        'nand_demo_new.py',
         'sarsamp_golden_example.py',
         'lab1_a_baselayoutgenerator_export.py',
         'lab1_b_baselayoutgenerator_import.py',

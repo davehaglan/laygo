@@ -45,7 +45,7 @@ from .BaseLayoutGenerator import *
 from .TemplateDB import *
 from .GridDB import *
 from . import PrimitiveUtil as ut
-import numpy as np 
+import numpy as np
 import logging
 
 #TODO: support path routing
@@ -198,7 +198,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         Place an instance on abstract grid, bound from a reference object. If reference object is not specified,
         [0, 0]+offset is used as the reference point.
-        Placement coordiate will be xy+refobj_xy+0.5*(Mt@refobj_size+Md@(refobj_size+inst_size)-Mti@inst_size).
+        Equation = xy+refobj_xy+0.5*(Mt@refobj_size+Md@(refobj_size+inst_size)-Mti@inst_size).
 
         Parameters
         ----------
@@ -309,7 +309,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             ### preprocessing ends ###
             t_size_grid = self.get_template_xy(templatename, gridname, libname=template_libname)
             t_size_grid = t_size_grid*shape
-            #reference instance check 
+            #reference instance check
             if (refobj is None) and (refinstname is None):
                 ir_xy_grid = np.array([0, t_size_grid[1]/2.0])
                 tr_size_grid = np.array([0, 0])
@@ -317,7 +317,11 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 mti = ut.Mt('R0')
             else:
                 if not refobj is None:
-                    ir = refobj
+                    if type(refobj).__name__ is 'Instance':
+                        ir = refobj
+                    elif type(refobj).__name__ is 'Pointer':
+                        ir = refobj.master
+                        direction = refobj.name
                 else:
                     ir = self.get_inst(refinstname)
                 tr = self.templates.get_template(ir.cellname, libname=ir.libname)
@@ -328,8 +332,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 mti = ut.Mt(transform)
             #direction
             md = ut.Md(direction)
-            i_xy_grid=ir_xy_grid + 0.5*(np.dot(tr_size_grid, mtr.T) + np.dot(tr_size_grid+t_size_grid, md.T)
-                                        - np.dot(t_size_grid, mti.T))
+            i_xy_grid = ir_xy_grid + 0.5 * (np.dot(tr_size_grid, mtr.T) + np.dot(tr_size_grid + t_size_grid, md.T)
+                                            - np.dot(t_size_grid, mti.T))
             return self.place(name=name, templatename=templatename, gridname=gridname, xy=i_xy_grid+xy, offset=offset,
                               template_libname=template_libname, shape=shape, spacing=spacing, transform=transform)
 
@@ -442,7 +446,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
     # Route functions
     def route(self, name=None, layer=None, xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=None, gridname1=None, direction='omni',
-              refobj0=None, refobj1=None, refobjindex0=np.array([0, 0]), refobjindex1=np.array([0, 0]), 
+              refobj0=None, refobj1=None, refobjindex0=np.array([0, 0]), refobjindex1=np.array([0, 0]),
               refinstname0=None, refinstname1=None, refinstindex0=np.array([0, 0]), refinstindex1=np.array([0, 0]),
               refpinname0=None, refpinname1=None, offset0=np.array([0,0]), offset1=None,
               transform0='R0', transform1=None, endstyle0="truncate", endstyle1="truncate",
@@ -450,7 +454,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         Route on abstract grid, bound from reference objects. If reference objects are not specified,
         [0, 0]+offset is used as reference points.
-        
+
         Parameters
         ----------
         name : str
@@ -545,16 +549,16 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         _xy1=xy1
         _offset0=offset0
         _offset1=offset1
-        _xy0_corner_pointer = np.array([0, 0])  # [0, 0] means lower_left
-        _xy1_corner_pointer = np.array([0, 0])  # [0, 0] means lower_left
+        _xy0_pointer_scale = np.array([0, 0])  # [0, 0] means lower_left
+        _xy1_pointer_scale = np.array([0, 0])  # [0, 0] means lower_left
         # reading coordinate information from the reference objects
         # this needs to be cleaned up
         if not refobj0 is None:
-            if type(refobj0).__name__ is 'Instance': 
+            if type(refobj0).__name__ is 'Instance':
                 refinst0=refobj0
                 refinstname0=refobj0.name
                 refinstindex0=refobjindex0
-            if type(refobj0).__name__ is 'Pin': 
+            if type(refobj0).__name__ is 'Pin':
                 refinst0=refobj0.master
                 refinstname0=refobj0.master.name
                 refinstindex0=refobjindex0
@@ -563,16 +567,16 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 refinst0=refobj0.master
                 refinstname0=refobj0.master.name
                 refinstindex0=refobjindex0
-                _xy0_corner_pointer=refobj0.xy
+                _xy0_pointer_scale=refobj0.xy
         else:
             if not refinstname0 == None:
                 refinst0=self.get_inst(refinstname0)
         if not refobj1 is None:
-            if type(refobj1).__name__ is 'Instance': 
+            if type(refobj1).__name__ is 'Instance':
                 refinst1=refobj1
                 refinstname1=refobj1.name
                 refinstindex1=refobjindex1
-            if type(refobj1).__name__ is 'Pin': 
+            if type(refobj1).__name__ is 'Pin':
                 refinst1=refobj1.master
                 refinstname1=refobj1.master.name
                 refinstindex1=refobjindex1
@@ -581,7 +585,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 refinst1=refobj1.master
                 refinstname1=refobj1.master.name
                 refinstindex1=refobjindex1
-                _xy1_corner_pointer=refobj1.xy
+                _xy1_pointer_scale=refobj1.xy
         else:
             if not refinstname1 == None:
                 refinst1=self.get_inst(refinstname1)
@@ -589,12 +593,12 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             #instance offset
             reftemplate0=self.templates.get_template(refinst0.cellname, libname=refinst0.libname)
             _offset0=offset0+refinst0.xy+np.dot(refinst0.spacing*refinstindex0, ut.Mt(refinst0.transform).T)
-            #corner
-            _xy0_corner_abs = np.dot(
-                _xy0_corner_pointer * self.get_xy(obj=reftemplate0, gridname=gridname0) * refinst0.shape,
+            #pointer
+            _xy0_pointer_abs = np.dot(
+                _xy0_pointer_scale * self.get_xy(obj=reftemplate0, gridname=gridname0) * refinst0.shape,
                 ut.Mt(refinst0.transform).T)
-            _xy0_corner_abs = _xy0_corner_abs.astype(int)
-            _xy0=_xy0+_xy0_corner_abs
+            _xy0_pointer_abs = _xy0_pointer_abs.astype(int)
+            _xy0=_xy0+_xy0_pointer_abs
             #pin
             if not refpinname0 == None: # if pin reference is specified
                 pin_xy0_abs=self.get_template_pin_xy(reftemplate0.name, refpinname0, gridname0, libname=refinst0.libname)[0,:]
@@ -605,11 +609,11 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             reftemplate1=self.templates.get_template(refinst1.cellname, libname=refinst1.libname)
             _offset1=offset1+refinst1.xy+np.dot(refinst1.spacing*refinstindex1, ut.Mt(refinst1.transform).T)
             #corner
-            _xy1_corner_abs = np.dot(
-                _xy1_corner_pointer * self.get_xy(obj=reftemplate1, gridname=gridname1) * refinst1.shape,
+            _xy1_pointer_abs = np.dot(
+                _xy1_pointer_scale * self.get_xy(obj=reftemplate1, gridname=gridname1) * refinst1.shape,
                 ut.Mt(refinst1.transform).T)
-            _xy1_corner_abs = _xy1_corner_abs.astype(int)
-            _xy1 = _xy1 + _xy1_corner_abs
+            _xy1_pointer_abs = _xy1_pointer_abs.astype(int)
+            _xy1 = _xy1 + _xy1_pointer_abs
             #pin
             if not refpinname1 == None: # if pin reference is specified
                 pin_xy1_abs = self.get_template_pin_xy(reftemplate1.name, refpinname1, gridname1, libname=refinst1.libname)[0, :]
@@ -655,7 +659,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
         Generate a rectangular box from 2 points on abstract grid.
         The thickness corresponds to the width parameter of gridname0
-        
+
         Parameters
         ----------
         name : str
