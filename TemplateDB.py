@@ -35,7 +35,7 @@ from .TemplateObject import *
 import yaml
 import logging
 
-class TemplateDB():
+class TemplateDB(dict):
     """
     layout template database class
     """
