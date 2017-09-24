@@ -1,0 +1,53 @@
+Setup for SARADC generation using Laygo in 28FDSOI
+
+1. clone laygo
+	git clone git@github.com:ucb-art/laygo.git
+
+2. clone BAG_framework
+	git clone https://github.com/ucb-art/BAG_framework.git
+
+3. copy some files
+	cp /tools/projects/wrbae/28FDSOI/adc_sar_spec.yaml .
+	cp /tools/projects/wrbae/28FDSOI/adc_sar_size.yaml .
+	cp /tools/projects/wrbae/28FDSOI/adc_sar_output.yaml .
+	cp -r /tools/projects/wrbae/28FDSOI/28fdsoi .
+	cp /tools/projects/wrbae/28FDSOI/bag_libs.def .
+	cp /tools/projects/wrbae/28FDSOI/laygo_config.yaml .
+	cp /tools/projects/wrbae/28FDSOI/bag_config.yaml .
+	cp /tools/projects/wrbae/28FDSOI/.cshrc .
+	cp /tools/projects/wrbae/28FDSOI/.cshrc_bag .
+	cp /tools/projects/wrbae/28FDSOI/start_bag.il .
+	cp /tools/projects/wrbae/28FDSOI/start_bag.sh .
+	cp ./BAG_framework/run_scripts/virt_server.sh .
+
+4. modify cds.lib
+	DEFINE logic_templates ./laygo/generators/splash/logic_templates
+	DEFINE serdes_templates ./laygo/generators/serdes/serdes_templates
+	DEFINE adc_sar_templates ./laygo/generators/splash/adc_sar_templates
+	DEFINE clk_dis_templates ./laygo/generators/splash/clk_dis_templates
+	DEFINE cmos32lp_microtemplates_dense /tools/projects/wrbae/28FDSOI/cmos32lp_microtemplates_dense
+	DEFINE BAG_prim ./28fdsoi/BAG_prim
+
+5. modify tsmc16 to cmos32lp in capdac in adc_sar_templates and clk_dis_templates
+
+6. Run BAG
+	source .cshrc
+	virtuoso &
+	In CIW, type load "start_bag.il"
+	In terminal, type start_bag.sh or ./start_bag.sh
+
+6. Construct template grids
+	run laygo/labs/lab2_a_gridlayoutgenerator_constructtemplate.py
+
+7. Generate logic template library
+	run laygo/generators/logic/logic_import.py
+	run laygo/generators/splash/logic_templates_layout_generator_lvt.py
+
+8. For generating ADC, follow instruction in https://ucb-art.github.io/laygo/example/tisar.html
+	Note that you should run scripts in laygo/generators/splash, instead in laygo/generators/adc_sar!!!
+
+	## quick check:
+	run laygo/generators/splash/adc_sar_import.py
+	run laygo/generators/splash/adc_sar_sar_wsamp_fullstack_generator_lvt.py
+	It will generate a sub SARADC unit
+	

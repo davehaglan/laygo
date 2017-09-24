@@ -411,7 +411,7 @@ class RouteGrid(GridObject):
         mod=np.mod(v, _width.shape[0])
         #if not isinstance(mod, int):
         #    print(v, _width, mod)
-        return _width[mod]
+        return _width[int(np.round(mod))]
 
     def _get_route_layer(self, v, _layer):
         """

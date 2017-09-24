@@ -65,6 +65,15 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         params['lch']=sizedict['lch']
+        params['wp']=sizedict['sampler_nmos']['wp']
+        params['wn']=sizedict['sampler_nmos']['wn']
+        params['fgn']=sizedict['sampler_nmos']['fgn']
+        params['fg_inbuf_list']=sizedict['sampler_nmos']['fg_inbuf_list']
+        params['fg_outbuf_list']=sizedict['sampler_nmos']['fg_outbuf_list']
+        params['nduml']=sizedict['sampler_nmos']['nduml']
+        params['ndumr']=sizedict['sampler_nmos']['ndumr']
+        params['nsep']=sizedict['sampler_nmos']['nsep']
+        '''
         params['wp']=sizedict['pw']*2
         params['wn']=sizedict['nw']*2
         params['fgn']=int(sizedict['sarsamp']['m_sw']*sizedict['sarsamp']['m_sw_arr']/2)
@@ -74,6 +83,7 @@ if __name__ == '__main__':
              params['fg_inbuf_list']+=[(m, m)]
         for m in sizedict['sarsamp']['m_outbuf_list']:
              params['fg_outbuf_list']+=[(m, m)]
+        '''
     
     # template and grid information
     layers = [4, 5, 6, 7]

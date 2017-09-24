@@ -137,40 +137,39 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
     for dev in devname_list_overlay_boundary_left:
         dev0_list=[ibndl0]
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(dev0.name, pg)
+            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_boundary_bottom:
         dev0_list=[ibndbl0] + ibndb + [ibndbr0] 
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(dev0.name, pg)
+            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_boundary_right:
         dev0_list=[ibndr0]
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(dev0.name, pg)
+            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_boundary_top:
         dev0_list=[ibndtl0] + ibndt + [ibndtr0] 
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(dev0.name, pg)
+            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_body:
         dev0_list=ivdac+[ic0]+ihdac 
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(dev0.name, pg)
+            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_dmy:
         dev0_list=idmydac
         for dev0 in dev0_list:
-            xy0 = laygen.get_inst_xy(dev0.name, pg)
+            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
-
 
     #reference route coordinate
     y0 = 1
     #c0 route
-    c_bot_xy = laygen.get_inst_pin_coord(ic0.name, 'BOTTOM', rg_m6m7, index=np.array([0, m-1]))[0]
-    c_bot_xy2 = laygen.get_template_pin_coord(ic0.cellname, 'BOTTOM', rg_m6m7)[0]
+    c_bot_xy = laygen.get_inst_pin_xy(ic0.name, 'BOTTOM', rg_m6m7, index=np.array([0, m - 1]))[0]
+    c_bot_xy2 = laygen.get_template_pin_xy(ic0.cellname, 'BOTTOM', rg_m6m7)[0]
     rc0=laygen.route(None, laygen.layers['metal'][7], xy0=c_bot_xy + np.array([0, 0]), xy1=np.array([0, y0]), gridname0=rg_m6m7, direction='y')
     for j in range(m):
         laygen.via(None, c_bot_xy2, refinstname=ic0.name, refinstindex=np.array([0, j]), gridname=rg_m6m7)
@@ -178,17 +177,15 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
     rbot=[]
     rbot2_hdac=[]
     for i, c in enumerate(ivdac):
-        #c_bot_xy = laygen.get_inst_pin_coord(c.name, 'BOTTOM', rg_m6m7, index=np.array([0, m*2**i-1]))[0] #radix2
-        c_bot_xy = laygen.get_inst_pin_coord(c.name, 'BOTTOM', rg_m6m7, index=np.array([0, m * m_vertical[i] - 1]))[0]
-        c_bot_xy2 = laygen.get_template_pin_coord(c.cellname, 'BOTTOM', rg_m6m7)[0]
+        c_bot_xy = laygen.get_inst_pin_xy(c.name, 'BOTTOM', rg_m6m7, index=np.array([0, m * m_vertical[i] - 1]))[0]
+        c_bot_xy2 = laygen.get_template_pin_xy(c.cellname, 'BOTTOM', rg_m6m7)[0]
         rbot.append(laygen.route(None, laygen.layers['metal'][7], xy0=c_bot_xy + np.array([2*(num_bits_vertical-i), 0]), xy1=np.array([0, y0]), gridname0=rg_m6m7, direction='y'))
         #for j in range(m*2**i): #radix2
         for j in range(m * m_vertical[i]):
             laygen.via(None, c_bot_xy2 + np.array([2*(num_bits_vertical-i), 0]), refinstname=c.name, refinstindex=np.array([0, j]), gridname=rg_m6m7)
     for i, c in enumerate(ihdac):
-        #c_bot_xy = laygen.get_inst_pin_coord(c.name, 'BOTTOM', rg_m6m7, index=np.array([0, m*2**num_bits_vertical-1]))[0]
-        c_bot_xy = laygen.get_inst_pin_coord(c.name, 'BOTTOM', rg_m6m7, index=np.array([0, m*m_horizontal[i]-1]))[0]
-        c_bot_xy2 = laygen.get_template_pin_coord(c.cellname, 'BOTTOM', rg_m6m7)[0]
+        c_bot_xy = laygen.get_inst_pin_xy(c.name, 'BOTTOM', rg_m6m7, index=np.array([0, m * m_horizontal[i] - 1]))[0]
+        c_bot_xy2 = laygen.get_template_pin_xy(c.cellname, 'BOTTOM', rg_m6m7)[0]
         rbot.append(laygen.route(None, laygen.layers['metal'][7], xy0=c_bot_xy + np.array([0, 0]), xy1=np.array([0, y0]), gridname0=rg_m6m7, direction='y'))
         rbot2_hdac.append(laygen.route(None, laygen.layers['metal'][7], xy0=c_bot_xy + np.array([num_bits_vertical*2, 0]), xy1=np.array([num_bits_vertical*2, y0]), gridname0=rg_m6m7, direction='y'))
         for j in range(m*m_horizontal[i]):
@@ -196,7 +193,7 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
             laygen.via(None, c_bot_xy2 + np.array([num_bits_vertical*2, 0]), refinstname=c.name, refinstindex=np.array([0, j]), gridname=rg_m6m7)
         #parallel connections
         for k in range(2**i):
-            c_bot_xy3 = laygen.get_inst_pin_coord(c.name, 'BOTTOM', rg_m6m7, index=np.array([k, m*m_horizontal[i]-1]))[0]
+            c_bot_xy3 = laygen.get_inst_pin_xy(c.name, 'BOTTOM', rg_m6m7, index=np.array([k, m * m_horizontal[i] - 1]))[0]
             laygen.route(None, laygen.layers['metal'][7], xy0=c_bot_xy3 + np.array([0, 0]), xy1=np.array([0, y0+1]), gridname0=rg_m6m7, direction='y')
             laygen.route(None, laygen.layers['metal'][7], xy0=c_bot_xy3 + np.array([num_bits_vertical*2, 0]), xy1=np.array([num_bits_vertical*2, y0+1]), gridname0=rg_m6m7, direction='y')
             for j in range(m*m_horizontal[i]):
@@ -208,26 +205,30 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
             laygen.via(None, np.array([c_bot_xy[0], y0+1]), gridname=rg_m6m7)
             laygen.via(None, np.array([c_bot_xy[0]+num_bits_vertical*2, y0+1]), gridname=rg_m6m7)
             for k in range(2**i):
-                c_bot_xy3 = laygen.get_inst_pin_coord(c.name, 'BOTTOM', rg_m6m7, index=np.array([k, m*2**num_bits_vertical-1]))[0]
+                c_bot_xy3 = laygen.get_inst_pin_xy(c.name, 'BOTTOM', rg_m6m7, index=np.array([k, m * 2 ** num_bits_vertical - 1]))[0]
                 laygen.via(None, np.array([c_bot_xy3[0], y0+1]), gridname=rg_m6m7)
                 laygen.via(None, np.array([c_bot_xy3[0]+num_bits_vertical*2, y0+1]), gridname=rg_m6m7)
     #pins 
-    laygen.create_boundary_pin_from_rect(rc0, rg_m6m7, "I_C0", laygen.layers['pin'][7], size=4, direction='bottom')
+    laygen.boundary_pin_from_rect(rc0, rg_m6m7, "I_C0", laygen.layers['pin'][7], size=4, direction='bottom')
     for i, r in enumerate(rbot):
-        laygen.create_boundary_pin_from_rect(r, rg_m6m7, "I<"+str(i)+">", laygen.layers['pin'][7], size=4, direction='bottom')
+        laygen.boundary_pin_from_rect(r, rg_m6m7, "I<" + str(i) + ">", laygen.layers['pin'][7], size=4,
+                                      direction='bottom')
     for i, r in enumerate(rbot2_hdac):
-        laygen.create_boundary_pin_from_rect(r, rg_m6m7, "I2<"+str(i+num_bits_vertical)+">", laygen.layers['pin'][7], size=4, direction='bottom', netname="I<"+str(i+num_bits_vertical)+">")
+        laygen.boundary_pin_from_rect(r, rg_m6m7, "I2<" + str(i + num_bits_vertical) + ">",
+                                      laygen.layers['pin'][7], size=4, direction='bottom',
+                                      netname="I<" + str(i + num_bits_vertical) + ">")
     cnt=0
     for i, c in enumerate(ivdac):
         #for j in range(m * 2 ** i): #radix2
         #for j in range(m * m_vertical[i]):
         for j in range(m * 2 ** i): #radix2
-            c_top_xy = laygen.get_inst_pin_coord(c.name, 'TOP', rg_m6m7, index=np.array([0, j]))
+            c_top_xy = laygen.get_inst_pin_xy(c.name, 'TOP', rg_m6m7, index=np.array([0, j]))
             rtop = laygen.route(None, laygen.layers['metal'][6], xy0=c_top_xy[0], xy1=c_top_xy[1], gridname0=rg_m6m7)
-            laygen.create_boundary_pin_from_rect(rtop, rg_m6m7, "O"+str(cnt), laygen.layers['pin'][6], size=4, direction='left', netname="O")
+            laygen.boundary_pin_from_rect(rtop, rg_m6m7, "O" + str(cnt), laygen.layers['pin'][6], size=4,
+                                          direction='left', netname="O")
             cnt+=1
     #grid alignment
-    xy0 = laygen.get_inst_xy(name=ibndtr0.name)+laygen.get_template_xy(name=ibndtr0.cellname)*np.array([num_space_right, num_space_top])
+    xy0 = laygen.get_xy(obj =ibndtr0)+laygen.get_xy(obj =ibndtr0.template)*np.array([num_space_right, num_space_top])
     if not placement_resolution[0] is None:
         xy0[0] = ceil(xy0[0] / placement_resolution[0])*placement_resolution[0]
     if not placement_resolution[1] is None:
@@ -302,9 +303,13 @@ if __name__ == '__main__':
         m_horizontal=specdict['rdx_array'][int(-1*(num_bits_horizontal)):]
         for i, m in enumerate(m_horizontal):
             m_horizontal[i]=int(m_horizontal[i]/(2**i))
+        if 'num_space_left' in sizedict['capdac']:
+            num_space_left=sizedict['capdac']['num_space_left']
+        if 'num_space_right' in sizedict['capdac']:
+            num_space_right=sizedict['capdac']['num_space_right']
         #print(m_vertical, m_horizontal)
 
-    yres=laygen.get_template_size(name='nmos4_fast_center_nf2')[1]*2
+    yres= laygen.get_xy(obj=laygen.get_template(name='nmos4_fast_center_nf2'))[1] * 2
 
     print(cell_name+" generating")
     mycell_list.append(cell_name)

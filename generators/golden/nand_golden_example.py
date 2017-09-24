@@ -24,10 +24,8 @@
 
 """Logic layout
 """
-import bag
 import laygo
 import numpy as np
-import yaml
 import os
 #import logging;logging.basicConfig(level=logging.DEBUG)
 
@@ -132,32 +130,46 @@ def generate_nand(laygen, prefix, placement_grid, routing_grid_m1m2, routing_gri
         create_power_pin(laygen, layer=laygen.layers['pin'][2], gridname=rg12, rect_vdd=rvdd, rect_vss=rvss)
 
 if __name__ == '__main__':
-    #laygo generator
-    laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
+    # initialize #######################################################################################################
+    import imp
+    try:
+        imp.find_module('bag')
+        lib_path = ''
+        laygen = laygo.GridLayoutGenerator(config_file=lib_path+"laygo_config.yaml")
+        use_phantom = False
+    except ImportError:
+        # if bag does not exist, load faketech lib and export phantom to gds
+        lib_path = '../../labs/'
+        use_phantom = True
+    laygen = laygo.GridLayoutGenerator(config_file=lib_path + "laygo_config.yaml")
+    laygen.use_phantom = use_phantom
 
-    #load primitive template/grid
-    tech=laygen.tech
-    utemplib = tech+'_microtemplates_dense' #primitive templates / grids
-    laygen.load_template(filename=tech+'_microtemplates_dense_templates.yaml', libname=utemplib)
-    laygen.load_grid(filename=tech+'_microtemplates_dense_grids.yaml', libname=utemplib)
+    # template and grid load
+    utemplib = laygen.tech + '_microtemplates_dense'  # device template library name
+    laygen.load_template(filename=lib_path + utemplib + '_templates.yaml', libname=utemplib)
+    laygen.load_grid(filename=lib_path + utemplib + '_grids.yaml', libname=utemplib)
     laygen.templates.sel_library(utemplib)
     laygen.grids.sel_library(utemplib)
 
-    #library generation
+    # generate a library and cell to work on
     workinglib = 'laygo_working'
     laygen.add_library(workinglib)
     if os.path.exists(workinglib+'.yaml'): #generated template library exists
         laygen.load_template(filename=workinglib+'.yaml', libname=workinglib)
         laygen.templates.sel_library(utemplib)
 
-    #grids
-    pg = 'placement_basic'           #placement grid
-    rg12 = 'route_M1_M2_cmos'        #route grids
+    # parameters
+    pg = 'placement_basic' # placement grid
+    rg12 = 'route_M1_M2_cmos' #route grids
     rg23 = 'route_M2_M3_cmos'
     rg34 = 'route_M3_M4_basic'
+    nb = 'nmos4_fast_boundary'  # nmos boundary cellname
+    nc = 'nmos4_fast_center_nf2'  # nmos body cellname
+    pb = 'pmos4_fast_boundary'  # pmos boundary cellname
+    pc = 'pmos4_fast_center_nf2'  # pmos body cellname
 
     # cell generation
-    mycell_dict={'nand':[2,4,8,16]}
+    mycell_dict = {'nand': [2, 4, 8, 16]}
     mycell_list=[]
     for mc in mycell_dict:
         for m in mycell_dict[mc]:
@@ -170,19 +182,27 @@ if __name__ == '__main__':
                           routing_grid_m1m2=rg12,
                           routing_grid_m2m3=rg23, 
                           routing_grid_m3m4=rg34, 
-                          devname_nmos_boundary='nmos4_fast_boundary',
-                          devname_nmos_body='nmos4_fast_center_nf2',
-                          devname_pmos_boundary='pmos4_fast_boundary',
-                          devname_pmos_body='pmos4_fast_center_nf2',
+                          devname_nmos_boundary=nb,
+                          devname_nmos_body=nc,
+                          devname_pmos_boundary=pb,
+                          devname_pmos_body=pc,
                           m=m, create_pin=True)
             laygen.add_template_from_cell()
 
     #save template database to file
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)
 
-    #export to bag
-    prj = bag.BagProject()
-    for mycell in mycell_list:
-        laygen.sel_cell(mycell)
-        laygen.export_BAG(prj, array_delimiter=['[', ']'])
+    # export ###########################################################################################################
+    # bag export, if bag does not exist, gds export
+    import imp
+    try:
+        imp.find_module('bag')
+        import bag
 
+        prj = bag.BagProject()
+        for mycell in mycell_list:
+            laygen.sel_cell(mycell)
+            laygen.export_BAG(prj, array_delimiter=['[', ']'])
+    except ImportError:
+        laygen.export_GDS('output.gds', cellname=mycell_list,
+                          layermapfile=lib_path + "laygo_faketech.layermap")  # change layermapfile

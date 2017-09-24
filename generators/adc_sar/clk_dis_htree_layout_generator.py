@@ -68,7 +68,9 @@ def generate_clkdis_hcell(laygen, objectname_pfix, logictemp_lib, working_lib, g
     for i in range(trackm):
         vp1x=laygen.route(None, laygen.layers['metal'][metal_v1], xy0=np.array([origin[0]+2*i, origin[1]]), xy1=np.array([origin[0]+2*i, origin[1]-len_v1-2*trackm+2]), gridname0=rg1)
         if in_pin==1:
-            laygen.create_boundary_pin_form_rect(vp1x, gridname=rg1, pinname='WI_'+str(i), layer=laygen.layers['pin'][metal_v1], size=2, direction='top', netname='W')
+            laygen.boundary_pin_from_rect(vp1x, gridname=rg1, name='WI_' + str(i),
+                                          layer=laygen.layers['pin'][metal_v1], size=2, direction='top',
+                                          netname='W')
         for j in range(trackm):
             laygen.via(None, xy=np.array([origin[0]+2*i,origin[1]-len_v1-2*j]), gridname=rg1)
     
@@ -83,7 +85,10 @@ def generate_clkdis_hcell(laygen, objectname_pfix, logictemp_lib, working_lib, g
             vp2x=laygen.route(None, laygen.layers['metal'][metal_v2], xy0=np.array([origin[0]+2*i-(ratio-1)/2*len_h+k*len_h+offset, origin[1]-len_v1]), 
                 xy1=np.array([origin[0]+2*i-(ratio-1)/2*len_h+k*len_h+offset, origin[1]-len_v1-2*trackm+2-len_v2]), gridname0=rg2)
             if out_pin==1:    
-                laygen.create_boundary_pin_form_rect(vp2x, gridname=rg1, pinname='WO'+str(out_label)+'_'+str(k)+'_'+str(i), layer=laygen.layers['pin'][metal_v1], size=2, direction='bottom', netname='W')
+                laygen.boundary_pin_from_rect(vp2x, gridname=rg1,
+                                              name='WO' + str(out_label) + '_' + str(k) + '_' + str(i),
+                                              layer=laygen.layers['pin'][metal_v1], size=2, direction='bottom',
+                                              netname='W')
                 #print('WO'+str(out_label)+'_'+str(k)+'_'+str(i))
             for j in range(trackm):
                 laygen.via(None, xy=np.array([origin[0]+2*i-(ratio-1)/2*len_h+k*len_h+offset,origin[1]-len_v1-2*j]), gridname=rg1)
@@ -211,7 +216,7 @@ if __name__ == '__main__':
         rg_m2m3_pin = 'route_M2_M3_basic',
     )
     #parameters
-    pitch_x=laygen.get_template_xy(name='clk_dis_viadel_cell', libname=workinglib)[0]
+    pitch_x=laygen.get_xy(obj=laygen.get_template(name='clk_dis_viadel_cell', libname=workinglib))[0]
     params = dict(
         #stage
         level = 2,

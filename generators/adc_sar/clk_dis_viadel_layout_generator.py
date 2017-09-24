@@ -95,15 +95,15 @@ def generate_clkdis_viadel(laygen, objectname_pfix, logictemp_lib, working_lib, 
         #print(wire_num_even)
         #print(wire_num_odd)
         if (i<int(num_ways/2)-1):
-            dff_O_xy_even = laygen.get_inst_pin_coord(viacell[way_index_even[i]].name, 'DATAO', rg_m3m4)
-            dff_I_xy_even = laygen.get_inst_pin_coord(viacell[way_index_even[i+1]].name, 'DATAI', rg_m3m4)
-            dff_O_xy_odd = laygen.get_inst_pin_coord(viacell[way_index_odd[i]].name, 'DATAO', rg_m3m4)
-            dff_I_xy_odd = laygen.get_inst_pin_coord(viacell[way_index_odd[i+1]].name, 'DATAI', rg_m3m4)
+            dff_O_xy_even = laygen.get_inst_pin_xy(viacell[way_index_even[i]].name, 'DATAO', rg_m3m4)
+            dff_I_xy_even = laygen.get_inst_pin_xy(viacell[way_index_even[i + 1]].name, 'DATAI', rg_m3m4)
+            dff_O_xy_odd = laygen.get_inst_pin_xy(viacell[way_index_odd[i]].name, 'DATAO', rg_m3m4)
+            dff_I_xy_odd = laygen.get_inst_pin_xy(viacell[way_index_odd[i + 1]].name, 'DATAI', rg_m3m4)
         else:
-            dff_O_xy_even = laygen.get_inst_pin_coord(viacell[way_index_even[i]].name, 'DATAO', rg_m3m4)
-            dff_I_xy_even = laygen.get_inst_pin_coord(viacell[way_index_even[0]].name, 'DATAI', rg_m3m4)
-            dff_O_xy_odd = laygen.get_inst_pin_coord(viacell[way_index_odd[i]].name, 'DATAO', rg_m3m4)
-            dff_I_xy_odd = laygen.get_inst_pin_coord(viacell[way_index_odd[0]].name, 'DATAI', rg_m3m4)
+            dff_O_xy_even = laygen.get_inst_pin_xy(viacell[way_index_even[i]].name, 'DATAO', rg_m3m4)
+            dff_I_xy_even = laygen.get_inst_pin_xy(viacell[way_index_even[0]].name, 'DATAI', rg_m3m4)
+            dff_O_xy_odd = laygen.get_inst_pin_xy(viacell[way_index_odd[i]].name, 'DATAO', rg_m3m4)
+            dff_I_xy_odd = laygen.get_inst_pin_xy(viacell[way_index_odd[0]].name, 'DATAI', rg_m3m4)
         y_cood = dff_I_xy_even[0][1]
         laygen.pin(name='DATAO<'+str(way_order[way_index_even[i]])+'>', layer=laygen.layers['pin'][3], xy=dff_I_xy_even, gridname=rg_m3m4) 
         laygen.pin(name='DATAO<'+str(way_order[way_index_odd[i]])+'>', layer=laygen.layers['pin'][3], xy=dff_I_xy_odd, gridname=rg_m3m4) 
@@ -114,13 +114,13 @@ def generate_clkdis_viadel(laygen, objectname_pfix, logictemp_lib, working_lib, 
     ##Route, clock connection from TGATE to input
     for i in range(num_ways):
         for j in range(m_clki):
-            viadel_I_xy = laygen.get_inst_pin_coord(viacell[i].name, 'CLKI_'+str(j), rg_m5m6)
+            viadel_I_xy = laygen.get_inst_pin_xy(viacell[i].name, 'CLKI_' + str(j), rg_m5m6)
             laygen.pin(name='CLKI'+str(way_order[i])+'_'+str(j), layer=laygen.layers['pin'][5], xy=viadel_I_xy, gridname=rg_m5m6, netname='CLKI<'+str(way_order[i])+'>')
             
     ##Route, clock connection from TGATE to output
     for i in range(num_ways):
         for j in range(m_clko):
-            viadel_I_xy = laygen.get_inst_pin_coord(viacell[i].name, 'CLKO_'+str(j), rg_m5m6)
+            viadel_I_xy = laygen.get_inst_pin_xy(viacell[i].name, 'CLKO_' + str(j), rg_m5m6)
             laygen.pin(name='CLKO'+str(way_order[i])+'_'+str(j), layer=laygen.layers['pin'][5], xy=viadel_I_xy, gridname=rg_m5m6, netname='CLKO<'+str(way_order[i])+'>')
     
     ##Route, for calibration signals
@@ -129,67 +129,70 @@ def generate_clkdis_viadel(laygen, objectname_pfix, logictemp_lib, working_lib, 
     m3m4_x = laygen.grids.get_absgrid_coord_x(gridname=rg_m3m4, x=pitch_x)
     for i in range(num_ways):
         for j in range(num_bits):
-            viadel_m2m3_xy = laygen.get_inst_pin_coord(viacell[i].name, 'CAL<'+str(j)+'>', rg_m2m3_basic)[1]
+            viadel_m2m3_xy = laygen.get_inst_pin_xy(viacell[i].name, 'CAL<' + str(j) + '>', rg_m2m3_basic)[1]
             laygen.route(None, laygen.layers['metal'][3], xy0=viadel_m2m3_xy, xy1=np.array([viadel_m2m3_xy[0],viadel_m2m3_xy[1]+9+j+i*num_bits]), gridname0=rg_m2m3_basic)
             laygen.via(None, xy=np.array([viadel_m2m3_xy[0],viadel_m2m3_xy[1]+9+j+i*num_bits]), gridname=rg_m2m3_basic)
             calpx=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0,viadel_m2m3_xy[1]+9+j+i*num_bits]), 
                     xy1=np.array([m2m3_x*num_ways,viadel_m2m3_xy[1]+9+j+i*num_bits]), gridname0=rg_m2m3_basic)
-            laygen.create_boundary_pin_form_rect(calpx, gridname=rg_m2m3_basic, pinname='CLKCAL'+str(way_order[i])+'<'+str(j)+'>', layer=laygen.layers['pin'][2], 
-                    size=2, direction='right')
+            laygen.boundary_pin_from_rect(calpx, gridname=rg_m2m3_basic,
+                                          name='CLKCAL' + str(way_order[i]) + '<' + str(j) + '>',
+                                          layer=laygen.layers['pin'][2], size=2, direction='right')
 
     ##Route, for set/reset signals
     #STP and RSTP -- even
     m2m3_x = laygen.grids.get_absgrid_coord_x(gridname=rg_m2m3_basic, x=pitch_x)
-    viadel_ST_xy = laygen.get_inst_pin_coord(viacell[way_index_even[0]].name, 'ST', rg_m2m3_basic)[1]
+    viadel_ST_xy = laygen.get_inst_pin_xy(viacell[way_index_even[0]].name, 'ST', rg_m2m3_basic)[1]
     laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], viadel_ST_xy, np.array([0,viadel_ST_xy[1]+12]), rg_m2m3_basic)
 
-    viadel_RST_xy = laygen.get_inst_pin_coord(viacell[way_index_even[0]].name, 'RST', rg_m2m3)[1]
+    viadel_RST_xy = laygen.get_inst_pin_xy(viacell[way_index_even[0]].name, 'RST', rg_m2m3)[1]
     laygen.route(None, laygen.layers['metal'][3], xy0=viadel_RST_xy, xy1=np.array([viadel_RST_xy[0],viadel_RST_xy[1]+4]), gridname0=rg_m2m3)
     laygen.via(None, xy=np.array([viadel_RST_xy[0],viadel_RST_xy[1]+4]), gridname=rg_m2m3)
 
-    viadel_RST_xy = laygen.get_inst_pin_coord(viacell[way_index_even[0]].name, 'RST', rg_m2m3_basic)[1]
+    viadel_RST_xy = laygen.get_inst_pin_xy(viacell[way_index_even[0]].name, 'RST', rg_m2m3_basic)[1]
     for i in range(int(num_ways/2)-1):#way_index
-        viadel_RST_xy = laygen.get_inst_pin_coord(viacell[way_index_even[i+1]].name, 'RST', rg_m2m3_basic)[1]
+        viadel_RST_xy = laygen.get_inst_pin_xy(viacell[way_index_even[i + 1]].name, 'RST', rg_m2m3_basic)[1]
         laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], viadel_RST_xy, np.array([0,viadel_RST_xy[1]+12]), rg_m2m3_basic)
 
-        viadel_ST_xy = laygen.get_inst_pin_coord(viacell[way_index_even[i+1]].name, 'ST', rg_m2m3)[1]
+        viadel_ST_xy = laygen.get_inst_pin_xy(viacell[way_index_even[i + 1]].name, 'ST', rg_m2m3)[1]
         laygen.route(None, laygen.layers['metal'][3], xy0=viadel_ST_xy, xy1=np.array([viadel_ST_xy[0],viadel_ST_xy[1]+4]), gridname0=rg_m2m3)
         laygen.via(None, xy=np.array([viadel_ST_xy[0],viadel_ST_xy[1]+4]), gridname=rg_m2m3)
 
-    stp=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, viadel_RST_xy[1]+12]), xy1=np.array([m2m3_x*num_ways, viadel_RST_xy[1]+12]), gridname0=rg_m2m3_basic)    
-    laygen.create_boundary_pin_form_rect(stp, gridname=rg_m2m3_basic, pinname='RSTP', layer=laygen.layers['pin'][2], size=2, direction='left')
+    stp=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, viadel_RST_xy[1]+12]), xy1=np.array([m2m3_x*num_ways, viadel_RST_xy[1]+12]), gridname0=rg_m2m3_basic)
+    laygen.boundary_pin_from_rect(stp, gridname=rg_m2m3_basic, name='RSTP', layer=laygen.layers['pin'][2],
+                                  size=2, direction='left')
     
     #STN, RSTN -- odd
-    viadel_ST_xy = laygen.get_inst_pin_coord(viacell[way_index_odd[0]].name, 'ST', rg_m2m3_basic)[1]
+    viadel_ST_xy = laygen.get_inst_pin_xy(viacell[way_index_odd[0]].name, 'ST', rg_m2m3_basic)[1]
     laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], viadel_ST_xy, np.array([0,viadel_ST_xy[1]+13]), rg_m2m3_basic)
 
-    viadel_RST_xy = laygen.get_inst_pin_coord(viacell[way_index_odd[0]].name, 'RST', rg_m2m3)[1]
+    viadel_RST_xy = laygen.get_inst_pin_xy(viacell[way_index_odd[0]].name, 'RST', rg_m2m3)[1]
     laygen.route(None, laygen.layers['metal'][3], xy0=viadel_RST_xy, xy1=np.array([viadel_RST_xy[0],viadel_RST_xy[1]+4]), gridname0=rg_m2m3)
     laygen.via(None, xy=np.array([viadel_RST_xy[0],viadel_RST_xy[1]+4]), gridname=rg_m2m3)
 
-    viadel_RST_xy = laygen.get_inst_pin_coord(viacell[way_index_odd[0]].name, 'RST', rg_m2m3_basic)[1]
+    viadel_RST_xy = laygen.get_inst_pin_xy(viacell[way_index_odd[0]].name, 'RST', rg_m2m3_basic)[1]
     for i in range(int(num_ways/2)-1):#way_index
-        viadel_RST_xy = laygen.get_inst_pin_coord(viacell[way_index_odd[i+1]].name, 'RST', rg_m2m3_basic)[1]
+        viadel_RST_xy = laygen.get_inst_pin_xy(viacell[way_index_odd[i + 1]].name, 'RST', rg_m2m3_basic)[1]
         laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], viadel_RST_xy, np.array([0,viadel_RST_xy[1]+13]), rg_m2m3_basic)
 
-        viadel_ST_xy = laygen.get_inst_pin_coord(viacell[way_index_odd[i+1]].name, 'ST', rg_m2m3)[1]
+        viadel_ST_xy = laygen.get_inst_pin_xy(viacell[way_index_odd[i + 1]].name, 'ST', rg_m2m3)[1]
         laygen.route(None, laygen.layers['metal'][3], xy0=viadel_ST_xy, xy1=np.array([viadel_ST_xy[0],viadel_ST_xy[1]+4]), gridname0=rg_m2m3)
         laygen.via(None, xy=np.array([viadel_ST_xy[0],viadel_ST_xy[1]+4]), gridname=rg_m2m3)
       
-    stn=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, viadel_RST_xy[1]+13]), xy1=np.array([m2m3_x*num_ways, viadel_RST_xy[1]+13]), gridname0=rg_m2m3_basic)    
-    laygen.create_boundary_pin_form_rect(stn, gridname=rg_m2m3_basic, pinname='RSTN', layer=laygen.layers['pin'][2], size=2, direction='left')
+    stn=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, viadel_RST_xy[1]+13]), xy1=np.array([m2m3_x*num_ways, viadel_RST_xy[1]+13]), gridname0=rg_m2m3_basic)
+    laygen.boundary_pin_from_rect(stn, gridname=rg_m2m3_basic, name='RSTN', layer=laygen.layers['pin'][2],
+                                  size=2, direction='left')
     
     ##VDD and VSS pin
     for i in range(num_ways):
         for j in range(num_vss_h):
-            vssl_xy = laygen.get_inst_pin_coord(viacell[i].name, 'VSS0_'+str(j), rg_m3m4_thick2)
+            vssl_xy = laygen.get_inst_pin_xy(viacell[i].name, 'VSS0_' + str(j), rg_m3m4_thick2)
             laygen.pin(name='VSS0_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vssl_xy, gridname=rg_m3m4_thick2, netname='VSS')
-            vssr_xy = laygen.get_inst_pin_coord(viacell[i].name, 'VSS1_'+str(j), rg_m3m4_thick2)
+            vssr_xy = laygen.get_inst_pin_xy(viacell[i].name, 'VSS1_' + str(j), rg_m3m4_thick2)
             laygen.pin(name='VSS1_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vssr_xy, gridname=rg_m3m4_thick2, netname='VSS')
         for j in range(num_vdd_h):
-            vddl_xy = laygen.get_inst_pin_coord(viacell[i].name, 'VDD0_'+str(j), rg_m3m4_thick2)
+            vddl_xy = laygen.get_inst_pin_xy(viacell[i].name, 'VDD0_' + str(j), rg_m3m4_thick2)
             laygen.pin(name='VDD0_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vddl_xy, gridname=rg_m3m4_thick2, netname='VDD')
-            vddr_xy = laygen.get_inst_pin_coord(viacell[i].name, 'VDD1_'+str(j), rg_m3m4_thick2)
+            vddr_xy = laygen.get_inst_pin_xy(viacell[i].name, 'VDD1_' + str(j), rg_m3m4_thick2)
             laygen.pin(name='VDD1_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vddr_xy, gridname=rg_m3m4_thick2, netname='VDD')
 
 
@@ -239,7 +242,7 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         params['way_order']=sizedict['slice_order']
-        params['pitch_x']=laygen.get_template_xy(name='clk_dis_viadel_cell', libname=workinglib)[0]
+        params['pitch_x']=laygen.get_xy(obj=laygen.get_template(name='clk_dis_viadel_cell', libname=workinglib))[0]
 
     #grid
     grid = dict(

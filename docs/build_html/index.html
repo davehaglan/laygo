@@ -129,6 +129,7 @@
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#array-generation">Array generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#clocking-path-generation">Clocking path generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#retimer">Retimer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example/tisar.html#tisaradc-body-clock-sar-retimer">TISARADC body (clock+sar+retimer)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#bias">Bias</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#top">Top</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#full-stack-generation">Full stack generation</a></li>
@@ -141,11 +142,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tech/tech.html">Technology setup instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tech/tech.html#example-setup-files">Example setup files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#laygo-config-yaml">laygo_config.yaml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#tech-lib-layermap-optional">(tech_lib).layermap (optional)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#template-library">template library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#bag-setup">BAG setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#config-file-laygo-config-yaml">Config file (laygo_config.yaml)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#tech-lib-layermap-gds-flow-only">(tech_lib).layermap (GDS flow only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#template-library">Template library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/modules.html">API documentation</a><ul>
@@ -259,6 +261,7 @@
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#array-generation">Array generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#clocking-path-generation">Clocking path generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#retimer">Retimer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example/tisar.html#tisaradc-body-clock-sar-retimer">TISARADC body (clock+sar+retimer)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#bias">Bias</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#top">Top</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example/tisar.html#full-stack-generation">Full stack generation</a></li>
@@ -271,15 +274,16 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tech/tech.html">Technology setup instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tech/tech.html#example-setup-files">Example setup files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#laygo-config-yaml">laygo_config.yaml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#tech-lib-layermap-optional">(tech_lib).layermap (optional)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#template-library">template library</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tech/tech.html#example-template-library-name">Example template library name</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tech/tech.html#example-placement-grids">Example placement grids</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tech/tech.html#example-routing-grids-and-vias">Example routing grids and vias</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tech/tech.html#example-mosfet-templates">Example mosfet templates</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#bag-setup">BAG setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#config-file-laygo-config-yaml">Config file (laygo_config.yaml)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#tech-lib-layermap-gds-flow-only">(tech_lib).layermap (GDS flow only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#template-library">Template library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tech/tech.html#template-library-name">Template library name</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tech/tech.html#placement-grids">Placement grids</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tech/tech.html#routing-grids-and-vias">Routing grids and vias</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tech/tech.html#mosfet-templates">Mosfet templates</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="tech/tech.html#basic-idea">Basic idea</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tech/tech.html#nmos4-fast-family-cells">nmos4_fast family cells</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tech/tech.html#pmos4-fast-family-cells">pmos4_fast family cells</a></li>
@@ -287,6 +291,7 @@
 <li class="toctree-l4"><a class="reference internal" href="tech/tech.html#ntap-fast-family-cells">ntap_fast family cells</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="tech/tech.html#momcap-family-cells">MOMCAP family cells</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tech/tech.html#converting-template-layout-to-laygo-database">Converting template layout to laygo database</a></li>
 </ul>
 </li>

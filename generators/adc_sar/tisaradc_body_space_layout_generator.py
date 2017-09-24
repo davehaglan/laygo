@@ -46,7 +46,7 @@ def generate_tisaradc_space(laygen, objectname_pfix, tisar_libname, space_libnam
     num_space=int((ttisar.size[1]-2*tbnd_bottom.size[1])/tspace.size[1])
     #space_xy=np.array([tspace.size[0], 56.88]) #change it after finishing the clock part
     #num_space=int((56.88-2*tbnd_bottom.size[1])/tspace.size[1]) #should be changed after finishing the clock part
-    space_origin = origin + laygen.get_template_size('boundary_bottomleft', pg)
+    space_origin = origin + laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottomleft'), gridname = pg)
     ispace = [laygen.place(name="I" + objectname_pfix + 'SP0', templatename=space_name,
                           gridname=pg, xy=space_origin, template_libname=space_libname)]
     #devname_bnd_left = ['nmos4_fast_left', 'pmos4_fast_left']
@@ -97,7 +97,7 @@ def generate_tisaradc_space(laygen, objectname_pfix, tisar_libname, space_libnam
     rvss_xy_m3=[]
     space_template = laygen.templates.get_template(space_name, workinglib)
     space_pins=space_template.pins
-    space_origin_phy = laygen.get_inst_bbox_phygrid(ispace[0].name)[0]
+    space_origin_phy = ispace[0].bbox[0]
     vddcnt=0
     vsscnt=0
     for pn, p in space_pins.items():
@@ -255,7 +255,7 @@ def generate_tisaradc_space2(laygen, objectname_pfix,
 
     #vddsar cap
     num_space_sar=int((y_vss_th-2*tbnd_bottom.size[1])/tspace.size[1])+4
-    space_origin = origin + laygen.get_template_size('boundary_bottomleft', pg)
+    space_origin = origin + laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottomleft'), gridname = pg)
     ispace_sar = [laygen.place(name="I" + objectname_pfix + 'SPSAR0', templatename=space_name,
                           gridname=pg, xy=space_origin, template_libname=space_libname)]
     devname_bnd_left = ['nmos4_fast_left', 'pmos4_fast_left']
@@ -296,7 +296,7 @@ def generate_tisaradc_space2(laygen, objectname_pfix,
 
     #vddsamp cap
     num_space_samp=num_space_tot-num_space_sar-1
-    space_origin = origin + laygen.get_template_size('boundary_bottomleft', pg)*np.array([1, (3+2*num_space_sar)])
+    space_origin = origin + laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottomleft'), gridname = pg) * np.array([1, (3 + 2 * num_space_sar)])
     ispace_samp = [laygen.place(name="I" + objectname_pfix + 'SPSAMP0', templatename=space_name,
                           gridname=pg, xy=space_origin, template_libname=space_libname)]
     devname_bnd_left = ['nmos4_fast_left', 'pmos4_fast_left']
@@ -325,22 +325,22 @@ def generate_tisaradc_space2(laygen, objectname_pfix,
     m_bnd = int(space_xy[0] / tbnd_bottom.size[0])
     [bnd_bottom, bnd_top, bnd_left, bnd_right] \
         = laygenhelper.generate_boundary(laygen, objectname_pfix='BNDSAMP0', placement_grid=pg,
-                            devname_bottom=['boundary_bottomleft', 'boundary_bottom', 'boundary_bottomright'],
-                            shape_bottom=[np.array([1, 1]), np.array([m_bnd, 1]), np.array([1, 1])],
-                            devname_top=['boundary_topleft', 'boundary_top', 'boundary_topright'],
-                            shape_top=[np.array([1, 1]), np.array([m_bnd, 1]), np.array([1, 1])],
-                            devname_left=devname_bnd_left,
-                            transform_left=transform_bnd_left,
-                            devname_right=devname_bnd_right,
-                            transform_right=transform_bnd_right,
-                            origin=space_origin-laygen.get_template_size('boundary_bottomleft', pg))
+                                         devname_bottom=['boundary_bottomleft', 'boundary_bottom', 'boundary_bottomright'],
+                                         shape_bottom=[np.array([1, 1]), np.array([m_bnd, 1]), np.array([1, 1])],
+                                         devname_top=['boundary_topleft', 'boundary_top', 'boundary_topright'],
+                                         shape_top=[np.array([1, 1]), np.array([m_bnd, 1]), np.array([1, 1])],
+                                         devname_left=devname_bnd_left,
+                                         transform_left=transform_bnd_left,
+                                         devname_right=devname_bnd_right,
+                                         transform_right=transform_bnd_right,
+                                         origin=space_origin-laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottomleft'), gridname = pg))
     #vdd/vss
     #m3
     rvdd_sar_xy_m3=[]
     rvss_sar_xy_m3=[]
     space_template = laygen.templates.get_template(space_name, workinglib)
     space_pins=space_template.pins
-    space_origin_phy = laygen.get_inst_bbox_phygrid(ispace_sar[0].name)[0]
+    space_origin_phy = ispace_sar[0].bbox[0]
     vddcnt=0
     vsscnt=0
     for pn, p in space_pins.items():
@@ -360,7 +360,7 @@ def generate_tisaradc_space2(laygen, objectname_pfix,
     rvss_samp_xy_m3=[]
     space_template = laygen.templates.get_template(space_name, workinglib)
     space_pins=space_template.pins
-    space_origin_phy = laygen.get_inst_bbox_phygrid(ispace_samp[0].name)[0]
+    space_origin_phy = ispace_samp[0].bbox[0]
     vddcnt=0
     vsscnt=0
     for pn, p in space_pins.items():

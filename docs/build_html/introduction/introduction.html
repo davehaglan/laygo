@@ -130,6 +130,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#array-generation">Array generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#clocking-path-generation">Clocking path generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#retimer">Retimer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#tisaradc-body-clock-sar-retimer">TISARADC body (clock+sar+retimer)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#bias">Bias</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#top">Top</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../example/tisar.html#full-stack-generation">Full stack generation</a></li>
@@ -142,11 +143,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../tech/tech.html">Technology setup instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#example-setup-files">Example setup files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#laygo-config-yaml">laygo_config.yaml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#tech-lib-layermap-optional">(tech_lib).layermap (optional)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#template-library">template library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#bag-setup">BAG setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#config-file-laygo-config-yaml">Config file (laygo_config.yaml)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#tech-lib-layermap-gds-flow-only">(tech_lib).layermap (GDS flow only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#template-library">Template library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API documentation</a><ul>
@@ -191,8 +193,8 @@
   <div class="section" id="laygo-layout-with-gridded-objects">
 <span id="laygo-layout-with-gridded-objects"></span><h1>LAYGO - LAYout with Gridded Objects<a class="headerlink" href="#laygo-layout-with-gridded-objects" title="Permalink to this headline">¶</a></h1>
 <p>Laygo is an add-on to <a class="reference external" href="https://github.com/pkerichang/BAG_framework">BAG2</a>
-framework for layout generation, written by Jaeduk Han, (jdhan&#64;eecs.berkeley.edu)
-and licensed under the BSD license.
+framework for layout generation, written by <a class="reference external" href="https://jdhan.github.io/">Jaeduk Han</a>,
+Zhongkai Wang, Woorham Bae, and Eric Jan. Laygo is licensed under the BSD license.
 With laygo, layout elements and parameters are abstracted as templates
 and grids, and the layout job can be done without dealing with complex
 design rules in advanced CMOS technology.
@@ -210,7 +212,7 @@ than conventional custom IC design flows.</p>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Prepare following etup files for your technology.</p>
+<li><p class="first">Prepare following setup files for your technology.</p>
 <ul>
 <li><p class="first"><strong>laygo_config.yaml</strong> - contains general technology information.</p>
 <p>An example file can be found here: <a class="reference external" href="https://github.com/ucb-art/laygo/blob/master/labs/laygo_config.yaml">labs/laygo_config.yaml</a></p>

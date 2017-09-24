@@ -35,10 +35,10 @@ import laygo.GridLayoutGeneratorHelper as laygenhelper #utility functions
 
 def create_power_pin_from_inst(laygen, layer, gridname, inst_left, inst_right):
     """create power pin"""
-    rvdd0_pin_xy = laygen.get_inst_pin_coord(inst_left.name, 'VDD', gridname, sort=True)
-    rvdd1_pin_xy = laygen.get_inst_pin_coord(inst_right.name, 'VDD', gridname, sort=True)
-    rvss0_pin_xy = laygen.get_inst_pin_coord(inst_left.name, 'VSS', gridname, sort=True)
-    rvss1_pin_xy = laygen.get_inst_pin_coord(inst_right.name, 'VSS', gridname, sort=True)
+    rvdd0_pin_xy = laygen.get_inst_pin_xy(inst_left.name, 'VDD', gridname, sort=True)
+    rvdd1_pin_xy = laygen.get_inst_pin_xy(inst_right.name, 'VDD', gridname, sort=True)
+    rvss0_pin_xy = laygen.get_inst_pin_xy(inst_left.name, 'VSS', gridname, sort=True)
+    rvss1_pin_xy = laygen.get_inst_pin_xy(inst_right.name, 'VSS', gridname, sort=True)
 
     laygen.pin(name='VDD', layer=layer, xy=np.vstack((rvdd0_pin_xy[0],rvdd1_pin_xy[1])), gridname=gridname)
     laygen.pin(name='VSS', layer=layer, xy=np.vstack((rvss0_pin_xy[0],rvss1_pin_xy[1])), gridname=gridname)
@@ -80,7 +80,7 @@ def generate_space(laygen, objectname_pfix, templib_logic, placement_grid, routi
                           gridname = pg, refinstname = refi, template_libname = templib_logic)
 
     # power pin
-    pwr_dim=laygen.get_template_size(name=itapl.cellname, gridname=rg_m2m3, libname=itapl.libname)
+    pwr_dim=laygen.get_xy(obj =itapl.template, gridname=rg_m2m3)
     rvdd = []
     rvss = []
     rp1='VDD'
@@ -91,16 +91,16 @@ def generate_space(laygen, objectname_pfix, templib_logic, placement_grid, routi
         rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+1, 0]), xy1=np.array([2*i+1, 0]), gridname0=rg_m2m3,
                      refinstname0=itapl.name, refpinname0='VSS', refinstindex0=np.array([0, 0]),
                      refinstname1=itapl.name, refpinname1=rp1, refinstindex1=np.array([0, 0])))
-        laygen.pin_from_rect('VDD'+str(2*i-2), laygen.layers['pin'][3], rvdd[-1], gridname=rg_m2m3, netname='VDD')
-        laygen.pin_from_rect('VSS'+str(2*i-2), laygen.layers['pin'][3], rvss[-1], gridname=rg_m2m3, netname='VSS')
+        laygen.pin(name = 'VDD'+str(2*i-2), layer = laygen.layers['pin'][3], refobj = rvdd[-1], gridname=rg_m2m3, netname='VDD')
+        laygen.pin(name = 'VSS'+str(2*i-2), layer = laygen.layers['pin'][3], refobj = rvss[-1], gridname=rg_m2m3, netname='VSS')
         rvdd.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+2+1, 0]), xy1=np.array([2*i+2+1, 0]), gridname0=rg_m2m3,
                      refinstname0=itapr.name, refpinname0='VSS', refinstindex0=np.array([0, 0]),
                      refinstname1=itapr.name, refpinname1=rp1, refinstindex1=np.array([0, 0])))
         rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+2, 0]), xy1=np.array([2*i+2, 0]), gridname0=rg_m2m3,
                      refinstname0=itapr.name, refpinname0='VSS', refinstindex0=np.array([0, 0]),
                      refinstname1=itapr.name, refpinname1=rp1, refinstindex1=np.array([0, 0])))
-        laygen.pin_from_rect('VDD'+str(2*i-1), laygen.layers['pin'][3], rvdd[-1], gridname=rg_m2m3, netname='VDD')
-        laygen.pin_from_rect('VSS'+str(2*i-1), laygen.layers['pin'][3], rvss[-1], gridname=rg_m2m3, netname='VSS')
+        laygen.pin(name = 'VDD'+str(2*i-1), layer = laygen.layers['pin'][3], refobj = rvdd[-1], gridname=rg_m2m3, netname='VDD')
+        laygen.pin(name = 'VSS'+str(2*i-1), layer = laygen.layers['pin'][3], refobj = rvss[-1], gridname=rg_m2m3, netname='VSS')
     for j in range(0, int(pwr_dim[0]/2)):
         rvdd.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j, 0]), xy1=np.array([2*j, 0]), gridname0=rg_m2m3,
                      refinstname0=itapl.name, refpinname0='VDD', refinstindex0=np.array([0, 0]), via0=[[0, 0]],
@@ -148,12 +148,12 @@ def generate_space_tap(laygen, objectname_pfix, placement_grid, routing_grid_m1m
     intapr=laygen.relplace(name = "I" + objectname_pfix + 'NTAPR0', templatename = ntap_boundary_name,
                            gridname = pg, refinstname = refi, transform = 'MX')
     # power pin
-    xy = laygen.get_template_size(iptapr.cellname, rg_m1m2) * np.array([1, 0])
+    xy = laygen.get_xy(obj = iptapr.template, gridname = rg_m1m2) * np.array([1, 0])
     rvdd=laygen.route("R"+objectname_pfix+"VDD0", laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=xy, gridname0=rg_m1m2,
                  refinstname0=iptapl.name, refinstname1=iptapr.name)
     rvss=laygen.route("R"+objectname_pfix+"VSS0", laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=xy, gridname0=rg_m1m2,
                  refinstname0=intapl.name, refinstname1=intapr.name)
-    xy_s0 = laygen.get_template_pin_coord(iptap[0].cellname, 'TAP0', rg_m1m2)[0, :]
+    xy_s0 = laygen.get_template_pin_xy(iptap[0].cellname, 'TAP0', rg_m1m2)[0, :]
     # power/ground vertical route
     for i in range(m_tap):
         laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0*np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
@@ -165,7 +165,7 @@ def generate_space_tap(laygen, objectname_pfix, placement_grid, routing_grid_m1m
         laygen.via(None, xy_s0 * np.array([1, 0]), refinstname=iptap[0].name, gridname=rg_m1m2,refinstindex=np.array([i, 0]))
         laygen.via(None, xy_s0 * np.array([1, 0]), refinstname=intap[0].name, gridname=rg_m1m2,refinstindex=np.array([i, 0]))
     # power pin
-    #pwr_dim=laygen.get_template_size(name=itapl.cellname, gridname=rg_m2m3, libname=itapl.libname)
+    #pwr_dim=laygen.get_xy(obj =itapl.template, gridname=rg_m2m3)
     pwr_dim=6
     rvdd = []
     rvss = []
@@ -176,16 +176,16 @@ def generate_space_tap(laygen, objectname_pfix, placement_grid, routing_grid_m1m
         rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+1, 0]), xy1=np.array([2*i+1, 0]), gridname0=rg_m2m3,
                      refinstname0=iptapl.name, refinstindex0=np.array([0, 0]),
                      refinstname1=intapl.name, refinstindex1=np.array([0, 0]), via0=[[0, 0]]))
-        laygen.pin_from_rect('VDD'+str(2*i-2), laygen.layers['pin'][3], rvdd[-1], gridname=rg_m2m3, netname='VDD')
-        laygen.pin_from_rect('VSS'+str(2*i-2), laygen.layers['pin'][3], rvss[-1], gridname=rg_m2m3, netname='VSS')
+        laygen.pin(name = 'VDD'+str(2*i-2), layer = laygen.layers['pin'][3], refobj = rvdd[-1], gridname=rg_m2m3, netname='VDD')
+        laygen.pin(name = 'VSS'+str(2*i-2), layer = laygen.layers['pin'][3], refobj = rvss[-1], gridname=rg_m2m3, netname='VSS')
         rvdd.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+2+1-pwr_dim, 0]), xy1=np.array([2*i+2+1-pwr_dim, 0]), gridname0=rg_m2m3,
                      refinstname0=iptapr.name, refinstindex0=np.array([0, 0]),
                      refinstname1=intapr.name, refinstindex1=np.array([0, 0]), via1=[[0, 0]]))
         rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+2-pwr_dim, 0]), xy1=np.array([2*i+2-pwr_dim, 0]), gridname0=rg_m2m3,
                      refinstname0=iptapr.name, refinstindex0=np.array([0, 0]),
                      refinstname1=intapr.name, refinstindex1=np.array([0, 0]), via0=[[0, 0]]))
-        laygen.pin_from_rect('VDD'+str(2*i-1), laygen.layers['pin'][3], rvdd[-1], gridname=rg_m2m3, netname='VDD')
-        laygen.pin_from_rect('VSS'+str(2*i-1), laygen.layers['pin'][3], rvss[-1], gridname=rg_m2m3, netname='VSS')
+        laygen.pin(name = 'VDD'+str(2*i-1), layer = laygen.layers['pin'][3], refobj = rvdd[-1], gridname=rg_m2m3, netname='VDD')
+        laygen.pin(name = 'VSS'+str(2*i-1), layer = laygen.layers['pin'][3], refobj = rvss[-1], gridname=rg_m2m3, netname='VSS')
 
 def generate_space_dcap(laygen, objectname_pfix, templib_logic, placement_grid, routing_grid_m3m4,
                         m_dcap=0, m_space_4x=0, m_space_2x=0, m_space_1x=0, dcap_name='dcap2_8x', origin=np.array([0, 0])):
@@ -231,7 +231,7 @@ def generate_space_dcap(laygen, objectname_pfix, templib_logic, placement_grid, 
                           gridname = pg, refinstname = refi, template_libname = templib_logic)
 
     # power pin
-    pwr_dim=laygen.get_template_size(name=itapl.cellname, gridname=rg_m2m3, libname=itapl.libname)
+    pwr_dim=laygen.get_xy(obj =itapl.template, gridname=rg_m2m3)
     rvdd = []
     rvss = []
     rp1='VDD'
@@ -242,16 +242,16 @@ def generate_space_dcap(laygen, objectname_pfix, templib_logic, placement_grid, 
         rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+1, 0]), xy1=np.array([2*i+1, 0]), gridname0=rg_m2m3,
                      refinstname0=itapl.name, refpinname0='VSS', refinstindex0=np.array([0, 0]),
                      refinstname1=itapl.name, refpinname1=rp1, refinstindex1=np.array([0, 0])))
-        laygen.pin_from_rect('VDD'+str(2*i-2), laygen.layers['pin'][3], rvdd[-1], gridname=rg_m2m3, netname='VDD')
-        laygen.pin_from_rect('VSS'+str(2*i-2), laygen.layers['pin'][3], rvss[-1], gridname=rg_m2m3, netname='VSS')
+        laygen.pin(name = 'VDD'+str(2*i-2), layer = laygen.layers['pin'][3], refobj = rvdd[-1], gridname=rg_m2m3, netname='VDD')
+        laygen.pin(name = 'VSS'+str(2*i-2), layer = laygen.layers['pin'][3], refobj = rvss[-1], gridname=rg_m2m3, netname='VSS')
         rvdd.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+2+1, 0]), xy1=np.array([2*i+2+1, 0]), gridname0=rg_m2m3,
                      refinstname0=itapr.name, refpinname0='VSS', refinstindex0=np.array([0, 0]),
                      refinstname1=itapr.name, refpinname1=rp1, refinstindex1=np.array([0, 0])))
         rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+2, 0]), xy1=np.array([2*i+2, 0]), gridname0=rg_m2m3,
                      refinstname0=itapr.name, refpinname0='VSS', refinstindex0=np.array([0, 0]),
                      refinstname1=itapr.name, refpinname1=rp1, refinstindex1=np.array([0, 0])))
-        laygen.pin_from_rect('VDD'+str(2*i-1), laygen.layers['pin'][3], rvdd[-1], gridname=rg_m2m3, netname='VDD')
-        laygen.pin_from_rect('VSS'+str(2*i-1), laygen.layers['pin'][3], rvss[-1], gridname=rg_m2m3, netname='VSS')
+        laygen.pin(name = 'VDD'+str(2*i-1), layer = laygen.layers['pin'][3], refobj = rvdd[-1], gridname=rg_m2m3, netname='VDD')
+        laygen.pin(name = 'VSS'+str(2*i-1), layer = laygen.layers['pin'][3], refobj = rvss[-1], gridname=rg_m2m3, netname='VSS')
     for j in range(0, int(pwr_dim[0]/2)):
         rvdd.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j, 0]), xy1=np.array([2*j, 0]), gridname0=rg_m2m3,
                      refinstname0=itapl.name, refpinname0='VDD', refinstindex0=np.array([0, 0]), via0=[[0, 0]],
@@ -276,13 +276,13 @@ def generate_space_dcap(laygen, objectname_pfix, templib_logic, placement_grid, 
 
 
 def generate_space_wbnd(laygen, objectname_pfix, workinglib, space_name, placement_grid, origin=np.array([0, 0])):
-    space_origin = origin + laygen.get_template_size('boundary_bottomleft', pg)
+    space_origin = origin + laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottomleft'), gridname = pg)
     ispace=laygen.place(name="I" + objectname_pfix + 'SP0', templatename=space_name,
                          gridname=pg, xy=space_origin, template_libname=workinglib)
-    xy0=laygen.get_template_size(name=space_name, gridname=pg, libname=workinglib)
+    xy0=laygen.get_xy(obj=laygen.get_template(name=space_name, libname=workinglib), gridname=pg)
     xsp=xy0[0]
     #ysp=xy0[1]
-    m_bnd = int(xsp / laygen.get_template_size('boundary_bottom', gridname=pg)[0])
+    m_bnd = int(xsp / laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottom'), gridname=pg)[0])
     [bnd_bottom, bnd_top, bnd_left, bnd_right] \
         = laygenhelper.generate_boundary(laygen, objectname_pfix='BND0', placement_grid=pg,
                             devname_bottom=['boundary_bottomleft', 'boundary_bottom', 'boundary_bottomright'],
@@ -297,7 +297,6 @@ def generate_space_wbnd(laygen, objectname_pfix, workinglib, space_name, placeme
     #pins
     space_template = laygen.templates.get_template(space_name, workinglib)
     space_pins=space_template.pins
-    #space_origin_phy = laygen.get_inst_bbox_phygrid(ispace.name)[0]
     space_origin_phy = ispace.bbox[0]
     vddcnt=0
     vsscnt=0

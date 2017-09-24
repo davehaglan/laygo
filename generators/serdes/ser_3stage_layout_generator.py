@@ -57,15 +57,15 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
             gridname = pg, refinstname = refi.name, transform="MY", shape=np.array([1,1]), template_libname = workinglib, direction = 'top')
 
     #Internal Pins
-    ser2Nto1_clkb_xy=laygen.get_inst_pin_coord(iser_2stg.name, 'CLKB', rg_m3m4)
-    ser2Nto1_clk_xy=laygen.get_inst_pin_coord(iser_2stg.name, 'CLK', rg_m3m4)
+    ser2Nto1_clkb_xy=laygen.get_inst_pin_xy(iser_2stg.name, 'CLKB', rg_m3m4)
+    ser2Nto1_clk_xy=laygen.get_inst_pin_xy(iser_2stg.name, 'CLK', rg_m3m4)
     ser2Nto1_rst_xy=[]
     ser2Nto1_rst_xy45=[]
     for i in range(2):
-        ser2Nto1_rst_xy.append(laygen.get_inst_pin_coord(iser_2stg.name, 'RST'+str(i), rg_m3m4))
-        ser2Nto1_rst_xy45.append(laygen.get_inst_pin_coord(iser_2stg.name, 'RST'+str(i), rg_m4m5))
-    ser2Nto1_out_xy=laygen.get_inst_pin_coord(iser_2stg.name, 'out', rg_m3m4)
-    ser2Nto1_div_xy=laygen.get_inst_pin_coord(iser_2stg.name, 'divclk', rg_m3m4)
+        ser2Nto1_rst_xy.append(laygen.get_inst_pin_xy(iser_2stg.name, 'RST' + str(i), rg_m3m4))
+        ser2Nto1_rst_xy45.append(laygen.get_inst_pin_xy(iser_2stg.name, 'RST' + str(i), rg_m4m5))
+    ser2Nto1_out_xy=laygen.get_inst_pin_xy(iser_2stg.name, 'out', rg_m3m4)
+    ser2Nto1_div_xy=laygen.get_inst_pin_xy(iser_2stg.name, 'divclk', rg_m3m4)
     ser2Nto1_in_xy=[]
     ser3rd_in_xy=[]
     ser3rd_rst_xy=[]
@@ -73,13 +73,13 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
     ser3rd_clk_xy=[]
     ser3rd_out_xy=[]
     for i in range(num_ser):
-        ser2Nto1_in_xy.append(laygen.get_inst_pin_coord(iser_2stg.name, 'in<'+str(i)+'>', rg_m3m4))
-        ser3rd_rst_xy.append(laygen.get_inst_pin_coord(iser_3rd[i].name, 'RST', rg_m3m4))
-        ser3rd_rst_xy45.append(laygen.get_inst_pin_coord(iser_3rd[i].name, 'RST', rg_m4m5))
-        ser3rd_clk_xy.append(laygen.get_inst_pin_coord(iser_3rd[i].name, 'clk_in', rg_m3m4))
-        ser3rd_out_xy.append(laygen.get_inst_pin_coord(iser_3rd[i].name, 'out', rg_m3m4))
+        ser2Nto1_in_xy.append(laygen.get_inst_pin_xy(iser_2stg.name, 'in<' + str(i) + '>', rg_m3m4))
+        ser3rd_rst_xy.append(laygen.get_inst_pin_xy(iser_3rd[i].name, 'RST', rg_m3m4))
+        ser3rd_rst_xy45.append(laygen.get_inst_pin_xy(iser_3rd[i].name, 'RST', rg_m4m5))
+        ser3rd_clk_xy.append(laygen.get_inst_pin_xy(iser_3rd[i].name, 'clk_in', rg_m3m4))
+        ser3rd_out_xy.append(laygen.get_inst_pin_xy(iser_3rd[i].name, 'out', rg_m3m4))
         for j in range(num_ser_3rd):
-            ser3rd_in_xy.append(laygen.get_inst_pin_coord(iser_3rd[i].name, 'in<'+str(j)+'>', rg_m3m4))
+            ser3rd_in_xy.append(laygen.get_inst_pin_xy(iser_3rd[i].name, 'in<' + str(j) + '>', rg_m3m4))
     print(ser3rd_in_xy[10])
 
     # Route
@@ -118,19 +118,19 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
                 laygen.pin(name='in<'+str(j)+'>', layer=laygen.layers['pin'][4], xy=ser3rd_in_xy[i*num_ser_3rd+int(j/num_ser)], gridname=rg_m3m4)
 
     # power pin
-    pwr_dim=laygen.get_template_size(name='tap', gridname=rg_m2m3, libname=logictemplib)
+    pwr_dim=laygen.get_xy(obj=laygen.get_template(name='tap', libname=logictemplib), gridname=rg_m2m3)
     rvdd = []
     rvss = []
     print(int(pwr_dim[0]))
     for i in range(-2, int(pwr_dim[0]/2)*2-2):
-        subser0_vdd_xy=laygen.get_inst_pin_coord(iser_3rd[0].name, 'VDD'+str(i), rg_m2m3)
-        subser0_vss_xy=laygen.get_inst_pin_coord(iser_3rd[0].name, 'VSS'+str(i), rg_m2m3)
-        subser1_vdd_xy=laygen.get_inst_pin_coord(iser_2stg.name, 'VDD'+str(i), rg_m2m3)
-        subser1_vss_xy=laygen.get_inst_pin_coord(iser_2stg.name, 'VSS'+str(i), rg_m2m3)
+        subser0_vdd_xy=laygen.get_inst_pin_xy(iser_3rd[0].name, 'VDD' + str(i), rg_m2m3)
+        subser0_vss_xy=laygen.get_inst_pin_xy(iser_3rd[0].name, 'VSS' + str(i), rg_m2m3)
+        subser1_vdd_xy=laygen.get_inst_pin_xy(iser_2stg.name, 'VDD' + str(i), rg_m2m3)
+        subser1_vss_xy=laygen.get_inst_pin_xy(iser_2stg.name, 'VSS' + str(i), rg_m2m3)
         rvdd.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([subser1_vdd_xy[1][0],0]), xy1=subser1_vdd_xy[1], gridname0=rg_m2m3))
         rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([subser1_vss_xy[1][0],0]), xy1=subser1_vss_xy[1], gridname0=rg_m2m3))
-        laygen.pin_from_rect('VDD'+str(i), laygen.layers['pin'][3], rvdd[-1], gridname=rg_m2m3, netname='VDD')
-        laygen.pin_from_rect('VSS'+str(i), laygen.layers['pin'][3], rvss[-1], gridname=rg_m2m3, netname='VSS')
+        laygen.pin(name = 'VDD'+str(i), layer = laygen.layers['pin'][3], refobj = rvdd[-1], gridname=rg_m2m3, netname='VDD')
+        laygen.pin(name = 'VSS'+str(i), layer = laygen.layers['pin'][3], refobj = rvss[-1], gridname=rg_m2m3, netname='VSS')
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")

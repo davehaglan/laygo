@@ -31,8 +31,6 @@ __maintainer__ = "Jaeduk Han"
 __email__ = "jdhan@eecs.berkeley.edu"
 __status__ = "Prototype"
 
-import yaml
-import logging
 import numpy as np
 
 # TODO: yaml (refer to GridDB.py), skill, matplotlib export

@@ -130,6 +130,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#array-generation">Array generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#clocking-path-generation">Clocking path generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#retimer">Retimer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tisaradc-body-clock-sar-retimer">TISARADC body (clock+sar+retimer)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#bias">Bias</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#top">Top</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#full-stack-generation">Full stack generation</a></li>
@@ -142,11 +143,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../tech/tech.html">Technology setup instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#example-setup-files">Example setup files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#laygo-config-yaml">laygo_config.yaml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#tech-lib-layermap-optional">(tech_lib).layermap (optional)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#template-library">template library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#bag-setup">BAG setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#config-file-laygo-config-yaml">Config file (laygo_config.yaml)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#tech-lib-layermap-gds-flow-only">(tech_lib).layermap (GDS flow only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#template-library">Template library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API documentation</a><ul>
@@ -442,7 +444,7 @@ schematic netlists. For the post-extract simulation, set
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_capdac_verify</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p><img alt="salatch" src="../_images/tisaradc_capsim.png" /></p>
+<p><img alt="salatch" src="example/images/tisaradc_capsim.png" /></p>
 <p>Simulation results from various settings (left: 5b-radix2,
 center: 8b-sub2radix, right: 10b-sub2radix)</p>
 </li>
@@ -518,19 +520,19 @@ clock generator(sarclkgen), and retimer(sarret).</p>
 </pre></div>
 </div>
 <p>SAR FSM</p>
-<p><img alt="sarfsm" src="../_images/tisaradc_sarfsm.png" /></p>
+<p><img alt="sarfsm" src="example/images/tisaradc_sarfsm.png" /></p>
 <p>SAR logic</p>
-<p><img alt="sarlogic" src="../_images/tisaradc_sarlogic.png" /></p>
+<p><img alt="sarlogic" src="example/images/tisaradc_sarlogic.png" /></p>
 <p>SAR logic array</p>
-<p><img alt="sarlogic_array" src="../_images/tisaradc_sarlogic_array.png" /></p>
+<p><img alt="sarlogic_array" src="example/images/tisaradc_sarlogic_array.png" /></p>
 <p>SAR clock delayline</p>
-<p><img alt="sarlogic_array" src="../_images/tisaradc_sarclkdelay.png" /></p>
+<p><img alt="sarlogic_array" src="example/images/tisaradc_sarclkdelay.png" /></p>
 <p>SAR clock generator</p>
-<p><img alt="sarclkgen" src="../_images/tisaradc_sarclkgen.png" /></p>
+<p><img alt="sarclkgen" src="example/images/tisaradc_sarclkgen.png" /></p>
 <p>SAR retimer</p>
-<p><img alt="sarret" src="../_images/tisaradc_sarret.png" /></p>
+<p><img alt="sarret" src="example/images/tisaradc_sarret.png" /></p>
 <p>SAR backend top</p>
-<p><img alt="sarabe" src="../_images/tisaradc_sarabe.png" /></p>
+<p><img alt="sarabe" src="example/images/tisaradc_sarabe.png" /></p>
 </li>
 </ol>
 <ol>
@@ -560,7 +562,7 @@ scripts.</p>
 <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sar_schematic_generator</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p><img alt="sar" src="../_images/tisaradc_sar.png" /></p>
+<p><img alt="sar" src="example/images/tisaradc_sar.png" /></p>
 </li>
 </ol>
 </div>
@@ -577,7 +579,7 @@ cds_ff_mpt technology), so laygo based sampler is used for this example.</p>
 <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarsamp_schematic_generator</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p><img alt="sar" src="../_images/tisaradc_sarsamp.png" /></p>
+<p><img alt="sar" src="example/images/tisaradc_sarsamp.png" /></p>
 <p>If the AnalogBase is set up for your technology, these scripts will
 generate the sampling switches.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># layout</span>
@@ -601,7 +603,7 @@ scripts to generate the SubADC top.</p>
 <p>The generated layouts shown below are from the full-stack subADC
 generation with different settings (9b, 6b, 10bits and different
 sizing parameters).</p>
-<p><img alt="sar" src="../_images/tisaradc_sar_wsamp.png" /></p>
+<p><img alt="sar" src="example/images/tisaradc_sar_wsamp.png" /></p>
 </div>
 <div class="section" id="array-generation">
 <span id="array-generation"></span><h2>Array generation<a class="headerlink" href="#array-generation" title="Permalink to this headline">¶</a></h2>
@@ -612,7 +614,7 @@ sizing parameters).</p>
 <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sar_wsamp_array_schematic_generator</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p><img alt="sar" src="../_images/tisaradc_sar_wsamp_array.png" /></p>
+<p><img alt="sar" src="example/images/tisaradc_sar_wsamp_array.png" /></p>
 </div>
 <div class="section" id="clocking-path-generation">
 <span id="clocking-path-generation"></span><h2>Clocking path generation<a class="headerlink" href="#clocking-path-generation" title="Permalink to this headline">¶</a></h2>
@@ -631,12 +633,27 @@ frontend. (You don&#8217;t need this for non-interleaving ADCs)</p>
 </div>
 <p>The following picture shows generated clocking paths for different
 interleaving ratio settings</p>
-<p><img alt="sar" src="../_images/tisaradc_clking.png" /></p>
+<p><img alt="sar" src="example/images/tisaradc_clking.png" /></p>
 </div>
 <div class="section" id="retimer">
 <span id="retimer"></span><h2>Retimer<a class="headerlink" href="#retimer" title="Permalink to this headline">¶</a></h2>
-<p>From now on, AnalogBase has to be set up for layout generations (which
-is not for the cds_ff_mpt technology).</p>
+<p>(From now on, AnalogBase has to be set up for layout generations (which
+is not for the cds_ff_mpt technology)</p>
+<p>Generator codes for the final retimer is written by Eric Chang. Run
+these scripts to generate the retimer schematic and layout.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_retimer_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_retimer_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tisaradc-body-clock-sar-retimer">
+<span id="tisaradc-body-clock-sar-retimer"></span><h2>TISARADC body (clock+sar+retimer)<a class="headerlink" href="#tisaradc-body-clock-sar-retimer" title="Permalink to this headline">¶</a></h2>
+<p>Following scripts are for generating layout and schematic of TISARADC
+body.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">tisaradc_body_core_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">tisaradc_body_core_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="bias">
 <span id="bias"></span><h2>Bias<a class="headerlink" href="#bias" title="Permalink to this headline">¶</a></h2>
