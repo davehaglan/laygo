@@ -401,11 +401,11 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     for i in range(2):
         rh0, rclkdsel0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                          pdict_m4m5[ickg.name]['SEL<' + str(i) + '>'][0],
-                                         np.array([pdict_m4m5[ickg.name]['SEL<'+str(i)+'>'][1][0]+1+i+2+2+0, 0]), rg_m4m5)
+                                         np.array([pdict_m4m5[ickg.name]['SEL<'+str(i)+'>'][1][0]+1+i+2+2-1, 0]), rg_m4m5)
         laygen.boundary_pin_from_rect(rclkdsel0, rg_m4m5, 'CKDSEL0<' + str(i) + '>', laygen.layers['pin'][5], size=6,direction='bottom')
     rh0, rclkdsel1 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                      pdict_m4m5[ickg.name]['SEL<2>'][0],
-                                     np.array([pdict_m4m5[ickg.name]['SEL<2>'][1][0]+1+3+2+2+0, 0]), rg_m4m5)
+                                     np.array([pdict_m4m5[ickg.name]['SEL<2>'][1][0]+1+3+2+2-1, 0]), rg_m4m5)
     laygen.boundary_pin_from_rect(rclkdsel1, rg_m4m5, 'CKDSEL1<0>', laygen.layers['pin'][5], size=6,direction='bottom')
     #ckdsel dummy
     xy0 = laygen.get_rect_xy(name=rclkdsel0.name, gridname=rg_m4m5, sort=True)

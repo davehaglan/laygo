@@ -1067,7 +1067,7 @@ def generate_inv(laygen, objectname_pfix,
 
     # output
     if m==1:
-        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([-1, 1]), xy1=np.array([1, 1]), gridname0=rg_m2m3,
+        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([-1, 0]), xy1=np.array([1, 0]), gridname0=rg_m2m3,
                      refinstname0=in1.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
                      refinstname1=in1.name, refpinname1='D0', refinstindex1=np.array([m-1, 0]),
                      endstyle0="extend", endstyle1="extend")
@@ -1076,23 +1076,23 @@ def generate_inv(laygen, objectname_pfix,
                      refinstname1=ip1.name, refpinname1='D0', refinstindex1=np.array([m-1, 0]),
                      endstyle0="extend", endstyle1="extend")
     else:
-        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 1]), xy1=np.array([0, 1]), gridname0=rg_m2m3,
+        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m2m3,
                      refinstname0=in1.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
                      refinstname1=in1.name, refpinname1='D0', refinstindex1=np.array([m-1, 0]))
         laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m2m3,
                      refinstname0=ip1.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
                      refinstname1=ip1.name, refpinname1='D0', refinstindex1=np.array([m-1, 0]))
     for i in range(m):
-        laygen.via(None, np.array([0, 1]), refinstname=in1.name, refpinname='D0', refinstindex=np.array([i, 0]),
+        laygen.via(None, np.array([0, 0]), refinstname=in1.name, refpinname='D0', refinstindex=np.array([i, 0]),
                    gridname=rg_m1m2)
         laygen.via(None, np.array([0, 0]), refinstname=ip1.name, refpinname='D0', refinstindex=np.array([i, 0]),
                    gridname=rg_m1m2)
-    laygen.via(None, np.array([0, 1]), refinstname=in1.name, refpinname='D0', refinstindex=np.array([m-1, 0]),
+    laygen.via(None, np.array([0, 0]), refinstname=in1.name, refpinname='D0', refinstindex=np.array([m-1, 0]),
                gridname=rg_m2m3)
     laygen.via(None, np.array([0, 0]), refinstname=ip1.name, refpinname='D0', refinstindex=np.array([m-1, 0]),
                gridname=rg_m2m3)
 
-    ro0 = laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 1]), xy1=np.array([0, 0]), gridname0=rg_m2m3,
+    ro0 = laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m2m3,
                        refinstname0=in1.name, refpinname0='D0', refinstindex0=np.array([m-1, 0]),
                        refinstname1=ip1.name, refpinname1='D0', refinstindex1=np.array([m-1, 0]))
 
