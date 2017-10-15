@@ -30,7 +30,7 @@ files=[
     'laygo/generators/splash/adc_sar_sarsamp_layout_generator_bb.py',
     'laygo/generators/splash/adc_sar_sar_wsamp_schematic_generator_bb.py',
     'laygo/generators/splash/adc_sar_sar_wsamp_layout_generator_bb.py',
-    'laygo/generators/splash/adc_sar_sar_wsamp_lvs.py',
+    #'laygo/generators/splash/adc_sar_sar_wsamp_lvs.py',
     ]
 
 for f in files:
