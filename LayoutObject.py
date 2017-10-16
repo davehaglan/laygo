@@ -447,4 +447,3 @@ class Instance(LayoutObject):
               " xy:" + str(self.xy.tolist()) + " shape:" + str(self.shape.tolist()) +
               " spacing:" + str(self.spacing.tolist()) + " transform:" + str(self.transform))
 
-

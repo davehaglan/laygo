@@ -28,6 +28,7 @@ from . import LayoutIO
 from . import PrimitiveUtil 
 from .LayoutDB import *
 from .LayoutObject import *
+from .LayoutObjectArray import *
 from .BaseLayoutGenerator import *
 from .GridLayoutGenerator import *
 

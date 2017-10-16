@@ -57,6 +57,8 @@ class BaseLayoutGenerator():
 
     db = LayoutDB()
     """laygo.LayoutDB.LayoutDB: layout database"""
+    use_array = False
+    """boolean: True if InstanceArray is used instead of Instance"""
 
     @property
     def res(self):
@@ -206,8 +208,8 @@ class BaseLayoutGenerator():
         """
         return self.db.add_text(name, text, xy, layer)
 
-    def add_inst(self, name, libname, cellname, xy=None, shape=np.array([1, 1]), spacing=np.array([0, 0]),
-                 transform='R0', template=None, xy1=None, pins=None):
+    def add_inst(self, name, libname, cellname, xy=None, shape=None, spacing=np.array([0, 0]),
+                 transform='R0', template=None):
         """
         Add an instance to specified coordinate.
 
@@ -221,8 +223,8 @@ class BaseLayoutGenerator():
             cellname
         xy : np.array([float, float])
             xy coordinate
-        shape : np.array([x0, y0])
-            array shape parameter
+        shape : np.array([x0, y0]) or None
+            array shape parameter. If None, the instance is not considered as array
         spacing : np.array([x0, y0])
             array spacing parameter
         transform : str
@@ -235,7 +237,7 @@ class BaseLayoutGenerator():
         laygo.LayoutObject.Instance
             created Instance object
         """
-        return self.db.add_inst(name, libname, cellname, xy, shape, spacing, transform, template)
+        return self.db.add_inst(name, libname, cellname, xy, shape, spacing, transform, template, use_array=self.use_array)
 
     # access functions
     def get_rect(self, name, libname=None):

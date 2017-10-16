@@ -37,6 +37,25 @@ import numpy as np
 # TODO: path, label support
 
 #aux functions
+def format_float(value, res):
+    """
+    Format float numbers for pretty printing
+
+    Parameters
+    ----------
+    value : float
+        number to be printed
+    res : float
+        resolution
+
+    Returns
+    -------
+    str
+    """
+    precision = int(np.log10(1 / res)) + 1
+    fstr = "%." + str(precision) + "f"
+    return fstr % value
+
 def Mt(transform):
     """
     Get transform matrix

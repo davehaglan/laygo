@@ -41,6 +41,7 @@ if __name__ == '__main__':
         use_phantom = True
     laygen = laygo.GridLayoutGenerator(config_file=lib_path + "laygo_config.yaml")
     laygen.use_phantom = use_phantom
+    laygen.use_array = True # use InstanceArray instead of Instance
 
     # template and grid load
     utemplib = laygen.tech + '_microtemplates_dense'  # device template library name
@@ -62,7 +63,7 @@ if __name__ == '__main__':
     pc = 'pmos4_fast_center_nf2'  # pmos body cellname
     nname = [nb, nc, nb, nb, nc, nb]  # nmos device names
     pname = [pb, pc, pb, pb, pc, pb]  # pmos device names
-    shape = [[i, 1] for i in [1, 2, 1, 1, 2, 1]]  # device shapes
+    shape = [None, [2, 1], None, None, [2, 1], None]  # device array shapes
 
     nd = []  # nmos
     robj = None
@@ -81,30 +82,26 @@ if __name__ == '__main__':
     rg23 = 'route_M2_M3_cmos'
 
     # a
-    for _ng, _pg in zip(nd[1].pins['G0'].elements[:, 0], pd[1].pins['G0'].elements[:, 0]):
-        laygen.route(gridname0=rg12, refobj0=_ng, refobj1=_pg, via0=[0, 0])
-    ra = laygen.route(gridname0=rg12, refobj0=nd[1].pins['G0'].elements[0, 0], refobj1=nd[1].pins['G0'].elements[-1, 0])
+    laygen.route(gridname0=rg12, refobj0=nd[1].pins['G0'], refobj1=pd[1].pins['G0'], via0=[0, 0])
+    ra = laygen.route(gridname0=rg12, refobj0=nd[1].pins['G0'][0, 0], refobj1=nd[1].pins['G0'][-1, 0])
     # b
-    for _ng, _pg in zip(nd[4].pins['G0'].elements[:, 0], pd[4].pins['G0'].elements[:, 0]):
-        laygen.route(gridname0=rg12, refobj0=_ng, refobj1=_pg, via1=[0, 0])
-    rb = laygen.route(gridname0=rg12, refobj0=pd[4].pins['G0'].elements[0, 0], refobj1=pd[4].pins['G0'].elements[-1, 0])
+    laygen.route(gridname0=rg12, refobj0=nd[4].pins['G0'], refobj1=pd[4].pins['G0'], via1=[0, 0])
+    rb = laygen.route(gridname0=rg12, refobj0=pd[4].pins['G0'][0, 0], refobj1=pd[4].pins['G0'][-1, 0])
     # internal connections
-    laygen.route(xy0=[0, 1], xy1=[0, 1], gridname0=rg12, refobj0=nd[1].pins['D0'].elements[0, 0],
-                 refobj1=nd[4].pins['S1'].elements[-1, 0])
-    for _p in np.concatenate(
-            (nd[1].pins['D0'].elements[:, 0], nd[4].pins['S0'].elements[:, 0], nd[4].pins['S1'].elements[:, 0])):
-        v = laygen.via(xy=[0, 1], refobj=_p, gridname=rg12)
+    ri = laygen.route(xy0=[0, 1], xy1=[0, 1], gridname0=rg12, refobj0=nd[1].pins['D0'][0, 0],
+                      refobj1=nd[4].pins['S1'][-1, 0])
+    for _p in np.concatenate((nd[1].pins['D0'], nd[4].pins['S0'], nd[4].pins['S1'])):
+        laygen.via(xy=[0, 0], refobj=_p, gridname=rg12, overlay=ri)
     # output
-    laygen.route(gridname0=rg12, refobj0=nd[4].pins['D0'].elements[0, 0], refobj1=nd[4].pins['D0'].elements[-1, 0])
-    laygen.route(gridname0=rg12, refobj0=pd[1].pins['D0'].elements[0, 0], refobj1=pd[4].pins['D0'].elements[-1, 0])
-    for _p in np.concatenate(
-            [nd[4].pins['D0'].elements[:, 0], pd[1].pins['D0'].elements[:, 0], pd[4].pins['D0'].elements[:, 0]]):
-        v = laygen.via(refobj=_p, gridname=rg12)
-    ro = laygen.route(gridname0=rg23, refobj0=nd[4].pins['D0'].elements[-1, 0],
-                      refobj1=pd[4].pins['D0'].elements[-1, 0],
+    ron = laygen.route(gridname0=rg12, refobj0=nd[4].pins['D0'][0, 0], refobj1=nd[4].pins['D0'][-1, 0])
+    rop = laygen.route(gridname0=rg12, refobj0=pd[1].pins['D0'][0, 0], refobj1=pd[4].pins['D0'][-1, 0])
+    laygen.via(refobj=nd[4].pins['D0'], gridname=rg12, overlay=ron)
+    laygen.via(refobj=pd[1].pins['D0'], gridname=rg12, overlay=rop)
+    laygen.via(refobj=pd[4].pins['D0'], gridname=rg12, overlay=rop)
+    ro = laygen.route(gridname0=rg23, refobj0=nd[4].pins['D0'][-1, 0], refobj1=pd[4].pins['D0'][-1, 0],
                       via0=[0, 0], via1=[0, 0])
     # power and ground route
-    for dev in np.concatenate((nd[1].elements[:, 0], pd[1].elements[:, 0], pd[4].elements[:, 0])):
+    for dev in [nd[1], pd[1], pd[4]]:
         for pn in ['S0', 'S1']:
             laygen.route(gridname0=rg12, refobj0=dev.pins[pn], refobj1=dev.bottom, direction='y', via1=[0, 0])
     # power and groud rails
@@ -116,7 +113,7 @@ if __name__ == '__main__':
         laygen.pin(name=pn, gridname=pg, refobj=pr)
 
     # display ##########################################################################################################
-    laygen.display()
+    #laygen.display()
 
     # export ###########################################################################################################
     # bag export, if bag does not exist, gds export

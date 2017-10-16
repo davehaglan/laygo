@@ -33,9 +33,10 @@ __email__ = "jdhan@eecs.berkeley.edu"
 __status__ = "Prototype"
 
 from .LayoutObject import *
+from .LayoutObjectArray import *
 from math import log10
 import numpy as np
-import yaml
+#import yaml
 import logging
 
 class LayoutDB(dict):
@@ -293,8 +294,8 @@ class LayoutDB(dict):
                       ', text:' + t.text + ', xy:' + str(np.round(t.xy, self.res_exp).tolist()))
         return t
 
-    def add_inst(self, name, libname, cellname, xy=np.array([0, 0]), shape=np.array([1, 1]), spacing=np.array([0, 0]),
-                 transform='R0', template=None, xy1=None, pins=None):
+    def add_inst(self, name, libname, cellname, xy=np.array([0, 0]), shape=None, spacing=np.array([0, 0]),
+                 transform='R0', template=None, use_array=False):
         """
         Add an instance to the specified library and cell (_plib, _pstr)
 
@@ -316,6 +317,8 @@ class LayoutDB(dict):
             transform parameter
         template : laygo.TemplateObject.TemplateObject
             template handle
+        use_array : boolean
+            temporarily used. If true, InstanceArray is used instead of Instance (introduced for backward compatibility.)
 
         Returns
         -------
@@ -324,11 +327,26 @@ class LayoutDB(dict):
         """
         if name == None: name = self.genid(type='instance', pfix='I')
         xy = np.asarray(xy)
-        shape = np.asarray(shape)
+        if shape == None:
+            _shape = np.array([1, 1])
+        else:
+            _shape = np.asarray(shape)
         spacing = np.asarray(spacing)
         if isinstance(xy, list): xy = np.array(xy)
-        i = Instance(name=name, res=self.res, xy=xy, libname=libname, cellname=cellname, shape=shape,
-                     spacing=spacing, transform=transform, template=template)
+        if use_array==False or shape==None:
+            i = Instance(name=name, res=self.res, xy=xy, libname=libname, cellname=cellname, shape=_shape,
+                         spacing=spacing, transform=transform, template=template)
+        else:
+            i_list = []
+            for idx_x in range(_shape[0]):
+                i_row = []
+                for idx_y in range(_shape[1]):
+                    xy = xy + np.dot(spacing * np.array([idx_x, idx_y]), ut.Mt(transform).T)
+                    i_row += [Instance(name=name, res=self.res, xy=xy, libname=libname, cellname=cellname,
+                                       transform=transform, template=template)]
+                i_list += [i_row]
+            #print(shape, np.array(i_list))
+            i = InstanceArray(input_array=np.array(i_list), name=name)
         self[self.plib][self.pcell]['instances'][name] = i
         logging.debug('Instance added - Name:' + name + ', lib:' + libname +
                       ', cell:' + cellname + ', xy:' + str(np.round(i.xy, self.res_exp).tolist()))
