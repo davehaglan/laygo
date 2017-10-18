@@ -31,70 +31,80 @@ __status__ = "Prototype"
 if __name__ == '__main__':
     import laygo
     import numpy as np
-    #initialize
+
+    # initialize #######################################################################################################
     laygen = laygo.GridLayoutGenerator(config_file="./labs/laygo_config.yaml")
     laygen.use_phantom = True  # for abstract generation. False when generating a real layout.
-    # template and grid load
+    laygen.use_array = True  # use InstanceArray instead of Instance
+    # load template and grid
     utemplib = laygen.tech + '_microtemplates_dense'  # device template library name
     laygen.load_template(filename='./labs/' + utemplib + '_templates.yaml', libname=utemplib)
     laygen.load_grid(filename='./labs/' + utemplib + '_grids.yaml', libname=utemplib)
     laygen.templates.sel_library(utemplib)
     laygen.grids.sel_library(utemplib)
 
-
     # library & cell creation
     laygen.add_library('laygo_working')
     laygen.add_cell('nand_demo')
 
-    # grid variables
-    pg = 'placement_basic'
-    rg12 = 'route_M1_M2_cmos'
+    # placement ########################################################################################################
+    # placement parameters
+    pg = 'placement_basic'  # placement grid
+
+    nd = [] # nmos
+    nd += [laygen.relplace(cellname='nmos4_fast_boundary', gridname=pg, refobj=None, shape=None)]
+    nd += [laygen.relplace(cellname='nmos4_fast_center_nf2', gridname=pg, refobj=nd[-1].right, shape=[2, 1])]
+    nd += [laygen.relplace(cellname='nmos4_fast_boundary', gridname=pg, refobj=nd[-1].right, shape=None)]
+    nd += [laygen.relplace(cellname='nmos4_fast_boundary', gridname=pg, refobj=nd[-1].right, shape=None)]
+    nd += [laygen.relplace(cellname='nmos4_fast_center_nf2', gridname=pg, refobj=nd[-1].right, shape=[2, 1])]
+    nd += [laygen.relplace(cellname='nmos4_fast_boundary', gridname=pg, refobj=nd[-1].right, shape=None)]
+    pd = [] # pmos
+    pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=nd[0].top, shape=None, transform='MX')]
+    pd += [laygen.relplace(cellname='pmos4_fast_center_nf2', gridname=pg, refobj=pd[-1].right, shape=[2, 1], transform='MX')]
+    pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=pd[-1].right, shape=None, transform='MX')]
+    pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=pd[-1].right, shape=None, transform='MX')]
+    pd += [laygen.relplace(cellname='pmos4_fast_center_nf2', gridname=pg, refobj=pd[-1].right, shape=[2, 1], transform='MX')]
+    pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=pd[-1].right, shape=None, transform='MX')]
+
+    # route ############################################################################################################
+    # route parameters
+    rg12 = 'route_M1_M2_cmos'  # grids
     rg23 = 'route_M2_M3_cmos'
 
-    #placements
-    nr = ['nmos4_fast_boundary', 'nmos4_fast_center_nf2', 'nmos4_fast_boundary',
-          'nmos4_fast_boundary', 'nmos4_fast_center_nf2', 'nmos4_fast_boundary']
-    pr = ['pmos4_fast_boundary', 'pmos4_fast_center_nf2', 'pmos4_fast_boundary',
-          'pmos4_fast_boundary', 'pmos4_fast_center_nf2', 'pmos4_fast_boundary']
-    pd = ['top']+['right']*5
-    nrow = laygen.relplace(templatename=nr, gridname=pg)
-    prow = laygen.relplace(templatename=pr, gridname=pg, refobj=nrow[0], direction=pd, transform='MX')
-    #routes
-    #   a
-    laygen.route(xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=prow[4].pins['G0'], refobj1=nrow[4].pins['G0'], via0=[0, 0])
-    laygen.route(xy0=[-2, 0], xy1=[0, 0], gridname0=rg12, refobj0=prow[4].pins['G0'], refobj1=prow[4].pins['G0'])
-    ra0 = laygen.route(xy0=[0, 0], xy1=[0, 2], gridname0=rg23, refobj0=prow[4].pins['G0'], refobj1=prow[4].pins['G0'],
-                       via0=[0, 0], endstyle0="extend", endstyle1="extend")
-    #   b
-    laygen.route(xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=nrow[1].pins['G0'], refobj1=prow[1].pins['G0'], via0=[0, 0])
-    laygen.route(xy0=[0, 0], xy1=[2, 0], gridname0=rg12, refobj0=nrow[1].pins['G0'], refobj1=nrow[1].pins['G0'])
-    rb0 = laygen.route(xy0=[0, 0], xy1=[0, 2], gridname0=rg23, refobj0=nrow[1].pins['G0'], refobj1=nrow[1].pins['G0'],
-                       via0=[0, 0], endstyle0="extend", endstyle1="extend")
-    #   internal
-    laygen.route(xy0=[0, 1], xy1=[0, 1], gridname0=rg12, refobj0=nrow[1].pins['D0'], refobj1=nrow[4].pins['S1'],
-                 via0=[0, 0], via1=[[-2, 0], [0, 0]])
-    #   output
-    laygen.route(xy0=[0, 1], xy1=[1, 1], gridname0=rg12, refobj0=prow[1].pins['D0'], refobj1=prow[4].pins['D0'],
-                 via0=[0, 0], via1=[-1, 0])
-    laygen.route(xy0=[-1, 0], xy1=[1, 0], gridname0=rg12, refobj0=nrow[4].pins['D0'], refobj1=nrow[4].pins['D0'], via0=[1, 0])
-    ro0 = laygen.route(xy0=[1, 0], xy1=[1, 1], gridname0=rg23, refobj0=nrow[4].pins['D0'], via0=[0, 0],
-                       refobj1=prow[4].pins['D0'], via1=[0, 0])
-    #   power and ground route - vertical
-    for d in [nrow[1], prow[1], prow[4]]:
-        for s in ['S0', 'S1']:
-            laygen.route(None, gridname0=rg12, refobj0=d.pins[s], refobj1=d, via1=[0, 0], direction='y')
-    #   power and ground route - horizontal
-    xy = laygen.get_template_xy(name=nrow[-1].cellname, gridname=rg12) * np.array([1, 0])
-    rvdd=laygen.route(None, xy0=[0, 0], xy1=xy, gridname0=rg12, refobj0=prow[0], refobj1=prow[-1])
-    rvss=laygen.route(None, xy0=[0, 0], xy1=xy, gridname0=rg12, refobj0=nrow[0], refobj1=nrow[-1])
+    # a
+    laygen.route(gridname0=rg12, refobj0=nd[1].pins['G0'], refobj1=pd[1].pins['G0'], via0=[0, 0])
+    ra = laygen.route(gridname0=rg12, refobj0=nd[1].pins['G0'][0, 0], refobj1=nd[1].pins['G0'][-1, 0])
+    # b
+    laygen.route(gridname0=rg12, refobj0=nd[4].pins['G0'], refobj1=pd[4].pins['G0'], via1=[0, 0])
+    rb = laygen.route(gridname0=rg12, refobj0=pd[4].pins['G0'][0, 0], refobj1=pd[4].pins['G0'][-1, 0])
+    # internal connections
+    ri = laygen.route(xy0=[0, 1], xy1=[0, 1], gridname0=rg12, refobj0=nd[1].pins['D0'][0, 0],
+                      refobj1=nd[4].pins['S1'][-1, 0])
+    for _p in np.concatenate((nd[1].pins['D0'], nd[4].pins['S0'], nd[4].pins['S1'])):
+        laygen.via(xy=[0, 0], refobj=_p, gridname=rg12, overlay=ri)
+    # output
+    ron = laygen.route(gridname0=rg12, refobj0=nd[4].pins['D0'][0, 0], refobj1=nd[4].pins['D0'][-1, 0])
+    rop = laygen.route(gridname0=rg12, refobj0=pd[1].pins['D0'][0, 0], refobj1=pd[4].pins['D0'][-1, 0])
+    laygen.via(refobj=nd[4].pins['D0'], gridname=rg12, overlay=ron)
+    laygen.via(refobj=pd[1].pins['D0'], gridname=rg12, overlay=rop)
+    laygen.via(refobj=pd[4].pins['D0'], gridname=rg12, overlay=rop)
+    ro = laygen.route(gridname0=rg23, refobj0=nd[4].pins['D0'][-1, 0], refobj1=pd[4].pins['D0'][-1, 0],
+                      via0=[0, 0], via1=[0, 0])
+    # power and ground route
+    for dev in [nd[1], pd[1], pd[4]]:
+        for pn in ['S0', 'S1']:
+            laygen.route(gridname0=rg12, refobj0=dev.pins[pn], refobj1=dev.bottom, direction='y', via1=[0, 0])
+    # power and groud rails
+    rvdd = laygen.route(gridname0=rg12, refobj0=pd[0].bottom_left, refobj1=pd[5].bottom_right)
+    rvss = laygen.route(gridname0=rg12, refobj0=nd[0].bottom_left, refobj1=nd[5].bottom_right)
 
-    #pins
-    for pn, rp in zip(['A', 'B', 'O'], [ra0, rb0, ro0]):
-        laygen.pin(name=pn, layer=laygen.layers['pin'][3], refobj=rp, gridname=rg23)
-    for pn, rp in zip(['VDD', 'VSS'], [rvdd, rvss]):
-        laygen.pin(name=pn, layer=laygen.layers['pin'][2], refobj=rp, gridname=rg12)
+    # pin ##############################################################################################################
+    for pn, pg, pr in zip(['A', 'B', 'O', 'VDD', 'VSS'], [rg12, rg12, rg23, rg12, rg12], [ra, rb, ro, rvdd, rvss]):
+        laygen.pin(name=pn, gridname=pg, refobj=pr)
 
+    # display ##########################################################################################################
     laygen.display()
-    # export
+
+    # export ###########################################################################################################
     laygen.export_GDS('output.gds', cellname='nand_demo', layermapfile="./labs/laygo_faketech.layermap")
 

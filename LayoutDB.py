@@ -325,15 +325,15 @@ class LayoutDB(dict):
         laygo.LayoutObject.Instance
             instance object
         """
-        if name == None: name = self.genid(type='instance', pfix='I')
+        if name is None: name = self.genid(type='instance', pfix='I')
         xy = np.asarray(xy)
-        if shape == None:
+        if shape is None:
             _shape = np.array([1, 1])
         else:
             _shape = np.asarray(shape)
         spacing = np.asarray(spacing)
         if isinstance(xy, list): xy = np.array(xy)
-        if use_array==False or shape==None:
+        if (use_array is False) or (shape is None):
             i = Instance(name=name, res=self.res, xy=xy, libname=libname, cellname=cellname, shape=_shape,
                          spacing=spacing, transform=transform, template=template)
         else:
