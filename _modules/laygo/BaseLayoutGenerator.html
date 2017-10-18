@@ -249,6 +249,8 @@
 
     <span class="n">db</span> <span class="o">=</span> <span class="n">LayoutDB</span><span class="p">()</span>
     <span class="sd">&quot;&quot;&quot;laygo.LayoutDB.LayoutDB: layout database&quot;&quot;&quot;</span>
+    <span class="n">use_array</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="sd">&quot;&quot;&quot;boolean: True if InstanceArray is used instead of Instance&quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">res</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -398,8 +400,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseLayoutGenerator.add_inst"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_inst">[docs]</a>    <span class="k">def</span> <span class="nf">add_inst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="p">,</span> <span class="n">cellname</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">spacing</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
-                 <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;R0&#39;</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pins</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseLayoutGenerator.add_inst"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_inst">[docs]</a>    <span class="k">def</span> <span class="nf">add_inst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="p">,</span> <span class="n">cellname</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+                 <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;R0&#39;</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add an instance to specified coordinate.</span>
 
@@ -413,8 +415,8 @@
 <span class="sd">            cellname</span>
 <span class="sd">        xy : np.array([float, float])</span>
 <span class="sd">            xy coordinate</span>
-<span class="sd">        shape : np.array([x0, y0])</span>
-<span class="sd">            array shape parameter</span>
+<span class="sd">        shape : np.array([x0, y0]) or None</span>
+<span class="sd">            array shape parameter. If None, the instance is not considered as array</span>
 <span class="sd">        spacing : np.array([x0, y0])</span>
 <span class="sd">            array spacing parameter</span>
 <span class="sd">        transform : str</span>
@@ -427,7 +429,7 @@
 <span class="sd">        laygo.LayoutObject.Instance</span>
 <span class="sd">            created Instance object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">add_inst</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="p">,</span> <span class="n">cellname</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">add_inst</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="p">,</span> <span class="n">cellname</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">use_array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_array</span><span class="p">)</span></div>
 
     <span class="c1"># access functions</span>
 <div class="viewcode-block" id="BaseLayoutGenerator.get_rect"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.get_rect">[docs]</a>    <span class="k">def</span> <span class="nf">get_rect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>

@@ -352,6 +352,8 @@
     <span class="sd">&quot;&quot;&quot;str: net name&quot;&quot;&quot;</span>
     <span class="n">master</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="sd">&quot;&quot;&quot;LayoutObject.Instance: master instance, only for instance pins&quot;&quot;&quot;</span>
+    <span class="n">elements</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="sd">&quot;&quot;&quot;np.array([[Pin]]): array elements&quot;&quot;&quot;</span>
 
     <span class="n">_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;np.array([[int, int], [int, int]]): Object xy coordinate (normalized to res)&quot;&quot;&quot;</span>
@@ -435,39 +437,71 @@
               <span class="s2">&quot; layer:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; xy:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xy</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span></div></div>
 
 
+<div class="viewcode-block" id="Pointer"><a class="viewcode-back" href="../../api/laygo.html#laygo.LayoutObject.Pointer">[docs]</a><span class="k">class</span> <span class="nc">Pointer</span><span class="p">(</span><span class="n">LayoutObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Pointer class attached to other LayoutObjects&quot;&quot;&quot;</span>
+    <span class="n">master</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="sd">&quot;&quot;&quot;LayoutObject.Instance: master instance that the tag is attached&quot;&quot;&quot;</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;boundary&#39;</span> <span class="c1">#Pointer type</span>
+    <span class="c1">#boundary : boundary pointer of instances, name will be used for direction in relplace, xy will be used in route</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;direction&#39;</span><span class="p">,</span> <span class="n">master</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            object name</span>
+<span class="sd">        res : float</span>
+<span class="sd">            grid resolution</span>
+<span class="sd">        xy : np.array([x0, y0]), optional</span>
+<span class="sd">            xy coorinates</span>
+<span class="sd">        master : LayoutObject.Instance</span>
+<span class="sd">            master instance handle</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master</span> <span class="o">=</span> <span class="n">master</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span>
+        <span class="n">LayoutObject</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="n">xy</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="Instance"><a class="viewcode-back" href="../../api/laygo.html#laygo.LayoutObject.Instance">[docs]</a><span class="k">class</span> <span class="nc">Instance</span><span class="p">(</span><span class="n">LayoutObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Instance object class&quot;&quot;&quot;</span>
 
     <span class="n">libname</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="sd">&quot;&quot;&quot;str: library name&quot;&quot;&quot;</span>
-
     <span class="n">cellname</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="sd">&quot;&quot;&quot;str: cell name&quot;&quot;&quot;</span>
-
     <span class="n">shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
     <span class="sd">&quot;&quot;&quot;np.array([int, int]): array shape&quot;&quot;&quot;</span>
-
     <span class="n">_spacing</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;Array spacing (actually this is a pitch, but I just followed GDS&#39;s notations)&quot;&quot;&quot;</span>
-
 <div class="viewcode-block" id="Instance.get_spacing"><a class="viewcode-back" href="../../api/laygo.html#laygo.LayoutObject.Instance.get_spacing">[docs]</a>    <span class="k">def</span> <span class="nf">get_spacing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">res</span></div>
 <div class="viewcode-block" id="Instance.set_spacing"><a class="viewcode-back" href="../../api/laygo.html#laygo.LayoutObject.Instance.set_spacing">[docs]</a>    <span class="k">def</span> <span class="nf">set_spacing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">value</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span></div>
     <span class="n">spacing</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_spacing</span><span class="p">,</span> <span class="n">set_spacing</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;Array spacing (actually this is a pitch, but I just followed GDS&#39;s notations)&quot;&quot;&quot;</span>
-
     <span class="n">transform</span> <span class="o">=</span> <span class="s1">&#39;R0&#39;</span>
     <span class="sd">&quot;&quot;&quot;str: transform parameter&quot;&quot;&quot;</span>
-
     <span class="n">template</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="sd">&quot;&quot;&quot;str: original template name&quot;&quot;&quot;</span>
-
+    <span class="sd">&quot;&quot;&quot;TemplateObject.TemplateObject: original template object&quot;&quot;&quot;</span>
     <span class="n">pins</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="sd">&quot;&quot;&quot;dict(): pin dictionary&quot;&quot;&quot;</span>
+    <span class="n">elements</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="sd">&quot;&quot;&quot;np.array([[Instance]]): array elements&quot;&quot;&quot;</span>
+    <span class="n">pointers</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="sd">&quot;&quot;&quot;dict(): pointer dictionary&quot;&quot;&quot;</span>
+    <span class="c1">#frequenctly used pointers</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">top</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">bottom</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">bottom_left</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">bottom_right</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">top_left</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">top_right</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">xy0</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">xy</span>
-
     <span class="sd">&quot;&quot;&quot;np.array([float, float]): Object location&quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
@@ -476,7 +510,6 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">xy</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">xy</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ut</span><span class="o">.</span><span class="n">Mt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
-
     <span class="sd">&quot;&quot;&quot;np.array([float, float]): the opposite corner of xy (or xy0)&quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
@@ -564,6 +597,24 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">elements</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="bp">self</span><span class="p">]])</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">template</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># crate pointers</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pointers</span><span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pointer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;boundary&#39;</span><span class="p">,</span> <span class="n">master</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pointers</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pointer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;boundary&#39;</span><span class="p">,</span> <span class="n">master</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pointers</span><span class="p">[</span><span class="s1">&#39;bottom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pointer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;boundary&#39;</span><span class="p">,</span> <span class="n">master</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pointers</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pointer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;boundary&#39;</span><span class="p">,</span> <span class="n">master</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pointers</span><span class="p">[</span><span class="s1">&#39;bottom_left&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pointer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;bottom_left&#39;</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;boundary&#39;</span><span class="p">,</span> <span class="n">master</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pointers</span><span class="p">[</span><span class="s1">&#39;bottom_right&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pointer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;bottom_right&#39;</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;boundary&#39;</span><span class="p">,</span> <span class="n">master</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pointers</span><span class="p">[</span><span class="s1">&#39;top_left&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pointer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;top_left&#39;</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;boundary&#39;</span><span class="p">,</span> <span class="n">master</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pointers</span><span class="p">[</span><span class="s1">&#39;top_right&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Pointer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;top_right&#39;</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;boundary&#39;</span><span class="p">,</span> <span class="n">master</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointers</span><span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointers</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointers</span><span class="p">[</span><span class="s1">&#39;bottom&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointers</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bottom_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointers</span><span class="p">[</span><span class="s1">&#39;bottom_left&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointers</span><span class="p">[</span><span class="s1">&#39;bottom_right&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointers</span><span class="p">[</span><span class="s1">&#39;top_left&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointers</span><span class="p">[</span><span class="s1">&#39;top_right&#39;</span><span class="p">]</span>
+
             <span class="c1"># create pin dictionary</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pins</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">pn</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">pins</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -587,7 +638,6 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  [Instance]&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; libname:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">libname</span> <span class="o">+</span> <span class="s2">&quot; cellname:&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cellname</span> <span class="o">+</span>
               <span class="s2">&quot; xy:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xy</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot; shape:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="o">+</span>
               <span class="s2">&quot; spacing:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spacing</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot; transform:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">))</span></div></div>
-
 
 </pre></div>
 

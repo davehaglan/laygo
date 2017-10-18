@@ -226,6 +226,12 @@ grids.</p>
 </tbody>
 </table>
 <dl class="attribute">
+<dt id="laygo.BaseLayoutGenerator.BaseLayoutGenerator.use_array">
+<code class="descname">use_array</code><em class="property"> = False</em><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator.use_array" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>boolean</em> &#8211; True if InstanceArray is used instead of Instance</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="laygo.BaseLayoutGenerator.BaseLayoutGenerator.res">
 <code class="descname">res</code><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator.res" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>float</em> &#8211; physical resolution</p>
@@ -233,7 +239,7 @@ grids.</p>
 
 <dl class="attribute">
 <dt id="laygo.BaseLayoutGenerator.BaseLayoutGenerator.db">
-<code class="descname">db</code><em class="property"> = &lt;laygo.LayoutDB.LayoutDB object&gt;</em><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator.db" title="Permalink to this definition">¶</a></dt>
+<code class="descname">db</code><em class="property"> = {}</em><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator.db" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>laygo.LayoutDB.LayoutDB</em> &#8211; layout database</p>
 </dd></dl>
 
@@ -399,7 +405,7 @@ grids.</p>
 
 <dl class="method">
 <dt id="laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_inst">
-<code class="descname">add_inst</code><span class="sig-paren">(</span><em>name</em>, <em>libname</em>, <em>cellname</em>, <em>xy=None</em>, <em>shape=array([1</em>, <em>1])</em>, <em>spacing=array([0</em>, <em>0])</em>, <em>transform='R0'</em>, <em>template=None</em>, <em>xy1=None</em>, <em>pins=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/BaseLayoutGenerator.html#BaseLayoutGenerator.add_inst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_inst" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_inst</code><span class="sig-paren">(</span><em>name</em>, <em>libname</em>, <em>cellname</em>, <em>xy=None</em>, <em>shape=None</em>, <em>spacing=array([0</em>, <em>0])</em>, <em>transform='R0'</em>, <em>template=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/BaseLayoutGenerator.html#BaseLayoutGenerator.add_inst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_inst" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an instance to specified coordinate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -410,7 +416,7 @@ grids.</p>
 <li><strong>libname</strong> (<em>str</em>) &#8211; cell library name (not output library name)</li>
 <li><strong>cellname</strong> (<em>str</em>) &#8211; cellname</li>
 <li><strong>xy</strong> (<em>np.array([float, float])</em>) &#8211; xy coordinate</li>
-<li><strong>shape</strong> (<em>np.array([x0, y0])</em>) &#8211; array shape parameter</li>
+<li><strong>shape</strong> (<em>np.array([x0, y0]) or None</em>) &#8211; array shape parameter. If None, the instance is not considered as array</li>
 <li><strong>spacing</strong> (<em>np.array([x0, y0])</em>) &#8211; array spacing parameter</li>
 <li><strong>transform</strong> (<em>str</em>) &#8211; transform parameter</li>
 <li><strong>template</strong> (<a class="reference internal" href="#laygo.TemplateObject.TemplateObject" title="laygo.TemplateObject.TemplateObject"><em>laygo.TemplateObject.TemplateObject</em></a>) &#8211; template handle</li>
@@ -893,7 +899,7 @@ ex) [[x0, y0], [x1, x1], ..., [xn-1, yn-1], [x0, y0]]</li>
 <p>Base class for GDSIO objects</p>
 <dl class="attribute">
 <dt id="laygo.GDSIO.Element.possible_transform_parameters">
-<code class="descname">possible_transform_parameters</code><em class="property"> = {'R90': (0, 90), 'MY': (32768, 180), 'MX': (32768, 0), 'R180': (0, 180), 'R270': (0, 270), 'R0': (None, None)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="descname">possible_transform_parameters</code><em class="property"> = {'R90': (0, 90), 'R270': (0, 270), 'R0': (None, None), 'R180': (0, 180), 'MY': (32768, 180), 'MX': (32768, 0)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; transform parameter dictionary</p>
 </dd></dl>
 
@@ -1044,7 +1050,7 @@ ex) [[x0, y0], [x1, x1], ..., [xn-1, yn-1], [x0, y0]]</li>
 <dl class="class">
 <dt id="laygo.GridDB.GridDB">
 <em class="property">class </em><code class="descclassname">laygo.GridDB.</code><code class="descname">GridDB</code><a class="reference internal" href="../_modules/laygo/GridDB.html#GridDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridDB.GridDB" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
 <p>layout grid database management class</p>
 <dl class="attribute">
 <dt id="laygo.GridDB.GridDB.plib">
@@ -1581,8 +1587,8 @@ grids.</p>
 
 <dl class="attribute">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.layers">
-<code class="descname">layers</code><em class="property"> = {'metal': [], 'pin': [], 'text': [], 'prbnd': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>dict</em> &#8211; layer dictionary. metal, pin, text, prbnd are used as keys</p>
+<code class="descname">layers</code><em class="property"> = {'text': [], 'metal': [], 'pin': [], 'prbnd': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>dict</em> &#8211; layer dictionary. Keys are metal, pin, text, prbnd</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -1597,33 +1603,9 @@ grids.</p>
 <dd><p><em>laygo.GridDB.GridDB</em> &#8211; grid database</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.physical_res">
-<code class="descname">physical_res</code><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.physical_res" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>float</em> &#8211; physical resolution</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.sort_rect_xy">
-<code class="descname">sort_rect_xy</code><span class="sig-paren">(</span><em>xy</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.sort_rect_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.sort_rect_xy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sort xy coordinates. ex) sort_rect_xy([[4, 3], [2, 1]])=np.array([[2, 1], [4, 3]])</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>xy</strong> (<em>np.array([[int, int], [int, int]]) or</em>) &#8211; point matrix. List can be also used.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">sorted matrix</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.array([[int, int], [int, int]])</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="method">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.place">
-<code class="descname">place</code><span class="sig-paren">(</span><em>name</em>, <em>templatename</em>, <em>gridname</em>, <em>xy</em>, <em>template_libname=None</em>, <em>shape=array([1</em>, <em>1])</em>, <em>spacing=None</em>, <em>offset=array([0</em>, <em>0])</em>, <em>transform='R0'</em>, <em>annotate_text=None</em>, <em>libname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.place"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.place" title="Permalink to this definition">¶</a></dt>
+<code class="descname">place</code><span class="sig-paren">(</span><em>name</em>, <em>templatename</em>, <em>gridname</em>, <em>xy</em>, <em>template_libname=None</em>, <em>shape=array([1</em>, <em>1])</em>, <em>spacing=None</em>, <em>offset=array([0</em>, <em>0])</em>, <em>transform='R0'</em>, <em>annotate_text=None</em>, <em>libname=None</em>, <em>use_array=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.place"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.place" title="Permalink to this definition">¶</a></dt>
 <dd><p>Place an instance on abstract grid. Use relplace instead</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1635,8 +1617,9 @@ grids.</p>
 <li><strong>gridname</strong> (<em>str</em>) &#8211; Grid name for the instance placement.</li>
 <li><strong>xy</strong> (<em>np.array([int, int]) or [int, int]</em>) &#8211; Placement coordinate on the grid, specified by gridname.</li>
 <li><strong>libname</strong> (<em>str, optional</em>) &#8211; Template library name. If not specified, self.templates.plib is used.</li>
-<li><strong>shape</strong> (<em>np.array([int, int]), optional</em>) &#8211; Array dimension of the instance. If not specified, [1, 1] is used.</li>
+<li><strong>shape</strong> (<em>np.array([x0, y0]) or None, optional</em>) &#8211; array shape parameter. If None, the instance is not considered as array. Default is None</li>
 <li><strong>transform</strong> (<em>str ('R0', 'MX', 'MY'), optional</em>) &#8211; Transform parameter</li>
+<li><strong>use_array</strong> (<em>boolean</em>) &#8211; temporarily used. If true, InstanceArray is used instead of Instance (introduced for backward compatibility.)</li>
 </ul>
 </td>
 </tr>
@@ -1661,9 +1644,10 @@ grids.</p>
 
 <dl class="method">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.relplace">
-<code class="descname">relplace</code><span class="sig-paren">(</span><em>name=None</em>, <em>templatename=None</em>, <em>gridname=None</em>, <em>refinstname=None</em>, <em>direction='right'</em>, <em>xy=array([0</em>, <em>0])</em>, <em>offset=array([0</em>, <em>0])</em>, <em>template_libname=None</em>, <em>shape=array([1</em>, <em>1])</em>, <em>spacing=None</em>, <em>transform='R0'</em>, <em>refobj=None</em>, <em>libname=None</em>, <em>cellname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.relplace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.relplace" title="Permalink to this definition">¶</a></dt>
+<code class="descname">relplace</code><span class="sig-paren">(</span><em>name=None</em>, <em>templatename=None</em>, <em>gridname=None</em>, <em>refinstname=None</em>, <em>direction='right'</em>, <em>xy=array([0</em>, <em>0])</em>, <em>offset=array([0</em>, <em>0])</em>, <em>template_libname=None</em>, <em>shape=None</em>, <em>spacing=None</em>, <em>transform='R0'</em>, <em>refobj=None</em>, <em>libname=None</em>, <em>cellname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.relplace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.relplace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Place an instance on abstract grid, bound from a reference object. If reference object is not specified,
-[0, 0]+offset is used as the reference point.</p>
+[0, 0]+offset is used as the reference point.
+Equation = xy+refobj_xy+0.5*(Mt&#64;refobj_size+Md&#64;(refobj_size+inst_size)-<a class="reference external" href="mailto:Mti&#37;&#52;&#48;inst_size">Mti<span>&#64;</span>inst_size</a>).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1676,7 +1660,7 @@ grids.</p>
 <li><strong>refobj</strong> (<em>LayoutObject.Instance, optional</em>) &#8211; Reference instance handle, if None, refinstname is used. Will be extended to support other objects.</li>
 <li><strong>direction</strong> (<em>str, optional</em>) &#8211; Direction of placement, bound from refobj. For example, if the instance will be place on top of refobj,
 direction=&#8217;top&#8217; is used</li>
-<li><strong>shape</strong> (<em>np.array([int, int]) or [int, int], optional</em>) &#8211; Array dimension of the instance. If not specified, [1, 1] is used.</li>
+<li><strong>shape</strong> (<em>np.array([x0, y0]) or None, optional</em>) &#8211; array shape parameter. If None, the instance is not considered as array. Default is None</li>
 <li><strong>transform</strong> (<em>str ('R0', 'MX', 'MY')</em>) &#8211; Transform parameter. &#8216;R0&#8217; is used by default.</li>
 <li><strong>libname</strong> (<em>str, optional</em>) &#8211; Template library name. If not specified, self.templates.plib is used.</li>
 </ul>
@@ -1947,16 +1931,6 @@ ex) if xy0 = [1, 2], xy1 = [1, 5], via1 = [0, 2] then a via will be placed at [1
 </dd></dl>
 
 <dl class="method">
-<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.annotate_instance">
-<code class="descname">annotate_instance</code><span class="sig-paren">(</span><em>name</em>, <em>annotation</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.annotate_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.annotate_instance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.annotate_route">
-<code class="descname">annotate_route</code><span class="sig-paren">(</span><em>name</em>, <em>annotation</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.annotate_route"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.annotate_route" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.pin">
 <code class="descname">pin</code><span class="sig-paren">(</span><em>name</em>, <em>layer=None</em>, <em>xy=None</em>, <em>gridname=None</em>, <em>netname=None</em>, <em>base_layer=None</em>, <em>refobj=None</em>, <em>xy0=array([0</em>, <em>0])</em>, <em>xy1=array([0</em>, <em>0])</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.pin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.pin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pin generation function.</p>
@@ -1994,33 +1968,6 @@ ex) if xy0 = [1, 2], xy1 = [1, 5], via1 = [0, 2] then a via will be placed at [1
 <dd>generate a boundary Pin from a Rect</dd>
 </dl>
 </div>
-</dd></dl>
-
-<dl class="method">
-<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.pin_from_rect">
-<code class="descname">pin_from_rect</code><span class="sig-paren">(</span><em>name</em>, <em>layer</em>, <em>rect</em>, <em>gridname</em>, <em>netname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.pin_from_rect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.pin_from_rect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a Pin object from a Rect object</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<em>str</em>) &#8211; Pin name</li>
-<li><strong>layer</strong> (<em>[str, str]</em>) &#8211; Pin layer</li>
-<li><strong>rect</strong> (<em>laygo.GridObject.Rect</em>) &#8211; Rect object</li>
-<li><strong>gridname</strong> (<em>str</em>) &#8211; Gridname</li>
-<li><strong>netname</strong> (<em>str, optional</em>) &#8211; net name. If None, pin name is used. Used when multiple pin objects are attached to the same net.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">generated Pin object</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#laygo.LayoutObject.Pin" title="laygo.LayoutObject.Pin">laygo.LayoutObject.Pin</a></p>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
@@ -2106,7 +2053,7 @@ ex) if xy0 = [1, 2], xy1 = [1, 5], via1 = [0, 2] then a via will be placed at [1
 
 <dl class="method">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_bbox">
-<code class="descname">get_bbox</code><span class="sig-paren">(</span><em>obj</em>, <em>gridname=None</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_bbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_bbox" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_bbox</code><span class="sig-paren">(</span><em>obj</em>, <em>gridname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_bbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_bbox" title="Permalink to this definition">¶</a></dt>
 <dd><p>get bounding box of an object on the specific coordinate</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2135,177 +2082,23 @@ ex) if xy0 = [1, 2], xy1 = [1, 5], via1 = [0, 2] then a via will be placed at [1
 </dd></dl>
 
 <dl class="method">
-<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_xy">
-<code class="descname">get_template_xy</code><span class="sig-paren">(</span><em>name</em>, <em>gridname=None</em>, <em>libname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_template_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_xy" title="Permalink to this definition">¶</a></dt>
-<dd><p>get the size of a template in abstract coordinate</p>
+<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_template">
+<code class="descname">get_template</code><span class="sig-paren">(</span><em>name</em>, <em>libname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_template"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get template object handle</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>name</strong> (<em>str</em>) &#8211; template name</li>
-<li><strong>gridname</strong> (<em>str, optional</em>) &#8211; grid name. If None, physical grid is used</li>
-<li><strong>libname</strong> (<em>str, optional</em>) &#8211; library name. If None, GridLayoutGenerator.TemplateDB.TemplateDB.plib is uesd</li>
+<li><strong>libname</strong> (<em>str, optional</em>) &#8211; library name</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">size of template</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">template object</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray([int, int])</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_xy">
-<code class="descname">get_inst_xy</code><span class="sig-paren">(</span><em>name</em>, <em>gridname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_inst_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_xy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get xy coordinate values of an Instance object in abstract coordinate</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<em>str</em>) &#8211; instance name</li>
-<li><strong>gridname</strong> (<em>str, optional</em>) &#8211; grid name. If None, physical grid is used</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">xy coordinate of instance</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray([int, int])</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_rect_xy">
-<code class="descname">get_rect_xy</code><span class="sig-paren">(</span><em>name</em>, <em>gridname</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_rect_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_rect_xy" title="Permalink to this definition">¶</a></dt>
-<dd><p>get xy coordinate values of a Rect object in abstract coordinate</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<em>str</em>) &#8211; rect name</li>
-<li><strong>gridname</strong> (<em>str</em>) &#8211; grid name</li>
-<li><strong>sort</strong> (<em>bool, optional</em>) &#8211; if True, the coordinates are sorted</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">xy coordinates of the Rect object</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray([int, int])</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_pin_xy">
-<code class="descname">get_pin_xy</code><span class="sig-paren">(</span><em>name</em>, <em>gridname</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_pin_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_pin_xy" title="Permalink to this definition">¶</a></dt>
-<dd><p>get xy coordinates of a Pin object in abstract coordinate</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<em>str</em>) &#8211; rect name</li>
-<li><strong>gridname</strong> (<em>str</em>) &#8211; grid name</li>
-<li><strong>sort</strong> (<em>bool, optional</em>) &#8211; if True, the coordinates are sorted</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">xy coordinates of the Pin object</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray([int, int])</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_pin_xy">
-<code class="descname">get_template_pin_xy</code><span class="sig-paren">(</span><em>name</em>, <em>pinname</em>, <em>gridname</em>, <em>libname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_template_pin_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_pin_xy" title="Permalink to this definition">¶</a></dt>
-<dd><p>get xy cooridnate of a template pin in abstract coordinate</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<em>str</em>) &#8211; template cellname</li>
-<li><strong>pinname</strong> (<em>str</em>) &#8211; template pinname</li>
-<li><strong>gridname</strong> (<em>str</em>) &#8211; grid name</li>
-<li><strong>libname</strong> (<em>str, optional</em>) &#8211; library name of template</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Template pin coordinates</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray([[int, int], [int, int]])</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_pin_xy">
-<code class="descname">get_inst_pin_xy</code><span class="sig-paren">(</span><em>name</em>, <em>pinname</em>, <em>gridname</em>, <em>index=array([0</em>, <em>0])</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_inst_pin_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_pin_xy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get xy coordinates of an instance pin in abstract coordinate</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<em>str</em>) &#8211; instance name
-if None, return all pin coordinates of all instances in dict format</li>
-<li><strong>pinname</strong> (<em>str</em>) &#8211; template pinname
-if None, return all pin coordinates of specified instance in dict format</li>
-<li><strong>gridname</strong> (<em>str</em>) &#8211; grid name</li>
-<li><strong>index</strong> (<em>np.array([int, int])</em>) &#8211; </li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Instance pin coordinates</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray([int, int])</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_bbox">
-<code class="descname">get_inst_bbox</code><span class="sig-paren">(</span><em>name</em>, <em>gridname=None</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_inst_bbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_bbox" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a bounding box of an Instance object, on abstract grid</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<em>str</em>) &#8211; instance name</li>
-<li><strong>gridname</strong> (<em>str, optional</em>) &#8211; grid name. If None, physical grid is used</li>
-<li><strong>sort</strong> (<em>bool, optional</em>) &#8211; if True, the return coordinates are sorted</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">instance bbox in abstract coordinate</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray([[int, int], [int, int]])</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#laygo.TemplateObject.TemplateObject" title="laygo.TemplateObject.TemplateObject">laygo.TemplateObject.TemplateObject</a></p>
 </td>
 </tr>
 </tbody>
@@ -2497,6 +2290,211 @@ from layout.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#laygo.GridObject.GridObject" title="laygo.GridObject.GridObject">laygo.GridObject.GridObject</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.pin_from_rect">
+<code class="descname">pin_from_rect</code><span class="sig-paren">(</span><em>name</em>, <em>layer</em>, <em>rect</em>, <em>gridname</em>, <em>netname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.pin_from_rect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.pin_from_rect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a Pin object from a Rect object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; Pin name</li>
+<li><strong>layer</strong> (<em>[str, str]</em>) &#8211; Pin layer</li>
+<li><strong>rect</strong> (<em>laygo.GridObject.Rect</em>) &#8211; Rect object</li>
+<li><strong>gridname</strong> (<em>str</em>) &#8211; Gridname</li>
+<li><strong>netname</strong> (<em>str, optional</em>) &#8211; net name. If None, pin name is used. Used when multiple pin objects are attached to the same net.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">generated Pin object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#laygo.LayoutObject.Pin" title="laygo.LayoutObject.Pin">laygo.LayoutObject.Pin</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_xy">
+<code class="descname">get_template_xy</code><span class="sig-paren">(</span><em>name</em>, <em>gridname=None</em>, <em>libname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_template_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_xy" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the size of a template in abstract coordinate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; template name</li>
+<li><strong>gridname</strong> (<em>str, optional</em>) &#8211; grid name. If None, physical grid is used</li>
+<li><strong>libname</strong> (<em>str, optional</em>) &#8211; library name. If None, GridLayoutGenerator.TemplateDB.TemplateDB.plib is uesd</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">size of template</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray([int, int])</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_xy">
+<code class="descname">get_inst_xy</code><span class="sig-paren">(</span><em>name</em>, <em>gridname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_inst_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_xy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get xy coordinate values of an Instance object in abstract coordinate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; instance name</li>
+<li><strong>gridname</strong> (<em>str, optional</em>) &#8211; grid name. If None, physical grid is used</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">xy coordinate of instance</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray([int, int])</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_rect_xy">
+<code class="descname">get_rect_xy</code><span class="sig-paren">(</span><em>name</em>, <em>gridname</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_rect_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_rect_xy" title="Permalink to this definition">¶</a></dt>
+<dd><p>get xy coordinate values of a Rect object in abstract coordinate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; rect name</li>
+<li><strong>gridname</strong> (<em>str</em>) &#8211; grid name</li>
+<li><strong>sort</strong> (<em>bool, optional</em>) &#8211; if True, the coordinates are sorted</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">xy coordinates of the Rect object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray([int, int])</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_pin_xy">
+<code class="descname">get_pin_xy</code><span class="sig-paren">(</span><em>name</em>, <em>gridname</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_pin_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_pin_xy" title="Permalink to this definition">¶</a></dt>
+<dd><p>get xy coordinates of a Pin object in abstract coordinate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; rect name</li>
+<li><strong>gridname</strong> (<em>str</em>) &#8211; grid name</li>
+<li><strong>sort</strong> (<em>bool, optional</em>) &#8211; if True, the coordinates are sorted</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">xy coordinates of the Pin object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray([int, int])</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_pin_xy">
+<code class="descname">get_template_pin_xy</code><span class="sig-paren">(</span><em>name</em>, <em>pinname</em>, <em>gridname</em>, <em>libname=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_template_pin_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_pin_xy" title="Permalink to this definition">¶</a></dt>
+<dd><p>get xy cooridnate of a template pin in abstract coordinate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; template cellname</li>
+<li><strong>pinname</strong> (<em>str</em>) &#8211; template pinname</li>
+<li><strong>gridname</strong> (<em>str</em>) &#8211; grid name</li>
+<li><strong>libname</strong> (<em>str, optional</em>) &#8211; library name of template</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Template pin coordinates</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray([[int, int], [int, int]])</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_pin_xy">
+<code class="descname">get_inst_pin_xy</code><span class="sig-paren">(</span><em>name</em>, <em>pinname</em>, <em>gridname</em>, <em>index=array([0</em>, <em>0])</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_inst_pin_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_pin_xy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get xy coordinates of an instance pin in abstract coordinate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; instance name
+if None, return all pin coordinates of all instances in dict format</li>
+<li><strong>pinname</strong> (<em>str</em>) &#8211; template pinname
+if None, return all pin coordinates of specified instance in dict format</li>
+<li><strong>gridname</strong> (<em>str</em>) &#8211; grid name</li>
+<li><strong>index</strong> (<em>np.array([int, int])</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Instance pin coordinates</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray([int, int])</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_bbox">
+<code class="descname">get_inst_bbox</code><span class="sig-paren">(</span><em>name</em>, <em>gridname=None</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/GridLayoutGenerator.html#GridLayoutGenerator.get_inst_bbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_bbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a bounding box of an Instance object, on abstract grid</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; instance name</li>
+<li><strong>gridname</strong> (<em>str, optional</em>) &#8211; grid name. If None, physical grid is used</li>
+<li><strong>sort</strong> (<em>bool, optional</em>) &#8211; if True, the return coordinates are sorted</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">instance bbox in abstract coordinate</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray([[int, int], [int, int]])</p>
 </td>
 </tr>
 </tbody>
@@ -3021,7 +3019,7 @@ design dict contains all layout objects (instances, rects, pins, ...), instantia
 <dl class="class">
 <dt id="laygo.LayoutDB.LayoutDB">
 <em class="property">class </em><code class="descclassname">laygo.LayoutDB.</code><code class="descname">LayoutDB</code><span class="sig-paren">(</span><em>res=0.005</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/LayoutDB.html#LayoutDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.LayoutDB.LayoutDB" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
 <p>Layout database class</p>
 <dl class="attribute">
 <dt id="laygo.LayoutDB.LayoutDB.plib">
@@ -3043,7 +3041,7 @@ design dict contains all layout objects (instances, rects, pins, ...), instantia
 
 <dl class="attribute">
 <dt id="laygo.LayoutDB.LayoutDB.design">
-<code class="descname">design</code><em class="property"> = {}</em><a class="headerlink" href="#laygo.LayoutDB.LayoutDB.design" title="Permalink to this definition">¶</a></dt>
+<code class="descname">design</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutDB.LayoutDB.design" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; core database</p>
 </dd></dl>
 
@@ -3246,7 +3244,7 @@ design dict contains all layout objects (instances, rects, pins, ...), instantia
 
 <dl class="method">
 <dt id="laygo.LayoutDB.LayoutDB.add_inst">
-<code class="descname">add_inst</code><span class="sig-paren">(</span><em>name</em>, <em>libname</em>, <em>cellname</em>, <em>xy=array([0</em>, <em>0])</em>, <em>shape=array([1</em>, <em>1])</em>, <em>spacing=array([0</em>, <em>0])</em>, <em>transform='R0'</em>, <em>template=None</em>, <em>xy1=None</em>, <em>pins=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/LayoutDB.html#LayoutDB.add_inst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.LayoutDB.LayoutDB.add_inst" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_inst</code><span class="sig-paren">(</span><em>name</em>, <em>libname</em>, <em>cellname</em>, <em>xy=array([0</em>, <em>0])</em>, <em>shape=None</em>, <em>spacing=array([0</em>, <em>0])</em>, <em>transform='R0'</em>, <em>template=None</em>, <em>use_array=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/LayoutDB.html#LayoutDB.add_inst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.LayoutDB.LayoutDB.add_inst" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an instance to the specified library and cell (_plib, _pstr)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -3261,6 +3259,7 @@ design dict contains all layout objects (instances, rects, pins, ...), instantia
 <li><strong>spacing</strong> (<em>np.array([x0, y0])</em>) &#8211; array spacing parameter</li>
 <li><strong>transform</strong> (<em>str</em>) &#8211; transform parameter</li>
 <li><strong>template</strong> (<a class="reference internal" href="#laygo.TemplateObject.TemplateObject" title="laygo.TemplateObject.TemplateObject"><em>laygo.TemplateObject.TemplateObject</em></a>) &#8211; template handle</li>
+<li><strong>use_array</strong> (<em>boolean</em>) &#8211; temporarily used. If true, InstanceArray is used instead of Instance (introduced for backward compatibility.)</li>
 </ul>
 </td>
 </tr>
@@ -3738,6 +3737,24 @@ All information shown in db.display() will be saved</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="laygo.LayoutObject.Pointer">
+<em class="property">class </em><code class="descclassname">laygo.LayoutObject.</code><code class="descname">Pointer</code><span class="sig-paren">(</span><em>name</em>, <em>res</em>, <em>xy</em>, <em>type='direction'</em>, <em>master=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/LayoutObject.html#Pointer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.LayoutObject.Pointer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#laygo.LayoutObject.LayoutObject" title="laygo.LayoutObject.LayoutObject"><code class="xref py py-class docutils literal"><span class="pre">laygo.LayoutObject.LayoutObject</span></code></a></p>
+<p>Pointer class attached to other LayoutObjects</p>
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Pointer.master">
+<code class="descname">master</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Pointer.master" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>LayoutObject.Instance</em> &#8211; master instance that the tag is attached</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Pointer.type">
+<code class="descname">type</code><em class="property"> = 'boundary'</em><a class="headerlink" href="#laygo.LayoutObject.Pointer.type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="laygo.LayoutObject.Instance">
 <em class="property">class </em><code class="descclassname">laygo.LayoutObject.</code><code class="descname">Instance</code><span class="sig-paren">(</span><em>name</em>, <em>res</em>, <em>xy</em>, <em>libname</em>, <em>cellname</em>, <em>shape=array([1</em>, <em>1])</em>, <em>spacing=array([0</em>, <em>0])</em>, <em>transform='R0'</em>, <em>template=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/LayoutObject.html#Instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.LayoutObject.Instance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#laygo.LayoutObject.LayoutObject" title="laygo.LayoutObject.LayoutObject"><code class="xref py py-class docutils literal"><span class="pre">laygo.LayoutObject.LayoutObject</span></code></a></p>
@@ -3751,6 +3768,12 @@ All information shown in db.display() will be saved</p>
 <dt id="laygo.LayoutObject.Instance.set_spacing">
 <code class="descname">set_spacing</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/laygo/LayoutObject.html#Instance.set_spacing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.LayoutObject.Instance.set_spacing" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Instance.pointers">
+<code class="descname">pointers</code><em class="property"> = {}</em><a class="headerlink" href="#laygo.LayoutObject.Instance.pointers" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>dict()</em> &#8211; pointer dictionary</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Instance.xy0">
@@ -3801,13 +3824,59 @@ All information shown in db.display() will be saved</p>
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Instance.template">
 <code class="descname">template</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Instance.template" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>str</em> &#8211; original template name</p>
+<dd><p><em>TemplateObject.TemplateObject</em> &#8211; original template object</p>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Instance.left">
+<code class="descname">left</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Instance.left" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Instance.right">
+<code class="descname">right</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Instance.right" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Instance.bottom">
+<code class="descname">bottom</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Instance.bottom" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Instance.top">
+<code class="descname">top</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Instance.top" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Instance.bottom_left">
+<code class="descname">bottom_left</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Instance.bottom_left" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Instance.bottom_right">
+<code class="descname">bottom_right</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Instance.bottom_right" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Instance.top_left">
+<code class="descname">top_left</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Instance.top_left" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Instance.top_right">
+<code class="descname">top_right</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Instance.top_right" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="laygo.LayoutObject.Instance.pins">
 <code class="descname">pins</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Instance.pins" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict()</em> &#8211; pin dictionary</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Instance.elements">
+<code class="descname">elements</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Instance.elements" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>np.array([[Instance]])</em> &#8211; array elements</p>
 </dd></dl>
 
 <dl class="method">
@@ -3825,7 +3894,7 @@ All information shown in db.display() will be saved</p>
 <dl class="class">
 <dt id="laygo.TemplateDB.TemplateDB">
 <em class="property">class </em><code class="descclassname">laygo.TemplateDB.</code><code class="descname">TemplateDB</code><a class="reference internal" href="../_modules/laygo/TemplateDB.html#TemplateDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#laygo.TemplateDB.TemplateDB" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
 <p>layout template database class</p>
 <dl class="attribute">
 <dt id="laygo.TemplateDB.TemplateDB.plib">
@@ -3835,7 +3904,7 @@ All information shown in db.display() will be saved</p>
 
 <dl class="attribute">
 <dt id="laygo.TemplateDB.TemplateDB.templates">
-<code class="descname">templates</code><em class="property"> = {}</em><a class="headerlink" href="#laygo.TemplateDB.TemplateDB.templates" title="Permalink to this definition">¶</a></dt>
+<code class="descname">templates</code><em class="property"> = None</em><a class="headerlink" href="#laygo.TemplateDB.TemplateDB.templates" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; template dictionary</p>
 </dd></dl>
 

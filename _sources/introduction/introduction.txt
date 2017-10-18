@@ -2,13 +2,14 @@
 
 Laygo is an add-on to [BAG2](https://github.com/pkerichang/BAG_framework)
 framework for layout generation, written by [Jaeduk Han](https://jdhan.github.io/),
-Zhongkai Wang, Woorham Bae, and Eric Jan. Laygo is licensed under the BSD license.
-With laygo, layout elements and parameters are abstracted as templates
-and grids, and the layout job can be done without dealing with complex
-design rules in advanced CMOS technology.
-Layout process is abstracted and scripted in python, and with the help
-of BAG API, laygo provides higher productivity and process portability
-than conventional custom IC design flows.
+Woorham Bae, Zhongkai Wang, and Eric Jan.
+The physical design of analog and mixed-signal (AMS) circuits is very challenging
+in advanced CMOS processes, due to their complex design rules.
+Laygo abstracts the design rules by introducing quantized templates and grids.
+With Laygo, the AMS layout is constructed by placing templates and routing wires
+on grids; designers don't need to deal with complex design rules.
+The construction process is scripted in Python for higher productivity
+and process portability than conventional custom IC design flows.
 
 ![laygo](images/laygo_concept.png)
 

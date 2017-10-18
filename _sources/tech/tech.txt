@@ -237,35 +237,6 @@ example generators.
     **M5_M6 grids**: route_M5_M6_basic, route_M5_M6_basic_thick,
     route_M5_M6_thick
 
-#### Template structure
-
-Typical template structures are composed of the following elements.
-
-**Template body**: Physical structure of the template. For example,
-transistor templates have poly, diffusion, contact, metal, and so on.
-
-**Pin region**: Define pin regions by drawing rect objects with pin
-layers (layer defined in laygo_config.yaml).
-
-**Pin label**: Assign pin names by drawing labels with pin layers
-(layer defined in laygo_config.yaml). You need to place pin label in
-side the pin region you want to assign the pin name.
-
-**Placement boundry**: After template completion, place a rect object with
-prBoundry layer (layer defined in laygo_config.yaml).
-
-![template_structure](images/tech_template1.png)
-
-In most cases, pin names are same with actual net names. However, if
-multiple pin structures are created for the same nets, you need to assign
-different pin names for each pin structure.
-The example shown below is a tap template for body connections. The 2
- pins are all connected to VSS net, but they need to have separate pin
- names, to be accessed in laygo separately. For this case, you can
- assign pin names using text pins, at the same coordinates.
-
-![template_structure2](images/tech_template2.png)
-
 #### Mosfet templates
 
 ##### Basic idea
@@ -282,10 +253,8 @@ one row.
 
 ![nmos](images/tech_nmos.png)
 
-Again, it's designer's choice to construnct the template dictionary,
-but if you want to use example codes in generator directory, these
-types of cells need to be implemented: **nmos4_fast, pmos4_fast,
-ntap_fast, ptap_fast**
+For generator examples, these types of cells need to be implemented:
+nmos4_fast, pmos4_fast, ntap_fast, ptap_fast
 
 ##### nmos4_fast family cells
 

@@ -229,7 +229,7 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 
 
-<div class="viewcode-block" id="GridDB"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridDB.GridDB">[docs]</a><span class="k">class</span> <span class="nc">GridDB</span><span class="p">():</span>
+<div class="viewcode-block" id="GridDB"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridDB.GridDB">[docs]</a><span class="k">class</span> <span class="nc">GridDB</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    layout grid database management class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -242,7 +242,8 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">grids</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="c1">#self.grids = dict()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grids</span> <span class="o">=</span> <span class="bp">self</span>
 
     <span class="c1"># i/o functions</span>
 <div class="viewcode-block" id="GridDB.display"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridDB.GridDB.display">[docs]</a>    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -265,7 +266,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">gridstr</span> <span class="o">=</span> <span class="s2">&quot;grid:&quot;</span> <span class="o">+</span> <span class="n">gridname</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Display &#39;</span> <span class="o">+</span> <span class="n">libstr</span> <span class="o">+</span> <span class="n">gridstr</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">ln</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">ln</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">libname</span> <span class="o">==</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">libname</span> <span class="o">==</span> <span class="n">ln</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[Library]&#39;</span> <span class="o">+</span> <span class="n">ln</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">sn</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">l</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -291,7 +292,7 @@
         <span class="c1"># export grid</span>
         <span class="n">export_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Export grid&#39;</span> <span class="o">+</span> <span class="n">libstr</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">ln</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">ln</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">export_dict</span><span class="p">[</span><span class="n">ln</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[Library]&#39;</span> <span class="o">+</span> <span class="n">ln</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">sn</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">l</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -316,7 +317,7 @@
         <span class="k">for</span> <span class="n">ln</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">ydict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">libname</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">libname</span> <span class="o">==</span> <span class="n">ln</span><span class="p">:</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;[Library]&#39;</span> <span class="o">+</span> <span class="n">ln</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">ln</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">ln</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">add_library</span><span class="p">(</span><span class="n">ln</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sel_library</span><span class="p">(</span><span class="n">ln</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">sn</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">l</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -347,8 +348,8 @@
 <span class="sd">        db : GridDB.GridDB</span>
 <span class="sd">            Grid database to be merged.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">ln</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">ln</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">ln</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ln</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_library</span><span class="p">(</span><span class="n">ln</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sel_library</span><span class="p">(</span><span class="n">ln</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">sn</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">l</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -368,7 +369,9 @@
 <span class="sd">        name : str</span>
 <span class="sd">            library name</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></div>
+        <span class="n">l</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">l</span>
+        <span class="k">return</span> <span class="n">l</span></div>
 
 <div class="viewcode-block" id="GridDB.add_placement_grid"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridDB.GridDB.add_placement_grid">[docs]</a>    <span class="k">def</span> <span class="nf">add_placement_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -383,7 +386,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">libname</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span> <span class="n">libname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plib</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">PlacementGrid</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">libname</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">xy</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">libname</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
+        <span class="bp">self</span><span class="p">[</span><span class="n">libname</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;AddPlacementGrid: name:&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39; xy:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">xy</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
         <span class="k">return</span> <span class="n">s</span></div>
 
@@ -402,7 +405,7 @@
         <span class="k">if</span> <span class="n">libname</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span> <span class="n">libname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plib</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">RouteGrid</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">libname</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">xy</span><span class="p">,</span> <span class="n">xgrid</span><span class="o">=</span><span class="n">xgrid</span><span class="p">,</span> <span class="n">ygrid</span><span class="o">=</span><span class="n">ygrid</span><span class="p">,</span> <span class="n">xwidth</span><span class="o">=</span><span class="n">xwidth</span><span class="p">,</span> <span class="n">ywidth</span><span class="o">=</span><span class="n">ywidth</span><span class="p">,</span>
                       <span class="n">xlayer</span><span class="o">=</span><span class="n">xlayer</span><span class="p">,</span> <span class="n">ylayer</span><span class="o">=</span><span class="n">ylayer</span><span class="p">,</span> <span class="n">viamap</span><span class="o">=</span><span class="n">viamap</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="n">libname</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
+        <span class="bp">self</span><span class="p">[</span><span class="n">libname</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;AddRouteGrid: name:&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39; xy:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">xy</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
                       <span class="o">+</span> <span class="s1">&#39; xgrid:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">xgrid</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39; xwidth:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">xwidth</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39; xlayer:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">xlayer</span><span class="p">)</span>
                       <span class="o">+</span> <span class="s1">&#39; ygrid:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ygrid</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39; ywidth:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ywidth</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39; ylayer:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ylayer</span><span class="p">))</span>
@@ -434,7 +437,7 @@
 <span class="sd">        GridObject.GridObject</span>
 <span class="sd">            Grid object handle</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span></div>
 
     <span class="c1"># grid coordinate access/conversion functions</span>
     <span class="c1"># Note: absgrid_coord notation will be changed to absgrid</span>
@@ -458,7 +461,7 @@
 <span class="sd">        int</span>
 <span class="sd">            x coordinate on gridname</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_absgrid_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_absgrid_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GridDB.get_absgrid_coord_y"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridDB.GridDB.get_absgrid_coord_y">[docs]</a>    <span class="k">def</span> <span class="nf">get_absgrid_coord_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;deprecated - use the get_absgrid_y function instead&quot;&quot;&quot;</span>
@@ -480,7 +483,7 @@
 <span class="sd">        int</span>
 <span class="sd">            y coordinate on gridname</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_absgrid_y</span><span class="p">(</span><span class="n">y</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_absgrid_y</span><span class="p">(</span><span class="n">y</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GridDB.get_absgrid_coord_xy"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridDB.GridDB.get_absgrid_coord_xy">[docs]</a>    <span class="k">def</span> <span class="nf">get_absgrid_coord_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">xy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;deprecated - use the get_absgrid_xy function instead&quot;&quot;&quot;</span>
@@ -502,7 +505,7 @@
 <span class="sd">        np.array([int, int])</span>
 <span class="sd">            xy coordinate on gridname</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_absgrid_xy</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_absgrid_xy</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GridDB.get_absgrid_coord_region"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridDB.GridDB.get_absgrid_coord_region">[docs]</a>    <span class="k">def</span> <span class="nf">get_absgrid_coord_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">xy0</span><span class="p">,</span> <span class="n">xy1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;deprecated - use the get_absgrid_region function instead&quot;&quot;&quot;</span>
@@ -526,7 +529,7 @@
 <span class="sd">        np.array([[int, int], [int, int]])</span>
 <span class="sd">            region on the specified grid</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_absgrid_region</span><span class="p">(</span><span class="n">xy0</span><span class="p">,</span> <span class="n">xy1</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_absgrid_region</span><span class="p">(</span><span class="n">xy0</span><span class="p">,</span> <span class="n">xy1</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GridDB.get_phygrid_coord_x"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridDB.GridDB.get_phygrid_coord_x">[docs]</a>    <span class="k">def</span> <span class="nf">get_phygrid_coord_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;deprecated - use the get_phygrid_x function instead&quot;&quot;&quot;</span>
@@ -548,7 +551,7 @@
 <span class="sd">        float</span>
 <span class="sd">            x coordinate on the physical grid</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_phygrid_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_phygrid_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GridDB.get_phygrid_coord_y"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridDB.GridDB.get_phygrid_coord_y">[docs]</a>    <span class="k">def</span> <span class="nf">get_phygrid_coord_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;deprecated - use the get_phygrid_y function instead&quot;&quot;&quot;</span>
@@ -570,7 +573,7 @@
 <span class="sd">        float</span>
 <span class="sd">            y coordinate on the physical grid</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_phygrid_y</span><span class="p">(</span><span class="n">y</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_phygrid_y</span><span class="p">(</span><span class="n">y</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GridDB.get_phygrid_coord_xy"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridDB.GridDB.get_phygrid_coord_xy">[docs]</a>    <span class="k">def</span> <span class="nf">get_phygrid_coord_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">xy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;deprecated - use the get_phygrid_xy function instead&quot;&quot;&quot;</span>
@@ -592,7 +595,7 @@
 <span class="sd">        np.array([float, float])</span>
 <span class="sd">            xy coordinate on the physical grid</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_phygrid_xy</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_phygrid_xy</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span></div>
 
     <span class="c1"># route grid function</span>
 <div class="viewcode-block" id="GridDB.get_route_width_xy"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridDB.GridDB.get_route_width_xy">[docs]</a>    <span class="k">def</span> <span class="nf">get_route_width_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">xy</span><span class="p">):</span>
@@ -611,7 +614,7 @@
 <span class="sd">        np.array([float, float])</span>
 <span class="sd">            width parameters on xy (xgrid(vertical), ygrid(horizontal))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_route_width_xy</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_route_width_xy</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GridDB.get_route_layer_xy"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridDB.GridDB.get_route_layer_xy">[docs]</a>    <span class="k">def</span> <span class="nf">get_route_layer_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">xy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -647,7 +650,7 @@
 <span class="sd">        list([str, str])</span>
 <span class="sd">            layer parameters of xgrid on xy coordinate</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_route_xlayer_xy</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_route_xlayer_xy</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GridDB.get_route_ylayer_xy"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridDB.GridDB.get_route_ylayer_xy">[docs]</a>    <span class="k">def</span> <span class="nf">get_route_ylayer_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">xy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -665,7 +668,7 @@
 <span class="sd">        list([str, str])</span>
 <span class="sd">            layer parameters of ygrid on xy coordinate</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_route_ylayer_xy</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_route_ylayer_xy</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span></div>
 
     <span class="c1"># via functions</span>
 <div class="viewcode-block" id="GridDB.get_vianame"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridDB.GridDB.get_vianame">[docs]</a>    <span class="k">def</span> <span class="nf">get_vianame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">xy</span><span class="p">):</span>
@@ -683,7 +686,7 @@
 <span class="sd">        str</span>
 <span class="sd">            name of via that can be placed on xy, on abstract grid specified by gridname</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_vianame</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">get_vianame</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GridDB.update_viamap"><a class="viewcode-back" href="../../api/laygo.html#laygo.GridDB.GridDB.update_viamap">[docs]</a>    <span class="k">def</span> <span class="nf">update_viamap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">viamap</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -695,7 +698,7 @@
 <span class="sd">        viamap : dict</span>
 <span class="sd">            dictionary that contains viamap parameters</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">update_viamap</span><span class="p">(</span><span class="n">viamap</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plib</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">update_viamap</span><span class="p">(</span><span class="n">viamap</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
