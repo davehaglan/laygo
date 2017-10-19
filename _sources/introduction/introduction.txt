@@ -33,7 +33,7 @@ multiple technology nodes.
     and grid information in yaml files. Users can construct their yaml
     files, or provided from external vendors under NDA.
 
-        Examples database files (for laygo_faketech, used in the GDS flow):
+        Example database files (for laygo_faketech, used in the GDS flow):
         [labs/laygo_faketech_microtemplates_dense_templates.yaml](https://github.com/ucb-art/laygo/blob/master/labs/laygo_faketech_microtemplates_dense_templates.yaml),
         [labs/laygo_faketech_microtemplates_dense_grids.yaml](https://github.com/ucb-art/laygo/blob/master/labs/laygo_faketech_microtemplates_dense_grids.yaml)
 
