@@ -53,17 +53,17 @@ if __name__ == '__main__':
 
     nd = [] # nmos
     nd += [laygen.relplace(cellname='nmos4_fast_boundary', gridname=pg, refobj=None, shape=None)]
-    nd += [laygen.relplace(cellname='nmos4_fast_center_nf2', gridname=pg, refobj=nd[-1].right, shape=[2, 1])]
+    nd += [laygen.relplace(cellname='nmos4_fast_center_nf2', gridname=pg, refobj=nd[-1].right, shape=[1, 1])]
     nd += [laygen.relplace(cellname='nmos4_fast_boundary', gridname=pg, refobj=nd[-1].right, shape=None)]
     nd += [laygen.relplace(cellname='nmos4_fast_boundary', gridname=pg, refobj=nd[-1].right, shape=None)]
-    nd += [laygen.relplace(cellname='nmos4_fast_center_nf2', gridname=pg, refobj=nd[-1].right, shape=[2, 1])]
+    nd += [laygen.relplace(cellname='nmos4_fast_center_nf2', gridname=pg, refobj=nd[-1].right, shape=[1, 1])]
     nd += [laygen.relplace(cellname='nmos4_fast_boundary', gridname=pg, refobj=nd[-1].right, shape=None)]
     pd = [] # pmos
     pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=nd[0].top, shape=None, transform='MX')]
-    pd += [laygen.relplace(cellname='pmos4_fast_center_nf2', gridname=pg, refobj=pd[-1].right, shape=[2, 1], transform='MX')]
+    pd += [laygen.relplace(cellname='pmos4_fast_center_nf2', gridname=pg, refobj=pd[-1].right, shape=[1, 1], transform='MX')]
     pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=pd[-1].right, shape=None, transform='MX')]
     pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=pd[-1].right, shape=None, transform='MX')]
-    pd += [laygen.relplace(cellname='pmos4_fast_center_nf2', gridname=pg, refobj=pd[-1].right, shape=[2, 1], transform='MX')]
+    pd += [laygen.relplace(cellname='pmos4_fast_center_nf2', gridname=pg, refobj=pd[-1].right, shape=[1, 1], transform='MX')]
     pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=pd[-1].right, shape=None, transform='MX')]
 
     # route ############################################################################################################
@@ -73,23 +73,27 @@ if __name__ == '__main__':
 
     # a
     laygen.route(gridname0=rg12, refobj0=nd[1].pins['G0'], refobj1=pd[1].pins['G0'], via0=[0, 0])
-    ra = laygen.route(gridname0=rg12, refobj0=nd[1].pins['G0'][0, 0], refobj1=nd[1].pins['G0'][-1, 0])
+    laygen.route(gridname0=rg12, xy0=[0, 0], xy1=[2, 0], refobj0=nd[1].pins['G0'][0, 0], refobj1=nd[1].pins['G0'][-1, 0])
+    ra = laygen.route(gridname0=rg23, xy0=[0, 0], xy1=[0, 2], refobj0=nd[1].pins['G0'][0, 0], refobj1=nd[1].pins['G0'][0, 0], via0=[0, 0])
     # b
     laygen.route(gridname0=rg12, refobj0=nd[4].pins['G0'], refobj1=pd[4].pins['G0'], via1=[0, 0])
-    rb = laygen.route(gridname0=rg12, refobj0=pd[4].pins['G0'][0, 0], refobj1=pd[4].pins['G0'][-1, 0])
+    laygen.route(gridname0=rg12, xy0=[-2, 0], xy1=[0, 0], refobj0=pd[4].pins['G0'][0, 0], refobj1=pd[4].pins['G0'][-1, 0])
+    rb = laygen.route(gridname0=rg23, xy0=[0, 0], xy1=[0, 2], refobj0=pd[4].pins['G0'][0, 0], refobj1=pd[4].pins['G0'][0, 0], via0=[0, 0])
     # internal connections
     ri = laygen.route(xy0=[0, 1], xy1=[0, 1], gridname0=rg12, refobj0=nd[1].pins['D0'][0, 0],
                       refobj1=nd[4].pins['S1'][-1, 0])
     for _p in np.concatenate((nd[1].pins['D0'], nd[4].pins['S0'], nd[4].pins['S1'])):
         laygen.via(xy=[0, 0], refobj=_p, gridname=rg12, overlay=ri)
     # output
-    ron = laygen.route(gridname0=rg12, refobj0=nd[4].pins['D0'][0, 0], refobj1=nd[4].pins['D0'][-1, 0])
-    rop = laygen.route(gridname0=rg12, refobj0=pd[1].pins['D0'][0, 0], refobj1=pd[4].pins['D0'][-1, 0])
+    ron = laygen.route(gridname0=rg12, xy0=[-2, 0], xy1=[1, 0], refobj0=nd[4].pins['D0'][0, 0], refobj1=nd[4].pins['D0'][-1, 0])
+    rop = laygen.route(gridname0=rg12, xy0=[0, 0], xy1=[1, 0], refobj0=pd[1].pins['D0'][0, 0], refobj1=pd[4].pins['D0'][-1, 0])
     laygen.via(refobj=nd[4].pins['D0'], gridname=rg12, overlay=ron)
     laygen.via(refobj=pd[1].pins['D0'], gridname=rg12, overlay=rop)
     laygen.via(refobj=pd[4].pins['D0'], gridname=rg12, overlay=rop)
-    ro = laygen.route(gridname0=rg23, refobj0=nd[4].pins['D0'][-1, 0], refobj1=pd[4].pins['D0'][-1, 0],
-                      via0=[0, 0], via1=[0, 0])
+    #ro = laygen.route(gridname0=rg23, xy0=[1, 0], xy1=[1, 0], refobj0=nd[4].pins['D0'][-1, 0], refobj1=pd[4].pins['D0'][-1, 0],
+    #                  via0=[0, 0], via1=[0, 0])
+    #ro = laygen.route(gridname0=rg23, refobj0=ron, refobj1=rop, via0=[0, 0], via1=[0, 0])
+    ro=ron
     # power and ground route
     for dev in [nd[1], pd[1], pd[4]]:
         for pn in ['S0', 'S1']:

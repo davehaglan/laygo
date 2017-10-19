@@ -118,7 +118,7 @@ Display
 ```
 
 ## Cell placements
-The following commands will place 4 4-fingered transistors (2 nmos, 2 pmos)
+The following commands will place 4 2-fingered transistors (2 nmos, 2 pmos)
 and cluster them to 2 lists, nd and pd.
 
 ```python
@@ -128,17 +128,17 @@ pg = 'placement_basic'  # placement grid
 
 nd = [] # nmos
 nd += [laygen.relplace(cellname='nmos4_fast_boundary', gridname=pg, refobj=None, shape=None)]
-nd += [laygen.relplace(cellname='nmos4_fast_center_nf2', gridname=pg, refobj=nd[-1].right, shape=[2, 1])]
+nd += [laygen.relplace(cellname='nmos4_fast_center_nf2', gridname=pg, refobj=nd[-1].right, shape=[1, 1])]
 nd += [laygen.relplace(cellname='nmos4_fast_boundary', gridname=pg, refobj=nd[-1].right, shape=None)]
 nd += [laygen.relplace(cellname='nmos4_fast_boundary', gridname=pg, refobj=nd[-1].right, shape=None)]
-nd += [laygen.relplace(cellname='nmos4_fast_center_nf2', gridname=pg, refobj=nd[-1].right, shape=[2, 1])]
+nd += [laygen.relplace(cellname='nmos4_fast_center_nf2', gridname=pg, refobj=nd[-1].right, shape=[1, 1])]
 nd += [laygen.relplace(cellname='nmos4_fast_boundary', gridname=pg, refobj=nd[-1].right, shape=None)]
 pd = [] # pmos
 pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=nd[0].top, shape=None, transform='MX')]
-pd += [laygen.relplace(cellname='pmos4_fast_center_nf2', gridname=pg, refobj=pd[-1].right, shape=[2, 1], transform='MX')]
+pd += [laygen.relplace(cellname='pmos4_fast_center_nf2', gridname=pg, refobj=pd[-1].right, shape=[1, 1], transform='MX')]
 pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=pd[-1].right, shape=None, transform='MX')]
 pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=pd[-1].right, shape=None, transform='MX')]
-pd += [laygen.relplace(cellname='pmos4_fast_center_nf2', gridname=pg, refobj=pd[-1].right, shape=[2, 1], transform='MX')]
+pd += [laygen.relplace(cellname='pmos4_fast_center_nf2', gridname=pg, refobj=pd[-1].right, shape=[1, 1], transform='MX')]
 pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=pd[-1].right, shape=None, transform='MX')]
 ```
 
@@ -161,7 +161,7 @@ gridname. The default value is [0, 0].
     inst0 = laygen.relplace(cellname='mycell0', gridname='mygrid', xy=[1, 3], transform='MX')
     ```
 
-    Possible parameters are R0, R90, R180, R270, MX, and MY.
+    Possible **transform** parameters are **R0**, **R180**, **MX**, **MY**, and **MXY**.
     The following figure shows how instances are placed by running the above two commands.
 
     ![placement](images/laygo_bag_placement0.png)
@@ -171,7 +171,7 @@ object that the new object is placed from.
 
     Following objects can be used for the **refobj** argument.
 
-    * Instance / InstanceArray : the new instance will be placed at the **right** side of **refobj**.
+    * **Instance / InstanceArray** : the new instance will be placed at the **right** side of **refobj**.
 
         For example, the following command will place inst1 (mycell1) at the right side of inst0, on mygrid.
         ```python
@@ -180,9 +180,9 @@ object that the new object is placed from.
 
         ![placement](images/laygo_bag_placement1.png)
 
-    * Pointer objects defined in Instance / InstanceArray : The **Instance**
+    * **Pointer** objects defined in **Instance / InstanceArray** : The **Instance**
     and **InstanceArray** objects have various Pointer objects to contain geometry information. The Pointers can
-    be used for **refobj**. Supported Pointer objects are left, right, top, bottom.
+    be used for **refobj**. Supported **Pointer** objects are **left, right, top, bottom**.
 
         For example, the following command will place inst2 at the bottom side of inst1, mirrored in x-axis.
         ```python
@@ -191,7 +191,8 @@ object that the new object is placed from.
 
         ![placement](images/laygo_bag_placement2.png)
 
-The way to architect templates totally depends on user's preferences.
+
+The way to architect templates depends on user's preferences.
 The example generator codes assume **nmos4_fast_center_nf2** and
 **pmos4_fast_center_nf2** templates are used for 2-fingered NMOS/PMOS devices, and
 **nmos4_fast_boundary** and **pmos4_fast_boundary** templates for
@@ -209,34 +210,21 @@ because they are abstracted.
 laygen.export_GDS('output.gds', cellname='nand_test', layermapfile="./laygo/labs/laygo_faketech.layermap")
 ```
 
-Instead of the single cell placements, multiple cells can be placed by
-single **relplace** function with list arguments, like this:
-
-```python
-nrow = laygen.relplace(name=None, templatename=['nmos4_fast_boundary', 'nmos4_fast_center_nf2', 'nmos4_fast_boundary',
-                                                'nmos4_fast_boundary', 'nmos4_fast_center_nf2', 'nmos4_fast_boundary'],
-                       gridname='placement_basic')
-prow = laygen.relplace(name=None, templatename=['pmos4_fast_boundary', 'pmos4_fast_center_nf2', 'pmos4_fast_boundary',
-                                                'pmos4_fast_boundary', 'pmos4_fast_center_nf2', 'pmos4_fast_boundary'],
-                       gridname='placement_basic', refinstname=nrow[0].name, direction=['top']+['right']*6, transform='MX')
-```
-
 The **relplace** function has several useful arguments, explained below:
 
 1. **shape** parameter sets the array dimension, for mosaic
-placements. (eg. shape=[2, 3] will create a 2x3 dimensional array)
+placements. (eg. shape=[2, 3] will create a 2x3 dimensional array).
+Default value is [1, 1] and if **shape** is set to None, it will generate
+a single instance. The difference between shape=[1, 1] and None is that
+InstanceArray is generated for shape=[1, 1], while Instance is generated
+for shape=None.
 2. **spacing** parameter sets the 'pitch' of the array placement.
-If None, laygo calculates the spacing parameter from the size of
+If None, laygo automatically calculates the spacing values from the size of
 template.
-3. **direction** parameters sets the direction where the object
-placed from (with respect to the reference instance). For example,
-refinstname=X, direction='top' will place the new instance on top of
-instance X. Possible values are **left**, **right**, **top**, and
-**bottom**.
-4. **transform** parameter sets the transformation of the instance.
+3. **transform** parameter sets the transformation of the instance, as explained above.
 Possible values are **R0**, **R180**, **MX**, **MY**, and **MXY**.
 
-Refer to the API documentation for details.
+Refer to the laygo API documentation for details.
 
 ## Signal routing
 Routing can be done by calling **route** commands. This routine creates
