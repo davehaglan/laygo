@@ -191,13 +191,13 @@ object that the new object is placed from.
 
         ![placement](images/laygo_bag_placement2.png)
 
-The way to architect templates totally depends on user's interests,
-for the example technology, **nmos4_fast_center_nf2** and
-**pmos4_fast_center_nf2** templates are 2-fingered NMOS/PMOS devices, and
-**nmos4_fast_boundary** and **pmos4_fast_boundary** templates are used for
+The way to architect templates totally depends on user's preferences.
+The example generator codes assume **nmos4_fast_center_nf2** and
+**pmos4_fast_center_nf2** templates are used for 2-fingered NMOS/PMOS devices, and
+**nmos4_fast_boundary** and **pmos4_fast_boundary** templates for
 boundary geometries for NMOS/PMOS devices.
 
-The resulting layout placement should look like this.
+The resulting layout should look like this.
 
 ![placement](images/placement.png)
 
