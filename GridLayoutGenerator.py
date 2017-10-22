@@ -122,7 +122,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
 
     #Placement functions
     def place(self, name, templatename, gridname, xy, template_libname=None, shape=np.array([1, 1]), spacing=None,
-              offset=np.array([0, 0]), transform='R0', annotate_text=None, libname=None, use_array=False):
+              offset=np.array([0, 0]), transform='R0', annotate_text=None, libname=None):
         """
         Place an instance on abstract grid. Use relplace instead
 
@@ -142,8 +142,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             array shape parameter. If None, the instance is not considered as array. Default is None
         transform : str ('R0', 'MX', 'MY'), optional
             Transform parameter
-        use_array : boolean
-            temporarily used. If true, InstanceArray is used instead of Instance (introduced for backward compatibility.)
 
         Returns
         -------
@@ -493,6 +491,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         Route on abstract grid, bound from reference objects. If reference objects are not specified,
         [0, 0]+offset is used as reference points.
+        This function is a bit messy because originally its main arguments were refinst/refinstindex/refpinname,
+        and switched to refobj/refobjindex, and to refobj only. At some point all the codes need to be rewritten.
 
         Parameters
         ----------
@@ -630,7 +630,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                     refinstindex0=refobjindex0
                 if isinstance(refobj0, Rect):
                     refinst0=refobj0 #this is hack; we need to completely rewrite the route function at some point
-                    refinstname1=refobj0.name
+                    refinstname0=refobj0.name
                     refinstindex0=np.array([0, 0])
                     refpinname0=None
                 if isinstance(refobj0, Pin):
@@ -639,10 +639,26 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                     refinstindex0=refobjindex0
                     refpinname0=refobj0.name
                 if isinstance(refobj0, Pointer):
-                    refinst0=refobj0.master
-                    refinstname0=refobj0.master.name
-                    refinstindex0=refobjindex0
-                    _xy0_pointer_scale=refobj0.xy
+                    if isinstance(refobj0.master, InstanceArray):
+                        refinst0 = refobj0.master[0, 0]
+                        refinstname0=refobj0.master.name
+                        refinstindex0=refobjindex0
+                        _xy0_pointer_scale=refobj0.xy
+                    elif isinstance(refobj0.master, Instance):
+                        refinst0 = refobj0.master
+                        refinstname0=refobj0.master.name
+                        refinstindex0=refobjindex0
+                        _xy0_pointer_scale=refobj0.xy
+                    elif isinstance(refobj0.master, Rect):
+                        refinst0 = refobj0.master
+                        refinstname0=refobj0.master.name
+                        refinstindex0=np.array([0, 0])
+                        _xy0_pointer_scale=refobj0.xy
+                    else:
+                        refinst0 = refobj0.master
+                        refinstname0=refobj0.master.name
+                        refinstindex0=refobjindex0
+                        _xy0_pointer_scale=refobj0.xy
             else:
                 if not (refinstname0 is None):
                     refinst0=self.get_inst(refinstname0)
@@ -666,22 +682,39 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                     refinstindex1=refobjindex1
                     refpinname1=refobj1.name
                 if isinstance(refobj1, Pointer):
-                    if refobj1.master is InstanceArray:
+                    if isinstance(refobj1.master, InstanceArray):
                         refinst1 = refobj1.master[0, 0]
+                        refinstname1 = refobj1.master.name
+                        refinstindex1 = refobjindex1
+                        _xy1_pointer_scale = refobj1.xy
+                    elif isinstance(refobj1.master, Instance):
+                        refinst1 = refobj1.master
+                        refinstname1 = refobj1.master.name
+                        refinstindex1 = refobjindex1
+                        _xy1_pointer_scale = refobj1.xy
+                    elif isinstance(refobj1.master, Rect):
+                        refinst1 = refobj1.master
+                        refinstname1 = refobj1.master.name
+                        refinstindex1 = np.array([0, 0])
+                        _xy1_pointer_scale = refobj1.xy
                     else:
                         refinst1 = refobj1.master
-                    refinstname1=refobj1.master.name
-                    refinstindex1=refobjindex1
-                    _xy1_pointer_scale=refobj1.xy
+                        refinstname1=refobj1.master.name
+                        refinstindex1=refobjindex1
+                        _xy1_pointer_scale=refobj1.xy
             else:
                 if not (refinstname1 is None):
                     refinst1=self.get_inst(refinstname1)
 
             #compute abstract coordinates
             if not (refinstname0 is None):
-                if isinstance(refinst0, Rect): #hack to support Rect objects
-                    _xy_rect0 = self.get_xy(obj=refinst0, gridname=gridname0, sort=False)[0]
-                    _xy0 = _xy0 + _xy_rect0
+                if isinstance(refinst0, Rect): #hack to support Rect objects and Pointer objects of Rect objects
+                    _xy_rect0 = self.get_xy(obj=refinst0, gridname=gridname0, sort=False)
+                    _xy0 = _xy0 + _xy_rect0[0]
+                    # pointer
+                    _xy0_pointer_abs = _xy0_pointer_scale * (_xy_rect0[1] - _xy_rect0[0])
+                    _xy0_pointer_abs = _xy0_pointer_abs.astype(int)
+                    _xy0 = _xy0 + _xy0_pointer_abs
                 else: #Instances
                     #instance offset
                     reftemplate0=self.templates.get_template(refinst0.cellname, libname=refinst0.libname)
@@ -698,14 +731,18 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                         _xy0=_xy0+pin_xy0_abs
                     transform0=refinst0.transform # overwrite transform variable
             if not (refinstname1 is None):
-                if isinstance(refinst1, Rect): #hack to support Rect objects
-                    _xy_rect1 = self.get_xy(obj=refinst1, gridname=gridname1, sort=False)[0]
-                    _xy1 = _xy1 + _xy_rect1
+                if isinstance(refinst1, Rect): #hack to support Rect objects and Pointer objects of Rect objects
+                    _xy_rect1 = self.get_xy(obj=refinst1, gridname=gridname1, sort=False)
+                    _xy1 = _xy1 + _xy_rect1[0]
+                    # pointer
+                    _xy1_pointer_abs = _xy1_pointer_scale * (_xy_rect1[1] - _xy_rect1[0])
+                    _xy1_pointer_abs = _xy1_pointer_abs.astype(int)
+                    _xy1 = _xy1 + _xy1_pointer_abs
                 else:
                     #instance offset
                     reftemplate1=self.templates.get_template(refinst1.cellname, libname=refinst1.libname)
                     _offset1=offset1+refinst1.xy+np.dot(refinst1.spacing*refinstindex1, ut.Mt(refinst1.transform).T)
-                    #corner
+                    #pointer
                     _xy1_pointer_abs = np.dot(
                         _xy1_pointer_scale * self.get_xy(obj=reftemplate1, gridname=gridname1) * refinst1.shape,
                         ut.Mt(refinst1.transform).T)
@@ -727,19 +764,31 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             # optional via placements
             if not via0 is None:
                 for vofst in via0:
-                    self.via(None, xy0+vofst, gridname0, offset=offset0, refobj=refinst0, refobjindex=refinstindex0,
-                             refpinname=refpinname0, transform=transform0)
+                    if isinstance(refinst0, Rect): #hact to support Rect objects and Pointer objects of Rect objects
+                        self.via(None, _xy0, gridname0, offset=offset0, refobj=None, refobjindex=None,
+                                 refpinname=None, transform=transform0)
+                    else:
+                        self.via(None, xy0+vofst, gridname0, offset=offset0, refobj=refinst0, refobjindex=refinstindex0,
+                                 refpinname=refpinname0, transform=transform0)
             if not via1 is None:
                 for vofst in via1:
                     #overwrite xy coordinate to handle direction matrix (xy1+vofst does not reflect direction matrix in via function)
                     if direction=='omni':
-                        self.via(None, xy1+vofst, gridname1, offset=offset1, refobj=refinst1, refobjindex=refinstindex1,
-                            refpinname=refpinname1, transform=transform1)
+                        if isinstance(refinst1, Rect): #hact to support Rect objects and Pointer objects of Rect objects
+                            self.via(None, _xy1, gridname1, offset=offset1, refobj=None, refobjindex=None,
+                                     refpinname=None, transform=transform1)
+                        else:
+                            self.via(None, xy1 + vofst, gridname1, offset=offset1, refobj=refinst1,
+                                     refobjindex=refinstindex1, refpinname=refpinname1, transform=transform1)
                     else:
-                        _xy1=self.get_absgrid_xy(gridname=gridname1, xy=xy1_phy_center, refobj=refinst1,
-                                                 refobjindex=refinstindex1, refpinname=refpinname1)
-                        self.via(None, _xy1, gridname1, offset=offset1, refobj=refinst1, refobjindex=refinstindex1,
-                            refpinname=refpinname1, transform=transform1)
+                        if isinstance(refinst1, Rect): #hact to support Rect objects and Pointer objects of Rect objects
+                            self.via(None, _xy1, gridname1, offset=offset1, refobj=None, refobjindex=None,
+                                     refpinname=None, transform=transform1)
+                        else:
+                            _xy1=self.get_absgrid_xy(gridname=gridname1, xy=xy1_phy_center, refobj=refinst1,
+                                                     refobjindex=refinstindex1, refpinname=refpinname1)
+                            self.via(None, _xy1, gridname1, offset=offset1, refobj=refinst1, refobjindex=refinstindex1,
+                                     refpinname=refpinname1, transform=transform1)
             #layer handling
             if layer is None:
                 #if xy0_phy_center[0] == xy1_phy_center[0]: #not accurate sometimes..

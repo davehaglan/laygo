@@ -175,6 +175,7 @@ object that the new object is placed from.
 
         For example, the following command will place inst1 (mycell1) at the right side of inst0, on mygrid.
         ```python
+        #pseudo code. modify parameter values for actual use
         inst1 = laygen.relplace(cellname='mycell1', gridname='mygrid', refobj=inst0)
         ```
 
@@ -186,13 +187,22 @@ object that the new object is placed from.
 
         For example, the following command will place inst2 at the bottom side of inst1, mirrored in x-axis.
         ```python
-        inst2 = laygen.relplace(cellname='mycell1', gridname='mygrid', refobj=inst1.bottom)
+        #pseudo code. modify parameter values for actual use
+        inst2 = laygen.relplace(cellname='mycell2', gridname='mygrid', refobj=inst1.bottom)
         ```
 
         ![placement](images/laygo_bag_placement2.png)
 
+You can also combine the two ways of placement. The following example will place inst3 at
+ the right side of inst2, with [1, 0] offset on 'mygrid', mirrored in x-axis.
+```python
+#pseudo code. modify parameter values for actual use
+inst3 = laygen.relplace(cellname='mycell3', gridname='mygrid', xy=[1, 0], refobj=inst2.right, transform='MX')
+```
 
-The way to architect templates depends on user's preferences.
+![placement](images/laygo_bag_placement3.png)
+
+The way of architecting your templates completely depends on your preference.
 The example generator codes assume **nmos4_fast_center_nf2** and
 **pmos4_fast_center_nf2** templates are used for 2-fingered NMOS/PMOS devices, and
 **nmos4_fast_boundary** and **pmos4_fast_boundary** templates for
@@ -227,48 +237,73 @@ Possible values are **R0**, **R180**, **MX**, **MY**, and **MXY**.
 Refer to the laygo API documentation for details.
 
 ## Signal routing
-Routing can be done by calling **route** commands. This routine creates
-a 180-degree rotated L shaped route, stacked from M1 to M3, for one of
-the nand gate input.
+**GridLayoutGenerator.route** function is used for creating metal wires.
+Like the **relplace** function, the route function can use xy0/xy1, and/or
+ refobj0/refobj1. **route** uses two arguments for each type of input because
+ the **route** needs to calculate the starting and ending point of wire.
+
+This example creates a vertical and a horizontal route on grid. Layers are
+automatically selected based on their routing directions.
+```python
+#pseudo code. modify parameter values for actual use
+laygen.route(gridname0='myroutegrid', xy0=[2, 4], xy1=[2, 6]) #vertical
+laygen.route(gridname0='myroutegrid', xy0=[2, 4], xy1=[5, 4]) #horizontal
+```
+
+This example shows a routing example using refobj (from A pin of inst0 to B pin of inst1).
+```python
+#pseudo code. modify parameter values for actual use
+laygen.route(gridname0='myroutegrid', refobj0=inst0.pins['A'], refobj1=inst1.pins['B'])
+```
+
+As shown in the **relplace** section, the xy and refobj parameters can be combined.
+```python
+#pseudo code. modify parameter values for actual use
+laygen.route(gridname0='myroutegrid', refobj0=inst0.pins['A'], xy0=[2, 1], refobj1=inst1.pins['B'], xy=[0, 1])
+```
+
+Let's go back to the real example. Running the following commands creates a rotated L shape route structure,
+ stacked from M1 to M3, for one of the nand gate input.
 
 ```python
-#a
-laygen.route(None, xy0=[0, 0], xy1=[0, 0], gridname0=rg_m1m2, refinstname0=prow[4].name, refpinname0='G0',
-             via0=[[0, 0]], refinstname1=nrow[4].name, refpinname1='G0')
-laygen.route(None, xy0=[-2, 0], xy1=[0, 0], gridname0=rg_m1m2, refinstname0=prow[4].name, refpinname0='G0',
-             refinstname1=prow[4].name, refpinname1='G0')
-ra0 = laygen.route(None, xy0=[0, 0], xy1=[0, 2], gridname0=rg_m2m3,refinstname0=prow[4].name, refpinname0='G0',
-                   refinstname1=prow[4].name, refpinname1='G0', via0=[[0, 0]], endstyle0="extend", endstyle1="extend")
+# a
+laygen.route(gridname0=rg12, refobj0=nd[4].pins['G0'], refobj1=pd[4].pins['G0'], via1=[0, 0])
+laygen.route(gridname0=rg12, xy0=[-2, 0], xy1=[0, 0], refobj0=pd[4].pins['G0'][0, 0], refobj1=pd[4].pins['G0'][-1, 0])
+ra = laygen.route(gridname0=rg23, xy0=[0, 0], xy1=[0, 2], refobj0=pd[4].pins['G0'][0, 0], refobj1=pd[4].pins['G0'][0, 0], via0=[0, 0])
 ```
+
+The first line creates a route from the **G0** pin of **nd[4]** (which is the second NMOS)
+ to the **G0** pin of **pd[4]** (which is the second PMOS) on rg12, with an additional via placement at the end point.
+ So this is basically connecting the gates of NMOS and PMOS.
+
+The second line will create a horizontal route over the gate row, with a -2 offset at the starting point.
+Since we already create the connecting vias in the first line, there's no need to add more vias.
+
+The third line is creating the final vertical metal stub for the pin connection.
 
 The generated routing pattern should look like this:
 
 ![route a](images/route0.png)
 
-Note that **refinstname** and **refpinname** are used to describe instance
-and pin related geometries for the routing, and **via0** and **via1**
-parameters are used to place via abut to the route objects.
-
-Running following commands will generate wire connections.
+Running following commands will generate rest wire connections.
 
 ```python
-#b
-laygen.route(None, xy0=[0, 0], xy1=[0, 0], gridname0=rg_m1m2, refinstname0=nrow[1].name, refpinname0='G0',
-             via0=[[0, 0]], refinstname1=prow[1].name, refpinname1='G0')
-laygen.route(None, xy0=np.array([0, 0]), xy1=[2, 0], gridname0=rg_m1m2, refinstname0=nrow[1].name, refpinname0='G0',
-             refinstname1=nrow[1].name, refpinname1='G0')
-rb0 = laygen.route(None, xy0=[0, 0], xy1=[0, 2], gridname0=rg_m2m3,refinstname0=nrow[1].name, refpinname0='G0',
-                   refinstname1=nrow[1].name, refpinname1='G0', via0=[[0, 0]], endstyle0="extend", endstyle1="extend")
-#internal connections
-laygen.route(None, xy0=[0, 1], xy1=[0, 1], gridname0=rg_m1m2, refinstname0=nrow[1].name, refpinname0='D0',
-             refinstname1=nrow[4].name, refpinname1='S1', via0=[[0, 0]], via1=[[-2, 0], [0, 0]])
-#output
-laygen.route(None, xy0=[0, 1], xy1=[1, 1], gridname0=rg_m1m2, refinstname0=prow[1].name, refpinname0='D0',
-             refinstname1=prow[4].name, refpinname1='D0', via0=[[0, 0]], via1=[[-1, 0]])
-laygen.route(None, xy0=[-1, 0], xy1=[1, 0], gridname0=rg_m1m2, refinstname0=nrow[4].name, refpinname0='D0',
-             refinstname1=nrow[4].name, refpinname1='D0', via0=[[1, 0]])
-ro0 = laygen.route(None, xy0=[1, 0], xy1=[1, 1], gridname0=rg_m2m3,refinstname0=nrow[4].name, refpinname0='D0',
-                   via0=[[0, 0]], refinstname1=prow[4].name, refpinname1='D0', via1=[[0, 0]])
+# b
+laygen.route(gridname0=rg12, refobj0=nd[1].pins['G0'], refobj1=pd[1].pins['G0'], via0=[0, 0])
+laygen.route(gridname0=rg12, xy0=[0, 0], xy1=[2, 0], refobj0=nd[1].pins['G0'][0, 0], refobj1=nd[1].pins['G0'][-1, 0])
+rb = laygen.route(gridname0=rg23, xy0=[0, 0], xy1=[0, 2], refobj0=nd[1].pins['G0'][0, 0], refobj1=nd[1].pins['G0'][0, 0], via0=[0, 0])
+# internal connections
+ri = laygen.route(xy0=[0, 1], xy1=[0, 1], gridname0=rg12, refobj0=nd[1].pins['D0'][0, 0],
+                  refobj1=nd[4].pins['S1'][-1, 0])
+for _p in np.concatenate((nd[1].pins['D0'], nd[4].pins['S0'], nd[4].pins['S1'])):
+    laygen.via(xy=[0, 0], refobj=_p, gridname=rg12, overlay=ri)
+# output
+ron = laygen.route(gridname0=rg12, xy0=[-1, 0], xy1=[1, 0], refobj0=nd[4].pins['D0'][0, 0], refobj1=nd[4].pins['D0'][-1, 0])
+rop = laygen.route(gridname0=rg12, xy0=[0, 0], xy1=[1, 0], refobj0=pd[1].pins['D0'][0, 0], refobj1=pd[4].pins['D0'][-1, 0])
+laygen.via(refobj=nd[4].pins['D0'], gridname=rg12, overlay=ron)
+laygen.via(refobj=pd[1].pins['D0'], gridname=rg12, overlay=rop)
+laygen.via(refobj=pd[4].pins['D0'], gridname=rg12, overlay=rop)
+ro = laygen.route(gridname0=rg23, refobj0=ron.right, refobj1=rop.right, xy0=[0, 0], xy1=[0, 0], via0=[0, 0], via1=[0, 0])
 ```
 
 
@@ -277,21 +312,13 @@ Power routing is very similar to signal routing. Run following commands
 to creat power rail shapes.
 
 ```python
-# power and ground vertical route
-for s in ['S0', 'S1']:
-    xy_s0 = laygen.get_template_pin_coord(nrow[1].cellname, s, rg_m1m2)[0, :]
-    laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0 * np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
-                 refinstname0=nrow[1].name, via0=[[0, 0]], refinstname1=nrow[1].name)
-    laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0 * np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
-                 refinstname0=prow[1].name, via0=[[0, 0]], refinstname1=prow[1].name)
-    laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0 * np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
-                 refinstname0=prow[4].name, via0=[[0, 0]], refinstname1=prow[4].name)
-# power and ground rails
-xy = laygen.get_template_size(nrow[5].cellname, rg_m1m2) * np.array([1, 0])
-rvdd=laygen.route(None, laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,
-                  refinstname0=prow[0].name, refinstname1=prow[5].name)
-rvss=laygen.route(None, laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,
-                  refinstname0=nrow[0].name, refinstname1=nrow[5].name)
+# power and ground route
+for dev in [nd[1], pd[1], pd[4]]:
+    for pn in ['S0', 'S1']:
+        laygen.route(gridname0=rg12, refobj0=dev.pins[pn], refobj1=dev.bottom, direction='y', via1=[0, 0])
+# power and groud rails
+rvdd = laygen.route(gridname0=rg12, refobj0=pd[0].bottom_left, refobj1=pd[5].bottom_right)
+rvss = laygen.route(gridname0=rg12, refobj0=nd[0].bottom_left, refobj1=nd[5].bottom_right)
 ```
 
 After finishing the route, your layout will look like this:
@@ -300,18 +327,12 @@ After finishing the route, your layout will look like this:
 
 ## Pin creation
 **GridLayoutGenerator.pin** function creates a pin and paste it to the
-generated layout. The function gets xy as arguments for pin coordinates,
-possibly provided from calling **get_rect_xy** function and providing the
-rect object that you want to create the pin over as an argument. Run the
- following commands.
+generated layout. The function gets **refobj** argument, as **relplace** and **route** functions do.
 
 ```python
 # pins
-laygen.pin(name='A', layer=laygen.layers['pin'][3], xy=laygen.get_rect_xy(ra0.name, rg_m2m3), gridname=rg_m2m3)
-laygen.pin(name='B', layer=laygen.layers['pin'][3], xy=laygen.get_rect_xy(rb0.name, rg_m2m3), gridname=rg_m2m3)
-laygen.pin(name='O', layer=laygen.layers['pin'][3], xy=laygen.get_rect_xy(ro0.name, rg_m2m3), gridname=rg_m2m3)
-laygen.pin(name='VDD', layer=laygen.layers['pin'][1], xy=laygen.get_rect_xy(rvdd.name, rg_m1m2), gridname=rg_m1m2)
-laygen.pin(name='VSS', layer=laygen.layers['pin'][1], xy=laygen.get_rect_xy(rvss.name, rg_m1m2), gridname=rg_m1m2)
+for pn, pg, pr in zip(['A', 'B', 'O', 'VDD', 'VSS'], [rg12, rg12, rg23, rg12, rg12], [ra, rb, ro, rvdd, rvss]):
+laygen.pin(name=pn, gridname=pg, refobj=pr)
 ```
 
 ## GDS export
