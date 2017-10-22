@@ -179,7 +179,7 @@ def generate_samp_space(laygen, objectname_pfix, templib_logic,
     print(width)
     # placement
     # top space
-    isp_t.append(laygen.relplace(name=None, templatename='space_wovdd_1x', gridname=pg,  
+    isp_t.append(laygen.relplace(name=None, templatename='space_1x', gridname=pg,  
                                direction='right', shape=[m_space2, 1], 
                                template_libname=templib_logic, transform='R0'))
 
@@ -305,10 +305,10 @@ def generate_samp(laygen, objectname_pfix, workinglib,
                            direction='top', template_libname=workinglib, transform='R0')
     # boundaries
     m_bnd = int(laygen.get_template_size('sarsamp_body', gridname=pg, libname=workinglib)[0]/laygen.get_template_size('boundary_bottom', gridname=pg)[0])
-    devname_bnd_left = ['nmos4_fast_left', 'nmos4_fast_left'] + ['nmos4_fast_left', 'pmos4_fast_left']
-    devname_bnd_right = ['nmos4_fast_right', 'nmos4_fast_right'] + ['nmos4_fast_right', 'pmos4_fast_right']
-    transform_bnd_left = ['R0', 'MX'] + ['R0', 'MX']
-    transform_bnd_right = ['R0', 'MX'] + ['R0', 'MX']
+    devname_bnd_left = ['nmos4_fast_left', 'nmos4_fast_left', 'nmos4_fast_left', 'pmos4_fast_left'] + ['nmos4_fast_left', 'pmos4_fast_left']
+    devname_bnd_right = ['nmos4_fast_right', 'nmos4_fast_right', 'nmos4_fast_right', 'pmos4_fast_right'] + ['nmos4_fast_right', 'pmos4_fast_right']
+    transform_bnd_left = ['R0', 'MX', 'R0', 'MX'] + ['R0', 'MX']
+    transform_bnd_right = ['R0', 'MX', 'R0', 'MX'] + ['R0', 'MX']
     [bnd_bottom, bnd_top, bnd_left, bnd_right] \
         = laygenhelper.generate_boundary(laygen, objectname_pfix='BND0', placement_grid=pg,
                             devname_bottom=['boundary_bottomleft', 'boundary_bottom', 'boundary_bottomright'],
