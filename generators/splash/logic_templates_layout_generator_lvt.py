@@ -338,6 +338,49 @@ def generate_tap(laygen, objectname_pfix, placement_grid, routing_grid_m1m2,
         laygen.pin(name='VDD', layer=laygen.layers['pin'][2], xy=rvdd_pin_xy, gridname=rg_m1m2)
         laygen.pin(name='VSS', layer=laygen.layers['pin'][2], xy=rvss_pin_xy, gridname=rg_m1m2)
 
+def generate_tap_float(laygen, objectname_pfix, placement_grid, routing_grid_m1m2,
+                 devname_nmos_tap, devname_pmos_tap, origin=np.array([0, 0]), create_pin=False):
+    pg = placement_grid
+    rg_m1m2=routing_grid_m1m2
+
+    # placement
+    in0 = laygen.place("I"+objectname_pfix + 'N0', devname_nmos_tap, pg, xy=origin)
+    ip0 = laygen.relplace(name = "I"+objectname_pfix + 'P0', templatename = devname_pmos_tap, gridname = pg, refinstname = in0.name, direction='top', transform='MX')
+
+    #tap route
+    xy_tap0 = laygen.get_template_pin_xy(in0.cellname, 'TAP0', rg_m1m2)[0, :]
+    #laygen.route(None, laygen.layers['metal'][1], xy0=xy_tap0 * np.array([1, 0]), xy1=xy_tap0, gridname0=rg_m1m2,
+    #             refinstname0=in0.name, refinstname1=in0.name)
+    #laygen.route(None, laygen.layers['metal'][1], xy0=xy_tap0 * np.array([1, 0]), xy1=xy_tap0, gridname0=rg_m1m2,
+    #             refinstname0=ip0.name, refinstname1=in0.name)
+    #laygen.via(None, xy_tap0 * np.array([1, 0]), refinstname=in0.name, gridname=rg_m1m2)
+    #laygen.via(None, xy_tap0 * np.array([1, 0]), refinstname=ip0.name, gridname=rg_m1m2)
+    xy_tap1 = laygen.get_template_pin_xy(in0.cellname, 'TAP0', rg_m1m2)[0, :]
+    #laygen.route(None, laygen.layers['metal'][1], xy0=xy_tap1 * np.array([1, 0]), xy1=xy_tap1, gridname0=rg_m1m2,
+    #             refinstname0=in0.name, refinstname1=in0.name)
+    #laygen.route(None, laygen.layers['metal'][1], xy0=xy_tap1 * np.array([1, 0]), xy1=xy_tap1, gridname0=rg_m1m2,
+    #             refinstname0=ip0.name, refinstname1=in0.name)
+    laygen.route(None, laygen.layers['metal'][2], xy0=xy_tap1, xy1=xy_tap1-np.array([2,0]), gridname0=rg_m1m2,
+                 refinstname0=ip0.name, refinstname1=ip0.name, via0=np.array([0,0]), via1=np.array([0,0]))
+    laygen.route(None, laygen.layers['metal'][1], xy0=xy_tap1 * np.array([1, 0])-np.array([2,0]), xy1=xy_tap1-np.array([2,0]), gridname0=rg_m1m2,
+                 refinstname0=in0.name, refinstname1=ip0.name)
+    laygen.via(None, xy_tap1 * np.array([1, 0]) - np.array([2,0]), refinstname=in0.name, gridname=rg_m1m2)
+    #laygen.via(None, xy_tap1 * np.array([1, 0]), refinstname=ip0.name, gridname=rg_m1m2)
+
+    # power and groud rail
+    xy = laygen.get_template_xy(name = in0.cellname, gridname = rg_m1m2) * np.array([1, 0])
+    laygen.route("R"+objectname_pfix+"VDD0", laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=xy, gridname0=rg_m1m2,
+                 refinstname0=ip0.name, refinstname1=ip0.name)
+    laygen.route("R"+objectname_pfix+"VSS0", laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=xy, gridname0=rg_m1m2,
+                 refinstname0=in0.name, refinstname1=in0.name)
+
+    # power pin
+    if create_pin==True:
+        rvdd_pin_xy = laygen.get_rect_xy(name = "R"+objectname_pfix+"VDD0", gridname = rg_m1m2)
+        rvss_pin_xy = laygen.get_rect_xy(name = "R"+objectname_pfix+"VSS0", gridname = rg_m1m2)
+        laygen.pin(name='VDD', layer=laygen.layers['pin'][2], xy=rvdd_pin_xy, gridname=rg_m1m2)
+        laygen.pin(name='VSS', layer=laygen.layers['pin'][2], xy=rvss_pin_xy, gridname=rg_m1m2)
+
 def generate_tap_wovdd(laygen, objectname_pfix, placement_grid, routing_grid_m1m2,
                  devname_nmos_tap, origin=np.array([0, 0]), create_pin=False):
     pg = placement_grid
@@ -3819,6 +3862,14 @@ if __name__ == '__main__':
                  )
     laygen.add_template_from_cell()
 
+    laygen.add_cell('tap_float')
+    laygen.sel_cell('tap_float')
+    generate_tap_float(laygen, objectname_pfix='TAP0', placement_grid=pg, routing_grid_m1m2=rg_m1m2,
+                 devname_nmos_tap='nmos4_fast_tap', devname_pmos_tap='pmos4_fast_tap',
+                 origin=np.array([0, 0]), create_pin=True
+                 )
+    laygen.add_template_from_cell()
+
     laygen.add_cell('tap_wovdd')
     laygen.sel_cell('tap_wovdd')
     generate_tap_wovdd(laygen, objectname_pfix='TAP0', placement_grid=pg, routing_grid_m1m2=rg_m1m2,
@@ -4619,7 +4670,7 @@ if __name__ == '__main__':
     #bag export, if bag does not exist, gds export
     mycell_list=['space_1x', 'space_2x', 'space_4x',
                  'space_wovdd_1x', 'space_wovdd_2x', 'space_wovdd_4x',
-                 'tap', 'tap_wovdd', 'tie_2x', 'tie_wovdd_2x', 
+                 'tap', 'tap_float', 'tap_wovdd', 'tie_2x', 'tie_wovdd_2x', 
                  'bcap_4x', 'bcap_8x',
                  'dcap_2x', 'dcap_4x', 'dcap_8x',
                  'dcap2_4x', 'dcap2_8x',

@@ -50,7 +50,7 @@ def generate_doubleSA_pmos(laygen, objectname_pfix, workinglib, placement_grid,
     i1st=laygen.relplace(name="I" + objectname_pfix + '1st', templatename=sa_1st_name,
                          gridname=pg, refinstname=None, direction='right', template_libname=workinglib)
     i2nd=laygen.relplace(name="I" + objectname_pfix + '2nd', templatename=sa_2nd_name,
-                         gridname=pg, refinstname=i1st.name, direction='top', transform='MY', template_libname=workinglib)
+                         gridname=pg, refinstname=i1st.name, direction='top', transform='R0', template_libname=workinglib)
 
     #route
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],
