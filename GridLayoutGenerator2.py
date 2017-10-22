@@ -62,6 +62,9 @@ class GridLayoutGenerator2(GridLayoutGenerator):
         layer dictionary. metal, pin, text, prbnd are used as keys
     """
 
+    use_array = False
+    """boolean: True if InstanceArray is used instead of Instance. For GridLayoutGenerator2 only"""
+
     def relplace(self, name=None, templatename=None, gridname=None, refinstname=None, direction='right',
                  xy=np.array([0, 0]), offset=np.array([0, 0]), template_libname=None, shape=None,
                  spacing=None, transform='R0', refobj=None, libname=None, cellname=None):

@@ -58,7 +58,7 @@ class BaseLayoutGenerator():
     db = LayoutDB()
     """laygo.LayoutDB.LayoutDB: layout database"""
     use_array = False
-    """boolean: True if InstanceArray is used instead of Instance"""
+    """boolean: True if InstanceArray is used instead of Instance. For GridLayoutGenerator2 only"""
 
     @property
     def res(self):
