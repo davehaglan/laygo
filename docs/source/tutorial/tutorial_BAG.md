@@ -85,7 +85,7 @@ laygen.use_array = True  # use InstanceArray instead of Instance
 Note that **laygo_config.yaml** is passed, which contains process
 specific information.
 **use_array** is used to enable a recently added feature; InstanceArray.
-Most legacy generator codes are not using the option.
+Most legacy generator codes are not using this option.
 
 ## Load template and grid database
 The example technology setup uses *cds_ff_mpt_microtemplates_dense*

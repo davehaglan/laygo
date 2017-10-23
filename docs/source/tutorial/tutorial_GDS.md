@@ -1,7 +1,7 @@
 # NAND gate generation and GDS export tutorial
 
 In this tutorial, you will create a simple NAND gate layout and export it to a GDS file.
-The scripts used in this tutorial can be found in [quick_start_GDS.py](../../../quick_start_GDS.py).
+The scripts used in this tutorial are in [quick_start_GDS.py](../../../quick_start_GDS.py).
 
 ## Setup
 Run the following commands to install laygo and run ipython.
@@ -20,13 +20,6 @@ Run the following commands to install laygo and run ipython.
     import numpy as np
     ```
 
->Note: if you just want to run
-[quick_start_GDS.py](../../../quick_start_GDS.py) (not copy & pasting
-codes in this document), first go into the laygo directory,
-by typing 'cd laygo', and type 'run 'quick_start_GDS.py' to run the
-script. This is because path variables in the scripts are referencing
-laygo directory.
-
 ## Initialize GridLayoutGenerator
 Run the following commands to initialize GridLayoutGenerator, the main
 generator object that contains all layout generation functions.
@@ -44,7 +37,7 @@ single GDS file. This option allows users to display the layout and
 debug without exporting primitive templates.
 
 **use_array** is used to enable a recently added feature; InstanceArray.
-Most legacy generator codes are not using the option.
+Most legacy generator codes are not using this option.
 
 ## Load template and grid database
 The example technology setup uses *laygo_faketech_microtemplates_dense*
