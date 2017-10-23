@@ -33,9 +33,8 @@ if __name__ == '__main__':
     import numpy as np
 
     # initialize #######################################################################################################
-    laygen = laygo.GridLayoutGenerator(config_file="./labs/laygo_config.yaml")
+    laygen = laygo.GridLayoutGenerator2(config_file="./labs/laygo_config.yaml")
     laygen.use_phantom = True  # for abstract generation. False when generating a real layout.
-    laygen.use_array = True  # use InstanceArray instead of Instance
     # load template and grid
     utemplib = laygen.tech + '_microtemplates_dense'  # device template library name
     laygen.load_template(filename='./labs/' + utemplib + '_templates.yaml', libname=utemplib)

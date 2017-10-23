@@ -28,11 +28,9 @@ to describe layout generation scripts in Python language and automate the layout
 easier implementation and process portability. All numerical parameters are given in integer numbers and they are
 converted to physical numbers internally and designers don't need to deal with complex design rules in modern CMOS
 process.
-
 Example
 -------
 For layout export, type below command in ipython console.
-
     $ run laygo/labs/lab2_b_gridlayoutgenerator_layoutexercise.py
 """
 
@@ -54,7 +52,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     """
     The GridLayoutGenerator class implements functions and variables for full-custom layout generations on abstract
     grids.
-
     Parameters
     ----------
     physical_res : float
@@ -101,12 +98,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def _bbox_xy(self, xy):
         """
         Find a bbox of xy coordinates. ex) _bbox_xy([[4, 1], [3, 5], [2, 3]])=np.array([[2, 1], [4, 5]])
-
         Parameters
         ----------
         xy : np.array([[int, int], [int, int]]) or
             point matrix. List can be also used.
-
         Returns
         -------
         np.array([[int, int], [int, int]])
@@ -125,7 +120,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
               offset=np.array([0, 0]), transform='R0', annotate_text=None, libname=None):
         """
         Place an instance on abstract grid. Use relplace instead
-
         Parameters
         ----------
         name : str
@@ -142,12 +136,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             array shape parameter. If None, the instance is not considered as array. Default is None
         transform : str ('R0', 'MX', 'MY'), optional
             Transform parameter
-
         Returns
         -------
         laygo.layoutObject.Instance
             generated instance
-
         Other Parameters
         ----------------
         template_libname: str, optional, deprecated
@@ -158,7 +150,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             Offset in physical coordinate.
         annotate_text : str, optional
             text to be annotated. Use None if no annotation is required
-
         """
         ### preprocessing starts ###
         xy = np.asarray(xy)  # convert to a numpy array
@@ -326,11 +317,11 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 mti = ut.Mt('R0')
             else:
                 if not refobj is None:
-                    if type(refobj).__name__ is 'Instance':
+                    if isinstance(refobj, Instance):
                         ir = refobj
-                    elif type(refobj).__name__ is 'InstanceArray':
+                    elif isinstance(refobj, InstanceArray):
                         ir = refobj
-                    elif type(refobj).__name__ is 'Pointer':
+                    elif isinstance(refobj, Pointer):
                         ir = refobj.master
                         direction = refobj.name
                 else:
@@ -424,23 +415,23 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             refrect0 = None
             refrect1 = None
             if not refobj is None:
-                if type(refobj).__name__ is 'Instance':
+                if isinstance(refobj, Instance):
                     refinst = refobj
                     refinstindex=refobjindex
-                elif type(refobj).__name__ is 'InstanceArray':
+                elif isinstance(refobj, InstanceArray):
                     refinst = refobj
                     refinstindex=refobjindex
-                elif type(refobj).__name__ is 'Pin':
+                elif isinstance(refobj, Pin):
                     refinst = refobj.master
                     refinstindex=refobjindex
                     refpinname=refobj.name
-                elif type(refobj).__name__ is 'Rect':
+                elif isinstance(refobj, Rect):
                     refrect0 = refobj
             else:
                 if not refinstname is None:
                     refinst = self.get_inst(refinstname)
             if not overlay is None:
-                if type(overlay).__name__ is 'Rect':
+                if isinstance(overlay, Rect):
                     refrect1 = overlay
 
             ### preprocessing arguments ends ###
@@ -803,10 +794,8 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                                           endstyle0="truncate", endstyle1="truncate"):
         """
         Internal function for routing and pinning.
-
         Generate a rectangular box from 2 points on abstract grid.
         The thickness corresponds to the width parameter of gridname0
-
         Parameters
         ----------
         name : str
@@ -835,7 +824,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             end style of xy0 (extend the edge by width/2 if endstyle="extend")
         endstyle1 : str (extend, truncate)
             end style of xy1 (extend the edge by width/2 if endstyle="extend")
-
         Returns
         -------
         np.array([[x0, y0], [x1, y1]])
@@ -882,7 +870,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                  endstyle1=['truncate', 'truncate'], via0=None, via1=None, gridname=None):
         """
         Vertical-horizontal route function
-
         Parameters
         ----------
         layerv : [str, str]
@@ -915,7 +902,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             Via attach coordinates. Offsets from xy0
         via1 : np.array([x0, y0], [x1, y1], ...), optional
             Via attach coordinates. Offsets from xy1
-
         Returns
         -------
         [laygo.layoutObject.Rect, laygo.layoutObject.Rect]
@@ -947,7 +933,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                  endstyle1=['truncate', 'truncate'], via0=None, via1=None, gridname=None):
         """
         Horizontal-vertical route function
-
         Parameters
         ----------
         layerh : [str, str]
@@ -980,7 +965,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             Via attach coordinates. Offsets from xy0
         via1 : np.array([x0, y0], [x1, y1], ...), optional
             Via attach coordinates. Offsets from xy1
-
         Returns
         -------
         [laygo.layoutObject.Rect, laygo.layoutObject.Rect]
@@ -1009,7 +993,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                   extendl=0, extendr=0, gridname=None):
         """
         Vertical-horizontal-vertical route function
-
         Parameters
         ----------
         layerv0 : [str, str]
@@ -1034,7 +1017,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             Extension parameter in left direction
         extendr : int
             Extension parameter in right direction
-
         Returns
         -------
         [laygo.layoutObject.Rect, laygo.layoutObject.Rect, laygo.layoutObject.Rect]
@@ -1085,7 +1067,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                   extendt=0, extendb=0, gridname=None):
         """
         Horizontal-vertical-horizontal route function
-
         Parameters
         ----------
         layerh0 : [str, str]
@@ -1110,7 +1091,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             Extension parameter in top direction
         extendb : int, optional
             Extension parameter in bottom direction
-
         Returns
         -------
         [laygo.layoutObject.Rect, laygo.layoutObject.Rect, laygo.layoutObject.Rect]
@@ -1151,7 +1131,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             xy0=np.array([0, 0]), xy1=np.array([0, 0])):
         """
         Pin generation function.
-
         Parameters
         ----------
         name : str
@@ -1172,12 +1151,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             base metal layer. If None, [layer[0], 'drawing'] is used.
         refobj : LayoutObject.LayoutObject, optional
             reference object handle
-
         Returns
         -------
         laygo.LayoutObject.Pin
             generated Pin object
-
         See Also
         --------
         pin_from_rect : generate a Pin from a Rect
@@ -1207,7 +1184,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def boundary_pin_from_rect(self, rect, gridname, name, layer, size=4, direction='left', netname=None):
         """
         Generate a boundary Pin object from a reference Rect object
-
         Parameters
         ----------
         rect : laygo.LayoutObject.Rect
@@ -1224,7 +1200,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             specifies which side the generated Pin is placed. Possible values are 'left', 'right', 'top', 'bottom'
         netname : str, optional
             net name. If None, pin name is used. Used when multiple pin objects are attached to the same net.
-
         Returns
         -------
         laygo.LayoutObject.Pin
@@ -1247,7 +1222,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def sel_template_library(self, libname):
         """
         Select a template library to work on
-
         Parameters
         ----------
         libname : str
@@ -1258,7 +1232,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def sel_grid_library(self, libname):
         """
         Select a grid library to work on
-
         Parameters
         ----------
         libname : str
@@ -1270,14 +1243,12 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def get_xy(self, obj, gridname=None, sort=False):
         """
             get xy coordinate of an object on the specific coordinate
-
             Parameters
             ----------
             obj : LayoutObject.LayoutObject or TemplateObject.TemplateObject
                 Object to get the xy coordinates
             gridname : str, optional
                 grid name. If None, physical grid is used
-
             Returns
             -------
             np.ndarray()
@@ -1305,14 +1276,12 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def get_bbox(self, obj, gridname=None):
         """
             get bounding box of an object on the specific coordinate
-
             Parameters
             ----------
             obj : LayoutObject.LayoutObject or TemplateObject.TemplateObject
                 Object to get the xy coordinates
             gridname : str, optional
                 grid name. If None, physical grid is used
-
             Returns
             -------
             np.ndarray()
@@ -1356,14 +1325,12 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def get_template(self, name, libname=None):
         """
             Get template object handle
-
             Parameters
             ----------
             name : str
                 template name
             libname : str, optional
                 library name
-
             Returns
             -------
             laygo.TemplateObject.TemplateObject
@@ -1374,12 +1341,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def get_grid(self, gridname):
         """
         Get grid object handle
-
         Parameters
         ----------
         gridname : str
             grid name
-
         Returns
         -------
         laygo.GridObject.GridObject
@@ -1390,7 +1355,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def get_absgrid_xy(self, gridname, xy, refinstname=None, refinstindex=np.array([0, 0]), refpinname=None, refobj=None, refobjindex=None):
         """
         Convert physical coordinate to abstract coordinate
-
         Parameters
         ----------
         gridname : str
@@ -1403,7 +1367,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             referenence instance index
         refpinname : str, optional
             reference pin name
-
         Returns
         -------
         np.ndarray([int, int])
@@ -1430,7 +1393,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def get_absgrid_region(self, gridname, xy0, xy1):
         """
         Get regional coordinates on abstract grid
-
         Parameters
         ----------
         gridname : str
@@ -1443,7 +1405,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             reference inst name
         refpinname : str, optional
             reference pin name
-
         Returns
         -------
         np.ndarray([[int, int], [int, int]])
@@ -1457,7 +1418,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         Construct TemplateDB and GridDB from LayoutDB. Used when generating a template and grid database
         from layout.
-
         Parameters
         ----------
         db : laygo.LayoutDB.LayoutDB
@@ -1476,7 +1436,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             prefix of placement grids. All layout cells starting with placementgrid_prefix will be considered as placement grids.
         append : True, optional
             if True, the loaded template and grid database will be appended to existing database.
-
         Returns
         -------
         [laygo.TemplateDB.TemplateDB, laygo.GridDB.GridDB]
@@ -1586,7 +1545,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def add_template_from_cell(self, libname=None, cellname=None):
         """
         Register selected cell to template database
-
         Parameters
         ----------
         libname : str, optional
@@ -1640,7 +1598,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def save_template(self, filename, libname=None):
         """
         Save templateDB to yaml file
-
         Parameters
         ----------
         filename : str
@@ -1650,7 +1607,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def load_template(self, filename, libname=None):
         """
         Load templateDB from yaml file
-
         Parameters
         ----------
         filename : str
@@ -1661,7 +1617,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def save_grid(self, filename):
         """
         Save gridDB to yaml file
-
         Parameters
         ----------
         filename : str
@@ -1671,12 +1626,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def load_grid(self, filename, libname=None):
         """
         Load gridDB from yaml file
-
         Parameters
         ----------
         filename : str
         libname : str, optional
-
         Returns
         -------
         laygo.GridObject.GridObject
@@ -1688,7 +1641,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def pin_from_rect(self, name, layer, rect, gridname, netname=None):
         """
         Generate a Pin object from a Rect object
-
         Parameters
         ----------
         name : str
@@ -1701,7 +1653,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             Gridname
         netname : str, optional
             net name. If None, pin name is used. Used when multiple pin objects are attached to the same net.
-
         Returns
         -------
         laygo.LayoutObject.Pin
@@ -1716,7 +1667,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def get_template_xy(self, name, gridname=None, libname=None):
         """
         get the size of a template in abstract coordinate
-
         Parameters
         ----------
         name : str
@@ -1725,7 +1675,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             grid name. If None, physical grid is used
         libname : str, optional
             library name. If None, GridLayoutGenerator.TemplateDB.TemplateDB.plib is uesd
-
         Returns
         -------
         np.ndarray([int, int])
@@ -1740,14 +1689,12 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def get_inst_xy(self, name, gridname=None):
         """
         Get xy coordinate values of an Instance object in abstract coordinate
-
         Parameters
         ----------
         name : str
             instance name
         gridname : str, optional
             grid name. If None, physical grid is used
-
         Returns
         -------
         np.ndarray([int, int])
@@ -1762,7 +1709,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def get_rect_xy(self, name, gridname, sort=False):
         """
         get xy coordinate values of a Rect object in abstract coordinate
-
         Parameters
         ----------
         name : str
@@ -1771,7 +1717,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             grid name
         sort : bool, optional
             if True, the coordinates are sorted
-
         Returns
         -------
         np.ndarray([int, int])
@@ -1785,7 +1730,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def get_pin_xy(self, name, gridname, sort=False):
         """
         get xy coordinates of a Pin object in abstract coordinate
-
         Parameters
         ----------
         name : str
@@ -1794,7 +1738,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             grid name
         sort : bool, optional
             if True, the coordinates are sorted
-
         Returns
         -------
         np.ndarray([int, int])
@@ -1808,7 +1751,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def get_template_pin_xy(self, name, pinname, gridname, libname=None):
         """
         get xy cooridnate of a template pin in abstract coordinate
-
         Parameters
         ----------
         name : str
@@ -1832,7 +1774,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def get_inst_pin_xy(self, name, pinname, gridname, index=np.array([0, 0]), sort=False):
         """
         Get xy coordinates of an instance pin in abstract coordinate
-
         Parameters
         ----------
         name : str
@@ -1844,7 +1785,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         gridname : str
             grid name
         index : np.array([int, int])
-
         Returns
         -------
         np.ndarray([int, int])
@@ -1878,7 +1818,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def get_inst_bbox(self, name, gridname=None, sort=False):
         """
         Get a bounding box of an Instance object, on abstract grid
-
         Parameters
         ----------
         name : str
@@ -1887,7 +1826,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             grid name. If None, physical grid is used
         sort : bool, optional
             if True, the return coordinates are sorted
-
         Returns
         -------
         np.ndarray([[int, int], [int, int]])
@@ -1904,12 +1842,10 @@ class GridLayoutGenerator(BaseLayoutGenerator):
     def get_inst_bbox_phygrid(self, instname):
         """
         (Obsolete) Get a bounding box of an Instance object, on physical grid
-
         Parameters
         ----------
         instname : str
             instance name
-
         Returns
         -------
         np.ndarray([[float, float], [float, float]])

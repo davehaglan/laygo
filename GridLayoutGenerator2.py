@@ -62,9 +62,13 @@ class GridLayoutGenerator2(GridLayoutGenerator):
         layer dictionary. metal, pin, text, prbnd are used as keys
     """
 
-    use_array = False
+    use_array = True
     """boolean: True if InstanceArray is used instead of Instance. For GridLayoutGenerator2 only"""
 
+    # def via(self, name=None, mn=np.array([0, 0]), gridname=None, ref=None, overlay=None, transform='R0',
+    #        offset=np.array([0, 0]), overwrite_xy=None):
+    #def relplace(self, name=None, libname=None, cellname=None, gridname=None, ref=None, mn=np.array([0, 0]),
+    #             offset=np.array([0, 0]), shape=None, spacing=None, transform='R0'):
     def relplace(self, name=None, templatename=None, gridname=None, refinstname=None, direction='right',
                  xy=np.array([0, 0]), offset=np.array([0, 0]), template_libname=None, shape=None,
                  spacing=None, transform='R0', refobj=None, libname=None, cellname=None):
@@ -196,11 +200,11 @@ class GridLayoutGenerator2(GridLayoutGenerator):
                 mti = ut.Mt('R0')
             else:
                 if not refobj is None:
-                    if type(refobj).__name__ is 'Instance':
+                    if isinstance(refobj, Instance):
                         ir = refobj
-                    elif type(refobj).__name__ is 'InstanceArray':
+                    elif isinstance(refobj, InstanceArray):
                         ir = refobj
-                    elif type(refobj).__name__ is 'Pointer':
+                    elif isinstance(refobj, Pointer):
                         ir = refobj.master
                         direction = refobj.name
                 else:
@@ -218,6 +222,8 @@ class GridLayoutGenerator2(GridLayoutGenerator):
             return self.place(name=name, templatename=templatename, gridname=gridname, xy=i_xy_grid+xy, offset=offset,
                               template_libname=template_libname, shape=shape, spacing=spacing, transform=transform)
 
+    #def via(self, name=None, mn=np.array([0, 0]), gridname=None, ref=None, overlay=None, transform='R0',
+    #        offset=np.array([0, 0]), overwrite_xy=None):
     def via(self, name=None, xy=np.array([0, 0]), gridname=None, refobj=None, refobjindex=np.array([0, 0]), offset=np.array([0, 0]), refinstname=None, refinstindex=np.array([0, 0]),
             refpinname=None, transform='R0', overwrite_xy_phy=None, overlay=None):
         """
@@ -294,23 +300,23 @@ class GridLayoutGenerator2(GridLayoutGenerator):
             refrect0 = None
             refrect1 = None
             if not refobj is None:
-                if type(refobj).__name__ is 'Instance':
+                if isinstance(refobj, Instance):
                     refinst = refobj
                     refinstindex=refobjindex
-                elif type(refobj).__name__ is 'InstanceArray':
+                elif isinstance(refobj, InstanceArray):
                     refinst = refobj
                     refinstindex=refobjindex
-                elif type(refobj).__name__ is 'Pin':
+                elif isinstance(refobj, Pin):
                     refinst = refobj.master
                     refinstindex=refobjindex
                     refpinname=refobj.name
-                elif type(refobj).__name__ is 'Rect':
+                elif isinstance(refobj, Rect):
                     refrect0 = refobj
             else:
                 if not refinstname is None:
                     refinst = self.get_inst(refinstname)
             if not overlay is None:
-                if type(overlay).__name__ is 'Rect':
+                if isinstance(overlay, Rect):
                     refrect1 = overlay
 
             ### preprocessing arguments ends ###
@@ -667,3 +673,79 @@ class GridLayoutGenerator2(GridLayoutGenerator):
                 else:
                     layer = self.grids.get_route_ylayer_xy(gridname0, _xy0)
             return self.add_rect(name, np.vstack((xy0_phy, xy1_phy)), layer, netname)
+
+    #object geometry related functions
+    def get_xy(self, obj, gridname=None, sort=False):
+        """
+            get xy coordinate of an object on the specific coordinate
+            Parameters
+            ----------
+            obj : LayoutObject.LayoutObject or TemplateObject.TemplateObject
+                Object to get the xy coordinates
+            gridname : str, optional
+                grid name. If None, physical grid is used
+            Returns
+            -------
+            np.ndarray()
+                geometric paramter of the object on gridname
+        """
+        if isinstance(obj, TemplateObject):
+            if gridname is None:
+                return obj.size
+            else:
+                return self.get_absgrid_xy(gridname, obj.size)
+        if isinstance(obj, Instance) or isinstance(obj, InstanceArray):
+            if gridname == None:
+                return obj.xy
+            else:
+                return self.get_absgrid_xy(gridname, obj.xy)
+        if isinstance(obj, Rect):
+            xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
+            if sort == True: xy = self._bbox_xy(xy)
+            return xy
+        if isinstance(obj, Pin):
+            xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
+            if sort == True: xy = self._bbox_xy(xy)
+            return xy
+
+    def get_bbox(self, obj, gridname=None):
+        """
+            get bounding box of an object on the specific coordinate
+            Parameters
+            ----------
+            obj : LayoutObject.LayoutObject or TemplateObject.TemplateObject
+                Object to get the xy coordinates
+            gridname : str, optional
+                grid name. If None, physical grid is used
+            Returns
+            -------
+            np.ndarray()
+                geometric paramter of the object on gridname
+        """
+        if isinstance(obj, TemplateObject):
+            if gridname is None:
+                xy = obj.size
+            else:
+                xy = self.get_absgrid_xy(gridname, obj.size)
+            return np.array([0, 0], xy)
+        if isinstance(obj, Instance) or isinstance(obj, InstanceArray):
+            if gridname == None:
+                xy = obj.bbox
+            else:
+                xy = self.get_absgrid_xy(gridname, obj.bbox)
+            xy = self._bbox_xy(xy)
+            return xy
+        if isinstance(obj, Rect):
+            if gridname == None:
+                xy = obj.xy
+            else:
+                xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
+            xy = self._bbox_xy(xy)
+            return xy
+        if isinstance(obj, Pin):
+            if gridname == None:
+                xy = obj.xy
+            else:
+                xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
+            xy = self._bbox_xy(xy)
+            return xy
