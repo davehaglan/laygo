@@ -65,39 +65,27 @@ class GridLayoutGenerator2(GridLayoutGenerator):
     use_array = True
     """boolean: True if InstanceArray is used instead of Instance. For GridLayoutGenerator2 only"""
 
-    # def via(self, name=None, mn=np.array([0, 0]), gridname=None, ref=None, overlay=None, transform='R0',
-    #        offset=np.array([0, 0]), overwrite_xy=None):
-    #def relplace(self, name=None, libname=None, cellname=None, gridname=None, ref=None, mn=np.array([0, 0]),
-    #             offset=np.array([0, 0]), shape=None, spacing=None, transform='R0'):
-    def relplace(self, name=None, templatename=None, gridname=None, refinstname=None, direction='right',
-                 xy=np.array([0, 0]), offset=np.array([0, 0]), template_libname=None, shape=None,
-                 spacing=None, transform='R0', refobj=None, libname=None, cellname=None):
+    def place(self, gridname, cellname, mn=np.array([0, 0]), ref=None, shape=None, transform='R0', name=None,
+              libname=None, spacing=None, offset=[0, 0]):
         """
-        Place an instance on abstract grid, bound from a reference object. If reference object is not specified,
-        [0, 0]+offset is used as the reference point.
-        Equation = xy+refobj_xy+0.5*(Mt@refobj_size+Md@(refobj_size+inst_size)-Mti@inst_size).
+        Place an instance at mn=[m, n] on abstract grid, optionally bound from a reference object.
+        If reference object is not specified, origin+offset (in physical grid) is used as the reference point.
+        Equation = mn+ref_mn+0.5*(Mt@ref_size+Md@(ref_size+template_size)-Mti@template_size).
 
         Parameters
         ----------
-        name : str
-            Name of the instance.
-        cellname : str
-            Template name (cellname) of the instance.
         gridname : str
             Grid name for the placement.
-        xy : np.array([x, y]) or [int, int], optional
-            Placement coordinate on the grid, specified by gridname. If not specified, [0, 0] is used.
-        refobj : LayoutObject.Instance, optional
-            Reference instance handle, if None, refinstname is used. Will be extended to support other objects.
-        direction : str, optional
-            Direction of placement, bound from refobj. For example, if the instance will be place on top of refobj,
-            direction='top' is used
-        shape : np.array([x0, y0]) or None, optional
-            array shape parameter. If None, the instance is not considered as array. Default is None
+        cellname : str
+            Template name (cellname) of the instance.
+        mn : np.array([int, int]) or [int, int], optional
+            Placement coordinate on the grid, specified by gridname. Default value is [0, 0].
+        ref : LayoutObject.Instance or LayoutObject.InstanceArray, optional
+            Reference instance handle.
+        shape : np.array([int, int]) or None, optional
+            array shape parameter. If None, the instance is not considered as array. Default is None.
         transform : str ('R0', 'MX', 'MY')
             Transform parameter. 'R0' is used by default.
-        libname : str, optional
-            Template library name. If not specified, self.templates.plib is used.
 
         Returns
         -------
@@ -106,145 +94,38 @@ class GridLayoutGenerator2(GridLayoutGenerator):
 
         Other Parameters
         ----------------
-        refinstname : str, optional, deprecated
-            Reference instance name, if None, [0, 0] is used for the reference point.
-        templatename : str, deprecated
-            Replaced with cellname
-        template_libname: str, optional, deprecated
-            Replaced with libname
+        name : str, optional
+            Name of the instance. If None, the instance name is automatically generated.
+        libname : str, optional
+            Template library name. If not specified, self.templates.plib is used.
         spacing : np.array([int, int]) or [int, int]
             Array spacing parameter for the instance. If none, the size of the instance of is used.
         offset : np.array([float, float]), optional
             Placement offset in physical coordinate.
-
-        See Also
-        --------
-        place : substrate function of relplace
         """
-        #TODO: Alignment option, bottom/top-left/right directions
-        # cellname handling
-        if not cellname is None:
-            templatename=cellname
-        # check if it's multiple placement
-        if isinstance(templatename, list): # multiple placement
-            flag_recursive=False #recursive placement flag. If True, next placement refer the current placement
-            # preprocessing arguments
-            len_inst = len(templatename) #number of instance to be placed (for multiple placements)
-            if name is None:
-                name = [None] * len_inst #extend Name list to be matched with templatename
-            if refinstname is None: #for backward compatibility. Use refobj instead of refinstname if possible
-                if refobj is None:
-                    flag_recursive=True
-                    _refinstname=[None for i in range(len_inst)]
-                else:
-                    #check if refobj is list. If so, do a recursive placement
-                    if isinstance(refobj, list):
-                        _refinstname=[i.name for i in refobj]
-                    else:
-                        flag_recursive=True
-                        _refinstname=[refobj.name]+[None for i in range(len_inst-1)]
-            else:
-                #check if refinstname is list. If so, do a recursive placement
-                if isinstance(refinstname, list):
-                    _refinstname=refinstname
-                else:
-                    flag_recursive=True
-                    _refinstname=[refinstname]+[None for i in range(len_inst-1)]
-            if isinstance(xy[0], (int, np.int64)):
-                xy = [xy] * len_inst
-            if isinstance(direction, str):
-                direction = [direction] * len_inst
-            if shape == None:
-                shape = [shape] * len_inst
-            else:
-                if isinstance(shape[0], (int, np.int64)):
-                    shape = [shape] * len_inst
-            if spacing is None:
-                spacing = [None] * len_inst
-            elif isinstance(spacing[0], (int, np.int64)):
-                spacing = [spacing] * len_inst
-            else:
-                if not isinstance(spacing, list): spacing = [spacing] * len_inst
-            if isinstance(transform, str): transform = [transform] * len_inst
-            return_inst_list = []
-            for i, nm, _refi_name, _xy, tl, dr, sh, sp, tr in zip(range(len_inst), name, _refinstname, xy, templatename, direction, shape, spacing, transform): #row placement
-                refi = self.relplace(nm, tl, gridname, refinstname=_refi_name, direction=dr, xy=_xy,
-                                   offset=offset, template_libname=template_libname, shape=sh, spacing=sp,
-                                   transform=tr)#, refobj=refobj)
-                return_inst_list.append(refi)
-                if flag_recursive is True:
-                    if not i == len_inst-1:
-                        _refinstname[i+1] = refi.name
-            return return_inst_list
-        else: # single placement
-            ### preprocessing starts ###
-            if shape == None:
-                _shape = np.array([1, 1])
-            else:
-                _shape = np.asarray(shape)
-            if not spacing == None: spacing = np.asarray(spacing)
-            xy = np.asarray(xy)
-            offset = np.asarray(offset)
-            if not libname is None:
-                template_libname = libname
-            if template_libname is None:
-                template_libname = self.templates.plib
-            ### preprocessing ends ###
-            t_size_grid = self.get_template_xy(templatename, gridname, libname=template_libname)
-            t_size_grid = t_size_grid*_shape
-            #reference instance check
-            if (refobj is None) and (refinstname is None):
-                ir_xy_grid = np.array([0, t_size_grid[1]/2.0])
-                tr_size_grid = np.array([0, 0])
-                mtr = ut.Mt('R0')
-                mti = ut.Mt('R0')
-            else:
-                if not refobj is None:
-                    if isinstance(refobj, Instance):
-                        ir = refobj
-                    elif isinstance(refobj, InstanceArray):
-                        ir = refobj
-                    elif isinstance(refobj, Pointer):
-                        ir = refobj.master
-                        direction = refobj.name
-                else:
-                    ir = self.get_inst(refinstname)
-                tr = self.templates.get_template(ir.cellname, libname=ir.libname)
-                #get abstract grid coordinates
-                ir_xy_grid = self.get_absgrid_xy(gridname, ir.xy)
-                tr_size_grid = self.get_absgrid_xy(gridname, tr.size+(ir.shape-np.array([1,1]))*ir.spacing)
-                mtr = ut.Mt(ir.transform)
-                mti = ut.Mt(transform)
-            #direction
-            md = ut.Md(direction)
-            i_xy_grid = ir_xy_grid + 0.5 * (np.dot(tr_size_grid, mtr.T) + np.dot(tr_size_grid + t_size_grid, md.T)
-                                            - np.dot(t_size_grid, mti.T))
-            return self.place(name=name, templatename=templatename, gridname=gridname, xy=i_xy_grid+xy, offset=offset,
-                              template_libname=template_libname, shape=shape, spacing=spacing, transform=transform)
+        return GridLayoutGenerator.relplace(self, name=name, gridname=gridname, xy=mn, offset=offset, shape=shape,
+                                            spacing=spacing, transform=transform, refobj=ref, libname=libname,
+                                            cellname=cellname)
 
-    #def via(self, name=None, mn=np.array([0, 0]), gridname=None, ref=None, overlay=None, transform='R0',
-    #        offset=np.array([0, 0]), overwrite_xy=None):
-    def via(self, name=None, xy=np.array([0, 0]), gridname=None, refobj=None, refobjindex=np.array([0, 0]), offset=np.array([0, 0]), refinstname=None, refinstindex=np.array([0, 0]),
-            refpinname=None, transform='R0', overwrite_xy_phy=None, overlay=None):
+    def via(self, gridname, mn=[0, 0], ref=None, overlay=None, transform='R0', name=None,
+            offset=np.array([0, 0]), overwrite_xy=None):
+
         """
         Place a via on abstract grid, bound from a reference object. If reference object is not specified,
         [0, 0]+offset is used as the reference point.
 
         Parameters
         ----------
-        name : str
-            Name of the via
-        xy : np.array([int, int]) or [int, int]
-            xy coordinate of the via
         gridname : str
             Grid name of the via
-        refobj : LayoutObject.LayoutObject
-            Reference object(Instance/Pin/Rect) handle. If None, refinstiname is used.
+        mn : np.array([int, int]) or [int, int]
+            xy coordinate of the via. Default value is [0, 0].
+        ref : LayoutObject.LayoutObject
+            Reference object(Instance/InstanceArray/Pin/Rect) handle.
         overlay : LayoutObject.LayoutObject
-            Layout object for via placement at intersection (via will be placed at the overlaid point btn refobj and overlay)
-            Use with refobj only. Not compatible with legacy reference parameters (refinstname)
+            Layout object for via placement at intersections (via will be placed at interaction points of ref and overlay.
         transform : str ('R0', 'MX', 'MY'), optional
-            Transform parameter for grid. Overwritten by transform of refinstname if not specified.
+            Transform parameter for grid. Transform of ref is used if not specified.
 
         Returns
         -------
@@ -253,109 +134,79 @@ class GridLayoutGenerator2(GridLayoutGenerator):
 
         Other Parameters
         ----------------
+        name : str
+            Name of the via
         offset : np.array([float, float]), optional
-            Offset on the physical grid, bound from xy
-        overwrite_xy_phy : None or np.array([float, float]), optional
-            If specified, final xy physical coordinates are overwritten by the argument.
-        refobjindex : np.array([int, int]), optional, deprecated
-            Index of refobj if it is a mosaic instance.
-        refinstname : str, optional, deprecated
-            Reference instance name for xy. If None, origin([0,0]) is used as the reference point.
-        refinstindex : str, optional, deprecated
-            Index of refinstname if it is a mosaic instance
-        refpinname : str, optional, deprecated
-            Reference pin of refinstname for reference point of xy. If None, the origin of refinstname0 is used.
-
+            Placement offset on the physical grid.
+        overwrite_xy : None or np.array([float, float]), optional
+            If specified, the final xy (in physical coordinate) is overwritten by the parameter.
         """
-        if isinstance(refobj, np.ndarray) or isinstance(overlay, np.ndarray): #mutiple placement
-            if isinstance(refobj, np.ndarray) and isinstance(overlay, np.ndarray): #both array
-                _refobj = refobj.flat
-                _overlay = overlay.flat
-            elif isinstance(refobj, np.ndarray):
-                _refobj = refobj.flat
-                _overlay = np.empty(refobj.shape, dtype=overlay.__class__)
-                for i, o in np.ndenumerate(_overlay):
-                    _overlay[i] = overlay
-                _overlay = _overlay.flat
-            elif isinstance(overlay, np.ndarray):
-                _overlay = overlay.flat
-                _refobj = np.empty(overlay.shape, dtype=refobj.__class__)
-                for i, o in np.ndenumerate(_refobj):
-                    _refobj[i] = refobj
-                _refobj = _refobj.flat
-            return_via_list = []
-            for r0, o0 in zip(_refobj, _overlay):
-                refv = self.via(name=name, xy=xy, gridname=gridname, refobj=r0, offset=offset, transform=transform,
-                                overwrite_xy_phy=overwrite_xy_phy, overlay=o0)
-                return_via_list.append(refv)
-            return return_via_list
-        else:
-            ### preprocessing arguments starts ###
-            xy = np.asarray(xy)
-            offset = np.asarray(offset)
-            refinstindex = np.asarray(refinstindex)
-            # reading coordinate information from the reference objects
-            # this needs to be cleaned up
-            refinst = None
-            refrect0 = None
-            refrect1 = None
-            if not refobj is None:
-                if isinstance(refobj, Instance):
-                    refinst = refobj
-                    refinstindex=refobjindex
-                elif isinstance(refobj, InstanceArray):
-                    refinst = refobj
-                    refinstindex=refobjindex
-                elif isinstance(refobj, Pin):
-                    refinst = refobj.master
-                    refinstindex=refobjindex
-                    refpinname=refobj.name
-                elif isinstance(refobj, Rect):
-                    refrect0 = refobj
-            else:
-                if not refinstname is None:
-                    refinst = self.get_inst(refinstname)
-            if not overlay is None:
-                if isinstance(overlay, Rect):
-                    refrect1 = overlay
+        return GridLayoutGenerator.via(self, name=name, xy=mn, gridname=gridname, refobj=ref, offset=offset,
+                                       transform=transform, overwrite_xy_phy=overwrite_xy, overlay=overlay)
 
-            ### preprocessing arguments ends ###
-            # get physical grid coordinates
-            # need to be refactored
-            if not refinst is None:
-                reftemplate = self.templates.get_template(refinst.cellname, libname=refinst.libname)
-                offset = offset + refinst.xy + np.dot(refinst.spacing * refinstindex, ut.Mt(refinst.transform).T)
-                if not refpinname == None: #if pin reference is specified
-                    pin_xy_phy=reftemplate.pins[refpinname]['xy']
-                    bbox=pin_xy_phy
-                    if not refrect1 is None: #overlay
-                        bbox0=pin_xy_phy
-                        bbox1=np.dot(refrect1.xy - refinst.xy, ut.Mtinv(refinst.transform).T)
-                        sx=sorted([bbox0[0][0], bbox0[1][0], bbox1[0][0], bbox1[1][0]])
-                        sy=sorted([bbox0[0][1], bbox0[1][1], bbox1[0][1], bbox1[1][1]])
-                        bbox=np.array([[sx[1], sy[1]], [sx[2], sy[2]]])
-                    #pin_xy_abs=self.get_absgrid_region(gridname, pin_xy_phy[0], pin_xy_phy[1])[0,:]
-                    pin_xy_abs=self.get_absgrid_region(gridname, bbox[0], bbox[1])[0,:]
-                    xy=xy+pin_xy_abs
-                transform=refinst.transform #overwrite transform variable
-            if not refrect0 is None:
-                xy=xy+self.get_absgrid_region(gridname, refrect0.xy0, refrect0.xy1)[0,:]
-                if not refrect1 is None:
-                    #TODO: implement overlay function using refrect1
-                    pass
+    def route(self, gridname0, gridname1=None, mn0=np.array([0, 0]), mn1=np.array([0, 0]), ref0=None, ref1=None,
+              transform0='R0', transform1=None, via0=None, via1=None, netname=None, direction='omni',
+              endstyle0="truncate", endstyle1="truncate", name=None, layer=None, offset0=np.array([0, 0]),
+              offset1=None):
+        """
+        Route on abstract grid, bound from reference objects. If reference objects are not specified,
+        [0, 0]+offset is used as reference points.
 
-            vianame = self.grids.get_vianame(gridname, xy)
-            if overwrite_xy_phy is None:
-                xy_phy=np.dot(self.grids.get_phygrid_xy(gridname, xy), ut.Mt(transform).T)+offset
-            else:
-                xy_phy=overwrite_xy_phy
-            inst=self.add_inst(name=name, libname=self.grids.plib, cellname=vianame, xy=xy_phy, transform=transform)
-            if self.use_phantom==True:
-                size=self.grids.get_route_width_xy(gridname, xy)
-                self.add_rect(None, xy=np.vstack((xy_phy-0.5*size, xy_phy+0.5*size)),
-                              layer=self.layers['text'])
-                self.add_text(None, text=vianame, xy=xy_phy, layer=self.layers['text'])
-            return inst
+        Parameters
+        ----------
+        gridname0 : str
+            Grid name0
+        gridname1 : str, optional
+            Grid name1
+        mn0 : np.array([int, int]) or [int, int]
+            abstract coordinate of start point.
+        mn1 : np.array([int, int]) or [int, int]
+            abstract coordinate of end point.
+        ref0 : LayoutObject.LayoutObject
+            Reference object(Instance/Pin/Rect) handle.
+        ref1 : LayoutObject.LayoutObject
+            Reference object(Instance/Pin/Rect) handle.
+        transform0 : str, optional
+            Transform parameter for grid0. Overwritten by transform of ref0 if not specified.
+        transform1 : str, optional
+            Transform parameter for grid1. Overwritten by transform of ref1 if not specified.
+        via0 : None or np.array([int, int]) or np.array([[int, int], [int, int], [int, int], ...]), optional
+            Offset coordinates for via placements, bound from xy0
+            ex) if mn0 = [1, 2], mn1 = [1, 5], via0 = [0, 2] then a via will be placed at [1, 4]
+        via1 : None or np.array([int, int]) or np.array([[int, int], [int, int], [int, int], ...]), optional
+            Offset coordinates for via placements, bound from xy1
+            ex) if mn0 = [1, 2], mn1 = [1, 5], via1 = [0, 2] then a via will be placed at [1, 7]
+        netname : str, optional
+            net name of the route
+        direction : str, optional
+            Routing direction (omni, x, y, ...). It will be used as the input argument of GridLayoutGenerator.Md.
+        endstyle0 : str ('extend', 'truncate'), optional
+            End style of xy0 (extend the edge by width/2 if endstyle=='extend')
+        endstyle1 : str ('extend', 'truncate'), optional
+            End style of xy1 (extend the edge by width/2 if endstyle=='extend')
+
+        Returns
+        -------
+        laygo.layoutObject.Rect
+            generated route
+
+        Other Parameters
+        ----------------
+        name : str
+            Route name. If None, the name will be automatically assigned by genid.
+        layer : [str, str], optional
+            Routing layer [name, purpose]. If None, it figures out the layer from grid and coordinates
+        offset0 : np.array([float, float]), optional
+            Coordinate offset from xy0, on the physical grid.
+        offset1 : np.array([float, float]), optional
+            Coordinate offset from xy1, on the physical grid.
+        """
+        return GridLayoutGenerator.route(self, name=name, layer=layer, xy0=mn0, xy1=mn1, gridname0=gridname0,
+                                         gridname1=gridname1, direction=direction, refobj0=ref0, refobj1=ref1,
+                                         offset0=offset0, offset1=offset1, transform0=transform0, transform1=transform1,
+                                         endstyle0=endstyle0, endstyle1=endstyle1, via0=via0, via1=via1,
+                                         netname=netname)
+    '''
 
     # Route functions
     def route(self, name=None, layer=None, xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=None, gridname1=None, direction='omni',
@@ -749,3 +600,4 @@ class GridLayoutGenerator2(GridLayoutGenerator):
                 xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
             xy = self._bbox_xy(xy)
             return xy
+    '''

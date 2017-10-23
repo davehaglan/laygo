@@ -285,7 +285,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             if isinstance(transform, str): transform = [transform] * len_inst
             return_inst_list = []
             for i, nm, _refi_name, _xy, tl, dr, sh, sp, tr in zip(range(len_inst), name, _refinstname, xy, templatename, direction, shape, spacing, transform): #row placement
-                refi = self.relplace(nm, tl, gridname, refinstname=_refi_name, direction=dr, xy=_xy,
+                refi = GridLayoutGenerator.relplace(self, nm, tl, gridname, refinstname=_refi_name, direction=dr, xy=_xy,
                                    offset=offset, template_libname=template_libname, shape=sh, spacing=sp,
                                    transform=tr)#, refobj=refobj)
                 return_inst_list.append(refi)
@@ -336,7 +336,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             md = ut.Md(direction)
             i_xy_grid = ir_xy_grid + 0.5 * (np.dot(tr_size_grid, mtr.T) + np.dot(tr_size_grid + t_size_grid, md.T)
                                             - np.dot(t_size_grid, mti.T))
-            return self.place(name=name, templatename=templatename, gridname=gridname, xy=i_xy_grid+xy, offset=offset,
+            return GridLayoutGenerator.place(self, name=name, templatename=templatename, gridname=gridname, xy=i_xy_grid+xy, offset=offset,
                               template_libname=template_libname, shape=shape, spacing=spacing, transform=transform)
 
     def via(self, name=None, xy=np.array([0, 0]), gridname=None, refobj=None, refobjindex=np.array([0, 0]), offset=np.array([0, 0]), refinstname=None, refinstindex=np.array([0, 0]),
@@ -400,7 +400,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 _refobj = _refobj.flat
             return_via_list = []
             for r0, o0 in zip(_refobj, _overlay):
-                refv = self.via(name=name, xy=xy, gridname=gridname, refobj=r0, offset=offset, transform=transform,
+                refv = GridLayoutGenerator.via(self, name=name, xy=xy, gridname=gridname, refobj=r0, offset=offset, transform=transform,
                                 overwrite_xy_phy=overwrite_xy_phy, overlay=o0)
                 return_via_list.append(refv)
             return return_via_list
@@ -570,10 +570,11 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                 _refobj0 = _refobj0.flat
             return_rect_list = []
             for r0, r1 in zip(_refobj0, _refobj1):
-                refr = self.route(name=name, layer=layer, xy0=xy0, xy1=xy1, gridname0=gridname0,
+                refr = GridLayoutGenerator.route(self, name=name, layer=layer, xy0=xy0, xy1=xy1, gridname0=gridname0,
                                   gridname1=gridname1, direction=direction, refobj0=r0, refobj1=r1,
                                   offset0=offset0, offset1=offset1, transform0=transform0, transform1=transform1,
-                                  endstyle0=endstyle0, endstyle1=endstyle1, via0=via0, via1=via1, netname=netname)
+                                  endstyle0=endstyle0, endstyle1=endstyle1, via0=via0, via1=via1, netname=netname) 
+                #Used GridLayoutGenerator for abstracting the function in GridLayoutGenerator2
                 return_rect_list.append(refr)
             return return_rect_list
         else:
@@ -756,29 +757,29 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             if not via0 is None:
                 for vofst in via0:
                     if isinstance(refinst0, Rect): #hact to support Rect objects and Pointer objects of Rect objects
-                        self.via(None, _xy0, gridname0, offset=offset0, refobj=None, refobjindex=None,
+                        GridLayoutGenerator.via(self, None, _xy0, gridname0, offset=offset0, refobj=None, refobjindex=None,
                                  refpinname=None, transform=transform0)
                     else:
-                        self.via(None, xy0+vofst, gridname0, offset=offset0, refobj=refinst0, refobjindex=refinstindex0,
+                        GridLayoutGenerator.via(self, None, xy0+vofst, gridname0, offset=offset0, refobj=refinst0, refobjindex=refinstindex0,
                                  refpinname=refpinname0, transform=transform0)
             if not via1 is None:
                 for vofst in via1:
                     #overwrite xy coordinate to handle direction matrix (xy1+vofst does not reflect direction matrix in via function)
                     if direction=='omni':
                         if isinstance(refinst1, Rect): #hact to support Rect objects and Pointer objects of Rect objects
-                            self.via(None, _xy1, gridname1, offset=offset1, refobj=None, refobjindex=None,
+                            GridLayoutGenerator.via(self, None, _xy1, gridname1, offset=offset1, refobj=None, refobjindex=None,
                                      refpinname=None, transform=transform1)
                         else:
-                            self.via(None, xy1 + vofst, gridname1, offset=offset1, refobj=refinst1,
+                            GridLayoutGenerator.via(self, None, xy1 + vofst, gridname1, offset=offset1, refobj=refinst1,
                                      refobjindex=refinstindex1, refpinname=refpinname1, transform=transform1)
                     else:
                         if isinstance(refinst1, Rect): #hact to support Rect objects and Pointer objects of Rect objects
-                            self.via(None, _xy1, gridname1, offset=offset1, refobj=None, refobjindex=None,
+                            GridLayoutGenerator.via(self, None, _xy1, gridname1, offset=offset1, refobj=None, refobjindex=None,
                                      refpinname=None, transform=transform1)
                         else:
                             _xy1=self.get_absgrid_xy(gridname=gridname1, xy=xy1_phy_center, refobj=refinst1,
                                                      refobjindex=refinstindex1, refpinname=refpinname1)
-                            self.via(None, _xy1, gridname1, offset=offset1, refobj=refinst1, refobjindex=refinstindex1,
+                            GridLayoutGenerator.via(self, None, _xy1, gridname1, offset=offset1, refobj=refinst1, refobjindex=refinstindex1,
                                      refpinname=refpinname1, transform=transform1)
             #layer handling
             if layer is None:
@@ -917,11 +918,12 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             gridname0 = gridname
         if gridname1 is None:
             gridname1 = gridname0
-        rv0 = self.route(name=None, layer=layerv, xy0=xy0, xy1=xy1, direction='y', gridname0=gridname0,
+        # Used GridLayoutGenerator for abstracting the function in GridLayoutGenerator2
+        rv0 = GridLayoutGenerator.route(self, name=None, layer=layerv, xy0=xy0, xy1=xy1, direction='y', gridname0=gridname0,
                          refinstname0=refinstname0, refinstindex0=refinstindex0, refpinname0=refpinname0,
                          refinstname1=refinstname1, refinstindex1=refinstindex1, refpinname1=refpinname1,
                          endstyle0=endstyle0[0], endstyle1=endstyle1[0], via0=via0, via1=np.array([[0, 0]]))
-        rh0 = self.route(name=None, layer=layerh, xy0=xy1, xy1=xy0, direction='x', gridname0=gridname1,
+        rh0 = GridLayoutGenerator.route(self, name=None, layer=layerh, xy0=xy1, xy1=xy0, direction='x', gridname0=gridname1,
                          refinstname0=refinstname1, refinstindex0=refinstindex1, refpinname0=refpinname1,
                          refinstname1=refinstname0, refinstindex1=refinstindex0, refpinname1=refpinname0,
                          endstyle0=endstyle0[1], endstyle1=endstyle1[1], via0=via1)
@@ -979,11 +981,12 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             gridname0 = gridname
         if gridname1 is None:
             gridname1 = gridname0
-        rh0=self.route(name=None, layer=layerh, xy0=xy0, xy1=xy1, direction='x', gridname0=gridname0,
+        # Used GridLayoutGenerator for abstracting the function in GridLayoutGenerator2
+        rh0=GridLayoutGenerator.route(self, name=None, layer=layerh, xy0=xy0, xy1=xy1, direction='x', gridname0=gridname0,
                        refinstname0=refinstname0, refinstindex0=refinstindex0, refpinname0=refpinname0,
                        refinstname1=refinstname1, refinstindex1=refinstindex1, refpinname1=refpinname1,
                        endstyle0=endstyle0[0], endstyle1=endstyle1[0], via0=via0, via1=np.array([[0, 0]]))
-        rv0=self.route(name=None, layer=layerv, xy0=xy1, xy1=xy0, direction='y', gridname0=gridname1,
+        rv0=GridLayoutGenerator.route(self, name=None, layer=layerv, xy0=xy1, xy1=xy0, direction='y', gridname0=gridname1,
                        refinstname0=refinstname1, refinstindex0=refinstindex1, refpinname0=refpinname1,
                        refinstname1=refinstname0, refinstindex1=refinstindex0, refpinname1=refpinname0,
                        endstyle0=endstyle0[1], endstyle1=endstyle1[1], via0=via1)
@@ -1042,11 +1045,12 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         #resolve grid mismatch and do horizontal route
         xy1_grid0=self.grids.get_phygrid_xy(gridname0, xy1)
         xy1_grid1=self.grids.get_phygrid_xy(gridname1, xy1)
+        # Used GridLayoutGenerator for abstracting the function in GridLayoutGenerator2
         if not xy1_grid0[0]==xy1_grid1[0]: #xy1[0] mismatch
-            rh0 = self.route(None, layer=layerh, xy0=np.array([xy0_0, track_y]), xy1=np.array([xy1_0, track_y]),
+            rh0 = GridLayoutGenerator.route(self, layer=layerh, xy0=np.array([xy0_0, track_y]), xy1=np.array([xy1_0, track_y]),
                              gridname0=gridname0, offset1=np.array([xy1_grid1[0] - xy1_grid0[0], 0]))
         else:
-            rh0 = self.route(None, layer=layerh, xy0=np.array([xy0_0, track_y]), xy1=np.array([xy1_0, track_y]),
+            rh0 = GridLayoutGenerator.route(self, layer=layerh, xy0=np.array([xy0_0, track_y]), xy1=np.array([xy1_0, track_y]),
                              gridname0=gridname0)
         rv0=None;rv1=None
         if gridname==gridname1 and xy0[0]==xy1[0]: #no horozontal route/no via
@@ -1054,13 +1058,13 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         else:
             via0 = [[0, 0]]
         if not track_y == xy0[1]:
-            rv0=self.route(None, layer=layerv0, xy0=np.array([xy0[0], track_y]), xy1=xy0, gridname0=gridname0, via0=via0)
+            rv0=GridLayoutGenerator.route(self, None, layer=layerv0, xy0=np.array([xy0[0], track_y]), xy1=xy0, gridname0=gridname0, via0=via0)
         else:
-            self.via(None, xy0, gridname=gridname0)
+            GridLayoutGenerator.via(self, None, xy0, gridname=gridname0)
         if not track_y == xy1[1]:
-            rv1=self.route(None, layer=layerv1, xy0=np.array([xy1[0], track_y]), xy1=xy1, gridname0=gridname1, via0=via0)
+            rv1=GridLayoutGenerator.route(self, None, layer=layerv1, xy0=np.array([xy1[0], track_y]), xy1=xy1, gridname0=gridname1, via0=via0)
         else:
-            self.via(None, xy1, gridname=gridname0)
+            GridLayoutGenerator.via(self, None, xy1, gridname=gridname0)
         return [rv0, rh0, rv1]
 
     def route_hvh(self, layerh0=None, layerv=None, xy0=[0, 0], xy1=[0, 0], track_x=0, gridname0=None, layerh1=None, gridname1=None,
@@ -1113,17 +1117,17 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             xy0_0 = xy0[0] + extendt
             xy1_0 = xy1[0] - extendb
 
-        rv0 = self.route(None, layerv, xy0=np.array([track_x, xy0[1]]), xy1=np.array([track_x, xy1[1]]),
+        rv0 = GridLayoutGenerator.route(self, None, layerv, xy0=np.array([track_x, xy0[1]]), xy1=np.array([track_x, xy1[1]]),
                          gridname0=gridname0)
         rh0 = None;rh1 = None
         if not track_x == xy0[0]:
-            rh0 = self.route(None, layerh0, xy0=xy0, xy1=np.array([track_x, xy0[1]]), gridname0=gridname0, via1=[[0, 0]])
+            rh0 = GridLayoutGenerator.route(self, None, layerh0, xy0=xy0, xy1=np.array([track_x, xy0[1]]), gridname0=gridname0, via1=[[0, 0]])
         else:
-            self.via(None, xy0, gridname=gridname0)
+            GridLayoutGenerator.via(self, None, xy0, gridname=gridname0)
         if not track_x == xy1[0]:
-            rh1 = self.route(None, layerh1, xy0=np.array([track_x, xy1[1]]), xy1=xy1, gridname0=gridname0, via0=[[0, 0]])
+            rh1 = GridLayoutGenerator.route(self, None, layerh1, xy0=np.array([track_x, xy1[1]]), xy1=xy1, gridname0=gridname0, via0=[[0, 0]])
         else:
-            self.via(None, xy1, gridname=gridname0)
+            GridLayoutGenerator.via(self, None, xy1, gridname=gridname0)
         return [rh0, rv0, rh1]
 
     #pin creation functions
@@ -1216,7 +1220,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         elif direction=="top":
             xy[0][1] = xy[1][1] - size
 
-        return self.pin(name=name, layer=layer, xy=xy, gridname=gridname, netname=netname)
+        return GridLayoutGenerator.pin(self, name=name, layer=layer, xy=xy, gridname=gridname, netname=netname)
 
     #db access functions
     def sel_template_library(self, libname):
@@ -1662,7 +1666,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         if netname == None: netname = name
         xy = rect.xy
         xy = self.get_absgrid_region(gridname, xy[0, :], xy[1, :])
-        return self.pin(name, layer, xy, gridname, netname=netname)
+        return GridLayoutGenerator.pin(self, name, layer, xy, gridname, netname=netname)
 
     def get_template_xy(self, name, gridname=None, libname=None):
         """
