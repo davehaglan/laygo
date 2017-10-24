@@ -18,7 +18,7 @@ files=[
     'laygo/generators/splash/adc_sar_doubleSA_pmos_layout_generator_lvt.py',
     'laygo/generators/splash/adc_sar_capdrv_nsw_layout_generator.py',
     'laygo/generators/splash/adc_sar_capdrv_nsw_array_layout_generator.py',
-    'laygo/generators/splash/adc_sar_sarafe_nsw_layout_generator.py',
+    'laygo/generators/splash/adc_sar_sarafe_nsw_layout_generator_doubleSA.py',
     'laygo/generators/splash/adc_sar_sarfsm_layout_generator.py',
     'laygo/generators/splash/adc_sar_sarlogic_wret_layout_generator.py',
     #'laygo/generators/splash/adc_sar_sarlogic_wret_array_layout_generator.py',
