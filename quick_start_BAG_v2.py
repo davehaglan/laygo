@@ -32,14 +32,14 @@ if __name__ == '__main__':
     import laygo
     import numpy as np
     # initialize #######################################################################################################
-    laygen = laygo.GridLayoutGenerator2(config_file="./labs/laygo_config.yaml")
-    laygen.use_phantom = True  # for abstract generation. False when generating a real layout.
-    # load template and grid
-    utemplib = laygen.tech + '_microtemplates_dense'  # device template library name
-    laygen.load_template(filename='./labs/' + utemplib + '_templates.yaml', libname=utemplib)
-    laygen.load_grid(filename='./labs/' + utemplib + '_grids.yaml', libname=utemplib)
+    laygen = laygo.GridLayoutGenerator2(config_file="laygo_config.yaml")
+    #template and grid load
+    utemplib = laygen.tech+'_microtemplates_dense' #device template library name
+    laygen.load_template(filename=utemplib+'_templates.yaml', libname=utemplib)
+    laygen.load_grid(filename=utemplib+'_grids.yaml', libname=utemplib)
     laygen.templates.sel_library(utemplib)
     laygen.grids.sel_library(utemplib)
+
     # library & cell creation
     laygen.add_library('laygo_working')
     laygen.add_cell('nand_demo')
@@ -99,7 +99,8 @@ if __name__ == '__main__':
         laygen.pin(name=pn, gridname=pg, refobj=pr)
 
     # display ##########################################################################################################
-    laygen.display()    # export
+    laygen.display()
+    # export
     import bag
     prj = bag.BagProject()
     laygen.export_BAG(prj)
