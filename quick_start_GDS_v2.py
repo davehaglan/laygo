@@ -41,7 +41,6 @@ if __name__ == '__main__':
     laygen.load_grid(filename='./labs/' + utemplib + '_grids.yaml', libname=utemplib)
     laygen.templates.sel_library(utemplib)
     laygen.grids.sel_library(utemplib)
-
     # library & cell creation
     laygen.add_library('laygo_working')
     laygen.add_cell('nand_demo')
@@ -69,7 +68,6 @@ if __name__ == '__main__':
     # route parameters
     rg12 = 'route_M1_M2_cmos'  # grids
     rg23 = 'route_M2_M3_cmos'
-
     # a
     laygen.route(gridname0=rg12, ref0=nd[4].pins['G0'], ref1=pd[4].pins['G0'], via1=[0, 0])
     laygen.route(gridname0=rg12, mn0=[-2, 0], mn1=[0, 0], ref0=pd[4].pins['G0'][0, 0], ref1=pd[4].pins['G0'][-1, 0])
@@ -79,16 +77,16 @@ if __name__ == '__main__':
     laygen.route(gridname0=rg12, mn0=[0, 0], mn1=[2, 0], ref0=nd[1].pins['G0'][0, 0], ref1=nd[1].pins['G0'][-1, 0])
     rb = laygen.route(gridname0=rg23, mn0=[0, 0], mn1=[0, 2], ref0=nd[1].pins['G0'][0, 0], ref1=nd[1].pins['G0'][0, 0], via0=[0, 0])
     # internal connections
-    ri = laygen.route(mn0=[0, 1], mn1=[0, 1], gridname0=rg12, ref0=nd[1].pins['D0'][0, 0], ref1=nd[4].pins['S1'][-1, 0])
+    ri = laygen.route(gridname0=rg12, ref0=nd[1].pins['D0'][0, 0].top, ref1=nd[4].pins['S1'][-1, 0].top)
     for _p in np.concatenate((nd[1].pins['D0'], nd[4].pins['S0'], nd[4].pins['S1'])):
-        laygen.via(gridname=rg12, mn=[0, 0], ref=_p, overlay=ri)
+        laygen.via(gridname=rg12, ref=_p, overlay=ri)
     # output
     ron = laygen.route(gridname0=rg12, mn0=[-1, 0], mn1=[1, 0], ref0=nd[4].pins['D0'][0, 0], ref1=nd[4].pins['D0'][-1, 0])
     rop = laygen.route(gridname0=rg12, mn0=[0, 0], mn1=[1, 0], ref0=pd[1].pins['D0'][0, 0].top, ref1=pd[4].pins['D0'][-1, 0].top)
     laygen.via(gridname=rg12, ref=nd[4].pins['D0'], overlay=ron)
     laygen.via(gridname=rg12, ref=pd[1].pins['D0'], overlay=rop)
     laygen.via(gridname=rg12, ref=pd[4].pins['D0'], overlay=rop)
-    ro = laygen.route(gridname0=rg23, mn0=[0, 0], mn1=[0, 0], ref0=ron.right, ref1=rop.right, via0=[0, 0], via1=[0, 0])
+    ro = laygen.route(gridname0=rg23, ref0=ron.right, ref1=rop.right, via0=[0, 0], via1=[0, 0])
     # power and ground route
     for dev in [nd[1], pd[1], pd[4]]:
         for pn in ['S0', 'S1']:
