@@ -99,6 +99,18 @@
 <li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#export-to-bag">Export to BAG</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html">Tutorial (BAG flow, new version)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#setup-and-running">Setup and running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#pin-creation">Pin creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#export-to-bag">Export to BAG</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture/architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../example/logic.html">Generator example - CMOS logic family</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../example/logic.html#install-and-launch">Install and launch</a></li>
@@ -899,7 +911,7 @@ ex) [[x0, y0], [x1, x1], ..., [xn-1, yn-1], [x0, y0]]</li>
 <p>Base class for GDSIO objects</p>
 <dl class="attribute">
 <dt id="laygo.GDSIO.Element.possible_transform_parameters">
-<code class="descname">possible_transform_parameters</code><em class="property"> = {'R0': (None, None), 'MY': (32768, 180), 'R90': (0, 90), 'R180': (0, 180), 'MX': (32768, 0), 'R270': (0, 270)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="descname">possible_transform_parameters</code><em class="property"> = {'R180': (0, 180), 'MY': (32768, 180), 'R0': (None, None), 'MX': (32768, 0), 'R90': (0, 90), 'R270': (0, 270)}</em><a class="headerlink" href="#laygo.GDSIO.Element.possible_transform_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; transform parameter dictionary</p>
 </dd></dl>
 
@@ -1583,7 +1595,7 @@ grids.
 
 <dl class="attribute">
 <dt id="laygo.GridLayoutGenerator.GridLayoutGenerator.layers">
-<code class="descname">layers</code><em class="property"> = {'prbnd': [], 'text': [], 'metal': [], 'pin': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">layers</code><em class="property"> = {'text': [], 'pin': [], 'prbnd': [], 'metal': []}</em><a class="headerlink" href="#laygo.GridLayoutGenerator.GridLayoutGenerator.layers" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; layer dictionary. Keys are metal, pin, text, prbnd</p>
 </dd></dl>
 
@@ -3690,6 +3702,12 @@ All information shown in db.display() will be saved</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="laygo.LayoutObject.Pin.pointers">
+<code class="descname">pointers</code><em class="property"> = {}</em><a class="headerlink" href="#laygo.LayoutObject.Pin.pointers" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>dict()</em> &#8211; pointer dictionary</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="laygo.LayoutObject.Pin.netname">
 <code class="descname">netname</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Pin.netname" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>str</em> &#8211; net name</p>
@@ -3706,6 +3724,46 @@ All information shown in db.display() will be saved</p>
 <code class="descname">master</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Pin.master" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>LayoutObject.Instance</em> &#8211; master instance, only for instance pins</p>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Pin.left">
+<code class="descname">left</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Pin.left" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Pin.right">
+<code class="descname">right</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Pin.right" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Pin.bottom">
+<code class="descname">bottom</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Pin.bottom" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Pin.top">
+<code class="descname">top</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Pin.top" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Pin.bottom_left">
+<code class="descname">bottom_left</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Pin.bottom_left" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Pin.bottom_right">
+<code class="descname">bottom_right</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Pin.bottom_right" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Pin.top_left">
+<code class="descname">top_left</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Pin.top_left" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="laygo.LayoutObject.Pin.top_right">
+<code class="descname">top_right</code><em class="property"> = None</em><a class="headerlink" href="#laygo.LayoutObject.Pin.top_right" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="laygo.LayoutObject.Pin.display">
