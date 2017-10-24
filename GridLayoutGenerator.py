@@ -646,6 +646,12 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                         refinstname0=refobj0.master.name
                         refinstindex0=np.array([0, 0])
                         _xy0_pointer_scale=refobj0.xy
+                    elif isinstance(refobj0.master, Pin):
+                        refinst0 = refobj0.master.master
+                        refinstname0 = refobj0.master.master.name
+                        refinstindex0 = refobjindex0
+                        refpinname0 = refobj0.master.name
+                        _xy0_pointer_scale = refobj0.xy
                     else:
                         refinst0 = refobj0.master
                         refinstname0=refobj0.master.name
@@ -689,6 +695,12 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                         refinstname1 = refobj1.master.name
                         refinstindex1 = np.array([0, 0])
                         _xy1_pointer_scale = refobj1.xy
+                    elif isinstance(refobj1.master, Pin):
+                        refinst1 = refobj1.master.master
+                        refinstname1 = refobj1.master.master.name
+                        refinstindex1 = refobjindex1
+                        refpinname1 = refobj1.master.name
+                        _xy1_pointer_scale = refobj1.xy
                     else:
                         refinst1 = refobj1.master
                         refinstname1=refobj1.master.name
@@ -711,16 +723,25 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                     #instance offset
                     reftemplate0=self.templates.get_template(refinst0.cellname, libname=refinst0.libname)
                     _offset0=offset0+refinst0.xy+np.dot(refinst0.spacing*refinstindex0, ut.Mt(refinst0.transform).T)
-                    #pointer
-                    _xy0_pointer_abs = np.dot(
-                        _xy0_pointer_scale * self.get_xy(obj=reftemplate0, gridname=gridname0) * refinst0.shape,
-                        ut.Mt(refinst0.transform).T)
-                    _xy0_pointer_abs = _xy0_pointer_abs.astype(int)
-                    _xy0=_xy0+_xy0_pointer_abs
-                    #pin
-                    if not refpinname0 == None: # if pin reference is specified
-                        pin_xy0_abs=self.get_template_pin_xy(reftemplate0.name, refpinname0, gridname0, libname=refinst0.libname)[0,:]
-                        _xy0=_xy0+pin_xy0_abs
+                    #pointer and pin
+                    if refpinname0 is None: # not pin
+                        # pointer
+                        _xy0_pointer_abs = np.dot(
+                            _xy0_pointer_scale * self.get_xy(obj=reftemplate0, gridname=gridname0) * refinst0.shape,
+                            ut.Mt(refinst0.transform).T)
+                        _xy0_pointer_abs = _xy0_pointer_abs.astype(int)
+                        _xy0 = _xy0 + _xy0_pointer_abs
+                    else: #pin
+                        #pin_xy0_abs=self.get_template_pin_xy(reftemplate0.name, refpinname0, gridname0, libname=refinst0.libname)[0,:]
+                        pin_xy_abs = self.get_template_pin_xy(reftemplate0.name, refpinname0, gridname0, libname=refinst0.libname)
+                        #pin location
+                        pin_xy0_abs = pin_xy_abs[0, :]
+                        _xy0 = _xy0 + pin_xy0_abs
+                        #pointer
+                        pin_size_abs = pin_xy_abs[1, :] - pin_xy_abs[0, :]
+                        _xy0_pointer_abs = _xy0_pointer_scale * pin_size_abs #np.dot(_xy0_pointer_scale * pin_size_abs, ut.Mt(refinst0.transform).T)
+                        _xy0_pointer_abs = _xy0_pointer_abs.astype(int)
+                        _xy0 = _xy0 + _xy0_pointer_abs
                     transform0=refinst0.transform # overwrite transform variable
             if not (refinstname1 is None):
                 if isinstance(refinst1, Rect): #hack to support Rect objects and Pointer objects of Rect objects
@@ -734,16 +755,25 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                     #instance offset
                     reftemplate1=self.templates.get_template(refinst1.cellname, libname=refinst1.libname)
                     _offset1=offset1+refinst1.xy+np.dot(refinst1.spacing*refinstindex1, ut.Mt(refinst1.transform).T)
-                    #pointer
-                    _xy1_pointer_abs = np.dot(
-                        _xy1_pointer_scale * self.get_xy(obj=reftemplate1, gridname=gridname1) * refinst1.shape,
-                        ut.Mt(refinst1.transform).T)
-                    _xy1_pointer_abs = _xy1_pointer_abs.astype(int)
-                    _xy1 = _xy1 + _xy1_pointer_abs
-                    #pin
-                    if not refpinname1 == None: # if pin reference is specified
-                        pin_xy1_abs = self.get_template_pin_xy(reftemplate1.name, refpinname1, gridname1, libname=refinst1.libname)[0, :]
-                        _xy1=_xy1+pin_xy1_abs
+                    #pointer and pin
+                    if refpinname1 is None: # not pin
+                        # pointer
+                        _xy1_pointer_abs = np.dot(
+                            _xy1_pointer_scale * self.get_xy(obj=reftemplate1, gridname=gridname1) * refinst1.shape,
+                            ut.Mt(refinst1.transform).T)
+                        _xy1_pointer_abs = _xy1_pointer_abs.astype(int)
+                        _xy1 = _xy1 + _xy1_pointer_abs
+                    else:
+                        #pin_xy1_abs = self.get_template_pin_xy(reftemplate1.name, refpinname1, gridname1, libname=refinst1.libname)[0, :]
+                        pin_xy_abs = self.get_template_pin_xy(reftemplate1.name, refpinname1, gridname1, libname=refinst1.libname)
+                        #pin location
+                        pin_xy1_abs = pin_xy_abs[0, :]
+                        _xy1 = _xy1 + pin_xy1_abs
+                        #pointer
+                        pin_size_abs = pin_xy_abs[1, :] - pin_xy_abs[0, :]
+                        _xy1_pointer_abs = _xy1_pointer_scale * pin_size_abs #np.dot(_xy1_pointer_scale * pin_size_abs, ut.Mt(refinst1.transform).T)
+                        _xy1_pointer_abs = _xy1_pointer_abs.astype(int)
+                        _xy1 = _xy1 + _xy1_pointer_abs
                     transform1=refinst1.transform # overwrite transform variable
 
             # get physical grid coordinates

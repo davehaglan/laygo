@@ -206,44 +206,11 @@ class GridLayoutGenerator2(GridLayoutGenerator):
                                          offset0=offset0, offset1=offset1, transform0=transform0, transform1=transform1,
                                          endstyle0=endstyle0, endstyle1=endstyle1, via0=via0, via1=via1,
                                          netname=netname)
-    '''
-    #object geometry related functions
-    def get_xy(self, obj, gridname=None, sort=False):
-        """
-            get xy coordinate of an object on the specific coordinate
-            Parameters
-            ----------
-            obj : LayoutObject.LayoutObject or TemplateObject.TemplateObject
-                Object to get the xy coordinates
-            gridname : str, optional
-                grid name. If None, physical grid is used
-            Returns
-            -------
-            np.ndarray()
-                geometric paramter of the object on gridname
-        """
-        if isinstance(obj, TemplateObject):
-            if gridname is None:
-                return obj.size
-            else:
-                return self.get_absgrid_xy(gridname, obj.size)
-        if isinstance(obj, Instance) or isinstance(obj, InstanceArray):
-            if gridname == None:
-                return obj.xy
-            else:
-                return self.get_absgrid_xy(gridname, obj.xy)
-        if isinstance(obj, Rect):
-            xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
-            if sort == True: xy = self._bbox_xy(xy)
-            return xy
-        if isinstance(obj, Pin):
-            xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
-            if sort == True: xy = self._bbox_xy(xy)
-            return xy
 
-    def get_bbox(self, obj, gridname=None):
+    #object geometry related functions
+    def get_mn(self, obj, gridname=None, sort=False):
         """
-            get bounding box of an object on the specific coordinate
+            get coordinate values of an object on the specific coordinate
             Parameters
             ----------
             obj : LayoutObject.LayoutObject or TemplateObject.TemplateObject
@@ -255,31 +222,4 @@ class GridLayoutGenerator2(GridLayoutGenerator):
             np.ndarray()
                 geometric paramter of the object on gridname
         """
-        if isinstance(obj, TemplateObject):
-            if gridname is None:
-                xy = obj.size
-            else:
-                xy = self.get_absgrid_xy(gridname, obj.size)
-            return np.array([0, 0], xy)
-        if isinstance(obj, Instance) or isinstance(obj, InstanceArray):
-            if gridname == None:
-                xy = obj.bbox
-            else:
-                xy = self.get_absgrid_xy(gridname, obj.bbox)
-            xy = self._bbox_xy(xy)
-            return xy
-        if isinstance(obj, Rect):
-            if gridname == None:
-                xy = obj.xy
-            else:
-                xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
-            xy = self._bbox_xy(xy)
-            return xy
-        if isinstance(obj, Pin):
-            if gridname == None:
-                xy = obj.xy
-            else:
-                xy = self.get_absgrid_region(gridname, obj.xy[0, :], obj.xy[1, :])
-            xy = self._bbox_xy(xy)
-            return xy
-    '''
+        return self.get_xy(obj=obj, gridname=gridname, sort=sort)

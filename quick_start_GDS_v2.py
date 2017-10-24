@@ -84,7 +84,7 @@ if __name__ == '__main__':
         laygen.via(gridname=rg12, mn=[0, 0], ref=_p, overlay=ri)
     # output
     ron = laygen.route(gridname0=rg12, mn0=[-1, 0], mn1=[1, 0], ref0=nd[4].pins['D0'][0, 0], ref1=nd[4].pins['D0'][-1, 0])
-    rop = laygen.route(gridname0=rg12, mn0=[0, 0], mn1=[1, 0], ref0=pd[1].pins['D0'][0, 0], ref1=pd[4].pins['D0'][-1, 0])
+    rop = laygen.route(gridname0=rg12, mn0=[0, 0], mn1=[1, 0], ref0=pd[1].pins['D0'][0, 0].top, ref1=pd[4].pins['D0'][-1, 0].top)
     laygen.via(gridname=rg12, ref=nd[4].pins['D0'], overlay=ron)
     laygen.via(gridname=rg12, ref=pd[1].pins['D0'], overlay=rop)
     laygen.via(gridname=rg12, ref=pd[4].pins['D0'], overlay=rop)
