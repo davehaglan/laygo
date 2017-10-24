@@ -70,11 +70,11 @@ if __name__ == '__main__':
     rg23 = 'route_M2_M3_cmos'
     # a
     laygen.route(gridname0=rg12, ref0=nd[4].pins['G0'], ref1=pd[4].pins['G0'], via1=[0, 0])
-    laygen.route(gridname0=rg12, mn0=[-2, 0], mn1=[0, 0], ref0=pd[4].pins['G0'][0, 0], ref1=pd[4].pins['G0'][-1, 0])
+    laygen.route(gridname0=rg12, mn0=[0, 0], mn1=[0, 0], ref0=pd[4].pins['G0'][0, 0], ref1=pd[4].pins['G0'][-1, 0])
     ra = laygen.route(gridname0=rg23, mn0=[0, 0], mn1=[0, 2], ref0=pd[4].pins['G0'][0, 0], ref1=pd[4].pins['G0'][0, 0], via0=[0, 0])
     # b
     laygen.route(gridname0=rg12, ref0=nd[1].pins['G0'], ref1=pd[1].pins['G0'], via0=[0, 0])
-    laygen.route(gridname0=rg12, mn0=[0, 0], mn1=[2, 0], ref0=nd[1].pins['G0'][0, 0], ref1=nd[1].pins['G0'][-1, 0])
+    laygen.route(gridname0=rg12, mn0=[0, 0], mn1=[0, 0], ref0=nd[1].pins['G0'][0, 0], ref1=nd[1].pins['G0'][-1, 0])
     rb = laygen.route(gridname0=rg23, mn0=[0, 0], mn1=[0, 2], ref0=nd[1].pins['G0'][0, 0], ref1=nd[1].pins['G0'][0, 0], via0=[0, 0])
     # internal connections
     ri = laygen.route(gridname0=rg12, ref0=nd[1].pins['D0'][0, 0].top, ref1=nd[4].pins['S1'][-1, 0].top)

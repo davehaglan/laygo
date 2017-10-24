@@ -10,6 +10,7 @@ recommend users to go through the entire tutorial steps, reading this
 document and running commands step by step, to get a better idea of the
 laygo flow.
 
+
 ## Setup and running
 Run following commands below to install laygo and load.
 
@@ -59,7 +60,7 @@ correctly so skip this step.
     You should see the generated nand gate layout in
     laygo_working/nand_test and it should looks like this:
 
-    ![nand](images/laygo_bag_nand_cds2.png)
+    ![nand](images/laygo_v2_nand.png)
 
 ## Initialize GridLayoutGenerator
 Let's take a look into the detail of the layout generator.
