@@ -98,6 +98,18 @@
 <li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG.html#export-to-bag">Export to BAG</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html">Tutorial (BAG flow, new version)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#setup-and-running">Setup and running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#pin-creation">Pin creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#export-to-bag">Export to BAG</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../architecture/architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../example/logic.html">Generator example - CMOS logic family</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../example/logic.html#install-and-launch">Install and launch</a></li>
@@ -533,8 +545,9 @@
             <span class="k">for</span> <span class="n">idx_x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
                 <span class="n">i_row</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">idx_y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-                    <span class="n">xy</span> <span class="o">=</span> <span class="n">xy</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">spacing</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">idx_x</span><span class="p">,</span> <span class="n">idx_y</span><span class="p">]),</span> <span class="n">ut</span><span class="o">.</span><span class="n">Mt</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
-                    <span class="n">i_row</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Instance</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">xy</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">libname</span><span class="p">,</span> <span class="n">cellname</span><span class="o">=</span><span class="n">cellname</span><span class="p">,</span>
+                    <span class="c1">#xy = xy + np.dot(spacing * np.array([idx_x, idx_y]), ut.Mt(transform).T)</span>
+                    <span class="n">_xy</span> <span class="o">=</span> <span class="n">xy</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">spacing</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">idx_x</span><span class="p">,</span> <span class="n">idx_y</span><span class="p">]),</span> <span class="n">ut</span><span class="o">.</span><span class="n">Mt</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+                    <span class="n">i_row</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Instance</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_xy</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">libname</span><span class="p">,</span> <span class="n">cellname</span><span class="o">=</span><span class="n">cellname</span><span class="p">,</span>
                                        <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="n">template</span><span class="p">)]</span>
                 <span class="n">i_list</span> <span class="o">+=</span> <span class="p">[</span><span class="n">i_row</span><span class="p">]</span>
             <span class="c1">#print(shape, np.array(i_list))</span>

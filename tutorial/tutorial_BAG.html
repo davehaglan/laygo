@@ -34,7 +34,7 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="laygo_documentation 1.0 documentation" href="../index.html"/>
-        <link rel="next" title="Laygo architecture" href="../architecture/architecture.html"/>
+        <link rel="next" title="NAND gate generation and BAG export tutorial" href="tutorial_BAG_v2.html"/>
         <link rel="prev" title="NAND gate generation and GDS export tutorial" href="tutorial_GDS.html"/> 
 
   
@@ -97,6 +97,18 @@
 <li class="toctree-l2"><a class="reference internal" href="#power-routing">Power routing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pin-creation">Pin creation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#export-to-bag">Export to BAG</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_BAG_v2.html">Tutorial (BAG flow, new version)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#setup-and-running">Setup and running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#pin-creation">Pin creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#export-to-bag">Export to BAG</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture/architecture.html">Architecture</a></li>
@@ -201,10 +213,6 @@ and running <a class="reference external" href="../../../quick_start_BAG.py">qui
 recommend users to go through the entire tutorial steps, reading this
 document and running commands step by step, to get a better idea of the
 laygo flow.</p>
-<blockquote>
-<div>Note: Although the rest of tutorial uses FreePDK45 for example, we
-recommend using cds_ff_mpt because its BAG tech repository is maintained
-continuously.</div></blockquote>
 <div class="section" id="setup-and-running">
 <span id="setup-and-running"></span><h2>Setup and running<a class="headerlink" href="#setup-and-running" title="Permalink to this headline">¶</a></h2>
 <p>Run following commands below to install laygo and load.</p>
@@ -238,10 +246,7 @@ $ git submodule update
 variables are set correctly. For BWRC users, all variables are set
 correctly so skip this step.</p>
 </li>
-<li><p class="first">Source .cshrc, launch virtuoso. Check if you can see all libraries
-listed below.</p>
-<p><img alt="lib" src="../_images/laygo_bag_lib.png" /></p>
-<p>type <code class="docutils literal"><span class="pre">load</span> <span class="pre">&quot;start_bag.il&quot;</span></code> in CIW to load skill APIs for bag.</p>
+<li><p class="first">Source .cshrc, launch virtuoso, type <code class="docutils literal"><span class="pre">load</span> <span class="pre">&quot;start_bag.il&quot;</span></code> in CIW to load skill APIs for bag.</p>
 </li>
 <li><p class="first">Launch bag, by typing this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ start_bag.sh
@@ -548,7 +553,7 @@ format.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../architecture/architecture.html" class="btn btn-neutral float-right" title="Laygo architecture">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="tutorial_BAG_v2.html" class="btn btn-neutral float-right" title="NAND gate generation and BAG export tutorial">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="tutorial_GDS.html" class="btn btn-neutral" title="NAND gate generation and GDS export tutorial"><span class="fa fa-arrow-circle-left"></span> Previous</a>

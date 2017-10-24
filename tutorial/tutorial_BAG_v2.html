@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>NAND gate generation and GDS export tutorial &mdash; laygo_documentation 1.0 documentation</title>
+  <title>NAND gate generation and BAG export tutorial &mdash; laygo_documentation 1.0 documentation</title>
   
 
   
@@ -34,8 +34,8 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="laygo_documentation 1.0 documentation" href="../index.html"/>
-        <link rel="next" title="NAND gate generation and BAG export tutorial" href="tutorial_BAG.html"/>
-        <link rel="prev" title="LAYGO - LAYout with Gridded Objects" href="../introduction/introduction.html"/> 
+        <link rel="next" title="Laygo architecture" href="../architecture/architecture.html"/>
+        <link rel="prev" title="NAND gate generation and BAG export tutorial" href="tutorial_BAG.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -75,16 +75,16 @@
 <li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#license">License</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial (GDS flow)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#setup">Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#load-template-and-grid-database">Load template and grid database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#library-and-cell-creation">Library and cell creation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#cell-placements">Cell placements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#signal-routing">Signal routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#power-routing">Power routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#pin-creation">Pin creation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#gds-export">GDS export</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_GDS.html">Tutorial (GDS flow)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_GDS.html#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_GDS.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_GDS.html#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_GDS.html#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_GDS.html#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_GDS.html#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_GDS.html#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_GDS.html#pin-creation">Pin creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_GDS.html#gds-export">GDS export</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial_BAG.html">Tutorial (BAG flow)</a><ul>
@@ -99,16 +99,16 @@
 <li class="toctree-l2"><a class="reference internal" href="tutorial_BAG.html#export-to-bag">Export to BAG</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial_BAG_v2.html">Tutorial (BAG flow, new version)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#setup-and-running">Setup and running</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#load-template-and-grid-database">Load template and grid database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#library-and-cell-creation">Library and cell creation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#cell-placements">Cell placements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#signal-routing">Signal routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#power-routing">Power routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#pin-creation">Pin creation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#export-to-bag">Export to BAG</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial (BAG flow, new version)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setup-and-running">Setup and running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pin-creation">Pin creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#export-to-bag">Export to BAG</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture/architecture.html">Architecture</a></li>
@@ -191,10 +191,10 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-    <li>NAND gate generation and GDS export tutorial</li>
+    <li>NAND gate generation and BAG export tutorial</li>
       <li class="wy-breadcrumbs-aside">
         
-          <a href="../_sources/tutorial/tutorial_GDS.txt" rel="nofollow"> View page source</a>
+          <a href="../_sources/tutorial/tutorial_BAG_v2.txt" rel="nofollow"> View page source</a>
         
       </li>
   </ul>
@@ -202,57 +202,91 @@
 </div>
           <div role="main" class="document">
             
-  <div class="section" id="nand-gate-generation-and-gds-export-tutorial">
-<span id="nand-gate-generation-and-gds-export-tutorial"></span><h1>NAND gate generation and GDS export tutorial<a class="headerlink" href="#nand-gate-generation-and-gds-export-tutorial" title="Permalink to this headline">¶</a></h1>
-<p>In this tutorial, you will create a simple NAND gate layout and export it to a GDS file.
-The scripts used in this tutorial are in <a class="reference external" href="../../../quick_start_GDS.py">quick_start_GDS.py</a>.</p>
-<div class="section" id="setup">
-<span id="setup"></span><h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
-<p>Run the following commands to install laygo and run ipython.</p>
+  <div class="section" id="nand-gate-generation-and-bag-export-tutorial">
+<span id="nand-gate-generation-and-bag-export-tutorial"></span><h1>NAND gate generation and BAG export tutorial<a class="headerlink" href="#nand-gate-generation-and-bag-export-tutorial" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial contains instructions to generate a NAND gate layout and
+export it to OA database through
+<a class="reference external" href="https://github.com/pkerichang/BAG_framework">BAG</a> framework. You can
+simply run this tutorial by setting up BAG for
+<a class="reference external" href="https://support.cadence.com">cadence generic PDK for finfet and multi patterned technology</a>
+and running <a class="reference external" href="../../../quick_start_BAG.py">quick_start_BAG.py</a>, but we
+recommend users to go through the entire tutorial steps, reading this
+document and running commands step by step, to get a better idea of the
+laygo flow.</p>
+<div class="section" id="setup-and-running">
+<span id="setup-and-running"></span><h2>Setup and running<a class="headerlink" href="#setup-and-running" title="Permalink to this headline">¶</a></h2>
+<p>Run following commands below to install laygo and load.</p>
 <ol>
-<li><p class="first">Clone laygo repo</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git@github.com:ucb-art/laygo.git
+<li><p class="first">Download cds_ff_mpt PDK from <a class="reference external" href="https://support.cadence.com">Cadence Customer Support</a>
+Make sure you can launch virtuoso and make a layout using the PDK.
+For BWRC users, PDK is installed in <code class="docutils literal"><span class="pre">/tools/cadence/GPDK/cds_ff_mpt_v_0.3/</span></code>.</p>
+</li>
+<li><p class="first">Clone BAG2_cds_ff_mpt repo.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git@github.com:ucb-art/BAG2_cds_ff_mpt.git
 </pre></div>
 </div>
 </li>
-<li><p class="first">Launch ipython (or bag)</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ ipython
+<li><p class="first">The technology setup repo has 2 submodules in it: BAG_framework and
+laygo. Let&#8217;s load the submodules. Enter the BAG_cds_ff_mpt
+(or BAG2_cds_ff_mpt) directory and type this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ git submodule init
+$ git submodule update
+</pre></div>
+</div>
+<ul class="simple">
+<li>In order to update the submodules to the latest ones, type below:</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ git submodule foreach git pull origin master
 </pre></div>
 </div>
 </li>
-<li><p class="first">In ipython, import laygo and numpy</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">laygo</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+</ol>
+<ol>
+<li><p class="first">Open <strong>.cshrc</strong>, <strong>bag_config.yaml</strong> file, and check if all path
+variables are set correctly. For BWRC users, all variables are set
+correctly so skip this step.</p>
+</li>
+<li><p class="first">Source .cshrc, launch virtuoso, type <code class="docutils literal"><span class="pre">load</span> <span class="pre">&quot;start_bag.il&quot;</span></code> in CIW to load skill APIs for bag.</p>
+</li>
+<li><p class="first">Launch bag, by typing this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ start_bag.sh
 </pre></div>
 </div>
+</li>
+<li><p class="first">Launch the generator script, by typing this in python console.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">quick_start_BAG</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>You should see the generated nand gate layout in
+laygo_working/nand_test and it should looks like this:</p>
+<p><img alt="nand" src="../_images/laygo_v2_nand.png" /></p>
 </li>
 </ol>
 </div>
 <div class="section" id="initialize-gridlayoutgenerator">
 <span id="initialize-gridlayoutgenerator"></span><h2>Initialize GridLayoutGenerator<a class="headerlink" href="#initialize-gridlayoutgenerator" title="Permalink to this headline">¶</a></h2>
-<p>Run the following commands to initialize GridLayoutGenerator, the main
-generator object that contains all layout generation functions.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">laygen</span> <span class="o">=</span> <span class="n">laygo</span><span class="o">.</span><span class="n">GridLayoutGenerator</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="s2">&quot;./labs/laygo_config.yaml&quot;</span><span class="p">)</span>
-<span class="n">laygen</span><span class="o">.</span><span class="n">use_phantom</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c1"># for abstract generation. False when generating a real layout.</span>
+<p>Let&#8217;s take a look into the detail of the layout generator.
+Open laygo/quick_start_BAG.py
+Following command will initialize GridLayoutGenerator, the main
+generator object that contains all core generation functions.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#initialize</span>
+<span class="n">laygen</span> <span class="o">=</span> <span class="n">laygo</span><span class="o">.</span><span class="n">GridLayoutGenerator</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="s2">&quot;laygo_config.yaml&quot;</span><span class="p">)</span>
 <span class="n">laygen</span><span class="o">.</span><span class="n">use_array</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c1"># use InstanceArray instead of Instance</span>
 </pre></div>
 </div>
-<p>Note that <strong>use_phantom</strong> tag is set to <strong>True</strong>, which means you are
-exporting to a phantom cell. This option is useful for the GDS flow,
-because in many cases you are not exporting the whole hierarchy to a
-single GDS file. This option allows users to display the layout and
-debug without exporting primitive templates.</p>
-<p><strong>use_array</strong> is used to enable a recently added feature; InstanceArray.
+<p>Note that <strong>laygo_config.yaml</strong> is passed, which contains process
+specific information.
+<strong>use_array</strong> is used to enable a recently added feature; InstanceArray.
 Most legacy generator codes are not using this option.</p>
 </div>
 <div class="section" id="load-template-and-grid-database">
 <span id="load-template-and-grid-database"></span><h2>Load template and grid database<a class="headerlink" href="#load-template-and-grid-database" title="Permalink to this headline">¶</a></h2>
-<p>The example technology setup uses <em>laygo_faketech_microtemplates_dense</em>
+<p>The example technology setup uses <em>cds_ff_mpt_microtemplates_dense</em>
 for the primitive template library. All primitive template and grid
-information are stored in <a class="reference external" href="../../../labs/laygo_faketech_microtemplates_dense_templates.yaml">labs/laygo_faketech_microtemplates_dense_templates.yaml</a>,
-<a class="reference external" href="../../../labs/laygo_faketech_microtemplates_dense_grids.yaml">labs/laygo_faketech_microtemplates_dense_grids.yaml</a>
-and the files need to be loaded before the actual layout generation steps.
-Run the following commands to load template and grid database.</p>
+information are stored in <em>cds_ff_mpt_microtemplates_dense_templates.yaml</em>,
+<em>cds_ff_mpt_microtemplates_dense_grids.yaml</em>
+and the files should be loaded before the actual layout generation steps.
+Run the following commands to load database.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># load template and grid</span>
 <span class="n">utemplib</span> <span class="o">=</span> <span class="n">laygen</span><span class="o">.</span><span class="n">tech</span> <span class="o">+</span> <span class="s1">&#39;_microtemplates_dense&#39;</span>  <span class="c1"># device template library name</span>
 <span class="n">laygen</span><span class="o">.</span><span class="n">load_template</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;./labs/&#39;</span> <span class="o">+</span> <span class="n">utemplib</span> <span class="o">+</span> <span class="s1">&#39;_templates.yaml&#39;</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">utemplib</span><span class="p">)</span>
@@ -261,29 +295,30 @@ Run the following commands to load template and grid database.</p>
 <span class="n">laygen</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">sel_library</span><span class="p">(</span><span class="n">utemplib</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><strong>load_template</strong> and <strong>load_grid</strong> functions read yaml files and dump
-to laygen.templates and laygen.grid.
-The following commands shows the loaded template and grid information.</p>
+<p><strong>load_template</strong> and <strong>load_grid</strong> functions load yaml files that store
+template and grid database to laygen.templates and laygen.grid.
+If you want to see the loaded information, run the following commands.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">laygen</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
 <span class="n">laygen</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Or you can specify a template (or grid) to display, like the following:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">laygen</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">libname</span><span class="o">=</span><span class="s1">&#39;laygo_faketech_microtemplates_dense&#39;</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="s1">&#39;nmos4_fast_center_nf2&#39;</span><span class="p">)</span>
-<span class="n">laygen</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">libname</span><span class="o">=</span><span class="s1">&#39;laygo_faketech_microtemplates_dense&#39;</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s1">&#39;route_M1_M2_basic&#39;</span><span class="p">)</span>
+<p>Or you can specify template (or grid name) to display, like this.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">laygen</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">libname</span><span class="o">=</span><span class="s1">&#39;cds_ff_mpt_microtemplates_dense&#39;</span><span class="p">,</span> <span class="n">templatename</span><span class="o">=</span><span class="s1">&#39;nmos4_fast_center_nf2&#39;</span><span class="p">)</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">grids</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">libname</span><span class="o">=</span><span class="s1">&#39;cds_ff_mpt_microtemplates_dense&#39;</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s1">&#39;route_M1_M2_basic&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Then you can see the specified template and grid information.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Display</span> <span class="n">lib</span><span class="p">:</span><span class="n">laygo_faketech_microtemplates_dense</span><span class="p">,</span> <span class="n">template</span><span class="p">:</span><span class="n">nmos4_fast_center_nf2</span>
-<span class="p">[</span><span class="n">Library</span><span class="p">]</span><span class="n">laygo_faketech_microtemplates_dense</span>
+<p>Then you can see the specified template and grid information, as shown
+below.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Display</span> <span class="n">lib</span><span class="p">:</span><span class="n">cds_ff_mpt_microtemplates_dense</span><span class="p">,</span> <span class="n">template</span><span class="p">:</span><span class="n">nmos4_fast_center_nf2</span>
+<span class="p">[</span><span class="n">Library</span><span class="p">]</span><span class="n">cds_ff_mpt_microtemplates_dense</span>
  <span class="p">[</span><span class="n">Template</span><span class="p">]</span><span class="n">nmos4_fast_center_nf2</span>
  <span class="n">xy</span><span class="p">:[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">]]</span> <span class="n">pins</span><span class="p">:{</span><span class="s1">&#39;S0&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;netname&#39;</span><span class="p">:</span> <span class="s1">&#39;S0&#39;</span><span class="p">,</span> <span class="s1">&#39;layer&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;pin&#39;</span><span class="p">],</span> <span class="s1">&#39;xy&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.2</span> <span class="p">],</span>
        <span class="p">[</span> <span class="mf">0.05</span><span class="p">,</span>  <span class="mf">0.5</span> <span class="p">]])},</span> <span class="s1">&#39;S1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;netname&#39;</span><span class="p">:</span> <span class="s1">&#39;S1&#39;</span><span class="p">,</span> <span class="s1">&#39;layer&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;pin&#39;</span><span class="p">],</span> <span class="s1">&#39;xy&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([[</span> <span class="mf">0.35</span><span class="p">,</span>  <span class="mf">0.2</span> <span class="p">],</span>
        <span class="p">[</span> <span class="mf">0.45</span><span class="p">,</span>  <span class="mf">0.5</span> <span class="p">]])},</span> <span class="s1">&#39;D0&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;netname&#39;</span><span class="p">:</span> <span class="s1">&#39;D0&#39;</span><span class="p">,</span> <span class="s1">&#39;layer&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;pin&#39;</span><span class="p">],</span> <span class="s1">&#39;xy&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([[</span> <span class="mf">0.15</span><span class="p">,</span>  <span class="mf">0.2</span> <span class="p">],</span>
        <span class="p">[</span> <span class="mf">0.25</span><span class="p">,</span>  <span class="mf">0.5</span> <span class="p">]])},</span> <span class="s1">&#39;G0&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;netname&#39;</span><span class="p">:</span> <span class="s1">&#39;G0&#39;</span><span class="p">,</span> <span class="s1">&#39;layer&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;M1&#39;</span><span class="p">,</span> <span class="s1">&#39;pin&#39;</span><span class="p">],</span> <span class="s1">&#39;xy&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([[</span> <span class="mf">0.125</span><span class="p">,</span>  <span class="mf">0.625</span><span class="p">],</span>
        <span class="p">[</span> <span class="mf">0.275</span><span class="p">,</span>  <span class="mf">0.775</span><span class="p">]])}}</span>
-<span class="n">Display</span> <span class="n">lib</span><span class="p">:</span><span class="n">laygo_faketech_microtemplates_dense</span><span class="p">,</span> <span class="n">grid</span><span class="p">:</span><span class="n">route_M1_M2_basic</span>
-<span class="p">[</span><span class="n">Library</span><span class="p">]</span><span class="n">laygo_faketech_microtemplates_dense</span>
+<span class="n">Display</span> <span class="n">lib</span><span class="p">:</span><span class="n">cds_ff_mpt_microtemplates_dense</span><span class="p">,</span> <span class="n">grid</span><span class="p">:</span><span class="n">route_M1_M2_basic</span>
+<span class="p">[</span><span class="n">Library</span><span class="p">]</span><span class="n">cds_ff_mpt_microtemplates_dense</span>
  <span class="p">[</span><span class="n">Grid</span><span class="p">]</span><span class="n">route_M1_M2_basic</span>
   <span class="n">route_M1_M2_basic</span> <span class="n">width</span><span class="p">:</span><span class="mf">0.2</span> <span class="n">height</span><span class="p">:</span><span class="mf">0.2</span> <span class="n">xgrid</span><span class="p">:[</span> <span class="mf">0.</span><span class="p">]</span> <span class="n">ygrid</span><span class="p">:[</span> <span class="mf">0.</span><span class="p">]</span> <span class="n">xwidth</span><span class="p">:[</span> <span class="mf">0.1</span><span class="p">]</span> <span class="n">ywidth</span><span class="p">:[</span> <span class="mf">0.1</span><span class="p">]</span> <span class="n">viamap</span><span class="p">:{</span><span class="n">via_M1_M2_0</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="p">}</span>
 </pre></div>
@@ -295,7 +330,7 @@ The following commands shows the loaded template and grid information.</p>
 Run the following commands to create a workspace.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># library &amp; cell creation</span>
 <span class="n">laygen</span><span class="o">.</span><span class="n">add_library</span><span class="p">(</span><span class="s1">&#39;laygo_working&#39;</span><span class="p">)</span>
-<span class="n">laygen</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="s1">&#39;nand_demo&#39;</span><span class="p">)</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="s1">&#39;nand_test&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The commands will create library and cell to work on. In order to
@@ -303,7 +338,7 @@ display the contents, simply type <code class="docutils literal"><span class="pr
 The output will be like this. (The nand_test is empty because we did not
 create anything yet).</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Display</span>
-<span class="p">[</span><span class="n">Library</span><span class="p">]</span><span class="n">laygo_test</span>
+<span class="p">[</span><span class="n">Library</span><span class="p">]</span><span class="n">laygo_working</span>
  <span class="p">[</span><span class="n">Cell</span><span class="p">]</span><span class="n">nand_test</span>
 </pre></div>
 </div>
@@ -390,28 +425,28 @@ The example generator codes assume <strong>nmos4_fast_center_nf2</strong> and
 <strong>nmos4_fast_boundary</strong> and <strong>pmos4_fast_boundary</strong> templates for
 boundary geometries for NMOS/PMOS devices.</p>
 <p>The resulting layout should look like this.</p>
-<p><img alt="placement" src="../_images/placement.png" /></p>
+<p><img alt="placement" src="../_images/laygo_bag_nand_placement.png" /></p>
 <p>If you want to display the layout, run the following command and open
-<strong>output.gds</strong> file. Note that actual NMOS/PMOS shapes are not shown
-because they are abstracted.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">laygen</span><span class="o">.</span><span class="n">export_GDS</span><span class="p">(</span><span class="s1">&#39;output.gds&#39;</span><span class="p">,</span> <span class="n">cellname</span><span class="o">=</span><span class="s1">&#39;nand_test&#39;</span><span class="p">,</span> <span class="n">layermapfile</span><span class="o">=</span><span class="s2">&quot;./laygo/labs/laygo_faketech.layermap&quot;</span><span class="p">)</span>
+<strong>laygo/nand_test</strong>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">laygen</span><span class="o">.</span><span class="n">export_BAG</span><span class="p">(</span><span class="n">prj</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The <strong>relplace</strong> function has several useful arguments, explained below:</p>
+<p>The <strong>relplace</strong> function has several arguments, explained below:</p>
 <ol class="simple">
 <li><strong>shape</strong> parameter sets the array dimension, for mosaic
-placements. (eg. shape=[2, 3] will create a 2x3 dimensional array).
-Default value is [1, 1] and if <strong>shape</strong> is set to None, it will generate
-a single instance. The difference between shape=[1, 1] and None is that
-InstanceArray is generated for shape=[1, 1], while Instance is generated
-for shape=None.</li>
+placements. (eg. shape=[2, 3] will create a 2x3 dimensional array)</li>
 <li><strong>spacing</strong> parameter sets the &#8216;pitch&#8217; of the array placement.
-If None, laygo automatically calculates the spacing values from the size of
+If None, laygo calculates the spacing parameter from the size of
 template.</li>
-<li><strong>transform</strong> parameter sets the transformation of the instance, as explained above.
+<li><strong>direction</strong> parameters sets the direction where the object
+placed from (with respect to the reference instance). For example,
+refinstname=X, direction=&#8217;top&#8217; will place the new instance on top of
+instance X. Possible values are <strong>left</strong>, <strong>right</strong>, <strong>top</strong>, and
+<strong>bottom</strong>.</li>
+<li><strong>transform</strong> parameter sets the transformation of the instance.
 Possible values are <strong>R0</strong>, <strong>R180</strong>, <strong>MX</strong>, <strong>MY</strong>, and <strong>MXY</strong>.</li>
 </ol>
-<p>Refer to the laygo API documentation for details.</p>
+<p>Refer to the API documentation for details.</p>
 </div>
 <div class="section" id="signal-routing">
 <span id="signal-routing"></span><h2>Signal routing<a class="headerlink" href="#signal-routing" title="Permalink to this headline">¶</a></h2>
@@ -450,8 +485,9 @@ So this is basically connecting the gates of NMOS and PMOS.</p>
 <p>The second line will create a horizontal route over the gate row, with a -2 offset at the starting point.
 Since we already create the connecting vias in the first line, there&#8217;s no need to add more vias.</p>
 <p>The third line is creating the final vertical metal stub for the pin connection.</p>
-<p>The generated routing pattern should look like this:</p>
-<p><img alt="route a" src="../_images/route0.png" /></p>
+<p>The generated routing pattern should look like this (if you run
+<strong>export_BAG</strong>):</p>
+<p><img alt="placement" src="../_images/laygo_bag_nand_route.png" /></p>
 <p>Running following commands will generate rest wire connections.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># b</span>
 <span class="n">laygen</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="n">gridname0</span><span class="o">=</span><span class="n">rg12</span><span class="p">,</span> <span class="n">refobj0</span><span class="o">=</span><span class="n">nd</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pins</span><span class="p">[</span><span class="s1">&#39;G0&#39;</span><span class="p">],</span> <span class="n">refobj1</span><span class="o">=</span><span class="n">pd</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pins</span><span class="p">[</span><span class="s1">&#39;G0&#39;</span><span class="p">],</span> <span class="n">via0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
@@ -485,29 +521,29 @@ to creat power rail shapes.</p>
 <span class="n">rvss</span> <span class="o">=</span> <span class="n">laygen</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="n">gridname0</span><span class="o">=</span><span class="n">rg12</span><span class="p">,</span> <span class="n">refobj0</span><span class="o">=</span><span class="n">nd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bottom_left</span><span class="p">,</span> <span class="n">refobj1</span><span class="o">=</span><span class="n">nd</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">bottom_right</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>After finishing the route, your layout will look like this:</p>
-<p><img alt="route" src="../_images/route1.png" /></p>
 </div>
 <div class="section" id="pin-creation">
 <span id="pin-creation"></span><h2>Pin creation<a class="headerlink" href="#pin-creation" title="Permalink to this headline">¶</a></h2>
 <p><strong>GridLayoutGenerator.pin</strong> function creates a pin and paste it to the
-generated layout. The function gets <strong>refobj</strong> argument, as <strong>relplace</strong> and <strong>route</strong> functions do.</p>
+generated layout, like this.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># pins</span>
 <span class="k">for</span> <span class="n">pn</span><span class="p">,</span> <span class="n">pg</span><span class="p">,</span> <span class="n">pr</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;VDD&#39;</span><span class="p">,</span> <span class="s1">&#39;VSS&#39;</span><span class="p">],</span> <span class="p">[</span><span class="n">rg12</span><span class="p">,</span> <span class="n">rg12</span><span class="p">,</span> <span class="n">rg23</span><span class="p">,</span> <span class="n">rg12</span><span class="p">,</span> <span class="n">rg12</span><span class="p">],</span> <span class="p">[</span><span class="n">ra</span><span class="p">,</span> <span class="n">rb</span><span class="p">,</span> <span class="n">ro</span><span class="p">,</span> <span class="n">rvdd</span><span class="p">,</span> <span class="n">rvss</span><span class="p">]):</span>
 <span class="n">laygen</span><span class="o">.</span><span class="n">pin</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">pn</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="n">pg</span><span class="p">,</span> <span class="n">refobj</span><span class="o">=</span><span class="n">pr</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="gds-export">
-<span id="gds-export"></span><h2>GDS export<a class="headerlink" href="#gds-export" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="export-to-bag">
+<span id="export-to-bag"></span><h2>Export to BAG<a class="headerlink" href="#export-to-bag" title="Permalink to this headline">¶</a></h2>
 <p>Running the following command will give a final layout exported in GDS
 format.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># GDS export</span>
-<span class="n">laygen</span><span class="o">.</span><span class="n">export_GDS</span><span class="p">(</span><span class="s1">&#39;output.gds&#39;</span><span class="p">,</span> <span class="n">cellname</span><span class="o">=</span><span class="s1">&#39;nand_test&#39;</span><span class="p">,</span> <span class="n">layermapfile</span><span class="o">=</span><span class="s2">&quot;./laygo/labs/laygo_faketech.layermap&quot;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># export</span>
+<span class="kn">import</span> <span class="nn">bag</span>
+<span class="n">prj</span> <span class="o">=</span> <span class="n">bag</span><span class="o">.</span><span class="n">BagProject</span><span class="p">()</span>
+<span class="n">laygen</span><span class="o">.</span><span class="n">export_BAG</span><span class="p">(</span><span class="n">prj</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The resulting layout will look like this.</p>
-<p><img alt="route a" src="../_images/laygo_quickstart1.png" /></p>
+<p><img alt="nand" src="../_images/laygo_bag_nand_cds.png" /></p>
 </div>
 </div>
 
@@ -517,10 +553,10 @@ format.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="tutorial_BAG.html" class="btn btn-neutral float-right" title="NAND gate generation and BAG export tutorial">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../architecture/architecture.html" class="btn btn-neutral float-right" title="Laygo architecture">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../introduction/introduction.html" class="btn btn-neutral" title="LAYGO - LAYout with Gridded Objects"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="tutorial_BAG.html" class="btn btn-neutral" title="NAND gate generation and BAG export tutorial"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
