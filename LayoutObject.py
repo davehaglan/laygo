@@ -154,7 +154,6 @@ class Rect(LayoutObject):
         """
         self.layer = layer
         self.netname = netname
-        LayoutObject.__init__(self, name, res, xy)
         # crate pointers
         self.pointers['left'] = Pointer(name='left', res=res, xy=[0, 0.5], type='boundary', master=self)
         self.pointers['right'] = Pointer(name='right', res=res, xy=[1, 0.5], type='boundary', master=self)
@@ -172,6 +171,8 @@ class Rect(LayoutObject):
         self.bottom_right = self.pointers['bottom_right']
         self.top_left = self.pointers['top_left']
         self.top_right = self.pointers['top_right']
+
+        LayoutObject.__init__(self, name, res, xy)
 
     def display(self):
         """Display object information"""
@@ -208,6 +209,18 @@ class Pin(LayoutObject):
     elements = []
     """elements for pins of array instance"""
 
+    pointers = dict()
+    """dict(): pointer dictionary"""
+    # frequenctly used pointers
+    left = None
+    right = None
+    top = None
+    bottom = None
+    bottom_left = None
+    bottom_right = None
+    top_left = None
+    top_right = None
+
     def __init__(self, name, res, xy, netname=None, layer=None, master=None):
         """
         Constructor
@@ -233,6 +246,24 @@ class Pin(LayoutObject):
         self.netname = netname
         self.layer = layer
         self.master = master
+        # crate pointers
+        self.pointers['left'] = Pointer(name='left', res=res, xy=[0, 0.5], type='boundary', master=self)
+        self.pointers['right'] = Pointer(name='right', res=res, xy=[1, 0.5], type='boundary', master=self)
+        self.pointers['bottom'] = Pointer(name='bottom', res=res, xy=[0.5, 0], type='boundary', master=self)
+        self.pointers['top'] = Pointer(name='top', res=res, xy=[0.5, 1], type='boundary', master=self)
+        self.pointers['bottom_left'] = Pointer(name='bottom_left', res=res, xy=[0, 0], type='boundary', master=self)
+        self.pointers['bottom_right'] = Pointer(name='bottom_right', res=res, xy=[1, 0], type='boundary', master=self)
+        self.pointers['top_left'] = Pointer(name='top_left', res=res, xy=[0, 1], type='boundary', master=self)
+        self.pointers['top_right'] = Pointer(name='top_right', res=res, xy=[1, 1], type='boundary', master=self)
+        self.left = self.pointers['left']
+        self.right = self.pointers['right']
+        self.bottom = self.pointers['bottom']
+        self.top = self.pointers['top']
+        self.bottom_left = self.pointers['bottom_left']
+        self.bottom_right = self.pointers['bottom_right']
+        self.top_left = self.pointers['top_left']
+        self.top_right = self.pointers['top_right']
+
         LayoutObject.__init__(self, name, res, xy)
 
     def display(self):
