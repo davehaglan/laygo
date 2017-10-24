@@ -50,17 +50,17 @@ if __name__ == '__main__':
 
     nd = [] # nmos
     nd += [laygen.place(gridname=pg, cellname='nmos4_fast_boundary')]
-    nd += [laygen.place(gridname=pg, cellname='nmos4_fast_center_nf2', ref=nd[-1].right, shape=[1, 1])]
+    nd += [laygen.place(gridname=pg, cellname='nmos4_fast_center_nf2', ref=nd[-1].right, shape=[2, 1])]
     nd += [laygen.place(gridname=pg, cellname='nmos4_fast_boundary', ref=nd[-1].right)]
     nd += [laygen.place(gridname=pg, cellname='nmos4_fast_boundary', ref=nd[-1].right)]
-    nd += [laygen.place(gridname=pg, cellname='nmos4_fast_center_nf2', ref=nd[-1].right, shape=[1, 1])]
+    nd += [laygen.place(gridname=pg, cellname='nmos4_fast_center_nf2', ref=nd[-1].right, shape=[2, 1])]
     nd += [laygen.place(gridname=pg, cellname='nmos4_fast_boundary', ref=nd[-1].right)]
     pd = []  # pmos
     pd += [laygen.place(gridname=pg, cellname='pmos4_fast_boundary', ref=nd[0].top, transform='MX')]
-    pd += [laygen.place(gridname=pg, cellname='pmos4_fast_center_nf2', ref=pd[-1].right, shape=[1, 1], transform='MX')]
+    pd += [laygen.place(gridname=pg, cellname='pmos4_fast_center_nf2', ref=pd[-1].right, shape=[2, 1], transform='MX')]
     pd += [laygen.place(gridname=pg, cellname='pmos4_fast_boundary', ref=pd[-1].right, transform='MX')]
     pd += [laygen.place(gridname=pg, cellname='pmos4_fast_boundary', ref=pd[-1].right, transform='MX')]
-    pd += [laygen.place(gridname=pg, cellname='pmos4_fast_center_nf2', ref=pd[-1].right, shape=[1, 1], transform='MX')]
+    pd += [laygen.place(gridname=pg, cellname='pmos4_fast_center_nf2', ref=pd[-1].right, shape=[2, 1], transform='MX')]
     pd += [laygen.place(gridname=pg, cellname='pmos4_fast_boundary', ref=pd[-1].right, transform='MX')]
 
     # route ############################################################################################################

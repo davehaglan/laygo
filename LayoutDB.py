@@ -341,8 +341,9 @@ class LayoutDB(dict):
             for idx_x in range(_shape[0]):
                 i_row = []
                 for idx_y in range(_shape[1]):
-                    xy = xy + np.dot(spacing * np.array([idx_x, idx_y]), ut.Mt(transform).T)
-                    i_row += [Instance(name=name, res=self.res, xy=xy, libname=libname, cellname=cellname,
+                    #xy = xy + np.dot(spacing * np.array([idx_x, idx_y]), ut.Mt(transform).T)
+                    _xy = xy + np.dot(spacing * np.array([idx_x, idx_y]), ut.Mt(transform).T)
+                    i_row += [Instance(name=name, res=self.res, xy=_xy, libname=libname, cellname=cellname,
                                        transform=transform, template=template)]
                 i_list += [i_row]
             #print(shape, np.array(i_list))
