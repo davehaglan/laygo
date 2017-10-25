@@ -59,7 +59,8 @@ _MAP = {
     'COLROW': b'\x13\x02',
     'XY': b'\x10\x03',
     'STRING': b'\x19\x06',
-    'ENDEL': b'\x11\x00'
+    'ENDEL': b'\x11\x00',
+    'PRESENTATION': b'\x17\x01',
 }
 
 #code remapping dictionary
@@ -154,86 +155,87 @@ def readout(stream):
             data_size, tag = struct.unpack('>HH', header)
             data_size -= 4  # substract header size
             data = stream.read(data_size)
-            key = _REMAP[tag]
-            tag_type = tag & 0xff
-            val = None
-            if tag_type == 1: #bits
-                val = struct.unpack('>H', data)[0]
-            elif tag_type == 2:  # short
-                val = list(struct.unpack('>%dh' % (len(data) // 2), data))
-            elif tag_type == 3:  # int
-                val = list(struct.unpack('>%dl' % (len(data) // 4), data))
-            elif tag_type == 5:  # double
-                data = struct.unpack('>%dQ' % (len(data) // 8), data)
-                val = list(_int_to_real(n) for n in data)
-            elif tag_type == 6:  # text
-                if data.endswith(b'\x00'):
-                    val = data.decode("utf-8")[:-1]
-                else:
-                    val = data.decode("utf-8")
-            rlist.append([key, val])
-            if key == 'LIBNAME': #library description starts
-                libname = val
-                rdict[libname]=dict()
-            if key == 'UNITS':
-                logical_unit = val[0]
-                physical_unit = val[1]
-            if key == 'STRNAME': #structure description starts
-                cellname = val
-                rdict[libname][cellname] = {'rects':dict(), 'texts':dict(), 'instances':dict()}
-                rect_cnt = 0 #reset rect naming counter
-                text_cnt = 0  # reset text naming counter
-                inst_cnt = 0  # reset instance naming counter
-                mirror_trig = 0 # mirroring tigger
-            if key == 'BOUNDARY': #rect
-                rectname = str(rect_cnt)
-                rdict_handle = {'layer':[]}
-                rdict[libname][cellname]['rects'][rectname]=rdict_handle
-                rect_cnt += 1
-            if key == 'TEXT': #text
-                labelname = str(text_cnt)
-                rdict_handle = {'layer':[]}
-                rdict[libname][cellname]['texts'][labelname]=rdict_handle
-                text_cnt += 1
-            if key == 'SREF' or key == 'AREF': #instame
-                inst_name = str(inst_cnt)
-                rdict_handle = {'libname':libname, 'transform':'R0'}
-                rdict[libname][cellname]['instances'][inst_name]=rdict_handle
-                inst_cnt += 1
-            if key == 'LAYER':
-                rdict_handle['layer'].append(val[0])
-            if key == 'DATATYPE':
-                rdict_handle['layer'].append(val[0])
-            if key == 'TEXTTYPE':
-                rdict_handle['layer'].append(val[0])
-            if key == 'XY': #xy cooridinate
-                if len(val)==2: #single cooridinate
-                    rdict_handle['xy'] = [v * logical_unit for v in val]
-                else:
-                    rdict_handle['xy'] = [[val[2*i] * logical_unit, val[2*i+1] * logical_unit]
-                                          for i in range(int(len(val)/2))]
-            if key == 'COLROW': #col and row
-                rdict_handle['shape']=val
-            if key == 'SNAME':
-                rdict_handle['cellname']=val
-            if key == 'STRING':
-                rdict_handle['text']=val
-            if key == 'STRANS':
-                if val==32768:
-                    mirror_trig=1
-            if key == 'ANGLE':
-                if mirror_trig==0: #no mirring
-                    if val[0]==90:
-                        rdict_handle['transform']='R90'
-                    if val[0]==180:
-                        rdict_handle['transform']='R180'
-                    if val[0]==270:
-                        rdict_handle['transform']='R270'
-                else: #mirroring
-                    if val[0]==0:
-                        rdict_handle['transform']='MX'
-                    if val[0]==180:
-                        rdict_handle['transform']='MY'
+            if data_size>=0:
+                key = _REMAP[tag]
+                tag_type = tag & 0xff
+                val = None
+                if tag_type == 1: #bits
+                    val = struct.unpack('>H', data)[0]
+                elif tag_type == 2:  # short
+                    val = list(struct.unpack('>%dh' % (len(data) // 2), data))
+                elif tag_type == 3:  # int
+                    val = list(struct.unpack('>%dl' % (len(data) // 4), data))
+                elif tag_type == 5:  # double
+                    data = struct.unpack('>%dQ' % (len(data) // 8), data)
+                    val = list(_int_to_real(n) for n in data)
+                elif tag_type == 6:  # text
+                    if data.endswith(b'\x00'):
+                        val = data.decode("utf-8")[:-1]
+                    else:
+                        val = data.decode("utf-8")
+                rlist.append([key, val])
+                if key == 'LIBNAME': #library description starts
+                    libname = val
+                    rdict[libname]=dict()
+                if key == 'UNITS':
+                    logical_unit = val[0]
+                    physical_unit = val[1]
+                if key == 'STRNAME': #structure description starts
+                    cellname = val
+                    rdict[libname][cellname] = {'rects':dict(), 'texts':dict(), 'instances':dict()}
+                    rect_cnt = 0 #reset rect naming counter
+                    text_cnt = 0  # reset text naming counter
+                    inst_cnt = 0  # reset instance naming counter
+                    mirror_trig = 0 # mirroring tigger
+                if key == 'BOUNDARY': #rect
+                    rectname = str(rect_cnt)
+                    rdict_handle = {'layer':[]}
+                    rdict[libname][cellname]['rects'][rectname]=rdict_handle
+                    rect_cnt += 1
+                if key == 'TEXT': #text
+                    labelname = str(text_cnt)
+                    rdict_handle = {'layer':[]}
+                    rdict[libname][cellname]['texts'][labelname]=rdict_handle
+                    text_cnt += 1
+                if key == 'SREF' or key == 'AREF': #instame
+                    inst_name = str(inst_cnt)
+                    rdict_handle = {'libname':libname, 'transform':'R0'}
+                    rdict[libname][cellname]['instances'][inst_name]=rdict_handle
+                    inst_cnt += 1
+                if key == 'LAYER':
+                    rdict_handle['layer'].append(val[0])
+                if key == 'DATATYPE':
+                    rdict_handle['layer'].append(val[0])
+                if key == 'TEXTTYPE':
+                    rdict_handle['layer'].append(val[0])
+                if key == 'XY': #xy cooridinate
+                    if len(val)==2: #single cooridinate
+                        rdict_handle['xy'] = [v * logical_unit for v in val]
+                    else:
+                        rdict_handle['xy'] = [[val[2*i] * logical_unit, val[2*i+1] * logical_unit]
+                                              for i in range(int(len(val)/2))]
+                if key == 'COLROW': #col and row
+                    rdict_handle['shape']=val
+                if key == 'SNAME':
+                    rdict_handle['cellname']=val
+                if key == 'STRING':
+                    rdict_handle['text']=val
+                if key == 'STRANS':
+                    if val==32768:
+                        mirror_trig=1
+                if key == 'ANGLE':
+                    if mirror_trig==0: #no mirring
+                        if val[0]==90:
+                            rdict_handle['transform']='R90'
+                        if val[0]==180:
+                            rdict_handle['transform']='R180'
+                        if val[0]==270:
+                            rdict_handle['transform']='R270'
+                    else: #mirroring
+                        if val[0]==0:
+                            rdict_handle['transform']='MX'
+                        if val[0]==180:
+                            rdict_handle['transform']='MY'
     #postprocess
     for cn in rdict[libname]:
         # rect - leave lowerLeft and upperRight corners only
