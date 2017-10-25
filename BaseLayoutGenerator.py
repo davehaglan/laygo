@@ -296,7 +296,7 @@ class BaseLayoutGenerator():
 
     # db I/O functions
     def export_GDS(self, filename, libname=None, cellname=None, layermapfile="default.layermap", physical_unit=1e-9,
-                   logical_unit=0.001, pin_label_height=0.1, text_height=0.1, annotate_layer = ['text', 'drawing'],
+                   logical_unit=0.001, pin_label_height=0.0001, text_height=0.0001, annotate_layer = ['text', 'drawing'],
                    annotate_height = 0.01):
         """
         Export specified cell(s) to a GDS file.
