@@ -1,25 +1,22 @@
-# NAND gate generation and BAG export tutorial
+# NAND gate generation and BAG export tutorial (API v2)
+
+>Note: This tutorial is for the improved set of Laygo API (GridLayoutGenerator2),
+which is not compatible with GridLayoutGenerator and most of legacy generator
+codes in generators directory.
 
 This tutorial contains instructions to generate a NAND gate layout and
-export it to OA database through
-[BAG](https://github.com/pkerichang/BAG_framework) framework. You can
-simply run this tutorial by setting up BAG for
-[cadence generic PDK for finfet and multi patterned technology](https://support.cadence.com)
-and running [quick_start_BAG.py](../../../quick_start_BAG.py), but we
-recommend users to go through the entire tutorial steps, reading this
-document and running commands step by step, to get a better idea of the
-laygo flow.
-
+export the layout to OA database through
+[BAG](https://github.com/ucb-art/BAG_framework) framework.
+The scripts used in this tutorial can be found here: [quick_start_BAG_v2.py](../../../quick_start_BAG_v2.py).
 
 ## Setup and running
-Run following commands below to install laygo and load.
+Run the following commands below to install laygo and load.
 
 1. Download cds_ff_mpt PDK from [Cadence Customer Support](https://support.cadence.com)
 Make sure you can launch virtuoso and make a layout using the PDK.
-For BWRC users, PDK is installed in ```/tools/cadence/GPDK/cds_ff_mpt_v_0.3/```.
+For BWRC users, the PDK is installed in ```/tools/cadence/GPDK/cds_ff_mpt_v_0.3/```.
 
 2. Clone BAG2_cds_ff_mpt repo.
-
     ```
     $ git clone git@github.com:ucb-art/BAG2_cds_ff_mpt.git
     ```
@@ -33,11 +30,11 @@ laygo. Let's load the submodules. Enter the BAG_cds_ff_mpt
     $ git submodule update
     ```
 
-    * In order to update the submodules to the latest ones, type below:
+    * If you want to update all submodules to the latest ones, type this:
+
     ```
     $ git submodule foreach git pull origin master
     ```
-
 
 4. Open **.cshrc**, **bag_config.yaml** file, and check if all path
 variables are set correctly. For BWRC users, all variables are set
@@ -54,7 +51,7 @@ correctly so skip this step.
 7. Launch the generator script, by typing this in python console.
 
     ```python
-    run laygo/quick_start_BAG.py
+    run laygo/quick_start_BAG_v2.py
     ```
 
     You should see the generated nand gate layout in
@@ -62,29 +59,26 @@ correctly so skip this step.
 
     ![nand](images/laygo_v2_nand.png)
 
-## Initialize GridLayoutGenerator
+## Initialize GridLayoutGenerator2
 Let's take a look into the detail of the layout generator.
 Open laygo/quick_start_BAG.py
-Following command will initialize GridLayoutGenerator, the main
+The following command will initialize GridLayoutGenerator, the main
 generator object that contains all core generation functions.
 
 ```python
 #initialize
-laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
-laygen.use_array = True  # use InstanceArray instead of Instance
+laygen = laygo.GridLayoutGenerator2(config_file="laygo_config.yaml")
 ```
 
 Note that **laygo_config.yaml** is passed, which contains process
-specific information.
-**use_array** is used to enable a recently added feature; InstanceArray.
-Most legacy generator codes are not using this option.
+specific parameters.
 
 ## Load template and grid database
 The example technology setup uses *cds_ff_mpt_microtemplates_dense*
 for the primitive template library. All primitive template and grid
 information are stored in *cds_ff_mpt_microtemplates_dense_templates.yaml*,
  *cds_ff_mpt_microtemplates_dense_grids.yaml*
-and the files should be loaded before the actual layout generation steps.
+and those files should be loaded before the actual layout generation steps.
 Run the following commands to load database.
 
 ```python
@@ -156,43 +150,42 @@ The following commands will place 4 2-fingered transistors (2 nmos, 2 pmos)
 and cluster them to 2 lists, nd and pd.
 
 ```python
-# placement ########################################################################################################
 # placement parameters
 pg = 'placement_basic'  # placement grid
 
 nd = [] # nmos
-nd += [laygen.relplace(cellname='nmos4_fast_boundary', gridname=pg, refobj=None, shape=None)]
-nd += [laygen.relplace(cellname='nmos4_fast_center_nf2', gridname=pg, refobj=nd[-1].right, shape=[1, 1])]
-nd += [laygen.relplace(cellname='nmos4_fast_boundary', gridname=pg, refobj=nd[-1].right, shape=None)]
-nd += [laygen.relplace(cellname='nmos4_fast_boundary', gridname=pg, refobj=nd[-1].right, shape=None)]
-nd += [laygen.relplace(cellname='nmos4_fast_center_nf2', gridname=pg, refobj=nd[-1].right, shape=[1, 1])]
-nd += [laygen.relplace(cellname='nmos4_fast_boundary', gridname=pg, refobj=nd[-1].right, shape=None)]
-pd = [] # pmos
-pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=nd[0].top, shape=None, transform='MX')]
-pd += [laygen.relplace(cellname='pmos4_fast_center_nf2', gridname=pg, refobj=pd[-1].right, shape=[1, 1], transform='MX')]
-pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=pd[-1].right, shape=None, transform='MX')]
-pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=pd[-1].right, shape=None, transform='MX')]
-pd += [laygen.relplace(cellname='pmos4_fast_center_nf2', gridname=pg, refobj=pd[-1].right, shape=[1, 1], transform='MX')]
-pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=pd[-1].right, shape=None, transform='MX')]
+nd += [laygen.place(gridname=pg, cellname='nmos4_fast_boundary')]
+nd += [laygen.place(gridname=pg, cellname='nmos4_fast_center_nf2', ref=nd[-1].right, shape=[2, 1])]
+nd += [laygen.place(gridname=pg, cellname='nmos4_fast_boundary', ref=nd[-1].right)]
+nd += [laygen.place(gridname=pg, cellname='nmos4_fast_boundary', ref=nd[-1].right)]
+nd += [laygen.place(gridname=pg, cellname='nmos4_fast_center_nf2', ref=nd[-1].right, shape=[2, 1])]
+nd += [laygen.place(gridname=pg, cellname='nmos4_fast_boundary', ref=nd[-1].right)]
+pd = []  # pmos
+pd += [laygen.place(gridname=pg, cellname='pmos4_fast_boundary', ref=nd[0].top, transform='MX')]
+pd += [laygen.place(gridname=pg, cellname='pmos4_fast_center_nf2', ref=pd[-1].right, shape=[2, 1], transform='MX')]
+pd += [laygen.place(gridname=pg, cellname='pmos4_fast_boundary', ref=pd[-1].right, transform='MX')]
+pd += [laygen.place(gridname=pg, cellname='pmos4_fast_boundary', ref=pd[-1].right, transform='MX')]
+pd += [laygen.place(gridname=pg, cellname='pmos4_fast_center_nf2', ref=pd[-1].right, shape=[2, 1], transform='MX')]
+pd += [laygen.place(gridname=pg, cellname='pmos4_fast_boundary', ref=pd[-1].right, transform='MX')]
 ```
 
-**GridLayoutGenerator.replace** function places templates on grid,
+**GridLayoutGenerator.place** function places templates on grid,
 using relative geometry information provided as arguments. Basically
 there are 2 ways to place templates:
 
-1. **xy**: with **xy** argument, the function places the
-template (specified by templatename) at **xy** on grid, specified by
+1. **mn**: with **mn=[m, n]** argument, the function places the
+template (specified by templatename) at **[m, n]** on grid, specified by
 gridname. The default value is [0, 0].
 
     For example, the following command will place *inst0* (cellname is *mycell0*) at *[3, 1]*, on *mygrid*.
     ```python
-    inst0 = laygen.relplace(cellname='mycell0', gridname='mygrid', xy=[1, 3])
+    inst0 = laygen.relplace(cellname='mycell0', gridname='mygrid', mn=[1, 3])
     ```
 
     **transform** paramter is used for mirroring/rotation. For example, this
     command will do a mirrored placement in x-axis.
     ```python
-    inst0 = laygen.relplace(cellname='mycell0', gridname='mygrid', xy=[1, 3], transform='MX')
+    inst0 = laygen.relplace(cellname='mycell0', gridname='mygrid', mn=[1, 3], transform='MX')
     ```
 
     Possible **transform** parameters are **R0**, **R180**, **MX**, **MY**, and **MXY**.
@@ -200,38 +193,38 @@ gridname. The default value is [0, 0].
 
     ![placement](images/laygo_bag_placement0.png)
 
-2. **refobj**: You can use the **refobj** argument to specify the reference
+2. **ref**: You can use the **ref** argument to specify the reference
 object that the new object is placed from.
 
-    Following objects can be used for the **refobj** argument.
+    Following objects can be used for the **ref** argument.
 
-    * **Instance / InstanceArray** : the new instance will be placed at the **right** side of **refobj**.
+    * **Instance / InstanceArray** : the new instance will be placed at the **right** side of **ref**.
 
         For example, the following command will place inst1 (mycell1) at the right side of inst0, on mygrid.
         ```python
         #pseudo code. modify parameter values for actual use
-        inst1 = laygen.relplace(cellname='mycell1', gridname='mygrid', refobj=inst0)
+        inst1 = laygen.relplace(cellname='mycell1', gridname='mygrid', ref=inst0)
         ```
 
         ![placement](images/laygo_bag_placement1.png)
 
     * **Pointer** objects defined in **Instance / InstanceArray** : The **Instance**
     and **InstanceArray** objects have various Pointer objects to contain geometry information. The Pointers can
-    be used for **refobj**. Supported **Pointer** objects are **left, right, top, bottom**.
+    be used for **ref**. Supported **Pointer** objects are **left, right, top, bottom**.
 
         For example, the following command will place inst2 at the bottom side of inst1, mirrored in x-axis.
         ```python
         #pseudo code. modify parameter values for actual use
-        inst2 = laygen.relplace(cellname='mycell2', gridname='mygrid', refobj=inst1.bottom)
+        inst2 = laygen.relplace(cellname='mycell2', gridname='mygrid', ref=inst1.bottom)
         ```
 
         ![placement](images/laygo_bag_placement2.png)
 
-You can also combine the two ways of placement. The following example will place inst3 at
+You can also combine those two ways of placement. The following example will place inst3 at
  the right side of inst2, with [1, 0] offset on 'mygrid', mirrored in x-axis.
 ```python
 #pseudo code. modify parameter values for actual use
-inst3 = laygen.relplace(cellname='mycell3', gridname='mygrid', xy=[1, 0], refobj=inst2.right, transform='MX')
+inst3 = laygen.relplace(cellname='mycell3', gridname='mygrid', xy=[1, 0], ref=inst2.right, transform='MX')
 ```
 
 ![placement](images/laygo_bag_placement3.png)
@@ -253,26 +246,19 @@ If you want to display the layout, run the following command and open
 laygen.export_BAG(prj)
 ```
 
-The **relplace** function has several arguments, explained below:
+The **place** function also has other arguments, explained below:
 
 1. **shape** parameter sets the array dimension, for mosaic
 placements. (eg. shape=[2, 3] will create a 2x3 dimensional array)
 2. **spacing** parameter sets the 'pitch' of the array placement.
 If None, laygo calculates the spacing parameter from the size of
 template.
-3. **direction** parameters sets the direction where the object
-placed from (with respect to the reference instance). For example,
-refinstname=X, direction='top' will place the new instance on top of
-instance X. Possible values are **left**, **right**, **top**, and
-**bottom**.
-4. **transform** parameter sets the transformation of the instance.
-Possible values are **R0**, **R180**, **MX**, **MY**, and **MXY**.
 
 Refer to the API documentation for details.
 
 ## Signal routing
-**GridLayoutGenerator.route** function is used for creating metal wires.
-Like the **relplace** function, the route function can use xy0/xy1, and/or
+**GridLayoutGenerator2.route** function is used for creating metal wires.
+Like the **place** function, the route function can use xy0/xy1, and/or
  refobj0/refobj1. **route** uses two arguments for each type of input because
  the **route** needs to calculate the starting and ending point of wire.
 
@@ -280,20 +266,20 @@ This example creates a vertical and a horizontal route on grid. Layers are
 automatically selected based on their routing directions.
 ```python
 #pseudo code. modify parameter values for actual use
-laygen.route(gridname0='myroutegrid', xy0=[2, 4], xy1=[2, 6]) #vertical
-laygen.route(gridname0='myroutegrid', xy0=[2, 4], xy1=[5, 4]) #horizontal
+laygen.route(gridname0='myroutegrid', mn0=[2, 4], mn1=[2, 6]) #vertical
+laygen.route(gridname0='myroutegrid', mn0=[2, 4], mn1=[5, 4]) #horizontal
 ```
 
 This example shows a routing example using refobj (from A pin of inst0 to B pin of inst1).
 ```python
 #pseudo code. modify parameter values for actual use
-laygen.route(gridname0='myroutegrid', refobj0=inst0.pins['A'], refobj1=inst1.pins['B'])
+laygen.route(gridname0='myroutegrid', ref0=inst0.pins['A'], ref1=inst1.pins['B'])
 ```
 
 As shown in the **relplace** section, the xy and refobj parameters can be combined.
 ```python
 #pseudo code. modify parameter values for actual use
-laygen.route(gridname0='myroutegrid', refobj0=inst0.pins['A'], xy0=[2, 1], refobj1=inst1.pins['B'], xy=[0, 1])
+laygen.route(gridname0='myroutegrid', ref0=inst0.pins['A'], mn0=[2, 1], ref1=inst1.pins['B'], mn=[0, 1])
 ```
 
 Let's go back to the real example. Running the following commands creates a rotated L shape route structure,
@@ -301,9 +287,9 @@ Let's go back to the real example. Running the following commands creates a rota
 
 ```python
 # a
-r0 = laygen.route(gridname0=rg12, refobj0=nd[4].pins['G0'], refobj1=pd[4].pins['G0'], via1=[0, 0])
-r1 = laygen.route(gridname0=rg12, xy0=[-2, 0], xy1=[0, 0], refobj0=pd[4].pins['G0'][0, 0], refobj1=pd[4].pins['G0'][-1, 0])
-ra = laygen.route(gridname0=rg23, xy0=[0, 0], xy1=[0, 2], refobj0=pd[4].pins['G0'][0, 0], refobj1=pd[4].pins['G0'][0, 0], via0=[0, 0])
+r0 = laygen.route(gridname0=rg12, ref0=nd[4].pins['G0'], ref1=pd[4].pins['G0'], via1=[0, 0])
+r1 = laygen.route(gridname0=rg12, mn0=[0, 0], mn1=[0, 0], ref0=pd[4].pins['G0'][0, 0], ref1=pd[4].pins['G0'][-1, 0])
+ra = laygen.route(gridname0=rg23, mn0=[0, 0], mn1=[0, 2], ref0=pd[4].pins['G0'][0, 0], ref1=pd[4].pins['G0'][0, 0], via0=[0, 0])
 ```
 
 The first line creates a route from the **G0** pin of **nd[4]** (which is the second NMOS)
@@ -324,23 +310,21 @@ Running following commands will generate rest wire connections.
 
 ```python
 # b
-laygen.route(gridname0=rg12, refobj0=nd[1].pins['G0'], refobj1=pd[1].pins['G0'], via0=[0, 0])
-laygen.route(gridname0=rg12, xy0=[0, 0], xy1=[2, 0], refobj0=nd[1].pins['G0'][0, 0], refobj1=nd[1].pins['G0'][-1, 0])
-rb = laygen.route(gridname0=rg23, xy0=[0, 0], xy1=[0, 2], refobj0=nd[1].pins['G0'][0, 0], refobj1=nd[1].pins['G0'][0, 0], via0=[0, 0])
+laygen.route(gridname0=rg12, ref0=nd[1].pins['G0'], ref1=pd[1].pins['G0'], via0=[0, 0])
+laygen.route(gridname0=rg12, mn0=[0, 0], mn1=[0, 0], ref0=nd[1].pins['G0'][0, 0], ref1=nd[1].pins['G0'][-1, 0])
+rb = laygen.route(gridname0=rg23, mn0=[0, 0], mn1=[0, 2], ref0=nd[1].pins['G0'][0, 0], ref1=nd[1].pins['G0'][0, 0], via0=[0, 0])
 # internal connections
-ri = laygen.route(xy0=[0, 1], xy1=[0, 1], gridname0=rg12, refobj0=nd[1].pins['D0'][0, 0],
-                  refobj1=nd[4].pins['S1'][-1, 0])
+ri = laygen.route(gridname0=rg12, ref0=nd[1].pins['D0'][0, 0].top, ref1=nd[4].pins['S1'][-1, 0].top)
 for _p in np.concatenate((nd[1].pins['D0'], nd[4].pins['S0'], nd[4].pins['S1'])):
-    laygen.via(xy=[0, 0], refobj=_p, gridname=rg12, overlay=ri)
+    laygen.via(gridname=rg12, ref=_p, overlay=ri)
 # output
-ron = laygen.route(gridname0=rg12, xy0=[-1, 0], xy1=[1, 0], refobj0=nd[4].pins['D0'][0, 0], refobj1=nd[4].pins['D0'][-1, 0])
-rop = laygen.route(gridname0=rg12, xy0=[0, 0], xy1=[1, 0], refobj0=pd[1].pins['D0'][0, 0], refobj1=pd[4].pins['D0'][-1, 0])
-laygen.via(refobj=nd[4].pins['D0'], gridname=rg12, overlay=ron)
-laygen.via(refobj=pd[1].pins['D0'], gridname=rg12, overlay=rop)
-laygen.via(refobj=pd[4].pins['D0'], gridname=rg12, overlay=rop)
-ro = laygen.route(gridname0=rg23, refobj0=ron.right, refobj1=rop.right, xy0=[0, 0], xy1=[0, 0], via0=[0, 0], via1=[0, 0])
+ron = laygen.route(gridname0=rg12, mn0=[-1, 0], mn1=[1, 0], ref0=nd[4].pins['D0'][0, 0], ref1=nd[4].pins['D0'][-1, 0])
+rop = laygen.route(gridname0=rg12, mn0=[0, 0], mn1=[1, 0], ref0=pd[1].pins['D0'][0, 0].top, ref1=pd[4].pins['D0'][-1, 0].top)
+laygen.via(gridname=rg12, ref=nd[4].pins['D0'], overlay=ron)
+laygen.via(gridname=rg12, ref=pd[1].pins['D0'], overlay=rop)
+laygen.via(gridname=rg12, ref=pd[4].pins['D0'], overlay=rop)
+ro = laygen.route(gridname0=rg23, ref0=ron.right, ref1=rop.right, via0=[0, 0], via1=[0, 0])
 ```
-
 
 ## Power routing
 Power routing is very similar to signal routing. Run following commands
@@ -350,10 +334,10 @@ to creat power rail shapes.
 # power and ground route
 for dev in [nd[1], pd[1], pd[4]]:
     for pn in ['S0', 'S1']:
-        laygen.route(gridname0=rg12, refobj0=dev.pins[pn], refobj1=dev.bottom, direction='y', via1=[0, 0])
+        laygen.route(gridname0=rg12, ref0=dev.pins[pn], ref1=dev.bottom, direction='y', via1=[0, 0])
 # power and groud rails
-rvdd = laygen.route(gridname0=rg12, refobj0=pd[0].bottom_left, refobj1=pd[5].bottom_right)
-rvss = laygen.route(gridname0=rg12, refobj0=nd[0].bottom_left, refobj1=nd[5].bottom_right)
+rvdd = laygen.route(gridname0=rg12, ref0=pd[0].bottom_left, ref1=pd[5].bottom_right)
+rvss = laygen.route(gridname0=rg12, ref0=nd[0].bottom_left, ref1=nd[5].bottom_right)
 ```
 
 ## Pin creation
@@ -363,12 +347,11 @@ generated layout, like this.
 ```python
 # pins
 for pn, pg, pr in zip(['A', 'B', 'O', 'VDD', 'VSS'], [rg12, rg12, rg23, rg12, rg12], [ra, rb, ro, rvdd, rvss]):
-laygen.pin(name=pn, gridname=pg, refobj=pr)
+    laygen.pin(name=pn, gridname=pg, refobj=pr)
 ```
 
 ## Export to BAG
-Running the following command will give a final layout exported in GDS
-format.
+Running the following command will produce the final layout.
 
 ```
 # export

@@ -100,7 +100,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html">Tutorial (BAG flow, new version)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#setup-and-running">Setup and running</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#initialize-gridlayoutgenerator2">Initialize GridLayoutGenerator2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#load-template-and-grid-database">Load template and grid database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#library-and-cell-creation">Library and cell creation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#cell-placements">Cell placements</a></li>
@@ -500,7 +500,7 @@
 
     <span class="c1"># db I/O functions</span>
 <div class="viewcode-block" id="BaseLayoutGenerator.export_GDS"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.export_GDS">[docs]</a>    <span class="k">def</span> <span class="nf">export_GDS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cellname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layermapfile</span><span class="o">=</span><span class="s2">&quot;default.layermap&quot;</span><span class="p">,</span> <span class="n">physical_unit</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">9</span><span class="p">,</span>
-                   <span class="n">logical_unit</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">pin_label_height</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">text_height</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">annotate_layer</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="s1">&#39;drawing&#39;</span><span class="p">],</span>
+                   <span class="n">logical_unit</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">pin_label_height</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">text_height</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">annotate_layer</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="s1">&#39;drawing&#39;</span><span class="p">],</span>
                    <span class="n">annotate_height</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Export specified cell(s) to a GDS file.</span>
