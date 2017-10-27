@@ -34,7 +34,7 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="laygo_documentation 1.0 documentation" href="../index.html"/>
-        <link rel="next" title="NAND gate generation and BAG export tutorial" href="tutorial_BAG_v2.html"/>
+        <link rel="next" title="NAND gate generation and BAG export tutorial (API v2)" href="tutorial_BAG_v2.html"/>
         <link rel="prev" title="NAND gate generation and GDS export tutorial" href="tutorial_GDS.html"/> 
 
   
@@ -101,7 +101,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial_BAG_v2.html">Tutorial (BAG flow, new version)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#setup-and-running">Setup and running</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#initialize-gridlayoutgenerator2">Initialize GridLayoutGenerator2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#load-template-and-grid-database">Load template and grid database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#library-and-cell-creation">Library and cell creation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#cell-placements">Cell placements</a></li>
@@ -206,13 +206,8 @@
 <span id="nand-gate-generation-and-bag-export-tutorial"></span><h1>NAND gate generation and BAG export tutorial<a class="headerlink" href="#nand-gate-generation-and-bag-export-tutorial" title="Permalink to this headline">¶</a></h1>
 <p>This tutorial contains instructions to generate a NAND gate layout and
 export it to OA database through
-<a class="reference external" href="https://github.com/pkerichang/BAG_framework">BAG</a> framework. You can
-simply run this tutorial by setting up BAG for
-<a class="reference external" href="https://support.cadence.com">cadence generic PDK for finfet and multi patterned technology</a>
-and running <a class="reference external" href="../../../quick_start_BAG.py">quick_start_BAG.py</a>, but we
-recommend users to go through the entire tutorial steps, reading this
-document and running commands step by step, to get a better idea of the
-laygo flow.</p>
+<a class="reference external" href="https://github.com/ucb-art/BAG_framework">BAG</a> framework.
+The scripts used in this tutorial can be found here: <a class="reference external" href="../../../quick_start_BAG.py">quick_start_BAG.py</a>.</p>
 <div class="section" id="setup-and-running">
 <span id="setup-and-running"></span><h2>Setup and running<a class="headerlink" href="#setup-and-running" title="Permalink to this headline">¶</a></h2>
 <p>Run following commands below to install laygo and load.</p>
@@ -234,14 +229,12 @@ $ git submodule update
 </pre></div>
 </div>
 <ul class="simple">
-<li>In order to update the submodules to the latest ones, type below:</li>
+<li>If you want to update all submodules to the latest ones, type this:</li>
 </ul>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ git submodule foreach git pull origin master
 </pre></div>
 </div>
 </li>
-</ol>
-<ol>
 <li><p class="first">Open <strong>.cshrc</strong>, <strong>bag_config.yaml</strong> file, and check if all path
 variables are set correctly. For BWRC users, all variables are set
 correctly so skip this step.</p>
@@ -275,7 +268,7 @@ generator object that contains all core generation functions.</p>
 </pre></div>
 </div>
 <p>Note that <strong>laygo_config.yaml</strong> is passed, which contains process
-specific information.
+specific parameters.
 <strong>use_array</strong> is used to enable a recently added feature; InstanceArray.
 Most legacy generator codes are not using this option.</p>
 </div>
@@ -285,7 +278,7 @@ Most legacy generator codes are not using this option.</p>
 for the primitive template library. All primitive template and grid
 information are stored in <em>cds_ff_mpt_microtemplates_dense_templates.yaml</em>,
 <em>cds_ff_mpt_microtemplates_dense_grids.yaml</em>
-and the files should be loaded before the actual layout generation steps.
+and those files should be loaded before the actual layout generation steps.
 Run the following commands to load database.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># load template and grid</span>
 <span class="n">utemplib</span> <span class="o">=</span> <span class="n">laygen</span><span class="o">.</span><span class="n">tech</span> <span class="o">+</span> <span class="s1">&#39;_microtemplates_dense&#39;</span>  <span class="c1"># device template library name</span>
@@ -367,7 +360,7 @@ and cluster them to 2 lists, nd and pd.</p>
 <span class="n">pd</span> <span class="o">+=</span> <span class="p">[</span><span class="n">laygen</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">cellname</span><span class="o">=</span><span class="s1">&#39;pmos4_fast_boundary&#39;</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="n">pg</span><span class="p">,</span> <span class="n">refobj</span><span class="o">=</span><span class="n">pd</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;MX&#39;</span><span class="p">)]</span>
 </pre></div>
 </div>
-<p><strong>GridLayoutGenerator.replace</strong> function places templates on grid,
+<p><strong>GridLayoutGenerator.relplace</strong> function places templates on grid,
 using relative geometry information provided as arguments. Basically
 there are 2 ways to place templates:</p>
 <ol>
@@ -431,7 +424,7 @@ boundary geometries for NMOS/PMOS devices.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">laygen</span><span class="o">.</span><span class="n">export_BAG</span><span class="p">(</span><span class="n">prj</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The <strong>relplace</strong> function has several arguments, explained below:</p>
+<p>The <strong>relplace</strong> function also has other arguments, explained below:</p>
 <ol class="simple">
 <li><strong>shape</strong> parameter sets the array dimension, for mosaic
 placements. (eg. shape=[2, 3] will create a 2x3 dimensional array)</li>
@@ -534,8 +527,7 @@ generated layout, like this.</p>
 </div>
 <div class="section" id="export-to-bag">
 <span id="export-to-bag"></span><h2>Export to BAG<a class="headerlink" href="#export-to-bag" title="Permalink to this headline">¶</a></h2>
-<p>Running the following command will give a final layout exported in GDS
-format.</p>
+<p>Running the following command will produce the final layout.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># export</span>
 <span class="kn">import</span> <span class="nn">bag</span>
 <span class="n">prj</span> <span class="o">=</span> <span class="n">bag</span><span class="o">.</span><span class="n">BagProject</span><span class="p">()</span>
@@ -553,7 +545,7 @@ format.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="tutorial_BAG_v2.html" class="btn btn-neutral float-right" title="NAND gate generation and BAG export tutorial">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="tutorial_BAG_v2.html" class="btn btn-neutral float-right" title="NAND gate generation and BAG export tutorial (API v2)">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="tutorial_GDS.html" class="btn btn-neutral" title="NAND gate generation and GDS export tutorial"><span class="fa fa-arrow-circle-left"></span> Previous</a>

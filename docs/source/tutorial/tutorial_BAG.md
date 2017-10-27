@@ -2,13 +2,9 @@
 
 This tutorial contains instructions to generate a NAND gate layout and
 export it to OA database through
-[BAG](https://github.com/pkerichang/BAG_framework) framework. You can
-simply run this tutorial by setting up BAG for
-[cadence generic PDK for finfet and multi patterned technology](https://support.cadence.com)
-and running [quick_start_BAG.py](../../../quick_start_BAG.py), but we
-recommend users to go through the entire tutorial steps, reading this
-document and running commands step by step, to get a better idea of the
-laygo flow.
+[BAG](https://github.com/ucb-art/BAG_framework) framework.
+The scripts used in this tutorial can be found here: [quick_start_BAG.py](../../../quick_start_BAG.py).
+
 
 ## Setup and running
 Run following commands below to install laygo and load.
@@ -32,11 +28,11 @@ laygo. Let's load the submodules. Enter the BAG_cds_ff_mpt
     $ git submodule update
     ```
 
-    * In order to update the submodules to the latest ones, type below:
+    * If you want to update all submodules to the latest ones, type this:
+
     ```
     $ git submodule foreach git pull origin master
     ```
-
 
 4. Open **.cshrc**, **bag_config.yaml** file, and check if all path
 variables are set correctly. For BWRC users, all variables are set
@@ -74,7 +70,7 @@ laygen.use_array = True  # use InstanceArray instead of Instance
 ```
 
 Note that **laygo_config.yaml** is passed, which contains process
-specific information.
+specific parameters.
 **use_array** is used to enable a recently added feature; InstanceArray.
 Most legacy generator codes are not using this option.
 
@@ -83,7 +79,7 @@ The example technology setup uses *cds_ff_mpt_microtemplates_dense*
 for the primitive template library. All primitive template and grid
 information are stored in *cds_ff_mpt_microtemplates_dense_templates.yaml*,
  *cds_ff_mpt_microtemplates_dense_grids.yaml*
-and the files should be loaded before the actual layout generation steps.
+and those files should be loaded before the actual layout generation steps.
 Run the following commands to load database.
 
 ```python
@@ -175,7 +171,7 @@ pd += [laygen.relplace(cellname='pmos4_fast_center_nf2', gridname=pg, refobj=pd[
 pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=pd[-1].right, shape=None, transform='MX')]
 ```
 
-**GridLayoutGenerator.replace** function places templates on grid,
+**GridLayoutGenerator.relplace** function places templates on grid,
 using relative geometry information provided as arguments. Basically
 there are 2 ways to place templates:
 
@@ -252,7 +248,7 @@ If you want to display the layout, run the following command and open
 laygen.export_BAG(prj)
 ```
 
-The **relplace** function has several arguments, explained below:
+The **relplace** function also has other arguments, explained below:
 
 1. **shape** parameter sets the array dimension, for mosaic
 placements. (eg. shape=[2, 3] will create a 2x3 dimensional array)
@@ -366,8 +362,7 @@ laygen.pin(name=pn, gridname=pg, refobj=pr)
 ```
 
 ## Export to BAG
-Running the following command will give a final layout exported in GDS
-format.
+Running the following command will produce the final layout.
 
 ```
 # export

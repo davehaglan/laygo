@@ -1,6 +1,6 @@
 # LAYGO - LAYout with Gridded Objects
 
-Laygo is an add-on to [BAG2](https://github.com/pkerichang/BAG_framework)
+Laygo is an add-on to [BAG2](https://github.com/ucb-art/BAG_framework)
 framework for layout generation, written by [Jaeduk Han](https://jdhan.github.io/),
 Woorham Bae, Zhongkai Wang, and Eric Jan.
 The physical design of analog and mixed-signal (AMS) circuits is very

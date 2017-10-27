@@ -101,7 +101,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial_BAG_v2.html">Tutorial (BAG flow, new version)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#setup-and-running">Setup and running</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#initialize-gridlayoutgenerator2">Initialize GridLayoutGenerator2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#load-template-and-grid-database">Load template and grid database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#library-and-cell-creation">Library and cell creation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial_BAG_v2.html#cell-placements">Cell placements</a></li>
@@ -332,7 +332,7 @@ and cluster them to 2 lists, nd and pd.</p>
 <span class="n">pd</span> <span class="o">+=</span> <span class="p">[</span><span class="n">laygen</span><span class="o">.</span><span class="n">relplace</span><span class="p">(</span><span class="n">cellname</span><span class="o">=</span><span class="s1">&#39;pmos4_fast_boundary&#39;</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="n">pg</span><span class="p">,</span> <span class="n">refobj</span><span class="o">=</span><span class="n">pd</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;MX&#39;</span><span class="p">)]</span>
 </pre></div>
 </div>
-<p><strong>GridLayoutGenerator.replace</strong> function places templates on grid,
+<p><strong>GridLayoutGenerator.relplace</strong> function places templates on grid,
 using relative geometry information provided as arguments. Basically
 there are 2 ways to place templates:</p>
 <ol>

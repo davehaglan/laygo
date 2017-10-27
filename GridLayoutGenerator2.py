@@ -75,7 +75,7 @@ class GridLayoutGenerator2(GridLayoutGenerator):
         Parameters
         ----------
         gridname : str
-            Grid name for the placement.
+            Grid name for the placement. If None, physical grid is used (not supported yet)
         cellname : str
             Template name (cellname) of the instance.
         mn : np.array([int, int]) or [int, int], optional

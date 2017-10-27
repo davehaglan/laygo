@@ -7,14 +7,19 @@ The scripts used in this tutorial are in [quick_start_GDS.py](../../../quick_sta
 Run the following commands to install laygo and run ipython.
 
 1. Clone laygo repo
+
     ```
     $ git clone git@github.com:ucb-art/laygo.git
     ```
+
 2. Launch ipython (or bag)
+
     ```
     $ ipython
     ```
+
 3. In ipython, import laygo and numpy
+
     ```python
     import laygo
     import numpy as np
@@ -135,7 +140,7 @@ pd += [laygen.relplace(cellname='pmos4_fast_center_nf2', gridname=pg, refobj=pd[
 pd += [laygen.relplace(cellname='pmos4_fast_boundary', gridname=pg, refobj=pd[-1].right, shape=None, transform='MX')]
 ```
 
-**GridLayoutGenerator.replace** function places templates on grid,
+**GridLayoutGenerator.relplace** function places templates on grid,
 using relative geometry information provided as arguments. Basically
 there are 2 ways to place templates:
 
