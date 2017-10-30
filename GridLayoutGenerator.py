@@ -721,7 +721,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                     _xy0 = _xy0 + _xy0_pointer_abs
                 else: #Instances
                     #instance offset
-                    reftemplate0=self.templates.get_template(refinst0.cellname, libname=refinst0.libname)
+                    reftemplate0=refinst0.template #self.templates.get_template(refinst0.cellname, libname=refinst0.libname)
                     _offset0=offset0+refinst0.xy+np.dot(refinst0.spacing*refinstindex0, ut.Mt(refinst0.transform).T)
                     #pointer and pin
                     if refpinname0 is None: # not pin
@@ -732,7 +732,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                         _xy0_pointer_abs = _xy0_pointer_abs.astype(int)
                         _xy0 = _xy0 + _xy0_pointer_abs
                     else: #pin
-                        #pin_xy0_abs=self.get_template_pin_xy(reftemplate0.name, refpinname0, gridname0, libname=refinst0.libname)[0,:]
                         pin_xy_abs = self.get_template_pin_xy(reftemplate0.name, refpinname0, gridname0, libname=refinst0.libname)
                         #pin location
                         pin_xy0_abs = pin_xy_abs[0, :]
@@ -753,7 +752,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                     _xy1 = _xy1 + _xy1_pointer_abs
                 else:
                     #instance offset
-                    reftemplate1=self.templates.get_template(refinst1.cellname, libname=refinst1.libname)
+                    reftemplate1=refinst1.template #self.templates.get_template(refinst1.cellname, libname=refinst1.libname)
                     _offset1=offset1+refinst1.xy+np.dot(refinst1.spacing*refinstindex1, ut.Mt(refinst1.transform).T)
                     #pointer and pin
                     if refpinname1 is None: # not pin
@@ -764,7 +763,6 @@ class GridLayoutGenerator(BaseLayoutGenerator):
                         _xy1_pointer_abs = _xy1_pointer_abs.astype(int)
                         _xy1 = _xy1 + _xy1_pointer_abs
                     else:
-                        #pin_xy1_abs = self.get_template_pin_xy(reftemplate1.name, refpinname1, gridname1, libname=refinst1.libname)[0, :]
                         pin_xy_abs = self.get_template_pin_xy(reftemplate1.name, refpinname1, gridname1, libname=refinst1.libname)
                         #pin location
                         pin_xy1_abs = pin_xy_abs[0, :]

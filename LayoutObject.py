@@ -341,6 +341,8 @@ class Instance(LayoutObject):
     """str: cell name"""
     shape = np.array([1, 1])
     """np.array([int, int]): array shape"""
+    size = np.array([0, 0])
+    """np.array([float, float]): instance size (valid only if its template is specified)"""
     _spacing = np.zeros((2), dtype=np.int)
     """Array spacing (actually this is a pitch, but I just followed GDS's notations)"""
     def get_spacing(self): return self._spacing * self.res
@@ -465,6 +467,7 @@ class Instance(LayoutObject):
         else:
             self.elements = np.array([[self]])
         if not template is None:
+            self.size = template.size
             # crate pointers
             self.pointers['left'] = Pointer(name='left', res=res, xy=[0, 0.5], type='boundary', master=self)
             self.pointers['right'] = Pointer(name='right', res=res, xy=[1, 0.5], type='boundary', master=self)
