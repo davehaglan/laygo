@@ -62,6 +62,7 @@ class GridLayoutGenerator2(GridLayoutGenerator):
         layer dictionary. metal, pin, text, prbnd are used as keys
     """
 
+    #options
     use_array = True
     """boolean: True if InstanceArray is used instead of Instance. For GridLayoutGenerator2 only"""
 
@@ -75,7 +76,7 @@ class GridLayoutGenerator2(GridLayoutGenerator):
         Parameters
         ----------
         gridname : str
-            Grid name for the placement. If None, physical grid is used (not supported yet)
+            Grid name for the placement. If None, physical grid is used.
         cellname : str
             Template name (cellname) of the instance.
         mn : np.array([int, int]) or [int, int], optional
@@ -206,6 +207,65 @@ class GridLayoutGenerator2(GridLayoutGenerator):
                                          offset0=offset0, offset1=offset1, transform0=transform0, transform1=transform1,
                                          endstyle0=endstyle0, endstyle1=endstyle1, via0=via0, via1=via1,
                                          netname=netname)
+
+    #pin creation functions
+    def pin(self, gridname, name, mn0=np.array([0, 0]), mn1=np.array([0, 0]), ref=None, layer=None, netname=None,
+            base_layer=None):
+        """
+        Pin generation function.
+        Parameters
+        ----------
+        gridname : str
+            grid name. If None, physical coordinate is used.
+        name : str
+            pin name
+        mn0 : np.array([[int, int]), optional
+            first coordinate
+        mn1 : np.array([[int, int]), optional
+            second coordinate
+        ref : LayoutObject.LayoutObject, optional
+            reference object handle
+        layer : [str, str], optional
+            pin layer, if None, layer of refobj is used (assuming refobj is Rect)
+        netname : str, optional
+            net name. If None, pin name is used. Used when multiple pin objects are attached to the same net.
+        base_layer : [str, str], optional
+            base metal layer. If None, corresponding layer in metal dict is used.
+
+        Returns
+        -------
+        laygo.LayoutObject.Pin
+            generated Pin object
+
+        See Also
+        --------
+        boundary_pin_from_rect : generate a boundary Pin from a Rect
+        """
+        mn = np.array([mn0, mn1])
+        if not ref is None:
+            if type(ref).__name__ is 'Rect':
+                mn = self.get_mn(obj=ref, gridname=gridname) + mn
+                if layer is None:
+                    layer=self.layers['pin'][self.layers['metal'].index(ref.layer)]
+            elif type(ref).__name__ is 'Pin':
+                mn = self.get_mn(obj=ref, gridname=gridname) + mn
+                if layer is None:
+                    layer=ref.layer
+        if netname==None: netname=name
+        xy_phy, xy_phy_center=self._route_generate_box_from_abscoord(xy0=mn[0,:], xy1=mn[1,:], gridname0=gridname)
+        xy0_phy_center=xy_phy_center[0,:]; xy1_phy_center=xy_phy_center[1,:]
+        #layer handling
+        if layer is None:
+            if int(round(xy0_phy_center[0]/self.res)) == int(round(xy1_phy_center[0]/self.res)):
+                _base_layer = self.grids.get_route_xlayer_xy(gridname, mn[0,:])
+            else:
+                _base_layer = self.grids.get_route_ylayer_xy(gridname, mn[0,:])
+            layer=self.layers['pin'][self.layers['metal'].index(_base_layer)]
+        #baselayer handling
+        if base_layer==None:
+            base_layer=self.layers['metal'][self.layers['pin'].index(layer)]
+        self.db.add_rect(None, xy=xy_phy, layer=base_layer)
+        return self.db.add_pin(name=name, netname=netname, xy=xy_phy, layer=layer)
 
     #object geometry related functions
     def get_mn(self, obj, gridname=None, sort=False):

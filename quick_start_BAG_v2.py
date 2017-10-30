@@ -96,7 +96,7 @@ if __name__ == '__main__':
 
     # pin ##############################################################################################################
     for pn, pg, pr in zip(['A', 'B', 'O', 'VDD', 'VSS'], [rg12, rg12, rg23, rg12, rg12], [ra, rb, ro, rvdd, rvss]):
-        laygen.pin(name=pn, gridname=pg, refobj=pr)
+        laygen.pin(name=pn, gridname=pg, ref=pr)
 
     # display ##########################################################################################################
     laygen.display()

@@ -1182,7 +1182,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         netname : str
             net name. If None, pin name is used. Used when multiple pin objects are attached to the same net.
         base_layer : [str, str]
-            base metal layer. If None, [layer[0], 'drawing'] is used.
+            base metal layer. If None, corresponding layer in metal dict is used.
         refobj : LayoutObject.LayoutObject, optional
             reference object handle
         Returns
@@ -1871,20 +1871,3 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             return xy
         else:
             return self.get_absgrid_region(gridname, xy[0], xy[1])
-
-    '''
-    def get_inst_bbox_phygrid(self, instname):
-        """
-        (Obsolete) Get a bounding box of an Instance object, on physical grid
-        Parameters
-        ----------
-        instname : str
-            instance name
-        Returns
-        -------
-        np.ndarray([[float, float], [float, float]])
-            instance bbox
-        """
-        #raise Exception("GridLayoutGenerater.get_inst_bbox_phygrid deprecated. Use inst.bbox instead")
-        return self.get_inst(instname).bbox
-    '''
