@@ -2,6 +2,26 @@ lib_name: adc_sar_templates
 cell_name: sarclkgen_static
 pins: [ "SAOM", "PHI0", "RST", "DONE", "SHORTB", "UP", "CLKO", "EXTSEL_CLK", "VDD", "VSS", "SAOP", "CLKOB", "SEL<2:0>" ]
 instances:
+  IINV5:
+    lib_name: logic_templates
+    cell_name: inv
+    instpins:
+      I:
+        direction: input
+        net_name: "UP"
+        num_bits: 1
+      VSS:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      VDD:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      O:
+        direction: output
+        net_name: "net09"
+        num_bits: 1
   IINV1:
     lib_name: logic_templates
     cell_name: inv
@@ -142,26 +162,6 @@ instances:
         direction: output
         net_name: "EXTSELB_CLK"
         num_bits: 1
-  IINV5:
-    lib_name: logic_templates
-    cell_name: inv
-    instpins:
-      I:
-        direction: input
-        net_name: "UP"
-        num_bits: 1
-      VSS:
-        direction: inputOutput
-        net_name: "VSS"
-        num_bits: 1
-      VDD:
-        direction: inputOutput
-        net_name: "VDD"
-        num_bits: 1
-      O:
-        direction: output
-        net_name: "UPB"
-        num_bits: 1
   PIN24:
     lib_name: basic
     cell_name: ipin
@@ -296,5 +296,5 @@ instances:
         num_bits: 1
       UPB:
         direction: input
-        net_name: "UPB"
+        net_name: "VDD"
         num_bits: 1

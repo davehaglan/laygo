@@ -12,7 +12,7 @@ instances:
         num_bits: 1
       D:
         direction: inputOutput
-        net_name: "OP"
+        net_name: "VSS"
         num_bits: 1
       B:
         direction: inputOutput
@@ -20,7 +20,7 @@ instances:
         num_bits: 1
       G:
         direction: inputOutput
-        net_name: "OM"
+        net_name: "VSS"
         num_bits: 1
   IBUFN0:
     lib_name: BAG_prim
@@ -152,7 +152,7 @@ instances:
         num_bits: 1
       D:
         direction: inputOutput
-        net_name: "OM"
+        net_name: "VSS"
         num_bits: 1
       B:
         direction: inputOutput
@@ -160,7 +160,7 @@ instances:
         num_bits: 1
       G:
         direction: inputOutput
-        net_name: "OP"
+        net_name: "VSS"
         num_bits: 1
   IRGNN0:
     lib_name: BAG_prim

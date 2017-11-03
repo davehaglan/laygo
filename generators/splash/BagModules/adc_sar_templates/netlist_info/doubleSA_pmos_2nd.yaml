@@ -52,7 +52,7 @@ instances:
         num_bits: 1
       D:
         direction: inputOutput
-        net_name: "OUTM"
+        net_name: "net24"
         num_bits: 1
       B:
         direction: inputOutput
@@ -60,7 +60,7 @@ instances:
         num_bits: 1
       G:
         direction: inputOutput
-        net_name: "RGNP"
+        net_name: "VSS"
         num_bits: 1
   IBUFN1:
     lib_name: BAG_prim
@@ -72,7 +72,7 @@ instances:
         num_bits: 1
       D:
         direction: inputOutput
-        net_name: "OUTP"
+        net_name: "net23"
         num_bits: 1
       B:
         direction: inputOutput
@@ -80,7 +80,7 @@ instances:
         num_bits: 1
       G:
         direction: inputOutput
-        net_name: "RGNM"
+        net_name: "VSS"
         num_bits: 1
   IRGNPDM2:
     lib_name: BAG_prim
@@ -152,7 +152,7 @@ instances:
         num_bits: 1
       D:
         direction: inputOutput
-        net_name: "RGNM"
+        net_name: "OUTM"
         num_bits: 1
       B:
         direction: inputOutput
@@ -160,7 +160,7 @@ instances:
         num_bits: 1
       G:
         direction: inputOutput
-        net_name: "RGNP"
+        net_name: "OUTP"
         num_bits: 1
   IDRGNN0:
     lib_name: BAG_prim
@@ -172,7 +172,7 @@ instances:
         num_bits: 1
       D:
         direction: inputOutput
-        net_name: "RGNP"
+        net_name: "OUTP"
         num_bits: 1
       B:
         direction: inputOutput
@@ -180,7 +180,7 @@ instances:
         num_bits: 1
       G:
         direction: inputOutput
-        net_name: "RGNM"
+        net_name: "OUTM"
         num_bits: 1
   IOSPB0:
     lib_name: BAG_prim
@@ -300,7 +300,7 @@ instances:
         num_bits: 1
       D:
         direction: inputOutput
-        net_name: "RGNP"
+        net_name: "OUTP"
         num_bits: 1
       B:
         direction: inputOutput
@@ -320,7 +320,7 @@ instances:
         num_bits: 1
       D:
         direction: inputOutput
-        net_name: "RGNM"
+        net_name: "OUTM"
         num_bits: 1
       B:
         direction: inputOutput
@@ -340,66 +340,6 @@ instances:
         num_bits: 1
       D:
         direction: inputOutput
-        net_name: "RGNM"
-        num_bits: 1
-      B:
-        direction: inputOutput
-        net_name: "VSS"
-        num_bits: 1
-      G:
-        direction: inputOutput
-        net_name: "RGNP"
-        num_bits: 1
-  IDRGNP0:
-    lib_name: BAG_prim
-    cell_name: pmos4_fast
-    instpins:
-      S:
-        direction: inputOutput
-        net_name: "VDD"
-        num_bits: 1
-      D:
-        direction: inputOutput
-        net_name: "RGNP"
-        num_bits: 1
-      B:
-        direction: inputOutput
-        net_name: "VSS"
-        num_bits: 1
-      G:
-        direction: inputOutput
-        net_name: "RGNM"
-        num_bits: 1
-  IRGNNDM1:
-    lib_name: BAG_prim
-    cell_name: pmos4_fast
-    instpins:
-      S:
-        direction: inputOutput
-        net_name: "RGNP"
-        num_bits: 1
-      D:
-        direction: inputOutput
-        net_name: "VDD"
-        num_bits: 1
-      B:
-        direction: inputOutput
-        net_name: "VSS"
-        num_bits: 1
-      G:
-        direction: inputOutput
-        net_name: "RGNM"
-        num_bits: 1
-  IBUFP0:
-    lib_name: BAG_prim
-    cell_name: pmos4_fast
-    instpins:
-      S:
-        direction: inputOutput
-        net_name: "VDD"
-        num_bits: 1
-      D:
-        direction: inputOutput
         net_name: "OUTM"
         num_bits: 1
       B:
@@ -408,9 +348,9 @@ instances:
         num_bits: 1
       G:
         direction: inputOutput
-        net_name: "RGNP"
+        net_name: "OUTP"
         num_bits: 1
-  IBUFP1:
+  IDRGNP0:
     lib_name: BAG_prim
     cell_name: pmos4_fast
     instpins:
@@ -428,15 +368,15 @@ instances:
         num_bits: 1
       G:
         direction: inputOutput
-        net_name: "RGNM"
+        net_name: "OUTM"
         num_bits: 1
-  IRGNNDM0:
+  IRGNNDM1:
     lib_name: BAG_prim
     cell_name: pmos4_fast
     instpins:
       S:
         direction: inputOutput
-        net_name: "RGNM"
+        net_name: "VDD"
         num_bits: 1
       D:
         direction: inputOutput
@@ -448,7 +388,67 @@ instances:
         num_bits: 1
       G:
         direction: inputOutput
-        net_name: "RGNP"
+        net_name: "VDD"
+        num_bits: 1
+  IBUFP0:
+    lib_name: BAG_prim
+    cell_name: pmos4_fast
+    instpins:
+      S:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      D:
+        direction: inputOutput
+        net_name: "net24"
+        num_bits: 1
+      B:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      G:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+  IBUFP1:
+    lib_name: BAG_prim
+    cell_name: pmos4_fast
+    instpins:
+      S:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      D:
+        direction: inputOutput
+        net_name: "net23"
+        num_bits: 1
+      B:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      G:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+  IRGNNDM0:
+    lib_name: BAG_prim
+    cell_name: pmos4_fast
+    instpins:
+      S:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      D:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      B:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      G:
+        direction: inputOutput
+        net_name: "VDD"
         num_bits: 1
   PIN12:
     lib_name: basic

@@ -1,7 +1,11 @@
+analysis(tran fields binnum) "16"
+analysis(tran fields calcStop) ""
 analysis(tran fields dynHeadListBox) (nil choices ("#         time                     value") value nil)
 analysis(tran fields dynParam) ""
+analysis(tran fields dynParamB) nil
 analysis(tran fields dynParamListBox) (nil choices nil value nil)
 analysis(tran fields dynchoice) "Parameter file"
+analysis(tran fields dynparam) ""
 analysis(tran fields enable) (t)
 analysis(tran fields errpreset) "conservative"
 analysis(tran fields noisefmax) ""
@@ -21,13 +25,23 @@ analysis(tran fields param_vec) nil
 analysis(tran fields stop) "VAR(\"pper\")*1.1"
 analysis(tran fields tranNoise) ""
 analysis(tran fields tranNoiseMultiRuns) ""
+analysis(tran fields transtrobe) ""
+analysis(tran options FinalOpOtherParameters) ""
+analysis(tran options InfotimesOtherParameters) ""
 analysis(tran options acnames) nil
 analysis(tran options actimes) nil
 analysis(tran options additionalParams) ""
 analysis(tran options annotate) "status"
+analysis(tran options annotatedigits) "4"
+analysis(tran options area_factor) ""
+analysis(tran options area_predict) ""
 analysis(tran options captab) nil
 analysis(tran options cmin) ""
+analysis(tran options compiabstol) ""
+analysis(tran options complvl) ""
+analysis(tran options compreltol) ""
 analysis(tran options compression) ""
+analysis(tran options compvabstol) ""
 analysis(tran options detail) "node"
 analysis(tran options emirfile) ""
 analysis(tran options emirformat) ""
@@ -67,7 +81,10 @@ analysis(tran options sort) "name"
 analysis(tran options start) ""
 analysis(tran options step) ""
 analysis(tran options strobedelay) ""
+analysis(tran options strobeoutput) ""
 analysis(tran options strobeperiod) ""
+analysis(tran options tddb_fail_perc) ""
+analysis(tran options tddb_stress_time) ""
 analysis(tran options threshold) "0.0"
 analysis(tran options timed) nil
 analysis(tran options write) "spectre.ic"
