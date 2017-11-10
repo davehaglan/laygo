@@ -38,6 +38,10 @@ if load_from_file==True:
     params['num_des']=specdict['num_des']
     params['num_flop']=specdict['num_flop']
     params['m_des_dff']=sizedict['m_des_dff']
+    params['lch']=sizedict['lch']
+    params['pw']=sizedict['pw']
+    params['nw']=sizedict['nw']
+    params['device_intent']=sizedict['device_intent']
 
 print('creating BAG project')
 prj = bag.BagProject()

@@ -386,10 +386,10 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
         [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #in-to-out
                     ffin_out_xy[i][0], ffout_in_xy[i][0], ffin_out_xy[i][1][1]+7-offset, rg_m3m4)
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #div feedback
-                ffdiv_out_xy[num_des-1][0], ffdiv_in_xy45[0][0]+np.array([4,0]), ffdiv_out_xy[num_des-1][1][1]+7-offset_div, 
+                ffdiv_out_xy[num_des-1][0], ffdiv_in_xy45[0][0]+np.array([3,0]), ffdiv_out_xy[num_des-1][1][1]+7-offset_div, 
                 rg_m3m4, layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5)
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #M3-to-M5
-                ffdiv_in_xy[0][0], ffdiv_in_xy45[0][1]+np.array([4,0]), ffdiv_in_xy[0][0][1], rg_m3m4, layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5)
+                ffdiv_in_xy[0][0], ffdiv_in_xy45[0][1]+np.array([3,0]), ffdiv_in_xy[0][0][1], rg_m3m4, layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5)
     #CLK Buffer
     for i in range(3):
         [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],

@@ -45,6 +45,11 @@ if load_from_file==True:
     params['m_mux']=sizedict['m_mux']
     params['m_out']=sizedict['m_out']
     params['m_ser']=sizedict['m_ser']
+    params['lch']=sizedict['lch']
+    params['pw']=sizedict['pw']
+    params['nw']=sizedict['nw']
+    params['device_intent']=sizedict['device_intent']
+
 
 print('creating BAG project')
 prj = bag.BagProject()
