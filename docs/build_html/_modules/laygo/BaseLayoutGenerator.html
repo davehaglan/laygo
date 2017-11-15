@@ -1,0 +1,660 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>laygo.BaseLayoutGenerator &mdash; laygo_documentation 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="laygo_documentation 1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../../index.html" class="fa fa-home"> laygo_documentation</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../introduction/introduction.html#installation-and-quick-start">Installation and Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../introduction/introduction.html#documentations">Documentations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../introduction/introduction.html#example-labs">Example Labs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../introduction/introduction.html#example-generators">Example Generators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../introduction/introduction.html#license">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/tutorial_GDS.html">Tutorial (GDS flow)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_GDS.html#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_GDS.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_GDS.html#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_GDS.html#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_GDS.html#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_GDS.html#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_GDS.html#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_GDS.html#pin-creation">Pin creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_GDS.html#gds-export">GDS export</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/tutorial_BAG.html">Tutorial (BAG flow)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG.html#setup-and-running">Setup and running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG.html#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG.html#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG.html#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG.html#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG.html#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG.html#pin-creation">Pin creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG.html#export-to-bag">Export to BAG</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html">Tutorial (BAG flow, new version)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#setup-and-running">Setup and running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#initialize-gridlayoutgenerator2">Initialize GridLayoutGenerator2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#pin-creation">Pin creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorial/tutorial_BAG_v2.html#export-to-bag">Export to BAG</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture/architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example/logic.html">Generator example - CMOS logic family</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../example/logic.html#install-and-launch">Install and launch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/logic.html#supported-logic-gate-types">Supported logic gate types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/logic.html#schematic-templates">Schematic templates</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../example/serdes.html">Generator example - CMOS 2:1 mux serializer (obsolete)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../example/serdes.html#install-and-launch">Install and launch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/serdes.html#parameterizations">Parameterizations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../example/ser_des.html">Generator example - Flexible CMOS SERDES</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../example/ser_des.html#structure">Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/ser_des.html#setup-for-bwrc-users">Setup (for BWRC users)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/ser_des.html#serializer-generation">Serializer Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/ser_des.html#deserializer-generation">Deserializer Generation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../example/tisar.html">Generator example - TISAR ADC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#setting-up-parameters">Setting up parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#tisaradc-architecture">TISARADC architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#subadc-frontend-layout-generation">SubADC frontend layout generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#subadc-backend-layout-generation">SubADC backend layout generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#subadc-switch-generation">SubADC switch generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#subadc-top-generation">SubADC top generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#array-generation">Array generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#clocking-path-generation">Clocking path generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#retimer">Retimer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#tisaradc-body-clock-sar-retimer">TISARADC body (clock+sar+retimer)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#bias">Bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#top">Top</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#full-stack-generation">Full stack generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/tisar.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../example/code.html">Code examples (to be uploaded)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../example/code.html#code-example-1-low-level-building-block-generations-using-primitive-templates">Code example 1: low-level building block generations using primitive templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../example/code.html#code-example-2-high-level-building-block-top-generations">Code example 2: high-level building block / top generations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tech/tech.html">Technology setup instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tech/tech.html#example-setup-files">Example setup files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tech/tech.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tech/tech.html#bag-setup">BAG setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tech/tech.html#config-file-laygo-config-yaml">Config file (laygo_config.yaml)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tech/tech.html#tech-lib-layermap-gds-flow-only">(tech_lib).layermap (GDS flow only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tech/tech.html#template-library">Template library</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/laygo.html">laygo package</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">laygo_documentation</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>laygo.BaseLayoutGenerator</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for laygo.BaseLayoutGenerator</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1">########################################################################################################################</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (c) 2014, Regents of the University of California</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># Redistribution and use in source and binary forms, with or without modification, are permitted provided that the</span>
+<span class="c1"># following conditions are met:</span>
+<span class="c1">#</span>
+<span class="c1"># 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following</span>
+<span class="c1">#   disclaimer.</span>
+<span class="c1"># 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the</span>
+<span class="c1">#    following disclaimer in the documentation and/or other materials provided with the distribution.</span>
+<span class="c1">#</span>
+<span class="c1"># THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES,</span>
+<span class="c1"># INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</span>
+<span class="c1"># DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span>
+<span class="c1"># SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR</span>
+<span class="c1"># SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,</span>
+<span class="c1"># WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span>
+<span class="c1"># OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+<span class="c1">#</span>
+<span class="c1">########################################################################################################################</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The BaseLayoutGenerator module implements classes to generate full-custom layout on physical grid. It allows designers</span>
+<span class="sd">to describe layout generation scripts in Python language and automate the layout process. BaseLayoutGenerator is not</span>
+<span class="sd">capable of handling any abstracted grid/template parameters, so all parameters should be given in real numbers</span>
+
+<span class="sd">Example</span>
+<span class="sd">-------</span>
+<span class="sd">For layout export, type below command in ipython console.</span>
+
+<span class="sd">    $ run laygo/labs/lab1_a_baselayoutgenerator_export.py</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Jaeduk Han&quot;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Jaeduk Han&quot;</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;jdhan@eecs.berkeley.edu&quot;</span>
+<span class="n">__status__</span> <span class="o">=</span> <span class="s2">&quot;Prototype&quot;</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">LayoutIO</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">PrimitiveUtil</span>
+<span class="kn">from</span> <span class="nn">.LayoutDB</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="BaseLayoutGenerator"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator">[docs]</a><span class="k">class</span> <span class="nc">BaseLayoutGenerator</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The BaseLayoutGenerator class implements functions and variables for full-custom layout generations on physical</span>
+<span class="sd">    grids.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    res : float</span>
+<span class="sd">        physical grid resolution</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">db</span> <span class="o">=</span> <span class="n">LayoutDB</span><span class="p">()</span>
+    <span class="sd">&quot;&quot;&quot;laygo.LayoutDB.LayoutDB: layout database&quot;&quot;&quot;</span>
+    <span class="n">use_array</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="sd">&quot;&quot;&quot;boolean: True if InstanceArray is used instead of Instance. For GridLayoutGenerator2 only&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">res</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;float: physical resolution&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">res</span>
+    
+    <span class="nd">@res</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">res</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;float: physical resolution&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">res</span><span class="o">=</span><span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="mf">0.005</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">=</span><span class="n">LayoutDB</span><span class="p">(</span><span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="p">)</span>
+
+    <span class="c1"># auxiliary functions</span>
+<div class="viewcode-block" id="BaseLayoutGenerator.display"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.display">[docs]</a>    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cellname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Display DB information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        libname : str, optional</span>
+<span class="sd">            library name</span>
+<span class="sd">        cellname : str, optional</span>
+<span class="sd">            cell name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">libname</span><span class="p">,</span> <span class="n">cellname</span><span class="p">)</span></div>
+
+    <span class="c1"># library and cell related functions</span>
+<div class="viewcode-block" id="BaseLayoutGenerator.add_library"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_library">[docs]</a>    <span class="k">def</span> <span class="nf">add_library</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a library to work on.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            library name</span>
+<span class="sd">        select : bool, optional</span>
+<span class="sd">            if True, automatically select the library to work on after creation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">add_library</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">select</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sel_library</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseLayoutGenerator.add_cell"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_cell">[docs]</a>    <span class="k">def</span> <span class="nf">add_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a cell to work on.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            cellname</span>
+<span class="sd">        libname : str, optional</span>
+<span class="sd">            library name. If None, current selected library name is used.</span>
+<span class="sd">        select : bool, optional</span>
+<span class="sd">            if True, automatically select the cell to work on after creation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">add_cell</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">select</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sel_cell</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseLayoutGenerator.sel_library"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.sel_library">[docs]</a>    <span class="k">def</span> <span class="nf">sel_library</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Select a library to work on.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        libname : str</span>
+<span class="sd">            library name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">sel_library</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseLayoutGenerator.sel_cell"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.sel_cell">[docs]</a>    <span class="k">def</span> <span class="nf">sel_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Select a cell to work on.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cellname : str</span>
+<span class="sd">            cell name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">sel_cell</span><span class="p">(</span><span class="n">cellname</span><span class="p">)</span></div>
+
+    <span class="c1"># geometry related functions</span>
+<div class="viewcode-block" id="BaseLayoutGenerator.add_rect"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_rect">[docs]</a>    <span class="k">def</span> <span class="nf">add_rect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">netname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a rect to selected region.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            rect name</span>
+<span class="sd">        xy : np.array([[float, float], [float, float]])</span>
+<span class="sd">            xy coordinates</span>
+<span class="sd">        layer : [str, str]</span>
+<span class="sd">            layer name an purpose</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        laygo.LayoutObject.Rect</span>
+<span class="sd">            created Rect object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">add_rect</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">netname</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseLayoutGenerator.add_pin"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_pin">[docs]</a>    <span class="k">def</span> <span class="nf">add_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">netname</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">layer</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a pin to specified region.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            pin object name</span>
+<span class="sd">        netname : str</span>
+<span class="sd">            net name</span>
+<span class="sd">        xy : np.array([[float, float], [float, float]])</span>
+<span class="sd">            xy coordinates</span>
+<span class="sd">        layer : [str, str]</span>
+<span class="sd">            layer name and purpose</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        laygo.LayoutObject.Pin</span>
+<span class="sd">            created Pin object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">add_pin</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">netname</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseLayoutGenerator.add_text"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_text">[docs]</a>    <span class="k">def</span> <span class="nf">add_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">layer</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a text to specified coordinate.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            pin object name</span>
+<span class="sd">        text : str</span>
+<span class="sd">            text string</span>
+<span class="sd">        xy : [float, float]</span>
+<span class="sd">            xy coordinate</span>
+<span class="sd">        layer : [layername, purpose]</span>
+<span class="sd">            layer name an purpose</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        laygo.LayoutObject.Text</span>
+<span class="sd">            created Text object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseLayoutGenerator.add_inst"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_inst">[docs]</a>    <span class="k">def</span> <span class="nf">add_inst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="p">,</span> <span class="n">cellname</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+                 <span class="n">transform</span><span class="o">=</span><span class="s1">&#39;R0&#39;</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add an instance to specified coordinate.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            instance name</span>
+<span class="sd">        libname : str</span>
+<span class="sd">            cell library name (not output library name)</span>
+<span class="sd">        cellname : str</span>
+<span class="sd">            cellname</span>
+<span class="sd">        xy : np.array([float, float])</span>
+<span class="sd">            xy coordinate</span>
+<span class="sd">        shape : np.array([x0, y0]) or None</span>
+<span class="sd">            array shape parameter. If None, the instance is not considered as array</span>
+<span class="sd">        spacing : np.array([x0, y0])</span>
+<span class="sd">            array spacing parameter</span>
+<span class="sd">        transform : str</span>
+<span class="sd">            transform parameter</span>
+<span class="sd">        template : laygo.TemplateObject.TemplateObject</span>
+<span class="sd">            template handle</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        laygo.LayoutObject.Instance</span>
+<span class="sd">            created Instance object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">add_inst</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="p">,</span> <span class="n">cellname</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">use_array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_array</span><span class="p">)</span></div>
+
+    <span class="c1"># access functions</span>
+<div class="viewcode-block" id="BaseLayoutGenerator.get_rect"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.get_rect">[docs]</a>    <span class="k">def</span> <span class="nf">get_rect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the handle of specified rect object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            rect name</span>
+<span class="sd">        libname : str</span>
+<span class="sd">            libname. if None, self.db._plib is used</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        laygo.LayoutObject.Rect</span>
+<span class="sd">            Rect object pointer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_rect</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseLayoutGenerator.get_inst"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.get_inst">[docs]</a>    <span class="k">def</span> <span class="nf">get_inst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the handle of specified instance object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str, optional</span>
+<span class="sd">            instance name, if None, all instances are returned.</span>
+<span class="sd">        libname : str, optional</span>
+<span class="sd">            libname. if None, self.db._plib is used.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        laygo.LayoutObject.Instance</span>
+<span class="sd">            Instance object pointer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_inst</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseLayoutGenerator.get_pin"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.get_pin">[docs]</a>    <span class="k">def</span> <span class="nf">get_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the handle of speficied pin object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            pin name</span>
+<span class="sd">        libname : str, optional</span>
+<span class="sd">            libname. if None, self.db._plib is used.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        laygo.LayoutObject.Pin</span>
+<span class="sd">            Pin object pointer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_pin</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">libname</span><span class="p">)</span></div>
+
+    <span class="c1"># db I/O functions</span>
+<div class="viewcode-block" id="BaseLayoutGenerator.export_GDS"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.export_GDS">[docs]</a>    <span class="k">def</span> <span class="nf">export_GDS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cellname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layermapfile</span><span class="o">=</span><span class="s2">&quot;default.layermap&quot;</span><span class="p">,</span> <span class="n">physical_unit</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">9</span><span class="p">,</span>
+                   <span class="n">logical_unit</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">pin_label_height</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">text_height</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">annotate_layer</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="s1">&#39;drawing&#39;</span><span class="p">],</span>
+                   <span class="n">annotate_height</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export specified cell(s) to a GDS file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            output filename</span>
+<span class="sd">        layermapfile : str</span>
+<span class="sd">            layermap filename</span>
+<span class="sd">        physical_unit : float</span>
+<span class="sd">            physical unit for GDS export</span>
+<span class="sd">        logical_unit : float</span>
+<span class="sd">            logical unit for GDS export</span>
+<span class="sd">        pin_label_height : float</span>
+<span class="sd">            pin label height</span>
+<span class="sd">        text_height : float</span>
+<span class="sd">            text height</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">libname</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span> <span class="n">libname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">plib</span>
+        <span class="k">if</span> <span class="n">cellname</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span> <span class="n">cellname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">pcell</span>
+        <span class="k">if</span> <span class="n">pin_label_height</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
+            <span class="n">pin_label_height</span><span class="o">=</span><span class="n">annotate_height</span>
+        <span class="k">if</span> <span class="n">text_height</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
+            <span class="n">text_height</span><span class="o">=</span><span class="n">annotate_height</span>
+        <span class="n">LayoutIO</span><span class="o">.</span><span class="n">export_GDS</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">,</span> <span class="n">libname</span><span class="p">,</span> <span class="n">cellname</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">layermapfile</span><span class="o">=</span><span class="n">layermapfile</span><span class="p">,</span>
+                            <span class="n">physical_unit</span><span class="o">=</span><span class="n">physical_unit</span><span class="p">,</span> <span class="n">logical_unit</span><span class="o">=</span><span class="n">logical_unit</span><span class="p">,</span> <span class="n">pin_label_height</span><span class="o">=</span><span class="n">pin_label_height</span><span class="p">,</span>
+                            <span class="n">text_height</span><span class="o">=</span><span class="n">text_height</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseLayoutGenerator.export_BAG"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.export_BAG">[docs]</a>    <span class="k">def</span> <span class="nf">export_BAG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prj</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cellname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">array_delimiter</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;[&#39;</span><span class="p">,</span><span class="s1">&#39;]&#39;</span><span class="p">],</span> <span class="n">via_tech</span><span class="o">=</span><span class="s1">&#39;cdsDefTechLib&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export specified cell(s) to BagProject object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        db : laygo.LayoutDB.LayoutDB</span>
+<span class="sd">            Layout db object</span>
+<span class="sd">        libname : str</span>
+<span class="sd">            name of library to be exported</span>
+<span class="sd">        cellname : list or str</span>
+<span class="sd">            name of cells to be exported</span>
+<span class="sd">        prj : BagProject</span>
+<span class="sd">            bag object to export</span>
+<span class="sd">        array_delimiter : list or str</span>
+<span class="sd">            array delimiter for multiple placements.</span>
+<span class="sd">        via_tech : str</span>
+<span class="sd">            via technology entry for BagProject. Not being used currently because instances are used for via connections.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">libname</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span> <span class="n">libname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">plib</span>
+        <span class="k">if</span> <span class="n">cellname</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span> <span class="n">cellname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">pcell</span>
+        <span class="n">LayoutIO</span><span class="o">.</span><span class="n">export_BAG</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">,</span> <span class="n">libname</span><span class="p">,</span> <span class="n">cellname</span><span class="p">,</span> <span class="n">prj</span><span class="p">,</span> <span class="n">array_delimiter</span><span class="o">=</span><span class="n">array_delimiter</span><span class="p">,</span> <span class="n">via_tech</span><span class="o">=</span><span class="n">via_tech</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseLayoutGenerator.import_GDS"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.import_GDS">[docs]</a>    <span class="k">def</span> <span class="nf">import_GDS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">layermapfile</span><span class="o">=</span><span class="s2">&quot;default.layermap&quot;</span><span class="p">,</span> <span class="n">instance_libname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">append</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Import layout database from gds file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : gds filename</span>
+<span class="sd">        layermapfile : layermap filename</span>
+<span class="sd">        instance_libname : library name of instantiated structure</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        laygo.LayoutDB.LayoutDB</span>
+<span class="sd">            Imported layout database</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">db</span><span class="o">=</span><span class="n">LayoutIO</span><span class="o">.</span><span class="n">import_GDS</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">layermapfile</span><span class="o">=</span><span class="n">layermapfile</span><span class="p">,</span> <span class="n">instance_libname</span><span class="o">=</span><span class="n">instance_libname</span><span class="p">,</span>
+                               <span class="n">res</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">append</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">db</span></div>
+
+<div class="viewcode-block" id="BaseLayoutGenerator.import_BAG"><a class="viewcode-back" href="../../api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.import_BAG">[docs]</a>    <span class="k">def</span> <span class="nf">import_BAG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prj</span><span class="p">,</span> <span class="n">libname</span><span class="p">,</span> <span class="n">cellname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yamlfile</span><span class="o">=</span><span class="s2">&quot;import_BAG_scratch.yaml&quot;</span><span class="p">,</span> <span class="n">append</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Import layout database from BagProject object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        prj : BagProject</span>
+<span class="sd">            bag object to export</span>
+<span class="sd">        libname : str</span>
+<span class="sd">            name of library to be exported</span>
+<span class="sd">        cellname : list or str</span>
+<span class="sd">            name of cells to be exported</span>
+<span class="sd">        yamlfile : str</span>
+<span class="sd">            scratch yaml file path</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        laygo.LayoutDB.LayoutDB</span>
+<span class="sd">            Imported layout database</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">db</span><span class="o">=</span><span class="n">LayoutIO</span><span class="o">.</span><span class="n">import_BAG</span><span class="p">(</span><span class="n">prj</span><span class="o">=</span><span class="n">prj</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">libname</span><span class="p">,</span> <span class="n">cellname</span><span class="o">=</span><span class="n">cellname</span><span class="p">,</span> <span class="n">yamlfile</span><span class="o">=</span><span class="n">yamlfile</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">res</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">append</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">db</span></div></div>
+
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Jaeduk Han.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
