@@ -31,9 +31,6 @@ import yaml
 import os
 #import logging;logging.basicConfig(level=logging.DEBUG)
 
-#global variables
-#device mapping table - could be process dependent
-
 def create_logic_io_pin(laygen, gridname, pinname_list, rect_list, offset_n=np.array([-1, 1])):
     """generate digital io pin"""
     rect_mn_list = [laygen.get_mn(obj=r, gridname=gridname, sort=True) for r in rect_list]
@@ -48,43 +45,49 @@ def create_logic_power_pin(laygen, gridname, rect_vdd, rect_vss, pinname_vdd='VD
     laygen.pin(name=pinname_vdd, ref=rect_vdd, gridname=gridname)
     laygen.pin(name=pinname_vss, ref=rect_vss, gridname=gridname)
 
-def create_logic_nmos(laygen, place_grid, nf, mn=np.array([0, 0]), ref=None, transform='R0'):
+def _create_logic_mos(laygen, devname_center, devname_boundary_left, devname_boundary_right, devname_space,
+                      place_grid, nf, mn=np.array([0, 0]), ref=None, transform='R0'):
+    """logic mosfet generator core function"""
     pg = place_grid
+    dnbl = devname_boundary_left    #boundary left mos structure name
+    dnc = devname_center            #core mos structure name
+    dnbr = devname_boundary_right   #boundary right mos structure name
+    dnsp = devname_space            #spacing structure name
+    if nf == 1:
+        _m = 1
+    else:
+        _m = int(nf / 2)
+    dev_bl0 = laygen.place(gridname=pg, cellname=dnbl, mn=mn, ref=ref, shape=[1, 1], transform=transform)
+    dev_core0 = laygen.place(gridname=pg, cellname=dnc, ref=dev_bl0.right, shape=[_m, 1], transform=transform)
+    dev_br0 = laygen.place(gridname=pg, cellname=dnbr, ref=dev_core0.right, shape=[1, 1], transform=transform)
+    if nf == 1:
+        dev_br0 = laygen.place(gridname=pg, cellname=dnsp, ref=dev_br0.right, shape=[1, 1], transform=transform)
+    return {'dev': [dev_bl0, dev_core0, dev_br0], 'core': dev_core0}
+
+def create_logic_nmos(laygen, place_grid, nf, mn=np.array([0, 0]), ref=None, transform='R0'):
+    """logic n-mosfet generator"""
     dnbl = 'nmos4_fast_boundary'
     if nf == 1:
         dnc = 'nmos4_fast_center_nf1_left'
-        m = 1
     else:
         dnc = 'nmos4_fast_center_nf2'
-        m = int(nf / 2)
     dnbr = 'nmos4_fast_boundary'
     dnsp = 'nmos4_fast_space'
-
-    dev_bl0 = laygen.place(gridname=pg, cellname=dnbl, mn=mn, ref=ref, shape=[1, 1], transform=transform)
-    dev_core0 = laygen.place(gridname=pg, cellname=dnc, ref=dev_bl0.right, shape=[m, 1], transform=transform)
-    dev_br0 = laygen.place(gridname=pg, cellname=dnbr, ref=dev_core0.right, shape=[1, 1], transform=transform)
-    if nf == 1:
-        dev_br0 = laygen.place(gridname=pg, cellname=dnsp, ref=dev_br0.right, shape=[1, 1], transform=transform)
-    return [dev_bl0, dev_core0, dev_br0]
+    return _create_logic_mos(laygen, devname_center=dnc, devname_boundary_left=dnbl, devname_boundary_right=dnbr,
+                             devname_space=dnsp, place_grid=place_grid, nf=nf, mn=mn, ref=ref, transform=transform)
 
 def create_logic_pmos(laygen, place_grid, nf, mn=np.array([0, 0]), ref=None, transform='R0'):
-    pg=place_grid
+    """logic p-mosfet generator"""
     dnbl='pmos4_fast_boundary'
     if nf == 1:
         dnc = 'pmos4_fast_center_nf1_left'
-        m = 1
     else:
         dnc = 'pmos4_fast_center_nf2'
-        m = int(nf/2)
     dnbr='pmos4_fast_boundary'
     dnsp = 'nmos4_fast_space'
+    return _create_logic_mos(laygen, devname_center=dnc, devname_boundary_left=dnbl, devname_boundary_right=dnbr,
+                             devname_space=dnsp, place_grid=place_grid, nf=nf, mn=mn, ref=ref, transform=transform)
 
-    dev_bl0 = laygen.place(gridname=pg, cellname=dnbl, mn=mn, ref=ref, shape=[1, 1], transform=transform)
-    dev_core0 = laygen.place(gridname=pg, cellname=dnc, ref=dev_bl0.right, shape=[m, 1], transform=transform)
-    dev_br0 = laygen.place(gridname=pg, cellname=dnbr, ref=dev_core0.right, shape=[1, 1], transform=transform)
-    if nf == 1:
-        dev_br0 = laygen.place(gridname=pg, cellname=dnsp, ref=dev_br0.right, shape=[1, 1], transform=transform)
-    return [dev_bl0, dev_core0, dev_br0]
 
 def generate_logic_gate(laygen, gate_type, place_grid, route_grid_m1m2, route_grid_m2m3,
                         route_grid_m1m2_pin, route_grid_m2m3_pin,
@@ -96,8 +99,14 @@ def generate_logic_gate(laygen, gate_type, place_grid, route_grid_m1m2, route_gr
 
     if gate_type=='inv': #inverter
         #place
-        nbl0, n0, nbr0 = create_logic_nmos(laygen, place_grid, nf=m, mn=origin, transform='R0')
-        pbl0, p0, pbr0 = create_logic_pmos(laygen, place_grid, nf=m, ref=nbl0.top, transform='MX')
+        nrow0 = create_logic_nmos(laygen, place_grid, nf=m, mn=origin, transform='R0')
+        prow0 = create_logic_pmos(laygen, place_grid, nf=m, ref=nrow0['dev'][0].top, transform='MX')
+        nbl0 = nrow0['dev'][0]
+        n0 = nrow0['core']
+        nbr0 = nrow0['dev'][-1]
+        pbl0 = prow0['dev'][0]
+        p0 = prow0['core']
+        pbr0 = prow0['dev'][-1]
 
         #route
         #input
@@ -144,10 +153,18 @@ def generate_logic_gate(laygen, gate_type, place_grid, route_grid_m1m2, route_gr
 
     if gate_type=='nand': #nand
         #place
-        nbl0, n0, nbr0 = create_logic_nmos(laygen, place_grid, nf=m, mn=origin, transform='R0')
-        nbl1, n1, nbr1 = create_logic_nmos(laygen, place_grid, nf=m, ref=nbr0.right, transform='R0')
-        pbl0, p0, pbr0 = create_logic_pmos(laygen, place_grid, nf=m, ref=nbl0.top, transform='MX')
-        pbl1, p1, pbr1 = create_logic_pmos(laygen, place_grid, nf=m, ref=pbr0.right, transform='MX')
+        nrow0 = create_logic_nmos(laygen, place_grid, nf=m, mn=origin, transform='R0')
+        nrow1 = create_logic_nmos(laygen, place_grid, nf=m, ref=nrow0['dev'][-1].right, transform='R0')
+        prow0 = create_logic_pmos(laygen, place_grid, nf=m, ref=nrow0['dev'][0].top, transform='MX')
+        prow1 = create_logic_pmos(laygen, place_grid, nf=m, ref=prow0['dev'][-1].right, transform='MX')
+        nbl0 = nrow0['dev'][0]
+        n0 = nrow0['core']
+        n1 = nrow1['core']
+        nbr1 = nrow1['dev'][-1]
+        pbl0 = prow0['dev'][0]
+        p0 = prow0['core']
+        p1 = prow0['core']
+        pbr1 = prow1['dev'][-1]
 
         #route
         # a
