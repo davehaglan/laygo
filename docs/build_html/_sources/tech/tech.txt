@@ -143,6 +143,8 @@ VIA8        drawing 18   0
 
 ## Template library
 
+**Refer to Woorham's [Template library setup guide](https://ucb-art.github.io/laygo/tech/Laygo_templates_guide.html) for more detailed instructions.**
+
 This is the most critical part of the laygo setup. Laygo uses hand-drawn
 templates of primitive devices and automatic generations are done in
 block levels. Therefore, users need to build the primitive templates and
