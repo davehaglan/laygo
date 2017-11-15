@@ -925,7 +925,7 @@
                     <span class="n">_xy0</span> <span class="o">=</span> <span class="n">_xy0</span> <span class="o">+</span> <span class="n">_xy0_pointer_abs</span>
                 <span class="k">else</span><span class="p">:</span> <span class="c1">#Instances</span>
                     <span class="c1">#instance offset</span>
-                    <span class="n">reftemplate0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">refinst0</span><span class="o">.</span><span class="n">cellname</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">refinst0</span><span class="o">.</span><span class="n">libname</span><span class="p">)</span>
+                    <span class="n">reftemplate0</span><span class="o">=</span><span class="n">refinst0</span><span class="o">.</span><span class="n">template</span> <span class="c1">#self.templates.get_template(refinst0.cellname, libname=refinst0.libname)</span>
                     <span class="n">_offset0</span><span class="o">=</span><span class="n">offset0</span><span class="o">+</span><span class="n">refinst0</span><span class="o">.</span><span class="n">xy</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">refinst0</span><span class="o">.</span><span class="n">spacing</span><span class="o">*</span><span class="n">refinstindex0</span><span class="p">,</span> <span class="n">ut</span><span class="o">.</span><span class="n">Mt</span><span class="p">(</span><span class="n">refinst0</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
                     <span class="c1">#pointer and pin</span>
                     <span class="k">if</span> <span class="n">refpinname0</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># not pin</span>
@@ -936,7 +936,6 @@
                         <span class="n">_xy0_pointer_abs</span> <span class="o">=</span> <span class="n">_xy0_pointer_abs</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
                         <span class="n">_xy0</span> <span class="o">=</span> <span class="n">_xy0</span> <span class="o">+</span> <span class="n">_xy0_pointer_abs</span>
                     <span class="k">else</span><span class="p">:</span> <span class="c1">#pin</span>
-                        <span class="c1">#pin_xy0_abs=self.get_template_pin_xy(reftemplate0.name, refpinname0, gridname0, libname=refinst0.libname)[0,:]</span>
                         <span class="n">pin_xy_abs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_template_pin_xy</span><span class="p">(</span><span class="n">reftemplate0</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname0</span><span class="p">,</span> <span class="n">gridname0</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">refinst0</span><span class="o">.</span><span class="n">libname</span><span class="p">)</span>
                         <span class="c1">#pin location</span>
                         <span class="n">pin_xy0_abs</span> <span class="o">=</span> <span class="n">pin_xy_abs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
@@ -957,7 +956,7 @@
                     <span class="n">_xy1</span> <span class="o">=</span> <span class="n">_xy1</span> <span class="o">+</span> <span class="n">_xy1_pointer_abs</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1">#instance offset</span>
-                    <span class="n">reftemplate1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">refinst1</span><span class="o">.</span><span class="n">cellname</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">refinst1</span><span class="o">.</span><span class="n">libname</span><span class="p">)</span>
+                    <span class="n">reftemplate1</span><span class="o">=</span><span class="n">refinst1</span><span class="o">.</span><span class="n">template</span> <span class="c1">#self.templates.get_template(refinst1.cellname, libname=refinst1.libname)</span>
                     <span class="n">_offset1</span><span class="o">=</span><span class="n">offset1</span><span class="o">+</span><span class="n">refinst1</span><span class="o">.</span><span class="n">xy</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">refinst1</span><span class="o">.</span><span class="n">spacing</span><span class="o">*</span><span class="n">refinstindex1</span><span class="p">,</span> <span class="n">ut</span><span class="o">.</span><span class="n">Mt</span><span class="p">(</span><span class="n">refinst1</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
                     <span class="c1">#pointer and pin</span>
                     <span class="k">if</span> <span class="n">refpinname1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># not pin</span>
@@ -968,7 +967,6 @@
                         <span class="n">_xy1_pointer_abs</span> <span class="o">=</span> <span class="n">_xy1_pointer_abs</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
                         <span class="n">_xy1</span> <span class="o">=</span> <span class="n">_xy1</span> <span class="o">+</span> <span class="n">_xy1_pointer_abs</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="c1">#pin_xy1_abs = self.get_template_pin_xy(reftemplate1.name, refpinname1, gridname1, libname=refinst1.libname)[0, :]</span>
                         <span class="n">pin_xy_abs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_template_pin_xy</span><span class="p">(</span><span class="n">reftemplate1</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">refpinname1</span><span class="p">,</span> <span class="n">gridname1</span><span class="p">,</span> <span class="n">libname</span><span class="o">=</span><span class="n">refinst1</span><span class="o">.</span><span class="n">libname</span><span class="p">)</span>
                         <span class="c1">#pin location</span>
                         <span class="n">pin_xy1_abs</span> <span class="o">=</span> <span class="n">pin_xy_abs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
@@ -1386,7 +1384,7 @@
 <span class="sd">        netname : str</span>
 <span class="sd">            net name. If None, pin name is used. Used when multiple pin objects are attached to the same net.</span>
 <span class="sd">        base_layer : [str, str]</span>
-<span class="sd">            base metal layer. If None, [layer[0], &#39;drawing&#39;] is used.</span>
+<span class="sd">            base metal layer. If None, corresponding layer in metal dict is used.</span>
 <span class="sd">        refobj : LayoutObject.LayoutObject, optional</span>
 <span class="sd">            reference object handle</span>
 <span class="sd">        Returns</span>
@@ -2074,24 +2072,7 @@
         <span class="k">if</span> <span class="n">gridname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">xy</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_absgrid_region</span><span class="p">(</span><span class="n">gridname</span><span class="p">,</span> <span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
-
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    def get_inst_bbox_phygrid(self, instname):</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-<span class="sd">        (Obsolete) Get a bounding box of an Instance object, on physical grid</span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        instname : str</span>
-<span class="sd">            instance name</span>
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        np.ndarray([[float, float], [float, float]])</span>
-<span class="sd">            instance bbox</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-<span class="sd">        #raise Exception(&quot;GridLayoutGenerater.get_inst_bbox_phygrid deprecated. Use inst.bbox instead&quot;)</span>
-<span class="sd">        return self.get_inst(instname).bbox</span>
-<span class="sd">    &#39;&#39;&#39;</span></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_absgrid_region</span><span class="p">(</span><span class="n">gridname</span><span class="p">,</span> <span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div></div>
 </pre></div>
 
           </div>

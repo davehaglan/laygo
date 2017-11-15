@@ -1,0 +1,567 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Laygo Template Library Setup Guide &mdash; laygo_documentation 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="laygo_documentation 1.0 documentation" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../index.html" class="fa fa-home"> laygo_documentation</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#installation-and-quick-start">Installation and Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#documentations">Documentations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#example-labs">Example Labs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#example-generators">Example Generators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#license">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial_GDS.html">Tutorial (GDS flow)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#pin-creation">Pin creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#gds-export">GDS export</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial_BAG.html">Tutorial (BAG flow)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#setup-and-running">Setup and running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#pin-creation">Pin creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#export-to-bag">Export to BAG</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html">Tutorial (BAG flow, new version)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#setup-and-running">Setup and running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#initialize-gridlayoutgenerator2">Initialize GridLayoutGenerator2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#load-template-and-grid-database">Load template and grid database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#library-and-cell-creation">Library and cell creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#cell-placements">Cell placements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#signal-routing">Signal routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#power-routing">Power routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#pin-creation">Pin creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#export-to-bag">Export to BAG</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logic.html">Generator example - CMOS logic family</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#install-and-launch">Install and launch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#supported-logic-gate-types">Supported logic gate types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#schematic-templates">Schematic templates</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="serdes.html">Generator example - CMOS 2:1 mux serializer (obsolete)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="serdes.html#install-and-launch">Install and launch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serdes.html#parameterizations">Parameterizations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ser_des.html">Generator example - Flexible CMOS SERDES</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ser_des.html#structure">Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ser_des.html#setup-for-bwrc-users">Setup (for BWRC users)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ser_des.html#serializer-generation">Serializer Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ser_des.html#deserializer-generation">Deserializer Generation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tisar.html">Generator example - TISAR ADC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tisar.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tisar.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tisar.html#setting-up-parameters">Setting up parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tisar.html#tisaradc-architecture">TISARADC architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tisar.html#subadc-frontend-layout-generation">SubADC frontend layout generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tisar.html#subadc-backend-layout-generation">SubADC backend layout generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tisar.html#subadc-switch-generation">SubADC switch generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tisar.html#subadc-top-generation">SubADC top generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tisar.html#array-generation">Array generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tisar.html#clocking-path-generation">Clocking path generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tisar.html#retimer">Retimer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tisar.html#tisaradc-body-clock-sar-retimer">TISARADC body (clock+sar+retimer)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tisar.html#bias">Bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tisar.html#top">Top</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tisar.html#full-stack-generation">Full stack generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tisar.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">Code examples (to be uploaded)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code.html#code-example-1-low-level-building-block-generations-using-primitive-templates">Code example 1: low-level building block generations using primitive templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#code-example-2-high-level-building-block-top-generations">Code example 2: high-level building block / top generations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tech/tech.html">Technology setup instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#example-setup-files">Example setup files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#bag-setup">BAG setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#config-file-laygo-config-yaml">Config file (laygo_config.yaml)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#tech-lib-layermap-gds-flow-only">(tech_lib).layermap (GDS flow only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#template-library">Template library</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/laygo.html">laygo package</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">laygo_documentation</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Laygo Template Library Setup Guide</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/example/Laygo_templates_guide.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="laygo-template-library-setup-guide">
+<span id="laygo-template-library-setup-guide"></span><h1>Laygo Template Library Setup Guide<a class="headerlink" href="#laygo-template-library-setup-guide" title="Permalink to this headline">¶</a></h1>
+<p>This section describes how to construct microtemplates_dense library.</p>
+<div class="section" id="introduction">
+<span id="introduction"></span><h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The guideline provided in this section is not a golden flow; It is based on my (Woorham Bae&#8217;s) limited experience, so there must be better solutions.
+The intend is just to provide some tips that can reduce number of trials and errors I did.
+Just refer and do not rely!</p>
+<ul class="simple">
+<li>For now, Laygo does not support ‘path’ drawing, so please use ‘rectangle’ for all routings</li>
+<li>It is hard to get a perfect templates in your first trial. Don’t be frustrated if you cannot make it.</li>
+<li>Best idea is to refer microtemplates_dense library for other technologies if you can access to.
+But you need to understand some basics of template library before you replicate.</li>
+</ul>
+</div>
+<div class="section" id="let-s-start-with-via-wire-template">
+<span id="let-s-start-with-via-wire-template"></span><h2>Let&#8217;s start with via(wire) template<a class="headerlink" href="#let-s-start-with-via-wire-template" title="Permalink to this headline">¶</a></h2>
+<ol>
+<li><p class="first">Draw horizontal/vertical metals with minimum width</p>
+<ul class="simple">
+<li>Create =&gt; Via =&gt; Auto for creating via</li>
+</ul>
+<p><img alt="template" src="../_images/1_via.png" /></p>
+</li>
+<li><p class="first">Make the via object a separate instance</p>
+<ul class="simple">
+<li>Edit =&gt; Hierarchy =&gt; Make cell (ex. via_M1_M2_0)</li>
+</ul>
+<p><img alt="template" src="../_images/2_via_instance.png" /></p>
+</li>
+<li><p class="first">Draw other via templates</p>
+<ul class="simple">
+<li>There are various via templates for each layer</li>
+</ul>
+<p><img alt="template" src="../_images/3_via_templates.png" /></p>
+</li>
+</ol>
+</div>
+<div class="section" id="transistor-template">
+<span id="transistor-template"></span><h2>Transistor template<a class="headerlink" href="#transistor-template" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><strong>Nmos4_fast_center_nf2</strong>: Most important templates!</li>
+</ul>
+<p><img alt="template" src="../_images/4_nmos4_fast_center_nf2.png" /></p>
+<ul class="simple">
+<li>Before placing an NMOS, we have to decide width (or number of fin) per finger</li>
+<li>Note that two M2 routing can be placed within S/D area</li>
+</ul>
+<ol class="simple">
+<li>Check M2 spacing rule</li>
+</ol>
+<ul class="simple">
+<li>With whatever you can do (Options =&gt; DRD Options =&gt; Enabling DRD Mode is useful)
+<img alt="template" src="../_images/5_M2_spacing.png" /></li>
+</ul>
+<ol class="simple">
+<li>Check V1 spacing rule as well</li>
+</ol>
+<ul class="simple">
+<li>Generally it is wider than M1 spacing</li>
+<li>It is not required, just suggested</li>
+</ul>
+<p><img alt="template" src="../_images/6_V1_spacing.png" /></p>
+<ol class="simple">
+<li>Choose number</li>
+</ol>
+<ul class="simple">
+<li>Choose a proper number of fins which is available to include two M2 routings/vias and place NMOS</li>
+<li>Turn off poly dummy options: it will be handled later</li>
+</ul>
+<p><img alt="template" src="../_images/7_unit_width.png" /></p>
+<ol class="simple">
+<li>Adjust coordinate of NMOS</li>
+</ol>
+<ul class="simple">
+<li>x: Center of left source should be at x=0</li>
+<li>y: Set intuitively(?). Consider a VSS rail will be placed at the bottom. We may modify it later.</li>
+</ul>
+<p><img alt="template" src="../_images/8_coordinate.png" /></p>
+<ol class="simple">
+<li>Draw gate contact</li>
+</ol>
+<ul class="simple">
+<li>One of the hardest part</li>
+<li>Best way is to refer standard cells</li>
+<li>You can activate poly connect option, but…</li>
+</ul>
+<p><img alt="template" src="../_images/9_gate_contact.png" /></p>
+<ul class="simple">
+<li>Note that it will be placed in array</li>
+<li>If poly connect option gives a horizontally long M1 connection, you’d better to find an alternate way</li>
+</ul>
+<p><img alt="template" src="../_images/10_gate_contact_array.png" /></p>
+<ol class="simple">
+<li>Draw additional M1 rectangle</li>
+</ol>
+<ul class="simple">
+<li>To meet minimum area requirement for M1</li>
+<li>and to avoid ‘+’ shape when a M1_M2 via is placed</li>
+<li>Again, note that it will be placed in array</li>
+</ul>
+<p><img alt="template" src="../_images/11_gate_contact_M1.png" /></p>
+<ol class="simple">
+<li>Draw some layers (technology dependent)</li>
+</ol>
+<ul class="simple">
+<li>Draw some other layers such as finfet and CPO if needed, refer related options embedded in pcell</li>
+</ul>
+<p>![template](images/12_final touch.png)</p>
+<ol class="simple">
+<li>Attach pin/label on M1</li>
+</ol>
+<ul class="simple">
+<li>Draw M1 pin or label layer on existing M1 drawing layers<ul>
+<li>On gate and every source/drain</li>
+<li>Choice of pin/label layer depends on technology</li>
+</ul>
+</li>
+<li>Attach label at the middle of each pin/label layer<ul>
+<li>S0, D0, S1, and G0</li>
+</ul>
+</li>
+</ul>
+<p><img alt="template" src="../_images/13_attach_label.png" /></p>
+<ul class="simple">
+<li>You can specify the pin area with a rectangle of [M1, pin] and net name with a label of [M1, pin]</li>
+<li>Optionally, you can specify the pin name with a label of &nbsp;[text, drawing]. This is useful if you want to assign multi pins for same nets.</li>
+</ul>
+<ol class="simple">
+<li>Set boundary</li>
+</ol>
+<ul class="simple">
+<li>Use prboundary layer (or corresponding layer) to define the placement boundary of the cell</li>
+<li>Note that one M2 routing will be placed at the top</li>
+</ul>
+<p><img alt="template" src="../_images/14_set_boundary.png" /></p>
+<ul class="simple">
+<li>It is recommended to set the height of the template as a common multiples of variety of numbers (i.e. 0.48um, 0.6um…)</li>
+<li>To be compatible with all the routing grids, all placement will be done based on prboundary!</li>
+</ul>
+<p><img alt="template" src="../_images/15_grid_mismatch.png" /></p>
+<ol class="simple">
+<li>Draw pmos4_fast_center_nf2</li>
+</ol>
+<ul class="simple">
+<li>It should be very easy if you have drawn nmos4_fast_center_nf2</li>
+</ul>
+<p><img alt="template" src="../_images/16_pmos4_fast_center_nf2.png" /></p>
+<ol class="simple">
+<li>Draw placement_basic</li>
+</ol>
+<ul class="simple">
+<li>There is only a prboundary rectangle</li>
+<li>xy0 = (0,0), xy1 = (poly pitch, one of divisions of height of nmos_fast_center_nf2)<ul>
+<li>All x coordinates should be multiples of poly pitch</li>
+</ul>
+</li>
+</ul>
+<p><img alt="template" src="../_images/17_placement_basic.png" /></p>
+</div>
+<div class="section" id="routing-grids">
+<span id="routing-grids"></span><h2>Routing grids<a class="headerlink" href="#routing-grids" title="Permalink to this headline">¶</a></h2>
+<p><strong>Draw route_M1_M2_cmos</strong></p>
+<ul class="simple">
+<li>Most important routing grid</li>
+<li>Before drawing that, place nmos and pmos templates</li>
+</ul>
+<p><img alt="template" src="../_images/18_route_M1_M2_cmos.png" /></p>
+<ul class="simple">
+<li>8 horizontal routings within the CMOS template<ul>
+<li>1 for VDD/VSS rail, 2 for NMOS S/D, 2 for PMOS S/D, 2 for CMOS gate, and 1 for additional gate routing</li>
+</ul>
+</li>
+</ul>
+<p><img alt="template" src="../_images/19_route_M1_M2_cmos.png" /></p>
+<ol class="simple">
+<li>Draw prboundary</li>
+</ol>
+<ul class="simple">
+<li>xy0 = (0,0), xy1 = (poly pitch, height of cmos)</li>
+</ul>
+<p><img alt="template" src="../_images/20_prboundary.png" /></p>
+<ol class="simple">
+<li>Place M1_M2 vias</li>
+</ol>
+<ul class="simple">
+<li>x=0 for all vias, so what you have to do is to set y</li>
+<li>We have already considered that when we drawn nmos, so we can easily find proper y coordinates</li>
+</ul>
+<p><img alt="template" src="../_images/21_place_M1_M2_vias.png" /></p>
+<ol class="simple">
+<li>Draw M1/M2 wires</li>
+</ol>
+<ul class="simple">
+<li>Make sure your routing grid is compatible with CMOS template</li>
+<li>After that, delete nmos/pmos templates</li>
+</ul>
+<p><img alt="template" src="../_images/22_draw_M1M2_wires.png" /></p>
+<ol class="simple">
+<li>Draw route_M2_M3_cmos</li>
+</ol>
+<ul class="simple">
+<li>CMOS-compatible M2_M3 grid is also required</li>
+<li>Just modify M1_M2 vias and M1 rectangle with M2_M3 vias and M3 rectangle from route_M1_M2</li>
+</ul>
+<p><img alt="template" src="../_images/23_route_M2_M3_cmos.png" /></p>
+<ol class="simple">
+<li>Define rest of routing grids</li>
+</ol>
+<ul class="simple">
+<li>Draw prboundary: if min. pitch of vertical layer is narrower than PC pitch, x=PC pitch</li>
+<li>else, x=N x PC pitch, where N x PC pitch &gt; min. pitch</li>
+</ul>
+<p><img alt="template" src="../_images/24_routing_grids.png" /></p>
+<ul class="simple">
+<li>When we define y grid, we have to consider spacing rule for horizontal layer and height of MOS template</li>
+<li>So basically, y of prboundary is height of MOS</li>
+</ul>
+<p><img alt="template" src="../_images/25_routing_grids.png" /></p>
+<ul class="simple">
+<li>After that, all the horizontal routing grid within prboundary should be defined as follows<ul>
+<li>If you want to utilize existing generators, set the number of horizontal wires be the same as tsmc16n</li>
+</ul>
+</li>
+</ul>
+<p><img alt="template" src="../_images/26_routing_grids.png" /></p>
+<ul class="simple">
+<li>However, if y grid is one of divisions of height of MOS and also meets the spacing rule, a simple template shown below is sufficient</li>
+</ul>
+<p><img alt="template" src="../_images/27_routing_grids.png" /></p>
+</div>
+<div class="section" id="draw-rest-of-transistor-templates">
+<span id="draw-rest-of-transistor-templates"></span><h2>Draw rest of transistor templates<a class="headerlink" href="#draw-rest-of-transistor-templates" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>nf1, stack, dummy, filler, boundary, and tap</li>
+</ul>
+<p><img alt="template" src="../_images/28_transistor_templates.png" /></p>
+<ol class="simple">
+<li>nf1</li>
+</ol>
+<ul class="simple">
+<li>nf1_left and nf1_right according to the direction of gate contact</li>
+<li>Consider DRCs for gate connection</li>
+</ul>
+<p><img alt="template" src="../_images/29_nf1.png" /></p>
+<ol class="simple">
+<li>2stack</li>
+</ol>
+<ul class="simple">
+<li>Used for NAND_1x, TINV_1x…</li>
+<li>Utilize gate connection technique you found in nf1 template</li>
+</ul>
+<p><img alt="template" src="../_images/30_2stack.png" /></p>
+<ol class="simple">
+<li>Dummy</li>
+</ol>
+<ul class="simple">
+<li>Use center_nf2 template</li>
+<li>Just connect gate-drain and remove pin on the gate</li>
+</ul>
+<p><img alt="template" src="../_images/31_dummy.png" /></p>
+<ol class="simple">
+<li>Space</li>
+</ol>
+<ul class="simple">
+<li>For filling space</li>
+<li>Note that RX layer might be included in 4x cell, in order to satisfy RX density rule (not in this layout)</li>
+</ul>
+<p><img alt="template" src="../_images/32_space.png" /></p>
+<ol class="simple">
+<li>Boundary</li>
+</ol>
+<ul class="simple">
+<li>Usually, nmos_fast_boundary == space_1x</li>
+<li>boundary_left/right should resolve design rules regarding poly dummy</li>
+</ul>
+<p><img alt="template" src="../_images/33_boundary.png" /></p>
+<ul class="simple">
+<li>Number and pattern of poly dummy depends on technology</li>
+<li>Refer dummy option in pcell</li>
+</ul>
+<p><img alt="template" src="../_images/34_boundary_example.png" /></p>
+<ol class="simple">
+<li>Tap</li>
+</ol>
+<ul class="simple">
+<li>For connecting body to VDD/VSS</li>
+</ul>
+<p><img alt="template" src="../_images/35_tap.png" /></p>
+<ul class="simple">
+<li>Refer to psub/nwell contact provided by foundry<ul>
+<li>Create =&gt; Via =&gt; Via Definition</li>
+</ul>
+</li>
+</ul>
+<p><img alt="template" src="../_images/36_psub_contact.png" /></p>
+<ul class="simple">
+<li>Two M1s in tap cell<ul>
+<li>VSS M1-pin to both of them</li>
+<li>TAP0/TAP1 pin using text drawing</li>
+</ul>
+</li>
+</ul>
+<p><img alt="template" src="../_images/37_tap_pin.png" /></p>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Jaeduk Han.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
