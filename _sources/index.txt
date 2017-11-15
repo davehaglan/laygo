@@ -26,6 +26,7 @@ Contents:
    Generator example - TISAR ADC <example/tisar>
    Code examples (to be uploaded) <example/code>
    Technology setup instructions <tech/tech>
+   Template library setup guide <tech/Laygo_templates_guide>
    API documentation <api/modules>
 
 
