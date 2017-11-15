@@ -128,6 +128,7 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
 
     # internal pins
     pdict = laygen.get_inst_pin_xy(None, None, rg_m3m4)
+    pdict23 = laygen.get_inst_pin_xy(None, None, rg_m2m3)
 
     # internal routes
     #x0 = laygen.get_inst_xy(name=inand0.name, gridname=rg_m3m4)[0] + 1
@@ -150,8 +151,10 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
                                        pdict[iinv5.name]['I'][0], y0 + 0, rg_m3m4)  # up
     #[rup0, rv1] = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][3], pdict[idly0.name]['O'][0],
     #                                   pdict[iinv5.name]['I'][0], rg_m3m4)  # up
-    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[icore0.name]['UPB'][0],
-                                       pdict[iinv5.name]['O'][0], y0 + 2-1+1, rg_m3m4)  # upb
+    #[rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[icore0.name]['UPB'][0],
+    #                                   pdict[iinv5.name]['O'][0], y0 + 2-1+1, rg_m3m4)  # upb
+    [rv0, rh0] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], pdict23[icore0.name]['UPB'][0],
+                                       pdict23[icore0.name]['VDD'][0], rg_m2m3)  # upb
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[icore0.name]['DONE'][0],
                                        pdict[inand0.name]['O'][0], y0 + 0+4, rg_m3m4) #DONE-pre
     # internal routes - outputbuf

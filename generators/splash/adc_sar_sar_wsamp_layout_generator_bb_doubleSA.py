@@ -210,6 +210,7 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
         if p.startswith('VSS'):
             xy0=pdict_m5m6_thick[isar.name][p]
             laygen.pin(name='VSSSAR' + str(vsscnt), layer=laygen.layers['pin'][6], xy=xy0, gridname=rg_m5m6_thick, netname='VSS:')
+            #laygen.pin(name='VSSSAR' + str(vsscnt), layer=laygen.layers['pin'][6], xy=xy0, gridname=rg_m5m6_thick, netname='VSS')
             vsscnt+=1
     #extract VDD/VSS grid from samp and make power pins
     rg_m5m6_thick_temp_samp='route_M5_M6_thick_temp_samp'
@@ -228,6 +229,7 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
         if p.startswith('VSS'):
             xy0=pdict_m5m6_thick_temp_samp[isamp.name][p]
             laygen.pin(name='VSSSAMP' + str(vsscnt), layer=laygen.layers['pin'][6], xy=xy0, gridname=rg_m5m6_thick_temp_samp, netname='VSS:')
+            #laygen.pin(name='VSSSAMP' + str(vsscnt), layer=laygen.layers['pin'][6], xy=xy0, gridname=rg_m5m6_thick_temp_samp, netname='VSS')
             vsscnt+=1
         if p.startswith('samp_body'):
             xy0=pdict_m5m6_thick_temp_samp[isamp.name][p]

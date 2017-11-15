@@ -108,7 +108,7 @@ class serdes_templates__ser_3stage(Module):
             p1buf_pin = 'p1buf<%d>'%j
             ser_out = 'ser<%d>'%j
 
-            ser_term_list.append({'in<0>': in_name[i], 'out':ser_out, 'clk_in':'divclk', 'RST':'RST', 'p1buf':p1buf_pin, 'VSS':VSS_pin, 'VDD':VDD_pin})
+            ser_term_list.append({'in<%d:0>'%(num_ser_3rd-1): in_name[i], 'out':ser_out, 'clk_in':'divclk', 'RST':'RST', 'p1buf':p1buf_pin, 'VSS':VSS_pin, 'VDD':VDD_pin})
             ser_name_list.append('ISER%d'%j)
 
         self.instances['I0'].design(lch=lch, pw=pw, nw=nw, num_ser=num_ser, m_dff=m_dff, m_cbuf1=m_cbuf1, m_cbuf2=m_cbuf2, m_pbuf1=m_pbuf1, m_pbuf2=m_pbuf2, m_mux=m_mux, m_out=m_out, m_ser=m_ser, device_intent=device_intent)   
@@ -122,7 +122,7 @@ class serdes_templates__ser_3stage(Module):
         #        m_tgate=m_tgate, num_bits=num_bits, m_capsw=m_capsw, device_intent=device_intent)
 
 
-        self.reconnect_instance_terminal('I0', 'in<1:0>', 'ser<%d:0>'%(num_ser-1))
+        self.reconnect_instance_terminal('I0', 'in<%d:0>'%(num_ser-1), 'ser<%d:0>'%(num_ser-1))
         
         self.rename_pin('in','in<%d:0>'%(num_ser*num_ser_3rd-1))
 

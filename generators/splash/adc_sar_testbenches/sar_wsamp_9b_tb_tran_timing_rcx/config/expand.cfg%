@@ -1,4 +1,4 @@
-//Revision 15
+//Revision 22
 //NOTE
 // Default template for spectre
 // Note:
@@ -15,6 +15,9 @@ stoplist spectre;
 
 
 cell adc_sar_generated.sar_wsamp_9b binding :av_extracted;
+inst (adc_sar_generated.sar_doubleSA_bb:schematic).IAFE0 binding :av_extracted;
+
+inst (adc_sar_testbenches.sar_wsamp_9b_tb_tran_timing_rcx:schematic).XDUT0 binding :av_extracted;
 
 
 endconfig
