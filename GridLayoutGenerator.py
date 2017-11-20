@@ -153,7 +153,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         """
         ### preprocessing starts ###
         xy = np.asarray(xy)  # convert to a numpy array
-        if shape == None:
+        if shape is None:
             _shape = np.array([1, 1])
         else:
             _shape = np.asarray(shape)
@@ -295,7 +295,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             return return_inst_list
         else: # single placement
             ### preprocessing starts ###
-            if shape == None:
+            if shape is None:
                 _shape = np.array([1, 1])
             else:
                 _shape = np.asarray(shape)
