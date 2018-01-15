@@ -85,11 +85,19 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
                             gridname=pg, refinstname=idly0.name, template_libname=templib_logic)
     icore0 = laygen.relplace(name="I" + objectname_pfix + 'CORE0', templatename=core_name,
                             gridname=pg, refinstname=iinv5.name, template_libname=workinglib)
-    iinv8 = laygen.relplace(name="I" + objectname_pfix + 'INV8', templatename=iobuf_name,
+    if fast==True:
+        iinv8 = laygen.relplace(name="I" + objectname_pfix + 'INV8', templatename=iobuf2_name,
+                            gridname=pg, refinstname=icore0.name, template_libname=templib_logic)
+    else:
+        iinv8 = laygen.relplace(name="I" + objectname_pfix + 'INV8', templatename=iobuf_name,
                             gridname=pg, refinstname=icore0.name, template_libname=templib_logic)
     iinv8b = laygen.relplace(name="I" + objectname_pfix + 'INV8B', templatename=iobuf2_name,
                             gridname=pg, refinstname=iinv8.name, template_libname=templib_logic)
-    iinv8c = laygen.relplace(name="I" + objectname_pfix + 'INV8C', templatename=iobuf2_name,
+    if fast==True:
+        iinv8c = laygen.relplace(name="I" + objectname_pfix + 'INV8C', templatename=inv_name,
+                            gridname=pg, refinstname=iinv8b.name, template_libname=templib_logic)
+    else:
+        iinv8c = laygen.relplace(name="I" + objectname_pfix + 'INV8C', templatename=iobuf2_name,
                             gridname=pg, refinstname=iinv8b.name, template_libname=templib_logic)
     iinv0 = laygen.relplace(name="I" + objectname_pfix + 'INV0', templatename=invd_name,
                             gridname=pg, refinstname=iinv8c.name, template_libname=templib_logic)
@@ -160,7 +168,11 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
     # internal routes - outputbuf
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[iinv8.name]['O'][0],
                                        pdict[iinv8b.name]['I'][0], y0 - 1, rg_m3m4) 
-    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[iinv8b.name]['O'][0],
+    if fast==True:
+        [rv0, rh0] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], 
+                                       pdict[iinv8c.name]['I'][0], pdict[iinv8c.name]['VSS'][0], rg_m2m3) 
+    else:
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[iinv8b.name]['O'][0],
                                        pdict[iinv8c.name]['I'][0], y0 + 1, rg_m3m4) 
 
     # input routes
@@ -201,7 +213,11 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
     #output routes
     #[rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[icore2.name]['CLKB'][0],
     #                                   pdict[iinv8c.name]['O'][0], y0 + 8-13, rg_m3m4)  
-    v0, rclkob0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[iinv8c.name]['O'][0],
+    if fast==True:
+        v0, rclkob0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[iinv8b.name]['I'][0],
+                                  np.array([x1, y0 + 8-13]), rg_m3m4)
+    else:
+        v0, rclkob0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[iinv8c.name]['O'][0],
                                   np.array([x1, y0 + 8-13]), rg_m3m4)
     v0, rclko0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[iinv8b.name]['O'][0],
                                   np.array([x1, y0 + 1]), rg_m3m4)
@@ -327,6 +343,7 @@ if __name__ == '__main__':
         m=sizedict['sarclkgen']['m']
         fo=sizedict['sarclkgen']['fo']
         ndelay=sizedict['sarclkgen']['ndelay']
+        fast=sizedict['sarclkgen']['fast']
         m_space_left_4x=sizedict['sarabe_m_space_left_4x']
     #generation (2 step)
     cellname='sarclkgen_static'
