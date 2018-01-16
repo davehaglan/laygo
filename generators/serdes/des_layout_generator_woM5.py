@@ -432,7 +432,7 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
                 #        ffdiv_st_xy[i][0], ffdiv_st_xy[i+1][0], rg_m3m4)
             else:
                 [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], 
-                        ffdiv_rst_xy[i][0], ffdiv_st_xy[i+1][0], ffdiv_rst_xy[i][1][1]+7, rg_m3m4)
+                        ffdiv_rst_xy[i][0], ffdiv_st_xy[i+1][0], ffdiv_rst_xy[i][1][1]+5, rg_m3m4)
         else: #Second half of FFDIVs
             if not i==num_des-1:
                 rst=laygen.route(None, laygen.layers['metal'][3], xy0=ffdiv_st_xy[i][0], xy1=ffdiv_st_xy[i+1][0], gridname0=rg_m3m4)
