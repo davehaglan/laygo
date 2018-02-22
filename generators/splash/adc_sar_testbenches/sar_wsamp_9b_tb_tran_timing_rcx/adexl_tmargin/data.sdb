@@ -261,9 +261,6 @@
 					<output>pavg(IDC("/VVDD/PLUS") 0 VAR("pper") nil 1)
 						<evalType>point</evalType>
 					</output>
-					<output>average(IDC("/VVDD/PLUS"))
-						<evalType>point</evalType>
-					</output>
 					<output>/SAMPP
 						<evalType>point</evalType>
 					</output>
@@ -272,7 +269,7 @@
 		</tests>
 		<vars>
 			<var>vdd
-				<value>1000m</value>
+				<value>1200m</value>
 				<dependentTests>
 					<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 				</dependentTests>
@@ -284,7 +281,7 @@
 				</dependentTests>
 			</var>
 			<var>pper
-				<value>{Inclusion List}3n{Inclusion List}</value>
+				<value>{Inclusion List}3.2n{Inclusion List}</value>
 				<dependentTests>
 					<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 				</dependentTests>
@@ -308,7 +305,7 @@
 				</dependentTests>
 			</var>
 			<var>pvidm
-				<value>300m</value>
+				<value>-170m</value>
 				<dependentTests>
 					<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 				</dependentTests>
@@ -358,7 +355,7 @@
 				</genusjoblimit>
 			</genusjoblimits>
 			<specifyjoblimit>0</specifyjoblimit>
-			<parallelrun>0</parallelrun>
+			<parallelrun>1</parallelrun>
 		</distributeoptions>
 		<checksasserts netlist="0">
 			<test netlist="1" netlistscope="all">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1
@@ -626,7 +623,7 @@
 		</incrementalsimulationoptions>
 	</active>
 	<history>History
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.168
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.192
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -768,7 +765,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.168</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.192</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -888,9 +885,6 @@
 							<output>pavg(IDC("/VVDD/PLUS") 0 VAR("pper") nil 1)
 								<evalType>point</evalType>
 							</output>
-							<output>average(IDC("/VVDD/PLUS"))
-								<evalType>point</evalType>
-							</output>
 							<output>/SAMPP
 								<evalType>point</evalType>
 							</output>
@@ -911,7 +905,7 @@
 						</dependentTests>
 					</var>
 					<var>pper
-						<value>{Inclusion List}3n{Inclusion List}</value>
+						<value>{Inclusion List}3.6n{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -935,7 +929,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>300m</value>
+						<value>-163m</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -985,7 +979,7 @@
 						</genusjoblimit>
 					</genusjoblimits>
 					<specifyjoblimit>0</specifyjoblimit>
-					<parallelrun>0</parallelrun>
+					<parallelrun>1</parallelrun>
 				</distributeoptions>
 				<checksasserts netlist="0">
 					<test netlist="1" netlistscope="all">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1
@@ -1253,22 +1247,1948 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Dec 11 11:31:32 2017</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.168.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.168.rdb</simresults>
+			<timestamp>Feb 7 07:45:22 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/sim_archive/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.192.rdb</resultsname>
+			<simresults>/tools/projects/wrbae/28FDSOI/sim_archive/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.192.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr720-6.eecs.berkeley.edu_wrbae_113132202</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.168</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.168</simdir>
+			<localpsfdir>/tmp/bwrcr820-3.eecs.berkeley.edu_wrbae_074522173</localpsfdir>
+			<psfdir>/tools/projects/wrbae/28FDSOI/sim_archive/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.192</psfdir>
+			<simdir>/tools/projects/wrbae/28FDSOI/sim_archive/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.192</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.168.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.168.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.192.log</runlog>
+			<runlogfile>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.192.log</runlogfile>
+			<schematicpoint></schematicpoint>
+			<test>all</test>
+			<resultspsfisuserpath>0</resultspsfisuserpath>
+			<resultsisuserpath>1</resultsisuserpath>
+			<locked>1</locked>
+		</historyentry>
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.193
+			<checkpoint>
+				<corners>
+					<corner enabled="1">_default</corner>
+					<corner enabled="0">tt
+						<vars>
+							<var>temperature
+								<value>25</value>
+							</var>
+							<var>vdd
+								<value>0.9</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_tt"</modelsection>
+							</model>
+						</models>
+					</corner>
+					<corner enabled="0">ssgnp072v125c
+						<vars>
+							<var>temperature
+								<value>125</value>
+							</var>
+							<var>vdd
+								<value>0.72</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_ss"</modelsection>
+							</model>
+						</models>
+					</corner>
+					<corner enabled="0">ssgnp072v0c
+						<vars>
+							<var>temperature
+								<value>0</value>
+							</var>
+							<var>vdd
+								<value>0.72</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_ss"</modelsection>
+							</model>
+						</models>
+					</corner>
+					<corner enabled="0">ffgnp0p88v125c
+						<vars>
+							<var>temperature
+								<value>125</value>
+							</var>
+							<var>vdd
+								<value>0.9</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_ff"</modelsection>
+							</model>
+						</models>
+					</corner>
+					<corner enabled="0">ffgnp88v0c
+						<vars>
+							<var>temperature
+								<value>0</value>
+							</var>
+							<var>vdd
+								<value>0.9</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_ff"</modelsection>
+							</model>
+						</models>
+					</corner>
+					<corner enabled="0">ssgnp09v125c
+						<vars>
+							<var>temperature
+								<value>125</value>
+							</var>
+							<var>vdd
+								<value>0.9</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_ss_gnp"</modelsection>
+							</model>
+						</models>
+					</corner>
+				</corners>
+				<currentmode>Single Run, Sweeps and Corners</currentmode>
+				<extensions>
+					<extension>Parasitics
+						<callback>_parSetupDBExtensionCB</callback>
+						<iconvalue></iconvalue>
+						<icontype></icontype>
+					</extension>
+				</extensions>
+				<overwritehistory>0</overwritehistory>
+				<tests>
+					<test enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1
+						<tool>ADE</tool>
+						<tooloptions>
+							<option>cell
+								<value>sar_wsamp_9b_tb_tran_timing_rcx</value>
+							</option>
+							<option>lib
+								<value>adc_sar_testbenches</value>
+							</option>
+							<option>sim
+								<value>spectre</value>
+							</option>
+							<option>view
+								<value>config</value>
+							</option>
+							<option>path
+								<value>$AXL_SETUPDB_DIR/test_states</value>
+							</option>
+							<option>state
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.193</value>
+							</option>
+						</tooloptions>
+						<origoptions>
+							<option>cell
+								<value>sar_wsamp_9b_tb_tran_timing_rcx</value>
+							</option>
+							<option>lib
+								<value>adc_sar_testbenches</value>
+							</option>
+							<option>sim
+								<value>spectre</value>
+							</option>
+							<option>view
+								<value>config</value>
+							</option>
+							<option>path
+								<value>$AXL_SETUPDB_DIR/test_states</value>
+							</option>
+							<option>state
+								<value>spectre_state1_10g_rcx</value>
+							</option>
+						</origoptions>
+						<outputs>
+							<output>/CLKO
+								<evalType>point</evalType>
+							</output>
+							<output>"/XDUT0/ISAR0/IABE0/RETI(0)"
+								<evalType>point</evalType>
+							</output>
+							<output>"/XDUT0/ISAR0|IABE0|RETI(0)"
+								<evalType>point</evalType>
+							</output>
+							<output>"/XDUT0/ISAR0/IABE0|RETI(0)"
+								<evalType>point</evalType>
+							</output>
+							<output>/XDUT0/ISAR0/IABE0|RETI(0)
+								<evalType>point</evalType>
+							</output>
+							<output>"/XDUT0/ISAR0/IABE0/RETI&lt;0&gt;"
+								<evalType>point</evalType>
+							</output>
+							<output>/XDUT0/ISAR0/IABE0/RETI&lt;0&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>tmargin_9bit
+								<evalType>point</evalType>
+							</output>
+							<output>tmargin_8bit
+								<evalType>point</evalType>
+							</output>
+							<output>tmargin_7bit
+								<evalType>point</evalType>
+							</output>
+							<output>tmargin_6bit
+								<evalType>point</evalType>
+							</output>
+							<output>/XDUT0/ISAR0/IABE0/ISARLOGIC0/ZP0&lt;0&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/SB&lt;0&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/SARCLK
+								<evalType>point</evalType>
+							</output>
+							<output>f
+								<evalType>point</evalType>
+							</output>
+							<output>/ICLK
+								<evalType>point</evalType>
+							</output>
+							<output>/XDUT0/ISAR0/IABE0/RETI&lt;8&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/XDUT0/ISAR0/IABE0/RETI&lt;4&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/SB&lt;8&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/SB&lt;7&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/DONE
+								<evalType>point</evalType>
+							</output>
+							<output>/SAOP
+								<evalType>point</evalType>
+							</output>
+							<output>/SAOM
+								<evalType>point</evalType>
+							</output>
+							<output>/SARCLKB
+								<evalType>point</evalType>
+							</output>
+							<output>/UP
+								<evalType>point</evalType>
+							</output>
+							<output>/ZM&lt;2&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>IDC("/I4/gnd!")
+								<evalType>point</evalType>
+							</output>
+							<output>IDC("/VVDD/PLUS")
+								<evalType>point</evalType>
+							</output>
+							<output>pavg(IDC("/VVDD/PLUS") 0 pper nil 1)
+								<evalType>point</evalType>
+							</output>
+							<output>pavg("/VVDD/PLUS" 0 pper nil 1)
+								<evalType>point</evalType>
+							</output>
+							<output>pavg(IDC("/VVDD/PLUS") 0 (VAL "pper") nil 1)
+								<evalType>point</evalType>
+							</output>
+							<output>pavg(IDC("/VVDD/PLUS") 0 VAR("pper") nil 1)
+								<evalType>point</evalType>
+							</output>
+							<output>/SAMPP
+								<evalType>point</evalType>
+							</output>
+						</outputs>
+					</test>
+				</tests>
+				<vars>
+					<var>vdd
+						<value>1000m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pdelay
+						<value>800p/8</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pper
+						<value>{Inclusion List}3.6n{Inclusion List}</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pskew_rst
+						<value>0</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvdd
+						<value>1</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvicm
+						<value>150m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvidm
+						<value>-162m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref0
+						<value>0.0</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref1
+						<value>150m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref2
+						<value>300m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+				</vars>
+				<jobpolicyname>ADE XL Default</jobpolicyname>
+				<overwritehistoryname>Interactive.0</overwritehistoryname>
+				<plottingoptions>
+					<plottingoption>plottype
+						<value>None</value>
+					</plottingoption>
+					<plottingoption>usewaveformtemplate
+						<value>no</value>
+					</plottingoption>
+					<plottingoption>waveformtemplate
+						<value></value>
+					</plottingoption>
+					<plottingoption>allplottingtemplates
+						<value></value>
+					</plottingoption>
+					<plottingoption>defaultplottingtemplate
+						<value></value>
+					</plottingoption>
+				</plottingoptions>
+				<distributeoptions>
+					<genusjoblimits>
+						<genusjoblimit>ICRP
+							<value>4</value>
+						</genusjoblimit>
+					</genusjoblimits>
+					<specifyjoblimit>0</specifyjoblimit>
+					<parallelrun>1</parallelrun>
+				</distributeoptions>
+				<checksasserts netlist="0">
+					<test netlist="1" netlistscope="all">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1
+						<cellviews>
+							<lcv netlist="1" vipcount="0">BAG_prim/nmos4_ulvt/schematic
+								<lib>BAG_prim</lib>
+								<cell>nmos4_ulvt</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">BAG_prim/pmos4_ulvt/schematic
+								<lib>BAG_prim</lib>
+								<cell>pmos4_ulvt</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/capdac/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>capdac</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/capdrv_nsw/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>capdrv_nsw</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/capdrv_nsw_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>capdrv_nsw_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/capdrv_nsw_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_1/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>capdrv_nsw_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_1</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/capdrv_nsw_array/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>capdrv_nsw_array</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/dff_rsth/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>dff_rsth</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/doubleSA_pmos/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>doubleSA_pmos</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/doubleSA_pmos_1st/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>doubleSA_pmos_1st</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/doubleSA_pmos_2nd/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>doubleSA_pmos_2nd</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV5/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV5</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV8/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV8</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV8B/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV8B</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_ISAR0_IABE0_ISARLOGIC0_ISL0_IBUF0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_ISAR0_IABE0_ISARLOGIC0_ISL0_IBUF0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_XSAMP0_IBUFA0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_XSAMP0_IBUFA0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_XSAMP0_IBUFB0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_XSAMP0_IBUFB0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/latch/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>latch</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/latch_2ck/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>latch_2ck</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/momcap_center_1x/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>momcap_center_1x</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/mux2to1/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>mux2to1</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nand/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nand</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nand_XTOP_ISAR0_IABE0_ISARFSM0_I1_I1/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nand_XTOP_ISAR0_IABE0_ISARFSM0_I1_I1</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nor/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nor</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nor_XTOP_ISAR0_IABE0_ISARLOGIC0_ISL0_INR0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nor_XTOP_ISAR0_IABE0_ISARLOGIC0_ISL0_INR0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nsw_wovdd/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nsw_wovdd</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nsw_wovdd_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_ISW0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nsw_wovdd_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_ISW0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nsw_wovdd_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_ISW0_1/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nsw_wovdd_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_ISW0_1</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/oai22_skewed/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>oai22_skewed</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sar_doubleSA_bb/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sar_doubleSA_bb</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sar_wsamp_bb_doubleSA/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sar_wsamp_bb_doubleSA</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarabe_dualdelay_bb/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarabe_dualdelay_bb</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarafe_nsw_doubleSA/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarafe_nsw_doubleSA</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarclkdelay_compact_dual/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarclkdelay_compact_dual</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarclkdelayslice_compact/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarclkdelayslice_compact</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarclkgen_core_static2/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarclkgen_core_static2</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarclkgen_static/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarclkgen_static</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarfsm/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarfsm</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarlogic_wret_v2/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarlogic_wret_v2</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarlogic_wret_v2_array_bb/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarlogic_wret_v2_array_bb</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarret_wckbuf/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarret_wckbuf</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarretslice/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarretslice</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarsamp_bb/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarsamp_bb</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/tie/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>tie</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/tie_wovdd/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>tie_wovdd</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/tinv/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>tinv</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/tinv_XTOP_ISAR0_IABE0_ISARFSM0_I1_I0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>tinv_XTOP_ISAR0_IABE0_ISARFSM0_I1_I0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/tinv_small/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>tinv_small</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_testbenches/dac_9bit_ideal/veriloga
+								<lib>adc_sar_testbenches</lib>
+								<cell>dac_9bit_ideal</cell>
+								<view>veriloga</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/schematic
+								<lib>adc_sar_testbenches</lib>
+								<cell>sar_wsamp_9b_tb_tran_timing_rcx</cell>
+								<view>schematic</view>
+							</lcv>
+						</cellviews>
+					</test>
+				</checksasserts>
+				<incrementalsimulationoptions>
+					<incrementalSimulation>0</incrementalSimulation>
+				</incrementalsimulationoptions>
+				<sortVariableValues>0</sortVariableValues>
+			</checkpoint>
+			<timestamp>Feb 7 08:06:42 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/sim_archive/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.193.rdb</resultsname>
+			<simresults>/tools/projects/wrbae/28FDSOI/sim_archive/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.193.rdb</simresults>
+			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
+			<netlistdelstrategy>SaveAll</netlistdelstrategy>
+			<uselocalpsfdir>false</uselocalpsfdir>
+			<localpsfdir>/tmp/bwrcr820-3.eecs.berkeley.edu_wrbae_080642911</localpsfdir>
+			<psfdir>/tools/projects/wrbae/28FDSOI/sim_archive/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.193</psfdir>
+			<simdir>/tools/projects/wrbae/28FDSOI/sim_archive/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.193</simdir>
+			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.193.log</runlog>
+			<runlogfile>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.193.log</runlogfile>
+			<schematicpoint></schematicpoint>
+			<test>all</test>
+			<resultspsfisuserpath>0</resultspsfisuserpath>
+			<resultsisuserpath>1</resultsisuserpath>
+			<locked>1</locked>
+		</historyentry>
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.194
+			<checkpoint>
+				<corners>
+					<corner enabled="1">_default</corner>
+					<corner enabled="0">tt
+						<vars>
+							<var>temperature
+								<value>25</value>
+							</var>
+							<var>vdd
+								<value>0.9</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_tt"</modelsection>
+							</model>
+						</models>
+					</corner>
+					<corner enabled="0">ssgnp072v125c
+						<vars>
+							<var>temperature
+								<value>125</value>
+							</var>
+							<var>vdd
+								<value>0.72</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_ss"</modelsection>
+							</model>
+						</models>
+					</corner>
+					<corner enabled="0">ssgnp072v0c
+						<vars>
+							<var>temperature
+								<value>0</value>
+							</var>
+							<var>vdd
+								<value>0.72</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_ss"</modelsection>
+							</model>
+						</models>
+					</corner>
+					<corner enabled="0">ffgnp0p88v125c
+						<vars>
+							<var>temperature
+								<value>125</value>
+							</var>
+							<var>vdd
+								<value>0.9</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_ff"</modelsection>
+							</model>
+						</models>
+					</corner>
+					<corner enabled="0">ffgnp88v0c
+						<vars>
+							<var>temperature
+								<value>0</value>
+							</var>
+							<var>vdd
+								<value>0.9</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_ff"</modelsection>
+							</model>
+						</models>
+					</corner>
+					<corner enabled="0">ssgnp09v125c
+						<vars>
+							<var>temperature
+								<value>125</value>
+							</var>
+							<var>vdd
+								<value>0.9</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_ss_gnp"</modelsection>
+							</model>
+						</models>
+					</corner>
+				</corners>
+				<currentmode>Single Run, Sweeps and Corners</currentmode>
+				<extensions>
+					<extension>Parasitics
+						<callback>_parSetupDBExtensionCB</callback>
+						<iconvalue></iconvalue>
+						<icontype></icontype>
+					</extension>
+				</extensions>
+				<overwritehistory>0</overwritehistory>
+				<tests>
+					<test enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1
+						<tool>ADE</tool>
+						<tooloptions>
+							<option>cell
+								<value>sar_wsamp_9b_tb_tran_timing_rcx</value>
+							</option>
+							<option>lib
+								<value>adc_sar_testbenches</value>
+							</option>
+							<option>sim
+								<value>spectre</value>
+							</option>
+							<option>view
+								<value>config</value>
+							</option>
+							<option>path
+								<value>$AXL_SETUPDB_DIR/test_states</value>
+							</option>
+							<option>state
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.194</value>
+							</option>
+						</tooloptions>
+						<origoptions>
+							<option>cell
+								<value>sar_wsamp_9b_tb_tran_timing_rcx</value>
+							</option>
+							<option>lib
+								<value>adc_sar_testbenches</value>
+							</option>
+							<option>sim
+								<value>spectre</value>
+							</option>
+							<option>view
+								<value>config</value>
+							</option>
+							<option>path
+								<value>$AXL_SETUPDB_DIR/test_states</value>
+							</option>
+							<option>state
+								<value>spectre_state1_10g_rcx</value>
+							</option>
+						</origoptions>
+						<outputs>
+							<output>/CLKO
+								<evalType>point</evalType>
+							</output>
+							<output>"/XDUT0/ISAR0/IABE0/RETI(0)"
+								<evalType>point</evalType>
+							</output>
+							<output>"/XDUT0/ISAR0|IABE0|RETI(0)"
+								<evalType>point</evalType>
+							</output>
+							<output>"/XDUT0/ISAR0/IABE0|RETI(0)"
+								<evalType>point</evalType>
+							</output>
+							<output>/XDUT0/ISAR0/IABE0|RETI(0)
+								<evalType>point</evalType>
+							</output>
+							<output>"/XDUT0/ISAR0/IABE0/RETI&lt;0&gt;"
+								<evalType>point</evalType>
+							</output>
+							<output>/XDUT0/ISAR0/IABE0/RETI&lt;0&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>tmargin_9bit
+								<evalType>point</evalType>
+							</output>
+							<output>tmargin_8bit
+								<evalType>point</evalType>
+							</output>
+							<output>tmargin_7bit
+								<evalType>point</evalType>
+							</output>
+							<output>tmargin_6bit
+								<evalType>point</evalType>
+							</output>
+							<output>/XDUT0/ISAR0/IABE0/ISARLOGIC0/ZP0&lt;0&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/SB&lt;0&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/SARCLK
+								<evalType>point</evalType>
+							</output>
+							<output>f
+								<evalType>point</evalType>
+							</output>
+							<output>/ICLK
+								<evalType>point</evalType>
+							</output>
+							<output>/XDUT0/ISAR0/IABE0/RETI&lt;8&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/XDUT0/ISAR0/IABE0/RETI&lt;4&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/SB&lt;8&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/SB&lt;7&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/DONE
+								<evalType>point</evalType>
+							</output>
+							<output>/SAOP
+								<evalType>point</evalType>
+							</output>
+							<output>/SAOM
+								<evalType>point</evalType>
+							</output>
+							<output>/SARCLKB
+								<evalType>point</evalType>
+							</output>
+							<output>/UP
+								<evalType>point</evalType>
+							</output>
+							<output>/ZM&lt;2&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>IDC("/I4/gnd!")
+								<evalType>point</evalType>
+							</output>
+							<output>IDC("/VVDD/PLUS")
+								<evalType>point</evalType>
+							</output>
+							<output>pavg(IDC("/VVDD/PLUS") 0 pper nil 1)
+								<evalType>point</evalType>
+							</output>
+							<output>pavg("/VVDD/PLUS" 0 pper nil 1)
+								<evalType>point</evalType>
+							</output>
+							<output>pavg(IDC("/VVDD/PLUS") 0 (VAL "pper") nil 1)
+								<evalType>point</evalType>
+							</output>
+							<output>pavg(IDC("/VVDD/PLUS") 0 VAR("pper") nil 1)
+								<evalType>point</evalType>
+							</output>
+							<output>/SAMPP
+								<evalType>point</evalType>
+							</output>
+						</outputs>
+					</test>
+				</tests>
+				<vars>
+					<var>vdd
+						<value>1000m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pdelay
+						<value>800p/8</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pper
+						<value>{Inclusion List}3.6n{Inclusion List}</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pskew_rst
+						<value>0</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvdd
+						<value>1</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvicm
+						<value>150m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvidm
+						<value>-210m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref0
+						<value>0.0</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref1
+						<value>150m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref2
+						<value>300m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+				</vars>
+				<jobpolicyname>ADE XL Default</jobpolicyname>
+				<overwritehistoryname>Interactive.0</overwritehistoryname>
+				<plottingoptions>
+					<plottingoption>plottype
+						<value>None</value>
+					</plottingoption>
+					<plottingoption>usewaveformtemplate
+						<value>no</value>
+					</plottingoption>
+					<plottingoption>waveformtemplate
+						<value></value>
+					</plottingoption>
+					<plottingoption>allplottingtemplates
+						<value></value>
+					</plottingoption>
+					<plottingoption>defaultplottingtemplate
+						<value></value>
+					</plottingoption>
+				</plottingoptions>
+				<distributeoptions>
+					<genusjoblimits>
+						<genusjoblimit>ICRP
+							<value>4</value>
+						</genusjoblimit>
+					</genusjoblimits>
+					<specifyjoblimit>0</specifyjoblimit>
+					<parallelrun>1</parallelrun>
+				</distributeoptions>
+				<checksasserts netlist="0">
+					<test netlist="1" netlistscope="all">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1
+						<cellviews>
+							<lcv netlist="1" vipcount="0">BAG_prim/nmos4_ulvt/schematic
+								<lib>BAG_prim</lib>
+								<cell>nmos4_ulvt</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">BAG_prim/pmos4_ulvt/schematic
+								<lib>BAG_prim</lib>
+								<cell>pmos4_ulvt</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/capdac/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>capdac</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/capdrv_nsw/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>capdrv_nsw</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/capdrv_nsw_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>capdrv_nsw_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/capdrv_nsw_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_1/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>capdrv_nsw_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_1</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/capdrv_nsw_array/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>capdrv_nsw_array</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/dff_rsth/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>dff_rsth</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/doubleSA_pmos/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>doubleSA_pmos</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/doubleSA_pmos_1st/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>doubleSA_pmos_1st</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/doubleSA_pmos_2nd/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>doubleSA_pmos_2nd</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV5/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV5</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV8/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV8</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV8B/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV8B</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_ISAR0_IABE0_ISARLOGIC0_ISL0_IBUF0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_ISAR0_IABE0_ISARLOGIC0_ISL0_IBUF0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_XSAMP0_IBUFA0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_XSAMP0_IBUFA0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_XSAMP0_IBUFB0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_XSAMP0_IBUFB0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/latch/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>latch</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/latch_2ck/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>latch_2ck</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/momcap_center_1x/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>momcap_center_1x</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/mux2to1/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>mux2to1</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nand/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nand</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nand_XTOP_ISAR0_IABE0_ISARFSM0_I1_I1/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nand_XTOP_ISAR0_IABE0_ISARFSM0_I1_I1</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nor/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nor</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nor_XTOP_ISAR0_IABE0_ISARLOGIC0_ISL0_INR0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nor_XTOP_ISAR0_IABE0_ISARLOGIC0_ISL0_INR0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nsw_wovdd/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nsw_wovdd</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nsw_wovdd_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_ISW0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nsw_wovdd_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_ISW0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nsw_wovdd_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_ISW0_1/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nsw_wovdd_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_ISW0_1</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/oai22_skewed/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>oai22_skewed</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sar_doubleSA_bb/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sar_doubleSA_bb</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sar_wsamp_bb_doubleSA/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sar_wsamp_bb_doubleSA</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarabe_dualdelay_bb/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarabe_dualdelay_bb</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarafe_nsw_doubleSA/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarafe_nsw_doubleSA</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarclkdelay_compact_dual/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarclkdelay_compact_dual</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarclkdelayslice_compact/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarclkdelayslice_compact</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarclkgen_core_static2/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarclkgen_core_static2</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarclkgen_static/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarclkgen_static</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarfsm/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarfsm</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarlogic_wret_v2/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarlogic_wret_v2</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarlogic_wret_v2_array_bb/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarlogic_wret_v2_array_bb</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarret_wckbuf/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarret_wckbuf</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarretslice/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarretslice</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarsamp_bb/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarsamp_bb</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/tie/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>tie</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/tie_wovdd/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>tie_wovdd</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/tinv/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>tinv</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/tinv_XTOP_ISAR0_IABE0_ISARFSM0_I1_I0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>tinv_XTOP_ISAR0_IABE0_ISARFSM0_I1_I0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/tinv_small/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>tinv_small</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_testbenches/dac_9bit_ideal/veriloga
+								<lib>adc_sar_testbenches</lib>
+								<cell>dac_9bit_ideal</cell>
+								<view>veriloga</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/schematic
+								<lib>adc_sar_testbenches</lib>
+								<cell>sar_wsamp_9b_tb_tran_timing_rcx</cell>
+								<view>schematic</view>
+							</lcv>
+						</cellviews>
+					</test>
+				</checksasserts>
+				<incrementalsimulationoptions>
+					<incrementalSimulation>0</incrementalSimulation>
+				</incrementalsimulationoptions>
+				<sortVariableValues>0</sortVariableValues>
+			</checkpoint>
+			<timestamp>Feb 7 08:23:46 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/sim_archive/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.194.rdb</resultsname>
+			<simresults>/tools/projects/wrbae/28FDSOI/sim_archive/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.194.rdb</simresults>
+			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
+			<netlistdelstrategy>SaveAll</netlistdelstrategy>
+			<uselocalpsfdir>false</uselocalpsfdir>
+			<localpsfdir>/tmp/bwrcr820-3.eecs.berkeley.edu_wrbae_082346461</localpsfdir>
+			<psfdir>/tools/projects/wrbae/28FDSOI/sim_archive/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.194</psfdir>
+			<simdir>/tools/projects/wrbae/28FDSOI/sim_archive/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.194</simdir>
+			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.194.log</runlog>
+			<runlogfile>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.194.log</runlogfile>
+			<schematicpoint></schematicpoint>
+			<test>all</test>
+			<resultspsfisuserpath>0</resultspsfisuserpath>
+			<resultsisuserpath>1</resultsisuserpath>
+			<locked>1</locked>
+		</historyentry>
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.203
+			<checkpoint>
+				<corners>
+					<corner enabled="1">_default</corner>
+					<corner enabled="0">tt
+						<vars>
+							<var>temperature
+								<value>25</value>
+							</var>
+							<var>vdd
+								<value>0.9</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_tt"</modelsection>
+							</model>
+						</models>
+					</corner>
+					<corner enabled="0">ssgnp072v125c
+						<vars>
+							<var>temperature
+								<value>125</value>
+							</var>
+							<var>vdd
+								<value>0.72</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_ss"</modelsection>
+							</model>
+						</models>
+					</corner>
+					<corner enabled="0">ssgnp072v0c
+						<vars>
+							<var>temperature
+								<value>0</value>
+							</var>
+							<var>vdd
+								<value>0.72</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_ss"</modelsection>
+							</model>
+						</models>
+					</corner>
+					<corner enabled="0">ffgnp0p88v125c
+						<vars>
+							<var>temperature
+								<value>125</value>
+							</var>
+							<var>vdd
+								<value>0.9</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_ff"</modelsection>
+							</model>
+						</models>
+					</corner>
+					<corner enabled="0">ffgnp88v0c
+						<vars>
+							<var>temperature
+								<value>0</value>
+							</var>
+							<var>vdd
+								<value>0.9</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_ff"</modelsection>
+							</model>
+						</models>
+					</corner>
+					<corner enabled="0">ssgnp09v125c
+						<vars>
+							<var>temperature
+								<value>125</value>
+							</var>
+							<var>vdd
+								<value>0.9</value>
+							</var>
+						</vars>
+						<models>
+							<model enabled="1">toplevel.scs
+								<modeltest>All</modeltest>
+								<modelblock>Global</modelblock>
+								<modelfile>/tools/tstech16/CLN16FFC/PDK/models/toplevel.scs</modelfile>
+								<modelsection>"top_ss_gnp"</modelsection>
+							</model>
+						</models>
+					</corner>
+				</corners>
+				<currentmode>Single Run, Sweeps and Corners</currentmode>
+				<extensions>
+					<extension>Parasitics
+						<callback>_parSetupDBExtensionCB</callback>
+						<iconvalue></iconvalue>
+						<icontype></icontype>
+					</extension>
+				</extensions>
+				<overwritehistory>0</overwritehistory>
+				<tests>
+					<test enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1
+						<tool>ADE</tool>
+						<tooloptions>
+							<option>cell
+								<value>sar_wsamp_9b_tb_tran_timing_rcx</value>
+							</option>
+							<option>lib
+								<value>adc_sar_testbenches</value>
+							</option>
+							<option>sim
+								<value>spectre</value>
+							</option>
+							<option>view
+								<value>config</value>
+							</option>
+							<option>path
+								<value>$AXL_SETUPDB_DIR/test_states</value>
+							</option>
+							<option>state
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.203</value>
+							</option>
+						</tooloptions>
+						<origoptions>
+							<option>cell
+								<value>sar_wsamp_9b_tb_tran_timing_rcx</value>
+							</option>
+							<option>lib
+								<value>adc_sar_testbenches</value>
+							</option>
+							<option>sim
+								<value>spectre</value>
+							</option>
+							<option>view
+								<value>config</value>
+							</option>
+							<option>path
+								<value>$AXL_SETUPDB_DIR/test_states</value>
+							</option>
+							<option>state
+								<value>spectre_state1_10g_rcx</value>
+							</option>
+						</origoptions>
+						<outputs>
+							<output>/CLKO
+								<evalType>point</evalType>
+							</output>
+							<output>"/XDUT0/ISAR0/IABE0/RETI(0)"
+								<evalType>point</evalType>
+							</output>
+							<output>"/XDUT0/ISAR0|IABE0|RETI(0)"
+								<evalType>point</evalType>
+							</output>
+							<output>"/XDUT0/ISAR0/IABE0|RETI(0)"
+								<evalType>point</evalType>
+							</output>
+							<output>/XDUT0/ISAR0/IABE0|RETI(0)
+								<evalType>point</evalType>
+							</output>
+							<output>"/XDUT0/ISAR0/IABE0/RETI&lt;0&gt;"
+								<evalType>point</evalType>
+							</output>
+							<output>/XDUT0/ISAR0/IABE0/RETI&lt;0&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>tmargin_9bit
+								<evalType>point</evalType>
+							</output>
+							<output>tmargin_8bit
+								<evalType>point</evalType>
+							</output>
+							<output>tmargin_7bit
+								<evalType>point</evalType>
+							</output>
+							<output>tmargin_6bit
+								<evalType>point</evalType>
+							</output>
+							<output>/XDUT0/ISAR0/IABE0/ISARLOGIC0/ZP0&lt;0&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/SB&lt;0&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/SARCLK
+								<evalType>point</evalType>
+							</output>
+							<output>f
+								<evalType>point</evalType>
+							</output>
+							<output>/ICLK
+								<evalType>point</evalType>
+							</output>
+							<output>/XDUT0/ISAR0/IABE0/RETI&lt;8&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/XDUT0/ISAR0/IABE0/RETI&lt;4&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/SB&lt;8&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/SB&lt;7&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>/DONE
+								<evalType>point</evalType>
+							</output>
+							<output>/SAOP
+								<evalType>point</evalType>
+							</output>
+							<output>/SAOM
+								<evalType>point</evalType>
+							</output>
+							<output>/SARCLKB
+								<evalType>point</evalType>
+							</output>
+							<output>/UP
+								<evalType>point</evalType>
+							</output>
+							<output>/ZM&lt;2&gt;
+								<evalType>point</evalType>
+							</output>
+							<output>IDC("/I4/gnd!")
+								<evalType>point</evalType>
+							</output>
+							<output>IDC("/VVDD/PLUS")
+								<evalType>point</evalType>
+							</output>
+							<output>pavg(IDC("/VVDD/PLUS") 0 pper nil 1)
+								<evalType>point</evalType>
+							</output>
+							<output>pavg("/VVDD/PLUS" 0 pper nil 1)
+								<evalType>point</evalType>
+							</output>
+							<output>pavg(IDC("/VVDD/PLUS") 0 (VAL "pper") nil 1)
+								<evalType>point</evalType>
+							</output>
+							<output>pavg(IDC("/VVDD/PLUS") 0 VAR("pper") nil 1)
+								<evalType>point</evalType>
+							</output>
+							<output>/SAMPP
+								<evalType>point</evalType>
+							</output>
+						</outputs>
+					</test>
+				</tests>
+				<vars>
+					<var>vdd
+						<value>1000m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pdelay
+						<value>800p/8</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pper
+						<value>{Inclusion List}3.2n{Inclusion List}</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pskew_rst
+						<value>0</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvdd
+						<value>1</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvicm
+						<value>150m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvidm
+						<value>-270m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref0
+						<value>0.0</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref1
+						<value>150m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref2
+						<value>300m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
+						</dependentTests>
+					</var>
+				</vars>
+				<jobpolicyname>ADE XL Default</jobpolicyname>
+				<overwritehistoryname>Interactive.0</overwritehistoryname>
+				<plottingoptions>
+					<plottingoption>plottype
+						<value>None</value>
+					</plottingoption>
+					<plottingoption>usewaveformtemplate
+						<value>no</value>
+					</plottingoption>
+					<plottingoption>waveformtemplate
+						<value></value>
+					</plottingoption>
+					<plottingoption>allplottingtemplates
+						<value></value>
+					</plottingoption>
+					<plottingoption>defaultplottingtemplate
+						<value></value>
+					</plottingoption>
+				</plottingoptions>
+				<distributeoptions>
+					<genusjoblimits>
+						<genusjoblimit>ICRP
+							<value>4</value>
+						</genusjoblimit>
+					</genusjoblimits>
+					<specifyjoblimit>0</specifyjoblimit>
+					<parallelrun>1</parallelrun>
+				</distributeoptions>
+				<checksasserts netlist="0">
+					<test netlist="1" netlistscope="all">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1
+						<cellviews>
+							<lcv netlist="1" vipcount="0">BAG_prim/nmos4_ulvt/schematic
+								<lib>BAG_prim</lib>
+								<cell>nmos4_ulvt</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">BAG_prim/pmos4_ulvt/schematic
+								<lib>BAG_prim</lib>
+								<cell>pmos4_ulvt</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/capdac/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>capdac</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/capdrv_nsw/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>capdrv_nsw</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/capdrv_nsw_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>capdrv_nsw_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/capdrv_nsw_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_1/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>capdrv_nsw_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_1</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/capdrv_nsw_array/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>capdrv_nsw_array</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/dff_rsth/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>dff_rsth</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/doubleSA_pmos/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>doubleSA_pmos</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/doubleSA_pmos_1st/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>doubleSA_pmos_1st</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/doubleSA_pmos_2nd/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>doubleSA_pmos_2nd</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV5/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV5</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV8/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV8</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV8B/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_ISAR0_IABE0_ICKGEN0_IINV8B</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_ISAR0_IABE0_ISARLOGIC0_ISL0_IBUF0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_ISAR0_IABE0_ISARLOGIC0_ISL0_IBUF0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_XSAMP0_IBUFA0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_XSAMP0_IBUFA0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/inv_XTOP_XSAMP0_IBUFB0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>inv_XTOP_XSAMP0_IBUFB0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/latch/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>latch</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/latch_2ck/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>latch_2ck</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/momcap_center_1x/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>momcap_center_1x</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/mux2to1/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>mux2to1</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nand/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nand</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nand_XTOP_ISAR0_IABE0_ISARFSM0_I1_I1/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nand_XTOP_ISAR0_IABE0_ISARFSM0_I1_I1</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nor/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nor</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nor_XTOP_ISAR0_IABE0_ISARLOGIC0_ISL0_INR0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nor_XTOP_ISAR0_IABE0_ISARLOGIC0_ISL0_INR0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nsw_wovdd/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nsw_wovdd</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nsw_wovdd_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_ISW0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nsw_wovdd_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_ISW0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/nsw_wovdd_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_ISW0_1/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>nsw_wovdd_XTOP_ISAR0_IAFE0_ICDRVM0_ICDRV0_ISW0_1</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/oai22_skewed/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>oai22_skewed</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sar_doubleSA_bb/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sar_doubleSA_bb</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sar_wsamp_bb_doubleSA/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sar_wsamp_bb_doubleSA</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarabe_dualdelay_bb/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarabe_dualdelay_bb</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarafe_nsw_doubleSA/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarafe_nsw_doubleSA</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarclkdelay_compact_dual/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarclkdelay_compact_dual</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarclkdelayslice_compact/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarclkdelayslice_compact</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarclkgen_core_static2/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarclkgen_core_static2</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarclkgen_static/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarclkgen_static</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarfsm/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarfsm</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarlogic_wret_v2/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarlogic_wret_v2</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarlogic_wret_v2_array_bb/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarlogic_wret_v2_array_bb</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarret_wckbuf/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarret_wckbuf</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarretslice/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarretslice</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/sarsamp_bb/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>sarsamp_bb</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/tie/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>tie</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/tie_wovdd/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>tie_wovdd</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/tinv/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>tinv</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/tinv_XTOP_ISAR0_IABE0_ISARFSM0_I1_I0/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>tinv_XTOP_ISAR0_IABE0_ISARFSM0_I1_I0</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_generated/tinv_small/schematic
+								<lib>adc_sar_generated</lib>
+								<cell>tinv_small</cell>
+								<view>schematic</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_testbenches/dac_9bit_ideal/veriloga
+								<lib>adc_sar_testbenches</lib>
+								<cell>dac_9bit_ideal</cell>
+								<view>veriloga</view>
+							</lcv>
+							<lcv netlist="1" vipcount="0">adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/schematic
+								<lib>adc_sar_testbenches</lib>
+								<cell>sar_wsamp_9b_tb_tran_timing_rcx</cell>
+								<view>schematic</view>
+							</lcv>
+						</cellviews>
+					</test>
+				</checksasserts>
+				<incrementalsimulationoptions>
+					<incrementalSimulation>0</incrementalSimulation>
+				</incrementalsimulationoptions>
+				<sortVariableValues>0</sortVariableValues>
+			</checkpoint>
+			<timestamp>Feb 8 18:04:08 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.203.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.203.rdb</simresults>
+			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
+			<netlistdelstrategy>SaveAll</netlistdelstrategy>
+			<uselocalpsfdir>false</uselocalpsfdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_180408484</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.203</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.203</simdir>
+			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.203.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.203.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.169
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.204
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -1410,7 +3330,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.169</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.204</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -1530,9 +3450,6 @@
 							<output>pavg(IDC("/VVDD/PLUS") 0 VAR("pper") nil 1)
 								<evalType>point</evalType>
 							</output>
-							<output>average(IDC("/VVDD/PLUS"))
-								<evalType>point</evalType>
-							</output>
 							<output>/SAMPP
 								<evalType>point</evalType>
 							</output>
@@ -1553,7 +3470,7 @@
 						</dependentTests>
 					</var>
 					<var>pper
-						<value>{Inclusion List}3n{Inclusion List}</value>
+						<value>{Inclusion List}3.2n{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -1577,7 +3494,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>300m</value>
+						<value>-186m</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -1627,7 +3544,7 @@
 						</genusjoblimit>
 					</genusjoblimits>
 					<specifyjoblimit>0</specifyjoblimit>
-					<parallelrun>0</parallelrun>
+					<parallelrun>1</parallelrun>
 				</distributeoptions>
 				<checksasserts netlist="0">
 					<test netlist="1" netlistscope="all">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1
@@ -1895,22 +3812,22 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Dec 11 12:16:07 2017</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.169.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.169.rdb</simresults>
+			<timestamp>Feb 8 23:55:44 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.204.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.204.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr720-6.eecs.berkeley.edu_wrbae_121607419</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.169</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.169</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_235544685</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.204</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.204</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.169.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.169.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.204.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.204.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.170
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.205
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -2052,7 +3969,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.170</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.205</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -2172,9 +4089,6 @@
 							<output>pavg(IDC("/VVDD/PLUS") 0 VAR("pper") nil 1)
 								<evalType>point</evalType>
 							</output>
-							<output>average(IDC("/VVDD/PLUS"))
-								<evalType>point</evalType>
-							</output>
 							<output>/SAMPP
 								<evalType>point</evalType>
 							</output>
@@ -2195,7 +4109,7 @@
 						</dependentTests>
 					</var>
 					<var>pper
-						<value>{Inclusion List}3n{Inclusion List}</value>
+						<value>{Inclusion List}3.2n{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -2219,7 +4133,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>300m</value>
+						<value>-191m</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -2269,7 +4183,7 @@
 						</genusjoblimit>
 					</genusjoblimits>
 					<specifyjoblimit>0</specifyjoblimit>
-					<parallelrun>0</parallelrun>
+					<parallelrun>1</parallelrun>
 				</distributeoptions>
 				<checksasserts netlist="0">
 					<test netlist="1" netlistscope="all">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1
@@ -2537,22 +4451,22 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Dec 11 12:24:52 2017</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.170.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.170.rdb</simresults>
+			<timestamp>Feb 8 23:58:57 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.205.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.205.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr720-6.eecs.berkeley.edu_wrbae_122452169</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.170</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.170</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_235857203</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.205</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.205</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.170.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.170.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.205.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.205.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.171
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.206
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -2694,7 +4608,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.171</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.206</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -2814,9 +4728,6 @@
 							<output>pavg(IDC("/VVDD/PLUS") 0 VAR("pper") nil 1)
 								<evalType>point</evalType>
 							</output>
-							<output>average(IDC("/VVDD/PLUS"))
-								<evalType>point</evalType>
-							</output>
 							<output>/SAMPP
 								<evalType>point</evalType>
 							</output>
@@ -2837,7 +4748,7 @@
 						</dependentTests>
 					</var>
 					<var>pper
-						<value>{Inclusion List}3n{Inclusion List}</value>
+						<value>{Inclusion List}3.2n{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -2861,7 +4772,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>300m</value>
+						<value>-191m</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -2911,7 +4822,7 @@
 						</genusjoblimit>
 					</genusjoblimits>
 					<specifyjoblimit>0</specifyjoblimit>
-					<parallelrun>0</parallelrun>
+					<parallelrun>1</parallelrun>
 				</distributeoptions>
 				<checksasserts netlist="0">
 					<test netlist="1" netlistscope="all">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1
@@ -3179,22 +5090,22 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Dec 11 12:35:23 2017</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.171.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.171.rdb</simresults>
+			<timestamp>Feb 9 00:02:46 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.206.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.206.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr720-6.eecs.berkeley.edu_wrbae_123523594</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.171</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.171</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_000246508</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.206</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.206</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.171.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.171.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.206.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.206.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.172
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.207
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -3336,7 +5247,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.172</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.207</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -3456,9 +5367,6 @@
 							<output>pavg(IDC("/VVDD/PLUS") 0 VAR("pper") nil 1)
 								<evalType>point</evalType>
 							</output>
-							<output>average(IDC("/VVDD/PLUS"))
-								<evalType>point</evalType>
-							</output>
 							<output>/SAMPP
 								<evalType>point</evalType>
 							</output>
@@ -3479,7 +5387,7 @@
 						</dependentTests>
 					</var>
 					<var>pper
-						<value>{Inclusion List}3n{Inclusion List}</value>
+						<value>{Inclusion List}3.2n{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -3503,7 +5411,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>300m</value>
+						<value>-186m</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -3553,7 +5461,7 @@
 						</genusjoblimit>
 					</genusjoblimits>
 					<specifyjoblimit>0</specifyjoblimit>
-					<parallelrun>0</parallelrun>
+					<parallelrun>1</parallelrun>
 				</distributeoptions>
 				<checksasserts netlist="0">
 					<test netlist="1" netlistscope="all">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1
@@ -3821,22 +5729,22 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Dec 11 12:41:46 2017</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.172.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.172.rdb</simresults>
+			<timestamp>Feb 9 00:06:21 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.207.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.207.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr720-6.eecs.berkeley.edu_wrbae_124146392</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.172</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.172</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_000621551</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.207</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.207</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.172.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.172.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.207.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.207.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.173
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.208
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -3978,7 +5886,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.173</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.208</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -4098,9 +6006,6 @@
 							<output>pavg(IDC("/VVDD/PLUS") 0 VAR("pper") nil 1)
 								<evalType>point</evalType>
 							</output>
-							<output>average(IDC("/VVDD/PLUS"))
-								<evalType>point</evalType>
-							</output>
 							<output>/SAMPP
 								<evalType>point</evalType>
 							</output>
@@ -4121,7 +6026,7 @@
 						</dependentTests>
 					</var>
 					<var>pper
-						<value>{Inclusion List}3n{Inclusion List}</value>
+						<value>{Inclusion List}3.2n{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -4145,7 +6050,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>300m</value>
+						<value>-160m</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -4195,7 +6100,7 @@
 						</genusjoblimit>
 					</genusjoblimits>
 					<specifyjoblimit>0</specifyjoblimit>
-					<parallelrun>0</parallelrun>
+					<parallelrun>1</parallelrun>
 				</distributeoptions>
 				<checksasserts netlist="0">
 					<test netlist="1" netlistscope="all">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1
@@ -4463,22 +6368,22 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Dec 11 12:46:40 2017</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.173.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.173.rdb</simresults>
+			<timestamp>Feb 9 21:47:58 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.208.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.208.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr720-6.eecs.berkeley.edu_wrbae_124640450</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.173</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.173</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_214758207</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.208</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.208</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.173.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.173.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.208.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.208.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.174
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.209
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -4620,7 +6525,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.174</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.209</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -4740,9 +6645,6 @@
 							<output>pavg(IDC("/VVDD/PLUS") 0 VAR("pper") nil 1)
 								<evalType>point</evalType>
 							</output>
-							<output>average(IDC("/VVDD/PLUS"))
-								<evalType>point</evalType>
-							</output>
 							<output>/SAMPP
 								<evalType>point</evalType>
 							</output>
@@ -4763,7 +6665,7 @@
 						</dependentTests>
 					</var>
 					<var>pper
-						<value>{Inclusion List}3n{Inclusion List}</value>
+						<value>{Inclusion List}3.2n{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -4787,7 +6689,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>300m</value>
+						<value>-170m</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -4837,7 +6739,7 @@
 						</genusjoblimit>
 					</genusjoblimits>
 					<specifyjoblimit>0</specifyjoblimit>
-					<parallelrun>0</parallelrun>
+					<parallelrun>1</parallelrun>
 				</distributeoptions>
 				<checksasserts netlist="0">
 					<test netlist="1" netlistscope="all">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1
@@ -5105,22 +7007,22 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Dec 12 22:40:47 2017</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.174.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.174.rdb</simresults>
+			<timestamp>Feb 9 22:02:27 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.209.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.209.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr820-1_wrbae_224047998</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.174</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.174</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_220227623</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.209</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.209</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.174.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.174.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.209.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.209.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.175
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.210
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -5262,7 +7164,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.175</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.210</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -5382,9 +7284,6 @@
 							<output>pavg(IDC("/VVDD/PLUS") 0 VAR("pper") nil 1)
 								<evalType>point</evalType>
 							</output>
-							<output>average(IDC("/VVDD/PLUS"))
-								<evalType>point</evalType>
-							</output>
 							<output>/SAMPP
 								<evalType>point</evalType>
 							</output>
@@ -5405,7 +7304,7 @@
 						</dependentTests>
 					</var>
 					<var>pper
-						<value>{Inclusion List}3n{Inclusion List}</value>
+						<value>{Inclusion List}3.2n{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -5429,7 +7328,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>300m</value>
+						<value>-170m</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -5479,7 +7378,7 @@
 						</genusjoblimit>
 					</genusjoblimits>
 					<specifyjoblimit>0</specifyjoblimit>
-					<parallelrun>0</parallelrun>
+					<parallelrun>1</parallelrun>
 				</distributeoptions>
 				<checksasserts netlist="0">
 					<test netlist="1" netlistscope="all">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1
@@ -5747,22 +7646,22 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Dec 17 21:22:41 2017</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.175.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.175.rdb</simresults>
+			<timestamp>Feb 9 23:49:16 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.210.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.210.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr820-1_wrbae_212241307</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.175</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.175</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_234916968</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.210</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.210</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.175.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.175.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.210.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.210.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.176
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.211
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -5904,7 +7803,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.176</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.211</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -6024,9 +7923,6 @@
 							<output>pavg(IDC("/VVDD/PLUS") 0 VAR("pper") nil 1)
 								<evalType>point</evalType>
 							</output>
-							<output>average(IDC("/VVDD/PLUS"))
-								<evalType>point</evalType>
-							</output>
 							<output>/SAMPP
 								<evalType>point</evalType>
 							</output>
@@ -6047,7 +7943,7 @@
 						</dependentTests>
 					</var>
 					<var>pper
-						<value>{Inclusion List}3n{Inclusion List}</value>
+						<value>{Inclusion List}3.2n{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -6071,7 +7967,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>300m</value>
+						<value>-170m</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -6121,7 +8017,7 @@
 						</genusjoblimit>
 					</genusjoblimits>
 					<specifyjoblimit>0</specifyjoblimit>
-					<parallelrun>0</parallelrun>
+					<parallelrun>1</parallelrun>
 				</distributeoptions>
 				<checksasserts netlist="0">
 					<test netlist="1" netlistscope="all">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1
@@ -6389,22 +8285,22 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Dec 21 22:11:05 2017</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.176.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.176.rdb</simresults>
+			<timestamp>Feb 10 00:30:39 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.211.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.211.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr820-1_wrbae_221105426</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.176</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.176</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_003039339</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.211</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.211</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.176.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.176.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.211.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.211.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.177
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.212
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -6546,7 +8442,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.177</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.212</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -6666,9 +8562,6 @@
 							<output>pavg(IDC("/VVDD/PLUS") 0 VAR("pper") nil 1)
 								<evalType>point</evalType>
 							</output>
-							<output>average(IDC("/VVDD/PLUS"))
-								<evalType>point</evalType>
-							</output>
 							<output>/SAMPP
 								<evalType>point</evalType>
 							</output>
@@ -6677,7 +8570,7 @@
 				</tests>
 				<vars>
 					<var>vdd
-						<value>1000m</value>
+						<value>1200m</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -6689,7 +8582,7 @@
 						</dependentTests>
 					</var>
 					<var>pper
-						<value>{Inclusion List}3n{Inclusion List}</value>
+						<value>{Inclusion List}3.2n{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -6713,7 +8606,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>300m</value>
+						<value>-170m</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -6763,7 +8656,7 @@
 						</genusjoblimit>
 					</genusjoblimits>
 					<specifyjoblimit>0</specifyjoblimit>
-					<parallelrun>0</parallelrun>
+					<parallelrun>1</parallelrun>
 				</distributeoptions>
 				<checksasserts netlist="0">
 					<test netlist="1" netlistscope="all">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1
@@ -7031,18 +8924,18 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Dec 22 00:18:06 2017</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.177.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.177.rdb</simresults>
+			<timestamp>Feb 10 00:39:56 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.212.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.212.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr820-1_wrbae_001806478</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.177</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.177</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_003956561</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.212</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.212</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.177.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.177.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.212.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.212.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>

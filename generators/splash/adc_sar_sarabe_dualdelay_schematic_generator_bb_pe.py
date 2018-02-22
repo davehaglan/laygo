@@ -20,6 +20,7 @@ params = dict(
     ckgen_m=2, 
     ckgen_fo=2,
     ckgen_ndelay=1, 
+    ckgen_fast=True, 
     logic_m=1, 
     logic_m_xor=2, 
     fsm_m=1, 
@@ -41,6 +42,7 @@ if load_from_file==True:
     params['ckgen_m']=sizedict['sarclkgen']['m']
     params['ckgen_fo']=sizedict['sarclkgen']['fo']
     params['ckgen_ndelay']=sizedict['sarclkgen']['ndelay']
+    params['ckgen_fast']=sizedict['sarclkgen']['fast']
     params['logic_m']=sizedict['sarlogic']['m']
     params['logic_m_dl']=sizedict['sarlogic']['m_dl']
     params['logic_m_xor']=sizedict['sarlogic']['m_xor']

@@ -19,6 +19,7 @@ params = dict(
     m=2,
     fo=2,
     ndelay=1,
+    fast=False,
     device_intent='fast',
     )
 load_from_file=True
@@ -33,7 +34,7 @@ if load_from_file==True:
     params['m']=sizedict['sarclkgen']['m']
     params['fo']=sizedict['sarclkgen']['fo']
     params['ndelay']=sizedict['sarclkgen']['ndelay']
-    params['ndelay']=sizedict['sarclkgen']['fast']
+    params['fast']=sizedict['sarclkgen']['fast']
     params['lch']=sizedict['lch']
     params['pw']=sizedict['pw']
     params['nw']=sizedict['nw']
