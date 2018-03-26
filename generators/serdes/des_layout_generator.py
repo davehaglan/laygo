@@ -137,15 +137,15 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
                                                                    transform_right=transform_bnd_right,
                                                                    origin=np.array([0, 0]))
     #Calculate origins for placement
-    tap_origin = origin + laygen.get_xy(obj = bnd_bottom[0], gridname = pg) \
-                   + laygen.get_xy(obj = bnd_bottom[0].template, gridname = pg)
-    array_origin = origin + laygen.get_xy(obj = bnd_bottom[0], gridname = pg) \
-                   + laygen.get_xy(obj = bnd_bottom[0].template, gridname = pg) \
-                   + np.array([laygen.get_xy(obj=laygen.get_template(name = tap_name, libname = templib_logic), gridname = pg)[0], 0])
-    tapr_origin = tap_origin + m_bnd*np.array([laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottom'), gridname = pg)[0], 0]) \
-                   - np.array([laygen.get_xy(obj=laygen.get_template(name = tap_name, libname = templib_logic), gridname = pg)[0], 0])
-    FF0_origin = array_origin + np.array([0, laygen.get_xy(obj=laygen.get_template(name = 'inv_1x', libname = templib_logic), gridname = pg)[1]]) + \
-                 np.array([0, laygen.get_xy(obj=laygen.get_template(name = ff_name, libname = templib_logic), gridname = pg)[1]])
+    tap_origin = origin + laygen.get_inst_xy(name = bnd_bottom[0].name, gridname = pg) \
+                   + laygen.get_template_xy(name = bnd_bottom[0].cellname, gridname = pg)
+    array_origin = origin + laygen.get_inst_xy(name = bnd_bottom[0].name, gridname = pg) \
+                   + laygen.get_template_xy(name = bnd_bottom[0].cellname, gridname = pg) \
+                   + np.array([laygen.get_template_xy(name = tap_name, gridname = pg, libname = templib_logic)[0], 0])
+    tapr_origin = tap_origin + m_bnd*np.array([laygen.get_template_xy(name = 'boundary_bottom', gridname = pg)[0], 0]) \
+                   - np.array([laygen.get_template_xy(name = tap_name, gridname = pg, libname = templib_logic)[0], 0])
+    FF0_origin = array_origin + np.array([0, laygen.get_template_xy(name = 'inv_1x', gridname = pg, libname = templib_logic)[1]]) + \
+                 np.array([0, laygen.get_template_xy(name = ff_name, gridname = pg, libname = templib_logic)[1]])
     # placement
     iffout=[]
     iffin=[]
@@ -155,7 +155,13 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
     isp1x=[]
     itapl=[]
     itapr=[]
+    clkbuf_name_list=[]
+    divbuf_name_list=[]
     tf='R0'
+    for i, m in enumerate(clkbuf_list):
+        clkbuf_name_list.append('inv_'+str(m)+'x')
+    for i, m in enumerate(divbuf_list):
+        divbuf_name_list.append('inv_'+str(m)+'x')
     if num_flop == 1: #Layout height reduction factor, no reduction
         for i in range(num_row):
             if i%2==0: tf='R0'
@@ -165,27 +171,21 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
                                           gridname = pg, xy=tap_origin, transform=tf, shape=np.array([1,1]), template_libname = templib_logic))
                 itapr.append(laygen.place(name = "I" + objectname_pfix + 'TAPR0', templatename = tap_name,
                                           gridname = pg, xy=tapr_origin, transform=tf, shape=np.array([1,1]), template_libname = templib_logic))
-                idivbuf.append(laygen.place(name = "I" + objectname_pfix + 'DIVBUF32x', templatename = 'inv_32x',
+                for j in range(len(divbuf_list)):
+                    if j==0:
+                        idivbuf.append(laygen.place(name = "I" + objectname_pfix + 'DIVBUF'+str(j), templatename = divbuf_name_list[len(divbuf_list)-j-1],
                                           gridname = pg, xy=array_origin, transform=tf, shape=np.array([1,1]), template_libname = templib_logic))
-                idivbuf.append(laygen.relplace(name = "I" + objectname_pfix + 'DIVBUF8x', templatename = 'inv_8x',
+                    else:
+                        idivbuf.append(laygen.relplace(name = "I" + objectname_pfix + 'DIVBUF'+str(j), templatename = divbuf_name_list[len(divbuf_list)-j-1],
                                        gridname = pg, refinstname = idivbuf[-1].name, transform=tf, shape=np.array([1,1]),
                                        template_libname=templib_logic))
-                idivbuf.append(laygen.relplace(name = "I" + objectname_pfix + 'DIVBUF2x', templatename = 'inv_2x',
-                                       gridname = pg, refinstname = idivbuf[-1].name, transform=tf, shape=np.array([1,1]),
-                                       template_libname=templib_logic))
-                idivbuf.append(laygen.relplace(name = "I" + objectname_pfix + 'DIVBUF1x', templatename = 'inv_1x',
-                                       gridname = pg, refinstname = idivbuf[-1].name, transform=tf, shape=np.array([1,1]),
-                                       template_libname=templib_logic))
-                iclkbuf.append(laygen.relplace(name = "I" + objectname_pfix + 'CLKBUF1x', templatename = 'inv_1x',
-                                       gridname = pg, refinstname = idivbuf[3].name, transform=tf, shape=np.array([1,1]), xy=np.array([0,0]),
-                                       template_libname=templib_logic))
-                iclkbuf.append(laygen.relplace(name = "I" + objectname_pfix + 'CLKBUF2x', templatename = 'inv_2x',
-                                       gridname = pg, refinstname = iclkbuf[-1].name, transform=tf, shape=np.array([1,1]),
-                                       template_libname=templib_logic))
-                iclkbuf.append(laygen.relplace(name = "I" + objectname_pfix + 'CLKBUF8x', templatename = 'inv_8x',
-                                       gridname = pg, refinstname = iclkbuf[-1].name, transform=tf, shape=np.array([1,1]),
-                                       template_libname=templib_logic))
-                iclkbuf.append(laygen.relplace(name = "I" + objectname_pfix + 'CLKBUF32x', templatename = 'inv_32x',
+                    print(idivbuf[j].name)
+                for k in range(len(clkbuf_list)):
+                    if k==0:
+                        iclkbuf.append(laygen.relplace(name = "I" + objectname_pfix + 'CLKBUF'+str(k), templatename = clkbuf_name_list[k],
+                                          gridname = pg, refinstname = idivbuf[len(divbuf_list)-1].name, transform=tf, shape=np.array([1,1]), xy=np.array([0,0]), template_libname = templib_logic))
+                    else:
+                        iclkbuf.append(laygen.relplace(name = "I" + objectname_pfix + 'CLKBUF'+str(k), templatename = clkbuf_name_list[k],
                                        gridname = pg, refinstname = iclkbuf[-1].name, transform=tf, shape=np.array([1,1]),
                                        template_libname=templib_logic))
             else:
@@ -275,11 +275,11 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
             else: tf='R0'
             iffin.append(laygen.relplace(name = "I" + objectname_pfix + 'FFIN'+str(j+1), templatename = ff_name,
                                          gridname = pg, refinstname = iffout[j].name, transform=tf, shape=np.array([1,1]),
-                                         xy=np.array([laygen.get_xy(obj=laygen.get_template(name = ff_name, libname = templib_logic), gridname = pg)[0], 0]), template_libname=templib_logic))
+                                         xy=np.array([laygen.get_template_xy(name = ff_name, gridname = pg, libname = templib_logic)[0], 0]), template_libname=templib_logic))
             if j%2==0:
                 iffdiv.append(laygen.relplace(name = "I" + objectname_pfix + 'FFDIV'+str(int(j/2+1)), templatename = ff_rst_name,
                                               gridname = pg, refinstname = iffin[j].name, transform=tf, shape=np.array([1,1]),
-                                              xy=np.array([laygen.get_xy(obj=laygen.get_template(name = ff_name, libname = templib_logic), gridname = pg)[0], 0]), template_libname=templib_logic))
+                                              xy=np.array([laygen.get_template_xy(name = ff_name, gridname = pg, libname = templib_logic)[0], 0]), template_libname=templib_logic))
         for i in range(num_row, num_des+1): #Right side of FFDIV
             if num_des%2==1:
                 if i%2==0: tf='R0'
@@ -299,12 +299,15 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
     #Space placement at the first row
     space_name = 'space_1x'
     space4x_name = 'space_4x'
-    space_width = laygen.get_xy(obj=laygen.get_template(name = space_name, libname = templib_logic), gridname = pg)[0]
-    space4_width = laygen.get_xy(obj=laygen.get_template(name = space4x_name, libname = templib_logic), gridname = pg)[0]
-    inv_width=[]
-    for i in (1,2,8,32):
-        inv_width.append(laygen.get_xy(obj=laygen.get_template(name = 'inv_' + str(i) + 'x', libname = templib_logic), gridname = pg)[0])
-    blank_width = tapr_origin[0] - array_origin[0] - 2 * (inv_width[0]+inv_width[1]+inv_width[2]+inv_width[3])
+    space_width = laygen.get_template_xy(name = space_name, gridname = pg, libname = templib_logic)[0]
+    space4_width = laygen.get_template_xy(name = space4x_name, gridname = pg, libname = templib_logic)[0]
+    inv_width_div=0
+    for i, m in enumerate(divbuf_list):
+        inv_width_div=inv_width_div+laygen.get_template_xy(name = 'inv_' + str(m) + 'x', gridname = pg, libname = templib_logic)[0]
+    inv_width_clk=0
+    for i, m in enumerate(clkbuf_list):
+        inv_width_clk=inv_width_clk+laygen.get_template_xy(name = 'inv_' + str(m) + 'x', gridname = pg, libname = templib_logic)[0]
+    blank_width = tapr_origin[0] - array_origin[0] - inv_width_div - inv_width_clk
     m_space4 = int(blank_width / space4_width)
     m_space1 = int((blank_width-m_space4*space4_width)/space_width)
     ispace4=laygen.relplace(name = "I" + objectname_pfix + 'SPACE4', templatename = space4x_name,
@@ -314,8 +317,8 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
                            gridname = pg, refinstname = ispace4.name, transform='R0', shape=np.array([m_space1+4,1]),
                            template_libname=templib_logic)
     #Space placement at the last row for odd num_des
-    m_ff_space = int(laygen.get_xy(obj=laygen.get_template(name = ff_name, libname = templib_logic), gridname = pg)[0] / space_width)
-    m_ffrst_space = int(laygen.get_xy(obj=laygen.get_template(name = ff_rst_name, libname = templib_logic), gridname = pg)[0] / space_width)
+    m_ff_space = int(laygen.get_template_xy(name = ff_name, gridname = pg, libname = templib_logic)[0] / space_width)
+    m_ffrst_space = int(laygen.get_template_xy(name = ff_rst_name, gridname = pg, libname = templib_logic)[0] / space_width)
     if (num_des%2)==1:
         if num_flop==2:
             ispace_out=laygen.relplace(name = "I" + objectname_pfix + 'SPACEOUT', templatename = space_name,
@@ -386,10 +389,16 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
         [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #in-to-out
                     ffin_out_xy[i][0], ffout_in_xy[i][0], ffin_out_xy[i][1][1]+7-offset, rg_m3m4)
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #div feedback
-                ffdiv_out_xy[num_des-1][0], ffdiv_in_xy45[0][0]+np.array([3,0]), ffdiv_out_xy[num_des-1][1][1]+7-offset_div, 
+                ffdiv_out_xy[num_des-1][0], ffdiv_in_xy45[0][0]+np.array([4,0]), ffdiv_out_xy[num_des-1][1][1]+7-offset_div, 
                 rg_m3m4, layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5)
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], #M3-to-M5
-                ffdiv_in_xy[0][0], ffdiv_in_xy45[0][1]+np.array([3,0]), ffdiv_in_xy[0][0][1], rg_m3m4, layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5)
+                ffdiv_in_xy[0][0], ffdiv_in_xy45[0][1]+np.array([4,0]), ffdiv_in_xy[0][0][1], rg_m3m4, layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5)
+    if ext_clk==True:
+        for i in range(num_des):
+            [rh0, rv1] = laygen.route_hv(laygen.layers['metal'][2], laygen.layers['metal'][3],
+                                           laygen.get_inst_pin_xy(iffdiv[i].name, 'VSS', rg_m2m3)[0], laygen.get_inst_pin_xy(iffdiv[i].name, 'I', rg_m2m3)[0],
+                                           rg_m2m3)
+            
     #CLK Buffer
     for i in range(3):
         [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],
@@ -400,7 +409,8 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
                                            laygen.get_inst_pin_xy(idivbuf[3 - i].name, 'O', rg_m3m4)[0][1] + i % 2, rg_m3m4)
 
     #DIVCLK Route
-    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],
+    if ext_clk==False:
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],
                                        laygen.get_inst_pin_xy(idivbuf[3].name, 'I', rg_m3m4)[0], laygen.get_inst_pin_xy(iffdiv[0].name, 'I', rg_m3m4)[0],
                                        laygen.get_inst_pin_xy(idivbuf[3].name, 'I', rg_m3m4)[0][1] + 3, rg_m3m4)
     for i in range(num_des):
@@ -410,9 +420,14 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
         [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],
                                            laygen.get_inst_pin_xy(iclkbuf[3].name, 'O', rg_m3m4)[0], laygen.get_inst_pin_xy(iffin[i].name, 'CLK', rg_m3m4)[0],
                                            laygen.get_inst_pin_xy(iclkbuf[3].name, 'O', rg_m3m4)[0][1] + 6, rg_m3m4)
-        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],
+        if ext_clk == False:
+            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],
                                            laygen.get_inst_pin_xy(iclkbuf[3].name, 'O', rg_m3m4)[0], laygen.get_inst_pin_xy(iffdiv[i].name, 'CLK', rg_m3m4)[0],
                                            laygen.get_inst_pin_xy(iclkbuf[3].name, 'O', rg_m3m4)[0][1] + 6, rg_m3m4)
+        else:
+            [rh0, rv1] = laygen.route_hv(laygen.layers['metal'][2], laygen.layers['metal'][3],
+                                           laygen.get_inst_pin_xy(iffdiv[i].name, 'VSS', rg_m2m3)[0], laygen.get_inst_pin_xy(iffdiv[i].name, 'CLK', rg_m2m3)[0],
+                                           rg_m2m3)
     #RST Route
     for i in range(num_des):
         if i in range(int((num_des+1)/2)): #First half of FFDIVs
@@ -443,6 +458,10 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
     clkin_xy=laygen.get_inst_pin_xy(iclkbuf[0].name, 'I', rg_m3m4)
     rclkin=laygen.route(None, laygen.layers['metal'][3], xy0=clkin_xy[0], xy1=np.array([clkin_xy[0][0],0]), gridname0=rg_m3m4)
     laygen.boundary_pin_from_rect(rclkin, rg_m3m4, "clk", laygen.layers['pin'][3], size=0, direction='left')
+    #if ext_clk==True:
+    divin_xy=laygen.get_inst_pin_xy(idivbuf[len(divbuf_list)-1].name, 'I', rg_m3m4)
+    rdivin=laygen.route(None, laygen.layers['metal'][3], xy0=divin_xy[0], xy1=np.array([divin_xy[0][0],0]), gridname0=rg_m3m4)
+    laygen.boundary_pin_from_rect(rdivin, rg_m3m4, "div<0>", laygen.layers['pin'][3], size=0, direction='left')
     din_xy34=laygen.get_inst_pin_xy(iffin[0].name, 'I', rg_m3m4)
     din_xy45=laygen.get_inst_pin_xy(iffin[0].name, 'I', rg_m4m5)
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], 
@@ -462,7 +481,7 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
     laygen.boundary_pin_from_rect(rv1, rg_m4m5, "RST", laygen.layers['pin'][5], size=4, direction='bottom')
 
     # power pin
-    pwr_dim=laygen.get_xy(obj =itapl[-1].template, gridname=rg_m2m3)
+    pwr_dim=laygen.get_template_xy(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)
     rvdd = []
     rvss = []
     if num_row%2==0: rp1='VSS'
@@ -559,7 +578,10 @@ if __name__ == '__main__':
         cell_name='des_1to'+str(specdict['num_des'])
         num_des=specdict['num_des']
         num_flop=specdict['num_flop']
+        ext_clk=specdict['ext_clk']
         m_des_dff=sizedict['m_des_dff']
+        clkbuf_list=sizedict['des_clkbuf_list']
+        divbuf_list=sizedict['des_divbuf_list']
 
     print(cell_name+" generating")
     mycell_list.append(cell_name)

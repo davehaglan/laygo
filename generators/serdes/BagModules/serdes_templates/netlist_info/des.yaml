@@ -1,6 +1,6 @@
 lib_name: serdes_templates
 cell_name: des
-pins: [ "clk", "in", "VDD", "VSS", "dout", "RST" ]
+pins: [ "clk", "in", "VDD", "VSS", "dout", "div<0>", "RST" ]
 instances:
   PIN5:
     lib_name: basic
@@ -13,6 +13,10 @@ instances:
   PIN0:
     lib_name: basic
     cell_name: ipin
+    instpins: {}
+  PIN6:
+    lib_name: basic
+    cell_name: iopin
     instpins: {}
   PIN3:
     lib_name: basic
