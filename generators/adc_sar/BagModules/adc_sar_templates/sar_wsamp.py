@@ -46,7 +46,7 @@ class adc_sar_templates__sar_wsamp(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, sar_lch, sar_pw, sar_nw, sar_sa_m, sar_sa_m_rst, sar_sa_m_rgnn, sar_sa_m_buf, sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay, sar_logic_m, sar_fsm_m, sar_ret_m, sar_ret_fo, sar_device_intent, sar_c_m, sar_rdx_array, samp_lch, samp_wp, samp_wn, samp_fgn, samp_fg_inbuf_list, samp_fg_outbuf_list, samp_nduml, samp_ndumr, samp_nsep, samp_intent, num_bits, samp_use_laygo=False):
+    def design(self, sar_lch, sar_pw, sar_nw, sar_sa_m, sar_sa_m_rst, sar_sa_m_rgnn, sar_sa_m_buf, sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay, sar_logic_m, sar_fsm_m, sar_ret_m, sar_ret_fo, sar_device_intent, sar_c_m, sar_rdx_array, samp_lch, samp_wp, samp_wn, samp_fgn, samp_fg_inbuf_list, samp_fg_outbuf_list, samp_nduml, samp_ndumr, samp_nsep, samp_intent, num_bits, tgate, samp_use_laygo=False):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -91,6 +91,7 @@ class adc_sar_templates__sar_wsamp(Module):
         self.parameters['samp_nsep'] = samp_nsep
         self.parameters['samp_intent'] = samp_intent
         self.parameters['num_bits'] = num_bits
+        self.parameters['tgate'] = tgate
         self.parameters['samp_use_laygo'] = samp_use_laygo #if true, use laygo for sampler generation
 
         self.instances['ISAR0'].design(lch=sar_lch, pw=sar_pw, nw=sar_nw, sa_m=sar_sa_m, sa_m_rst=sar_sa_m_rst, sa_m_rgnn=sar_sa_m_rgnn, sa_m_buf=sar_sa_m_buf, 
@@ -99,7 +100,7 @@ class adc_sar_templates__sar_wsamp(Module):
                                        device_intent=sar_device_intent)
         if samp_use_laygo==True:
             self.replace_instance_master(inst_name='XSAMP0', lib_name='adc_sar_templates', cell_name='sarsamp')
-            self.instances['XSAMP0'].design(lch=samp_lch, pw=samp_wp, nw=samp_wn, m_sw=4, m_sw_arr=samp_fgn, m_inbuf_list=samp_fg_inbuf_list, m_outbuf_list=samp_fg_outbuf_list, device_intent=samp_intent)
+            self.instances['XSAMP0'].design(lch=samp_lch, pw=samp_wp, nw=samp_wn, m_sw=4, m_sw_arr=samp_fgn, m_inbuf_list=samp_fg_inbuf_list, m_outbuf_list=samp_fg_outbuf_list, tgate=tgate, device_intent=samp_intent)
         else:
             self.replace_instance_master(inst_name='XSAMP0', lib_name='adc_ec_templates', cell_name='sampler_nmos')
             self.instances['XSAMP0'].design_specs(lch=samp_lch, wp=samp_wp, wn=samp_wn, fgn=samp_fgn, fg_inbuf_list=samp_fg_inbuf_list, fg_outbuf_list=samp_fg_outbuf_list, nduml=samp_nduml, ndumr=samp_ndumr, nsep=samp_nsep, intent=samp_intent)

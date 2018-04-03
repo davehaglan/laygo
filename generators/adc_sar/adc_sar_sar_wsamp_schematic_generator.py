@@ -39,6 +39,7 @@ params = dict(
     samp_ndumr=4,
     samp_nsep=2,
     samp_intent='ulvt',
+    tgate=False,
     samp_use_laygo=False,
 )
 load_from_file=True
@@ -65,6 +66,7 @@ if load_from_file==True:
     params['sar_c_m']=sizedict['capdac']['c_m']
     params['sar_rdx_array']=specdict['rdx_array']
     params['num_bits']=specdict['n_bit']
+    params['tgate']=specdict['samp_with_tgate']
     params['samp_use_laygo']=specdict['samp_use_laygo']
     params['sar_lch']=sizedict['lch']
     params['sar_pw']=sizedict['pw']
