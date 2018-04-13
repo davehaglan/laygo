@@ -108,7 +108,7 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
     export_dict = {'boundaries': {'lib_name': 'tsmcN16_logic_templates',
                                   'lr_width': 8,
                                   'tb_height': 0.5},
-                   'cells': {'sar_wsamp': {'cell_name': 'sar_wsamp',
+                   'cells': {cell_name: {'cell_name': cell_name,
                                                  'lib_name': workinglib,
                                                  'size': [40, 1]}},
                    'spaces': [{'cell_name': 'space_4x',
@@ -572,8 +572,8 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
     
     # export_dict will be written to a yaml file for using with StdCellBase
 
-    export_dict['cells']['sar_wsamp']['ports'] = export_ports
-    export_dict['cells']['sar_wsamp']['size_um'] = [float(int(size_x*1e3))/1e3, float(int(size_y*1e3))/1e3]
+    export_dict['cells'][cell_name]['ports'] = export_ports
+    export_dict['cells'][cell_name]['size_um'] = [float(int(size_x*1e3))/1e3, float(int(size_y*1e3))/1e3]
     #export_dict['cells']['clk_dis_N_units']['num_ways'] = num_ways
     # print('export_dict:')
     # pprint(export_dict)
