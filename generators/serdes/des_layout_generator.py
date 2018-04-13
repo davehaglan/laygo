@@ -472,6 +472,8 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
     for i in range(num_des):
         datao_xy = laygen.get_inst_pin_xy(iffout[i].name, 'O', rg_m3m4)
         laygen.pin(name='dout<'+str(i)+'>', layer=laygen.layers['pin'][3], xy=datao_xy, gridname=rg_m3m4)
+    clkdiv_xy = laygen.get_inst_pin_xy(iffout[-1].name, 'CLK', rg_m3m4)
+    laygen.pin(name='clk_div', layer=laygen.layers['pin'][3], xy=clkdiv_xy, gridname=rg_m3m4)
     rst_xy34=laygen.get_inst_pin_xy(iffdiv[0].name, 'RST', rg_m3m4)
     rst_xy45=laygen.get_inst_pin_xy(iffdiv[0].name, 'RST', rg_m4m5)
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], 

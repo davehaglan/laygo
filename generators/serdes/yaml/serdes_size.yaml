@@ -16,4 +16,4 @@ m_ser: 2
 #DES dff size
 m_des_dff: 2
 des_clkbuf_list: [1, 2, 8, 32]
-des_divbuf_list: [1, 2, 8, 16]
+des_divbuf_list: [1, 2, 8, 32]
