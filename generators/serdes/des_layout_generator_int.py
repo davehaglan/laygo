@@ -507,12 +507,17 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], 
             din_xy34[0], np.array([din_xy45[0][0]-2,0]), din_xy34[0][1], 
             rg_m3m4, layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5)
+    [rv2, rh3, rv4] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4], 
+            np.array([din_xy45[0][0]-2,0]), np.array([din_xy34[0][0]+4,0]), 4, 
+            rg_m4m5, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4)
     rdummy = laygen.route(None, laygen.layers['metal'][4], xy0=din_xy34[0], xy1=din_xy34[0]+np.array([2,0]), gridname0=rg_m3m4)
-    in_pin=laygen.boundary_pin_from_rect(rv1, rg_m4m5, "in", laygen.layers['pin'][5], size=4, direction='bottom')
+    in_pin=laygen.boundary_pin_from_rect(rv4, rg_m3m4, "in", laygen.layers['pin'][3], size=4, direction='bottom')
     export_ports = add_to_export_ports(export_ports, in_pin)
     for i in range(num_des):
         datao_xy = laygen.get_inst_pin_xy(iffout[i].name, 'O', rg_m3m4)
-        datao_pin=laygen.pin(name='dout<'+str(i)+'>', layer=laygen.layers['pin'][3], xy=datao_xy, gridname=rg_m3m4)
+        rdatao=laygen.route(None, laygen.layers['metal'][3], xy0=datao_xy[0], xy1=datao_xy[1], gridname0=rg_m3m4)
+        datao_pin=laygen.boundary_pin_from_rect(rdatao, rg_m3m4, 'dout<'+str(i)+'>', laygen.layers['pin'][3], size=0, direction='left')
+        #datao_pin=laygen.pin(name='dout<'+str(i)+'>', layer=laygen.layers['pin'][3], xy=datao_xy, gridname=rg_m3m4)
         export_ports = add_to_export_ports(export_ports, datao_pin)
     clkdiv_xy = laygen.get_inst_pin_xy(iffout[-1].name, 'CLK', rg_m3m4)
     clkdiv_pin=laygen.pin(name='clk_div', layer=laygen.layers['pin'][3], xy=clkdiv_xy, gridname=rg_m3m4)
@@ -522,8 +527,11 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], 
             rst_xy34[0], np.array([rst_xy45[0][0]-2,0]), rst_xy34[0][1], 
             rg_m3m4, layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5)
+    [rv2, rh2, rv3] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4], 
+            np.array([rst_xy45[0][0]-2,0]), np.array([rst_xy34[0][0]+4,0]), 4, 
+            rg_m4m5, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4)
     rdummy = laygen.route(None, laygen.layers['metal'][4], xy0=rst_xy34[0], xy1=rst_xy34[0]+np.array([2,0]), gridname0=rg_m3m4)
-    rst_pin=laygen.boundary_pin_from_rect(rv1, rg_m4m5, "RST", laygen.layers['pin'][5], size=4, direction='bottom')
+    rst_pin=laygen.boundary_pin_from_rect(rv3, rg_m3m4, "RST", laygen.layers['pin'][3], size=4, direction='bottom')
     export_ports = add_to_export_ports(export_ports, rst_pin)
 
     # power pin
