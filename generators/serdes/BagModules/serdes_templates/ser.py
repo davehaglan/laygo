@@ -46,7 +46,7 @@ class serdes_templates__ser(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, num_ser=10, m_dff=1, m_cbuf1=2, m_cbuf2=8, m_pbuf1=2, m_pbuf2=8, m_mux=2, m_out=2, device_intent='fast'):
+    def design(self, lch, pw, nw, num_ser=10, m_dff=1, m_latch=1, m_cbuf1=2, m_cbuf2=8, m_pbuf1=2, m_pbuf2=8, m_mux=2, m_out=2, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -67,6 +67,7 @@ class serdes_templates__ser(Module):
         self.parameters['pw'] = pw
         self.parameters['nw'] = nw
         self.parameters['m_dff'] = m_dff
+        self.parameters['m_latch'] = m_latch
         self.parameters['m_cbuf1'] = m_cbuf1
         self.parameters['m_cbuf2'] = m_cbuf2
         self.parameters['m_pbuf1'] = m_pbuf1
@@ -126,7 +127,7 @@ class serdes_templates__ser(Module):
 
         self.instances['IINVOUT'].design(lch=lch, pw=pw, nw=nw, m=m_out, device_intent=device_intent)   
         self.instances['ITINV0'].design(lch=lch, pw=pw, nw=nw, m=m_mux, device_intent=device_intent)   
-        self.instances['ILATCH0'].design(lch=lch, pw=pw, nw=nw, m=1, device_intent=device_intent)   
+        self.instances['ILATCH0'].design(lch=lch, pw=pw, nw=nw, m=m_latch, device_intent=device_intent)   
         self.instances['IFF0'].design(lch=lch, pw=pw, nw=nw, m=m_dff, device_intent=device_intent)   
         self.instances['IP0BUF3'].design(lch=lch, pw=pw, nw=nw, m=m_pbuf2, device_intent=device_intent)   
         self.instances['IP0BUF2'].design(lch=lch, pw=pw, nw=nw, m=m_pbuf2, device_intent=device_intent)   
@@ -134,6 +135,7 @@ class serdes_templates__ser(Module):
         self.instances['ICBUF1'].design(lch=lch, pw=pw, nw=nw, m=m_cbuf1, device_intent=device_intent)   
         self.instances['ICBUF2'].design(lch=lch, pw=pw, nw=nw, m=m_cbuf2, device_intent=device_intent)   
         self.instances['IDIV0'].design(lch=lch, pw=pw, nw=nw, m=m_dff, device_intent=device_intent)   
+        self.instances['ISR'].design(lch=lch, pw=pw, nw=nw, m=2, device_intent=device_intent)   
         #self.instances['IOUT'].design(lch=lch, pw=pw, nw=nw, m=m_dff, device_intent=device_intent)   #dff
         #self.instances['IIN'].design(lch=lch, pw=pw, nw=nw, m=m_dff, device_intent=device_intent)   #dff
         #self.instances['IDIV'].design(lch=lch, pw=pw, nw=nw, m=m_dff, device_intent=device_intent)   #dff
@@ -160,7 +162,8 @@ class serdes_templates__ser(Module):
         #    inst.design(lch=lch, pw=pw, nw=nw, m_dff=m_dff, m_inv1=m_inv1, m_inv2=m_inv2,
         #        m_tgate=m_tgate, num_bits=num_bits, m_capsw=m_capsw, device_intent=device_intent)
 
-        #self.reconnect_instance_terminal('I0', 'CAL<%d:0>'%(num_bits-1), 'CAL<%d:0>'%(num_bits-1))
+        self.reconnect_instance_terminal('ISR', 'S', 'p1bufb')
+        self.reconnect_instance_terminal('ISR', 'R', 'p'+str(int(sub_ser/2)+1)+'bufb')
         
         self.rename_pin('in<0>','in<%d:0>'%(sub_ser-1))
 

@@ -62,7 +62,7 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
     ser2to1_i1_xy=laygen.get_inst_pin_xy(iser2to1.name, 'I<1>', rg_m3m4)
     ser2to1_i0_xy=laygen.get_inst_pin_xy(iser2to1.name, 'I<0>', rg_m3m4)
     ser2to1_out_xy=laygen.get_inst_pin_xy(iser2to1.name, 'O', rg_m3m4)
-    divclk_xy=laygen.get_inst_pin_xy(isubser0.name, 'p1buf', rg_m3m4)
+    divclk_xy=laygen.get_inst_pin_xy(isubser0.name, 'div', rg_m3m4)
 
     # Route
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], 

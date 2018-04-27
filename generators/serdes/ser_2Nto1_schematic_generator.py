@@ -16,6 +16,7 @@ params = dict(
     nw = 4,
     num_ser = 10,
     m_dff=1, 
+    m_latch=1, 
     m_cbuf1=2, 
     m_cbuf2=8, 
     m_pbuf1=2, 
@@ -38,6 +39,7 @@ if load_from_file==True:
     suffix_name='_'+str(int(specdict['num_ser']))+'to1'
     params['num_ser']=specdict['num_ser']
     params['m_dff']=sizedict['m_dff']
+    params['m_latch']=sizedict['m_latch']
     params['m_cbuf1']=sizedict['m_cbuf1']
     params['m_cbuf2']=sizedict['m_cbuf2']
     params['m_pbuf1']=sizedict['m_pbuf1']
