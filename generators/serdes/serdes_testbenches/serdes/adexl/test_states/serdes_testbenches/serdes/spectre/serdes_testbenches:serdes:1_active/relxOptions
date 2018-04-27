@@ -1,22 +1,33 @@
 (relxOpts aged_data_dir) ""
 (relxOpts aged_var_list) nil
+<<<<<<< HEAD
 (relxOpts agingPointsType) "Standard aging"
 (relxOpts anaMode) "Reliability"
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 (relxOpts checknegagingclamp) "no"
 (relxOpts checknegagingtype) "error"
 (relxOpts combinedeg) "off"
 (relxOpts compactagednetlist) "none"
 (relxOpts degdatatype) "appendage"
+<<<<<<< HEAD
 (relxOpts displayTMIGui) nil
 (relxOpts doADELPostProcess) t
 (relxOpts enableAging) nil
 (relxOpts enableAgingForTMI) t
+=======
+(relxOpts doADELPostProcess) t
+(relxOpts enableAging) nil
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 (relxOpts enableDegSort) nil
 (relxOpts enableGradualAging) nil
 (relxOpts enablePreset) nil
 (relxOpts enableRelXTran) nil
 (relxOpts enableRelxpert) nil
+<<<<<<< HEAD
 (relxOpts enableSelfheating) nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 (relxOpts enableStress) nil
 (relxOpts enabledegdata) nil
 (relxOpts fresh_data_dir) ""
@@ -41,7 +52,10 @@
 (relxOpts gaSkipFresh) nil
 (relxOpts gaSkipLast) nil
 (relxOpts includeFiles) ""
+<<<<<<< HEAD
 (relxOpts mindtemp) ""
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 (relxOpts mosAgeDomain) "loglog"
 (relxOpts mosAgeMethod) "agemos"
 (relxOpts mosAgeModelFilePath) ""
@@ -116,6 +130,7 @@
 (relxOpts relusercmdlineoption) ""
 (relxOpts relxTranStart) ""
 (relxOpts relxTranStop) ""
+<<<<<<< HEAD
 (relxOpts relxpertExecName) "relxpert"
 (relxOpts reportModelParamChanged) nil
 (relxOpts saAgeStepOrTotalStep) ""
@@ -129,6 +144,14 @@
 (relxOpts tmiAgingType) "TMI Aging"
 (relxOpts tmiMosMode) (t t)
 (relxOpts tmiParameters) ""
+=======
+(relxOpts reportModelParamChanged) nil
+(relxOpts showunageddevices) "limit"
+(relxOpts simModeFile) "input.bs0"
+(relxOpts simModeType) "all"
+(relxOpts stress_data_dir) ""
+(relxOpts stress_var_list) nil
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 (relxOpts uriAppendtype) "none"
 (relxOpts uriDebugMode) "0"
 (relxOpts uriLibs) ""

@@ -46,7 +46,7 @@ class serdes_templates__des(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, m_des_dff=1, m_cbuf1=1, m_cbuf2=2, m_cbuf3=8, m_cbuf4=32, num_flop=1, num_des=4, device_intent='fast'):
+    def design(self, lch, pw, nw, m_des_dff, clkbuf_list, divbuf_list, num_flop, num_des, ext_clk, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -68,11 +68,17 @@ class serdes_templates__des(Module):
         self.parameters['pw'] = pw
         self.parameters['nw'] = nw
         self.parameters['m_des_dff'] = m_des_dff
-        self.parameters['m_cbuf1'] = m_cbuf1
-        self.parameters['m_cbuf2'] = m_cbuf2
-        self.parameters['m_cbuf3'] = m_cbuf3
-        self.parameters['m_cbuf4'] = m_cbuf4
+        self.parameters['clkbuf_list'] = clkbuf_list
+        self.parameters['divbuf_list'] = divbuf_list
         self.parameters['device_intent'] = device_intent
+        m_cbuf1 = clkbuf_list[0]
+        m_cbuf2 = clkbuf_list[1]
+        m_cbuf3 = clkbuf_list[2]
+        m_cbuf4 = clkbuf_list[3]
+        m_dbuf1 = divbuf_list[0]
+        m_dbuf2 = divbuf_list[1]
+        m_dbuf3 = divbuf_list[2]
+        m_dbuf4 = divbuf_list[3]
 
         out_name_list=[]
         out_term_list=[]
@@ -110,7 +116,10 @@ class serdes_templates__des(Module):
             out_name_list.append('IOUT%d'%i)
             in_term_list.append({'I': in_pin, 'O':d_pin, 'CLK':'clk_int', 'VSS':VSS_pin, 'VDD':VDD_pin})
             in_name_list.append('IIN%d'%i)
-            div_term_list.append({'I': divi_pin, 'O':divo_pin, 'CLK':'clk_int', 'ST':ST_pin, 'RST':RST_pin, 'VSS':VSS_pin, 'VDD':VDD_pin})
+            if ext_clk==False:
+                div_term_list.append({'I': divi_pin, 'O':divo_pin, 'CLK':'clk_int', 'ST':ST_pin, 'RST':RST_pin, 'VSS':VSS_pin, 'VDD':VDD_pin})
+            else:
+                div_term_list.append({'I': 'VSS', 'O':'VSS', 'CLK':'VSS', 'ST':ST_pin, 'RST':RST_pin, 'VSS':VSS_pin, 'VDD':VDD_pin})
             div_name_list.append('IDIV%d'%i)
 
         #print(term_list)
@@ -120,10 +129,10 @@ class serdes_templates__des(Module):
         self.instances['ICBUF2'].design(lch=lch, pw=pw, nw=nw, m=m_cbuf2, device_intent=device_intent)   
         self.instances['ICBUF3'].design(lch=lch, pw=pw, nw=nw, m=m_cbuf3, device_intent=device_intent)   
         self.instances['ICBUF4'].design(lch=lch, pw=pw, nw=nw, m=m_cbuf4, device_intent=device_intent)   
-        self.instances['IDBUF1'].design(lch=lch, pw=pw, nw=nw, m=m_cbuf1, device_intent=device_intent)   
-        self.instances['IDBUF2'].design(lch=lch, pw=pw, nw=nw, m=m_cbuf2, device_intent=device_intent)   
-        self.instances['IDBUF3'].design(lch=lch, pw=pw, nw=nw, m=m_cbuf3, device_intent=device_intent)   
-        self.instances['IDBUF4'].design(lch=lch, pw=pw, nw=nw, m=m_cbuf4, device_intent=device_intent)   
+        self.instances['IDBUF1'].design(lch=lch, pw=pw, nw=nw, m=m_dbuf1, device_intent=device_intent)   
+        self.instances['IDBUF2'].design(lch=lch, pw=pw, nw=nw, m=m_dbuf2, device_intent=device_intent)   
+        self.instances['IDBUF3'].design(lch=lch, pw=pw, nw=nw, m=m_dbuf3, device_intent=device_intent)   
+        self.instances['IDBUF4'].design(lch=lch, pw=pw, nw=nw, m=m_dbuf4, device_intent=device_intent)   
         #self.instances['IOUT'].design(lch=lch, pw=pw, nw=nw, m=m_dff, device_intent=device_intent)   #dff
         #self.instances['IIN'].design(lch=lch, pw=pw, nw=nw, m=m_dff, device_intent=device_intent)   #dff
         #self.instances['IDIV'].design(lch=lch, pw=pw, nw=nw, m=m_dff, device_intent=device_intent)   #dff
@@ -143,6 +152,7 @@ class serdes_templates__des(Module):
 
         #self.reconnect_instance_terminal('I0', 'CAL<%d:0>'%(num_bits-1), 'CAL<%d:0>'%(num_bits-1))
         
+        self.rename_pin('dout','dout<%d:0>'%(num_des-1))
         self.rename_pin('dout','dout<%d:0>'%(num_des-1))
 
     def get_layout_params(self, **kwargs):

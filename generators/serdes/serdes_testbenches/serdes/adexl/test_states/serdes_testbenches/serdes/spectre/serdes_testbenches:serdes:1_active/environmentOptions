@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 (envOpts analysisOrder) ("tran" "pz" "dcmatch" "stb" "envlp" "ac" "dc" "lf" "noise" "xf" "sp" "pss" "pac" "pstb" "pnoise" "pxf" "psp" "qpss" "qpac" "qpnoise" "qpxf" "qpsp" "hb" "hbac" "hbstb" "hbnoise" "hbxf" "sens" "acmatch")
 (envOpts autoDisplay) t
 (envOpts cmd64bit) nil
@@ -24,11 +25,26 @@
 (envOpts pllPlugin) ""
 (envOpts pllWizardinfo) ""
 (envOpts printComments) (nil nil)
+=======
+(envOpts analysisOrder) ("tran" "pz" "dcmatch" "stb" "envlp" "ac" "dc" "noise" "xf" "sp" "pss" "pac" "pstb" "pnoise" "pxf" "psp" "qpss" "qpac" "qpnoise" "qpxf" "qpsp" "hb" "hbac" "hbnoise" "sens")
+(envOpts autoDisplay) t
+(envOpts cmd64bit) nil
+(envOpts cpfIsPommardEnabled) t
+(envOpts enableArclength) nil
+(envOpts firstRun) t
+(envOpts paramRangeCheckFile) ""
+(envOpts pllPlugin) ""
+(envOpts pllWizardinfo) ""
+(envOpts printComments) nil
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 (envOpts restart) ""
 (envOpts savestate) ""
 (envOpts setTopLevelAsSubckt) nil
 (envOpts sst2usecolon) nil
+<<<<<<< HEAD
 (envOpts termDirectionMismatch) "ignore"
 (envOpts termMismatch) "ignore"
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 (envOpts userCmdLineOption) ""
 (envOpts vcoType) ""

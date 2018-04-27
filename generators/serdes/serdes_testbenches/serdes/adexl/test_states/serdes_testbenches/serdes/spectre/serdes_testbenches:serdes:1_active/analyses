@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 analysis(tran fields binnum) "16"
 analysis(tran fields calcStop) ""
 analysis(tran fields dynHeadListBox) (nil choices ("#         time                     value") value nil)
@@ -6,6 +7,12 @@ analysis(tran fields dynParamB) nil
 analysis(tran fields dynParamListBox) (nil choices nil value nil)
 analysis(tran fields dynchoice) "Parameter file"
 analysis(tran fields dynparam) ""
+=======
+analysis(tran fields dynHeadListBox) (nil choices ("#         time                     value") value nil)
+analysis(tran fields dynParam) ""
+analysis(tran fields dynParamListBox) (nil choices nil value nil)
+analysis(tran fields dynchoice) "Parameter file"
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 analysis(tran fields enable) (t)
 analysis(tran fields errpreset) "liberal"
 analysis(tran fields noisefmax) ""
@@ -25,13 +32,17 @@ analysis(tran fields param_vec) nil
 analysis(tran fields stop) "VAR(\"tsim\")"
 analysis(tran fields tranNoise) ""
 analysis(tran fields tranNoiseMultiRuns) ""
+<<<<<<< HEAD
 analysis(tran fields transtrobe) ""
 analysis(tran options FinalOpOtherParameters) ""
 analysis(tran options InfotimesOtherParameters) ""
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 analysis(tran options acnames) nil
 analysis(tran options actimes) nil
 analysis(tran options additionalParams) ""
 analysis(tran options annotate) "status"
+<<<<<<< HEAD
 analysis(tran options annotatedigits) "4"
 analysis(tran options area_factor) ""
 analysis(tran options area_predict) ""
@@ -42,6 +53,11 @@ analysis(tran options complvl) ""
 analysis(tran options compreltol) ""
 analysis(tran options compression) ""
 analysis(tran options compvabstol) ""
+=======
+analysis(tran options captab) nil
+analysis(tran options cmin) ""
+analysis(tran options compression) ""
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 analysis(tran options detail) "node"
 analysis(tran options emirfile) ""
 analysis(tran options emirformat) ""
@@ -81,10 +97,14 @@ analysis(tran options sort) "name"
 analysis(tran options start) "1n"
 analysis(tran options step) ""
 analysis(tran options strobedelay) ""
+<<<<<<< HEAD
 analysis(tran options strobeoutput) ""
 analysis(tran options strobeperiod) ""
 analysis(tran options tddb_fail_perc) ""
 analysis(tran options tddb_stress_time) ""
+=======
+analysis(tran options strobeperiod) ""
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 analysis(tran options threshold) "0.0"
 analysis(tran options timed) nil
 analysis(tran options write) "spectre.ic"

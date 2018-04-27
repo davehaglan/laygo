@@ -9,6 +9,12 @@ tmp1 = make_sevOutputStruct()
 tmp1 = (ncons nil)
 )
 tmp1->inLastSet = nil
+<<<<<<< HEAD
+=======
+tmp1->sweepSet = nil
+tmp1->depList = nil
+tmp1->waveSpec = nil
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->name = nil
 tmp1->expression = nil
 tmp1->signal = "/ser_out"
@@ -24,8 +30,11 @@ tmp1->saveMasterScriptFile = nil
 tmp1->isReferenced = nil
 tmp1->lastEvalTime = nil
 tmp1->origin = nil
+<<<<<<< HEAD
 tmp1->sweepSet = nil
 tmp1->depList = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->type = 'net
 tmp1->areaTable = nil
 tmp1->selectionDetail = (let
@@ -53,7 +62,10 @@ tmp1->graphType = nil
 tmp1->yaxisLabel = nil
 tmp1->label = nil
 tmp1->yaxisUnit = nil
+<<<<<<< HEAD
 tmp1->waveSpec = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1)
 )
 _outputList = nconc( _outputList savedComponent) 
@@ -67,6 +79,12 @@ tmp1 = make_sevOutputStruct()
 tmp1 = (ncons nil)
 )
 tmp1->inLastSet = nil
+<<<<<<< HEAD
+=======
+tmp1->sweepSet = nil
+tmp1->depList = nil
+tmp1->waveSpec = nil
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->name = nil
 tmp1->expression = nil
 tmp1->signal = "/d<3>"
@@ -82,8 +100,11 @@ tmp1->saveMasterScriptFile = nil
 tmp1->isReferenced = nil
 tmp1->lastEvalTime = nil
 tmp1->origin = nil
+<<<<<<< HEAD
 tmp1->sweepSet = nil
 tmp1->depList = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->type = 'net
 tmp1->areaTable = nil
 tmp1->selectionDetail = (let
@@ -111,7 +132,10 @@ tmp1->graphType = nil
 tmp1->yaxisLabel = nil
 tmp1->label = nil
 tmp1->yaxisUnit = nil
+<<<<<<< HEAD
 tmp1->waveSpec = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1)
 )
 _outputList = nconc( _outputList savedComponent) 
@@ -125,6 +149,12 @@ tmp1 = make_sevOutputStruct()
 tmp1 = (ncons nil)
 )
 tmp1->inLastSet = nil
+<<<<<<< HEAD
+=======
+tmp1->sweepSet = nil
+tmp1->depList = nil
+tmp1->waveSpec = nil
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->name = nil
 tmp1->expression = nil
 tmp1->signal = "/d<2>"
@@ -140,8 +170,11 @@ tmp1->saveMasterScriptFile = nil
 tmp1->isReferenced = nil
 tmp1->lastEvalTime = nil
 tmp1->origin = nil
+<<<<<<< HEAD
 tmp1->sweepSet = nil
 tmp1->depList = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->type = 'net
 tmp1->areaTable = nil
 tmp1->selectionDetail = (let
@@ -169,7 +202,10 @@ tmp1->graphType = nil
 tmp1->yaxisLabel = nil
 tmp1->label = nil
 tmp1->yaxisUnit = nil
+<<<<<<< HEAD
 tmp1->waveSpec = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1)
 )
 _outputList = nconc( _outputList savedComponent) 
@@ -183,6 +219,12 @@ tmp1 = make_sevOutputStruct()
 tmp1 = (ncons nil)
 )
 tmp1->inLastSet = nil
+<<<<<<< HEAD
+=======
+tmp1->sweepSet = nil
+tmp1->depList = nil
+tmp1->waveSpec = nil
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->name = nil
 tmp1->expression = nil
 tmp1->signal = "/d<1>"
@@ -198,8 +240,11 @@ tmp1->saveMasterScriptFile = nil
 tmp1->isReferenced = nil
 tmp1->lastEvalTime = nil
 tmp1->origin = nil
+<<<<<<< HEAD
 tmp1->sweepSet = nil
 tmp1->depList = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->type = 'net
 tmp1->areaTable = nil
 tmp1->selectionDetail = (let
@@ -227,7 +272,10 @@ tmp1->graphType = nil
 tmp1->yaxisLabel = nil
 tmp1->label = nil
 tmp1->yaxisUnit = nil
+<<<<<<< HEAD
 tmp1->waveSpec = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1)
 )
 _outputList = nconc( _outputList savedComponent) 
@@ -241,6 +289,12 @@ tmp1 = make_sevOutputStruct()
 tmp1 = (ncons nil)
 )
 tmp1->inLastSet = nil
+<<<<<<< HEAD
+=======
+tmp1->sweepSet = nil
+tmp1->depList = nil
+tmp1->waveSpec = nil
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->name = nil
 tmp1->expression = nil
 tmp1->signal = "/d<0>"
@@ -256,8 +310,11 @@ tmp1->saveMasterScriptFile = nil
 tmp1->isReferenced = nil
 tmp1->lastEvalTime = nil
 tmp1->origin = nil
+<<<<<<< HEAD
 tmp1->sweepSet = nil
 tmp1->depList = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->type = 'net
 tmp1->areaTable = nil
 tmp1->selectionDetail = (let
@@ -285,7 +342,10 @@ tmp1->graphType = nil
 tmp1->yaxisLabel = nil
 tmp1->label = nil
 tmp1->yaxisUnit = nil
+<<<<<<< HEAD
 tmp1->waveSpec = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1)
 )
 _outputList = nconc( _outputList savedComponent) 
@@ -299,6 +359,12 @@ tmp1 = make_sevOutputStruct()
 tmp1 = (ncons nil)
 )
 tmp1->inLastSet = nil
+<<<<<<< HEAD
+=======
+tmp1->sweepSet = nil
+tmp1->depList = nil
+tmp1->waveSpec = nil
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->name = nil
 tmp1->expression = nil
 tmp1->signal = "/in"
@@ -314,8 +380,11 @@ tmp1->saveMasterScriptFile = nil
 tmp1->isReferenced = nil
 tmp1->lastEvalTime = nil
 tmp1->origin = nil
+<<<<<<< HEAD
 tmp1->sweepSet = nil
 tmp1->depList = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->type = 'net
 tmp1->areaTable = nil
 tmp1->selectionDetail = (let
@@ -343,7 +412,10 @@ tmp1->graphType = nil
 tmp1->yaxisLabel = nil
 tmp1->label = nil
 tmp1->yaxisUnit = nil
+<<<<<<< HEAD
 tmp1->waveSpec = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1)
 )
 _outputList = nconc( _outputList savedComponent) 
@@ -357,6 +429,12 @@ tmp1 = make_sevOutputStruct()
 tmp1 = (ncons nil)
 )
 tmp1->inLastSet = nil
+<<<<<<< HEAD
+=======
+tmp1->sweepSet = nil
+tmp1->depList = nil
+tmp1->waveSpec = nil
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->name = nil
 tmp1->expression = nil
 tmp1->signal = "/clk_full"
@@ -372,8 +450,11 @@ tmp1->saveMasterScriptFile = nil
 tmp1->isReferenced = nil
 tmp1->lastEvalTime = nil
 tmp1->origin = nil
+<<<<<<< HEAD
 tmp1->sweepSet = nil
 tmp1->depList = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->type = 'net
 tmp1->areaTable = nil
 tmp1->selectionDetail = (let
@@ -401,7 +482,10 @@ tmp1->graphType = nil
 tmp1->yaxisLabel = nil
 tmp1->label = nil
 tmp1->yaxisUnit = nil
+<<<<<<< HEAD
 tmp1->waveSpec = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1)
 )
 _outputList = nconc( _outputList savedComponent) 
@@ -415,6 +499,12 @@ tmp1 = make_sevOutputStruct()
 tmp1 = (ncons nil)
 )
 tmp1->inLastSet = nil
+<<<<<<< HEAD
+=======
+tmp1->sweepSet = nil
+tmp1->depList = nil
+tmp1->waveSpec = nil
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->name = nil
 tmp1->expression = nil
 tmp1->signal = "/clk"
@@ -430,8 +520,11 @@ tmp1->saveMasterScriptFile = nil
 tmp1->isReferenced = nil
 tmp1->lastEvalTime = nil
 tmp1->origin = nil
+<<<<<<< HEAD
 tmp1->sweepSet = nil
 tmp1->depList = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->type = 'net
 tmp1->areaTable = nil
 tmp1->selectionDetail = (let
@@ -459,7 +552,10 @@ tmp1->graphType = nil
 tmp1->yaxisLabel = nil
 tmp1->label = nil
 tmp1->yaxisUnit = nil
+<<<<<<< HEAD
 tmp1->waveSpec = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1)
 )
 _outputList = nconc( _outputList savedComponent) 
@@ -473,6 +569,12 @@ tmp1 = make_sevOutputStruct()
 tmp1 = (ncons nil)
 )
 tmp1->inLastSet = nil
+<<<<<<< HEAD
+=======
+tmp1->sweepSet = nil
+tmp1->depList = nil
+tmp1->waveSpec = nil
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->name = nil
 tmp1->expression = nil
 tmp1->signal = "/clkb"
@@ -488,8 +590,11 @@ tmp1->saveMasterScriptFile = nil
 tmp1->isReferenced = nil
 tmp1->lastEvalTime = nil
 tmp1->origin = nil
+<<<<<<< HEAD
 tmp1->sweepSet = nil
 tmp1->depList = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->type = 'net
 tmp1->areaTable = nil
 tmp1->selectionDetail = (let
@@ -517,7 +622,10 @@ tmp1->graphType = nil
 tmp1->yaxisLabel = nil
 tmp1->label = nil
 tmp1->yaxisUnit = nil
+<<<<<<< HEAD
 tmp1->waveSpec = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1)
 )
 _outputList = nconc( _outputList savedComponent) 
@@ -531,6 +639,12 @@ tmp1 = make_sevOutputStruct()
 tmp1 = (ncons nil)
 )
 tmp1->inLastSet = nil
+<<<<<<< HEAD
+=======
+tmp1->sweepSet = nil
+tmp1->depList = nil
+tmp1->waveSpec = nil
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->name = nil
 tmp1->expression = nil
 tmp1->signal = "/divclk"
@@ -546,8 +660,11 @@ tmp1->saveMasterScriptFile = nil
 tmp1->isReferenced = nil
 tmp1->lastEvalTime = nil
 tmp1->origin = nil
+<<<<<<< HEAD
 tmp1->sweepSet = nil
 tmp1->depList = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->type = 'net
 tmp1->areaTable = nil
 tmp1->selectionDetail = (let
@@ -566,7 +683,11 @@ list(tmp1 tmp2)
 list(tmp1)
 )
 tmp1->value = nil
+<<<<<<< HEAD
 tmp1->plot = nil
+=======
+tmp1->plot = 't
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1->save = nil
 tmp1->march = nil
 tmp1->index = 10
@@ -575,96 +696,166 @@ tmp1->graphType = nil
 tmp1->yaxisLabel = nil
 tmp1->label = nil
 tmp1->yaxisUnit = nil
+<<<<<<< HEAD
 tmp1->waveSpec = nil
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1)
 )
 _outputList = nconc( _outputList savedComponent) 
 savedComponent = nil 
 _envSaveOptions = (let
+<<<<<<< HEAD
 (tmp1 tmp2 tmp3 tmp4 tmp5 tmp6 tmp7 tmp8 tmp9 tmp10 tmp11 tmp12 tmp13 tmp14 tmp15 tmp16 tmp17 tmp18 tmp19 tmp20 tmp21 tmp22 tmp23 tmp24)
 tmp1 = (let
 (tmp1 tmp2)
 tmp1 = 'extremesInfo
+=======
+(tmp1 tmp2 tmp3 tmp4 tmp5 tmp6 tmp7 tmp8 tmp9 tmp10 tmp11 tmp12 tmp13 tmp14 tmp15 tmp16 tmp17 tmp18 tmp19 tmp20 tmp21)
+tmp1 = (let
+(tmp1 tmp2)
+tmp1 = 'fastViewOption
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1 tmp2)
 )
 tmp2 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'assertsInfo
+=======
+tmp1 = 'simOutputFormat
+tmp2 = "psf"
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1 tmp2)
 )
 tmp3 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'designParamValInfo
 tmp2 = 't
+=======
+tmp1 = 'separator4
+tmp2 = ""
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1 tmp2)
 )
 tmp4 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'subcktsInfo
 tmp2 = 't
+=======
+tmp1 = 'extremesInfo
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1 tmp2)
 )
 tmp5 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'primitivesInfo
 tmp2 = 't
+=======
+tmp1 = 'assertsInfo
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1 tmp2)
 )
 tmp6 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'outputParamInfo
+=======
+tmp1 = 'designParamValInfo
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp2 = 't
 list(tmp1 tmp2)
 )
 tmp7 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'elementInfo
+=======
+tmp1 = 'subcktsInfo
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp2 = 't
 list(tmp1 tmp2)
 )
 tmp8 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'modelParamInfo
+=======
+tmp1 = 'primitivesInfo
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp2 = 't
 list(tmp1 tmp2)
 )
 tmp9 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'fastViewOption
+=======
+tmp1 = 'outputParamInfo
+tmp2 = 't
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1 tmp2)
 )
 tmp10 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'simOutputFormat
 tmp2 = "psf"
+=======
+tmp1 = 'elementInfo
+tmp2 = 't
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1 tmp2)
 )
 tmp11 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'outputFrame
 tmp2 = ""
+=======
+tmp1 = 'modelParamInfo
+tmp2 = 't
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1 tmp2)
 )
 tmp12 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'captab_threshold
+=======
+tmp1 = 'separator3
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp2 = ""
 list(tmp1 tmp2)
 )
 tmp13 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'captab_sort
 tmp2 = "name"
+=======
+tmp1 = 'saveahdlvars
+tmp2 = ""
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1 tmp2)
 )
 tmp14 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'captab_detail
 tmp2 = "node"
+=======
+tmp1 = 'separator2
+tmp2 = ""
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1 tmp2)
 )
 tmp15 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'infoOptions
 tmp2 = (let
 (tmp1 tmp2 tmp3 tmp4 tmp5 tmp6 tmp7 tmp8 tmp9)
@@ -766,28 +957,45 @@ list(tmp1 tmp2 tmp3 tmp4 tmp5 tmp6 tmp7)
 )
 list(tmp1 tmp2 tmp3 tmp4 tmp5 tmp6 tmp7 tmp8 tmp9)
 )
+=======
+tmp1 = 'useprobes
+tmp2 = ""
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 list(tmp1 tmp2)
 )
 tmp16 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'infoFrame
+=======
+tmp1 = 'subcktprobelvl
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp2 = ""
 list(tmp1 tmp2)
 )
 tmp17 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'saveahdlvars
+=======
+tmp1 = 'currents
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp2 = ""
 list(tmp1 tmp2)
 )
 tmp18 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'useprobes
+=======
+tmp1 = 'separator1
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp2 = ""
 list(tmp1 tmp2)
 )
 tmp19 = (let
 (tmp1 tmp2)
+<<<<<<< HEAD
 tmp1 = 'subcktprobelvl
 tmp2 = ""
 list(tmp1 tmp2)
@@ -800,22 +1008,33 @@ list(tmp1 tmp2)
 )
 tmp21 = (let
 (tmp1 tmp2)
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 tmp1 = 'nestlvl
 tmp2 = ""
 list(tmp1 tmp2)
 )
+<<<<<<< HEAD
 tmp22 = (let
+=======
+tmp20 = (let
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 (tmp1 tmp2)
 tmp1 = 'pwr
 tmp2 = ""
 list(tmp1 tmp2)
 )
+<<<<<<< HEAD
 tmp23 = (let
+=======
+tmp21 = (let
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 (tmp1 tmp2)
 tmp1 = 'save
 tmp2 = "allpub"
 list(tmp1 tmp2)
 )
+<<<<<<< HEAD
 tmp24 = (let
 (tmp1 tmp2)
 tmp1 = 'saveFrame
@@ -823,6 +1042,9 @@ tmp2 = ""
 list(tmp1 tmp2)
 )
 list(tmp1 tmp2 tmp3 tmp4 tmp5 tmp6 tmp7 tmp8 tmp9 tmp10 tmp11 tmp12 tmp13 tmp14 tmp15 tmp16 tmp17 tmp18 tmp19 tmp20 tmp21 tmp22 tmp23 tmp24)
+=======
+list(tmp1 tmp2 tmp3 tmp4 tmp5 tmp6 tmp7 tmp8 tmp9 tmp10 tmp11 tmp12 tmp13 tmp14 tmp15 tmp16 tmp17 tmp18 tmp19 tmp20 tmp21)
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 )
 savedComponent = list( _outputList _envSaveOptions ) 
 _outputList = 'unbound

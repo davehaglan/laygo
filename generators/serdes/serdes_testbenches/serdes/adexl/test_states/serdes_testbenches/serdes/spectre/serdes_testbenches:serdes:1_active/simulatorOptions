@@ -12,7 +12,10 @@
 (opts cols) "80"
 (opts colslog) ""
 (opts convdbg) ""
+<<<<<<< HEAD
 (opts dc_pivot_check) ""
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 (opts debug) ""
 (opts diagnose) ""
 (opts digits) "5"
@@ -29,7 +32,10 @@
 (opts homotopy) ""
 (opts iabstol) "1e-12"
 (opts iccapcheck) ""
+<<<<<<< HEAD
 (opts icpriority) ""
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 (opts ignshorts) ""
 (opts info) ""
 (opts inventory) ""
@@ -48,8 +54,11 @@
 (opts minr) ""
 (opts multithread) ""
 (opts narrate) ""
+<<<<<<< HEAD
 (opts noiseOffType) (nil nil nil nil nil)
 (opts noiseOnType) (nil nil nil nil nil)
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 (opts nonconv_topnum) ""
 (opts notation) ""
 (opts note) ""
@@ -67,14 +76,20 @@
 (opts preorder) ""
 (opts printstep) ""
 (opts quantities) ""
+<<<<<<< HEAD
 (opts rabsclamp) ""
 (opts rabsshort) ""
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 (opts rebuild_matrix) ""
 (opts redefinedparams) ""
 (opts reltol) "1e-3"
 (opts residualtol) ""
 (opts rforce) "1"
+<<<<<<< HEAD
 (opts rthresh) ""
+=======
+>>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 (opts scale) "1.0"
 (opts scalefactor) ""
 (opts scalem) "1.0"
