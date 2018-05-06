@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 //Revision 12
-=======
-//Revision 10
->>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 config serdes;
 design serdes_testbenches.serdes:schematic;
 liblist myLib;
@@ -13,11 +9,7 @@ stoplist spectre;
 
 cell serdes_generated.ser_2Nto1_4to1 binding :calibre;
 
-<<<<<<< HEAD
 inst (serdes_testbenches.serdes:schematic).XDUT binding :av_extracted;
-=======
-inst (serdes_testbenches.serdes:schematic).XDUT binding :calibre;
->>>>>>> 49700635aed8c87d8c9da2b4c7ad527685cede1f
 
 
 endconfig
