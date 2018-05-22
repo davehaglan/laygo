@@ -1271,8 +1271,8 @@ def generate_tgate(laygen, objectname_pfix,
                    gridname=rg_m1m2)
         laygen.via(None, np.array([0, 1]), refinstname=ip1.name, refpinname='D0', refinstindex=np.array([i, 0]),
                    gridname=rg_m1m2)
-    laygen.via(None, np.array([0, 1]), refinstname=in1.name, refpinname='D0', refinstindex=np.array([0, 0]), gridname=rg_m2m3)
-    laygen.via(None, np.array([0, 1]), refinstname=ip1.name, refpinname='D0', refinstindex=np.array([0, 0]), gridname=rg_m2m3)
+    laygen.via(None, np.array([0, 1]), refinstname=in1.name, refpinname='D0', refinstindex=np.array([m-1, 0]), gridname=rg_m2m3)
+    laygen.via(None, np.array([0, 1]), refinstname=ip1.name, refpinname='D0', refinstindex=np.array([m-1, 0]), gridname=rg_m2m3)
     ro0 = laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 1]), xy1=np.array([0, 1]), gridname0=rg_m2m3,
                        refinstname0=in1.name, refpinname0='D0', refinstindex0=np.array([m-1, 0]),
                        refinstname1=ip1.name, refpinname1='D0', refinstindex1=np.array([m-1, 0]))

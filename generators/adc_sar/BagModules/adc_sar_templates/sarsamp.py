@@ -46,7 +46,7 @@ class adc_sar_templates__sarsamp(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, m_sw, m_sw_arr, m_inbuf_list, m_outbuf_list, device_intent='fast'):
+    def design(self, lch, pw, nw, m_sw, m_sw_arr, m_inbuf_list, m_outbuf_list, tgate, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -70,13 +70,24 @@ class adc_sar_templates__sarsamp(Module):
         self.parameters['m_inbuf_list'] = m_inbuf_list
         self.parameters['m_outbuf_list'] = m_outbuf_list
         self.parameters['device_intent'] = device_intent
+        self.parameters['tgate'] = tgate
         #switch
-        self.array_instance('ISWP0', ['ISWP<%d:0>'%(m_sw_arr-1)])
-        self.array_instance('ISWN0', ['ISWN<%d:0>'%(m_sw_arr-1)])
-        for swp in self.instances['ISWP0']:
-            swp.design(lch=lch, pw=pw, nw=nw, m=m_sw, device_intent=device_intent)
-        for swn in self.instances['ISWN0']:
-            swn.design(lch=lch, pw=pw, nw=nw, m=m_sw, device_intent=device_intent)
+        if tgate == True:
+            self.replace_instance_master('ISWP0', 'logic_templates', 'tgate')
+            self.replace_instance_master('ISWN0', 'logic_templates', 'tgate')
+            self.array_instance('ISWP0', ['ISWP<%d:0>'%(m_sw_arr-1)], term_list=[{'ENB': 'out_int<0>', 'VDD':'VDD'}])
+            self.array_instance('ISWN0', ['ISWN<%d:0>'%(m_sw_arr-1)], term_list=[{'ENB': 'out_int<0>', 'VDD':'VDD'}])
+            for swp in self.instances['ISWP0']:
+                swp.design(lch=lch, pw=pw, nw=nw, m=m_sw, device_intent=device_intent)
+            for swn in self.instances['ISWN0']:
+                swn.design(lch=lch, pw=pw, nw=nw, m=m_sw, device_intent=device_intent)
+        else:
+            self.array_instance('ISWP0', ['ISWP<%d:0>'%(m_sw_arr-1)])
+            self.array_instance('ISWN0', ['ISWN<%d:0>'%(m_sw_arr-1)])
+            for swp in self.instances['ISWP0']:
+                swp.design(lch=lch, pw=pw, nw=nw, m=m_sw, device_intent=device_intent)
+            for swn in self.instances['ISWN0']:
+                swn.design(lch=lch, pw=pw, nw=nw, m=m_sw, device_intent=device_intent)
         #input buffer
         name_list=[]
         term_list=[]

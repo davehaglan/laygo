@@ -7,7 +7,7 @@ instances:
     cell_name: ser
     instpins:
       p1buf:
-        direction: output
+        direction: 
         net_name: "divclk"
         num_bits: 1
       VDD:
@@ -39,7 +39,7 @@ instances:
     cell_name: ser
     instpins:
       p1buf:
-        direction: output
+        direction: 
         net_name: "net2"
         num_bits: 1
       VDD:

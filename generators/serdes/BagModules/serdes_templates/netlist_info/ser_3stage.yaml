@@ -43,7 +43,7 @@ instances:
     cell_name: ser
     instpins:
       p1buf:
-        direction: output
+        direction: 
         net_name: "p1buf"
         num_bits: 1
       VDD:

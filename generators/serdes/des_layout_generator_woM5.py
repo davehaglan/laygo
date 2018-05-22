@@ -450,6 +450,9 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
     clkin_xy=laygen.get_inst_pin_xy(iclkbuf[0].name, 'I', rg_m3m4)
     rclkin=laygen.route(None, laygen.layers['metal'][3], xy0=clkin_xy[0], xy1=np.array([clkin_xy[0][0],0]), gridname0=rg_m3m4)
     laygen.boundary_pin_from_rect(rclkin, rg_m3m4, "clk", laygen.layers['pin'][3], size=0, direction='left')
+    divin_xy=laygen.get_inst_pin_xy(idivbuf[len(divbuf_list)-1].name, 'I', rg_m3m4)
+    rdivin=laygen.route(None, laygen.layers['metal'][3], xy0=divin_xy[0], xy1=np.array([divin_xy[0][0],0]), gridname0=rg_m3m4)
+    laygen.boundary_pin_from_rect(rdivin, rg_m3m4, "div<0>", laygen.layers['pin'][3], size=0, direction='left')
     din_xy34=laygen.get_inst_pin_xy(iffin[0].name, 'I', rg_m3m4)
     din_xy45=laygen.get_inst_pin_xy(iffin[0].name, 'I', rg_m4m5)
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], 
@@ -460,6 +463,8 @@ def generate_deserializer(laygen, objectname_pfix, templib_logic, placement_grid
     for i in range(num_des):
         datao_xy = laygen.get_inst_pin_xy(iffout[i].name, 'O', rg_m3m4)
         laygen.pin(name='dout<'+str(i)+'>', layer=laygen.layers['pin'][3], xy=datao_xy, gridname=rg_m3m4)
+    clkdiv_xy = laygen.get_inst_pin_xy(iffout[-1].name, 'CLK', rg_m3m4)
+    laygen.pin(name='clk_div', layer=laygen.layers['pin'][3], xy=clkdiv_xy, gridname=rg_m3m4)
     rst_xy34=laygen.get_inst_pin_xy(iffdiv[0].name, 'RST', rg_m3m4)
     rst_xy45=laygen.get_inst_pin_xy(iffdiv[0].name, 'RST', rg_m4m5)
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], 
@@ -567,6 +572,8 @@ if __name__ == '__main__':
         num_des=specdict['num_des']
         num_flop=specdict['num_flop']
         m_des_dff=sizedict['m_des_dff']
+        clkbuf_list=sizedict['des_clkbuf_list']
+        divbuf_list=sizedict['des_divbuf_list']
 
     print(cell_name+" generating")
     mycell_list.append(cell_name)
