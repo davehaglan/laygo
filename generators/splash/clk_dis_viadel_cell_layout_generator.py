@@ -27,6 +27,7 @@
 import laygo
 import numpy as np
 import os
+import yaml
 #import logging;logging.basicConfig(level=logging.DEBUG)
 
 def generate_clkdis_viadel_cell(laygen, objectname_pfix, logictemp_lib, working_lib, grid, origin=np.array([0, 0]), 
@@ -64,7 +65,7 @@ def generate_clkdis_viadel_cell(laygen, objectname_pfix, logictemp_lib, working_
     capdac.append(capdac0_1)
     
     ##Route, clock connection from TGATE to input
-    clki_y =laygen.grids.get_absgrid_coord_y(gridname=rg_m5m6, y=4)
+    clki_y =laygen.grids.get_absgrid_coord_y(gridname=rg_m5m6, y=4.13) # y number set by hand, To be fixed
     for i in range(m_clki):
         viadel_I_xy = laygen.get_inst_pin_xy(viacell.name, 'CLKI_' + str(i), rg_m5m6)[0]
         clkopx=laygen.route(None, laygen.layers['metal'][5], xy0=viadel_I_xy, xy1=np.array([viadel_I_xy[0],clki_y]), gridname0=rg_m5m6)
@@ -72,7 +73,8 @@ def generate_clkdis_viadel_cell(laygen, objectname_pfix, logictemp_lib, working_
                                       layer=laygen.layers['pin'][5], size=2, direction='top', netname='CLKI')
 
     ##Route, clock connection from TGATE to output
-    clko_y =laygen.grids.get_absgrid_coord_y(gridname=rg_m5m6, y=-20)
+    # clko_y =laygen.grids.get_absgrid_coord_y(gridname=rg_m5m6, y=-20)
+    clko_y = -laygen.get_template_size(name='capdac', gridname=rg_m5m6, libname='clk_dis_generated')[1]
     clko_xy = []
     for i in range(m_clko):
         viadel_O_xy = laygen.get_inst_pin_xy(viacell.name, 'CLKO_' + str(i), rg_m5m6)[0]
@@ -128,6 +130,12 @@ def generate_clkdis_viadel_cell(laygen, objectname_pfix, logictemp_lib, working_
         vddr_xy = laygen.get_inst_pin_xy(viacell.name, 'VDD1_' + str(i), rg_m3m4_thick2)
         laygen.pin(name='VDD1_'+str(i), layer=laygen.layers['pin'][4], xy=vddr_xy, gridname=rg_m3m4_thick2, netname='VDD')
     
+    # prboundary
+    y_grid = laygen.get_template('boundary_bottom', libname=utemplib).size[1]
+    size_y1 = (int(viacell.size[1]/y_grid+0.99))*y_grid
+    size_y2 = 0-(int(capdac0_0.size[1]/y_grid+0.99)*y_grid)
+    size_x = viacell.size[0]
+    laygen.add_rect(None, np.array([origin + [0, size_y2], origin + np.array([size_x, size_y1])]), laygen.layers['prbnd'])
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
@@ -158,13 +166,26 @@ if __name__ == '__main__':
 
     #params
     params = dict(
-        m_clki = 12,
-        m_clko = 4,
+        m_clki = 24,
+        m_clko = 2,
         num_bits = 5,
         unit_size = 2,
         num_vss_h=4, 
         num_vdd_h=4
     )
+    #load from preset
+    load_from_file=True
+    yamlfile_spec="adc_sar_spec.yaml"
+    yamlfile_size="adc_sar_size.yaml"
+    if load_from_file==True:
+        with open(yamlfile_spec, 'r') as stream:
+            specdict = yaml.load(stream)
+        with open(yamlfile_size, 'r') as stream:
+            sizedict = yaml.load(stream)
+        params['m_clki']=sizedict['clk_dis_htree']['m_track']
+        params['m_clko'] = sizedict['clk_dis_htree']['m_clko']
+        params['num_bits'] = sizedict['clk_dis_cdac']['num_bits']
+        params['unit_size'] = sizedict['clk_dis_cdac']['m']
 
     #grid
     grid = dict(

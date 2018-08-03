@@ -46,7 +46,7 @@ class clk_dis_templates__capdac(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, num_bits=5, unit_cell=1):
+    def design(self, unit_cell, num_bits):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in

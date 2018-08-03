@@ -320,9 +320,9 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     rvdd_sar_m5, rvss_sar_m5 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAR_M5_', 
                 layer=laygen.layers['metal'][5], gridname=rg_m4m5_thick, netnames=['VDD', 'VSS'], direction='y', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=None,
-                offset_start_index=8, offset_end_index=0)
+                offset_start_index=7, offset_end_index=0)
     #sa_m6
-    num_vref_routes_m6=4
+    num_vref_routes_m6=5
     x1 = laygen.get_inst_xy(name=isa.name, gridname=rg_m5m6_thick)[0]\
          +laygen.get_template_size(name=isa.cellname, gridname=rg_m5m6_thick, libname=workinglib)[0]
     x1_phy = laygen.get_inst_xy(name=isa.name)[0]\

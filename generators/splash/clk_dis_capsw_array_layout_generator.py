@@ -27,6 +27,7 @@
 import laygo
 import numpy as np
 import os
+import yaml
 #import logging;logging.basicConfig(level=logging.DEBUG)
 
 def create_power_pin_from_inst(laygen, layer, gridname, inst_left, inst_right):
@@ -127,8 +128,20 @@ if __name__ == '__main__':
     #laygen.templates.display()
     #laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)
 
+    #load from preset
+    load_from_file=True
+    yamlfile_spec="adc_sar_spec.yaml"
+    yamlfile_size="adc_sar_size.yaml"
+    if load_from_file==True:
+        with open(yamlfile_spec, 'r') as stream:
+            specdict = yaml.load(stream)
+        with open(yamlfile_size, 'r') as stream:
+            sizedict = yaml.load(stream)
+        num_bits = sizedict['clk_dis_cdac']['num_bits']
+        m_capsw = sizedict['clk_dis_capsw']['m']
+
     mycell_list = []
-    m_list = [5]
+    m_list = [num_bits]
     #capdrv generation
     for num in m_list:
         cellname='cap_sw_array'
@@ -137,7 +150,7 @@ if __name__ == '__main__':
         laygen.add_cell(cellname)
         laygen.sel_cell(cellname)
         generate_capsw_array(laygen, objectname_pfix='CD0', templib_logic=logictemplib,
-                            placement_grid=pg, routing_grid_m3m4=rg_m3m4, num_bits=num, m=2, origin=np.array([0, 0]))
+                            placement_grid=pg, routing_grid_m3m4=rg_m3m4, num_bits=num, m=m_capsw, origin=np.array([0, 0]))
         laygen.add_template_from_cell()
 
 

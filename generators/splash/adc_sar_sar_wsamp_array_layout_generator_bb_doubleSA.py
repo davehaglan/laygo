@@ -33,16 +33,17 @@ import yaml
 import os
 #import logging;logging.basicConfig(level=logging.DEBUG)
 
-def generate_sar_wsamp_array(laygen, objectname_pfix, workinglib, sar_name, 
+def generate_sar_wsamp_bb_doubleSA_array(laygen, objectname_pfix, workinglib, sar_name, 
                        placement_grid,
-                       routing_grid_m3m4, routing_grid_m4m5, routing_grid_m5m6, routing_grid_m5m6_thick,
+                       routing_grid_m3m4, routing_grid_m4m5, routing_grid_m4m5_basic_thick, routing_grid_m5m6, routing_grid_m5m6_thick,
                        routing_grid_m5m6_basic_thick,
-                       num_bits=9, num_slices=8, slice_order=[0,7,1,6,2,5,3,4], origin=np.array([0, 0])):
+                       num_bits=9, num_slices=8, slice_order=[0,7,1,6,2,5,3,4], use_offset=True, origin=np.array([0, 0])):
     """generate sar array """
     pg = placement_grid
 
     rg_m3m4 = routing_grid_m3m4
     rg_m4m5 = routing_grid_m4m5
+    rg_m4m5_basic_thick = routing_grid_m4m5_basic_thick
     rg_m5m6 = routing_grid_m5m6
     rg_m5m6_thick = routing_grid_m5m6_thick
     rg_m5m6_basic_thick = routing_grid_m5m6_basic_thick
@@ -55,12 +56,14 @@ def generate_sar_wsamp_array(laygen, objectname_pfix, workinglib, sar_name,
     #reference coordinates
     pdict_m3m4 = [] 
     pdict_m4m5 = []
+    pdict_m4m5_basic_thick = []
     pdict_m5m6 = []
     pdict_m5m6_thick = []
     pdict_m5m6_thick_basic = []
     for i in range(num_slices):
         pdict_m3m4.append(laygen.get_inst_pin_xy(None, None, rg_m3m4, index=np.array([i, 0])))
         pdict_m4m5.append(laygen.get_inst_pin_xy(None, None, rg_m4m5, index=np.array([i, 0])))
+        pdict_m4m5_basic_thick.append(laygen.get_inst_pin_xy(None, None, rg_m4m5_basic_thick, index=np.array([i, 0])))
         pdict_m5m6.append(laygen.get_inst_pin_xy(None, None, rg_m5m6, index=np.array([i, 0])))
         pdict_m5m6_thick.append(laygen.get_inst_pin_xy(None, None, rg_m5m6_thick, index=np.array([i, 0])))
         pdict_m5m6_thick_basic.append(laygen.get_inst_pin_xy(None, None, rg_m5m6_basic_thick, index=np.array([i, 0])))
@@ -129,38 +132,34 @@ def generate_sar_wsamp_array(laygen, objectname_pfix, workinglib, sar_name,
                                  gridname=rg_m5m6_basic_thick)
     '''
     #ofp/ofm route
-    for i in range(num_slices):
-        rv, rh = laygen.route_vh(layerv=laygen.layers['metal'][3], layerh=laygen.layers['metal'][4], 
-                                 xy0=pdict_m3m4[i][isar.name]['OSP'][0], 
-                                 xy1=np.array([0, pdict_m3m4[i][isar.name]['OSP'][0][1]+6-(num_slices*3)+3*slice_order[i]]), 
-                                 gridname=rg_m3m4)
-        '''
-        rv, rh = laygen.route_vh(layerv=laygen.layers['metal'][3], layerh=laygen.layers['metal'][4], 
-                                 xy0=pdict_m3m4[i][isar.name]['OSP'][0]+np.array([2, 0]), 
-                                 xy1=np.array([0, pdict_m3m4[i][isar.name]['OSP'][0][1]+6-(num_slices*3)+3*slice_order[i]]), 
-                                 gridname=rg_m3m4)
-        rv, rh = laygen.route_vh(layerv=laygen.layers['metal'][3], layerh=laygen.layers['metal'][4], 
-                                 xy0=pdict_m3m4[i][isar.name]['OSP'][0]+np.array([4, 0]), 
-                                 xy1=np.array([0, pdict_m3m4[i][isar.name]['OSP'][0][1]+6-(num_slices*3)+3*slice_order[i]]), 
-                                 gridname=rg_m3m4)
-        '''
-        laygen.boundary_pin_from_rect(rh, rg_m3m4, 'OSP' + str(slice_order[i]), laygen.layers['pin'][4], size=8, direction='left')
+    if use_offset == True:
+        for i in range(num_slices):
+            rv, rh = laygen.route_vh(layerv=laygen.layers['metal'][3], layerh=laygen.layers['metal'][4],
+                                     xy0=pdict_m3m4[i][isar.name]['OSP'][0],
+                                     xy1=np.array([0, pdict_m3m4[i][isar.name]['OSP'][0][1]+6-(num_slices*3)+3*slice_order[i]]),
+                                     gridname=rg_m3m4)
+            laygen.boundary_pin_from_rect(rh, rg_m3m4, 'OSP' + str(slice_order[i]), laygen.layers['pin'][4], size=8, direction='left')
 
-        rv, rh = laygen.route_vh(layerv=laygen.layers['metal'][3], layerh=laygen.layers['metal'][4], 
-                                 xy0=pdict_m3m4[i][isar.name]['OSM'][0], 
-                                 xy1=np.array([0, pdict_m3m4[i][isar.name]['OSM'][0][1]+6-(num_slices*3)+3*slice_order[i]+1]), 
+            rv, rh = laygen.route_vh(layerv=laygen.layers['metal'][3], layerh=laygen.layers['metal'][4],
+                                     xy0=pdict_m3m4[i][isar.name]['OSM'][0],
+                                     xy1=np.array([0, pdict_m3m4[i][isar.name]['OSM'][0][1]+6-(num_slices*3)+3*slice_order[i]+1]),
+                                     gridname=rg_m3m4)
+            laygen.boundary_pin_from_rect(rh, rg_m3m4, 'OSM' + str(slice_order[i]), laygen.layers['pin'][4], size=8, direction='left')
+    else:
+        for i in range(num_slices):
+            rv, rh = laygen.route_vh(layerv=laygen.layers['metal'][3], layerh=laygen.layers['metal'][4],
+                                     xy0=pdict_m3m4[i][isar.name]['OSP'][0],
+                                     xy1=np.array([0, pdict_m3m4[i][isar.name]['OSP'][0][1] + 0 - (num_slices * 0)]),
+                                     gridname=rg_m3m4)
+            rv, rh = laygen.route_vh(layerv=laygen.layers['metal'][3], layerh=laygen.layers['metal'][4],
+                                 xy0=pdict_m3m4[i][isar.name]['OSM'][0],
+                                 xy1=np.array([0, pdict_m3m4[i][isar.name]['OSM'][0][1] + 0 - (num_slices * 0)]),
                                  gridname=rg_m3m4)
-        '''
-        rv, rh = laygen.route_vh(layerv=laygen.layers['metal'][3], layerh=laygen.layers['metal'][4], 
-                                 xy0=pdict_m3m4[i][isar.name]['OSM'][0]+np.array([-2, 0]), 
-                                 xy1=np.array([0, pdict_m3m4[i][isar.name]['OSM'][0][1]+6-(num_slices*3)+3*slice_order[i]+1]), 
-                                 gridname=rg_m3m4)
-        rv, rh = laygen.route_vh(layerv=laygen.layers['metal'][3], layerh=laygen.layers['metal'][4], 
-                                 xy0=pdict_m3m4[i][isar.name]['OSM'][0]+np.array([-4, 0]), 
-                                 xy1=np.array([0, pdict_m3m4[i][isar.name]['OSM'][0][1]+6-(num_slices*3)+3*slice_order[i]+1]), 
-                                 gridname=rg_m3m4)
-        '''
-        laygen.boundary_pin_from_rect(rh, rg_m3m4, 'OSM' + str(slice_order[i]), laygen.layers['pin'][4], size=8, direction='left')
+            rv0, rh1 = laygen.route_vh(layerv=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
+                                 xy0=pdict_m4m5_basic_thick[i][isar.name]['VDDSAR0'][0]+[1,0],
+                                 xy1=np.array([0, pdict_m4m5_basic_thick[i][isar.name]['OSM'][0][1] + 0 - (num_slices * 0)]),
+                                 gridname=rg_m4m5_basic_thick)
+
     #pins
     sar_template = laygen.templates.get_template(sar_name, workinglib)
     sar_pins=sar_template.pins
@@ -179,6 +178,7 @@ def generate_sar_wsamp_array(laygen, objectname_pfix, workinglib, sar_name,
         for j in range(num_bits):
             laygen.add_pin('ADCOUT' + str(slice_order[i]) + '<'+str(j)+'>', 'ADCOUT' + str(slice_order[i]) + '<'+str(j)+'>', sar_xy+sar_pins['ADCOUT<'+str(j)+'>']['xy'], sar_pins['ADCOUT<'+str(j)+'>']['layer'])
         sar_xy+=sar_template.xy[1]*np.array([1, 0])
+
     #VREF pins
     sar_xy=deepcopy(isar.xy[0])
     for pn, p in sar_pins.items():
@@ -194,11 +194,27 @@ def generate_sar_wsamp_array(laygen, objectname_pfix, workinglib, sar_name,
             pxy=sar_xy+sar_pins[pn]['xy']
             pxy[1][0]=pxy[1][0]*num_slices
             laygen.add_pin(pn, 'VREF<2>', pxy, sar_pins[pn]['layer'])
+    # body bias pins
+    sar_xy=deepcopy(isar.xy)
+    for pn, p in sar_pins.items():
+        if pn.startswith('samp_body'):
+            for i in range(num_slices):
+                pxy = sar_xy + sar_pins[pn]['xy']
+                laygen.add_pin(pn+str(slice_order[i])+'_M6', 'samp_body%d'%(slice_order[i]), pxy, sar_pins[pn]['layer'])
+                sar_xy[0] = sar_xy[0] + isar.size[0]
+        sar_xy = deepcopy(isar.xy)
+        if pn.startswith('bottom_body'):
+            for i in range(num_slices):
+                pxy = sar_xy + sar_pins[pn]['xy']
+                laygen.add_pin('bottom_body%d_M7' % (slice_order[i]), 'bottom_body%d' % (slice_order[i]), pxy, sar_pins[pn]['layer'])
+                sar_xy[0] = sar_xy[0] + isar.size[0]
+
     #VDD/VSS pins (just duplicate from lower hierarchy cells)
     sar_xy=deepcopy(isar.xy[0])
     vddsampcnt=0
     vddsarcnt=0
-    vsscnt=0
+    vsssampcnt=0
+    vsssarcnt=0
     for pn, p in sar_pins.items():
         if pn.startswith('VDDSAMP'):
             #check if it's a horizontal rail
@@ -214,13 +230,20 @@ def generate_sar_wsamp_array(laygen, objectname_pfix, workinglib, sar_name,
                 pxy[1][0]=pxy[1][0]*num_slices
                 laygen.add_pin('VDDSAR' + str(vddsarcnt), 'VDDSAR', pxy, sar_pins[pn]['layer'])
                 vddsarcnt+=1
-        if pn.startswith('VSS'):
+        if pn.startswith('VSSSAMP'):
             #check if it's a horizontal rail
             if sar_pins[pn]['xy'][0][0]==0 and sar_pins[pn]['xy'][1][0]==sar_template.xy[1][0]: 
                 pxy=sar_xy+sar_pins[pn]['xy']
                 pxy[1][0]=pxy[1][0]*num_slices
-                laygen.add_pin('VSS' + str(vsscnt), 'VSS:', pxy, sar_pins[pn]['layer'])
-                vsscnt+=1
+                laygen.add_pin('VSSSAMP' + str(vsssampcnt), 'VSS:', pxy, sar_pins[pn]['layer'])
+                vsssampcnt+=1
+        if pn.startswith('VSSSAR'):
+            # check if it's a horizontal rail
+            if sar_pins[pn]['xy'][0][0] == 0 and sar_pins[pn]['xy'][1][0] == sar_template.xy[1][0]:
+                pxy = sar_xy + sar_pins[pn]['xy']
+                pxy[1][0] = pxy[1][0] * num_slices
+                laygen.add_pin('VSSSAR' + str(vsssarcnt), 'VSS:', pxy, sar_pins[pn]['layer'])
+                vsssarcnt += 1
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
@@ -256,6 +279,7 @@ if __name__ == '__main__':
     rg_m2m3 = 'route_M2_M3_cmos'
     rg_m3m4 = 'route_M3_M4_basic'
     rg_m4m5 = 'route_M4_M5_basic'
+    rg_m4m5_basic_thick = 'route_M4_M5_basic_thick'
     rg_m5m6 = 'route_M5_M6_basic'
     rg_m5m6_thick = 'route_M5_M6_thick'
     rg_m5m6_basic_thick = 'route_M5_M6_basic_thick'
@@ -280,18 +304,22 @@ if __name__ == '__main__':
         num_bits=specdict['n_bit']
         num_slices=specdict['n_interleave']
         slice_order=sizedict['slice_order']
+        use_offset = sizedict['use_offset']
+
     #sar generation
-    cellname='sar_wsamp_array'
+    cellname='sar_wsamp_bb_doubleSA_array'
     sar_name = 'sar_wsamp_bb_doubleSA'
 
     print(cellname+" generating")
     mycell_list.append(cellname)
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
-    generate_sar_wsamp_array(laygen, objectname_pfix='SA0', workinglib=workinglib, sar_name=sar_name,
-                             placement_grid=pg, routing_grid_m3m4=rg_m3m4, routing_grid_m4m5=rg_m4m5, routing_grid_m5m6=rg_m5m6,
+    generate_sar_wsamp_bb_doubleSA_array(laygen, objectname_pfix='SA0', workinglib=workinglib, sar_name=sar_name,
+                             placement_grid=pg, routing_grid_m3m4=rg_m3m4, routing_grid_m4m5=rg_m4m5,
+                             routing_grid_m4m5_basic_thick=rg_m4m5_basic_thick, routing_grid_m5m6=rg_m5m6,
                              routing_grid_m5m6_thick=rg_m5m6_thick, routing_grid_m5m6_basic_thick=rg_m5m6_basic_thick,
-                             num_bits=num_bits, num_slices=num_slices, slice_order=slice_order, origin=np.array([0, 0]))
+                             num_bits=num_bits, num_slices=num_slices, slice_order=slice_order,
+                             use_offset=use_offset, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
     
 

@@ -15,10 +15,12 @@ files=[
     'laygo/generators/splash/clk_dis_capdac_layout_generator.py',
     'laygo/generators/splash/clk_dis_viadel_cell_layout_generator.py',
     'laygo/generators/splash/clk_dis_viadel_layout_generator.py',
-    'laygo/generators/splash/clk_dis_htree_layout_generator.py',
+    #'laygo/generators/splash/clk_dis_htree_layout_generator.py',
     'laygo/generators/splash/clk_dis_viadel_htree_layout_generator.py',
-    'laygo/generators/splash/clk_dis_viadel_htree_schematic_generator.py',
-    'laygo/generators/splash/clk_dis_viadel_htree_lvs.py',
+    #'laygo/generators/splash/clk_dis_viadel_htree_schematic_generator.py',
+    'laygo/generators/splash/clk_dis_viadel_cal_layout.py',
+    #'laygo/generators/splash/clk_dis_viadel_cal_schematic.py',
+    #'laygo/generators/splash/clk_dis_viadel_htree_lvs.py',
     ]
 
 for f in files:

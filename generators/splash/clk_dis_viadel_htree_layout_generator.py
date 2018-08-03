@@ -28,9 +28,11 @@ import laygo
 import numpy as np
 import os
 import yaml
+import laygo.GridLayoutGeneratorHelper as laygenhelper #utility functions
 #import logging;logging.basicConfig(level=logging.DEBUG)
 
-def generate_clkdis_viadel_htree(laygen, objectname_pfix, logictemp_lib, working_lib, grid, pitch_x, num_ways, origin=np.array([0, 0])):
+def generate_clkdis_viadel_htree(laygen, objectname_pfix, logictemp_lib, working_lib, grid, pitch_x, num_ways,
+                                 trackm, m_clko, num_bits, origin=np.array([0, 0])):
     """generate htree cell """
 
     pg = grid['pg']
@@ -44,16 +46,18 @@ def generate_clkdis_viadel_htree(laygen, objectname_pfix, logictemp_lib, working
     rg_m3m4_dense = grid['rg_m3m4_dense']
     rg_m3m4_thick2 = grid['rg_m3m4_thick2']
     rg_m4m5 = grid['rg_m4m5']
+    rg_m4m5_thick = grid['rg_m4m5_thick']
     rg_m5m6 = grid['rg_m5m6']
-    rg_m6m7 = grid['rg_m6m7'] 
+    rg_m5m6_thick = grid['rg_m5m6_thick']
+    rg_m6m7 = grid['rg_m6m7']
 
-    trackm = 9
+    # trackm = 24
     #len_h = laygen.grids.get_absgrid_coord_x(gridname=rg_m4m5, x=20.16)
-    len_h = laygen.grids.get_absgrid_coord_x(gridname=rg_m4m5, x=pitch_x)*num_ways/8
+    len_h = laygen.grids.get_absgrid_coord_x(gridname=rg_m4m5, x=pitch_x)*num_ways/16
     len_in = laygen.grids.get_absgrid_coord_x(gridname=rg_m4m5, x=2)
     #num_ways = 8
-    num_bits = 5
-    m_clko = 4
+    # num_bits = 5
+    # m_clko = 2
     num_vss_h=4
     num_vdd_h=4
 
@@ -87,30 +91,34 @@ def generate_clkdis_viadel_htree(laygen, objectname_pfix, logictemp_lib, working
     ##create input vias and metals
     
     for i in range(trackm):
-        for j in range (trackm):
-            laygen.via(None, xy=np.array([ht0_WI_xy[0]+2*i, ht0_WI_xy[1]+2*j]), gridname=rg_m4m5)
-            laygen.via(None, xy=np.array([ht1_WI_xy[0]+2*i, ht1_WI_xy[1]+2*j]), gridname=rg_m4m5)
+        # for j in range (trackm):
+        #     laygen.via(None, xy=np.array([ht0_WI_xy[0]+2*i, ht0_WI_xy[1]+2*j]), gridname=rg_m4m5)
+        #     laygen.via(None, xy=np.array([ht1_WI_xy[0]+2*i, ht1_WI_xy[1]+2*j]), gridname=rg_m4m5)
 
-        laygen.route(None, laygen.layers['metal'][5], xy0=np.array([ht0_WI_xy[0]+2*i, ht0_WI_xy[1]]), xy1=np.array([ht0_WI_xy[0]+2*i, ht0_WI_xy[1]+2*(trackm-1)]),
+        vipx =laygen.route(None, laygen.layers['metal'][5], xy0=np.array([ht0_WI_xy[0]+2*i, ht0_WI_xy[1]]),
+                           xy1=np.array([ht0_WI_xy[0]+2*i, ht0_WI_xy[1]+2*(trackm-1)+trackm]),
                 gridname0=rg_m4m5)
-        laygen.route(None, laygen.layers['metal'][5], xy0=np.array([ht1_WI_xy[0]+2*i, ht1_WI_xy[1]]), xy1=np.array([ht1_WI_xy[0]+2*i, ht1_WI_xy[1]+2*(trackm-1)]), 
-                gridname0=rg_m4m5)
-
-        laygen.route(None, laygen.layers['metal'][4], xy0=np.array([ht0_WI_xy[0], ht0_WI_xy[1]+2*i]), xy1=np.array([ht0_WI_xy[0]+(len_h*2-2), ht0_WI_xy[1]+2*i]),
-                gridname0=rg_m4m5)
-        laygen.route(None, laygen.layers['metal'][4], xy0=np.array([ht1_WI_xy[0]+2*(trackm-1), ht1_WI_xy[1]+2*i]), xy1=np.array([ht1_WI_xy[0]-(len_h*2-2), ht1_WI_xy[1]+2*i]), 
+        vinx =laygen.route(None, laygen.layers['metal'][5], xy0=np.array([ht1_WI_xy[0]+2*i, ht1_WI_xy[1]]),
+                           xy1=np.array([ht1_WI_xy[0]+2*i, ht1_WI_xy[1]+2*(trackm-1)+trackm]),
                 gridname0=rg_m4m5)
 
-        for j in range (trackm):
-            laygen.via(None, xy=np.array([ht0_WI_xy[0]+(len_h*2-2)-2*i, ht0_WI_xy[1]+2*j]), gridname=rg_m4m5)
-            laygen.via(None, xy=np.array([ht1_WI_xy[0]-(len_h*2-2)+2*i, ht1_WI_xy[1]+2*j]), gridname=rg_m4m5)
+        # laygen.route(None, laygen.layers['metal'][4], xy0=np.array([ht0_WI_xy[0], ht0_WI_xy[1]+2*i]), xy1=np.array([ht0_WI_xy[0]+(len_h*2-2), ht0_WI_xy[1]+2*i]),
+        #         gridname0=rg_m4m5)
+        # laygen.route(None, laygen.layers['metal'][4], xy0=np.array([ht1_WI_xy[0]+2*(trackm-1), ht1_WI_xy[1]+2*i]), xy1=np.array([ht1_WI_xy[0]-(len_h*2-2), ht1_WI_xy[1]+2*i]),
+        #         gridname0=rg_m4m5)
 
-        vipx=laygen.route(None, laygen.layers['metal'][5], xy0=np.array([ht0_WI_xy[0]+(len_h*2-2)-2*i, ht0_WI_xy[1]]), xy1=np.array([ht0_WI_xy[0]+(len_h*2-2)-2*i, ht0_WI_xy[1]+len_in]),
-                gridname0=rg_m4m5)
+        # for j in range (trackm):
+        #     laygen.via(None, xy=np.array([ht0_WI_xy[0]+(len_h*2-2)-2*i, ht0_WI_xy[1]+2*j]), gridname=rg_m4m5)
+        #     laygen.via(None, xy=np.array([ht1_WI_xy[0]-(len_h*2-2)+2*i, ht1_WI_xy[1]+2*j]), gridname=rg_m4m5)
+
+        # vipx=laygen.route(None, laygen.layers['metal'][5], xy0=np.array([ht0_WI_xy[0]+(len_h*2-2)-2*i, ht0_WI_xy[1]]),
+        #                   xy1=np.array([ht0_WI_xy[0]+(len_h*2-2)-2*i, ht0_WI_xy[1]+trackm*2]),
+        #         gridname0=rg_m4m5)
         laygen.boundary_pin_from_rect(vipx, gridname=rg_m4m5, name='CLKIP_' + str(i),
                                       layer=laygen.layers['pin'][5], size=2, direction='top', netname='CLKIP')
-        vinx=laygen.route(None, laygen.layers['metal'][5], xy0=np.array([ht1_WI_xy[0]-(len_h*2-2)+2*i, ht1_WI_xy[1]]), xy1=np.array([ht1_WI_xy[0]-(len_h*2-2)+2*i, ht1_WI_xy[1]+len_in]), 
-                gridname0=rg_m4m5)
+        # vinx=laygen.route(None, laygen.layers['metal'][5], xy0=np.array([ht1_WI_xy[0]-(len_h*2-2)+2*i, ht1_WI_xy[1]]),
+        #                   xy1=np.array([ht1_WI_xy[0]-(len_h*2-2)+2*i, ht1_WI_xy[1]+trackm*2]),
+        #         gridname0=rg_m4m5)
         laygen.boundary_pin_from_rect(vinx, gridname=rg_m4m5, name='CLKIN_' + str(i),
                                       layer=laygen.layers['pin'][5], size=2, direction='top', netname='CLKIN')
 
@@ -140,18 +148,75 @@ def generate_clkdis_viadel_htree(laygen, objectname_pfix, logictemp_lib, working
 
 
     ##VDD and VSS pin
+    rvssl_m4 = []
+    rvssr_m4 = []
+    rvddl_m4 = []
+    rvddr_m4 = []
+    rvdd_m5 = []
+    rvss_m5 = []
     for i in range(num_ways):
         for j in range(num_vss_h):
             vssl_xy = laygen.get_inst_pin_xy(viadel.name, 'VSS0_' + str(i) + '_' + str(j), rg_m3m4_thick2)
-            laygen.pin(name='VSS0_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vssl_xy, gridname=rg_m3m4_thick2, netname='VSS')
+            rvssl_m4.append(laygen.route(None, laygen.layers['metal'][4], xy0=vssl_xy[0], xy1=vssl_xy[1], gridname0=rg_m3m4_thick2))
             vssr_xy = laygen.get_inst_pin_xy(viadel.name, 'VSS1_' + str(i) + '_' + str(j), rg_m3m4_thick2)
-            laygen.pin(name='VSS1_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vssr_xy, gridname=rg_m3m4_thick2, netname='VSS')
+            rvssr_m4.append(laygen.route(None, laygen.layers['metal'][4], xy0=vssr_xy[0], xy1=vssr_xy[1], gridname0=rg_m3m4_thick2))
+            # laygen.pin(name='VSS0_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vssl_xy, gridname=rg_m3m4_thick2, netname='VSS')
+            # laygen.pin(name='VSS1_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vssr_xy, gridname=rg_m3m4_thick2, netname='VSS')
         for j in range(num_vdd_h):
             vddl_xy = laygen.get_inst_pin_xy(viadel.name, 'VDD0_' + str(i) + '_' + str(j), rg_m3m4_thick2)
-            laygen.pin(name='VDD0_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vddl_xy, gridname=rg_m3m4_thick2, netname='VDD')
+            rvddl_m4.append(laygen.route(None, laygen.layers['metal'][4], xy0=vddl_xy[0], xy1=vddl_xy[1], gridname0=rg_m3m4_thick2))
             vddr_xy = laygen.get_inst_pin_xy(viadel.name, 'VDD1_' + str(i) + '_' + str(j), rg_m3m4_thick2)
-            laygen.pin(name='VDD1_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vddr_xy, gridname=rg_m3m4_thick2, netname='VDD') 
-    
+            rvddr_m4.append(laygen.route(None, laygen.layers['metal'][4], xy0=vddr_xy[0], xy1=vddr_xy[1], gridname0=rg_m3m4_thick2))
+            # laygen.pin(name='VDD0_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vddl_xy, gridname=rg_m3m4_thick2, netname='VDD')
+            # laygen.pin(name='VDD1_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vddr_xy, gridname=rg_m3m4_thick2, netname='VDD')
+        rvddl_m5, rvssl_m5 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='M5L',
+                                                                           layer=laygen.layers['metal'][5],
+                                                                           gridname=rg_m4m5_thick,
+                                                                           netnames=['VDD', 'VSS'], direction='y',
+                                                                           input_rails_rect=[rvddl_m4, rvssl_m4],
+                                                                           generate_pin=False,
+                                                                           overwrite_start_coord=0,
+                                                                           overwrite_end_coord=None,
+                                                                           overwrite_num_routes=None,
+                                                                           offset_start_index=0,
+                                                                           offset_end_index=0)
+        rvddr_m5, rvssr_m5 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='M5L',
+                                                                               layer=laygen.layers['metal'][5],
+                                                                               gridname=rg_m4m5_thick,
+                                                                               netnames=['VDD', 'VSS'], direction='y',
+                                                                               input_rails_rect=[rvddr_m4, rvssr_m4],
+                                                                               generate_pin=False,
+                                                                               overwrite_start_coord=0,
+                                                                               overwrite_end_coord=None,
+                                                                               overwrite_num_routes=None,
+                                                                               offset_start_index=0,
+                                                                               offset_end_index=-2)
+        rvddl_m4 = []
+        rvssl_m4 = []
+        rvddr_m4 = []
+        rvssr_m4 = []
+        rvdd_m5 += rvddl_m5
+        rvdd_m5 += rvddr_m5
+        rvss_m5 += rvssl_m5
+        rvss_m5 += rvssr_m5
+    rvdd_m6, rvss_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='M6',
+                                                                           layer=laygen.layers['pin'][6],
+                                                                           gridname=rg_m5m6_thick,
+                                                                           netnames=['VDD', 'VSS'], direction='x',
+                                                                           input_rails_rect=[rvdd_m5, rvss_m5],
+                                                                           generate_pin=True,
+                                                                           overwrite_start_coord=0,
+                                                                           overwrite_end_coord=None,
+                                                                           overwrite_num_routes=None,
+                                                                           offset_start_index=2,
+                                                                           offset_end_index=0)
+
+    #prboundary
+    size_x=laygen.templates.get_template('clk_dis_viadel', libname='clk_dis_generated').size[0]
+    y_grid = laygen.get_template('tap', libname=logictemplib).size[1]
+    size_y = (int(laygen.get_rect(vinx.name).xy1[1] / y_grid) + 1) * y_grid
+    print('prb:', size_x, size_y)
+    laygen.add_rect(None, np.array([origin, origin+np.array([size_x, size_y])]), laygen.layers['prbnd'])
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
@@ -194,7 +259,9 @@ if __name__ == '__main__':
         rg_m3m4_dense = 'route_M3_M4_dense',
         rg_m3m4_thick2 = 'route_M3_M4_basic_thick',
         rg_m4m5 = 'route_M4_M5_basic',
+        rg_m4m5_thick = 'route_M4_M5_thick',
         rg_m5m6 = 'route_M5_M6_basic',
+        rg_m5m6_thick = 'route_M5_M6_thick',
         rg_m6m7 = 'route_M6_M7_basic',
         rg_m1m2_pin = 'route_M1_M2_basic',
         rg_m2m3_pin = 'route_M2_M3_basic',
@@ -213,6 +280,9 @@ if __name__ == '__main__':
             sizedict = yaml.load(stream)
         lvl=int(np.log2(specdict['n_interleave']/2))
         num_ways=specdict['n_interleave']
+        trackm=sizedict['clk_dis_htree']['m_track']
+        m_clko=sizedict['clk_dis_htree']['m_clko']
+        num_bits = sizedict['clk_dis_cdac']['num_bits']
 
     print(workinglib)
 
@@ -223,7 +293,8 @@ if __name__ == '__main__':
     mycell_list.append(cellname)
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
-    generate_clkdis_viadel_htree(laygen, objectname_pfix='VIADEL_H', logictemp_lib=logictemplib, working_lib=workinglib, grid=grid, pitch_x=pitch_x, num_ways=num_ways)
+    generate_clkdis_viadel_htree(laygen, objectname_pfix='VIADEL_H', logictemp_lib=logictemplib, working_lib=workinglib,
+                                 grid=grid, pitch_x=pitch_x, num_ways=num_ways, trackm=trackm, m_clko=m_clko, num_bits=num_bits)
     laygen.add_template_from_cell()
 
     print(mycell_list)

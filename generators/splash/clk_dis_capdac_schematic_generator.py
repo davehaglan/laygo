@@ -25,6 +25,16 @@ params = dict(
 	num_bits = 5,
 	unit_cell = 2,
     )
+load_from_file=True
+yamlfile_spec="adc_sar_spec.yaml"
+yamlfile_size="adc_sar_size.yaml"
+if load_from_file==True:
+    with open(yamlfile_spec, 'r') as stream:
+        specdict = yaml.load(stream)
+    with open(yamlfile_size, 'r') as stream:
+        sizedict = yaml.load(stream)
+    params['unit_cell']=sizedict['clk_dis_cdac']['m']
+    params['num_bits']=sizedict['clk_dis_cdac']['num_bits']
 
 print('creating BAG project')
 prj = bag.BagProject()

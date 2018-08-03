@@ -312,14 +312,14 @@ def generate_tap(laygen, objectname_pfix, placement_grid, routing_grid_m1m2,
     xy_tap0 = laygen.get_template_pin_xy(in0.cellname, 'TAP0', rg_m1m2)[0, :]
     laygen.route(None, laygen.layers['metal'][1], xy0=xy_tap0 * np.array([1, 0]), xy1=xy_tap0, gridname0=rg_m1m2,
                  refinstname0=in0.name, refinstname1=in0.name)
-    laygen.route(None, laygen.layers['metal'][1], xy0=xy_tap0 * np.array([1, 0]), xy1=xy_tap0, gridname0=rg_m1m2,
+    laygen.route(None, laygen.layers['metal'][1], xy0=xy_tap0 * np.array([1, 0])+[0,1], xy1=xy_tap0, gridname0=rg_m1m2,
                  refinstname0=ip0.name, refinstname1=in0.name)
     laygen.via(None, xy_tap0 * np.array([1, 0]), refinstname=in0.name, gridname=rg_m1m2)
     #laygen.via(None, xy_tap0 * np.array([1, 0]), refinstname=ip0.name, gridname=rg_m1m2)
     xy_tap1 = laygen.get_template_pin_xy(in0.cellname, 'TAP0', rg_m1m2)[0, :]
     laygen.route(None, laygen.layers['metal'][1], xy0=xy_tap1 * np.array([1, 0]), xy1=xy_tap1, gridname0=rg_m1m2,
                  refinstname0=in0.name, refinstname1=in0.name)
-    laygen.route(None, laygen.layers['metal'][1], xy0=xy_tap1 * np.array([1, 0]), xy1=xy_tap1, gridname0=rg_m1m2,
+    laygen.route(None, laygen.layers['metal'][1], xy0=xy_tap1 * np.array([1, 0])+[0,1], xy1=xy_tap1, gridname0=rg_m1m2,
                  refinstname0=ip0.name, refinstname1=in0.name)
     laygen.via(None, xy_tap1 * np.array([1, 0]), refinstname=in0.name, gridname=rg_m1m2)
     #laygen.via(None, xy_tap1 * np.array([1, 0]), refinstname=ip0.name, gridname=rg_m1m2)

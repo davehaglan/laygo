@@ -524,16 +524,16 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     rvddl_m6, rvssl_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='L_M6_', 
                 layer=laygen.layers['metal'][6], gridname=rg_m5m6_thick, netnames=['VDD', 'VSS'], direction='x', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=None,
-                offset_start_index=1, offset_end_index=-1)
+                offset_start_index=2, offset_end_index=-1)
     x1 = laygen.get_inst_xy(name=bnd_right[0].name, gridname=rg_m5m6_thick)[0]\
          +laygen.get_template_size(name=bnd_right[0].cellname, gridname=rg_m5m6_thick, libname=utemplib)[0]
     x1_phy = laygen.get_inst_xy(name=bnd_right[0].name)[0]\
          +laygen.get_template_size(name=bnd_right[0].cellname, libname=utemplib)[0]
     input_rails_rect = [rvddr_m5, rvssr_m5]
     rvddr_m6, rvssr_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='R_M6_', 
-                layer=laygen.layers['metal'][6], gridname=rg_m5m6_thick, netnames=['VDD', 'VSS'], direction='x', 
+                layer=laygen.layers['metal'][6], gridname=rg_m5m6_thick, netnames=['VDD', 'VSS'], direction='x',
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=None, overwrite_end_coord=x1,
-                offset_start_index=1, offset_end_index=-1)
+                offset_start_index=2, offset_end_index=-1)
     #trimming
     for r in rvddr_m6:
         r.xy1[0]=x1_phy
