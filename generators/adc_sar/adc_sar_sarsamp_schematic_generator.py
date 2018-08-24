@@ -19,7 +19,6 @@ params = dict(
     m_inbuf_list=[16, 24],
     m_outbuf_list=[8, 32],
     device_intent='fast',
-    tgate=False,
     )
 
 load_from_file=True
@@ -38,7 +37,6 @@ if load_from_file==True:
     params['pw']=sizedict['pw']
     params['nw']=sizedict['nw']
     params['device_intent']=sizedict['device_intent']
-    params['tgate']=specdict['samp_with_tgate']
 
 
 print('creating BAG project')

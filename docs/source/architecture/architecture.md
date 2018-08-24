@@ -11,7 +11,6 @@ There are 2 generator modules implemented in laygo.
 
     * **BaseLayoutGenerator**: generates layout on physical grids.
     * **GridLayoutGenerator**: generates layout on abstract grids.
-    * **GridLayoutGenerator2**: improved version of GridLayoutGenerator. Not backward compatible.
 
     Since the GridLayoutGenerator class is based on BaseLayoutGenerator,
     users may instantiate the GridLayoutGenerator even for physical grid

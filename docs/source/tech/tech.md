@@ -1,40 +1,23 @@
 # Laygo setup for new technologies
 
-This section describes how to setup laygo for a new technology.
-This document is written to help users create setup files and template
-libraries.
-
-## Example setup files
-Instead of starting from scratch, you can reuse some parts of example
-files. Check the following repos for reference:
-
-* cds_ff_mpt: [https://github.com/ucb-art/BAG2_cds_ff_mpt](https://github.com/ucb-art/BAG2_cds_ff_mpt)
-* NCSU freePDK45: [https://github.com/ucb-art/BAG2_freePDK45](https://github.com/ucb-art/BAG2_freePDK45)
+This section describes how to make a laygo setup for the technology in
+use. This document is assuming BAG is already set up for the technology
+(at least for schematic generations), but no laygo setup is created.
+This document helps users to prepare technology dependent setup files
+and template libraries.
 
 ## Overview
 
-Following items are need to be set up laygo.
+## Example setup files
+Instead of starting from scratch, example setups for generic
+technologies are provided. You can get files in the following repos.
 
-* BAG and PDK
-* config files: laygo_config.yaml, layermap file (GDS only)
-* template and grid library: (tech_name)_microtemplates_dense
-for most example generators, and associated yaml files
-
-## BAG setup
-
-Since laygo exports the generated layout to BAG (unless you are
-exporting to GDS), you need to setup BAG before setting up laygo.
-
-> Note: Techinfo in BAG does not need to be set up because DummyTechinfo
-is used by default.
-
-## Config file (laygo_config.yaml)
-
-Laygo uses **laygo_config.yaml** to store technology specific
-information. For each technology, user need to create/update
-**laygo_config.yaml** to contain correct parameters.
-An example **laygo_config.yaml** file for **cds_ff_mpt**
-technology is shown below.
+## laygo_config.yaml
+The only technology file to be described by users is
+**laygo_config.yaml**. It defines basic technology dependent information
+(i.e. layer names for route layers). Here's a example
+**laygo_config.yaml** for **cds_ff_mpt** technology (Cadence generic PDK
+for finfet and multiple patterning technology).
 
 ```
 #default_laygo_config file
@@ -76,28 +59,30 @@ text_layer: [text, drawing]
 physical_resolution: 0.001
 ```
 
-All fields need to filled in proper format, and contains information
-explained below:
+Here's description on items.
 
-* **metal_layers** (list): list of [*layername*, *layerpurpose*]
+* **metal_layers** (list): contains [*layername*, *layerpurpose*]
  of metal layers to be used for routing, starting from the bottom
  layer to the top layer.
-* **via_layers** (list): list of [*layername*, *layerpurpose*]
+* **via_layers** (list): contains [*layername*, *layerpurpose*]
  of via layers to be used for routing, starting from the bottom
  layer to the top layer.
-* **pin_layers** (list): list of [*layername*, *layerpurpose*]
+* **pin_layers** (list): contains [*layername*, *layerpurpose*]
  of pin layers to be used for routing, starting from the bottom
  layer to the top layer.
-* **prboundary_layer** (list): list of [*layername*, *layerpurpose*]
+* **prboundary_layer** (list): contains [*layername*, *layerpurpose*]
  of the prBoundary layer for placement.
 * **tech_lib** (str): name of technology.
-* **text_layers** (list): list of [*layername*, *layerpurpose*]
+* **text_layers** (list): contains [*layername*, *layerpurpose*]
  of the text layer for annotations.
 * **physical_resolution** (float): minimum layout grid resolution in
 micron. Most advanced nodes have grid resolutions ranging from 0.01
 to 0.001.
 
-## (tech_lib).layermap (GDS flow only)
+As you can see, all parameters are straightforward and can easily be
+filled up.
+
+## (tech_lib).layermap (optional)
 
 For **GDS flow**, a separate layermap file is needed to map the layer
 names to actual layer ids. Usually the layermap file is provided by
@@ -141,73 +126,58 @@ VIA7        drawing 17   0
 VIA8        drawing 18   0
 ```
 
-## Template library
+## template library
 
-**Refer to Woorham's [Template library setup guide](https://ucb-art.github.io/laygo/tech/Laygo_templates_guide.html) for more detailed instructions.**
+This is the most critical part for the setup. Laygo uses handcraft
+templates of primitive devices for layout generations, meaning that
+users need to build the template devices by themselves if not provided.
+Basically there are 4 different cells to be created.
 
-This is the most critical part of the laygo setup. Laygo uses hand-drawn
-templates of primitive devices and automatic generations are done in
-block levels. Therefore, users need to build the primitive templates and
- grids associated with the templates in advance.
-Template and grid cells in laygo are classified into 4 categories.
-
-1. Placement grids: defines the grid resolutions to place devices.
-**prboundary_layer** is used for specifying the resolution.
+1. Placement grids: defines the grid resolutions that devices will
+ be placed. **prboundary_layer** is used for setting the resolution.
 2. Routing grids: defines the grid resolutions that routing wires
- and vias will be placed on. Rect objects with **metal_layers** are used
- to define the width / spacing / coordinate of the routing grid. Vias
- are placed at cross-sections of route wires, and they are constructed
- as via template cells.
+ and vias will be placed. Rects with **metal_layers** are used to
+ define the width / spacing / coordinate of the routing grid.
 3. Device template cells: templates of devices will be placed on one
- of the placement grids. **prboundary_layer** is used to specify
- boundaries of the template, and **pin_layers** are used to specify pin
- regions and pin names.
+ of the placement grids
 4. Via template cells: templates of vias will be placed on one of
  the route grids.
 
-The figure shown below contains all types of template and grid cells.
-
 ![techex](images/tech_example.png)
 
-Since there are no limitations on architecting grids, **multiple
-placement grids / routing grids / devices / vias** can be
-used for same technology / layer / device types. For example, 2
-different types of grids (e.g thin and thick grids) can be used for
-Metal1-Metal2 grids. Or 2 different set of NMOS templates (short channel
-devices and long channel ones) can be constructed. These aspects are
-one of major differences from digital place and route flows.
+Template and grid cell examples
 
-The way of constructing template and grid cells is up to designer's
-intent. However, there should be some levels of compatibility to
-enable code reusability over different technologies. We propose
-guidelines to architect template and grids cells for the reusability,
-especially for exampler scripts in the generators directory.
+**Multiple placement grids / routing grids / devices / vias** can be
+defined for same technology / layer / device type. For example, users
+can use 2 different types of grids (e.g thin and thick grids) for Metal1
+and Metal2. Or 2 different set of NMOS templates (short channel and
+long channel) can be defined. This gives a flexibility on generated
+layout while still abstracting design rules.
 
-#### Template library name
-For the generator examples, (tech_lib)_microtemplates_(flavor) is used
-for the primitive template library name. **dense** flavor is used for
-most example cases, which stands for optimized to reduce active area.
-For example, **cds_ff_mpt_microtemplates_dense** is the primitive
-template library name of cds_ff_mpt technology.
+The set of template / grid elements depends on user's preference, but
+here are cells that need to be included to generate layout in the
+example documentation.
+
+#### Example template library name
+For generator examples, (tech_lib)_microtemplates_dense is used for the
+primitive template library name
 
 ![libname](images/tech_libname.png)
 
-#### Placement grids
-1. placement_basic : a default placement grid layout. **Contacted Poly
-Pitch(CPO)** (for **x** axis) and a multiple of **fin grid** (for **y***
-axis) are good candidates for the placement grid. Note that the size of
-any compatible templates should be a multiple of the placement grid.
+#### Example placement grids
+1. placement_basic : a default placement grid cell. **Contacted Poly
+Pitch(CPO)** for the resolution in **x** direction and **fin
+grid** or **contact pitch** is a good candidate for the
+placement grid. Note that the size of any compatible templates
+should be a multiple of the placement grid.
 
     ![placement_basic](images/tech_placement_basic.png)
 
-The figure above shows the placement_basic example for cds_ff_mpt
-technology. CPO was used for the x-resolution and fin grid was used for
-the y-resolution.
+    placement_basic example
 
-#### Routing grids and vias
+#### Example routing grids and vias
 1. route_M1_M2_basic : a default M1_M2_route grid cell. **Minimum metal
-spacings and widths** are used for the resolution and metal width,
-assuming vias can be placed in diagonal directions.
+spacings and widths** are used for the resolution and metal width.
 
     ![m1_m2_basic](images/tech_m1_m2.png)
 
@@ -218,8 +188,7 @@ assuming vias can be placed in diagonal directions.
 
 3. route_M1_M2_mos, route_M1_M2_cmos : M2_M2 grids that are designed
 to be compatible to NMOS/PMOS/CMOS stuctures. Note that grid coordinates
- are aligned to gate/drain/source pins of fets, and 2 horizontal tracks
- crosses the source and drain region.
+ are aligned to gate/drain/source pins of fets.
 
     ![m1_m2_mos](images/tech_m1_m2_mos.png)
 
@@ -239,7 +208,7 @@ example generators.
     **M5_M6 grids**: route_M5_M6_basic, route_M5_M6_basic_thick,
     route_M5_M6_thick
 
-#### Mosfet templates
+#### Example mosfet templates
 
 ##### Basic idea
 
@@ -318,21 +287,11 @@ Equivalent ntap cells need to be implemented as well:
 1. **ntap_fast_center_nf2**: 2 finger ntap core
 1. **ntap_fast_space**: 1x spacing cell
 1. **ntap_fast_space_nf2**: 1x spacing cell
-1. **ntap_fast_space_nf4**: 1x spacing cell
-
-#### MOMCAP family cells
-
-1. **momcap_boundary_1x**: 1x momcap boundary
-1. **momcap_center_1x**: 1x momcap core
-1. **momcap_dmy_1x**: 1x momcap dummy (place where center cells are not placed)
-1. **momcap_dmyblk_1x**: 1x momcap dummy metal fill block cell
-1. **momcap_dmyptn_mX_1x**: 1x momcap dummy metal fill (mX) cell
-
-![mom_type](images/tech_mom.png)
+1. **ntap_fast_space_Nf4**: 1x spacing cell
 
 #### Converting template layout to laygo database
 
-After building all primitive templates, open bag and type
+After building those primitive templates, open bag and type
 
 ```
     run laygo/labs/lab2_a_gridlayoutgenerator_constructtemplate.py

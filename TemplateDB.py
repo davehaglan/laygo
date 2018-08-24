@@ -35,11 +35,11 @@ from .TemplateObject import *
 import yaml
 import logging
 
-class TemplateDB(dict):
+class TemplateDB():
     """
     layout template database class
     """
-    templates = None
+    templates = dict()
     """dict: template dictionary"""
     plib = None
     """str: current library handle"""
@@ -48,8 +48,7 @@ class TemplateDB(dict):
         """
         Constructor
         """
-        #self.templates = dict()
-        self.templates = self
+        self.templates = dict()
 
     # aux functions
     def display(self, libname=None, templatename=None):
@@ -72,7 +71,7 @@ class TemplateDB(dict):
         else:
             templatestr = "template:" + templatename
         print('Display ' + libstr + templatestr)
-        for ln, l in self.items():
+        for ln, l in self.templates.items():
             if libname==None or libname==ln:
                 print('[Library]' + ln)
                 for sn, s in l.items():
@@ -93,7 +92,7 @@ class TemplateDB(dict):
         """
         if libname == None:
             libstr = ""
-            liblist=self.keys()
+            liblist=self.templates.keys()
         else:
             libstr = "lib:" + libname + ", "
             liblist=[libname]
@@ -101,7 +100,7 @@ class TemplateDB(dict):
         export_dict = dict()
         print('Export template' + libstr)
         for ln in liblist:
-            l=self[ln]
+            l=self.templates[ln]
             export_dict[ln] = dict()
             print('[Library]' + ln)
             for sn, s in l.items():
@@ -126,7 +125,7 @@ class TemplateDB(dict):
         logging.debug('Import template')
         for ln, l in ydict.items():
             logging.debug('[Library]' + ln)
-            if not ln in self:
+            if not ln in self.templates:
                 self.add_library(ln)
             self.sel_library(ln)
             for sn, s in l.items():
@@ -147,8 +146,8 @@ class TemplateDB(dict):
         ----------
         db : TemplateDB
         """
-        for ln, l in db.items():
-            if not ln in self:
+        for ln, l in db.templates.items():
+            if not ln in self.templates:
                 self.add_library(ln)
             self.sel_library(ln)
             for sn, s in l.items():
@@ -164,7 +163,7 @@ class TemplateDB(dict):
         name : str
             library name
         """
-        self[name] = dict()
+        self.templates[name] = dict()
 
     def add_template(self, name, libname=None, xy=np.array([[0, 0], [0, 0]]), pins=dict()):
         """
@@ -182,10 +181,10 @@ class TemplateDB(dict):
             pin dictionary
         """
         if libname == None: libname = self._plib
-        if not libname in self:
+        if not libname in self.templates:
             self.add_library(libname)
         s = TemplateObject(name=name, xy=xy, pins=pins)
-        self[libname][name] = s
+        self.templates[libname][name] = s
         logging.debug('AddTemplate: name:' + name + ' xy:' + str(xy.tolist()))
         return s
 
@@ -217,6 +216,6 @@ class TemplateDB(dict):
             template object
         """
         if libname==None: libname=self.plib
-        if not templatename in self[libname].keys(): #template is not in the library,
+        if not templatename in self.templates[libname].keys(): #template is not in the library,
             raise KeyError(templatename+" template is not in "+libname+'. Check corresponding yaml file')
-        return self[libname][templatename]
+        return self.templates[libname][templatename]

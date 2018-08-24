@@ -47,109 +47,125 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
     #abe
     iabe=laygen.place(name="I" + objectname_pfix + 'ABE0', templatename=sarabe_name,
                       gridname=pg, xy=origin, template_libname=workinglib)
-    yabe=laygen.get_xy(obj=laygen.get_template(name=sarabe_name, libname=workinglib), gridname=pg)[1]
+    yabe=laygen.get_template_size(name=sarabe_name, gridname=pg, libname=workinglib)[1]
     #afe
     iafe=laygen.relplace(name="I" + objectname_pfix + 'AFE0', templatename=sarafe_name,
                          gridname=pg, refinstname=iabe.name, direction='top', template_libname=workinglib)
 
     #reference coordinates
-    pdict_m3m4 = laygen.get_inst_pin_xy(None, None, rg_m3m4)
-    pdict_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5)
-    pdict_m5m6 = laygen.get_inst_pin_xy(None, None, rg_m5m6)
-    pdict_m5m6_thick = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick)
+    pdict_m3m4 = laygen.get_inst_pin_coord(None, None, rg_m3m4)
+    pdict_m4m5 = laygen.get_inst_pin_coord(None, None, rg_m4m5)
+    pdict_m5m6 = laygen.get_inst_pin_coord(None, None, rg_m5m6)
+    pdict_m5m6_thick = laygen.get_inst_pin_coord(None, None, rg_m5m6_thick)
 
     #zp/zm/zmid route
-    x0=pdict_m5m6[iafe.name]['ENL0<0>'][0][0]+4
-    y0=pdict_m5m6[iabe.name]['ZP<0>'][0][1]-10
+    x0=pdict_m4m5[iafe.name]['ENL0<0>'][0][0]+4
+    y0=pdict_m4m5[iabe.name]['ZP<0>'][0][1]+36
     for i in range(1, num_bits):
+        if i==2: #hack
+            idx_zp=y0+i+3*(num_bits-1)
+            idx_zm=y0+i+1*(num_bits-1)
+            idx_zmid=y0+i+2*(num_bits-1)
+        elif i==4:
+            idx_zp=y0+i+0*(num_bits-1)
+            idx_zm=y0+i+3*(num_bits-1)
+            idx_zmid=y0+i+2*(num_bits-1)
+        elif i==6:
+            idx_zp=y0+i+3*(num_bits-1)+2
+            idx_zm=y0+i+1*(num_bits-1)
+            idx_zmid=y0+i+3*(num_bits-1)
+        else:
+            idx_zp=y0+i+0*(num_bits-1)
+            idx_zm=y0+i+1*(num_bits-1)
+            idx_zmid=y0+i+2*(num_bits-1)
         #ZP-ENL/R
-        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
-                                           pdict_m5m6[iabe.name]['ZP<'+str(i)+'>'][0],
-                                           pdict_m5m6[iafe.name]['ENL'+str(i-1)+'<0>'][0],
-                                           y0+2*i+0*(num_bits-1)+2-2+8, rg_m5m6)
-        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
-                                           pdict_m5m6[iabe.name]['ZP<'+str(i)+'>'][0],
-                                           pdict_m5m6[iafe.name]['ENR'+str(i-1)+'<2>'][0],
-                                           y0+2*i+0*(num_bits-1)+2-2+8, rg_m5m6)
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                                           pdict_m4m5[iabe.name]['ZP<'+str(i)+'>'][0],
+                                           pdict_m4m5[iafe.name]['ENL'+str(i-1)+'<0>'][0],
+                                           idx_zp, rg_m4m5)
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                                           pdict_m4m5[iabe.name]['ZP<'+str(i)+'>'][0],
+                                           pdict_m4m5[iafe.name]['ENR'+str(i-1)+'<2>'][0],
+                                           idx_zp, rg_m4m5)
         #ZM-ENL/R
-        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
-                                           pdict_m5m6[iabe.name]['ZM<'+str(i)+'>'][0],
-                                           pdict_m5m6[iafe.name]['ENL'+str(i-1)+'<2>'][0],
-                                           y0+2*i+2*(num_bits-1)+2-2+8, rg_m5m6)
-        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
-                                           pdict_m5m6[iabe.name]['ZM<'+str(i)+'>'][0],
-                                           pdict_m5m6[iafe.name]['ENR'+str(i-1)+'<0>'][0],
-                                           y0+2*i+2*(num_bits-1)+2-2+8, rg_m5m6)
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                                           pdict_m4m5[iabe.name]['ZM<'+str(i)+'>'][0],
+                                           pdict_m4m5[iafe.name]['ENL'+str(i-1)+'<2>'][0],
+                                           idx_zm, rg_m4m5)
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                                           pdict_m4m5[iabe.name]['ZM<'+str(i)+'>'][0],
+                                           pdict_m4m5[iafe.name]['ENR'+str(i-1)+'<0>'][0],
+                                           idx_zm, rg_m4m5)
         #ZMID-ENL/R
-        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
-                                           pdict_m5m6[iabe.name]['ZMID<'+str(i)+'>'][0],
-                                           pdict_m5m6[iafe.name]['ENL'+str(i-1)+'<1>'][0],
-                                           y0+2*i+4*(num_bits-1)+2-2+8, rg_m5m6)
-        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
-                                           pdict_m5m6[iabe.name]['ZMID<'+str(i)+'>'][0],
-                                           pdict_m5m6[iafe.name]['ENR'+str(i-1)+'<1>'][0],
-                                           y0+2*i+4*(num_bits-1)+2-2+8, rg_m5m6)
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                                           pdict_m4m5[iabe.name]['ZMID<'+str(i)+'>'][0],
+                                           pdict_m4m5[iafe.name]['ENL'+str(i-1)+'<1>'][0],
+                                           idx_zmid, rg_m4m5)
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                                           pdict_m4m5[iabe.name]['ZMID<'+str(i)+'>'][0],
+                                           pdict_m4m5[iafe.name]['ENR'+str(i-1)+'<1>'][0],
+                                           idx_zmid, rg_m4m5)
         '''
-        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
-                                           pdict_m5m6[iabe.name]['ZP<'+str(i)+'>'][0],
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                                           pdict_m4m5[iabe.name]['ZP<'+str(i)+'>'][0],
                                            np.array([x0+3*i+2, y0 + 3*num_bits]),
-                                           y0+i+0*(num_bits-1), rg_m5m6)
-        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
-                                           pdict_m5m6[iabe.name]['ZM<'+str(i)+'>'][0],
+                                           y0+i+0*(num_bits-1), rg_m4m5)
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                                           pdict_m4m5[iabe.name]['ZM<'+str(i)+'>'][0],
                                            np.array([x0+3*i+1, y0 + 3*num_bits]),
-                                           y0+i+1*(num_bits-1), rg_m5m6)
-        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
-                                           pdict_m5m6[iabe.name]['ZMID<'+str(i)+'>'][0],
+                                           y0+i+1*(num_bits-1), rg_m4m5)
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                                           pdict_m4m5[iabe.name]['ZMID<'+str(i)+'>'][0],
                                            np.array([x0+3*i+0, y0 + 3*num_bits]),
-                                           y0+i+2*(num_bits-1), rg_m5m6)
+                                           y0+i+2*(num_bits-1), rg_m4m5)
         #ZP-ENL/R
-        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
                                            np.array([x0+3*i+2, y0 + 3*num_bits]),
-                                           pdict_m5m6[iafe.name]['ENL'+str(i-1)+'<0>'][0],
-                                           y0+i+3*(num_bits-1)+2-2+1, rg_m5m6)
-        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
+                                           pdict_m4m5[iafe.name]['ENL'+str(i-1)+'<0>'][0],
+                                           y0+i+3*(num_bits-1)+2-2+1, rg_m4m5)
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
                                            np.array([x0+3*i+2, y0 + 3*num_bits]),
-                                           pdict_m5m6[iafe.name]['ENR'+str(i-1)+'<2>'][0],
-                                           y0+i+3*(num_bits-1)+2-2+1, rg_m5m6)
+                                           pdict_m4m5[iafe.name]['ENR'+str(i-1)+'<2>'][0],
+                                           y0+i+3*(num_bits-1)+2-2+1, rg_m4m5)
         #ZM-ENL/R
-        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
                                            np.array([x0+3*i+1, y0 + 3*num_bits]),
-                                           pdict_m5m6[iafe.name]['ENL'+str(i-1)+'<2>'][0],
-                                           y0+i+4*(num_bits-1)+2-2+1, rg_m5m6)
-        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
+                                           pdict_m4m5[iafe.name]['ENL'+str(i-1)+'<2>'][0],
+                                           y0+i+4*(num_bits-1)+2-2+1, rg_m4m5)
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
                                            np.array([x0+3*i+1, y0 + 3*num_bits]),
-                                           pdict_m5m6[iafe.name]['ENR'+str(i-1)+'<0>'][0],
-                                           y0+i+4*(num_bits-1)+2-2+1, rg_m5m6)
+                                           pdict_m4m5[iafe.name]['ENR'+str(i-1)+'<0>'][0],
+                                           y0+i+4*(num_bits-1)+2-2+1, rg_m4m5)
         #ZMID-ENL/R
-        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
                                            np.array([x0+3*i+0, y0 + 3*num_bits]),
-                                           pdict_m5m6[iafe.name]['ENL'+str(i-1)+'<1>'][0],
-                                           y0+i+5*(num_bits-1)+2-2+1, rg_m5m6)
-        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
+                                           pdict_m4m5[iafe.name]['ENL'+str(i-1)+'<1>'][0],
+                                           y0+i+5*(num_bits-1)+2-2+1, rg_m4m5)
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
                                            np.array([x0+3*i+0, y0 + 3*num_bits]),
-                                           pdict_m5m6[iafe.name]['ENR'+str(i-1)+'<1>'][0],
-                                           y0+i+5*(num_bits-1)+2-2+1, rg_m5m6)
+                                           pdict_m4m5[iafe.name]['ENR'+str(i-1)+'<1>'][0],
+                                           y0+i+5*(num_bits-1)+2-2+1, rg_m4m5)
         '''
     #saop/saom route
-    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
-                                       pdict_m5m6[iabe.name]['SAOP'][0], pdict_m5m6[iafe.name]['OUTP'][0],
-                                       y0 + 6*num_bits+0-3+8, rg_m5m6)
-    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
-                                       pdict_m5m6[iabe.name]['SAOM'][0], pdict_m5m6[iafe.name]['OUTM'][0],
-                                       y0 + 6*num_bits+1-3+8, rg_m5m6)
+    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                                       pdict_m4m5[iabe.name]['SAOP'][0], pdict_m4m5[iafe.name]['OUTP'][0],
+                                       y0 + 4*num_bits, rg_m4m5)
+    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                                       pdict_m4m5[iabe.name]['SAOM'][0], pdict_m4m5[iafe.name]['OUTM'][0],
+                                       y0 + 4*num_bits+1, rg_m4m5)
     #sarclkb
     [rv0, rh0] = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][4],
-                                      pdict_m5m6[iafe.name]['CLKB'][0],
-                                      pdict_m5m6[iabe.name]['SARCLKB'][0], rg_m4m5)
-    #[rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6],
-    #                                   pdict_m5m6[iabe.name]['SARCLKB'][0], pdict_m5m6[iafe.name]['CLKB'][0],
-    #                                   y0 + 6*num_bits+6, rg_m5m6)
+                                      pdict_m4m5[iafe.name]['CLKB'][0],
+                                      pdict_m4m5[iabe.name]['SARCLKB'][0], rg_m4m5)
+    #[rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][4],
+    #                                   pdict_m4m5[iabe.name]['SARCLKB'][0], pdict_m4m5[iafe.name]['CLKB'][0],
+    #                                   y0 + 6*num_bits+6, rg_m4m5)
     #clk
-    x0=int(laygen.get_xy(obj=laygen.get_template(name=sarabe_name, libname=workinglib), gridname=rg_m5m6)[0] / 2)
-    [rv0, rclk0] = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6],
-                                       pdict_m5m6[iabe.name]['RST0'][0], np.array([x0+3, y0 + 6*num_bits+3-3+8]), rg_m5m6)
-    [rv0, rclk1] = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6],
-                                       pdict_m5m6[iabe.name]['RST1'][0], np.array([x0+3, y0 + 6*num_bits+5-3+8]), rg_m5m6)
+    x0=int(laygen.get_template_size(name=sarabe_name, gridname=rg_m5m6, libname=workinglib)[0]/2)
+    [rv0, rclk0] = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                                       pdict_m4m5[iabe.name]['RST0'][0], np.array([x0+3, y0 + 5*num_bits]), rg_m4m5)
+    [rv0, rclk1] = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                                       pdict_m4m5[iabe.name]['RST1'][0], np.array([x0+3, y0 + 5*num_bits+2]), rg_m4m5)
     #[rv0, rclk2] = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6],
     #                                   pdict_m5m6[iabe.name]['RST2'][0], np.array([x0+3, y0 + 6*num_bits+7-3+8]), rg_m5m6)
     #[rv0, rclk0] = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6],
@@ -180,11 +196,11 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
     #inp/inm
     laygen.pin(name='SAINP', layer=laygen.layers['pin'][4], xy=pdict_m4m5[iafe.name]['SAINP'], gridname=rg_m4m5, netname='INP')
     laygen.pin(name='SAINM', layer=laygen.layers['pin'][4], xy=pdict_m4m5[iafe.name]['SAINM'], gridname=rg_m4m5, netname='INM')
-    for p, pxy in pdict_m5m6[iafe.name].items():
+    for p, pxy in pdict_m3m4[iafe.name].items():
         if p.startswith('INP'):
-            laygen.pin(name=p, layer=laygen.layers['pin'][6], xy=pxy, gridname=rg_m5m6, netname='INP')
+            laygen.pin(name=p, layer=laygen.layers['pin'][4], xy=pxy, gridname=rg_m3m4, netname='INP')
         if p.startswith('INM'):
-            laygen.pin(name=p, layer=laygen.layers['pin'][6], xy=pxy, gridname=rg_m5m6, netname='INM')
+            laygen.pin(name=p, layer=laygen.layers['pin'][4], xy=pxy, gridname=rg_m3m4, netname='INM')
     #osp/osm
     laygen.pin(name='OSP', layer=laygen.layers['pin'][3], xy=pdict_m3m4[iafe.name]['OSP'], gridname=rg_m3m4)
     laygen.pin(name='OSM', layer=laygen.layers['pin'][3], xy=pdict_m3m4[iafe.name]['OSM'], gridname=rg_m3m4)
@@ -215,12 +231,10 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
         laygen.pin(name='ADCOUT<'+str(i)+'>', layer=laygen.layers['pin'][5], xy=pdict_m5m6[iabe.name]['ADCOUT<'+str(i)+'>'], gridname=rg_m5m6)
     #clk
     #laygen.pin(name='CLK', layer=laygen.layers['pin'][5], xy=pdict_m5m6[iabe.name]['RST'], gridname=rg_m5m6)
-    #laygen.pin(name='CLK', layer=laygen.layers['pin'][5], xy=laygen.get_xy(obj = rclk0, gridname=rg_m5m6), gridname=rg_m5m6)
-    laygen.boundary_pin_from_rect(rclk0, rg_m5m6, 'CLK0', laygen.layers['pin'][6], size=6, direction='right',
-                                  netname='CLK')
-    laygen.boundary_pin_from_rect(rclk1, rg_m5m6, 'CLK1', laygen.layers['pin'][6], size=6, direction='right',
-                                  netname='CLK')
-    #laygen.boundary_pin_from_rect(rclk2, rg_m5m6, 'CLK2', laygen.layers['pin'][6], size=6, direction='right', netname='CLK')
+    #laygen.pin(name='CLK', layer=laygen.layers['pin'][5], xy=laygen.get_rect_xy(rclk0.name, gridname=rg_m5m6), gridname=rg_m5m6)
+    laygen.create_boundary_pin_from_rect(rclk0, rg_m4m5, 'CLK0', laygen.layers['pin'][4], size=6, direction='right', netname='CLK')
+    laygen.create_boundary_pin_from_rect(rclk1, rg_m4m5, 'CLK1', laygen.layers['pin'][4], size=6, direction='right', netname='CLK')
+    #laygen.create_boundary_pin_from_rect(rclk2, rg_m5m6, 'CLK2', laygen.layers['pin'][6], size=6, direction='right', netname='CLK')
     laygen.pin(name='CLKOUT0', layer=laygen.layers['pin'][5], xy=pdict_m5m6[iabe.name]['RSTOUT0'], gridname=rg_m5m6, netname='CLKOUT')
     laygen.pin(name='CLKOUT1', layer=laygen.layers['pin'][5], xy=pdict_m5m6[iabe.name]['RSTOUT1'], gridname=rg_m5m6, netname='CLKOUT')
     #laygen.pin(name='CLKOUT2', layer=laygen.layers['pin'][5], xy=pdict_m5m6[iabe.name]['RSTOUT2'], gridname=rg_m5m6, netname='CLKOUT')
@@ -302,8 +316,8 @@ if __name__ == '__main__':
     num_bits=9
     #load from preset
     load_from_file=True
-    yamlfile_spec="adc_sar_spec.yaml"
-    yamlfile_size="adc_sar_size.yaml"
+    yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
+    yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
     if load_from_file==True:
         with open(yamlfile_spec, 'r') as stream:
             specdict = yaml.load(stream)

@@ -7,7 +7,7 @@ instances:
     cell_name: ipin
     instpins: {}
   CDAC:
-    lib_name: cmos32lp_microtemplates_dense
+    lib_name: cmos14lpp_microtemplates_dense
     cell_name: momcap_center_1x
     instpins:
       BOTTOM:

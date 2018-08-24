@@ -34,7 +34,7 @@ if __name__ == '__main__':
     #    intent='ulvt',
     #)
     params = dict(
-        lch=16e-9,
+        lch=14e-9,
         wp=8,
         wn=8,
         fgn=12,
@@ -53,12 +53,12 @@ if __name__ == '__main__':
         num_track_sep=2,
         io_width=2,
         guard_ring_nf=2,
-        tot_width=224,
+        tot_width=252,
     )
 
     load_from_file=True
-    yamlfile_spec="adc_sar_spec.yaml"
-    yamlfile_size="adc_sar_size.yaml"
+    yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
+    yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
     if load_from_file==True:
         with open(yamlfile_spec, 'r') as stream:
             specdict = yaml.load(stream)
@@ -73,6 +73,7 @@ if __name__ == '__main__':
         params['nduml']=sizedict['sampler_nmos']['nduml']
         params['ndumr']=sizedict['sampler_nmos']['ndumr']
         params['nsep']=sizedict['sampler_nmos']['nsep']
+        params['intent']=sizedict['device_intent']
         '''
         params['wp']=sizedict['pw']*2
         params['wn']=sizedict['nw']*2
@@ -87,10 +88,14 @@ if __name__ == '__main__':
     
     # template and grid information
     layers = [4, 5, 6, 7]
-    spaces = [0.056, 0.100, 0.092, 0.100]
-    widths = [0.040, 0.080, 0.100, 0.080]
+    spaces = [0.056, 0.044, 0.080, 0.104]
+    widths = [0.040, 0.040, 0.064, 0.064]
     bot_dir = 'x'
-    routing_grid = RoutingGrid(prj.tech_info, layers, spaces, widths, bot_dir)
+    width_override = {
+        4: {2: 0.120},
+        5: {2: 0.120}
+    }
+    routing_grid = RoutingGrid(prj.tech_info, layers, spaces, widths, bot_dir, width_override=width_override)
     temp_db = TemplateDB('template_libs.def', routing_grid, impl_lib, use_cybagoa=True)
 
     # create design module and run design method.
@@ -101,7 +106,7 @@ if __name__ == '__main__':
 
     # implement the design
     print('implementing design with library %s' % impl_lib)
-    dsn.implement_design(impl_lib, top_cell_name=cell_name, erase=True)
+    dsn.implement_design(impl_lib, top_cell_name=cell_name)
 
     # generate the layout
     layout_params = dsn.get_layout_params(**layout_params)

@@ -11,7 +11,7 @@ instances:
     cell_name: ipin
     instpins: {}
   C0:
-    lib_name: cmos32lp_microtemplates_dense
+    lib_name: cmos14lpp_microtemplates_dense
     cell_name: momcap_center_1x
     instpins:
       BOTTOM:
@@ -23,7 +23,7 @@ instances:
         net_name: "O"
         num_bits: 1
   CDAC0:
-    lib_name: cmos32lp_microtemplates_dense
+    lib_name: cmos14lpp_microtemplates_dense
     cell_name: momcap_center_1x
     instpins:
       BOTTOM:

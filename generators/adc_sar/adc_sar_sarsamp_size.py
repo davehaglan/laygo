@@ -17,7 +17,7 @@ pmos_type='pch'
 nmos_type='nch'
 #env_list = ['tt', 'ff', 'ss', 'sf', 'fs', 'ff_hot', 'ss_hot']
 env_list = ['tt']
-l = 16e-9
+l = 14e-9
 intent = 'ulvt'
 pw = 4
 nw = 4
@@ -83,7 +83,7 @@ m_inbuf_list_opt=m_inbuf_list_list[-1]
 m_outbuf_list_list=m_outbuf_list_list[-1]
 
 # sw transistor
-vbs = vincm
+vbs = -vincm
 vgs = vdd-vincm
 vds = vincm
 msw = nmos_db.query(w=pw, vbs=vbs, vgs=vgs, vds=vds)

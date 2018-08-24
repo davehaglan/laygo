@@ -46,7 +46,7 @@ class serdes_templates__ser_2Nto1(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, num_ser=10, m_dff=1, m_latch=1, m_cbuf1=2, m_cbuf2=8, m_pbuf1=2, m_pbuf2=8, m_mux=2, m_out=2, m_ser=1, device_intent='fast'):
+    def design(self, lch, pw, nw, num_ser=10, m_dff=1, m_cbuf1=2, m_cbuf2=8, m_pbuf1=2, m_pbuf2=8, m_mux=2, m_out=2, m_ser=1, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -67,7 +67,6 @@ class serdes_templates__ser_2Nto1(Module):
         self.parameters['pw'] = pw
         self.parameters['nw'] = nw
         self.parameters['m_dff'] = m_dff
-        self.parameters['m_latch'] = m_latch
         self.parameters['m_cbuf1'] = m_cbuf1
         self.parameters['m_cbuf2'] = m_cbuf2
         self.parameters['m_pbuf1'] = m_pbuf1
@@ -126,8 +125,8 @@ class serdes_templates__ser_2Nto1(Module):
         #print(term_list)
         #print(name_list)
 
-        self.instances['INto1_1'].design(lch=lch, pw=pw, nw=nw, num_ser=num_ser, m_dff=m_dff, m_latch=m_latch, m_cbuf1=m_cbuf1, m_cbuf2=m_cbuf2, m_pbuf1=m_pbuf1, m_pbuf2=m_pbuf2, m_mux=m_mux, m_out=m_out, device_intent=device_intent)   
-        self.instances['INto1_0'].design(lch=lch, pw=pw, nw=nw, num_ser=num_ser, m_dff=m_dff, m_latch=m_latch, m_cbuf1=m_cbuf1, m_cbuf2=m_cbuf2, m_pbuf1=m_pbuf1, m_pbuf2=m_pbuf2, m_mux=m_mux, m_out=m_out, device_intent=device_intent)   
+        self.instances['INto1_1'].design(lch=lch, pw=pw, nw=nw, num_ser=num_ser, m_dff=m_dff, m_cbuf1=m_cbuf1, m_cbuf2=m_cbuf2, m_pbuf1=m_pbuf1, m_pbuf2=m_pbuf2, m_mux=m_mux, m_out=m_out, device_intent=device_intent)   
+        self.instances['INto1_0'].design(lch=lch, pw=pw, nw=nw, num_ser=num_ser, m_dff=m_dff, m_cbuf1=m_cbuf1, m_cbuf2=m_cbuf2, m_pbuf1=m_pbuf1, m_pbuf2=m_pbuf2, m_mux=m_mux, m_out=m_out, device_intent=device_intent)   
         self.instances['I2to1'].design(lch=lch, pw=pw, nw=nw, m_ser=m_ser, device_intent=device_intent)   
 
         #self.array_instance('IDIV1', div_name_list, term_list=div_term_list) 
@@ -149,8 +148,8 @@ class serdes_templates__ser_2Nto1(Module):
             if i%2==1:
                 in0_name = in0_name+',in<%d>'%(num_ser-i-3)
             print(in0_name)
-        self.reconnect_instance_terminal('INto1_1', 'in<%d:0>'%(sub_ser-1), in1_name)
-        self.reconnect_instance_terminal('INto1_0', 'in<%d:0>'%(sub_ser-1), in0_name)
+        self.reconnect_instance_terminal('INto1_1', 'in<0>', in1_name)
+        self.reconnect_instance_terminal('INto1_0', 'in<0>', in0_name)
         
         self.rename_pin('in<1:0>','in<%d:0>'%(num_ser-1))
 

@@ -11,7 +11,7 @@ cell_name = 'tisaradc_body'
 impl_lib = 'adc_sar_generated'
 
 params = dict(
-    sar_lch=16e-9,
+    sar_lch=14e-9,
     sar_pw=4,
     sar_nw=4,
     sar_sa_m=8,
@@ -29,7 +29,7 @@ params = dict(
     sar_device_intent='fast',
     sar_c_m=1,
     sar_rdx_array=[1,2,4,8,16,32,64,128],
-    samp_lch=16e-9,
+    samp_lch=14e-9,
     samp_wp=8,
     samp_wn=8,
     samp_fgn=12,
@@ -41,7 +41,7 @@ params = dict(
     samp_intent='ulvt',
     samp_use_laygo=False,
     num_slices=8,
-    clk_lch=16e-9,
+    clk_lch=14e-9,
     clk_pw=4,
     clk_nw=4,
     clk_m_dff=2, 
@@ -52,7 +52,7 @@ params = dict(
 	clk_m_capsw=2, 
     clk_unit_cell=2,
     clk_device_intent='fast',
-    ret_lch=16e-9,
+    ret_lch=14e-9,
     ret_pw=4,
     ret_nw=4,
     ret_m_ibuf=8,
@@ -129,5 +129,5 @@ dsn.design(**params)
 
 # implement the design
 print('implementing design with library %s' % impl_lib)
-dsn.implement_design(impl_lib, top_cell_name=cell_name, erase=True)
+dsn.implement_design(impl_lib, top_cell_name=cell_name)
 

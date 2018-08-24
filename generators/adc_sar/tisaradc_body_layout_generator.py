@@ -56,23 +56,23 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
     space20_template = laygen.templates.get_template(tisar_space2_name, libname)
     space20_pins=space20_template.pins
     space20_xy=ispace20.xy
-    space0_origin = laygen.get_xy(obj = ispace20.template, gridname=pg) * np.array([1, 0])
+    space0_origin = laygen.get_template_size(ispace20.cellname, gridname=pg, libname=workinglib)*np.array([1, 0])
     ispace0 = laygen.place(name="I" + objectname_pfix + 'SP0', templatename=tisar_space_name,
                       gridname=pg, xy=space0_origin, template_libname=libname)
     space_template = laygen.templates.get_template(tisar_space_name, libname)
     space_pins=space_template.pins
     space0_xy=ispace0.xy
-    sar_origin = space0_origin + laygen.get_xy(obj = ispace0.template, gridname=pg) * np.array([1, 0])
+    sar_origin = space0_origin + laygen.get_template_size(ispace0.cellname, gridname=pg, libname=workinglib)*np.array([1, 0])
     isar = laygen.place(name="I" + objectname_pfix + 'SAR0', templatename=tisar_core_name,
                       gridname=pg, xy=sar_origin, template_libname=libname)
     sar_template = laygen.templates.get_template(tisar_core_name, libname)
     sar_pins=sar_template.pins
     sar_xy=isar.xy
-    space1_origin = sar_origin + laygen.get_xy(obj = isar.template, gridname=pg) * np.array([1, 0])
+    space1_origin = sar_origin + laygen.get_template_size(isar.cellname, gridname=pg, libname=workinglib)*np.array([1, 0])
     ispace1 = laygen.place(name="I" + objectname_pfix + 'SP1', templatename=tisar_space_name,
                       gridname=pg, xy=space1_origin, template_libname=libname)
     space1_xy=ispace1.xy
-    space21_origin = space1_origin + laygen.get_xy(obj = ispace1.template, gridname=pg) * np.array([1, 0])
+    space21_origin = space1_origin + laygen.get_template_size(ispace1.cellname, gridname=pg, libname=workinglib)*np.array([1, 0])
     ispace21 = laygen.place(name="I" + objectname_pfix + 'SP21', templatename=tisar_space2_name,
                       gridname=pg, xy=space21_origin, template_libname=libname)
     space21_xy=ispace21.xy
@@ -154,14 +154,12 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
     laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m6m7_thick, gridname_output=rg_route,
                                           instname=[isar.name],
                                           inst_pin_prefix=['VDD', 'VSS', 'VREF'], xy_grid_type='ygrid')
-    '''
     #M7 rails-clkd
     input_rails_rect = [rvddclkd, rvssclkd]
     rvddclkd_m7_pre, rvssclkd_m7_pre= laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_CLKD_M7_', 
                 layer=laygen.layers['metal'][7], gridname=rg_route, netnames=['VDDCLKD', 'VSS'], direction='y', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=None, offset_end_coord=None,
                 offset_start_index=2, offset_end_index=-2)
-    '''
     #M7 rails-samp
     input_rails_rect = [rvddsamp, rvsssamp]
     rvddsamp_m7_pre, rvsssamp_m7_pre= laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAMP_M7_', 
@@ -182,34 +180,32 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
                 offset_start_index=2, offset_end_index=-2)
     rvsssar_m7_upper_pre=rvsssar0_m7+rvsssar1_m7+rvsssar2_m7+rvsssar3_m7
     #extend m7 rails for clkd and samp and vref, rvsssar_m7_upper
-    #rvddclkd_m7=[]
-    #rvssclkd_m7=[]
+    rvddclkd_m7=[]
+    rvssclkd_m7=[]
     rvddsamp_m7=[]
     rvsssamp_m7=[]
     rvref0_m7=[]
     rvref1_m7=[]
     rvref2_m7=[]
     rvsssar_m7_upper=[]
-    '''
     for r in rvddclkd_m7_pre:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_rect_xy(r.name, gridname=rg_m6m7_thick, sort=True)
         rxy[1][1]+=12
         r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
         rvddclkd_m7.append(r2)
     for r in rvssclkd_m7_pre:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_rect_xy(r.name, gridname=rg_m6m7_thick, sort=True)
         rxy[1][1]+=12
         r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
         rvssclkd_m7.append(r2)
-    '''
     for r in rvddsamp_m7_pre:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_rect_xy(r.name, gridname=rg_m6m7_thick, sort=True)
         #rxy[0][1]-=1
         rxy[1][1]+=24
         r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
         rvddsamp_m7.append(r2)
     for r in rvsssamp_m7_pre:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_rect_xy(r.name, gridname=rg_m6m7_thick, sort=True)
         #rxy[0][1]-=1
         rxy[1][1]+=24
         r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
@@ -220,53 +216,50 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
         if r.xy[0][0]>sar_xy[0]+sar_template.width:
             laygen.route(None, laygen.layers['metal'][7], xy0=[rxy[0][0], 0], xy1=rxy[1], gridname0=rg_m6m7_thick)
     for r in rvref0_m7_pre:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_rect_xy(r.name, gridname=rg_m6m7_thick, sort=True)
         rxy[0][1]-=24
         #rxy[1][1]+=24
         r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
         rvref0_m7.append(r2)
     for r in rvref1_m7_pre:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_rect_xy(r.name, gridname=rg_m6m7_thick, sort=True)
         rxy[0][1]-=24
         #rxy[1][1]+=24
         r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
         rvref1_m7.append(r2)
     for r in rvref2_m7_pre:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_rect_xy(r.name, gridname=rg_m6m7_thick, sort=True)
         rxy[0][1]-=24
         #rxy[1][1]+=24
         r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
         rvref2_m7.append(r2)
     for r in rvsssar_m7_upper_pre:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_rect_xy(r.name, gridname=rg_m6m7_thick, sort=True)
         rxy[0][1]-=24
         #rxy[1][1]+=24
         r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
         rvsssar_m7_upper.append(r2)
     #connect VDDSAR/VSS in sar region
     for r in rvddsar_m7_upper:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_rect_xy(r.name, gridname=rg_m6m7_thick, sort=True)
         rxy[0][1]=1
         r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
     for r in rvsssar_m7_upper:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_rect_xy(r.name, gridname=rg_m6m7_thick, sort=True)
         rxy[0][1]=1
         r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
   
     #connect VSS between sar/samp/clkd in space region
-    '''
     for r in rvssclkd_m7:
         if r.xy[1][0] < sar_xy[0]:
             laygen.add_rect(None, np.array([[r.xy[0][0],rvsssar_m7[0].xy[0][1]], r.xy[1]]), laygen.layers['metal'][7])
         if r.xy[0][0] > space1_xy[0]:
             laygen.add_rect(None, np.array([[r.xy[0][0],rvsssar_m7[0].xy[0][1]], r.xy[1]]), laygen.layers['metal'][7])
-    '''
     #create VSS pins for connection to core
     for i, r in enumerate(rvsssar_m7):
         pxy=np.array([[r.xy[0][0],0], r.xy[1]])
         laygen.add_rect(None, pxy, laygen.layers['metal'][7])
         laygen.add_pin('VSS_SAR_M7_'+str(i), 'VSS', pxy, laygen.layers['pin'][7])
-    '''
     #connect VDDSAMP between samp/clkd in space region
     for r in rvddclkd_m7:
         if r.xy[1][0] < sar_xy[0]:
@@ -283,8 +276,7 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
     rvssclkd_m8, rvddclkd_m8= laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_CLKD_M8_', 
                 layer=laygen.layers['pin'][8], gridname=rg_m7m8_thick, netnames=['VSS', 'VDDSAMP'], direction='x', 
                 input_rails_rect=input_rails_rect, generate_pin=True, overwrite_start_coord=None, overwrite_end_coord=None,
-                offset_start_index=1, offset_end_index=0)
-    '''
+                offset_start_index=0, offset_end_index=0)
     #M8 routes
     input_rails_rect = [rvsssamp_m7, rvddsamp_m7]
     rvsssamp_m8, rvddsamp_m8= laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAMP_M8_', 
@@ -295,7 +287,7 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
     rvddsar_m8, rvsssar_m8= laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAR_M8_', 
                 layer=laygen.layers['pin'][8], gridname=rg_m7m8_thick, netnames=['VDDSAR', 'VSS'], direction='x', 
                 input_rails_rect=input_rails_rect, generate_pin=True, overwrite_start_coord=None, overwrite_end_coord=None,
-                offset_start_index=0, offset_end_index=0)
+                offset_start_index=1, offset_end_index=0)
     input_rails_rect = [rvref0_m7, rvsssar_m7_upper, rvref1_m7, rvsssar_m7_upper, rvref2_m7, rvsssar_m7_upper]
     laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_VREF_M8_', 
                 layer=laygen.layers['metal'][8], gridname=rg_m7m8_thick, netnames=['VREF<0>', 'VSS', 'VREF<1>', 'VSS', 'VREF<2>', 'VSS'], direction='x', 
@@ -303,7 +295,7 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
                 offset_start_index=1, offset_end_index=0)
 
     #osp/osm route
-    pdict_os_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5_basic_thick)
+    pdict_os_m4m5 = laygen.get_inst_pin_coord(None, None, rg_m4m5_basic_thick)
     rosp_m5=[]
     rosm_m5=[]
     for i in range(num_slices):
@@ -313,21 +305,19 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
         rh0, rv0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], 
                         pdict_os_m4m5[isar.name]['OSM'+str(i)][0], pdict_os_m4m5[isar.name]['OSM'+str(i)][0]+np.array([-num_slices-i-2, -10]), gridname=rg_m4m5_basic_thick)
         rosm_m5.append(rv0)
-    pdict_os_m5m6 = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick)
+    pdict_os_m5m6 = laygen.get_inst_pin_coord(None, None, rg_m5m6_thick)
     x0=pdict_os_m5m6[isar.name]['VREF0<0>'][0][0]-4*num_slices
     y0=pdict_os_m5m6[isar.name]['VREF0<0>'][0][1]-8
     rosp_m6=[]
     rosm_m6=[]
     for i in range(num_slices):
-        xy0=laygen.get_xy(obj = rosp_m5[i], gridname=rg_m5m6_thick, sort=True)[0]
+        xy0=laygen.get_rect_xy(rosp_m5[i].name, gridname=rg_m5m6_thick, sort=True)[0]
         rv0, rh0 = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6], xy0, np.array([x0, y0-2*i]), gridname=rg_m5m6_thick)
-        laygen.boundary_pin_from_rect(rh0, rg_m5m6_thick, 'OSP' + str(i), laygen.layers['pin'][6], size=6,
-                                      direction='left')
+        laygen.create_boundary_pin_form_rect(rh0, rg_m5m6_thick, 'OSP'+str(i), laygen.layers['pin'][6], size=6, direction='left')
         rosp_m6.append(rh0)
-        xy0=laygen.get_xy(obj = rosm_m5[i], gridname=rg_m5m6_thick, sort=True)[0]
+        xy0=laygen.get_rect_xy(rosm_m5[i].name, gridname=rg_m5m6_thick, sort=True)[0]
         rv0, rh0 = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6], xy0, np.array([x0, y0-2*i-1]), gridname=rg_m5m6_thick)
-        laygen.boundary_pin_from_rect(rh0, rg_m5m6_thick, 'OSM' + str(i), laygen.layers['pin'][6], size=6,
-                                      direction='left')
+        laygen.create_boundary_pin_form_rect(rh0, rg_m5m6_thick, 'OSM'+str(i), laygen.layers['pin'][6], size=6, direction='left')
         rosm_m6.append(rh0)
     
             
@@ -337,7 +327,6 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
         for pfix in pin_prefix_list:
             if pn.startswith(pfix):
                 laygen.add_pin(pn, sar_pins[pn]['netname'], sar_xy+sar_pins[pn]['xy'], sar_pins[pn]['layer'])
-
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
 

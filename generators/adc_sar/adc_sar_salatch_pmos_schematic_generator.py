@@ -17,7 +17,7 @@ tb_cell = 'salatch_pmos_tb_tran'
 tb_noise_cell = 'salatch_pmos_tb_trannoise'
 
 params = dict(
-    lch=16e-9,
+    lch=14e-9,
     pw=4,
     nw=4,
     m=8, #larger than 8, even number
@@ -28,8 +28,8 @@ params = dict(
     )
 
 load_from_file=True
-yamlfile_spec="adc_sar_spec.yaml"
-yamlfile_size="adc_sar_size.yaml"
+yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
+yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
 
 if load_from_file==True:
     with open(yamlfile_spec, 'r') as stream:

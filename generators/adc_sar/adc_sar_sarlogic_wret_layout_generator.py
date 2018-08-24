@@ -32,10 +32,10 @@ import yaml
 
 def create_power_pin_from_inst(laygen, layer, gridname, inst_left, inst_right):
     """create power pin"""
-    rvdd0_pin_xy = laygen.get_inst_pin_xy(inst_left.name, 'VDD', gridname, sort=True)
-    rvdd1_pin_xy = laygen.get_inst_pin_xy(inst_right.name, 'VDD', gridname, sort=True)
-    rvss0_pin_xy = laygen.get_inst_pin_xy(inst_left.name, 'VSS', gridname, sort=True)
-    rvss1_pin_xy = laygen.get_inst_pin_xy(inst_right.name, 'VSS', gridname, sort=True)
+    rvdd0_pin_xy = laygen.get_inst_pin_coord(inst_left.name, 'VDD', gridname, sort=True)
+    rvdd1_pin_xy = laygen.get_inst_pin_coord(inst_right.name, 'VDD', gridname, sort=True)
+    rvss0_pin_xy = laygen.get_inst_pin_coord(inst_left.name, 'VSS', gridname, sort=True)
+    rvss1_pin_xy = laygen.get_inst_pin_coord(inst_right.name, 'VSS', gridname, sort=True)
 
     laygen.pin(name='VDD', layer=layer, xy=np.vstack((rvdd0_pin_xy[0],rvdd1_pin_xy[1])), gridname=gridname)
     laygen.pin(name='VSS', layer=layer, xy=np.vstack((rvss0_pin_xy[0],rvss1_pin_xy[1])), gridname=gridname)
@@ -79,38 +79,43 @@ def generate_sarlogic(laygen, objectname_pfix, templib_logic, placement_grid, ro
                             gridname=pg, refinstname=isp0.name, template_libname=templib_logic)
 
     # internal pins
-    ioai0_a_xy = laygen.get_inst_pin_xy(ioai0.name, 'A', rg_m3m4)
-    ioai0_b_xy = laygen.get_inst_pin_xy(ioai0.name, 'B', rg_m3m4)
-    ioai0_c_xy = laygen.get_inst_pin_xy(ioai0.name, 'C', rg_m3m4)
-    ioai0_d_xy = laygen.get_inst_pin_xy(ioai0.name, 'D', rg_m3m4)
-    ioai0_o_xy = laygen.get_inst_pin_xy(ioai0.name, 'O', rg_m3m4)
-    ildpo0_i_xy = laygen.get_inst_pin_xy(ildpo0.name, 'I', rg_m3m4)
-    ildpo0_o_xy = laygen.get_inst_pin_xy(ildpo0.name, 'O', rg_m3m4)
-    ioai1_a_xy = laygen.get_inst_pin_xy(ioai1.name, 'A', rg_m3m4)
-    ioai1_b_xy = laygen.get_inst_pin_xy(ioai1.name, 'B', rg_m3m4)
-    ioai1_c_xy = laygen.get_inst_pin_xy(ioai1.name, 'C', rg_m3m4)
-    ioai1_d_xy = laygen.get_inst_pin_xy(ioai1.name, 'D', rg_m3m4)
-    ioai1_o_xy = laygen.get_inst_pin_xy(ioai1.name, 'O', rg_m3m4)
-    ildno0_i_xy = laygen.get_inst_pin_xy(ildno0.name, 'I', rg_m3m4)
-    ildno0_o_xy = laygen.get_inst_pin_xy(ildno0.name, 'O', rg_m3m4)
-    inr0_a_xy = laygen.get_inst_pin_xy(inr0.name, 'A', rg_m3m4)
-    inr0_b_xy = laygen.get_inst_pin_xy(inr0.name, 'B', rg_m3m4)
-    inr0_o_xy = laygen.get_inst_pin_xy(inr0.name, 'O', rg_m3m4)
-    izp0_i_xy = laygen.get_inst_pin_xy(izp0.name, 'I', rg_m3m4)
-    izp0_o_xy = laygen.get_inst_pin_xy(izp0.name, 'O', rg_m3m4)
-    izm0_i_xy = laygen.get_inst_pin_xy(izm0.name, 'I', rg_m3m4)
-    izm0_o_xy = laygen.get_inst_pin_xy(izm0.name, 'O', rg_m3m4)
-    idff0_i_xy = laygen.get_inst_pin_xy(idff0.name, 'I', rg_m3m4)
-    idff0_clk_xy = laygen.get_inst_pin_xy(idff0.name, 'CLK', rg_m3m4)
-    idff0_o_xy = laygen.get_inst_pin_xy(idff0.name, 'O', rg_m3m4)
+    ioai0_a_xy = laygen.get_inst_pin_coord(ioai0.name, 'A', rg_m3m4)
+    ioai0_b_xy = laygen.get_inst_pin_coord(ioai0.name, 'B', rg_m3m4)
+    ioai0_c_xy = laygen.get_inst_pin_coord(ioai0.name, 'C', rg_m3m4)
+    ioai0_d_xy = laygen.get_inst_pin_coord(ioai0.name, 'D', rg_m3m4)
+    ioai0_o_xy = laygen.get_inst_pin_coord(ioai0.name, 'O', rg_m3m4)
+    ildpo0_i_xy = laygen.get_inst_pin_coord(ildpo0.name, 'I', rg_m3m4)
+    ildpo0_o_xy = laygen.get_inst_pin_coord(ildpo0.name, 'O', rg_m3m4)
+    ioai1_a_xy = laygen.get_inst_pin_coord(ioai1.name, 'A', rg_m3m4)
+    ioai1_b_xy = laygen.get_inst_pin_coord(ioai1.name, 'B', rg_m3m4)
+    ioai1_c_xy = laygen.get_inst_pin_coord(ioai1.name, 'C', rg_m3m4)
+    ioai1_d_xy = laygen.get_inst_pin_coord(ioai1.name, 'D', rg_m3m4)
+    ioai1_o_xy = laygen.get_inst_pin_coord(ioai1.name, 'O', rg_m3m4)
+    ildno0_i_xy = laygen.get_inst_pin_coord(ildno0.name, 'I', rg_m3m4)
+    ildno0_o_xy = laygen.get_inst_pin_coord(ildno0.name, 'O', rg_m3m4)
+    #ind0_a_xy = laygen.get_inst_pin_coord(ind0.name, 'A', rg_m3m4)
+    #ind0_b_xy = laygen.get_inst_pin_coord(ind0.name, 'B', rg_m3m4)
+    #ind0_o_xy = laygen.get_inst_pin_coord(ind0.name, 'O', rg_m3m4)
+    inr0_a_xy = laygen.get_inst_pin_coord(inr0.name, 'A', rg_m3m4)
+    inr0_b_xy = laygen.get_inst_pin_coord(inr0.name, 'B', rg_m3m4)
+    inr0_o_xy = laygen.get_inst_pin_coord(inr0.name, 'O', rg_m3m4)
+    izp0_i_xy = laygen.get_inst_pin_coord(izp0.name, 'I', rg_m3m4)
+    izp0_o_xy = laygen.get_inst_pin_coord(izp0.name, 'O', rg_m3m4)
+    izm0_i_xy = laygen.get_inst_pin_coord(izm0.name, 'I', rg_m3m4)
+    izm0_o_xy = laygen.get_inst_pin_coord(izm0.name, 'O', rg_m3m4)
+    #izmid0_i_xy = laygen.get_inst_pin_coord(izmid0.name, 'I', rg_m3m4)
+    #izmid0_o_xy = laygen.get_inst_pin_coord(izmid0.name, 'O', rg_m3m4)
+    idff0_i_xy = laygen.get_inst_pin_coord(idff0.name, 'I', rg_m3m4)
+    idff0_clk_xy = laygen.get_inst_pin_coord(idff0.name, 'CLK', rg_m3m4)
+    idff0_o_xy = laygen.get_inst_pin_coord(idff0.name, 'O', rg_m3m4)
 
     #reference route coordinate
     y0 = ioai0_a_xy[0][1]
-    x0 = laygen.get_xy(obj =ioai0, gridname=rg_m3m4)[0] + 1
-    x1 = laygen.get_xy(obj =izm0, gridname=rg_m3m4)[0]\
-         + laygen.get_xy(obj =izm0.template, gridname=rg_m3m4)[0] * 2 - 1
-    x2 = laygen.get_xy(obj =idff0, gridname=rg_m3m4)[0]\
-         +laygen.get_xy(obj =idff0.template, gridname=rg_m3m4)[0] - 1
+    x0 = laygen.get_inst_xy(name=ioai0.name, gridname=rg_m3m4)[0] + 1
+    x1 = laygen.get_inst_xy(name=izm0.name, gridname=rg_m3m4)[0]\
+         +laygen.get_template_size(name=izm0.cellname, gridname=rg_m3m4, libname=templib_logic)[0]*2 - 1
+    x2 = laygen.get_inst_xy(name=idff0.name, gridname=rg_m3m4)[0]\
+         +laygen.get_template_size(name=idff0.cellname, gridname=rg_m3m4, libname=templib_logic)[0] - 1
     #saop/saom
     rsaopv0, rsaop0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], ioai0_c_xy[0], np.array([x0, y0 + 3]), rg_m3m4)
     rsaomv0, rsaom0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], ioai1_c_xy[0], np.array([x0, y0 + 4]), rg_m3m4)
@@ -146,17 +151,17 @@ def generate_sarlogic(laygen, objectname_pfix, templib_logic, placement_grid, ro
     rv0, rzmid0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], inr0_o_xy[0], np.array([x1, y0 + 2]), rg_m3m4)
    
     #pins 
-    laygen.boundary_pin_from_rect(rsaop0, rg_m3m4, "SAOP", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.pin(name = 'SAOP2', layer = laygen.layers['pin'][3], refobj = rsaopv0, gridname=rg_m3m4, netname='SAOP')
-    laygen.boundary_pin_from_rect(rsaom0, rg_m3m4, "SAOM", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.pin(name = 'SAOM2', layer = laygen.layers['pin'][3], refobj = rsaomv0, gridname=rg_m3m4, netname='SAOM')
-    laygen.boundary_pin_from_rect(rsb0, rg_m3m4, "SB", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.boundary_pin_from_rect(rrst0, rg_m3m4, "RST", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.pin(name = 'RST2', layer = laygen.layers['pin'][3], refobj = rrstv1, gridname=rg_m3m4, netname='RST')
-    laygen.boundary_pin_from_rect(rzp0, rg_m3m4, "ZP", laygen.layers['pin'][4], size=6, direction='right')
-    laygen.boundary_pin_from_rect(rzm0, rg_m3m4, "ZM", laygen.layers['pin'][4], size=6, direction='right')
-    laygen.boundary_pin_from_rect(rzmid0, rg_m3m4, "ZMID", laygen.layers['pin'][4], size=6, direction='right')
-    laygen.boundary_pin_from_rect(rreto0, rg_m3m4, "RETO", laygen.layers['pin'][4], size=6, direction='right')
+    laygen.create_boundary_pin_from_rect(rsaop0, rg_m3m4, "SAOP", laygen.layers['pin'][4], size=6, direction='left')
+    laygen.pin_from_rect('SAOP2', laygen.layers['pin'][3], rsaopv0, gridname=rg_m3m4, netname='SAOP')
+    laygen.create_boundary_pin_from_rect(rsaom0, rg_m3m4, "SAOM", laygen.layers['pin'][4], size=6, direction='left')
+    laygen.pin_from_rect('SAOM2', laygen.layers['pin'][3], rsaomv0, gridname=rg_m3m4, netname='SAOM')
+    laygen.create_boundary_pin_from_rect(rsb0, rg_m3m4, "SB", laygen.layers['pin'][4], size=6, direction='left')
+    laygen.create_boundary_pin_from_rect(rrst0, rg_m3m4, "RST", laygen.layers['pin'][4], size=6, direction='left')
+    laygen.pin_from_rect('RST2', laygen.layers['pin'][3], rrstv1, gridname=rg_m3m4, netname='RST')
+    laygen.create_boundary_pin_from_rect(rzp0, rg_m3m4, "ZP", laygen.layers['pin'][4], size=6, direction='right')
+    laygen.create_boundary_pin_from_rect(rzm0, rg_m3m4, "ZM", laygen.layers['pin'][4], size=6, direction='right')
+    laygen.create_boundary_pin_from_rect(rzmid0, rg_m3m4, "ZMID", laygen.layers['pin'][4], size=6, direction='right')
+    laygen.create_boundary_pin_from_rect(rreto0, rg_m3m4, "RETO", laygen.layers['pin'][4], size=6, direction='right')
 
     # power pin
     create_power_pin_from_inst(laygen, layer=laygen.layers['pin'][2], gridname=rg_m1m2, inst_left=ioai0, inst_right=idff0)
@@ -203,43 +208,46 @@ def generate_sarlogic_wret_v2(laygen, objectname_pfix, templib_logic, placement_
                             gridname=pg, refinstname=iinv0.name, template_libname=templib_logic)
 
     # internal pins
-    ioai0_a_xy = laygen.get_inst_pin_xy(ioai0.name, 'A', rg_m3m4)
-    ioai0_b_xy = laygen.get_inst_pin_xy(ioai0.name, 'B', rg_m3m4)
-    ioai0_c_xy = laygen.get_inst_pin_xy(ioai0.name, 'C', rg_m3m4)
-    ioai0_d_xy = laygen.get_inst_pin_xy(ioai0.name, 'D', rg_m3m4)
-    ioai0_o_xy = laygen.get_inst_pin_xy(ioai0.name, 'O', rg_m3m4)
-    ildpo0_i_xy = laygen.get_inst_pin_xy(ildpo0.name, 'I', rg_m3m4)
-    ildpo0_o_xy = laygen.get_inst_pin_xy(ildpo0.name, 'O', rg_m3m4)
-    ioai1_a_xy = laygen.get_inst_pin_xy(ioai1.name, 'A', rg_m3m4)
-    ioai1_b_xy = laygen.get_inst_pin_xy(ioai1.name, 'B', rg_m3m4)
-    ioai1_c_xy = laygen.get_inst_pin_xy(ioai1.name, 'C', rg_m3m4)
-    ioai1_d_xy = laygen.get_inst_pin_xy(ioai1.name, 'D', rg_m3m4)
-    ioai1_o_xy = laygen.get_inst_pin_xy(ioai1.name, 'O', rg_m3m4)
-    ildno0_i_xy = laygen.get_inst_pin_xy(ildno0.name, 'I', rg_m3m4)
-    ildno0_o_xy = laygen.get_inst_pin_xy(ildno0.name, 'O', rg_m3m4)
-    inr0_a_xy = laygen.get_inst_pin_xy(inr0.name, 'A', rg_m3m4)
-    inr0_b_xy = laygen.get_inst_pin_xy(inr0.name, 'B', rg_m3m4)
-    inr0_o_xy = laygen.get_inst_pin_xy(inr0.name, 'O', rg_m3m4)
-    izp0_i_xy = laygen.get_inst_pin_xy(izp0.name, 'I', rg_m3m4)
-    izp0_o_xy = laygen.get_inst_pin_xy(izp0.name, 'O', rg_m3m4)
-    izm0_i_xy = laygen.get_inst_pin_xy(izm0.name, 'I', rg_m3m4)
-    izm0_o_xy = laygen.get_inst_pin_xy(izm0.name, 'O', rg_m3m4)
-    iinv0_i_xy = laygen.get_inst_pin_xy(iinv0.name, 'I', rg_m3m4)
-    iinv0_o_xy = laygen.get_inst_pin_xy(iinv0.name, 'O', rg_m3m4)
-    ilatch0_i_xy = laygen.get_inst_pin_xy(ilatch0.name, 'I', rg_m3m4)
-    ilatch0_clk_xy = laygen.get_inst_pin_xy(ilatch0.name, 'CLK', rg_m3m4)
-    ilatch0_clkb_xy = laygen.get_inst_pin_xy(ilatch0.name, 'CLKB', rg_m3m4)
-    ilatch0_o_xy = laygen.get_inst_pin_xy(ilatch0.name, 'O', rg_m3m4)
+    ioai0_a_xy = laygen.get_inst_pin_coord(ioai0.name, 'A', rg_m3m4)
+    ioai0_b_xy = laygen.get_inst_pin_coord(ioai0.name, 'B', rg_m3m4)
+    ioai0_c_xy = laygen.get_inst_pin_coord(ioai0.name, 'C', rg_m3m4)
+    ioai0_d_xy = laygen.get_inst_pin_coord(ioai0.name, 'D', rg_m3m4)
+    ioai0_o_xy = laygen.get_inst_pin_coord(ioai0.name, 'O', rg_m3m4)
+    ildpo0_i_xy = laygen.get_inst_pin_coord(ildpo0.name, 'I', rg_m3m4)
+    ildpo0_o_xy = laygen.get_inst_pin_coord(ildpo0.name, 'O', rg_m3m4)
+    ioai1_a_xy = laygen.get_inst_pin_coord(ioai1.name, 'A', rg_m3m4)
+    ioai1_b_xy = laygen.get_inst_pin_coord(ioai1.name, 'B', rg_m3m4)
+    ioai1_c_xy = laygen.get_inst_pin_coord(ioai1.name, 'C', rg_m3m4)
+    ioai1_d_xy = laygen.get_inst_pin_coord(ioai1.name, 'D', rg_m3m4)
+    ioai1_o_xy = laygen.get_inst_pin_coord(ioai1.name, 'O', rg_m3m4)
+    ildno0_i_xy = laygen.get_inst_pin_coord(ildno0.name, 'I', rg_m3m4)
+    ildno0_o_xy = laygen.get_inst_pin_coord(ildno0.name, 'O', rg_m3m4)
+    inr0_a_xy = laygen.get_inst_pin_coord(inr0.name, 'A', rg_m3m4)
+    inr0_b_xy = laygen.get_inst_pin_coord(inr0.name, 'B', rg_m3m4)
+    inr0_o_xy = laygen.get_inst_pin_coord(inr0.name, 'O', rg_m3m4)
+    izp0_i_xy = laygen.get_inst_pin_coord(izp0.name, 'I', rg_m3m4)
+    izp0_o_xy = laygen.get_inst_pin_coord(izp0.name, 'O', rg_m3m4)
+    izm0_i_xy = laygen.get_inst_pin_coord(izm0.name, 'I', rg_m3m4)
+    izm0_o_xy = laygen.get_inst_pin_coord(izm0.name, 'O', rg_m3m4)
+    #idff0_i_xy = laygen.get_inst_pin_coord(idff0.name, 'I', rg_m3m4)
+    #idff0_clk_xy = laygen.get_inst_pin_coord(idff0.name, 'CLK', rg_m3m4)
+    #idff0_o_xy = laygen.get_inst_pin_coord(idff0.name, 'O', rg_m3m4)
+    iinv0_i_xy = laygen.get_inst_pin_coord(iinv0.name, 'I', rg_m3m4)
+    iinv0_o_xy = laygen.get_inst_pin_coord(iinv0.name, 'O', rg_m3m4)
+    ilatch0_i_xy = laygen.get_inst_pin_coord(ilatch0.name, 'I', rg_m3m4)
+    ilatch0_clk_xy = laygen.get_inst_pin_coord(ilatch0.name, 'CLK', rg_m3m4)
+    ilatch0_clkb_xy = laygen.get_inst_pin_coord(ilatch0.name, 'CLKB', rg_m3m4)
+    ilatch0_o_xy = laygen.get_inst_pin_coord(ilatch0.name, 'O', rg_m3m4)
 
     #reference route coordinate
     y0 = ioai0_a_xy[0][1]
-    x0 = laygen.get_xy(obj =ioai0, gridname=rg_m3m4)[0] + 1
-    x1 = laygen.get_xy(obj =izm0, gridname=rg_m3m4)[0]\
-         + laygen.get_xy(obj =izm0.template, gridname=rg_m3m4)[0] * 2 - 1
-    #x2 = laygen.get_xy(obj =idff0, gridname=rg_m3m4)[0]\
-    #     +laygen.get_xy(obj =idff0.template, gridname=rg_m3m4)[0] - 1
-    x2 = laygen.get_xy(obj =ilatch0, gridname=rg_m3m4)[0]\
-         +laygen.get_xy(obj =ilatch0.template, gridname=rg_m3m4)[0] - 1
+    x0 = laygen.get_inst_xy(name=ioai0.name, gridname=rg_m3m4)[0] + 1
+    x1 = laygen.get_inst_xy(name=izm0.name, gridname=rg_m3m4)[0]\
+         +laygen.get_template_size(name=izm0.cellname, gridname=rg_m3m4, libname=templib_logic)[0]*2 - 1
+    #x2 = laygen.get_inst_xy(name=idff0.name, gridname=rg_m3m4)[0]\
+    #     +laygen.get_template_size(name=idff0.cellname, gridname=rg_m3m4, libname=templib_logic)[0] - 1
+    x2 = laygen.get_inst_xy(name=ilatch0.name, gridname=rg_m3m4)[0]\
+         +laygen.get_template_size(name=ilatch0.cellname, gridname=rg_m3m4, libname=templib_logic)[0] - 1
     #saop/saom
     rsaopv0, rsaop0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], ioai0_c_xy[0], np.array([x0, y0 + 3]), rg_m3m4)
     rsaomv0, rsaom0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], ioai1_c_xy[0], np.array([x0, y0 + 4]), rg_m3m4)
@@ -251,7 +259,7 @@ def generate_sarlogic_wret_v2(laygen, objectname_pfix, templib_logic, placement_
     #[rv0, rsb2, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], ioai1_d_xy[0], idff0_clk_xy[0], y0 - 1, rg_m3m4)
     [rv0, rsb2, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], ioai1_d_xy[0], iinv0_i_xy[0], y0 - 3, rg_m3m4)
     [rv0, rsb3, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], iinv0_i_xy[0], ilatch0_clkb_xy[0], y0 - 3, rg_m3m4)
-    [rv0, rs1, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], iinv0_o_xy[0], ilatch0_clk_xy[0], y0 - 2, rg_m3m4)
+    [rv0, rs1, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], iinv0_o_xy[0], ilatch0_clk_xy[0], y0 - 1, rg_m3m4)
     #ldpo
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], ioai0_o_xy[0], ildpo0_i_xy[0], y0 + 1, rg_m3m4)
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], ildpo0_o_xy[0], ioai0_a_xy[0], y0 - 4 + 3, rg_m3m4)
@@ -274,17 +282,17 @@ def generate_sarlogic_wret_v2(laygen, objectname_pfix, templib_logic, placement_
     rv0, rzmid0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], inr0_o_xy[0], np.array([x1, y0 + 2]), rg_m3m4)
    
     #pins 
-    laygen.boundary_pin_from_rect(rsaop0, rg_m3m4, "SAOP", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.pin(name = 'SAOP2', layer = laygen.layers['pin'][3], refobj = rsaopv0, gridname=rg_m3m4, netname='SAOP')
-    laygen.boundary_pin_from_rect(rsaom0, rg_m3m4, "SAOM", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.pin(name = 'SAOM2', layer = laygen.layers['pin'][3], refobj = rsaomv0, gridname=rg_m3m4, netname='SAOM')
-    laygen.boundary_pin_from_rect(rsb0, rg_m3m4, "SB", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.boundary_pin_from_rect(rrst0, rg_m3m4, "RST", laygen.layers['pin'][4], size=6, direction='left')
-    laygen.pin(name = 'RST2', layer = laygen.layers['pin'][3], refobj = rrstv1, gridname=rg_m3m4, netname='RST')
-    laygen.boundary_pin_from_rect(rzp0, rg_m3m4, "ZP", laygen.layers['pin'][4], size=6, direction='right')
-    laygen.boundary_pin_from_rect(rzm0, rg_m3m4, "ZM", laygen.layers['pin'][4], size=6, direction='right')
-    laygen.boundary_pin_from_rect(rzmid0, rg_m3m4, "ZMID", laygen.layers['pin'][4], size=6, direction='right')
-    laygen.boundary_pin_from_rect(rreto0, rg_m3m4, "RETO", laygen.layers['pin'][4], size=6, direction='right')
+    laygen.create_boundary_pin_from_rect(rsaop0, rg_m3m4, "SAOP", laygen.layers['pin'][4], size=6, direction='left')
+    laygen.pin_from_rect('SAOP2', laygen.layers['pin'][3], rsaopv0, gridname=rg_m3m4, netname='SAOP')
+    laygen.create_boundary_pin_from_rect(rsaom0, rg_m3m4, "SAOM", laygen.layers['pin'][4], size=6, direction='left')
+    laygen.pin_from_rect('SAOM2', laygen.layers['pin'][3], rsaomv0, gridname=rg_m3m4, netname='SAOM')
+    laygen.create_boundary_pin_from_rect(rsb0, rg_m3m4, "SB", laygen.layers['pin'][4], size=6, direction='left')
+    laygen.create_boundary_pin_from_rect(rrst0, rg_m3m4, "RST", laygen.layers['pin'][4], size=6, direction='left')
+    laygen.pin_from_rect('RST2', laygen.layers['pin'][3], rrstv1, gridname=rg_m3m4, netname='RST')
+    laygen.create_boundary_pin_from_rect(rzp0, rg_m3m4, "ZP", laygen.layers['pin'][4], size=6, direction='right')
+    laygen.create_boundary_pin_from_rect(rzm0, rg_m3m4, "ZM", laygen.layers['pin'][4], size=6, direction='right')
+    laygen.create_boundary_pin_from_rect(rzmid0, rg_m3m4, "ZMID", laygen.layers['pin'][4], size=6, direction='right')
+    laygen.create_boundary_pin_from_rect(rreto0, rg_m3m4, "RETO", laygen.layers['pin'][4], size=6, direction='right')
 
     # power pin
     #create_power_pin_from_inst(laygen, layer=laygen.layers['pin'][2], gridname=rg_m1m2, inst_left=ioai0, inst_right=idff0)
@@ -339,8 +347,8 @@ if __name__ == '__main__':
     m=2
     #load from preset
     load_from_file=True
-    yamlfile_spec="adc_sar_spec.yaml"
-    yamlfile_size="adc_sar_size.yaml"
+    yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
+    yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
     if load_from_file==True:
         with open(yamlfile_spec, 'r') as stream:
             specdict = yaml.load(stream)

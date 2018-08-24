@@ -62,25 +62,25 @@ def generate_boundary(laygen, objectname_pfix, placement_grid,
     dev_bottom.append(laygen.place("I" + objectname_pfix + 'BNDBTM0', devname_bottom[0], pg, xy=origin,
                       shape=shape_bottom[0], transform=transform_bottom[0]))
     for i, d in enumerate(devname_bottom[1:]):
-        dev_bottom.append(laygen.relplace(name = "I" + objectname_pfix + 'BNDBTM'+str(i+1), templatename = d, gridname = pg, refinstname = dev_bottom[-1].name,
+        dev_bottom.append(laygen.relplace("I" + objectname_pfix + 'BNDBTM'+str(i+1), d, pg, dev_bottom[-1].name,
                                           shape=shape_bottom[i+1], transform=transform_bottom[i+1]))
     dev_left=[]
-    dev_left.append(laygen.relplace(name = "I" + objectname_pfix + 'BNDLFT0', templatename = devname_left[0], gridname = pg, refinstname = dev_bottom[0].name, direction='top',
+    dev_left.append(laygen.relplace("I" + objectname_pfix + 'BNDLFT0', devname_left[0], pg, dev_bottom[0].name, direction='top',
                                     shape=shape_left[0], transform=transform_left[0]))
     for i, d in enumerate(devname_left[1:]):
-        dev_left.append(laygen.relplace(name = "I" + objectname_pfix + 'BNDLFT'+str(i+1), templatename = d, gridname = pg, refinstname = dev_left[-1].name, direction='top',
+        dev_left.append(laygen.relplace("I" + objectname_pfix + 'BNDLFT'+str(i+1), d, pg, dev_left[-1].name, direction='top',
                                         shape=shape_left[i+1], transform=transform_left[i+1]))
     dev_right=[]
-    dev_right.append(laygen.relplace(name = "I" + objectname_pfix + 'BNDRHT0', templatename = devname_right[0], gridname = pg, refinstname = dev_bottom[-1].name, direction='top',
+    dev_right.append(laygen.relplace("I" + objectname_pfix + 'BNDRHT0', devname_right[0], pg, dev_bottom[-1].name, direction='top',
                                      shape=shape_right[0], transform=transform_right[0]))
     for i, d in enumerate(devname_right[1:]):
-        dev_right.append(laygen.relplace(name = "I" + objectname_pfix + 'BNDRHT'+str(i+1), templatename = d, gridname = pg, refinstname = dev_right[-1].name, direction='top',
+        dev_right.append(laygen.relplace("I" + objectname_pfix + 'BNDRHT'+str(i+1), d, pg, dev_right[-1].name, direction='top',
                                          shape=shape_right[i+1], transform=transform_right[i+1]))
     dev_top=[]
-    dev_top.append(laygen.relplace(name = "I" + objectname_pfix + 'BNDTOP0', templatename = devname_top[0], gridname = pg, refinstname = dev_left[-1].name, direction='top',
+    dev_top.append(laygen.relplace("I" + objectname_pfix + 'BNDTOP0', devname_top[0], pg, dev_left[-1].name, direction='top',
                                    shape=shape_top[0], transform=transform_top[0]))
     for i, d in enumerate(devname_top[1:]):
-        dev_top.append(laygen.relplace(name = "I" + objectname_pfix + 'BNDTOP'+str(i+1), templatename = d, gridname = pg, refinstname = dev_top[-1].name,
+        dev_top.append(laygen.relplace("I" + objectname_pfix + 'BNDTOP'+str(i+1), d, pg, dev_top[-1].name,
                                        shape=shape_top[i+1], transform=transform_top[i+1]))
     dev_right=[]
     return [dev_bottom, dev_top, dev_left, dev_right]
@@ -105,18 +105,18 @@ def generate_ser2to1(laygen, objectname_pfix, templib_logic, placement_grid, rou
     sub_ser = int(num_ser/2)
 
     #Calculate layout size from sub_ser
-    ff_size=laygen.get_xy(obj=laygen.get_template(name = ff_name, libname = templib_logic), gridname = pg)
-    ff_rst_size=laygen.get_xy(obj=laygen.get_template(name = ff_rst_name, libname = templib_logic), gridname = pg)
-    latch_size=laygen.get_xy(obj=laygen.get_template(name = latch_name, libname = templib_logic), gridname = pg)
-    inv1_size=laygen.get_xy(obj=laygen.get_template(name = inv1_name, libname = templib_logic), gridname = pg)
-    inv2_size=laygen.get_xy(obj=laygen.get_template(name = inv2_name, libname = templib_logic), gridname = pg)
-    tinv_size=laygen.get_xy(obj=laygen.get_template(name = tinv_name, libname = templib_logic), gridname = pg)
-    outinv_size=laygen.get_xy(obj=laygen.get_template(name = outinv_name, libname = templib_logic), gridname = pg)
-    tap_size=laygen.get_xy(obj=laygen.get_template(name = tap_name, libname = templib_logic), gridname = pg)
+    ff_size=laygen.get_template_size(ff_name,pg,templib_logic)
+    ff_rst_size=laygen.get_template_size(ff_rst_name,pg,templib_logic)
+    latch_size=laygen.get_template_size(latch_name,pg,templib_logic)
+    inv1_size=laygen.get_template_size(inv1_name,pg,templib_logic)
+    inv2_size=laygen.get_template_size(inv2_name,pg,templib_logic)
+    tinv_size=laygen.get_template_size(tinv_name,pg,templib_logic)
+    outinv_size=laygen.get_template_size(outinv_name,pg,templib_logic)
+    tap_size=laygen.get_template_size(tap_name,pg,templib_logic)
     x0=ff_size[0]+ff_rst_size[0]+inv1_size[0]+2*inv2_size[0]+tinv_size[0]+2*tap_size[0]
     num_row=1
     #boundaries
-    m_bnd = int(x0 / laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottom'), gridname = pg)[0])
+    m_bnd = int(x0 / laygen.get_template_size('boundary_bottom',pg)[0])
     devname_bnd_left = []
     devname_bnd_right = []
     transform_bnd_left = []
@@ -149,13 +149,13 @@ def generate_ser2to1(laygen, objectname_pfix, templib_logic, placement_grid, rou
                                                                    transform_right=transform_bnd_right,
                                                                    origin=np.array([0, 0]))
     #Calculate origins for placement
-    tap_origin = origin + laygen.get_xy(obj = bnd_bottom[0], gridname = pg) \
-                   + laygen.get_xy(obj = bnd_bottom[0].template, gridname = pg)
-    array_origin = origin + laygen.get_xy(obj = bnd_bottom[0], gridname = pg) \
-                   + laygen.get_xy(obj = bnd_bottom[0].template, gridname = pg) \
-                   + np.array([laygen.get_xy(obj=laygen.get_template(name = tap_name, libname = templib_logic), gridname = pg)[0], 0])
-    tapr_origin = tap_origin + m_bnd*np.array([laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottom'), gridname = pg)[0], 0]) \
-                   - np.array([laygen.get_xy(obj=laygen.get_template(name = tap_name, libname = templib_logic), gridname = pg)[0], 0])
+    tap_origin = origin + laygen.get_inst_xy(bnd_bottom[0].name, pg) \
+                   + laygen.get_template_size(bnd_bottom[0].cellname, pg)
+    array_origin = origin + laygen.get_inst_xy(bnd_bottom[0].name, pg) \
+                   + laygen.get_template_size(bnd_bottom[0].cellname, pg) \
+                   + np.array([laygen.get_template_size(tap_name,pg,templib_logic)[0],0])
+    tapr_origin = tap_origin + m_bnd*np.array([laygen.get_template_size('boundary_bottom',pg)[0],0]) \
+                   - np.array([laygen.get_template_size(tap_name,pg,templib_logic)[0],0])
     # placement
     itapl=[]
     itapr=[]
@@ -166,10 +166,10 @@ def generate_ser2to1(laygen, objectname_pfix, templib_logic, placement_grid, rou
     #Space placement
     space_name = 'space_1x'
     space4x_name = 'space_4x'
-    space_width = laygen.get_xy(obj=laygen.get_template(name = space_name, libname = templib_logic), gridname = pg)[0]
-    space4_width = laygen.get_xy(obj=laygen.get_template(name = space4x_name, libname = templib_logic), gridname = pg)[0]
-    iclk_size=laygen.get_xy(obj=laygen.get_template(name = "inv_" + str(m_ser) + "x", libname = templib_logic), gridname = pg)
-    imux_size=laygen.get_xy(obj=laygen.get_template(name = "mux2to1_" + str(m_ser) + "x", libname = templib_logic), gridname = pg)
+    space_width = laygen.get_template_size(space_name,pg,templib_logic)[0]
+    space4_width = laygen.get_template_size(space4x_name,pg,templib_logic)[0]
+    iclk_size=laygen.get_template_size("inv_" + str(m_ser) + "x",pg,templib_logic)
+    imux_size=laygen.get_template_size("mux2to1_"+str(m_ser)+"x",pg,templib_logic)
     blank1_width = x0 - (2*tap_size + 2*iclk_size + imux_size + latch_size)[0]
     m_space4 = int(blank1_width / space4_width)
     m_space1 = int((blank1_width-m_space4*space4_width)/space_width)
@@ -206,19 +206,19 @@ def generate_ser2to1(laygen, objectname_pfix, templib_logic, placement_grid, rou
     )
 
     # internal pins
-    iclk0_i_xy = laygen.get_inst_pin_xy(iclk0.name, 'I', rg_m3m4)
-    iclk0_o_xy = laygen.get_inst_pin_xy(iclk0.name, 'O', rg_m3m4)
-    iclkb0_i_xy = laygen.get_inst_pin_xy(iclkb0.name, 'I', rg_m3m4)
-    iclkb0_o_xy = laygen.get_inst_pin_xy(iclkb0.name, 'O', rg_m3m4)
-    i0_i_xy = laygen.get_inst_pin_xy(i0.name, 'I', rg_m3m4)
-    i0_clk_xy = laygen.get_inst_pin_xy(i0.name, 'CLK', rg_m3m4)
-    i0_clkb_xy = laygen.get_inst_pin_xy(i0.name, 'CLKB', rg_m3m4)
-    i0_o_xy = laygen.get_inst_pin_xy(i0.name, 'O', rg_m3m4)
-    i1_i0_xy = laygen.get_inst_pin_xy(i1.name, 'I0', rg_m3m4)
-    i1_i1_xy = laygen.get_inst_pin_xy(i1.name, 'I1', rg_m3m4)
-    i1_en0_xy = laygen.get_inst_pin_xy(i1.name, 'EN0', rg_m3m4)
-    i1_en1_xy = laygen.get_inst_pin_xy(i1.name, 'EN1', rg_m3m4)
-    i1_o_xy = laygen.get_inst_pin_xy(i1.name, 'O', rg_m3m4)
+    iclk0_i_xy = laygen.get_inst_pin_coord(iclk0.name, 'I', rg_m3m4)
+    iclk0_o_xy = laygen.get_inst_pin_coord(iclk0.name, 'O', rg_m3m4)
+    iclkb0_i_xy = laygen.get_inst_pin_coord(iclkb0.name, 'I', rg_m3m4)
+    iclkb0_o_xy = laygen.get_inst_pin_coord(iclkb0.name, 'O', rg_m3m4)
+    i0_i_xy = laygen.get_inst_pin_coord(i0.name, 'I', rg_m3m4)
+    i0_clk_xy = laygen.get_inst_pin_coord(i0.name, 'CLK', rg_m3m4)
+    i0_clkb_xy = laygen.get_inst_pin_coord(i0.name, 'CLKB', rg_m3m4)
+    i0_o_xy = laygen.get_inst_pin_coord(i0.name, 'O', rg_m3m4)
+    i1_i0_xy = laygen.get_inst_pin_coord(i1.name, 'I0', rg_m3m4)
+    i1_i1_xy = laygen.get_inst_pin_coord(i1.name, 'I1', rg_m3m4)
+    i1_en0_xy = laygen.get_inst_pin_coord(i1.name, 'EN0', rg_m3m4)
+    i1_en1_xy = laygen.get_inst_pin_coord(i1.name, 'EN1', rg_m3m4)
+    i1_o_xy = laygen.get_inst_pin_coord(i1.name, 'O', rg_m3m4)
 
     # internal route
     laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][3], i0_o_xy[0], i1_i0_xy[0], rg_m3m4)
@@ -228,17 +228,17 @@ def generate_ser2to1(laygen, objectname_pfix, templib_logic, placement_grid, rou
     #Pin
     [rv0, rclk] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], 
             iclk0_i_xy[0], np.array([0,iclk0_i_xy[0][1]]), rg_m3m4)
-    laygen.boundary_pin_from_rect(rclk, rg_m3m4, "CLK", laygen.layers['pin'][4], size=4, direction='left')
+    laygen.create_boundary_pin_form_rect(rclk, rg_m3m4, "CLK", laygen.layers['pin'][4], size=4, direction='left')
     [rv0, rclkb] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], 
             iclkb0_i_xy[0], np.array([0,iclkb0_i_xy[1][1]]), rg_m3m4)
-    laygen.boundary_pin_from_rect(rclkb, rg_m3m4, "CLKB", laygen.layers['pin'][4], size=4, direction='left')
+    laygen.create_boundary_pin_form_rect(rclkb, rg_m3m4, "CLKB", laygen.layers['pin'][4], size=4, direction='left')
     [rv0, rdatao] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], 
             i1_o_xy[0], i1_o_xy[0]+np.array([5,0]), rg_m3m4)
-    laygen.boundary_pin_from_rect(rdatao, rg_m3m4, "O", laygen.layers['pin'][4], size=4, direction='right')
+    laygen.create_boundary_pin_form_rect(rdatao, rg_m3m4, "O", laygen.layers['pin'][4], size=4, direction='right')
     laygen.pin(name='I<0>', layer=laygen.layers['pin'][3], xy=i0_i_xy, gridname=rg_m3m4)
     laygen.pin(name='I<1>', layer=laygen.layers['pin'][3], xy=i1_i1_xy, gridname=rg_m3m4)
     # power pin
-    pwr_dim=laygen.get_xy(obj =itapl[-1].template, gridname=rg_m2m3)
+    pwr_dim=laygen.get_template_size(name=itapl[-1].cellname, gridname=rg_m2m3, libname=itapl[-1].libname)
     rvdd = []
     rvss = []
     if num_row%2==0: rp1='VSS'
@@ -251,31 +251,31 @@ def generate_ser2to1(laygen, objectname_pfix, templib_logic, placement_grid, rou
         rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+1, 0]), xy1=np.array([2*i+1, 0]), gridname0=rg_m2m3,
                      refinstname0=itapl[0].name, refpinname0='VSS', refinstindex0=np.array([0, 0]),
                      refinstname1=itapl[-1].name, refpinname1=rp1, refinstindex1=np.array([0, 0])))
-        laygen.pin(name = 'VDD'+str(2*i-2), layer = laygen.layers['pin'][3], refobj = rvdd[-1], gridname=rg_m2m3, netname='VDD')
-        laygen.pin(name = 'VSS'+str(2*i-2), layer = laygen.layers['pin'][3], refobj = rvss[-1], gridname=rg_m2m3, netname='VSS')
+        laygen.pin_from_rect('VDD'+str(2*i-2), laygen.layers['pin'][3], rvdd[-1], gridname=rg_m2m3, netname='VDD')
+        laygen.pin_from_rect('VSS'+str(2*i-2), laygen.layers['pin'][3], rvss[-1], gridname=rg_m2m3, netname='VSS')
         rvdd.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+2+1, 0]), xy1=np.array([2*i+2+1, 0]), gridname0=rg_m2m3,
                      refinstname0=itapr[0].name, refpinname0='VSS', refinstindex0=np.array([0, 0]),
                      refinstname1=itapr[-1].name, refpinname1=rp1, refinstindex1=np.array([0, 0])))
         rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+2, 0]), xy1=np.array([2*i+2, 0]), gridname0=rg_m2m3,
                      refinstname0=itapr[0].name, refpinname0='VSS', refinstindex0=np.array([0, 0]),
                      refinstname1=itapr[-1].name, refpinname1=rp1, refinstindex1=np.array([0, 0])))
-        laygen.pin(name = 'VDD'+str(2*i-1), layer = laygen.layers['pin'][3], refobj = rvdd[-1], gridname=rg_m2m3, netname='VDD')
-        laygen.pin(name = 'VSS'+str(2*i-1), layer = laygen.layers['pin'][3], refobj = rvss[-1], gridname=rg_m2m3, netname='VSS')
+        laygen.pin_from_rect('VDD'+str(2*i-1), laygen.layers['pin'][3], rvdd[-1], gridname=rg_m2m3, netname='VDD')
+        laygen.pin_from_rect('VSS'+str(2*i-1), laygen.layers['pin'][3], rvss[-1], gridname=rg_m2m3, netname='VSS')
     
     for i in range(num_row):
         for j in range(0, int(pwr_dim[0]/2)):
             rvdd.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j, 0]), xy1=np.array([2*j, 0]), gridname0=rg_m2m3,
-                         refinstname0=itapl[i].name, refpinname0='VDD', refinstindex0=np.array([0, 0]), via0=[[0, 0]],
+                         refinstname0=itapl[i].name, refpinname0='VDD', refinstindex0=np.array([0, 0]), addvia0=True,
                          refinstname1=itapl[i].name, refpinname1='VSS', refinstindex1=np.array([0, 0])))
             rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j+1, 0]), xy1=np.array([2*j+1, 0]), gridname0=rg_m2m3,
                          refinstname0=itapl[i].name, refpinname0='VDD', refinstindex0=np.array([0, 0]),
-                         refinstname1=itapl[i].name, refpinname1='VSS', refinstindex1=np.array([0, 0]), via1=[[0, 0]]))
+                         refinstname1=itapl[i].name, refpinname1='VSS', refinstindex1=np.array([0, 0]), addvia1=True))
             rvdd.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j+2+1, 0]), xy1=np.array([2*j+2+1, 0]), gridname0=rg_m2m3,
-                         refinstname0=itapr[i].name, refpinname0='VDD', refinstindex0=np.array([0, 0]), via0=[[0, 0]],
+                         refinstname0=itapr[i].name, refpinname0='VDD', refinstindex0=np.array([0, 0]), addvia0=True,
                          refinstname1=itapr[i].name, refpinname1='VSS', refinstindex1=np.array([0, 0])))
             rvss.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*j+2, 0]), xy1=np.array([2*j+2, 0]), gridname0=rg_m2m3,
                          refinstname0=itapr[i].name, refpinname0='VDD', refinstindex0=np.array([0, 0]),
-                         refinstname1=itapr[i].name, refpinname1='VSS', refinstindex1=np.array([0, 0]), via1=[[0, 0]]))
+                         refinstname1=itapr[i].name, refpinname1='VSS', refinstindex1=np.array([0, 0]), addvia1=True))
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")

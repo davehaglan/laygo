@@ -26,15 +26,15 @@ params = dict(
     rdx_array = [1, 2, 4, 8, 16, 32, 64, 128],
     )
 
-extracted_calibre = False
-extracted_pvs = True
-verify_tran = False
+extracted_calibre = True
+extracted_pvs = False
+verify_tran = True
 verify_noise = True
 
 load_from_file=True
 save_to_file=True
-yamlfile_spec="adc_sar_spec.yaml"
-yamlfile_size="adc_sar_size.yaml"
+yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
+yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
 yamlfile_output="adc_sar_output.yaml"
 
 if load_from_file==True:

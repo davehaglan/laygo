@@ -90,7 +90,7 @@
 				</dependentTests>
 			</var>
 			<var>pvidm
-				<value>{From/To}Linear:-240m:0.5m:240m{From/To}</value>
+				<value>{From/To}Linear:-320m:0.5m:320m{From/To}</value>
 				<dependentTests>
 					<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 				</dependentTests>
@@ -113,9 +113,21 @@
 					<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 				</dependentTests>
 			</var>
+			<var>l
+				<value>14m</value>
+				<dependentTests>
+					<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+				</dependentTests>
+			</var>
+			<var>nfin
+				<value>4</value>
+				<dependentTests>
+					<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+				</dependentTests>
+			</var>
 		</vars>
 		<jobpolicyname>ADE XL Default</jobpolicyname>
-		<overwritehistoryname>Interactive.0</overwritehistoryname>
+		<overwritehistoryname>Interactive.24</overwritehistoryname>
 		<plottingoptions>
 			<plottingoption>plottype
 				<value>None</value>
@@ -138,316 +150,7 @@
 		</distributeoptions>
 	</active>
 	<history>History
-		<historyentry>Interactive.0
-			<checkpoint>
-				<corners>
-					<corner enabled="1">_default</corner>
-				</corners>
-				<extensions>
-					<extension>Parasitics
-						<callback>_parSetupDBExtensionCB</callback>
-						<iconvalue></iconvalue>
-						<icontype></icontype>
-					</extension>
-				</extensions>
-				<currentmode>Single Run, Sweeps and Corners</currentmode>
-				<overwritehistory>0</overwritehistory>
-				<tests>
-					<test>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1
-						<tool>ADE</tool>
-						<tooloptions>
-							<option>cell
-								<value>sar_wsamp_9b_tb_tran_static</value>
-							</option>
-							<option>lib
-								<value>adc_sar_testbenches</value>
-							</option>
-							<option>sim
-								<value>spectre</value>
-							</option>
-							<option>view
-								<value>schematic</value>
-							</option>
-							<option>path
-								<value>$AXL_SETUPDB_DIR/test_states</value>
-							</option>
-							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1_spectre_state1_Interactive.0</value>
-							</option>
-						</tooloptions>
-						<origoptions>
-							<option>cell
-								<value>sar_wsamp_9b_tb_tran_static</value>
-							</option>
-							<option>lib
-								<value>adc_sar_testbenches</value>
-							</option>
-							<option>sim
-								<value>spectre</value>
-							</option>
-							<option>view
-								<value>schematic</value>
-							</option>
-							<option>path
-								<value>$AXL_SETUPDB_DIR/test_states</value>
-							</option>
-							<option>state
-								<value>spectre_state1</value>
-							</option>
-						</origoptions>
-					</test>
-				</tests>
-				<vars>
-					<var>vdd
-						<value>900m</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-					<var>pdelay
-						<value>2n/8</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-					<var>pper
-						<value>2n</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-					<var>pskew_rst
-						<value>0</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-					<var>pvicm
-						<value>150m</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-					<var>pvidm
-						<value>{From/To}Auto:-300m:7:300m{From/To}</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-					<var>pvref0
-						<value>0.0</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-					<var>pvref1
-						<value>150m</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-					<var>pvref2
-						<value>300m</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-				</vars>
-				<overwritehistoryname>Interactive.0</overwritehistoryname>
-				<plottingoptions>
-					<plottingoption>plottype
-						<value>None</value>
-					</plottingoption>
-					<plottingoption>usewaveformtemplate
-						<value>no</value>
-					</plottingoption>
-					<plottingoption>waveformtemplate
-						<value></value>
-					</plottingoption>
-				</plottingoptions>
-				<sortVariableValues>0</sortVariableValues>
-			</checkpoint>
-			<timestamp>Mon Apr 17 12:38:41 2017</timestamp>
-			<resultsname>/tools/projects/jdhan/BAG/tsmc16_craft/laygo/generators/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.0.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.0.rdb</simresults>
-			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
-			<netlistdelstrategy>SaveAll</netlistdelstrategy>
-			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr720-3.eecs.berkeley.edu_jdhan_123841707</localpsfdir>
-			<psfdir>/tools/scratch/jdhan/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.0</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.0</simdir>
-			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/jdhan/BAG/tsmc16_craft/laygo/generators/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.0.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.0.log</runlogfile>
-			<schematicpoint>
-				<vars>
-					<var>pvidm
-						<value>76m</value>
-					</var>
-				</vars>
-			</schematicpoint>
-			<test>all</test>
-		</historyentry>
-		<historyentry>Interactive.1
-			<checkpoint>
-				<corners>
-					<corner enabled="1">_default</corner>
-				</corners>
-				<extensions>
-					<extension>Parasitics
-						<callback>_parSetupDBExtensionCB</callback>
-						<iconvalue></iconvalue>
-						<icontype></icontype>
-					</extension>
-				</extensions>
-				<currentmode>Single Run, Sweeps and Corners</currentmode>
-				<overwritehistory>0</overwritehistory>
-				<tests>
-					<test>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1
-						<tool>ADE</tool>
-						<tooloptions>
-							<option>cell
-								<value>sar_wsamp_9b_tb_tran_static</value>
-							</option>
-							<option>lib
-								<value>adc_sar_testbenches</value>
-							</option>
-							<option>sim
-								<value>spectre</value>
-							</option>
-							<option>view
-								<value>schematic</value>
-							</option>
-							<option>path
-								<value>$AXL_SETUPDB_DIR/test_states</value>
-							</option>
-							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1_spectre_state1_Interactive.1</value>
-							</option>
-						</tooloptions>
-						<origoptions>
-							<option>cell
-								<value>sar_wsamp_9b_tb_tran_static</value>
-							</option>
-							<option>lib
-								<value>adc_sar_testbenches</value>
-							</option>
-							<option>sim
-								<value>spectre</value>
-							</option>
-							<option>view
-								<value>schematic</value>
-							</option>
-							<option>path
-								<value>$AXL_SETUPDB_DIR/test_states</value>
-							</option>
-							<option>state
-								<value>spectre_state1</value>
-							</option>
-						</origoptions>
-					</test>
-				</tests>
-				<vars>
-					<var>vdd
-						<value>900m</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-					<var>pdelay
-						<value>2n/8</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-					<var>pper
-						<value>2n</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-					<var>pskew_rst
-						<value>0</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-					<var>pvicm
-						<value>150m</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-					<var>pvidm
-						<value>{From/To}Auto:-300m:7:300m{From/To}</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-					<var>pvref0
-						<value>0.0</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-					<var>pvref1
-						<value>150m</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-					<var>pvref2
-						<value>300m</value>
-						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
-						</dependentTests>
-					</var>
-				</vars>
-				<overwritehistoryname>Interactive.0</overwritehistoryname>
-				<plottingoptions>
-					<plottingoption>plottype
-						<value>None</value>
-					</plottingoption>
-					<plottingoption>usewaveformtemplate
-						<value>no</value>
-					</plottingoption>
-					<plottingoption>waveformtemplate
-						<value></value>
-					</plottingoption>
-				</plottingoptions>
-				<distributeoptions>
-					<genusjoblimits>
-						<genusjoblimit>ICRP
-							<value>0</value>
-						</genusjoblimit>
-					</genusjoblimits>
-					<specifyjoblimit>0</specifyjoblimit>
-					<parallelrun>1</parallelrun>
-				</distributeoptions>
-				<sortVariableValues>0</sortVariableValues>
-			</checkpoint>
-			<timestamp>Mon Apr 17 12:47:14 2017</timestamp>
-			<resultsname>/tools/projects/jdhan/BAG/tsmc16_craft/laygo/generators/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.1.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.1.rdb</simresults>
-			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
-			<netlistdelstrategy>SaveAll</netlistdelstrategy>
-			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr720-3.eecs.berkeley.edu_jdhan_124714429</localpsfdir>
-			<psfdir>/tools/scratch/jdhan/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.1</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.1</simdir>
-			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/jdhan/BAG/tsmc16_craft/laygo/generators/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.1.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.1.log</runlogfile>
-			<schematicpoint>
-				<vars>
-					<var>pvidm
-						<value>76m</value>
-					</var>
-				</vars>
-			</schematicpoint>
-			<test>all</test>
-		</historyentry>
-		<historyentry>Interactive.2
+		<historyentry assemblerOrExplorer="adexl">Interactive.23
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -481,7 +184,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1_spectre_state1_Interactive.2</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1_spectre_state1_Interactive.23</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -510,59 +213,72 @@
 					<var>vdd
 						<value>900m</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pdelay
 						<value>2n/8</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pper
 						<value>2n</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pskew_rst
 						<value>0</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pvicm
 						<value>150m</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>{From/To}Auto:-300m:7:300m{From/To}</value>
+						<value>{From/To}Linear:-320m:0.5m:320m{From/To}</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pvref0
 						<value>0.0</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pvref1
 						<value>150m</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pvref2
 						<value>300m</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>l
+						<value>14m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>nfin
+						<value>4</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 				</vars>
-				<overwritehistoryname>Interactive.0</overwritehistoryname>
+				<jobpolicyname>ADE XL Default</jobpolicyname>
+				<overwritehistoryname>Interactive.12</overwritehistoryname>
 				<plottingoptions>
 					<plottingoption>plottype
 						<value>None</value>
@@ -583,30 +299,16 @@
 					<specifyjoblimit>0</specifyjoblimit>
 					<parallelrun>1</parallelrun>
 				</distributeoptions>
-				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Mon Apr 17 13:07:41 2017</timestamp>
-			<resultsname>/tools/projects/jdhan/BAG/tsmc16_craft/laygo/generators/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.2.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.2.rdb</simresults>
+			<timestamp>Dec 21 05:36:44 2017</timestamp>
+			<resultsname>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.23.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.23.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr720-3.eecs.berkeley.edu_jdhan_130741668</localpsfdir>
-			<psfdir>/tools/scratch/jdhan/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.2</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.2</simdir>
-			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/jdhan/BAG/tsmc16_craft/laygo/generators/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.2.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.2.log</runlogfile>
-			<schematicpoint>
-				<vars>
-					<var>pvidm
-						<value>76m</value>
-					</var>
-				</vars>
-			</schematicpoint>
-			<test>all</test>
+			<localpsfdir>/tmp/sj28lo03_chiragg_053644312</localpsfdir>
 		</historyentry>
-		<historyentry>Interactive.3
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.24
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -640,7 +342,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1_spectre_state1_Interactive.3</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1_spectre_state1_Interactive.24</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -669,59 +371,72 @@
 					<var>vdd
 						<value>900m</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pdelay
 						<value>2n/8</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pper
 						<value>2n</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pskew_rst
 						<value>0</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pvicm
 						<value>150m</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>{From/To}Auto:-300m:129:300m{From/To}</value>
+						<value>{From/To}Linear:-320m:0.5m:320m{From/To}</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pvref0
 						<value>0.0</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pvref1
 						<value>150m</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pvref2
 						<value>300m</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>l
+						<value>14m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>nfin
+						<value>4</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 				</vars>
-				<overwritehistoryname>Interactive.0</overwritehistoryname>
+				<jobpolicyname>ADE XL Default</jobpolicyname>
+				<overwritehistoryname>Interactive.24</overwritehistoryname>
 				<plottingoptions>
 					<plottingoption>plottype
 						<value>None</value>
@@ -744,18 +459,19 @@
 				</distributeoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Mon Apr 17 13:55:06 2017</timestamp>
-			<resultsname>/tools/projects/jdhan/BAG/tsmc16_craft/laygo/generators/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.3.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.3.rdb</simresults>
+			<timestamp>Dec 21 05:40:57 2017</timestamp>
+			<resultsname>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.24.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.24.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr720-3.eecs.berkeley.edu_jdhan_135506694</localpsfdir>
-			<psfdir>/tools/scratch/jdhan/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.3</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.3</simdir>
+			<localpsfdir>/tmp/sj28lo03_chiragg_054057699</localpsfdir>
+			<psfdir>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.24</psfdir>
+			<simdir>./Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.24</simdir>
+			<resultspsfisuserpath>1</resultspsfisuserpath>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/jdhan/BAG/tsmc16_craft/laygo/generators/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.3.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.3.log</runlogfile>
+			<runlog>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.24.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.24.log</runlogfile>
 			<schematicpoint>
 				<vars>
 					<var>pvidm
@@ -765,7 +481,7 @@
 			</schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry>Interactive.4
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.25
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -799,7 +515,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1_spectre_state1_Interactive.4</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1_spectre_state1_Interactive.25</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -828,59 +544,72 @@
 					<var>vdd
 						<value>900m</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pdelay
 						<value>2n/8</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pper
 						<value>2n</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pskew_rst
 						<value>0</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pvicm
 						<value>150m</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>{From/To}Linear:-300m:0.5m:270m{From/To}</value>
+						<value>{From/To}Linear:-320m:0.5m:320m{From/To}</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pvref0
 						<value>0.0</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pvref1
 						<value>150m</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 					<var>pvref2
 						<value>300m</value>
 						<dependentTests>
-							<dependentTest omitted="0">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>l
+						<value>14m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>nfin
+						<value>4</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
 				</vars>
-				<overwritehistoryname>Interactive.0</overwritehistoryname>
+				<jobpolicyname>ADE XL Default</jobpolicyname>
+				<overwritehistoryname>Interactive.24</overwritehistoryname>
 				<plottingoptions>
 					<plottingoption>plottype
 						<value>None</value>
@@ -903,18 +632,19 @@
 				</distributeoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Mon Apr 17 20:42:49 2017</timestamp>
-			<resultsname>/tools/projects/jdhan/BAG/tsmc16_craft/laygo/generators/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.4.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.4.rdb</simresults>
+			<timestamp>Dec 26 16:34:51 2017</timestamp>
+			<resultsname>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.25.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.25.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr720-3.eecs.berkeley.edu_jdhan_204249330</localpsfdir>
-			<psfdir>/tools/scratch/jdhan/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.4</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.4</simdir>
+			<localpsfdir>/tmp/sj28lo03_chiragg_163451178</localpsfdir>
+			<psfdir>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.25</psfdir>
+			<simdir>./Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.25</simdir>
+			<resultspsfisuserpath>1</resultspsfisuserpath>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/jdhan/BAG/tsmc16_craft/laygo/generators/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.4.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.4.log</runlogfile>
+			<runlog>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.25.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.25.log</runlogfile>
 			<schematicpoint>
 				<vars>
 					<var>pvidm
@@ -924,7 +654,526 @@
 			</schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry>Interactive.5
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.26
+			<checkpoint>
+				<corners>
+					<corner enabled="1">_default</corner>
+				</corners>
+				<extensions>
+					<extension>Parasitics
+						<callback>_parSetupDBExtensionCB</callback>
+						<iconvalue></iconvalue>
+						<icontype></icontype>
+					</extension>
+				</extensions>
+				<currentmode>Single Run, Sweeps and Corners</currentmode>
+				<overwritehistory>0</overwritehistory>
+				<tests>
+					<test>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1
+						<tool>ADE</tool>
+						<tooloptions>
+							<option>cell
+								<value>sar_wsamp_9b_tb_tran_static</value>
+							</option>
+							<option>lib
+								<value>adc_sar_testbenches</value>
+							</option>
+							<option>sim
+								<value>spectre</value>
+							</option>
+							<option>view
+								<value>schematic</value>
+							</option>
+							<option>path
+								<value>$AXL_SETUPDB_DIR/test_states</value>
+							</option>
+							<option>state
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1_spectre_state1_Interactive.26</value>
+							</option>
+						</tooloptions>
+						<origoptions>
+							<option>cell
+								<value>sar_wsamp_9b_tb_tran_static</value>
+							</option>
+							<option>lib
+								<value>adc_sar_testbenches</value>
+							</option>
+							<option>sim
+								<value>spectre</value>
+							</option>
+							<option>view
+								<value>schematic</value>
+							</option>
+							<option>path
+								<value>$AXL_SETUPDB_DIR/test_states</value>
+							</option>
+							<option>state
+								<value>spectre_state1</value>
+							</option>
+						</origoptions>
+					</test>
+				</tests>
+				<vars>
+					<var>vdd
+						<value>900m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pdelay
+						<value>2n/8</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pper
+						<value>2n</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pskew_rst
+						<value>0</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvicm
+						<value>150m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvidm
+						<value>{From/To}Linear:-320m:0.5m:320m{From/To}</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref0
+						<value>0.0</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref1
+						<value>150m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref2
+						<value>300m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>l
+						<value>14m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>nfin
+						<value>4</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+				</vars>
+				<jobpolicyname>ADE XL Default</jobpolicyname>
+				<overwritehistoryname>Interactive.24</overwritehistoryname>
+				<plottingoptions>
+					<plottingoption>plottype
+						<value>None</value>
+					</plottingoption>
+					<plottingoption>usewaveformtemplate
+						<value>no</value>
+					</plottingoption>
+					<plottingoption>waveformtemplate
+						<value></value>
+					</plottingoption>
+				</plottingoptions>
+				<distributeoptions>
+					<genusjoblimits>
+						<genusjoblimit>ICRP
+							<value>0</value>
+						</genusjoblimit>
+					</genusjoblimits>
+					<specifyjoblimit>0</specifyjoblimit>
+					<parallelrun>1</parallelrun>
+				</distributeoptions>
+				<sortVariableValues>0</sortVariableValues>
+			</checkpoint>
+			<timestamp>Jan 3 10:01:42 2018</timestamp>
+			<resultsname>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.26.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.26.rdb</simresults>
+			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
+			<netlistdelstrategy>SaveAll</netlistdelstrategy>
+			<uselocalpsfdir>false</uselocalpsfdir>
+			<localpsfdir>/tmp/sj28lo03_chiragg_100142467</localpsfdir>
+			<psfdir>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.26</psfdir>
+			<simdir>./Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.26</simdir>
+			<resultspsfisuserpath>1</resultspsfisuserpath>
+			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
+			<runlog>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.26.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.26.log</runlogfile>
+			<schematicpoint>
+				<vars>
+					<var>pvidm
+						<value>76m</value>
+					</var>
+				</vars>
+			</schematicpoint>
+			<test>all</test>
+		</historyentry>
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.27
+			<checkpoint>
+				<corners>
+					<corner enabled="1">_default</corner>
+				</corners>
+				<extensions>
+					<extension>Parasitics
+						<callback>_parSetupDBExtensionCB</callback>
+						<iconvalue></iconvalue>
+						<icontype></icontype>
+					</extension>
+				</extensions>
+				<currentmode>Single Run, Sweeps and Corners</currentmode>
+				<overwritehistory>0</overwritehistory>
+				<tests>
+					<test>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1
+						<tool>ADE</tool>
+						<tooloptions>
+							<option>cell
+								<value>sar_wsamp_9b_tb_tran_static</value>
+							</option>
+							<option>lib
+								<value>adc_sar_testbenches</value>
+							</option>
+							<option>sim
+								<value>spectre</value>
+							</option>
+							<option>view
+								<value>schematic</value>
+							</option>
+							<option>path
+								<value>$AXL_SETUPDB_DIR/test_states</value>
+							</option>
+							<option>state
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1_spectre_state1_Interactive.27</value>
+							</option>
+						</tooloptions>
+						<origoptions>
+							<option>cell
+								<value>sar_wsamp_9b_tb_tran_static</value>
+							</option>
+							<option>lib
+								<value>adc_sar_testbenches</value>
+							</option>
+							<option>sim
+								<value>spectre</value>
+							</option>
+							<option>view
+								<value>schematic</value>
+							</option>
+							<option>path
+								<value>$AXL_SETUPDB_DIR/test_states</value>
+							</option>
+							<option>state
+								<value>spectre_state1</value>
+							</option>
+						</origoptions>
+					</test>
+				</tests>
+				<vars>
+					<var>vdd
+						<value>900m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pdelay
+						<value>2n/8</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pper
+						<value>2n</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pskew_rst
+						<value>0</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvicm
+						<value>150m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvidm
+						<value>{From/To}Linear:-320m:0.5m:320m{From/To}</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref0
+						<value>0.0</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref1
+						<value>150m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref2
+						<value>300m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>l
+						<value>14m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>nfin
+						<value>4</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+				</vars>
+				<jobpolicyname>ADE XL Default</jobpolicyname>
+				<overwritehistoryname>Interactive.24</overwritehistoryname>
+				<plottingoptions>
+					<plottingoption>plottype
+						<value>None</value>
+					</plottingoption>
+					<plottingoption>usewaveformtemplate
+						<value>no</value>
+					</plottingoption>
+					<plottingoption>waveformtemplate
+						<value></value>
+					</plottingoption>
+				</plottingoptions>
+				<distributeoptions>
+					<genusjoblimits>
+						<genusjoblimit>ICRP
+							<value>0</value>
+						</genusjoblimit>
+					</genusjoblimits>
+					<specifyjoblimit>0</specifyjoblimit>
+					<parallelrun>1</parallelrun>
+				</distributeoptions>
+				<sortVariableValues>0</sortVariableValues>
+			</checkpoint>
+			<timestamp>Jan 4 01:00:07 2018</timestamp>
+			<resultsname>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.27.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.27.rdb</simresults>
+			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
+			<netlistdelstrategy>SaveAll</netlistdelstrategy>
+			<uselocalpsfdir>false</uselocalpsfdir>
+			<localpsfdir>/tmp/sj28ut02_chiragg_010007278</localpsfdir>
+			<psfdir>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.27</psfdir>
+			<simdir>./Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.27</simdir>
+			<resultspsfisuserpath>1</resultspsfisuserpath>
+			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
+			<runlog>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.27.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.27.log</runlogfile>
+			<schematicpoint>
+				<vars>
+					<var>pvidm
+						<value>76m</value>
+					</var>
+				</vars>
+			</schematicpoint>
+			<test>all</test>
+		</historyentry>
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.28
+			<checkpoint>
+				<corners>
+					<corner enabled="1">_default</corner>
+				</corners>
+				<extensions>
+					<extension>Parasitics
+						<callback>_parSetupDBExtensionCB</callback>
+						<iconvalue></iconvalue>
+						<icontype></icontype>
+					</extension>
+				</extensions>
+				<currentmode>Single Run, Sweeps and Corners</currentmode>
+				<overwritehistory>0</overwritehistory>
+				<tests>
+					<test>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1
+						<tool>ADE</tool>
+						<tooloptions>
+							<option>cell
+								<value>sar_wsamp_9b_tb_tran_static</value>
+							</option>
+							<option>lib
+								<value>adc_sar_testbenches</value>
+							</option>
+							<option>sim
+								<value>spectre</value>
+							</option>
+							<option>view
+								<value>schematic</value>
+							</option>
+							<option>path
+								<value>$AXL_SETUPDB_DIR/test_states</value>
+							</option>
+							<option>state
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1_spectre_state1_Interactive.28</value>
+							</option>
+						</tooloptions>
+						<origoptions>
+							<option>cell
+								<value>sar_wsamp_9b_tb_tran_static</value>
+							</option>
+							<option>lib
+								<value>adc_sar_testbenches</value>
+							</option>
+							<option>sim
+								<value>spectre</value>
+							</option>
+							<option>view
+								<value>schematic</value>
+							</option>
+							<option>path
+								<value>$AXL_SETUPDB_DIR/test_states</value>
+							</option>
+							<option>state
+								<value>spectre_state1</value>
+							</option>
+						</origoptions>
+					</test>
+				</tests>
+				<vars>
+					<var>vdd
+						<value>900m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pdelay
+						<value>2n/8</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pper
+						<value>2n</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pskew_rst
+						<value>0</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvicm
+						<value>150m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvidm
+						<value>{From/To}Linear:-320m:0.5m:320m{From/To}</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref0
+						<value>0.0</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref1
+						<value>150m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref2
+						<value>300m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>l
+						<value>14m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>nfin
+						<value>4</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+				</vars>
+				<jobpolicyname>ADE XL Default</jobpolicyname>
+				<overwritehistoryname>Interactive.24</overwritehistoryname>
+				<plottingoptions>
+					<plottingoption>plottype
+						<value>None</value>
+					</plottingoption>
+					<plottingoption>usewaveformtemplate
+						<value>no</value>
+					</plottingoption>
+					<plottingoption>waveformtemplate
+						<value></value>
+					</plottingoption>
+				</plottingoptions>
+				<distributeoptions>
+					<genusjoblimits>
+						<genusjoblimit>ICRP
+							<value>0</value>
+						</genusjoblimit>
+					</genusjoblimits>
+					<specifyjoblimit>0</specifyjoblimit>
+					<parallelrun>1</parallelrun>
+				</distributeoptions>
+				<sortVariableValues>0</sortVariableValues>
+			</checkpoint>
+			<timestamp>Jan 4 01:02:01 2018</timestamp>
+			<resultsname>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.28.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.28.rdb</simresults>
+			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
+			<netlistdelstrategy>SaveAll</netlistdelstrategy>
+			<uselocalpsfdir>false</uselocalpsfdir>
+			<localpsfdir>/tmp/sj28ut02_chiragg_010201886</localpsfdir>
+			<psfdir>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.28</psfdir>
+			<simdir>./Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.28</simdir>
+			<resultspsfisuserpath>1</resultspsfisuserpath>
+			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
+			<runlog>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.28.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.28.log</runlogfile>
+			<schematicpoint>
+				<vars>
+					<var>pvidm
+						<value>76m</value>
+					</var>
+				</vars>
+			</schematicpoint>
+			<test>all</test>
+		</historyentry>
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.29
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -958,7 +1207,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1_spectre_state1_Interactive.5</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1_spectre_state1_Interactive.29</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -1015,7 +1264,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>{From/To}Linear:-270m:0.5m:270m{From/To}</value>
+						<value>{From/To}Linear:-320m:0.5m:320m{From/To}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
@@ -1038,8 +1287,21 @@
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
+					<var>l
+						<value>14m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>nfin
+						<value>4</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
 				</vars>
-				<overwritehistoryname>Interactive.0</overwritehistoryname>
+				<jobpolicyname>ADE XL Default</jobpolicyname>
+				<overwritehistoryname>Interactive.24</overwritehistoryname>
 				<plottingoptions>
 					<plottingoption>plottype
 						<value>None</value>
@@ -1062,18 +1324,19 @@
 				</distributeoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Tue Apr 18 00:22:31 2017</timestamp>
-			<resultsname>/tools/projects/jdhan/BAG/tsmc16_craft/laygo/generators/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.5.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.5.rdb</simresults>
+			<timestamp>Jan 10 12:00:13 2018</timestamp>
+			<resultsname>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.29.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.29.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr720-3.eecs.berkeley.edu_jdhan_002231033</localpsfdir>
-			<psfdir>/tools/scratch/jdhan/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.5</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.5</simdir>
+			<localpsfdir>/tmp/sj28lo02_chiragg_120013992</localpsfdir>
+			<psfdir>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.29</psfdir>
+			<simdir>./Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.29</simdir>
+			<resultspsfisuserpath>1</resultspsfisuserpath>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/jdhan/BAG/tsmc16_craft/laygo/generators/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.5.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.5.log</runlogfile>
+			<runlog>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.29.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.29.log</runlogfile>
 			<schematicpoint>
 				<vars>
 					<var>pvidm
@@ -1083,7 +1346,7 @@
 			</schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry>Interactive.6
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.30
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -1117,7 +1380,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1_spectre_state1_Interactive.6</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1_spectre_state1_Interactive.30</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -1174,7 +1437,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>{From/To}Linear:-240m:0.5m:240m{From/To}</value>
+						<value>{From/To}Linear:-320m:0.5m:320m{From/To}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
@@ -1197,8 +1460,21 @@
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
 						</dependentTests>
 					</var>
+					<var>l
+						<value>14m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>nfin
+						<value>4</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
 				</vars>
-				<overwritehistoryname>Interactive.0</overwritehistoryname>
+				<jobpolicyname>ADE XL Default</jobpolicyname>
+				<overwritehistoryname>Interactive.24</overwritehistoryname>
 				<plottingoptions>
 					<plottingoption>plottype
 						<value>None</value>
@@ -1221,18 +1497,365 @@
 				</distributeoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Tue Apr 18 13:27:22 2017</timestamp>
-			<resultsname>/tools/projects/jdhan/BAG/tsmc16_craft/laygo/generators/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.6.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.6.rdb</simresults>
+			<timestamp>Jan 28 23:51:07 2018</timestamp>
+			<resultsname>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.30.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.30.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr720-3.eecs.berkeley.edu_jdhan_132722462</localpsfdir>
-			<psfdir>/tools/scratch/jdhan/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.6</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.6</simdir>
+			<localpsfdir>/tmp/sj28ut02_chiragg_235107976</localpsfdir>
+			<psfdir>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.30</psfdir>
+			<simdir>./Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.30</simdir>
+			<resultspsfisuserpath>1</resultspsfisuserpath>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/jdhan/BAG/tsmc16_craft/laygo/generators/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.6.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.6.log</runlogfile>
+			<runlog>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.30.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.30.log</runlogfile>
+			<schematicpoint>
+				<vars>
+					<var>pvidm
+						<value>76m</value>
+					</var>
+				</vars>
+			</schematicpoint>
+			<test>all</test>
+		</historyentry>
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.31
+			<checkpoint>
+				<corners>
+					<corner enabled="1">_default</corner>
+				</corners>
+				<extensions>
+					<extension>Parasitics
+						<callback>_parSetupDBExtensionCB</callback>
+						<iconvalue></iconvalue>
+						<icontype></icontype>
+					</extension>
+				</extensions>
+				<currentmode>Single Run, Sweeps and Corners</currentmode>
+				<overwritehistory>0</overwritehistory>
+				<tests>
+					<test>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1
+						<tool>ADE</tool>
+						<tooloptions>
+							<option>cell
+								<value>sar_wsamp_9b_tb_tran_static</value>
+							</option>
+							<option>lib
+								<value>adc_sar_testbenches</value>
+							</option>
+							<option>sim
+								<value>spectre</value>
+							</option>
+							<option>view
+								<value>config</value>
+							</option>
+							<option>path
+								<value>$AXL_SETUPDB_DIR/test_states</value>
+							</option>
+							<option>state
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1_spectre_state1_Interactive.31</value>
+							</option>
+						</tooloptions>
+						<origoptions>
+							<option>cell
+								<value>sar_wsamp_9b_tb_tran_static</value>
+							</option>
+							<option>lib
+								<value>adc_sar_testbenches</value>
+							</option>
+							<option>sim
+								<value>spectre</value>
+							</option>
+							<option>view
+								<value>schematic</value>
+							</option>
+							<option>path
+								<value>$AXL_SETUPDB_DIR/test_states</value>
+							</option>
+							<option>state
+								<value>spectre_state1</value>
+							</option>
+						</origoptions>
+					</test>
+				</tests>
+				<vars>
+					<var>vdd
+						<value>900m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pdelay
+						<value>2n/8</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pper
+						<value>2n</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pskew_rst
+						<value>0</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvicm
+						<value>150m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvidm
+						<value>{From/To}Linear:-320m:0.5m:320m{From/To}</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref0
+						<value>0.0</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref1
+						<value>150m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref2
+						<value>300m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>l
+						<value>14m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>nfin
+						<value>4</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+				</vars>
+				<jobpolicyname>ADE XL Default</jobpolicyname>
+				<overwritehistoryname>Interactive.24</overwritehistoryname>
+				<plottingoptions>
+					<plottingoption>plottype
+						<value>None</value>
+					</plottingoption>
+					<plottingoption>usewaveformtemplate
+						<value>no</value>
+					</plottingoption>
+					<plottingoption>waveformtemplate
+						<value></value>
+					</plottingoption>
+				</plottingoptions>
+				<distributeoptions>
+					<genusjoblimits>
+						<genusjoblimit>ICRP
+							<value>0</value>
+						</genusjoblimit>
+					</genusjoblimits>
+					<specifyjoblimit>0</specifyjoblimit>
+					<parallelrun>1</parallelrun>
+				</distributeoptions>
+				<sortVariableValues>0</sortVariableValues>
+			</checkpoint>
+			<timestamp>Jan 30 10:51:42 2018</timestamp>
+			<resultsname>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.31.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.31.rdb</simresults>
+			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
+			<netlistdelstrategy>SaveAll</netlistdelstrategy>
+			<uselocalpsfdir>false</uselocalpsfdir>
+			<localpsfdir>/tmp/sj28lo02_chiragg_105142419</localpsfdir>
+			<psfdir>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.31</psfdir>
+			<simdir>./Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.31</simdir>
+			<resultspsfisuserpath>1</resultspsfisuserpath>
+			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
+			<runlog>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.31.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.31.log</runlogfile>
+			<schematicpoint>
+				<vars>
+					<var>pvidm
+						<value>76m</value>
+					</var>
+				</vars>
+			</schematicpoint>
+			<test>all</test>
+		</historyentry>
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.32
+			<checkpoint>
+				<corners>
+					<corner enabled="1">_default</corner>
+				</corners>
+				<extensions>
+					<extension>Parasitics
+						<callback>_parSetupDBExtensionCB</callback>
+						<iconvalue></iconvalue>
+						<icontype></icontype>
+					</extension>
+				</extensions>
+				<currentmode>Single Run, Sweeps and Corners</currentmode>
+				<overwritehistory>0</overwritehistory>
+				<tests>
+					<test>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1
+						<tool>ADE</tool>
+						<tooloptions>
+							<option>cell
+								<value>sar_wsamp_9b_tb_tran_static</value>
+							</option>
+							<option>lib
+								<value>adc_sar_testbenches</value>
+							</option>
+							<option>sim
+								<value>spectre</value>
+							</option>
+							<option>view
+								<value>config</value>
+							</option>
+							<option>path
+								<value>$AXL_SETUPDB_DIR/test_states</value>
+							</option>
+							<option>state
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1_spectre_state1_Interactive.32</value>
+							</option>
+						</tooloptions>
+						<origoptions>
+							<option>cell
+								<value>sar_wsamp_9b_tb_tran_static</value>
+							</option>
+							<option>lib
+								<value>adc_sar_testbenches</value>
+							</option>
+							<option>sim
+								<value>spectre</value>
+							</option>
+							<option>view
+								<value>schematic</value>
+							</option>
+							<option>path
+								<value>$AXL_SETUPDB_DIR/test_states</value>
+							</option>
+							<option>state
+								<value>spectre_state1</value>
+							</option>
+						</origoptions>
+					</test>
+				</tests>
+				<vars>
+					<var>vdd
+						<value>900m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pdelay
+						<value>2n/8</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pper
+						<value>2n</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pskew_rst
+						<value>0</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvicm
+						<value>150m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvidm
+						<value>{From/To}Linear:-320m:0.5m:320m{From/To}</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref0
+						<value>0.0</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref1
+						<value>150m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>pvref2
+						<value>300m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>l
+						<value>14m</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+					<var>nfin
+						<value>4</value>
+						<dependentTests>
+							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_static:1</dependentTest>
+						</dependentTests>
+					</var>
+				</vars>
+				<jobpolicyname>ADE XL Default</jobpolicyname>
+				<overwritehistoryname>Interactive.24</overwritehistoryname>
+				<plottingoptions>
+					<plottingoption>plottype
+						<value>None</value>
+					</plottingoption>
+					<plottingoption>usewaveformtemplate
+						<value>no</value>
+					</plottingoption>
+					<plottingoption>waveformtemplate
+						<value></value>
+					</plottingoption>
+				</plottingoptions>
+				<distributeoptions>
+					<genusjoblimits>
+						<genusjoblimit>ICRP
+							<value>0</value>
+						</genusjoblimit>
+					</genusjoblimits>
+					<specifyjoblimit>0</specifyjoblimit>
+					<parallelrun>1</parallelrun>
+				</distributeoptions>
+				<sortVariableValues>0</sortVariableValues>
+			</checkpoint>
+			<timestamp>Jan 30 10:56:15 2018</timestamp>
+			<resultsname>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.32.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.32.rdb</simresults>
+			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
+			<netlistdelstrategy>SaveAll</netlistdelstrategy>
+			<uselocalpsfdir>false</uselocalpsfdir>
+			<localpsfdir>/tmp/sj28lo02_chiragg_105615688</localpsfdir>
+			<psfdir>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.32</psfdir>
+			<simdir>./Simulations/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.32</simdir>
+			<resultspsfisuserpath>1</resultspsfisuserpath>
+			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
+			<runlog>/proj/craft_p2/work/chiragg/craft_adc_14/TISARADC_TSMC16FFC/laygo/generators/adc_sar/adc_sar_testbenches/sar_wsamp_9b_tb_tran_static/adexl/results/data/Interactive.32.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.32.log</runlogfile>
 			<schematicpoint>
 				<vars>
 					<var>pvidm

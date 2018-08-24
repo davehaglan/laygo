@@ -13,13 +13,14 @@ impl_lib = 'serdes_generated'
 params = dict(
     num_des = 8,
     num_flop = 1,
-    ext_clk = False,
     lch = 16e-9,
     pw = 4,
     nw = 4,
     m_des_dff=1, 
-    clkbuf_list=[1,2,4,8], 
-    divbuf_list=[1,2,4,8], 
+    m_cbuf1=1, 
+    m_cbuf2=2, 
+    m_cbuf3=8, 
+    m_cbuf4=32, 
     device_intent='fast'
     )
 load_from_file=True
@@ -36,14 +37,7 @@ if load_from_file==True:
     suffix_name='_1to'+str(specdict['num_des'])
     params['num_des']=specdict['num_des']
     params['num_flop']=specdict['num_flop']
-    params['ext_clk']=specdict['ext_clk']
     params['m_des_dff']=sizedict['m_des_dff']
-    params['lch']=sizedict['lch']
-    params['pw']=sizedict['pw']
-    params['nw']=sizedict['nw']
-    params['clkbuf_list']=sizedict['des_clkbuf_list']
-    params['divbuf_list']=sizedict['des_divbuf_list']
-    params['device_intent']=sizedict['device_intent']
 
 print('creating BAG project')
 prj = bag.BagProject()

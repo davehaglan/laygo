@@ -46,7 +46,7 @@ class serdes_templates__ser_3stage(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, num_ser=10, num_ser_3rd=4, m_dff=1, m_latch=1, m_cbuf1=2, m_cbuf2=8, m_pbuf1=2, m_pbuf2=8, m_mux=2, m_out=2, m_ser=1, device_intent='fast'):
+    def design(self, lch, pw, nw, num_ser=10, num_ser_3rd=4, m_dff=1, m_cbuf1=2, m_cbuf2=8, m_pbuf1=2, m_pbuf2=8, m_mux=2, m_out=2, m_ser=1, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -68,7 +68,6 @@ class serdes_templates__ser_3stage(Module):
         self.parameters['pw'] = pw
         self.parameters['nw'] = nw
         self.parameters['m_dff'] = m_dff
-        self.parameters['m_latch'] = m_latch
         self.parameters['m_cbuf1'] = m_cbuf1
         self.parameters['m_cbuf2'] = m_cbuf2
         self.parameters['m_pbuf1'] = m_pbuf1
@@ -109,21 +108,21 @@ class serdes_templates__ser_3stage(Module):
             p1buf_pin = 'p1buf<%d>'%j
             ser_out = 'ser<%d>'%j
 
-            ser_term_list.append({'in<%d:0>'%(num_ser_3rd-1): in_name[i], 'out':ser_out, 'clk_in':'divclk', 'RST':'RST', 'p1buf':p1buf_pin, 'VSS':VSS_pin, 'VDD':VDD_pin})
+            ser_term_list.append({'in<0>': in_name[i], 'out':ser_out, 'clk_in':'divclk', 'RST':'RST', 'p1buf':p1buf_pin, 'VSS':VSS_pin, 'VDD':VDD_pin})
             ser_name_list.append('ISER%d'%j)
 
-        self.instances['I0'].design(lch=lch, pw=pw, nw=nw, num_ser=num_ser, m_dff=m_dff, m_latch=m_latch, m_cbuf1=m_cbuf1, m_cbuf2=m_cbuf2, m_pbuf1=m_pbuf1, m_pbuf2=m_pbuf2, m_mux=m_mux, m_out=m_out, m_ser=m_ser, device_intent=device_intent)   
+        self.instances['I0'].design(lch=lch, pw=pw, nw=nw, num_ser=num_ser, m_dff=m_dff, m_cbuf1=m_cbuf1, m_cbuf2=m_cbuf2, m_pbuf1=m_pbuf1, m_pbuf2=m_pbuf2, m_mux=m_mux, m_out=m_out, m_ser=m_ser, device_intent=device_intent)   
 
         self.array_instance('I1', ser_name_list, term_list=ser_term_list) 
         for inst in self.instances['I1']:
-            inst.design(lch=lch, pw=pw, nw=nw, num_ser=num_ser_3rd*2, m_dff=m_dff, m_latch=m_latch, m_cbuf1=m_cbuf1, m_cbuf2=m_cbuf2, m_pbuf1=m_pbuf1, m_pbuf2=m_pbuf2, m_mux=m_mux, m_out=m_out, device_intent=device_intent)
+            inst.design(lch=lch, pw=pw, nw=nw, num_ser=num_ser_3rd*2, m_dff=m_dff, m_cbuf1=m_cbuf1, m_cbuf2=m_cbuf2, m_pbuf1=m_pbuf1, m_pbuf2=m_pbuf2, m_mux=m_mux, m_out=m_out, device_intent=device_intent)
 
         #for inst in self.instances['I0']:
         #    inst.design(lch=lch, pw=pw, nw=nw, m_dff=m_dff, m_inv1=m_inv1, m_inv2=m_inv2,
         #        m_tgate=m_tgate, num_bits=num_bits, m_capsw=m_capsw, device_intent=device_intent)
 
 
-        self.reconnect_instance_terminal('I0', 'in<%d:0>'%(num_ser-1), 'ser<%d:0>'%(num_ser-1))
+        self.reconnect_instance_terminal('I0', 'in<1:0>', 'ser<%d:0>'%(num_ser-1))
         
         self.rename_pin('in','in<%d:0>'%(num_ser*num_ser_3rd-1))
 

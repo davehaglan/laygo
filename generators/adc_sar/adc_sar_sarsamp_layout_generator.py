@@ -86,23 +86,15 @@ def generate_samp_body(laygen, objectname_pfix, templib_logic,
     
     # signal routes
     sides=['left', 'right']
+    pins_se=['EN']
     pins_diff=['I', 'O']
+    yofsts_se=np.array([-2])
     yofsts_diff=np.array([4, 0])
-    if tgate==False:
-        pins_se=['EN']
-        yofsts_se=np.array([-2])
-        xl=[laygen.get_inst_pin_xy(name=isamp[0].name, pinname='EN', gridname=rg34, index=[0, 0], sort=True)[0][0],
-            laygen.get_inst_pin_xy(name=isamp[0].name, pinname='I', gridname=rg34, index=[samp_m-1, 0], sort=True)[0][0]]
-        xr=[laygen.get_inst_pin_xy(name=isamp[1].name, pinname='I', gridname=rg34, index=[samp_m-1, 0], sort=True)[0][0],
-            laygen.get_inst_pin_xy(name=isamp[1].name, pinname='EN', gridname=rg34, index=[0, 0], sort=True)[0][0]]
-    elif tgate==True:
-        pins_se=['EN', 'ENB']
-        yofsts_se=np.array([-2, -4])
-        # xy reference coordinates
-        xl=[laygen.get_inst_pin_xy(name=isamp[0].name, pinname='EN', gridname=rg34, index=[0, 0], sort=True)[0][0],
-            laygen.get_inst_pin_xy(name=isamp[0].name, pinname='O', gridname=rg34, index=[samp_m-1, 0], sort=True)[0][0]]
-        xr=[laygen.get_inst_pin_xy(name=isamp[1].name, pinname='O', gridname=rg34, index=[samp_m-1, 0], sort=True)[0][0],
-            laygen.get_inst_pin_xy(name=isamp[1].name, pinname='EN', gridname=rg34, index=[0, 0], sort=True)[0][0]]
+    # xy reference coordinates
+    xl=[laygen.get_inst_pin_xy(name=isamp[0].name, pinname='EN', gridname=rg34, index=[0, 0], sort=True)[0][0],
+        laygen.get_inst_pin_xy(name=isamp[0].name, pinname='I', gridname=rg34, index=[samp_m-1, 0], sort=True)[0][0]]
+    xr=[laygen.get_inst_pin_xy(name=isamp[1].name, pinname='I', gridname=rg34, index=[samp_m-1, 0], sort=True)[0][0],
+        laygen.get_inst_pin_xy(name=isamp[1].name, pinname='EN', gridname=rg34, index=[0, 0], sort=True)[0][0]]
     x=np.array([xl, xr])
     y0=laygen.get_inst_pin_xy(name=isamp[0].name, pinname='I', gridname=rg34, index=[0, 0], sort=True)[0][1]
     y_se=yofsts_se+y0
@@ -121,37 +113,23 @@ def generate_samp_body(laygen, objectname_pfix, templib_logic,
     # signal pins 
     for p in pins_diff:
         for r, sfix in zip(routes[p], ['P', 'M']):
-            laygen.pin(name=p+str(sfix), layer=laygen.layers['pin'][4], refobj=r, gridname=rg34)
+            laygen.pin_from_rect(name=p+str(sfix), layer=laygen.layers['pin'][4], rect=r, gridname=rg34)
     for p in pins_se:
         for r in routes[p]:
-            laygen.pin(name=p, layer=laygen.layers['pin'][4], refobj=r, gridname=rg34)
+            laygen.pin_from_rect(name=p, layer=laygen.layers['pin'][4], rect=r, gridname=rg34)
     
     # power routes
-    if tgate==False:
-        num_pwr= int(laygen.get_xy(obj =itap[0].template, gridname=rg23)[0] / 2) * min(tap_m_list)
-        rvss=[]
-        for _itap, pfix in zip(itap, ['L', 'R']):
-            rvss.append([])
-            for i in range(0, num_pwr):
-                rvss[-1].append(laygen.route(name=None, xy0=[2*i+2, 0], xy1=[2*i+2, 0], gridname0=rg23, 
+    num_pwr=int(laygen.get_template_size(name=itap[0].cellname, gridname=rg23, libname=itap[0].libname)[0]/2)*min(tap_m_list)
+    rvss=[]
+    for _itap, pfix in zip(itap, ['L', 'R']):
+        rvss.append([])
+        for i in range(0, num_pwr):
+            rvss[-1].append(laygen.route(name=None, xy0=[2*i+2, 0], xy1=[2*i+2, 0], gridname0=rg23, 
                             refobj0=_itap.pins['VSS0'], refobj1=_itap.pins['VSS1'], via0=[0, 0], via1=[0, 0]))
-    elif tgate==True:
-        num_pwr= int(laygen.get_xy(obj =itap[0].template, gridname=rg23)[0] / 2) * min(tap_m_list)
-        rvss=[]
-        for _itap, pfix in zip(itap, ['L', 'R']):
-            rvss.append([])
-            for i in range(0, num_pwr):
-                rvss[-1].append(laygen.route(name=None, xy0=[2*i+2, 0], xy1=[2*i+2, 0], gridname0=rg23, 
-                            refobj0=_itap.pins['VSS'], refobj1=_itap.pins['VDD'], via0=[0, 0]))
-        rvss_h=laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg23, 
-                    refobj0=itap[0].pins['VSS'], refobj1=itap[1].pins['VSS'])
-        rvdd_h=laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg23, 
-                    refobj0=itap[0].pins['VDD'], refobj1=itap[1].pins['VDD'])
-        laygen.pin(name='VDD', layer=laygen.layers['pin'][2], refobj=rvdd_h, gridname=rg23, netname='VDD')
     # power pins
     for rv, sfix in zip(rvss, ['L', 'R']):
         for idx, r in enumerate(rv):
-            laygen.pin(name='VSS'+str(sfix)+str(idx), layer=laygen.layers['pin'][3], refobj=r, gridname=rg23, netname='VSS')
+            laygen.pin_from_rect(name='VSS'+str(sfix)+str(idx), layer=laygen.layers['pin'][3], rect=r, gridname=rg23, netname='VSS')
 
 def generate_samp_buffer(laygen, objectname_pfix, templib_logic, 
                          placement_grid='placement_basic',
@@ -219,20 +197,16 @@ def generate_samp_buffer(laygen, objectname_pfix, templib_logic,
     yofst_osw=2
     xy0=laygen.get_inst_pin_xy(name=iinbuf[-1].name, pinname='O', gridname=rg34, sort=True)[0]
     rv0, rout_sw=laygen.route_vh(xy0=xy0, xy1=xy0+np.array([-4, yofst_osw]), gridname0=rg34)
-    #output_swb
-    yofst_obuf=-2
-    xy0=laygen.get_inst_pin_xy(name=ioutbuf[0].name, pinname='O', gridname=rg34, sort=True)[0]
-    rv0, rout_swb=laygen.route_vh(xy0=xy0, xy1=xy0+np.array([-4, yofst_obuf]), gridname0=rg34)
     #output_buf
     yofst_obuf=0
     xy0=laygen.get_inst_pin_xy(name=ioutbuf[-1].name, pinname='O', gridname=rg34, sort=True)[0]
     rv0, rout_buf=laygen.route_vh(xy0=xy0, xy1=xy0+np.array([-4, yofst_obuf]), gridname0=rg34)
     # signal pins 
-    for p, r in zip(['IN', 'OUT_SW', 'out_int<0>', 'OUT_BUF'],[rin, rout_sw, rout_swb, rout_buf]):
-        laygen.pin(name=p, layer=laygen.layers['pin'][4], refobj=r, gridname=rg34)
+    for p, r in zip(['IN', 'OUT_SW', 'OUT_BUF'],[rin, rout_sw, rout_buf]):
+        laygen.pin_from_rect(name=p, layer=laygen.layers['pin'][4], rect=r, gridname=rg34)
 
     # power routes
-    num_pwr= int(laygen.get_xy(obj =itap[0].template, gridname=rg23)[0] / 2) * min(tap_m_list)
+    num_pwr=int(laygen.get_template_size(name=itap[0].cellname, gridname=rg23, libname=itap[0].libname)[0]/2)*min(tap_m_list)
     rvdd=[]
     rvss=[]
     for _itap, pfix in zip(itap, ['L', 'R']):
@@ -246,10 +220,10 @@ def generate_samp_buffer(laygen, objectname_pfix, templib_logic,
     # power pins
     for rv, sfix in zip(rvss, ['L', 'R']):
         for idx, r in enumerate(rv):
-            laygen.pin(name='VSS'+str(sfix)+str(idx), layer=laygen.layers['pin'][3], refobj=r, gridname=rg23, netname='VSS')
+            laygen.pin_from_rect(name='VSS'+str(sfix)+str(idx), layer=laygen.layers['pin'][3], rect=r, gridname=rg23, netname='VSS')
     for rv, sfix in zip(rvdd, ['L', 'R']):
         for idx, r in enumerate(rv):
-            laygen.pin(name='VDD'+str(sfix)+str(idx), layer=laygen.layers['pin'][3], refobj=r, gridname=rg23, netname='VDD')
+            laygen.pin_from_rect(name='VDD'+str(sfix)+str(idx), layer=laygen.layers['pin'][3], rect=r, gridname=rg23, netname='VDD')
 
 def generate_samp(laygen, objectname_pfix, workinglib, 
                   placement_grid='placement_basic',
@@ -268,30 +242,18 @@ def generate_samp(laygen, objectname_pfix, workinglib,
     pg56t = power_grid_m5m6
 
     # placement
-    core_origin = origin + laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottomleft'), gridname = pg)
+    core_origin = origin + laygen.get_template_size('boundary_bottomleft', pg)
     # sampler body
     isamp = laygen.relplace(name=None, templatename='sarsamp_body', gridname=pg, template_libname=workinglib, transform='R0', xy=core_origin)
     # clock buffer
-    if tgate==True:
-        ibuf = laygen.relplace(name=None, templatename='sarsamp_buf', gridname=pg, refobj=isamp,
-                           direction='top', template_libname=workinglib, transform='MX')
-    else:
-        ibuf = laygen.relplace(name=None, templatename='sarsamp_buf', gridname=pg, refobj=isamp,
+    ibuf = laygen.relplace(name=None, templatename='sarsamp_buf', gridname=pg, refobj=isamp,
                            direction='top', template_libname=workinglib, transform='R0')
     # boundaries
-    a = laygen.get_xy(obj=laygen.get_template(name = 'sarsamp_body', libname=workinglib), gridname=pg)[0]
-    b = laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottom'), gridname=pg)[0]
-    m_bnd = int(a/b)
-    if tgate==True:
-        devname_bnd_left = ['nmos4_fast_left', 'pmos4_fast_left'] + ['pmos4_fast_left', 'nmos4_fast_left']
-        devname_bnd_right = ['nmos4_fast_right', 'pmos4_fast_right'] + ['pmos4_fast_right', 'nmos4_fast_right']
-        transform_bnd_left = ['R0', 'MX'] + ['MX', 'R0']
-        transform_bnd_right = ['R0', 'MX'] + ['MX', 'R0']
-    else:
-        devname_bnd_left = ['nmos4_fast_left', 'nmos4_fast_left'] + ['nmos4_fast_left', 'pmos4_fast_left']
-        devname_bnd_right = ['nmos4_fast_right', 'nmos4_fast_right'] + ['nmos4_fast_right', 'pmos4_fast_right']
-        transform_bnd_left = ['R0', 'MX'] + ['R0', 'MX']
-        transform_bnd_right = ['R0', 'MX'] + ['R0', 'MX']
+    m_bnd = int(laygen.get_template_size('sarsamp_body', gridname=pg, libname=workinglib)[0]/laygen.get_template_size('boundary_bottom', gridname=pg)[0])
+    devname_bnd_left = ['nmos4_fast_left', 'nmos4_fast_left'] + ['nmos4_fast_left', 'pmos4_fast_left']
+    devname_bnd_right = ['nmos4_fast_right', 'nmos4_fast_right'] + ['nmos4_fast_right', 'pmos4_fast_right']
+    transform_bnd_left = ['R0', 'MX'] + ['R0', 'MX']
+    transform_bnd_right = ['R0', 'MX'] + ['R0', 'MX']
     [bnd_bottom, bnd_top, bnd_left, bnd_right] \
         = laygenhelper.generate_boundary(laygen, objectname_pfix='BND0', placement_grid=pg,
                             devname_bottom=['boundary_bottomleft', 'boundary_bottom', 'boundary_bottomright'],
@@ -305,10 +267,10 @@ def generate_samp(laygen, objectname_pfix, workinglib,
                             origin=origin)
 
     # route
-    x_center=int((laygen.get_inst_bbox(name=ibuf.name, gridname=rg45bt, sort=True)[1][0] \
-                  -laygen.get_inst_bbox(name=ibuf.name, gridname=rg45bt, sort=True)[0][0])/2\
-                  +laygen.get_inst_bbox(name=ibuf.name, gridname=rg45bt, sort=True)[0][0])
-    y_top=int(laygen.get_inst_bbox(name=ibuf.name, gridname=rg45bt, sort=True)[1][1])
+    x_center=int((laygen.get_inst_bbox(instname=ibuf.name, gridname=rg45bt, sort=True)[1][0] \
+                  -laygen.get_inst_bbox(instname=ibuf.name, gridname=rg45bt, sort=True)[0][0])/2\
+                  +laygen.get_inst_bbox(instname=ibuf.name, gridname=rg45bt, sort=True)[0][0])
+    y_top=int(laygen.get_inst_bbox(instname=ibuf.name, gridname=rg45bt, sort=True)[1][1])
     #in
     xy0=laygen.get_inst_pin_xy(name=isamp.name, pinname='IP', gridname=rg45bt, sort=True)[0]
     xy1=[x_center-3, y_top]
@@ -328,12 +290,6 @@ def generate_samp(laygen, objectname_pfix, workinglib,
     xy1=laygen.get_inst_pin_xy(name=isamp.name, pinname='EN', gridname=rg45bt, sort=True)[0]
     rh0, rckpg0, rh1 = laygen.route_hvh(xy0=xy0, xy1=xy1, track_x=x_center-1, gridname0=rg45bt)
     rh0, rv0, rh1 = laygen.route_hvh(xy0=xy0, xy1=xy1, track_x=x_center+1, gridname0=rg45bt)
-    #enb
-    if tgate==True:
-        xy0=laygen.get_inst_pin_xy(name=ibuf.name, pinname='out_int<0>', gridname=rg45bt, sort=True)[0]
-        xy1=laygen.get_inst_pin_xy(name=isamp.name, pinname='ENB', gridname=rg45bt, sort=True)[0]
-        rh0, rckint0, rh1 = laygen.route_hvh(xy0=xy0, xy1=xy1, track_x=x_center-2, gridname0=rg45bt)
-        rh0, rv0, rh1 = laygen.route_hvh(xy0=xy0, xy1=xy1, track_x=x_center+2, gridname0=rg45bt)
     #ckin
     xy0=laygen.get_inst_pin_xy(name=ibuf.name, pinname='IN', gridname=rg45bt, sort=True)[0]
     xy1=[xy0[0], y_top]
@@ -345,7 +301,7 @@ def generate_samp(laygen, objectname_pfix, workinglib,
 
     # signal pins 
     for p, r in zip(['inp', 'inn', 'outp', 'outn', 'ckin', 'ckout', 'ckpg'],[rinp0, rinn0, routp0, routn0, rckin0, rckout0, rckpg0]):
-        laygen.pin(name=p, layer=laygen.layers['pin'][5], refobj=r, gridname=rg45bt)
+        laygen.pin_from_rect(name=p, layer=laygen.layers['pin'][5], rect=r, gridname=rg45bt)
 
     #vdd/vss - route
     #samp_m3_xy
@@ -416,20 +372,20 @@ def generate_samp(laygen, objectname_pfix, workinglib,
                 offset_start_index=0, offset_end_index=0)
     #m6
     input_rails_rect = [rvdd_m5[0]+rvdd_m5[1], rvss_m5[0]+rvss_m5[1]]
-    x1 = laygen.get_inst_bbox(name=ibuf.name, gridname=pg56t)[1][0] + laygen.get_xy(obj=laygen.get_template(name = 'nmos4_fast_left'), gridname=pg56t)[0]
+    x1 = laygen.get_inst_bbox(instname=ibuf.name, gridname=pg56t)[1][0] + laygen.get_template_size('nmos4_fast_left', gridname=pg56t)[0]
     rvdd_m6, rvss_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_', 
                 layer=laygen.layers['metal'][6], gridname=pg56t, netnames=['VDD', 'VSS'], direction='x', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=x1,
                 offset_start_index=0, offset_end_index=0)
     #trimming and pinning
-    x1_phy = laygen.get_inst_bbox(name=ibuf.name)[1][0] + laygen.get_xy(obj=laygen.get_template(name = 'nmos4_fast_left'))[0]
+    x1_phy = laygen.get_inst_bbox(instname=ibuf.name)[1][0] + laygen.get_template_size('nmos4_fast_left')[0]
     for r in rvdd_m6:
         r.xy1[0]=x1_phy
-        p=laygen.pin(name='VDD_M6_'+r.name, layer=laygen.layers['pin'][6], refobj=r, gridname=pg56t, netname='VDD')
+        p=laygen.pin_from_rect(name='VDD_M6_'+r.name, layer=laygen.layers['pin'][6], rect=r, gridname=pg56t, netname='VDD')
         p.xy1[0]=x1_phy
     for r in rvss_m6:
         r.xy1[0]=x1_phy
-        p=laygen.pin(name='VSS_M6_'+r.name, layer=laygen.layers['pin'][6], refobj=r, gridname=pg56t, netname='VSS')
+        p=laygen.pin_from_rect(name='VSS_M6_'+r.name, layer=laygen.layers['pin'][6], rect=r, gridname=pg56t, netname='VSS')
         p.xy1[0]=x1_phy
 
 if __name__ == '__main__':
@@ -478,15 +434,11 @@ if __name__ == '__main__':
             specdict = yaml.load(stream)
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
-        tgate=specdict['samp_with_tgate']
         m_sw=sizedict['sarsamp']['m_sw']
         m_sw_arr=sizedict['sarsamp']['m_sw_arr']
         m_inbuf_list=sizedict['sarsamp']['m_inbuf_list']
         m_outbuf_list=sizedict['sarsamp']['m_outbuf_list']
-    if tgate==True:
-        samp_cellname='tgate_'+str(m_sw)+'x'
-    else:
-        samp_cellname='nsw_wovdd_'+str(m_sw)+'x'
+    samp_cellname='nsw_wovdd_'+str(m_sw)+'x'
     inbuf_cellname_list=['inv_'+str(i)+'x' for i in m_inbuf_list]
     outbuf_cellname_list=['inv_'+str(i)+'x' for i in m_outbuf_list]
 
@@ -497,20 +449,7 @@ if __name__ == '__main__':
     # 1. generate without spacing
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
-    if tgate==True:
-        generate_samp_body(laygen, objectname_pfix='SW0', templib_logic=logictemplib, 
-                       placement_grid=pg,
-                       routing_grid_m2m3=rg23,
-                       routing_grid_m3m4=rg34,
-                       samp_cellname=samp_cellname,
-                       samp_m=m_sw_arr,
-                       space_cellname_list=['space_4x', 'space_2x', 'space_1x'],
-                       tap_cellname='tap',
-                       space_m_list=[0, 0, 0],
-                       tap_m_list=[4, 4],
-                       origin=np.array([0, 0]))
-    else:
-        generate_samp_body(laygen, objectname_pfix='SW0', templib_logic=logictemplib, 
+    generate_samp_body(laygen, objectname_pfix='SW0', templib_logic=logictemplib, 
                        placement_grid=pg,
                        routing_grid_m2m3=rg23,
                        routing_grid_m3m4=rg34,
@@ -533,20 +472,7 @@ if __name__ == '__main__':
     m_space_1x = int(m_space - m_space_4x * 4 - m_space_2x * 2)
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
-    if tgate==True:
-        generate_samp_body(laygen, objectname_pfix='SW0', templib_logic=logictemplib, 
-                       placement_grid=pg,
-                       routing_grid_m2m3=rg23,
-                       routing_grid_m3m4=rg34,
-                       samp_cellname=samp_cellname,
-                       samp_m=m_sw_arr,
-                       space_cellname_list=['space_4x', 'space_2x', 'space_1x'],
-                       tap_cellname='tap',
-                       space_m_list=[m_space_4x, m_space_2x, m_space_1x],
-                       tap_m_list=[4, 4],
-                       origin=np.array([0, 0]))
-    else:
-        generate_samp_body(laygen, objectname_pfix='SW0', templib_logic=logictemplib, 
+    generate_samp_body(laygen, objectname_pfix='SW0', templib_logic=logictemplib, 
                        placement_grid=pg,
                        routing_grid_m2m3=rg23,
                        routing_grid_m3m4=rg34,

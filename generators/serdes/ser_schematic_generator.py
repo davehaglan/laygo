@@ -11,7 +11,7 @@ lib_name = 'serdes_templates'
 cell_name = 'ser'
 impl_lib = 'serdes_generated'
 params = dict(
-    lch = 20e-9,
+    lch = 16e-9,
     pw = 4,
     nw = 4,
     num_ser = 10,
@@ -43,10 +43,6 @@ if load_from_file==True:
     params['m_pbuf2']=sizedict['m_pbuf2']
     params['m_mux']=sizedict['m_mux']
     params['m_out']=sizedict['m_out']
-    params['lch']=sizedict['lch']
-    params['pw']=sizedict['pw']
-    params['nw']=sizedict['nw']
-    params['device_intent']=sizedict['device_intent']
 
 print('creating BAG project')
 prj = bag.BagProject()

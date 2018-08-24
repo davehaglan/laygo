@@ -7,7 +7,7 @@ instances:
     cell_name: ser
     instpins:
       p1buf:
-        direction: 
+        direction: output
         net_name: "divclk"
         num_bits: 1
       VDD:
@@ -39,7 +39,7 @@ instances:
     cell_name: ser
     instpins:
       p1buf:
-        direction: 
+        direction: output
         net_name: "net2"
         num_bits: 1
       VDD:
@@ -66,46 +66,6 @@ instances:
         direction: input
         net_name: "in<1>"
         num_bits: 1
-  I3:
-    lib_name: basic
-    cell_name: noConn
-    instpins:
-      noConn:
-        direction: inputOutput
-        net_name: "net2"
-        num_bits: 1
-  PIN5:
-    lib_name: basic
-    cell_name: opin
-    instpins: {}
-  PIN0:
-    lib_name: basic
-    cell_name: opin
-    instpins: {}
-  PIN2:
-    lib_name: basic
-    cell_name: iopin
-    instpins: {}
-  PIN3:
-    lib_name: basic
-    cell_name: iopin
-    instpins: {}
-  PIN8:
-    lib_name: basic
-    cell_name: ipin
-    instpins: {}
-  PIN6:
-    lib_name: basic
-    cell_name: ipin
-    instpins: {}
-  PIN4:
-    lib_name: basic
-    cell_name: ipin
-    instpins: {}
-  PIN1:
-    lib_name: basic
-    cell_name: ipin
-    instpins: {}
   I2to1:
     lib_name: serdes_templates
     cell_name: ser_2to1_halfrate

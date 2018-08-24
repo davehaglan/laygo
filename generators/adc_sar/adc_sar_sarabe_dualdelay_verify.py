@@ -22,12 +22,12 @@ cload=20e-15
 #corners=['tt', 'ff', 'ss']
 corners=['tt'] #, 'ff', 'ss']
 verify_lvs = False
-extracted_calibre = False
-extracted_pvs = True
+extracted_calibre = True
+extracted_pvs = False
 verify_tran = True
 
 params = dict(
-    lch=16e-9,
+    lch=14e-9,
     pw=4,
     nw=4,
     num_bits=9,
@@ -43,8 +43,8 @@ params = dict(
 
 load_from_file=True
 save_to_file=True
-yamlfile_spec="adc_sar_spec.yaml"
-yamlfile_size="adc_sar_size.yaml"
+yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
+yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
 yamlfile_output="adc_sar_output.yaml"
 
 if load_from_file==True:

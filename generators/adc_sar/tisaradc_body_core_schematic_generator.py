@@ -11,7 +11,7 @@ cell_name = 'tisaradc_body_core'
 impl_lib = 'adc_sar_generated'
 
 params = dict(
-    sar_lch=16e-9,
+    sar_lch=14e-9,
     sar_pw=4,
     sar_nw=4,
     sar_sa_m=8,
@@ -41,15 +41,15 @@ params = dict(
     samp_intent='ulvt',
     samp_use_laygo=False,
     num_slices=8,
-    clk_lch=16e-9,
+    clk_lch=14e-9,
     clk_pw=4,
     clk_nw=4,
     clk_m_dff=2, 
-	clk_m_inv1=6, 
-	clk_m_inv2=8, 
-	clk_m_tgate=18, 
+    clk_m_inv1=6,
+    clk_m_inv2=8,
+    clk_m_tgate=18,
     clk_n_pd=4,
-	clk_m_capsw=2, 
+    clk_m_capsw=2,
     clk_unit_cell=2,
     clk_device_intent='fast',
     ret_lch=16e-9,
@@ -61,8 +61,8 @@ params = dict(
     ret_device_intent='fast'
 )
 load_from_file=True
-yamlfile_spec="adc_sar_spec.yaml"
-yamlfile_size="adc_sar_size.yaml"
+yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
+yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
 if load_from_file==True:
     with open(yamlfile_spec, 'r') as stream:
         specdict = yaml.load(stream)
@@ -97,22 +97,23 @@ if load_from_file==True:
     params['ret_pw']=sizedict['pw']
     params['ret_nw']=sizedict['nw']
     params['ret_device_intent']=sizedict['device_intent']
-#sampler sizing
-if params['samp_use_laygo']==True:
-    params['samp_wp']=params['sar_pw']
-    params['samp_wn']=params['sar_nw']
-    params['samp_fgn']=sizedict['sarsamp']['m_sw_arr']
-    params['samp_fg_inbuf_list']=sizedict['sarsamp']['m_inbuf_list']
-    params['samp_fg_outbuf_list']=sizedict['sarsamp']['m_outbuf_list']
-else:
-    params['samp_wp']=sizedict['sampler_nmos']['wp']
-    params['samp_wn']=sizedict['sampler_nmos']['wn']
-    params['samp_fgn']=sizedict['sampler_nmos']['fgn']
-    params['samp_fg_inbuf_list']=sizedict['sampler_nmos']['fg_inbuf_list']
-    params['samp_fg_outbuf_list']=sizedict['sampler_nmos']['fg_outbuf_list']
-    params['samp_nduml']=sizedict['sampler_nmos']['nduml']
-    params['samp_ndumr']=sizedict['sampler_nmos']['ndumr']
-    params['samp_nsep']=sizedict['sampler_nmos']['nsep']
+    params['clk_device_intent']=sizedict['device_intent']
+    #sampler sizing
+    if params['samp_use_laygo']==True:
+        params['samp_wp']=params['sar_pw']
+        params['samp_wn']=params['sar_nw']
+        params['samp_fgn']=sizedict['sarsamp']['m_sw_arr']
+        params['samp_fg_inbuf_list']=sizedict['sarsamp']['m_inbuf_list']
+        params['samp_fg_outbuf_list']=sizedict['sarsamp']['m_outbuf_list']
+    else:
+        params['samp_wp']=sizedict['sampler_nmos']['wp']
+        params['samp_wn']=sizedict['sampler_nmos']['wn']
+        params['samp_fgn']=sizedict['sampler_nmos']['fgn']
+        params['samp_fg_inbuf_list']=sizedict['sampler_nmos']['fg_inbuf_list']
+        params['samp_fg_outbuf_list']=sizedict['sampler_nmos']['fg_outbuf_list']
+        params['samp_nduml']=sizedict['sampler_nmos']['nduml']
+        params['samp_ndumr']=sizedict['sampler_nmos']['ndumr']
+        params['samp_nsep']=sizedict['sampler_nmos']['nsep']
 
 print('creating BAG project')
 prj = bag.BagProject()
@@ -125,5 +126,5 @@ dsn.design(**params)
 
 # implement the design
 print('implementing design with library %s' % impl_lib)
-dsn.implement_design(impl_lib, top_cell_name=cell_name, erase=True)
+dsn.implement_design(impl_lib, top_cell_name=cell_name)
 

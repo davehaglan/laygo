@@ -26,13 +26,13 @@ vdd=0.8
 corners=['tt'] #, 'ff', 'ss']
 
 verify_lvs = False
-extracted_calibre = False
-extracted_pvs = True
+extracted_calibre = True
+extracted_pvs = False
 verify_tran = True
 verify_noise = True
 
 params = dict(
-    lch=16e-9,
+    lch=14e-9,
     pw=4,
     nw=4,
     m=8, #larger than 8, even number
@@ -44,9 +44,9 @@ params = dict(
 
 load_from_file=True
 save_to_file=True
-yamlfile_spec="adc_sar_spec.yaml"
+yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
 #yamlfile_spec_output="adc_sar_spec_output.yaml"
-yamlfile_size="adc_sar_size.yaml"
+yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
 yamlfile_output="adc_sar_output.yaml"
 
 if load_from_file==True:
@@ -179,3 +179,10 @@ if verify_noise==True:
     print('loading results')
     results = bag.data.load_sim_results(tb_noise.save_dir)
     print('0/1 ratio (0.841 for 1sigma):'+str(results['zero_one_ratio']))
+
+    if save_to_file==True:
+        with open(yamlfile_output, 'r') as stream:
+            outdict = yaml.load(stream)
+        outdict['salatch']['0/1_ratio'] = str(results['zero_one_ratio'])
+        with open(yamlfile_output, 'w') as stream:
+            yaml.dump(outdict, stream)

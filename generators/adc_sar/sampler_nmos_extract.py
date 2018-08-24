@@ -10,7 +10,7 @@ import yaml
 
 lib_name = 'adc_sar_templates'
 cell_name = 'sampler_nmos'
-impl_lib = 'adc_sar_generated'
+impl_lib = 'adc_sampler_ec'
 
 print('creating BAG project')
 prj = bag.BagProject()

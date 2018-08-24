@@ -6,6 +6,7 @@ from abs_templates_ec.adc_sar.digital.retiming import *
 #from abs_templates_ec.adc_sar.digital.retiming import Retimer
 from bag.layout import RoutingGrid, TemplateDB
 import yaml
+import numpy as np
 
 impl_lib = 'adc_retimer_ec'
 # impl_lib = 'AAAFOO_retimer'
@@ -159,7 +160,8 @@ class Retimer2(Retimer):
         self.set_std_size((adc_width * num_adc, 4 * spy + cb_nrow))
         # draw boundaries
         self.draw_boundaries()
-        blk_w, blk_h = self.grid.get_size_dimension(self.size)
+        # blk_w, blk_h = self.grid.get_size_dimension(self.size)
+        blk_w, blk_h = self.bound_box.width, self.bound_box.height
 
         # first stage latches, clock buffers, and fills
         ck0_1_list = []
@@ -220,17 +222,17 @@ class Retimer2(Retimer):
             ck_wires = ck_dict[ck_idx]
             tr_id = self.grid.coord_to_nearest_track(buf_layer + 1, buf_out.middle, mode=0)
             tr_id = TrackID(buf_layer + 1, tr_id, width=buf_ck_width)
-            self.connect_to_tracks([buf_out, ] + ck_wires, tr_id, fill_type='')
+            self.connect_to_tracks([buf_out, ] + ck_wires, tr_id, )
 
         # export digital output
         tr_id = self.grid.coord_to_nearest_track(out_dig_warr.layer_id + 1, out_dig_warr.middle, mode=0)
         tr_id = TrackID(out_dig_warr.layer_id + 1, tr_id, width=buf_ck_width)
-        warr = self.connect_to_tracks(out_dig_warr, tr_id, fill_type='', track_lower=0)
+        warr = self.connect_to_tracks(out_dig_warr, tr_id, track_lower=0)
         self.add_pin('ck_out', warr, show=True)
 
         sup_layer = vdd_list[0].layer_id + 1
-        vdd_list, vss_list = self.do_power_fill(sup_layer, vdd_list, vss_list, sup_width=2,
-                                                fill_margin=0.5, edge_margin=0.2)
+        vdd_list, vss_list = self.do_power_fill(sup_layer, vdd_warrs=vdd_list, vss_warrs=vss_list, unit_mode=True,
+                                                space=0, space_le=0, x_margin=0, y_margin=220)
         sup_layer += 1
 
         # reserve routing tracks for ADC
@@ -238,11 +240,11 @@ class Retimer2(Retimer):
         for tid in reserve_tracks:
             self.reserve_tracks(sup_layer, tid, num=num_adc, pitch=adc_pitch)
 
-        vdd_list, vss_list = self.do_power_fill(sup_layer, vdd_list, vss_list, sup_width=2,
-                                                fill_margin=0.5, edge_margin=0.2)
+        vdd_list, vss_list = self.do_power_fill(sup_layer, vdd_warrs=vdd_list, vss_warrs=vss_list, unit_mode=True,
+                                                fill_width=2, fill_space=1, space=0, space_le=0, x_margin=0, y_margin=200)
         sup_layer += 1
-        vdd_list, vss_list = self.do_power_fill(sup_layer, vdd_list, vss_list, sup_width=2,
-                                                fill_margin=0.5, edge_margin=0.2)
+        vdd_list, vss_list = self.do_power_fill(sup_layer, vdd_warrs=vdd_list, vss_warrs=vss_list, unit_mode=True,
+                                                space=0, space_le=0, x_margin=0, y_margin=220)
 
         self.add_pin('VDD', vdd_list, show=True)
         self.add_pin('VSS', vss_list, show=True)
@@ -270,20 +272,23 @@ def latch_adc(prj, temp_db):
         num_adc=8,
         #num_adc=4,
         #num_adc=2,
-        adc_width=224,
+        adc_width=250,
         cells_per_tap=3,
         config_file='adc_sar_retimer_logic.yaml',
         clk_width=8,
         adc_order=[0, 2, 4, 6, 1, 3, 5, 7],
         #adc_order=[0, 2, 1, 3],
         #adc_order=[0, 1],
-        reserve_tracks=[31.5, 38.5, 40.5, 55.5, 57.5, 59.5, 91.5, 93.5,
-                        127.5, 129.5, 163.5, 165.5, 229.5, 230.5, 231.5, 232.5],
+        # reserve_tracks=[31.5, 38.5, 40.5, 55.5, 57.5, 59.5, 91.5, 93.5,
+        #                 127.5, 129.5, 163.5, 165.5, 229.5, 230.5, 231.5, 232.5],
+        # reserve_tracks=[19.5, 24.5, 26.5, 51.5, 53.5, 55.5, 79.5, 81.5,
+        #                 107.5, 109.5, 135.5, 137.5, 198.5, 199.5, 201.5, 202.5],
+        reserve_tracks=list(np.arange(19.5, 33.5+1)) + list(np.arange(198.5, 216.5+1)),
     )
     #load from preset
     load_from_file=True
-    yamlfile_spec="adc_sar_spec.yaml"
-    yamlfile_size="adc_sar_size.yaml"
+    yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
+    yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
     if load_from_file==True:
         with open(yamlfile_spec, 'r') as stream:
             specdict = yaml.load(stream)
@@ -308,12 +313,20 @@ if __name__ == '__main__':
         print('creating BAG project')
         bprj = bag.BagProject()
         temp = 70.0
+        # layers = [3, 4, 5, 6]
+        # spaces = [0.058, 0.04, 0.04, 0.112]
+        # widths = [0.032, 0.04, 0.04, 0.080]
+        # bot_dir = 'y'
         layers = [3, 4, 5, 6]
-        spaces = [0.058, 0.04, 0.04, 0.112]
-        widths = [0.032, 0.04, 0.04, 0.080]
+        spaces = [0.052, 0.056, 0.044, 0.080]
+        widths = [0.032, 0.040, 0.040, 0.064]
         bot_dir = 'y'
+        width_override = {
+            4: {2: 0.120},
+            5: {2: 0.120}
+        }
 
-        routing_grid = RoutingGrid(bprj.tech_info, layers, spaces, widths, bot_dir)
+        routing_grid = RoutingGrid(bprj.tech_info, layers, spaces, widths, bot_dir, width_override=width_override)
 
         tdb = TemplateDB('template_libs.def', routing_grid, impl_lib, use_cybagoa=True)
 

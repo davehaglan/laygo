@@ -31,10 +31,10 @@ import yaml
 
 def create_power_pin_from_inst(laygen, layer, gridname, inst_left, inst_right):
     """create power pin"""
-    rvdd0_pin_xy = laygen.get_inst_pin_xy(inst_left.name, 'VDD', gridname, sort=True)
-    rvdd1_pin_xy = laygen.get_inst_pin_xy(inst_right.name, 'VDD', gridname, sort=True)
-    rvss0_pin_xy = laygen.get_inst_pin_xy(inst_left.name, 'VSS', gridname, sort=True)
-    rvss1_pin_xy = laygen.get_inst_pin_xy(inst_right.name, 'VSS', gridname, sort=True)
+    rvdd0_pin_xy = laygen.get_inst_pin_coord(inst_left.name, 'VDD', gridname, sort=True)
+    rvdd1_pin_xy = laygen.get_inst_pin_coord(inst_right.name, 'VDD', gridname, sort=True)
+    rvss0_pin_xy = laygen.get_inst_pin_coord(inst_left.name, 'VSS', gridname, sort=True)
+    rvss1_pin_xy = laygen.get_inst_pin_coord(inst_right.name, 'VSS', gridname, sort=True)
 
     laygen.pin(name='VDD', layer=layer, xy=np.vstack((rvdd0_pin_xy[0],rvdd1_pin_xy[1])), gridname=gridname)
     laygen.pin(name='VSS', layer=layer, xy=np.vstack((rvss0_pin_xy[0],rvss1_pin_xy[1])), gridname=gridname)
@@ -196,11 +196,11 @@ def generate_clkdiffpair(laygen, objectname_pfix, placement_grid, routing_grid_m
                                              routing_grid_m1m2_thick=rg12t,
                                              devname_tap_boundary=devname_tap_boundary, devname_tap_body=devname_tap_body,
                                              m=m_tap, origin=origin)
-    diffpair_origin = laygen.get_xy(obj = itapbl0, gridname = pg) + laygen.get_xy(obj = itapbl0.template, gridname = pg) * np.array([0, 1])
+    diffpair_origin = laygen.get_inst_xy(itapbl0.name, pg) + laygen.get_template_size(itapbl0.cellname, pg) * np.array([0, 1])
     [ickbl0, ickdmyl0, ick0, ickdmyr0, ickbr0]=generate_mos(laygen, objectname_pfix +'CK0', placement_grid=pg, routing_grid_m1m2=rg12,
                                         devname_mos_boundary=devname_mos_boundary, devname_mos_body=devname_mos_body,
                                         devname_mos_dmy=devname_mos_dmy, m=m_clkh*2, m_dmy=m_clkh_dmy, origin=diffpair_origin)
-    in_origin=laygen.get_xy(obj = ickbl0, gridname = pg)+ laygen.get_xy(obj = ickbl0.template, gridname = pg) * np.array([0, 1])
+    in_origin=laygen.get_inst_xy(ickbl0.name, pg)+laygen.get_template_size(ickbl0.cellname, pg)*np.array([0,1])
     [iinbl0, iindmyl0, iinl0, iinr0, iindmyr0, iinbr0] = \
         generate_diff_mos(laygen, objectname_pfix+'IN0', placement_grid=pg, routing_grid_m1m2=rg12,
                           devname_mos_boundary=devname_mos_boundary, devname_mos_body=devname_mos_body,
@@ -255,7 +255,7 @@ def generate_salatch_regen(laygen, objectname_pfix, placement_grid, routing_grid
                                                 placement_grid=pg, routing_grid_m1m2_thick=rg12t,
                                                 devname_tap_boundary=devname_ptap_boundary, devname_tap_body=devname_ptap_body,
                                                 m=m_tap, origin=origin)
-    rgnbody_origin = laygen.get_xy(obj = itapbln0, gridname = pg) + laygen.get_xy(obj = itapbln0.template, gridname = pg) * np.array([0, 1])
+    rgnbody_origin = laygen.get_inst_xy(itapbln0.name, pg) + laygen.get_template_size(itapbln0.cellname, pg) * np.array([0, 1])
     #nmos row
     imbln0 = laygen.relplace(name="I" + pfix + 'BLN0', templatename=devname_nmos_boundary, gridname=pg, xy=rgnbody_origin)
     imdmyln0 = laygen.relplace(name="I" + pfix + 'DMYLN0', templatename=devname_nmos_dmy, gridname=pg, refobj=imbln0, shape=[m_rgnn_dmy, 1])
@@ -277,7 +277,7 @@ def generate_salatch_regen(laygen, objectname_pfix, placement_grid, routing_grid
     imdmyrp0 = laygen.relplace(name="I" + pfix + 'DMYRP0', templatename=devname_pmos_dmy, gridname=pg, refobj=imrp0, shape=[m_rgnp_dmy, 1], transform='R180')
     imbrp0 = laygen.relplace(name="I" + pfix + 'BRP0', templatename=devname_pmos_boundary, gridname=pg, refobj=imdmyrp0, transform='R180')
     #tap
-    tap_origin = laygen.get_xy(obj = imblp0, gridname = pg) + laygen.get_xy(obj=laygen.get_template(name = devname_ntap_boundary), gridname = pg) * np.array([0, 1])
+    tap_origin = laygen.get_inst_xy(imblp0.name, pg) + laygen.get_template_size(devname_ntap_boundary, pg) * np.array([0, 1])
     [itapbl0, itap0, itapbr0] = generate_tap(laygen, objectname_pfix=pfix+'PTAP0', placement_grid=pg, routing_grid_m1m2_thick=rg12t,
                                              devname_tap_boundary=devname_ntap_boundary, devname_tap_body=devname_ntap_body,
                                              m=m_tap, origin=tap_origin, transform='MX')
@@ -352,10 +352,10 @@ def generate_salatch_regen(laygen, objectname_pfix, placement_grid, routing_grid
     for _m in imrstrp0.elements[:, 0]:
         laygen.via(name=None, xy=[0, 0], refobj=_m.pins['D0'], gridname=rg12)
     #cross-coupled route and via
-    xyg0=laygen.get_xy(obj = rglv0, gridname = rg34, sort=True)[0]
-    xyd0=laygen.get_xy(obj = rdlv[0], gridname = rg34, sort=True)[0]
-    xyg1=laygen.get_xy(obj = rgrv0, gridname = rg34, sort=True)[0]
-    xyd1=laygen.get_xy(obj = rdrv[0], gridname = rg34, sort=True)[0]
+    xyg0=laygen.get_rect_xy(rglv0.name, rg34, sort=True)[0]
+    xyd0=laygen.get_rect_xy(rdlv[0].name, rg34, sort=True)[0]
+    xyg1=laygen.get_rect_xy(rgrv0.name, rg34, sort=True)[0]
+    xyd1=laygen.get_rect_xy(rdrv[0].name, rg34, sort=True)[0]
     rop=laygen.route(name=None, xy0=[xyd0[0], xyg0[1]], xy1=[xyd1[0], xyg0[1]], gridname0=rg34)
     rom=laygen.route(name=None, xy0=[xyd0[0], xyg0[1]+1], xy1=[xyd1[0], xyg0[1]+1], gridname0=rg34)
     laygen.via(name=None, xy=[xyg0[0], xyg0[1]], gridname=rg34)
@@ -452,7 +452,7 @@ def generate_salatch_simple(laygen, objectname_pfix, placement_grid,
                          devname_tap_boundary=devname_ptap_boundary, devname_tap_body=devname_ptap_body,
                          m_in=m_in, m_in_dmy=m_in_dmy, m_clkh=m_clkh, m_clkh_dmy=m_clkh_dmy, m_tap=m_tap, origin=mainpair_origin)
     #regen
-    regen_origin = laygen.get_xy(obj = imaininbl0, gridname = pg) + laygen.get_xy(obj = imaininbl0.template, gridname = pg) * np.array([0, 1])
+    regen_origin = laygen.get_inst_xy(imaininbl0.name, pg) + laygen.get_template_size(imaininbl0.cellname, pg) * np.array([0, 1])
 
     [irgntapbln0, irgntapn0, irgntapbrn0,
      irgnbln0, irgndmyln0, irgnln0, irgnln1, irgnrn1, irgnrn0, irgndmyrn0, irgnbrn0,
@@ -476,10 +476,8 @@ def generate_salatch_simple(laygen, objectname_pfix, placement_grid,
                      refobj0=imaininl0.elements[m_in - 1 - i, 0].pins['S0'], via0=[0, 0], refobj1=irgnln0.elements[-i-1, 0].pins['S1'], via1=[0, 0])
         laygen.route(None, xy0=[0, 1], xy1=[0, 0], gridname0=rg23,
                      refobj0=imaininr0.elements[m_in - 1 - i, 0].pins['S0'], via0=[0, 0], refobj1=irgnrn0.elements[-i-1, 0].pins['S1'], via1=[0, 0])
-    laygen.boundary_pin_from_rect(rintp, gridname=rg23, name='INTP', layer=laygen.layers['pin'][3], size=2,
-                                  direction='top')
-    laygen.boundary_pin_from_rect(rintm, gridname=rg23, name='INTM', layer=laygen.layers['pin'][3], size=2,
-                                  direction='top')
+    laygen.create_boundary_pin_from_rect(rintp, gridname=rg23, pinname='INTP', layer=laygen.layers['pin'][3], size=2, direction='top')
+    laygen.create_boundary_pin_from_rect(rintm, gridname=rg23, pinname='INTM', layer=laygen.layers['pin'][3], size=2, direction='top')
     laygen.route(None, xy0=[0, 1], xy1=[0, 1], gridname0=rg23,
                  refobj0=irgnrstlp1.elements[0, 0].pins['D0'], refobj1=irgnrstlp1.elements[m_rst-1, 0].pins['D0'])
     laygen.route(None, xy0=[0, 1], xy1=[0, 1], gridname0=rg23,
@@ -493,17 +491,16 @@ def generate_salatch_simple(laygen, objectname_pfix, placement_grid,
     #clk connection
     rclk=laygen.route(None, xy0=[1, 0], xy1=[1, 0], gridname0=rg23,
                       refobj0=imainck0.elements[m_clkh-1, 0].pins['G0'], refobj1=irgnrstlp1.elements[m_rst-1, 0].pins['G0'], via0=[0, 0], via1=[0, 0])
-    laygen.boundary_pin_from_rect(rclk, gridname=rg23, name='CLK', layer=laygen.layers['pin'][3], size=4,
-                                  direction='bottom')
+    laygen.create_boundary_pin_from_rect(rclk, gridname=rg23, pinname='CLK', layer=laygen.layers['pin'][3], size=4, direction='bottom')
     #input connection
     rinp=laygen.route(None, xy0=[0, -4], xy1=[0, 0], gridname0=rg23,
                       refobj0=imaininl0.elements[0, 0].pins['G0'], refobj1=imaininl0.elements[0, 0].pins['G0'], via1=[0, 0])
     rinm=laygen.route(None, xy0=[0, -4], xy1=[0, 0], gridname0=rg23,
                       refobj0=imaininr0.elements[0, 0].pins['G0'], refobj1=imaininr0.elements[0, 0].pins['G0'], via1=[0, 0])
-    laygen.pin(layer=laygen.layers['pin'][3], refobj=rinp, gridname=rg23, name='INP')
-    laygen.pin(layer=laygen.layers['pin'][3], refobj=rinm, gridname=rg23, name='INM')
-    laygen.pin(layer=laygen.layers['pin'][4], refobj=rop, gridname=rg34, name='OUTP')
-    laygen.pin(layer=laygen.layers['pin'][4], refobj=rom, gridname=rg34, name='OUTM')
+    laygen.pin_from_rect(layer=laygen.layers['pin'][3], rect=rinp, gridname=rg23, name='INP')
+    laygen.pin_from_rect(layer=laygen.layers['pin'][3], rect=rinm, gridname=rg23, name='INM')
+    laygen.pin_from_rect(layer=laygen.layers['pin'][4], rect=rop, gridname=rg34, name='OUTP')
+    laygen.pin_from_rect(layer=laygen.layers['pin'][4], rect=rom, gridname=rg34, name='OUTM')
     #VDD/VSS
     rvss0 = laygen.route(None, xy0=[0, 1], xy1=[0, 1], gridname0=rg12t,
                         refobj0=imaintap0.elements[0, 0].pins['TAP0'], refobj1=imaintap0.elements[-1, 0].pins['TAP1'])
@@ -511,9 +508,9 @@ def generate_salatch_simple(laygen, objectname_pfix, placement_grid,
                         refobj0=irgntapn0.elements[0, 0].pins['TAP0'], refobj1=irgntapn0.elements[-1, 0].pins['TAP1']) 
     rvdd0 = laygen.route(None, xy0=[0, 1], xy1=[0, 1], gridname0=rg12t,
                         refobj0=irgntap0.elements[0, 0].pins['TAP0'], refobj1=irgntap0.elements[-1, 0].pins['TAP1'])
-    laygen.pin(name='VSS0', layer=laygen.layers['pin'][2], refobj=rvss0, gridname=rg12t, netname='VSS:')
-    laygen.pin(name='VSS1', layer=laygen.layers['pin'][2], refobj=rvss1, gridname=rg12t, netname='VSS:')
-    laygen.pin(name='VDD0', layer=laygen.layers['pin'][2], refobj=rvdd0, gridname=rg12t, netname='VDD')
+    laygen.pin_from_rect(name='VSS0', layer=laygen.layers['pin'][2], rect=rvss0, gridname=rg12t, netname='VSS:')
+    laygen.pin_from_rect(name='VSS1', layer=laygen.layers['pin'][2], rect=rvss1, gridname=rg12t, netname='VSS:')
+    laygen.pin_from_rect(name='VDD0', layer=laygen.layers['pin'][2], rect=rvdd0, gridname=rg12t, netname='VDD')
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")

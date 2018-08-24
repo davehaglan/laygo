@@ -99,18 +99,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#export-to-bag">Export to BAG</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html">Tutorial (BAG flow, new version)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#setup-and-running">Setup and running</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#initialize-gridlayoutgenerator2">Initialize GridLayoutGenerator2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#load-template-and-grid-database">Load template and grid database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#library-and-cell-creation">Library and cell creation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#cell-placements">Cell placements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#signal-routing">Signal routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#power-routing">Power routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#pin-creation">Pin creation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#export-to-bag">Export to BAG</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture/architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../example/logic.html">Generator example - CMOS logic family</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../example/logic.html#install-and-launch">Install and launch</a></li>
@@ -155,20 +143,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../tech/tech.html">Technology setup instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#example-setup-files">Example setup files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#bag-setup">BAG setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#config-file-laygo-config-yaml">Config file (laygo_config.yaml)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#tech-lib-layermap-gds-flow-only">(tech_lib).layermap (GDS flow only)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#template-library">Template library</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../tech/Laygo_templates_guide.html">Template library setup guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../tech/Laygo_templates_guide.html#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/Laygo_templates_guide.html#let-s-start-with-via-wire-template">Let&#8217;s start with via(wire) template</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/Laygo_templates_guide.html#transistor-template">Transistor template</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/Laygo_templates_guide.html#routing-grids">Routing grids</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/Laygo_templates_guide.html#draw-rest-of-transistor-templates">Draw rest of transistor templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#example-setup-files">Example setup files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#laygo-config-yaml">laygo_config.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#tech-lib-layermap-optional">(tech_lib).layermap (optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#template-library">template library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API documentation</a><ul>
@@ -212,45 +191,43 @@
             
   <div class="section" id="laygo-layout-with-gridded-objects">
 <span id="laygo-layout-with-gridded-objects"></span><h1>LAYGO - LAYout with Gridded Objects<a class="headerlink" href="#laygo-layout-with-gridded-objects" title="Permalink to this headline">¶</a></h1>
-<p>Laygo is an add-on to <a class="reference external" href="https://github.com/ucb-art/BAG_framework">BAG2</a>
+<p>Laygo is an add-on to <a class="reference external" href="https://github.com/pkerichang/BAG_framework">BAG2</a>
 framework for layout generation, written by <a class="reference external" href="https://jdhan.github.io/">Jaeduk Han</a>,
-Woorham Bae, Zhongkai Wang, and Eric Jan.
-The physical design of analog and mixed-signal (AMS) circuits is very
-challenging in advanced CMOS processes, due to their complex design rules.
-Laygo abstracts the design rules by introducing quantized templates and
-grids. With Laygo, the AMS layout is constructed by placing templates and
-routing wires on grids; designers don&#8217;t need to deal with complex design
-rules. Using Laygo, you can script your layout construction process in
-Python, which gives higher productivity and process portability over
-multiple technology nodes.</p>
+and licensed under the BSD license.
+With laygo, layout elements and parameters are abstracted as templates
+and grids, and the layout job can be done without dealing with complex
+design rules in advanced CMOS technology.
+Layout process is abstracted and scripted in python, and with the help
+of BAG API, laygo provides higher productivity and process portability
+than conventional custom IC design flows.</p>
 <p><img alt="laygo" src="../_images/laygo_concept.png" /></p>
 <div class="section" id="installation-and-quick-start">
 <span id="installation-and-quick-start"></span><h2>Installation and Quick Start<a class="headerlink" href="#installation-and-quick-start" title="Permalink to this headline">¶</a></h2>
 <ol>
-<li><p class="first">Install BAG2 (skip if you are using the GDS flow)</p>
+<li><p class="first">Install BAG2 (not necessary if the GDS flow is used)</p>
 </li>
 <li><p class="first">Clone laygo repo</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git@github.com:ucb-art/laygo.git
 </pre></div>
 </div>
 </li>
-<li><p class="first">Prepare setup files for your technology.</p>
+<li><p class="first">Prepare following setup files for your technology.</p>
 <ul>
 <li><p class="first"><strong>laygo_config.yaml</strong> - contains general technology information.</p>
-<p>Example: <a class="reference external" href="https://github.com/ucb-art/laygo/blob/master/labs/laygo_config.yaml">labs/laygo_config.yaml</a></p>
+<p>An example file can be found here: <a class="reference external" href="https://github.com/ucb-art/laygo/blob/master/labs/laygo_config.yaml">labs/laygo_config.yaml</a></p>
 </li>
 <li><p class="first"><strong>(technology_name).layermap</strong>(optional) - layer mapping file only
-for the GDS flow. Usually the layermap file can be found in your PDK
+for the GDS flow. Usually layermap files can be found in your PDK
 library.</p>
-<p>Example: <a class="reference external" href="https://github.com/ucb-art/laygo/blob/master/labs/laygo_faketech.layermap">labs/laygo_faketech.layermap</a></p>
+<p>An example file can be found here: <a class="reference external" href="https://github.com/ucb-art/laygo/blob/master/labs/laygo_faketech.layermap">labs/laygo_faketech.layermap</a></p>
 </li>
-<li><p class="first"><strong>primitive template and grid database</strong> : laygo stores template
-and grid information in yaml files. Users can construct their yaml
-files, or provided from external vendors under NDA.</p>
-<p>Example database files (for laygo_faketech, used in the GDS flow):
+<li><p class="first"><strong>primitive template and grid database</strong> : laygo keeps template
+and grid information in yaml files. Users can construct yaml files
+by themselves, or files can be provided under NDA.</p>
+<p>Examples files can be found here (for laygo_faketech, used in the GDS flow):
 <a class="reference external" href="https://github.com/ucb-art/laygo/blob/master/labs/laygo_faketech_microtemplates_dense_templates.yaml">labs/laygo_faketech_microtemplates_dense_templates.yaml</a>,
 <a class="reference external" href="https://github.com/ucb-art/laygo/blob/master/labs/laygo_faketech_microtemplates_dense_grids.yaml">labs/laygo_faketech_microtemplates_dense_grids.yaml</a></p>
-<p>An example script for constructing the yaml database:
+<p>An example script that consturcts the yaml database is here:
 <a class="reference external" href="https://github.com/ucb-art/laygo/blob/master/labs/lab2_a_gridlayoutgenerator_constructtemplate.py">labs/lab2_a_gridlayoutgenerator_constructtemplate.py</a></p>
 </li>
 </ul>
@@ -260,26 +237,26 @@ reference, which can be found here:</p>
  <span class="o">*</span> <span class="p">[</span><span class="n">NCSU</span> <span class="n">FreePDK45</span><span class="p">](</span><span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">ucb</span><span class="o">-</span><span class="n">art</span><span class="o">/</span><span class="n">BAG2_freePDK45</span><span class="o">.</span><span class="n">git</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>For <strong>BWRC users</strong>, default setup files for various technologies are
-provided under proper NDAs.</p>
+<p>For BWRC users, default setup files for real technologies can be
+provided under proper NDA, as a form of git repository.</p>
 </li>
-<li><p class="first">Let&#8217;s run a toy example. Launch ipython and run the GDS tutorial script
+<li><p class="first">For a toy example, launch ipython and run the GDS tutorial script
 <a class="reference external" href="https://github.com/ucb-art/laygo/blob/master/quick_start_GDS.py">quick_start_GDS.py</a>.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>$ start_bag.sh    (or ipython)
 &gt; cd laygo
 &gt; run quick_start_GDS.py
 </pre></div>
 </div>
-<p>It will create a nand gate layout and save the layout to <em>output.gds</em>.</p>
+<p>It will create a nand gate layout and save it to output.gds.</p>
 <p><img alt="qs_nand" src="../_images/laygo_quickstart.png" /></p>
-<p><a class="reference external" href="http://www.klayout.de/">KLayout</a> was used for the gds display. Detailed
-explanations on the tutorial script are
+<p><a class="reference external" href="http://www.klayout.de/">KLayout</a> was used for gds display. Detailed
+explanations on the tutorial script can be found
 <a class="reference external" href="https://ucb-art.github.io/laygo/tutorial/tutorial_GDS.html">here</a>.
 You can also export the layout to the BAG framework. Refer to
 <a class="reference external" href="https://ucb-art.github.io/laygo/tutorial/tutorial_BAG.html">this document</a>
 for details.</p>
 </li>
-<li><p class="first">For more practice examples, go over lab materials in <a class="reference external" href="https://github.com/ucb-art/laygo/tree/master/labs">labs/</a>.
+<li><p class="first">For more practice, go over lab materials in <a class="reference external" href="https://github.com/ucb-art/laygo/tree/master/labs">labs/</a>.
 Detailed instructions can be found in <a class="reference external" href="docs/labs.md">lab readme</a>.</p>
 </li>
 <li><p class="first">More generator examples are being uploaded in <a class="reference external" href="https://ucb-art.github.io/laygo/">https://ucb-art.github.io/laygo/</a> for reference.</p>
@@ -288,7 +265,7 @@ Detailed instructions can be found in <a class="reference external" href="docs/l
 </div>
 <div class="section" id="documentations">
 <span id="documentations"></span><h2>Documentations<a class="headerlink" href="#documentations" title="Permalink to this headline">¶</a></h2>
-<p>Documents are stored in <a class="reference external" href="https://ucb-art.github.io/laygo/">https://ucb-art.github.io/laygo/</a>.</p>
+<p>Documents can be found at <a class="reference external" href="https://ucb-art.github.io/laygo/">https://ucb-art.github.io/laygo/</a>.</p>
 </div>
 <div class="section" id="example-labs">
 <span id="example-labs"></span><h2>Example Labs<a class="headerlink" href="#example-labs" title="Permalink to this headline">¶</a></h2>

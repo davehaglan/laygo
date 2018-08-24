@@ -28,10 +28,6 @@ if load_from_file==True:
         sizedict = yaml.load(stream)
     cell_name='ser_2to1_halfrate'
     params['m_ser']=sizedict['m_ser']
-    params['lch']=sizedict['lch']
-    params['pw']=sizedict['pw']
-    params['nw']=sizedict['nw']
-    params['device_intent']=sizedict['device_intent']
 
 print('creating BAG project')
 prj = bag.BagProject()

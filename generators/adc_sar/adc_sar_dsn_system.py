@@ -8,7 +8,7 @@ import yaml
 from math import log10
 
 save_to_file=True
-yamlfile_input="adc_sar_spec.yaml"         #given spec
+yamlfile_input="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"         #given spec
 yamlfile_output="adc_sar_output.yaml" #derived spec
 #load spec
 with open(yamlfile_input, 'r') as stream:

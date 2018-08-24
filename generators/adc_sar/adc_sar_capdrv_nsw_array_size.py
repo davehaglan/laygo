@@ -12,13 +12,26 @@ import yaml
 import bag
 import bag.tech.mos
 
+from verification_ec.mos.query import MOSDBDiscrete
+
+
+def get_db(spec_file, intent, interp_method = 'spline', sim_env = 'tt'):
+    # initialize transistor database from simulation data
+    mos_db = MOSDBDiscrete([spec_file], interp_method=interp_method)
+    # set process corners
+    mos_db.env_list = [sim_env]
+    # set layout parameters
+    mos_db.set_dsn_params(intent=intent)
+    return mos_db
+
+
 #parameters
 pmos_type='pch'
 nmos_type='nch'
 #env_list = ['tt', 'ff', 'ss', 'sf', 'fs', 'ff_hot', 'ss_hot']
-env_list = ['tt']
-l = 16e-9
-intent = 'ulvt'
+env_list = 'tt'
+l = 14e-9
+intent = 'lvt'
 pw = 4
 nw = 4
 csamp = 60e-15
@@ -29,9 +42,9 @@ m_max = 8
 
 load_from_file=True
 save_to_file=True #update sizing yaml file
-yamlfile_spec="adc_sar_spec.yaml"
+yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
 #yamlfile_spec_output="adc_sar_spec_output.yaml"
-yamlfile_size="adc_sar_size.yaml"
+yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
 yamlfile_output="adc_sar_output.yaml"
 
 vdd = 0.8
@@ -55,19 +68,25 @@ if load_from_file==True:
 
 mos_config = bag.BagProject().tech_info.tech_params['mos']
 root_dir = mos_config['mos_char_root']
-pmos_db = bag.tech.mos.MosCharDB(root_dir, pmos_type, ['intent', 'l'],
-                                 env_list, intent=intent, l=l,
-                                 method='spline')
-nmos_db = bag.tech.mos.MosCharDB(root_dir, nmos_type, ['intent', 'l'],
-                                 env_list, intent=intent, l=l,
-                                 method='spline')
+# pmos_db = bag.tech.mos.MosCharDB(root_dir, pmos_type, ['intent', 'l'],
+#                                  env_list, intent=intent, l=l,
+#                                  method='spline')
+# nmos_db = bag.tech.mos.MosCharDB(root_dir, nmos_type, ['intent', 'l'],
+#                                  env_list, intent=intent, l=l,
+#                                  method='spline')
+interp_method = 'spline'
+nmos_spec = 'specs_mos_char/nch_w4_14n.yaml'
+pmos_spec = 'specs_mos_char/pch_w4_14n.yaml'
+
+nmos_db = get_db(nmos_spec, intent, interp_method=interp_method, sim_env=env_list)
+pmos_db = get_db(pmos_spec, intent, interp_method=interp_method, sim_env=env_list)
 
 #calculate
 # sw transistor
-vbs = vincm
+vbs = -vincm
 vgs = vdd-vincm
 vds = vincm
-mdrv = nmos_db.query(w=pw, vbs=vbs, vgs=vgs, vds=vds)
+mdrv = nmos_db.query(vbs=vbs, vgs=vgs, vds=vds)
 
 # parameter calculation
 m0 = 2.3*cmax/(tdac_target*np.abs(mdrv['gds'])-2.3*mdrv['cdd']) #90% settling (+cal). Need to be updated if other settling target is needed

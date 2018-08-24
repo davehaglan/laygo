@@ -1,17 +1,24 @@
+(relxOpts addAdditionalArgumentForTMI) nil
 (relxOpts aged_data_dir) ""
 (relxOpts aged_var_list) nil
+(relxOpts agingPointsType) "Standard aging"
+(relxOpts anaMode) "Reliability"
+(relxOpts anaModeClone) "Reliability"
 (relxOpts checknegagingclamp) "no"
 (relxOpts checknegagingtype) "error"
 (relxOpts combinedeg) "off"
 (relxOpts compactagednetlist) "none"
 (relxOpts degdatatype) "appendage"
+(relxOpts displayTMIGui) nil
 (relxOpts doADELPostProcess) t
 (relxOpts enableAging) nil
+(relxOpts enableAgingForTMI) t
 (relxOpts enableDegSort) nil
 (relxOpts enableGradualAging) nil
 (relxOpts enablePreset) nil
 (relxOpts enableRelXTran) nil
 (relxOpts enableRelxpert) nil
+(relxOpts enableSelfheating) nil
 (relxOpts enableStress) nil
 (relxOpts enabledegdata) nil
 (relxOpts fresh_data_dir) ""
@@ -36,6 +43,7 @@
 (relxOpts gaSkipFresh) nil
 (relxOpts gaSkipLast) nil
 (relxOpts includeFiles) ""
+(relxOpts mindtemp) ""
 (relxOpts mosAgeDomain) "loglog"
 (relxOpts mosAgeMethod) "agemos"
 (relxOpts mosAgeModelFilePath) ""
@@ -102,6 +110,7 @@
 (relxOpts mosVthMethod) "calculate"
 (relxOpts nativeMode) "Spectre native"
 (relxOpts otherRXOptions) ""
+(relxOpts otherTMIRXOptions) ""
 (relxOpts outputmethod) "single"
 (relxOpts presetAgeLevel) ""
 (relxOpts presetBlock) ""
@@ -110,13 +119,20 @@
 (relxOpts relusercmdlineoption) ""
 (relxOpts relxTranStart) ""
 (relxOpts relxTranStop) ""
+(relxOpts relxpertExecName) "relxpert"
+(relxOpts removeTMIAgeSettingInFresh) nil
 (relxOpts reportModelParamChanged) nil
+(relxOpts saAgeStepOrTotalStep) ""
+(relxOpts saStepType) "Total steps"
 (relxOpts showunageddevices) "limit"
 (relxOpts simModeFile) "input.bs0"
 (relxOpts simModeType) "all"
+(relxOpts standardAgeType) "Age points"
 (relxOpts stress_data_dir) ""
 (relxOpts stress_var_list) nil
+(relxOpts tmiAgingType) "TMI Aging"
+(relxOpts tmiMosMode) (t t)
 (relxOpts uriAppendtype) "none"
 (relxOpts uriDebugMode) "0"
 (relxOpts uriLibs) ""
-(relxOpts uriMode) "none"
+(relxOpts uriMode) "agemos"

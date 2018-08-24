@@ -43,8 +43,8 @@ params = dict(
     num_slices=8,
 )
 load_from_file=True
-yamlfile_spec="adc_sar_spec.yaml"
-yamlfile_size="adc_sar_size.yaml"
+yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
+yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
 if load_from_file==True:
     with open(yamlfile_spec, 'r') as stream:
         specdict = yaml.load(stream)

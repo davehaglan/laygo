@@ -18,7 +18,6 @@ Contents:
    Introduction <introduction/introduction>
    Tutorial (GDS flow) <tutorial/tutorial_GDS>
    Tutorial (BAG flow) <tutorial/tutorial_BAG>
-   Tutorial (BAG flow, new version) <tutorial/tutorial_BAG_v2>
    Architecture <architecture/architecture>
    Generator example - CMOS logic family <example/logic>
    Generator example - CMOS 2:1 mux serializer (obsolete) <example/serdes>
@@ -26,7 +25,6 @@ Contents:
    Generator example - TISAR ADC <example/tisar>
    Code examples (to be uploaded) <example/code>
    Technology setup instructions <tech/tech>
-   Template library setup guide <tech/Laygo_templates_guide>
    API documentation <api/modules>
 
 

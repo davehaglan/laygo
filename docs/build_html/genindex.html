@@ -98,18 +98,6 @@
 <li class="toctree-l2"><a class="reference internal" href="tutorial/tutorial_BAG.html#export-to-bag">Export to BAG</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial/tutorial_BAG_v2.html">Tutorial (BAG flow, new version)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/tutorial_BAG_v2.html#setup-and-running">Setup and running</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/tutorial_BAG_v2.html#initialize-gridlayoutgenerator2">Initialize GridLayoutGenerator2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/tutorial_BAG_v2.html#load-template-and-grid-database">Load template and grid database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/tutorial_BAG_v2.html#library-and-cell-creation">Library and cell creation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/tutorial_BAG_v2.html#cell-placements">Cell placements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/tutorial_BAG_v2.html#signal-routing">Signal routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/tutorial_BAG_v2.html#power-routing">Power routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/tutorial_BAG_v2.html#pin-creation">Pin creation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/tutorial_BAG_v2.html#export-to-bag">Export to BAG</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="architecture/architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example/logic.html">Generator example - CMOS logic family</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="example/logic.html#install-and-launch">Install and launch</a></li>
@@ -154,20 +142,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tech/tech.html">Technology setup instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#example-setup-files">Example setup files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tech/tech.html#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#bag-setup">BAG setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#config-file-laygo-config-yaml">Config file (laygo_config.yaml)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#tech-lib-layermap-gds-flow-only">(tech_lib).layermap (GDS flow only)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#template-library">Template library</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tech/Laygo_templates_guide.html">Template library setup guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tech/Laygo_templates_guide.html#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tech/Laygo_templates_guide.html#let-s-start-with-via-wire-template">Let&#8217;s start with via(wire) template</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tech/Laygo_templates_guide.html#transistor-template">Transistor template</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tech/Laygo_templates_guide.html#routing-grids">Routing grids</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tech/Laygo_templates_guide.html#draw-rest-of-transistor-templates">Draw rest of transistor templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#example-setup-files">Example setup files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#laygo-config-yaml">laygo_config.yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#tech-lib-layermap-optional">(tech_lib).layermap (optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tech/tech.html#template-library">template library</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/modules.html">API documentation</a><ul>
@@ -304,8 +283,6 @@
   </dt>
 
       </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.add_pin">add_pin() (laygo.BaseLayoutGenerator.BaseLayoutGenerator method)</a>
   </dt>
@@ -316,6 +293,8 @@
   </dt>
 
       </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#laygo.GridDB.GridDB.add_placement_grid">add_placement_grid() (laygo.GridDB.GridDB method)</a>
   </dt>
@@ -372,6 +351,14 @@
   <dt><a href="api/laygo.html#laygo.GridObject.GridObject.add_ygrid">add_ygrid() (laygo.GridObject.GridObject method)</a>
   </dt>
 
+      
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.annotate_instance">annotate_instance() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
+  </dt>
+
+      
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.annotate_route">annotate_route() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
+  </dt>
+
   </dl></td>
 </tr></table>
 
@@ -386,50 +373,8 @@
   <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.bbox">bbox (laygo.LayoutObject.Instance attribute)</a>
   </dt>
 
-      
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.bottom">bottom (laygo.LayoutObject.Instance attribute)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.bottom">(laygo.LayoutObject.Pin attribute)</a>
-  </dt>
-
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.bottom">(laygo.LayoutObject.Rect attribute)</a>
-  </dt>
-
-      </dl></dd>
-      
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.bottom_left">bottom_left (laygo.LayoutObject.Instance attribute)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.bottom_left">(laygo.LayoutObject.Pin attribute)</a>
-  </dt>
-
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.bottom_left">(laygo.LayoutObject.Rect attribute)</a>
-  </dt>
-
-      </dl></dd>
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.bottom_right">bottom_right (laygo.LayoutObject.Instance attribute)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.bottom_right">(laygo.LayoutObject.Pin attribute)</a>
-  </dt>
-
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.bottom_right">(laygo.LayoutObject.Rect attribute)</a>
-  </dt>
-
-      </dl></dd>
       
   <dt><a href="api/laygo.html#laygo.GDSIO.Boundary">Boundary (class in laygo.GDSIO)</a>
   </dt>
@@ -452,10 +397,18 @@
   <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.center">center (laygo.LayoutObject.Rect attribute)</a>
   </dt>
 
+      
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.construct_template_and_grid">construct_template_and_grid() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
+  </dt>
+
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.construct_template_and_grid">construct_template_and_grid() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.create_boundary_pin_form_rect">create_boundary_pin_form_rect() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
+  </dt>
+
+      
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.create_boundary_pin_from_rect">create_boundary_pin_from_rect() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
   </dt>
 
       
@@ -541,16 +494,6 @@
   </dt>
 
       
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.elements">elements (laygo.LayoutObject.Instance attribute)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.elements">(laygo.LayoutObject.Pin attribute)</a>
-  </dt>
-
-      </dl></dd>
-      
   <dt><a href="api/laygo.html#laygo.GDSIO.Boundary.export">export() (laygo.GDSIO.Boundary method)</a>
   </dt>
 
@@ -576,8 +519,6 @@
   </dt>
 
       </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#laygo.LayoutIO.export_BAG">export_BAG() (in module laygo.LayoutIO)</a>
   </dt>
@@ -588,6 +529,8 @@
   </dt>
 
       </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#laygo.GridObject.GridObject.export_dict">export_dict() (laygo.GridObject.GridObject method)</a>
   </dt>
@@ -757,10 +700,6 @@
 
       </dl></dd>
       
-  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_bbox">get_bbox() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
-  </dt>
-
-      
   <dt><a href="api/laygo.html#laygo.GridDB.GridDB.get_grid">get_grid() (laygo.GridDB.GridDB method)</a>
   </dt>
 
@@ -782,6 +721,14 @@
       </dl></dd>
       
   <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_bbox">get_inst_bbox() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
+  </dt>
+
+      
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_bbox_phygrid">get_inst_bbox_phygrid() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
+  </dt>
+
+      
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_inst_pin_coord">get_inst_pin_coord() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
   </dt>
 
       
@@ -812,6 +759,8 @@
   </dt>
 
       </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#laygo.GridDB.GridDB.get_phygrid_coord_y">get_phygrid_coord_y() (laygo.GridDB.GridDB method)</a>
   </dt>
@@ -822,8 +771,6 @@
   </dt>
 
       </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#laygo.GridDB.GridDB.get_phygrid_x">get_phygrid_x() (laygo.GridDB.GridDB method)</a>
   </dt>
@@ -921,15 +868,13 @@
   </dt>
 
       
-  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_template">get_template() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
+  <dt><a href="api/laygo.html#laygo.TemplateDB.TemplateDB.get_template">get_template() (laygo.TemplateDB.TemplateDB method)</a>
   </dt>
 
-      <dd><dl>
-        
-  <dt><a href="api/laygo.html#laygo.TemplateDB.TemplateDB.get_template">(laygo.TemplateDB.TemplateDB method)</a>
+      
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_pin_coord">get_template_pin_coord() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
   </dt>
 
-      </dl></dd>
       
   <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_template_pin_xy">get_template_pin_xy() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
   </dt>
@@ -957,15 +902,9 @@
   </dt>
 
       
-  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.get_xy">get_xy() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
+  <dt><a href="api/laygo.html#laygo.LayoutObject.LayoutObject.get_xy">get_xy() (laygo.LayoutObject.LayoutObject method)</a>
   </dt>
 
-      <dd><dl>
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.LayoutObject.get_xy">(laygo.LayoutObject.LayoutObject method)</a>
-  </dt>
-
-      </dl></dd>
       
   <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.get_xy0">get_xy0() (laygo.LayoutObject.Pin method)</a>
   </dt>
@@ -1148,12 +1087,12 @@
   <dt><a href="api/laygo.html#module-laygo.LayoutDB">laygo.LayoutDB (module)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#module-laygo.LayoutIO">laygo.LayoutIO (module)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#module-laygo.LayoutObject">laygo.LayoutObject (module)</a>
   </dt>
@@ -1182,20 +1121,6 @@
   <dt><a href="api/laygo.html#laygo.LayoutObject.LayoutObject">LayoutObject (class in laygo.LayoutObject)</a>
   </dt>
 
-      
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.left">left (laygo.LayoutObject.Instance attribute)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.left">(laygo.LayoutObject.Pin attribute)</a>
-  </dt>
-
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.left">(laygo.LayoutObject.Rect attribute)</a>
-  </dt>
-
-      </dl></dd>
       
   <dt><a href="api/laygo.html#laygo.GridObject.GridObject.libname">libname (laygo.GridObject.GridObject attribute)</a>
   </dt>
@@ -1228,14 +1153,12 @@
   <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.master">master (laygo.LayoutObject.Pin attribute)</a>
   </dt>
 
-      <dd><dl>
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Pointer.master">(laygo.LayoutObject.Pointer attribute)</a>
-  </dt>
-
-      </dl></dd>
       
   <dt><a href="api/laygo.html#laygo.GridObject.GridObject.max_resolution">max_resolution (laygo.GridObject.GridObject attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.Md">Md() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
   </dt>
 
   </dl></td>
@@ -1254,6 +1177,10 @@
   </dt>
 
       </dl></dd>
+      
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.Mt">Mt() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
+  </dt>
+
   </dl></td>
 </tr></table>
 
@@ -1313,6 +1240,10 @@
   </dt>
 
       
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.physical_res">physical_res (laygo.GridLayoutGenerator.GridLayoutGenerator attribute)</a>
+  </dt>
+
+      
   <dt><a href="api/laygo.html#laygo.LayoutObject.Pin">Pin (class in laygo.LayoutObject)</a>
   </dt>
 
@@ -1320,6 +1251,8 @@
   <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.pin">pin() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.pin_from_rect">pin_from_rect() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
   </dt>
@@ -1328,8 +1261,6 @@
   <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.pins">pins (laygo.LayoutObject.Instance attribute)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.place">place() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
   </dt>
@@ -1349,24 +1280,6 @@
 
         
   <dt><a href="api/laygo.html#laygo.TemplateDB.TemplateDB.plib">(laygo.TemplateDB.TemplateDB attribute)</a>
-  </dt>
-
-      </dl></dd>
-      
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Pointer">Pointer (class in laygo.LayoutObject)</a>
-  </dt>
-
-      
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.pointers">pointers (laygo.LayoutObject.Instance attribute)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.pointers">(laygo.LayoutObject.Pin attribute)</a>
-  </dt>
-
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.pointers">(laygo.LayoutObject.Rect attribute)</a>
   </dt>
 
       </dl></dd>
@@ -1406,26 +1319,12 @@
   </dt>
 
       </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#laygo.LayoutDB.LayoutDB.res_exp">res_exp (laygo.LayoutDB.LayoutDB attribute)</a>
   </dt>
 
-      
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.right">right (laygo.LayoutObject.Instance attribute)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.right">(laygo.LayoutObject.Pin attribute)</a>
-  </dt>
-
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.right">(laygo.LayoutObject.Rect attribute)</a>
-  </dt>
-
-      </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.route">route() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
   </dt>
@@ -1539,19 +1438,19 @@
   </dt>
 
       
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.size">size (laygo.LayoutObject.Instance attribute)</a>
+  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.size">size (laygo.LayoutObject.Rect attribute)</a>
   </dt>
 
       <dd><dl>
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.size">(laygo.LayoutObject.Rect attribute)</a>
-  </dt>
-
         
   <dt><a href="api/laygo.html#laygo.TemplateObject.TemplateObject.size">(laygo.TemplateObject.TemplateObject attribute)</a>
   </dt>
 
       </dl></dd>
+      
+  <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.sort_rect_xy">sort_rect_xy() (laygo.GridLayoutGenerator.GridLayoutGenerator method)</a>
+  </dt>
+
       
   <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.spacing">spacing (laygo.LayoutObject.Instance attribute)</a>
   </dt>
@@ -1598,56 +1497,18 @@
   </dt>
 
       </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/laygo.html#laygo.LayoutObject.Text.text">text (laygo.LayoutObject.Text attribute)</a>
   </dt>
 
       
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.top">top (laygo.LayoutObject.Instance attribute)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.top">(laygo.LayoutObject.Pin attribute)</a>
-  </dt>
-
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.top">(laygo.LayoutObject.Rect attribute)</a>
-  </dt>
-
-      </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.top_left">top_left (laygo.LayoutObject.Instance attribute)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.top_left">(laygo.LayoutObject.Pin attribute)</a>
-  </dt>
-
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.top_left">(laygo.LayoutObject.Rect attribute)</a>
-  </dt>
-
-      </dl></dd>
-      
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.top_right">top_right (laygo.LayoutObject.Instance attribute)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Pin.top_right">(laygo.LayoutObject.Pin attribute)</a>
-  </dt>
-
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Rect.top_right">(laygo.LayoutObject.Rect attribute)</a>
-  </dt>
-
-      </dl></dd>
-      
   <dt><a href="api/laygo.html#laygo.LayoutObject.Instance.transform">transform (laygo.LayoutObject.Instance attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/laygo.html#laygo.LayoutObject.LayoutObject.trim">trim() (laygo.LayoutObject.LayoutObject method)</a>
   </dt>
 
       
@@ -1661,10 +1522,6 @@
 
         
   <dt><a href="api/laygo.html#laygo.GridObject.RouteGrid.type">(laygo.GridObject.RouteGrid attribute)</a>
-  </dt>
-
-        
-  <dt><a href="api/laygo.html#laygo.LayoutObject.Pointer.type">(laygo.LayoutObject.Pointer attribute)</a>
   </dt>
 
       </dl></dd>
@@ -1686,10 +1543,6 @@
       </dl></dd>
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="api/laygo.html#laygo.BaseLayoutGenerator.BaseLayoutGenerator.use_array">use_array (laygo.BaseLayoutGenerator.BaseLayoutGenerator attribute)</a>
-  </dt>
-
       
   <dt><a href="api/laygo.html#laygo.GridLayoutGenerator.GridLayoutGenerator.use_phantom">use_phantom (laygo.GridLayoutGenerator.GridLayoutGenerator attribute)</a>
   </dt>

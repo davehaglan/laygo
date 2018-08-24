@@ -13,7 +13,7 @@ cell_name = 'tisaradc_body_space2'
 impl_lib = 'adc_sar_generated'
 
 params = dict(
-    lch=16e-9,
+    lch=14e-9,
     pw=4,
     nw=4,
     msamp=2,

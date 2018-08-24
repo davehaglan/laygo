@@ -13,14 +13,14 @@ cell_name = 'space_dcap'
 impl_lib = 'adc_sar_generated'
 
 params = dict(
-    lch=16e-9,
+    lch=14e-9,
     pw=4,
     nw=4,
     m=2,
     device_intent='fast',
     )
 load_from_file=True
-yamlfile_size="adc_sar_size.yaml"
+yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
 
 if load_from_file==True:
     with open(yamlfile_size, 'r') as stream:

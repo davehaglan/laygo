@@ -185,12 +185,12 @@ def export_GDS(db, libname, cellname, filename, layermapfile="default.layermap",
                 l = layermap[p.layer[0]][p.layer[1]]
                 lib_export.add_boundary(sn, l[0], l[1], c)
                 lib_export.add_text(sn, l[0], l[1], [[int(0.5*(_xy[0][0]+_xy[1][0])), int(0.5*(_xy[0][1]+_xy[1][1]))]],
-                                    string=p.netname, textHeight=pin_label_height / logical_unit)
+                                    string=p.netname, textHeight=int(pin_label_height / logical_unit))
                 if not p.name==p.netname: # if netname is different from pinname, create an annotate text
                     l_ann = layermap[pin_annotate_layer[0]][pin_annotate_layer[1]]
                     lib_export.add_text(sn, l_ann[0], l_ann[1],
                                         [[int(0.5*(_xy[0][0]+_xy[1][0])), int(0.5*(_xy[0][1]+_xy[1][1]))]],
-                                        string=p.name, textHeight=pin_label_height / logical_unit)
+                                        string=p.name, textHeight=int(pin_label_height / logical_unit))
                 logging.debug('ExportGDS: Pin:' + p.name + ' net:' + p.netname + ' layer:' + str(l) + ' xy:' + str(c))
         for t in s['texts'].values():  # text generation
             if t.xy.ndim == 1:

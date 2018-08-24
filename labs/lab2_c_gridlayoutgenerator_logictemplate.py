@@ -32,7 +32,7 @@ import numpy as np
 
 def create_io_pin(laygen, layer, gridname, pinname_list, rect_list, offset_y=np.array([-1, 1])):
     """create digital io pin"""
-    rect_xy_list = [laygen.get_xy(obj =r, gridname=gridname, sort=True) for r in rect_list]
+    rect_xy_list = [laygen.get_rect_xy(name=r.name, gridname=gridname, sort=True) for r in rect_list]
     #align pins
     ry = rect_xy_list[0][:, 1] + offset_y.T
     for i, xy_rect in enumerate(rect_xy_list):
@@ -41,8 +41,8 @@ def create_io_pin(laygen, layer, gridname, pinname_list, rect_list, offset_y=np.
 
 def create_power_pin(laygen, layer, gridname, rect_vdd, rect_vss, pinname_vdd='VDD', pinname_vss='VSS'):
     """create power pin"""
-    laygen.pin(name=pinname_vdd, layer=layer, refobj=rect_vdd, gridname=gridname)
-    laygen.pin(name=pinname_vss, layer=layer, refobj=rect_vss, gridname=gridname)
+    laygen.pin_from_rect(name=pinname_vdd, layer=layer, rect=rect_vdd, gridname=gridname)
+    laygen.pin_from_rect(name=pinname_vss, layer=layer, rect=rect_vss, gridname=gridname)
 
 def generate_inv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, routing_grid_m2m3, routing_grid_m2m3_pin,
                  devname_nmos_boundary, devname_nmos_body, devname_pmos_boundary, devname_pmos_body, m=2,
@@ -85,13 +85,13 @@ def generate_inv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, rou
                        refinstname0=in1.name, refpinname0='D0', refinstindex0=[m-1, 0], via0=[[0, 0]],
                        refinstname1=ip1.name, refpinname1='D0', refinstindex1=[m-1, 0], via1=[[0, 0]])
     # power and groud rail
-    xy = laygen.get_xy(obj = in2.template, gridname = rg_m1m2) * np.array([1, 0])
+    xy = laygen.get_template_size(in2.cellname, rg_m1m2) * np.array([1, 0])
     rvdd=laygen.route("R"+objectname_pfix+"VDD0", laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,
                  refinstname0=ip0.name, refinstname1=ip2.name)
     rvss=laygen.route("R"+objectname_pfix+"VSS0", laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,
                  refinstname0=in0.name, refinstname1=in2.name)
     # power and ground route
-    xy_s0 = laygen.get_template_pin_xy(in1.cellname, 'S0', rg_m1m2)[0, :]
+    xy_s0 = laygen.get_template_pin_coord(in1.cellname, 'S0', rg_m1m2)[0, :]
     for i in range(m):
         laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0*np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
                      refinstname0=in1.name, refinstindex0=np.array([i, 0]), via0=[[0, 0]],
@@ -99,7 +99,7 @@ def generate_inv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, rou
         laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0*np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
                      refinstname0=ip1.name, refinstindex0=np.array([i, 0]), via0=[[0, 0]],
                      refinstname1=ip1.name, refinstindex1=np.array([i, 0]))
-    xy_s1 = laygen.get_template_pin_xy(in1.cellname, 'S1', rg_m1m2)[0, :]
+    xy_s1 = laygen.get_template_pin_coord(in1.cellname, 'S1', rg_m1m2)[0, :]
     laygen.route(None, laygen.layers['metal'][1], xy0=xy_s1 * np.array([1, 0]), xy1=xy_s1, gridname0=rg_m1m2,
                  refinstname0=in1.name, refinstindex0=np.array([m-1, 0]), via0=[[0, 0]],
                  refinstname1=in1.name, refinstindex1=np.array([m-1, 0]))
@@ -110,8 +110,8 @@ def generate_inv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, rou
     if create_pin == True:
         create_io_pin(laygen, layer=laygen.layers['pin'][3], gridname=rg_m2m3_pin, pinname_list = ['I', 'O'],
                       rect_list=[ri0, ro0])
-        laygen.pin(name='VDD', layer=laygen.layers['pin'][2], refobj=rvdd, gridname=rg_m1m2)
-        laygen.pin(name='VSS', layer=laygen.layers['pin'][2], refobj=rvss, gridname=rg_m1m2)
+        laygen.pin_from_rect(name='VDD', layer=laygen.layers['pin'][2], rect=rvdd, gridname=rg_m1m2)
+        laygen.pin_from_rect(name='VSS', layer=laygen.layers['pin'][2], rect=rvss, gridname=rg_m1m2)
 
 def generate_tinv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, routing_grid_m2m3, routing_grid_m2m3_pin,
                   devname_nmos_boundary, devname_nmos_body, devname_pmos_boundary, devname_pmos_body, m=2,
@@ -192,13 +192,13 @@ def generate_tinv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, ro
                        refinstname0=in4.name, refpinname0='D0', refinstindex0=[m-1, 0], via0=[[0, 0]],
                        refinstname1=ip4.name, refpinname1='D0', refinstindex1=[m-1, 0], via1=[[0, 0]])
     # power and groud rail
-    xy = laygen.get_xy(obj = in2.template, gridname = rg_m1m2) * np.array([1, 0])
+    xy = laygen.get_template_size(in2.cellname, rg_m1m2) * np.array([1, 0])
     rvdd=laygen.route("R"+objectname_pfix+"VDD0", laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,
                  refinstname0=ip0.name, refinstname1=ip5.name)
     rvss=laygen.route("R"+objectname_pfix+"VSS0", laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,
                  refinstname0=in0.name, refinstname1=in5.name)
     # power and ground route
-    xy_s0 = laygen.get_template_pin_xy(in1.cellname, 'S0', rg_m1m2)[0, :]
+    xy_s0 = laygen.get_template_pin_coord(in1.cellname, 'S0', rg_m1m2)[0, :]
     for i in range(m):
         laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0*np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
                      refinstname0=in1.name, refinstindex0=np.array([i, 0]), via0=[[0, 0]],
@@ -206,7 +206,7 @@ def generate_tinv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, ro
         laygen.route(None, laygen.layers['metal'][1], xy0=xy_s0*np.array([1, 0]), xy1=xy_s0, gridname0=rg_m1m2,
                      refinstname0=ip1.name, refinstindex0=np.array([i, 0]), via0=[[0, 0]],
                      refinstname1=ip1.name, refinstindex1=np.array([i, 0]))
-    xy_s1 = laygen.get_template_pin_xy(in1.cellname, 'S1', rg_m1m2)[0, :]
+    xy_s1 = laygen.get_template_pin_coord(in1.cellname, 'S1', rg_m1m2)[0, :]
     laygen.route(None, laygen.layers['metal'][1], xy0=xy_s1 * np.array([1, 0]), xy1=xy_s1, gridname0=rg_m1m2,
                  refinstname0=in1.name, refinstindex0=np.array([m-1, 0]), via0=[[0, 0]],
                  refinstname1=in1.name, refinstindex1=np.array([m-1, 0]))
@@ -217,8 +217,8 @@ def generate_tinv(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, ro
     if create_pin == True:
         create_io_pin(laygen, layer=laygen.layers['pin'][3], gridname=rg_m2m3_pin,
                       pinname_list = ['I', 'EN', 'ENB', 'O'], rect_list=[ri0, ren0, renb0, ro0])
-        laygen.pin(name='VDD', layer=laygen.layers['pin'][2], refobj=rvdd, gridname=rg_m1m2)
-        laygen.pin(name='VSS', layer=laygen.layers['pin'][2], refobj=rvss, gridname=rg_m1m2)
+        laygen.pin_from_rect(name='VDD', layer=laygen.layers['pin'][2], rect=rvdd, gridname=rg_m1m2)
+        laygen.pin_from_rect(name='VSS', layer=laygen.layers['pin'][2], rect=rvss, gridname=rg_m1m2)
 
 def generate_space(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, routing_grid_m2m3, routing_grid_m2m3_pin,
                    devname_nmos_space, devname_pmos_space, m=1, origin=np.array([0,0]), create_pin=False):
@@ -234,15 +234,15 @@ def generate_space(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, r
                           refinstname=in0.name, shape=[m, 1], direction='top', transform='MX')
 
     # power and groud rail
-    xy = laygen.get_xy(obj = in0.template, gridname = rg_m1m2) * np.array([1, 0]) * m
+    xy = laygen.get_template_size(in0.cellname, rg_m1m2) * np.array([1, 0])*m
     rvdd=laygen.route("R"+objectname_pfix+"VDD0", laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,
                  refinstname0=ip0.name, refinstname1=ip0.name)
     rvss=laygen.route("R"+objectname_pfix+"VSS0", laygen.layers['metal'][2], xy0=[0, 0], xy1=xy, gridname0=rg_m1m2,
                  refinstname0=in0.name, refinstname1=in0.name)
     # pin
     if create_pin == True:
-        laygen.pin(name='VDD', layer=laygen.layers['pin'][2], refobj=rvdd, gridname=rg_m1m2)
-        laygen.pin(name='VSS', layer=laygen.layers['pin'][2], refobj=rvss, gridname=rg_m1m2)
+        laygen.pin_from_rect(name='VDD', layer=laygen.layers['pin'][2], rect=rvdd, gridname=rg_m1m2)
+        laygen.pin_from_rect(name='VSS', layer=laygen.layers['pin'][2], rect=rvss, gridname=rg_m1m2)
 
 #setup laygo
 laygen = laygo.GridLayoutGenerator(config_file='laygo_config.yaml')

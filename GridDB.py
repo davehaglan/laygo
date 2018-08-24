@@ -37,7 +37,7 @@ import yaml
 import logging
 
 
-class GridDB(dict):
+class GridDB():
     """
     layout grid database management class
     """
@@ -50,8 +50,7 @@ class GridDB(dict):
         """
         Constructor
         """
-        #self.grids = dict()
-        self.grids = self
+        self.grids = dict()
 
     # i/o functions
     def display(self, libname=None, gridname=None):
@@ -74,7 +73,7 @@ class GridDB(dict):
         else:
             gridstr = "grid:" + gridname
         print('Display ' + libstr + gridstr)
-        for ln, l in self.items():
+        for ln, l in self.grids.items():
             if libname == None or libname == ln:
                 print('[Library]' + ln)
                 for sn, s in l.items():
@@ -100,7 +99,7 @@ class GridDB(dict):
         # export grid
         export_dict = dict()
         print('Export grid' + libstr)
-        for ln, l in self.items():
+        for ln, l in self.grids.items():
             export_dict[ln] = dict()
             print('[Library]' + ln)
             for sn, s in l.items():
@@ -125,7 +124,7 @@ class GridDB(dict):
         for ln, l in ydict.items():
             if libname is None or libname == ln:
                 logging.debug('[Library]' + ln)
-                if not ln in self:
+                if not ln in self.grids:
                     self.add_library(ln)
                 self.sel_library(ln)
                 for sn, s in l.items():
@@ -156,8 +155,8 @@ class GridDB(dict):
         db : GridDB.GridDB
             Grid database to be merged.
         """
-        for ln, l in db.items():
-            if not ln in self:
+        for ln, l in db.grids.items():
+            if not ln in self.grids:
                 self.add_library(ln)
             self.sel_library(ln)
             for sn, s in l.items():
@@ -177,9 +176,7 @@ class GridDB(dict):
         name : str
             library name
         """
-        l = dict()
-        self[name] = l
-        return l
+        self.grids[name] = dict()
 
     def add_placement_grid(self, name, libname=None, xy=np.array([0, 0])):
         """
@@ -194,7 +191,7 @@ class GridDB(dict):
         """
         if libname == None: libname = self.plib
         s = PlacementGrid(name=name, libname=libname, xy=xy)
-        self[libname][name] = s
+        self.grids[libname][name] = s
         logging.debug('AddPlacementGrid: name:' + name + ' xy:' + str(xy.tolist()))
         return s
 
@@ -213,7 +210,7 @@ class GridDB(dict):
         if libname == None: libname = self.plib
         s = RouteGrid(name=name, libname=libname, xy=xy, xgrid=xgrid, ygrid=ygrid, xwidth=xwidth, ywidth=ywidth,
                       xlayer=xlayer, ylayer=ylayer, viamap=viamap)
-        self[libname][name] = s
+        self.grids[libname][name] = s
         logging.debug('AddRouteGrid: name:' + name + ' xy:' + str(xy.tolist())
                       + ' xgrid:' + str(xgrid.tolist()) + ' xwidth:' + str(xwidth.tolist()) + ' xlayer:' + str(xlayer)
                       + ' ygrid:' + str(ygrid.tolist()) + ' ywidth:' + str(ywidth.tolist()) + ' ylayer:' + str(ylayer))
@@ -245,7 +242,7 @@ class GridDB(dict):
         GridObject.GridObject
             Grid object handle
         """
-        return self[self.plib][gridname]
+        return self.grids[self.plib][gridname]
 
     # grid coordinate access/conversion functions
     # Note: absgrid_coord notation will be changed to absgrid
@@ -269,7 +266,7 @@ class GridDB(dict):
         int
             x coordinate on gridname
         """
-        return self[self.plib][gridname].get_absgrid_x(x)
+        return self.grids[self.plib][gridname].get_absgrid_x(x)
 
     def get_absgrid_coord_y(self, gridname, y):
         """deprecated - use the get_absgrid_y function instead"""
@@ -291,7 +288,7 @@ class GridDB(dict):
         int
             y coordinate on gridname
         """
-        return self[self.plib][gridname].get_absgrid_y(y)
+        return self.grids[self.plib][gridname].get_absgrid_y(y)
 
     def get_absgrid_coord_xy(self, gridname, xy):
         """deprecated - use the get_absgrid_xy function instead"""
@@ -313,7 +310,7 @@ class GridDB(dict):
         np.array([int, int])
             xy coordinate on gridname
         """
-        return self[self.plib][gridname].get_absgrid_xy(xy)
+        return self.grids[self.plib][gridname].get_absgrid_xy(xy)
 
     def get_absgrid_coord_region(self, gridname, xy0, xy1):
         """deprecated - use the get_absgrid_region function instead"""
@@ -337,7 +334,7 @@ class GridDB(dict):
         np.array([[int, int], [int, int]])
             region on the specified grid
         """
-        return self[self.plib][gridname].get_absgrid_region(xy0, xy1)
+        return self.grids[self.plib][gridname].get_absgrid_region(xy0, xy1)
 
     def get_phygrid_coord_x(self, gridname, x):
         """deprecated - use the get_phygrid_x function instead"""
@@ -359,7 +356,7 @@ class GridDB(dict):
         float
             x coordinate on the physical grid
         """
-        return self[self.plib][gridname].get_phygrid_x(x)
+        return self.grids[self.plib][gridname].get_phygrid_x(x)
 
     def get_phygrid_coord_y(self, gridname, y):
         """deprecated - use the get_phygrid_y function instead"""
@@ -381,7 +378,7 @@ class GridDB(dict):
         float
             y coordinate on the physical grid
         """
-        return self[self.plib][gridname].get_phygrid_y(y)
+        return self.grids[self.plib][gridname].get_phygrid_y(y)
 
     def get_phygrid_coord_xy(self, gridname, xy):
         """deprecated - use the get_phygrid_xy function instead"""
@@ -403,7 +400,7 @@ class GridDB(dict):
         np.array([float, float])
             xy coordinate on the physical grid
         """
-        return self[self.plib][gridname].get_phygrid_xy(xy)
+        return self.grids[self.plib][gridname].get_phygrid_xy(xy)
 
     # route grid function
     def get_route_width_xy(self, gridname, xy):
@@ -422,7 +419,7 @@ class GridDB(dict):
         np.array([float, float])
             width parameters on xy (xgrid(vertical), ygrid(horizontal))
         """
-        return self[self.plib][gridname].get_route_width_xy(xy)
+        return self.grids[self.plib][gridname].get_route_width_xy(xy)
 
     def get_route_layer_xy(self, gridname, xy):
         """
@@ -458,7 +455,7 @@ class GridDB(dict):
         list([str, str])
             layer parameters of xgrid on xy coordinate
         """
-        return self[self.plib][gridname].get_route_xlayer_xy(xy)
+        return self.grids[self.plib][gridname].get_route_xlayer_xy(xy)
 
     def get_route_ylayer_xy(self, gridname, xy):
         """
@@ -476,7 +473,7 @@ class GridDB(dict):
         list([str, str])
             layer parameters of ygrid on xy coordinate
         """
-        return self[self.plib][gridname].get_route_ylayer_xy(xy)
+        return self.grids[self.plib][gridname].get_route_ylayer_xy(xy)
 
     # via functions
     def get_vianame(self, gridname, xy):
@@ -494,7 +491,7 @@ class GridDB(dict):
         str
             name of via that can be placed on xy, on abstract grid specified by gridname
         """
-        return self[self.plib][gridname].get_vianame(xy)
+        return self.grids[self.plib][gridname].get_vianame(xy)
 
     def update_viamap(self, gridname, viamap):
         """
@@ -506,4 +503,4 @@ class GridDB(dict):
         viamap : dict
             dictionary that contains viamap parameters
         """
-        self[self.plib][gridname].update_viamap(viamap)
+        self.grids[self.plib][gridname].update_viamap(viamap)

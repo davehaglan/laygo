@@ -1,4 +1,4 @@
-//Revision 11
+//Revision 18
 //NOTE
 // Default template for spectre
 // Note:
@@ -10,11 +10,12 @@ config sar_wsamp_9b_tb_tran_timing;
 design adc_sar_testbenches.sar_wsamp_9b_tb_tran_timing:schematic;
 liblist myLib;
 
-viewlist spectre, cmos_sch, \cmos.sch , schematic, veriloga, ahdl;
+viewlist schematic, spectre, cmos_sch, \cmos.sch , veriloga, ahdl;
 stoplist spectre;
 
 
 cell adc_sar_generated.sar_wsamp_9b binding :av_extracted;
+cell adc_sar_generated.sar_wsamp binding :av_extracted;
 
 
 endconfig

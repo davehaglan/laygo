@@ -4,11 +4,11 @@ capdrv:
   m_list: [2, 2, 2, 2, 2, 2, 4, 8]
   space_offset: 0
 dcap2_m: 19
-device_intent: ulvt
-lch: 1.6e-08
-m_dcap2: 19
-num_space_samp: 35
-num_space_sar: 48
+device_intent: lvt
+lch: 1.4e-08
+m_dcap2: 22
+num_space_samp: 34
+num_space_sar: 54
 nw: 4
 pw: 4
 salatch: {m: 12, m_buf: 12, m_rgnn: 12, m_rst: 6, num_row_ptap: 2}
@@ -39,7 +39,7 @@ sarsamp:
   m_inbuf_list: [16, 24]
   m_outbuf_list: [8, 32]
   m_sw: 4
-  m_sw_arr: 4
+  m_sw_arr: 6
 sarsamp_preset:
   m_inbuf_list:
   - [4, 6]

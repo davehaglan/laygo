@@ -222,7 +222,7 @@ def generate_power_rails_from_rails_inst(laygen, routename_tag, layer, gridname,
        the pre-existing rail information is provided as inst / pin prefix
     """
     xy=[]
-    pdict=laygen.get_inst_pin_xy(None, None, gridname)
+    pdict=laygen.get_inst_pin_coord(None, None, gridname)
     #iname=input_rails_instname
     if not isinstance(input_rails_instname, list):
         input_rails_instname=[input_rails_instname]

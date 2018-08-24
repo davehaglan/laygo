@@ -11,7 +11,7 @@ cell_name = 'sar_wsamp'
 impl_lib = 'adc_sar_generated'
 #impl_lib = 'adc_sampler_ec'
 params = dict(
-    sar_lch=16e-9,
+    sar_lch=14e-9,
     sar_pw=4,
     sar_nw=4,
     sar_sa_m=8,
@@ -29,7 +29,7 @@ params = dict(
     sar_device_intent='fast',
     sar_c_m=1,
     sar_rdx_array=[1,2,4,8,16,32,64,128],
-    samp_lch=16e-9,
+    samp_lch=14e-9,
     samp_wp=8,
     samp_wn=8,
     samp_fgn=12,
@@ -39,12 +39,11 @@ params = dict(
     samp_ndumr=4,
     samp_nsep=2,
     samp_intent='ulvt',
-    tgate=False,
     samp_use_laygo=False,
 )
 load_from_file=True
-yamlfile_spec="adc_sar_spec.yaml"
-yamlfile_size="adc_sar_size.yaml"
+yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
+yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
 if load_from_file==True:
     with open(yamlfile_spec, 'r') as stream:
         specdict = yaml.load(stream)
@@ -66,7 +65,6 @@ if load_from_file==True:
     params['sar_c_m']=sizedict['capdac']['c_m']
     params['sar_rdx_array']=specdict['rdx_array']
     params['num_bits']=specdict['n_bit']
-    params['tgate']=specdict['samp_with_tgate']
     params['samp_use_laygo']=specdict['samp_use_laygo']
     params['sar_lch']=sizedict['lch']
     params['sar_pw']=sizedict['pw']
