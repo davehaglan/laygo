@@ -194,7 +194,6 @@ def generate_clkdis_viadel(laygen, objectname_pfix, logictemp_lib, working_lib, 
             laygen.pin(name='VDD1_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vddr_xy, gridname=rg_m3m4_thick2, netname='VDD')
 
 
-
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
 
@@ -231,8 +230,8 @@ if __name__ == '__main__':
         pitch_x = 20,
     )
     load_from_file=True
-    yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
-    yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
+    yamlfile_spec="adc_sar_spec.yaml"
+    yamlfile_size="adc_sar_size.yaml"
     if load_from_file==True:
         #load parameters
         with open(yamlfile_spec, 'r') as stream:

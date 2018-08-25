@@ -34,7 +34,7 @@ if __name__ == '__main__':
     #    intent='ulvt',
     #)
     params = dict(
-        lch=14e-9,
+        lch=16e-9,
         wp=8,
         wn=8,
         fgn=12,
@@ -53,12 +53,12 @@ if __name__ == '__main__':
         num_track_sep=2,
         io_width=2,
         guard_ring_nf=2,
-        tot_width=252,
+        tot_width=224,
     )
 
     load_from_file=True
-    yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
-    yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
+    yamlfile_spec="adc_sar_spec.yaml"
+    yamlfile_size="adc_sar_size.yaml"
     if load_from_file==True:
         with open(yamlfile_spec, 'r') as stream:
             specdict = yaml.load(stream)
@@ -74,6 +74,7 @@ if __name__ == '__main__':
         params['ndumr']=sizedict['sampler_nmos']['ndumr']
         params['nsep']=sizedict['sampler_nmos']['nsep']
         params['intent']=sizedict['device_intent']
+        layout_params['tot_width']=sizedict['adc_width']
         '''
         params['wp']=sizedict['pw']*2
         params['wn']=sizedict['nw']*2

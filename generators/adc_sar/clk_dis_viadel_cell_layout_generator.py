@@ -60,22 +60,6 @@ def generate_clkdis_viadel_cell(laygen, objectname_pfix, logictemp_lib, working_
     ##Placing delay cell
     viacell = laygen.place(name='I' + objectname_pfix + 'CELL0', templatename='clk_dis_cell', gridname=pg, xy=origin,
                            template_libname='clk_dis_generated', offset=ofst_capdac)
-
-    # ##Placing delay cells
-    # viacell=laygen.place(name='I'+objectname_pfix+'CELL0', templatename='clk_dis_cell', gridname=pg, xy=origin,
-    #         template_libname='clk_dis_generated')
-    #
-    # ofst=np.array([laygen.get_template_xy(name='clk_dis_cell', libname='clk_dis_generated')[0]/2 \
-    #                -laygen.get_template_xy(name='capdac', libname='clk_dis_generated')[0] \
-    #                , 0])
-    # ##Placing capdacs
-    # capdac=[]
-    # capdac0_0= laygen.place(name='I'+objectname_pfix+'CAPDAC0_0', templatename='capdac', gridname=pg, xy=origin,
-    #         template_libname='clk_dis_generated', transform='MX', offset=ofst)
-    # capdac0_1=laygen.relplace(name='I'+objectname_pfix+'CAPDAC0_1', templatename='capdac', gridname=pg,
-    #         refinstname=capdac0_0.name, template_libname='clk_dis_generated', transform='R180')
-    # capdac.append(capdac0_0)
-    # capdac.append(capdac0_1)
     
     ##Route, clock connection from TGATE to input
     for i in range(m_clki):

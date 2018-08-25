@@ -22,8 +22,8 @@ params = dict(
     )
 load_from_file=True
 
-yamlfile_system_input="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
-yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
+yamlfile_system_input="adc_sar_spec.yaml"
+yamlfile_size="adc_sar_size.yaml"
 if load_from_file==True:
     with open(yamlfile_system_input, 'r') as stream:
         sysdict_i = yaml.load(stream)

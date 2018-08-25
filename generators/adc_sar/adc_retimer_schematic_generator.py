@@ -21,7 +21,7 @@ if __name__ == '__main__':
     cell_name = 'adc_retimer'
 
     params = dict(
-        lch=14e-9,
+        lch=16e-9,
         pw=4,
         nw=4,
         m_ibuf=8,
@@ -33,8 +33,8 @@ if __name__ == '__main__':
     )
     load_from_file=True
 
-    yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
-    yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
+    yamlfile_spec="adc_sar_spec.yaml"
+    yamlfile_size="adc_sar_size.yaml"
     if load_from_file==True:
         with open(yamlfile_spec, 'r') as stream:
             specdict = yaml.load(stream)

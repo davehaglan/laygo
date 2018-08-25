@@ -33,8 +33,8 @@ verify_noise = True
 
 load_from_file=True
 save_to_file=True
-yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
-yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
+yamlfile_spec="adc_sar_spec.yaml"
+yamlfile_size="adc_sar_size.yaml"
 yamlfile_output="adc_sar_output.yaml"
 
 if load_from_file==True:

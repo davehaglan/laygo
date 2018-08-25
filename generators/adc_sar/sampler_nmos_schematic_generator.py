@@ -22,7 +22,7 @@ if __name__ == '__main__':
     cell_name = 'sampler_nmos'
 
     params = dict(
-        lch=14e-9,
+        lch=16e-9,
         wp=8,
         wn=8,
         fgn=12,
@@ -35,8 +35,8 @@ if __name__ == '__main__':
     )
 
     load_from_file=True
-    yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
-    yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
+    yamlfile_spec="adc_sar_spec.yaml"
+    yamlfile_size="adc_sar_size.yaml"
     if load_from_file==True:
         with open(yamlfile_spec, 'r') as stream:
             specdict = yaml.load(stream)

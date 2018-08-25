@@ -272,7 +272,7 @@ def latch_adc(prj, temp_db):
         num_adc=8,
         #num_adc=4,
         #num_adc=2,
-        adc_width=250,
+        adc_width=224,
         cells_per_tap=3,
         config_file='adc_sar_retimer_logic.yaml',
         clk_width=8,
@@ -281,14 +281,12 @@ def latch_adc(prj, temp_db):
         #adc_order=[0, 1],
         # reserve_tracks=[31.5, 38.5, 40.5, 55.5, 57.5, 59.5, 91.5, 93.5,
         #                 127.5, 129.5, 163.5, 165.5, 229.5, 230.5, 231.5, 232.5],
-        # reserve_tracks=[19.5, 24.5, 26.5, 51.5, 53.5, 55.5, 79.5, 81.5,
-        #                 107.5, 109.5, 135.5, 137.5, 198.5, 199.5, 201.5, 202.5],
         reserve_tracks=list(np.arange(19.5, 33.5+1)) + list(np.arange(198.5, 216.5+1)),
     )
     #load from preset
     load_from_file=True
-    yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
-    yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
+    yamlfile_spec="adc_sar_spec.yaml"
+    yamlfile_size="adc_sar_size.yaml"
     if load_from_file==True:
         with open(yamlfile_spec, 'r') as stream:
             specdict = yaml.load(stream)
@@ -297,6 +295,7 @@ def latch_adc(prj, temp_db):
         layout_params['num_bits']=specdict['n_bit']
         layout_params['num_adc']=specdict['n_interleave']
         layout_params['adc_order']=sizedict['slice_order']
+        layout_params['adc_width']=sizedict['ret_width']
         if layout_params['num_bits']==10: #this is hack; need to be fixed
             layout_params['cells_per_tap']=5
     template = temp_db.new_template(params=layout_params, temp_cls=Retimer2, debug=False)

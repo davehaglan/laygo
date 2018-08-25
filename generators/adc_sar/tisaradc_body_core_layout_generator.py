@@ -392,7 +392,7 @@ if __name__ == '__main__':
     num_slices=9
     #load from preset
     load_from_file=True
-    yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
+    yamlfile_spec="adc_sar_spec.yaml"
     if load_from_file==True:
         with open(yamlfile_spec, 'r') as stream:
             specdict = yaml.load(stream)

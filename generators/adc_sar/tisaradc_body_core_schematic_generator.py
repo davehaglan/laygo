@@ -11,7 +11,7 @@ cell_name = 'tisaradc_body_core'
 impl_lib = 'adc_sar_generated'
 
 params = dict(
-    sar_lch=14e-9,
+    sar_lch=16e-9,
     sar_pw=4,
     sar_nw=4,
     sar_sa_m=8,
@@ -41,7 +41,7 @@ params = dict(
     samp_intent='ulvt',
     samp_use_laygo=False,
     num_slices=8,
-    clk_lch=14e-9,
+    clk_lch=16e-9,
     clk_pw=4,
     clk_nw=4,
     clk_m_dff=2, 
@@ -61,8 +61,8 @@ params = dict(
     ret_device_intent='fast'
 )
 load_from_file=True
-yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
-yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
+yamlfile_spec="adc_sar_spec.yaml"
+yamlfile_size="adc_sar_size.yaml"
 if load_from_file==True:
     with open(yamlfile_spec, 'r') as stream:
         specdict = yaml.load(stream)

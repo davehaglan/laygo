@@ -13,7 +13,7 @@ cell_name = 'clk_dis_viadel_htree'
 impl_lib = 'clk_dis_generated'
 
 params = dict(
-    lch=14e-9,
+    lch=16e-9,
     pw=4,
     nw=4,
     m_dff=2, 
@@ -29,8 +29,8 @@ params = dict(
     )
 
 load_from_file=True
-yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
-yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
+yamlfile_spec="adc_sar_spec.yaml"
+yamlfile_size="adc_sar_size.yaml"
 if load_from_file==True:
     with open(yamlfile_spec, 'r') as stream:
         specdict = yaml.load(stream)

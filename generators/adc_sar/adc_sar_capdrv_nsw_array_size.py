@@ -30,7 +30,7 @@ pmos_type='pch'
 nmos_type='nch'
 #env_list = ['tt', 'ff', 'ss', 'sf', 'fs', 'ff_hot', 'ss_hot']
 env_list = 'tt'
-l = 14e-9
+l = 16e-9
 intent = 'lvt'
 pw = 4
 nw = 4
@@ -42,9 +42,9 @@ m_max = 8
 
 load_from_file=True
 save_to_file=True #update sizing yaml file
-yamlfile_spec="laygo/generators/adc_sar/yaml/adc_sar_spec.yaml"
+yamlfile_spec="adc_sar_spec.yaml"
 #yamlfile_spec_output="adc_sar_spec_output.yaml"
-yamlfile_size="laygo/generators/adc_sar/yaml/adc_sar_size.yaml"
+yamlfile_size="adc_sar_size.yaml"
 yamlfile_output="adc_sar_output.yaml"
 
 vdd = 0.8
