@@ -84,9 +84,8 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
     print(sar_size[1]+ret_size[1]+clkdist_size[1], sar_size[1],ret_size[1],clkdist_size[1],space_size[1])
     # size_y=int((sar_size[1]+ret_size[1]+clkdist_size[1]-9.6-3.84)/space_size[1]+1)*space_size[1] #clkdist_size is not correct.. will be fixed later
     size_y = int((sar_size[1] + ret_size[1] + clkdist_size[1]) / space_size[1] + 1) * space_size[1]
-    laygen.add_rect(None, np.array([origin, origin+np.array([size_x, size_y])]), laygen.layers['prbnd'])
+    # laygen.add_rect(None, np.array([origin, origin+np.array([size_x, size_y])]), laygen.layers['prbnd'])
     # laygen.add_rect(None, np.array([origin, origin + np.array([size_x, size_y + 6.96])]), laygen.layers['outline'])
-    laygen.add_rect(None, np.array([origin, origin + np.array([size_x, size_y + 10.37])]), laygen.layers['outline'])
 
     pdict_m2m3=laygen.get_inst_pin_coord(None, None, rg_m2m3)
     pdict_m3m4=laygen.get_inst_pin_coord(None, None, rg_m3m4)

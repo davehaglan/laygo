@@ -334,6 +334,12 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
             if (i==0):
                 laygen.boundary_pin_from_rect(clkv, gridname=rg_m4m5, name='CLKI_'+str(j), layer=laygen.layers['pin'][5], size=1, direction='top', netname='CLKI')
 
+    # prboundary
+    y_grid = laygen.get_template_size('boundary_bottom', libname=utemplib)[1]
+    size_y = (int(laygen.get_rect(clkv.name).xy1[1]/y_grid)+1)*y_grid
+    size_x = laygen.get_inst(bnd_right[-1].name).xy1[0]
+    laygen.add_rect(None, np.array([origin, np.array([size_x, size_y])]), laygen.layers['prbnd'])
+    laygen.add_rect(None, np.array([origin, np.array([size_x, size_y])]), laygen.layers['outline'])
     #laygen.boundary_pin_from_rect(clkv, gridname=rg_m4m5, name='CLKI', layer=laygen.layers['pin'][5], size=1, direction='top')
 
     clko_x = laygen.get_inst_pin_coord(tgated0.name, 'O_0', rg_m3m4)[0]

@@ -150,7 +150,13 @@ def generate_clkdis_viadel_htree(laygen, objectname_pfix, logictemp_lib, working
             laygen.pin(name='VDD0_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vddl_xy, gridname=rg_m3m4_thick2, netname='VDD')
             vddr_xy = laygen.get_inst_pin_coord(viadel.name, 'VDD1_'+str(i)+'_'+str(j), rg_m3m4_thick2)
             laygen.pin(name='VDD1_'+str(i)+'_'+str(j), layer=laygen.layers['pin'][4], xy=vddr_xy, gridname=rg_m3m4_thick2, netname='VDD') 
-    
+
+    #prboundary
+            size_x = laygen.templates.get_template('clk_dis_viadel', libname='clk_dis_generated').size[0]
+            y_grid = laygen.get_template_size('tap', libname=logictemplib)[1]
+            size_y = (int(laygen.get_rect(vinx.name).xy1[1] / y_grid) + 1) * y_grid
+            laygen.add_rect(None, np.array([origin, np.array([size_x, size_y])]), laygen.layers['prbnd'])
+            laygen.add_rect(None, np.array([origin, np.array([size_x, size_y])]), laygen.layers['outline'])
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")

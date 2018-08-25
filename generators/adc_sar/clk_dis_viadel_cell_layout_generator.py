@@ -60,6 +60,7 @@ def generate_clkdis_viadel_cell(laygen, objectname_pfix, logictemp_lib, working_
     ##Placing delay cell
     viacell = laygen.place(name='I' + objectname_pfix + 'CELL0', templatename='clk_dis_cell', gridname=pg, xy=origin,
                            template_libname='clk_dis_generated', offset=ofst_capdac)
+    viacell_height = laygen.get_template_xy(name='clk_dis_cell', libname='clk_dis_generated')[1]
     
     ##Route, clock connection from TGATE to input
     for i in range(m_clki):
