@@ -46,7 +46,7 @@ class adc_sar_templates__adc_retimer(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, m_ibuf, m_obuf, m_latch, num_slices, num_bits, device_intent='fast'):
+    def design(self, lch, pw, nw, m_ibuf, m_obuf, m_latch, m_srbuf, m_sr, num_slices, num_bits, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -63,7 +63,7 @@ class adc_sar_templates__adc_retimer(Module):
         array_instance()
         """
         for pn, p in zip(['lch', 'pw', 'nw', 'm_ibuf', 'm_obuf', 'num_slices', 'num_bits', 'device_intent'], 
-                         [lch, pw, nw, m_ibuf, m_obuf, num_slices, num_bits, device_intent]):
+                         [lch, pw, nw, m_ibuf, m_obuf, m_srbuf, m_sr, num_slices, num_bits, device_intent]):
             self.parameters[pn]=p
         #lch=16e-9
         #pw=4
@@ -92,19 +92,45 @@ class adc_sar_templates__adc_retimer(Module):
         name_list=[]
         term_list=[]
         for i in ck_phase_buf:
-            term_list.append({'I': 'clk%d'%(i), 'O':'clkb%d'%(i)})
-            name_list.append('IIBUF%d<5:0>'%(i))
+            term_list.append({'I': 'iclk%d'%(i), 'O':'clkb%d'%(i)})
+            name_list.append('IIBUF0_%d<15:0>'%(i))
         self.array_instance('IIBUF0', name_list, term_list=term_list)
         for inst in self.instances['IIBUF0']:
             inst.design(lch=lch, pw=pw, nw=nw, m=m_ibuf, device_intent=device_intent)
+        name_list=[]
+        term_list=[]
+        for i in ck_phase_buf:
+            term_list.append({'I': 'iclkb%d'%(i), 'O':'iclk%d'%(i)})
+            name_list.append('IIBUF1_%d<3:0>'%(i))
+        self.array_instance('IIBUF1', name_list, term_list=term_list)
+        for inst in self.instances['IIBUF1']:
+            inst.design(lch=lch, pw=pw, nw=nw, m=m_ibuf, device_intent=device_intent)
+        name_list=[]
+        term_list=[]
+        for i in ck_phase_buf:
+            term_list.append({'I': 'clk%d'%(i), 'O':'iclkb%d'%(i)})
+            name_list.append('IIBUF2_%d<1:0>'%(i))
+        self.array_instance('IIBUF2', name_list, term_list=term_list)
+        for inst in self.instances['IIBUF2']:
+            inst.design(lch=lch, pw=pw, nw=nw, m=max(m_ibuf/2, 2), device_intent=device_intent)
 
         #obuf
         #self.reconnect_instance_terminal(inst_name='IOBUF0', term_name='I', net_name='clkb%d'%(ck_phase_out))
-        self.array_instance('IOBUF0', ['IOBUF0<1:0>'], 
-                            term_list=[{'I':'clkb%d'%(ck_phase_out)}])
+        self.array_instance('IOBUF0', ['IOBUF0<3:0>'], 
+                            term_list=[{'I':'clk_duty'}])
+                            #term_list=[{'I':'clkb%d'%(ck_phase_out)}])
                             #term_list=[{'I':'in<%d:0>'%(num_bits-1), 'O':'int0<%d:0>'%(num_bits-1)}])
         self.instances['IOBUF0'][0].design(lch=lch, pw=pw, nw=nw, m=m_obuf, device_intent=device_intent)
-            
+        
+        #DCC
+        name_list=[]
+        term_list=[]
+        term_list.append({'S': 'clkb%d'%(ck_phase_1), 'R':'clkb%d'%(ck_phase_2), 'Q':'clk_duty'})
+        name_list.append('ISR<1:0>')
+        self.array_instance('ISR', name_list, term_list=term_list)
+        for inst in self.instances['ISR']:
+            inst.design(lch=lch, pw=pw, nw=nw, m=m_sr, device_intent=device_intent)
+    
         #slice
         name_list=[]
         term_list=[]
