@@ -107,6 +107,8 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     #space_name = 'space_dcap_nmos'
     space_name = 'space'
 
+    pin_bot_locx = []
+
     xy0=laygen.get_template_size(name=space_name, gridname=pg, libname=workinglib)
     xsp=xy0[0]
     ysp=xy0[1]
@@ -364,10 +366,14 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                             xy0=pdict_m5m6[iret.name]['CLKO0'][0],
                             xy1=np.array([pdict_m5m6[iret.name]['CLKO0'][0][0], 0]), gridname0=rg_m5m6)
     laygen.create_boundary_pin_from_rect(rrstout0, rg_m4m5, 'RSTOUT0', laygen.layers['pin'][5], size=6, direction='bottom', netname='RSTOUT')
+    xy = laygen.get_rect_xy(rrstout0.name, rg_m4m5)
+    pin_bot_locx.append(float(laygen._route_generate_box_from_abscoord(xy0=xy[0, :], xy1=xy[1, :], gridname0=rg_m4m5)[1][0][0]))
     rrstout1 = laygen.route(None, laygen.layers['metal'][5],
                             xy0=pdict_m5m6[iret.name]['CLKO1'][0],
                             xy1=np.array([pdict_m5m6[iret.name]['CLKO1'][0][0], 0]), gridname0=rg_m5m6)
     laygen.create_boundary_pin_from_rect(rrstout1, rg_m4m5, 'RSTOUT1', laygen.layers['pin'][5], size=6, direction='bottom', netname='RSTOUT')
+    xy = laygen.get_rect_xy(rrstout1.name, rg_m4m5)
+    pin_bot_locx.append(float(laygen._route_generate_box_from_abscoord(xy0=xy[0, :], xy1=xy[1, :], gridname0=rg_m4m5)[1][0][0]))
 
     # clk input 
     laygen.create_boundary_pin_from_rect(rrst0, rg_m5m6, 'RST0', laygen.layers['pin'][5], size=6, direction='top', netname='RST')
@@ -448,14 +454,20 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                                          pdict_m4m5[ickg.name]['SEL<' + str(i) + '>'][0],
                                          np.array([pdict_m4m5[ickg.name]['SEL<'+str(i)+'>'][1][0]+1+i+2+2, 0]), rg_m4m5)
         laygen.create_boundary_pin_from_rect(rclkdsel0, rg_m4m5, 'CKDSEL0<' + str(i) + '>', laygen.layers['pin'][5], size=6,direction='bottom')
+        xy = laygen.get_rect_xy(rclkdsel0.name, rg_m4m5)
+        pin_bot_locx.append(float(laygen._route_generate_box_from_abscoord(xy0=xy[0, :], xy1=xy[1, :], gridname0=rg_m4m5)[1][0][0]))
     rh0, rclkdsel1 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                      pdict_m4m5[ickg.name]['SEL<2>'][0],
                                      np.array([pdict_m4m5[ickg.name]['SEL<2>'][1][0]+1+3+2+2, 0]), rg_m4m5)
     laygen.create_boundary_pin_from_rect(rclkdsel1, rg_m4m5, 'CKDSEL1<0>', laygen.layers['pin'][5], size=6,direction='bottom')
+    xy = laygen.get_rect_xy(rclkdsel1.name, rg_m4m5)
+    pin_bot_locx.append(float(laygen._route_generate_box_from_abscoord(xy0=xy[0, :], xy1=xy[1, :], gridname0=rg_m4m5)[1][0][0]))
     #ckdsel dummy
     xy0 = laygen.get_rect_xy(name=rclkdsel0.name, gridname=rg_m4m5, sort=True)
     rclkdsel1 = laygen.route(None, laygen.layers['metal'][5], xy0=xy0[0]+np.array([3,0]), xy1=xy0[0]+np.array([3,4]), gridname0=rg_m4m5)
     laygen.create_boundary_pin_from_rect(rclkdsel1, rg_m4m5, 'CKDSEL1<1>', laygen.layers['pin'][5], size=6, direction='bottom')
+    xy = laygen.get_rect_xy(rclkdsel1.name, rg_m4m5)
+    pin_bot_locx.append(float(laygen._route_generate_box_from_abscoord(xy0=xy[0, :], xy1=xy[1, :], gridname0=rg_m4m5)[1][0][0]))
 
     # SAOP/SAOM
     laygen.create_boundary_pin_from_rect(rsaop0, rg_m4m5, 'SAOP', laygen.layers['pin'][5], size=6, direction='top')
@@ -466,6 +478,8 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                                     np.array([x0+4, 0]), rg_m4m5)
                                     #np.array([x0+13+3, 0]), rg_m4m5)
     laygen.create_boundary_pin_from_rect(rextsel_clk0, rg_m4m5, 'EXTSEL_CLK', laygen.layers['pin'][5], size=6, direction='bottom')
+    xy = laygen.get_rect_xy(rextsel_clk0.name, rg_m4m5)
+    pin_bot_locx.append(float(laygen._route_generate_box_from_abscoord(xy0=xy[0,:], xy1=xy[1,:], gridname0=rg_m4m5)[1][0][0]))
     # fsm to ret (data)
     for i in range(num_bits):
         if i%2==0: #even channel
@@ -493,6 +507,8 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                              xy0=pdict_m4m5[iret.name]['OUT<'+str(i)+'>'][0],
                              xy1=np.array([pdict_m4m5[iret.name]['OUT<'+str(i)+'>'][0][0], 0]), gridname0=rg_m5m6)
         laygen.create_boundary_pin_from_rect(radco0, rg_m4m5, 'ADCOUT<'+str(i)+'>', laygen.layers['pin'][5], size=6, direction='bottom')
+        xy = laygen.get_rect_xy(radco0.name, rg_m4m5)
+        pin_bot_locx.append(float(laygen._route_generate_box_from_abscoord(xy0=xy[0, :], xy1=xy[1, :], gridname0=rg_m4m5)[1][0][0]))
     # probe outputs
     laygen.pin(name='PHI0', layer=laygen.layers['pin'][4], xy=pdict_m4m5[ickg.name]['PHI0'], gridname=rg_m4m5)
     laygen.pin(name='UP', layer=laygen.layers['pin'][4], xy=pdict_m4m5[ickg.name]['UP'], gridname=rg_m4m5)
@@ -630,6 +646,9 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                 laygen.pin(name='VSS_M6' + str(n_vss_m6), layer=laygen.layers['pin'][6], xy=xy0, gridname=rg_m5m6_thick, netname='VSS')
                 n_vss_m6+=1
 
+    return sorted(pin_bot_locx)
+
+
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
 
@@ -689,10 +708,16 @@ if __name__ == '__main__':
     mycell_list.append(cellname)
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
-    generate_sarabe_dualdelay(laygen, objectname_pfix='CA0', workinglib=workinglib,
+    pin_bot_locx = generate_sarabe_dualdelay(laygen, objectname_pfix='CA0', workinglib=workinglib,
                     placement_grid=pg, routing_grid_m2m3=rg_m2m3, 
                     routing_grid_m3m4_thick=rg_m3m4_thick, routing_grid_m4m5_thick=rg_m4m5_thick, routing_grid_m5m6_thick=rg_m5m6_thick, 
                     routing_grid_m4m5=rg_m4m5, num_bits=num_bits, origin=np.array([0, 0]))
+
+    # save x -co-ordinate of bottom pin locations for reserving tracks in power fill of retimer
+    sizedict['reserve_tracks'] = pin_bot_locx
+    with open(yamlfile_size, 'w') as stream:
+        yaml.dump(sizedict, stream)
+
     laygen.add_template_from_cell()
 
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)
