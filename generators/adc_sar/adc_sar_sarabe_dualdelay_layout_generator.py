@@ -717,12 +717,6 @@ if __name__ == '__main__':
 
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)
 
-    sizedict['adc_width'] = int(laygen.get_template_xy(cellname, libname=workinglib, gridname=rg_m1m2)[0])
-    # save x -co-ordinate of bottom pin locations for reserving tracks in power fill of retimer
-    sizedict['reserve_tracks'] = pin_bot_locx
-    with open(yamlfile_size, 'w') as stream:
-        yaml.dump(sizedict, stream)
-
     #bag export, if bag does not exist, gds export
     import imp
     try:
@@ -734,3 +728,9 @@ if __name__ == '__main__':
             laygen.export_BAG(prj, array_delimiter=['[', ']'])
     except ImportError:
         laygen.export_GDS('output.gds', cellname=mycell_list, layermapfile=tech+".layermap")  # change layermapfile
+
+    sizedict['adc_width'] = int(laygen.get_template_xy(cellname, libname=workinglib, gridname=rg_m1m2)[0])
+    # save x -co-ordinate of bottom pin locations for reserving tracks in power fill of retimer
+    sizedict['reserve_tracks'] = pin_bot_locx
+    with open(yamlfile_size, 'w') as stream:
+        yaml.dump(sizedict, stream)
