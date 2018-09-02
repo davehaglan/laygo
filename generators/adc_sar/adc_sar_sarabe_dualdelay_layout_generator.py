@@ -713,14 +713,16 @@ if __name__ == '__main__':
                     routing_grid_m3m4_thick=rg_m3m4_thick, routing_grid_m4m5_thick=rg_m4m5_thick, routing_grid_m5m6_thick=rg_m5m6_thick, 
                     routing_grid_m4m5=rg_m4m5, num_bits=num_bits, origin=np.array([0, 0]))
 
+    laygen.add_template_from_cell()
+
+    laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)
+
+    sizedict['adc_width'] = int(laygen.get_template_xy(cellname, libname=workinglib, gridname=rg_m1m2)[0])
     # save x -co-ordinate of bottom pin locations for reserving tracks in power fill of retimer
     sizedict['reserve_tracks'] = pin_bot_locx
     with open(yamlfile_size, 'w') as stream:
         yaml.dump(sizedict, stream)
 
-    laygen.add_template_from_cell()
-
-    laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)
     #bag export, if bag does not exist, gds export
     import imp
     try:
