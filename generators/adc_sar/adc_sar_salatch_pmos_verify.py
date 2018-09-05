@@ -27,7 +27,7 @@ corners=['tt'] #, 'ff', 'ss']
 
 verify_lvs = False
 extracted_calibre = False
-extracted_pvs = True
+extracted_pvs = False
 verify_tran = True
 verify_noise = True
 

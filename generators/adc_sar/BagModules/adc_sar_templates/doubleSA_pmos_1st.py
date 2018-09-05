@@ -46,7 +46,7 @@ class adc_sar_templates__doubleSA_pmos_1st(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, m, m_rst, m_rgnn, m_buf, device_intent='fast'):
+    def design(self, lch, pw, nw, m, m_rst, m_rgnn, m_buf, pmos_body, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -118,6 +118,11 @@ class adc_sar_templates__doubleSA_pmos_1st(Module):
         self.instances['IINDM0'].design(w=pw, l=lch, nf=6, intent=device_intent)
         self.instances['IINDM1'].design(w=pw, l=lch, nf=2, intent=device_intent)
         self.instances['ICKPDM0'].design(w=pw, l=lch, nf=m_clkh_dmy*4, intent=device_intent)
+
+        if pmos_body == 'VSS':
+            for inst in ['IINP0', 'IINM0', 'ICKP0', 'IOSP0', 'IOSM0', 'IRGNP0', 'IRGNP1', 'IBUFP0', 'IBUFP1',
+                         'IRGNPDM0', 'IRGNPDM1', 'IRGNPDM2', 'IOSPB0', 'IOSMB0', 'IINDM0', 'IINDM1', 'ICKPDM0']:
+                self.reconnect_instance_terminal(inst, 'B', 'VSS')
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

@@ -28,7 +28,7 @@ params = dict(
 
 extracted_calibre = False
 extracted_pvs = True
-verify_tran = False
+verify_tran = True
 verify_noise = True
 
 load_from_file=True

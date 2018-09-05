@@ -10,8 +10,12 @@ instances:
     lib_name: basic
     cell_name: ipin
     instpins: {}
+  PIN3:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
   C0:
-    lib_name: cmos32lp_microtemplates_dense
+    lib_name: tsmcN16_microtemplates_dense
     cell_name: momcap_center_1x
     instpins:
       BOTTOM:
@@ -23,7 +27,7 @@ instances:
         net_name: "O"
         num_bits: 1
   CDAC0:
-    lib_name: cmos32lp_microtemplates_dense
+    lib_name: tsmcN16_microtemplates_dense
     cell_name: momcap_center_1x
     instpins:
       BOTTOM:
@@ -34,7 +38,3 @@ instances:
         direction: inputOutput
         net_name: "O"
         num_bits: 1
-  PIN3:
-    lib_name: basic
-    cell_name: iopin
-    instpins: {}

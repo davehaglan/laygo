@@ -41,7 +41,7 @@ def create_power_pin_from_inst(laygen, layer, gridname, inst_left, inst_right):
     laygen.pin(name='VSS', layer=layer, xy=np.vstack((rvss0_pin_xy[0],rvss1_pin_xy[1])), gridname=gridname)
 
 def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_grid, routing_grid_m3m4,
-        m=2, fo=2, m_space_left_4x=0, m_space_4x=0, m_space_2x=0, m_space_1x=0, origin=np.array([0, 0])):
+        m=2, fo=2, m_space_left_4x=0, m_space_4x=0, m_space_2x=0, m_space_1x=0, fast=True, origin=np.array([0, 0])):
     """generate a static sar clock generator """
     pg = placement_grid
     rg_m3m4 = routing_grid_m3m4
@@ -128,6 +128,7 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
 
     # internal pins
     pdict = laygen.get_inst_pin_xy(None, None, rg_m3m4)
+    pdict23 = laygen.get_inst_pin_xy(None, None, rg_m2m3)
 
     # internal routes
     #x0 = laygen.get_xy(obj =inand0, gridname=rg_m3m4)[0] + 1
@@ -140,18 +141,18 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
                                        pdict[iinv8.name]['I'][0], y0 - 2 + 1, rg_m3m4)
 
     # internal routes - clkdelay
-    #[rv0, rdone0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[inand0.name]['O'][0],
-    #                                   pdict[idly0.name]['I'][0], y0 + 0+4, rg_m3m4)  
     [rv0, rdone0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[inand0.name]['O'][0],
                                        pdict[idly0.name]['I'][0], y0 + 0+2, rg_m3m4)  
 
     # internal routes - phi0 logic
     [rv0, rup0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[idly0.name]['O'][0],
                                        pdict[iinv5.name]['I'][0], y0 + 0, rg_m3m4)  # up
-    #[rup0, rv1] = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][3], pdict[idly0.name]['O'][0],
-    #                                   pdict[iinv5.name]['I'][0], rg_m3m4)  # up
-    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[icore0.name]['UPB'][0],
+    if fast==True:
+        [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[icore0.name]['UPB'][0],
                                        pdict[iinv5.name]['O'][0], y0 + 2-1+1, rg_m3m4)  # upb
+    elif fast==False:
+        [rv0, rh0] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], pdict23[icore0.name]['UPB'][0],
+                                       pdict23[icore0.name]['VDD'][0], rg_m2m3)  # upb
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[icore0.name]['DONE'][0],
                                        pdict[inand0.name]['O'][0], y0 + 0+4, rg_m3m4) #DONE-pre
     # internal routes - outputbuf
@@ -325,6 +326,7 @@ if __name__ == '__main__':
         m=sizedict['sarclkgen']['m']
         fo=sizedict['sarclkgen']['fo']
         ndelay=sizedict['sarclkgen']['ndelay']
+        fast=sizedict['sarclkgen']['fast']
         m_space_left_4x=sizedict['sarabe_m_space_left_4x']
     #generation (2 step)
     cellname='sarclkgen_static'
@@ -335,7 +337,7 @@ if __name__ == '__main__':
     laygen.sel_cell(cellname)
     generate_sarclkgen_static(laygen, objectname_pfix='CKG0', templib_logic=logictemplib, placement_grid=pg,
                        routing_grid_m3m4=rg_m3m4,
-                       m=m, fo=fo, m_space_left_4x=m_space_left_4x, m_space_4x=0, m_space_2x=0, m_space_1x=0, 
+                       m=m, fo=fo, m_space_left_4x=m_space_left_4x, m_space_4x=0, m_space_2x=0, m_space_1x=0, fast=fast,
                        origin=np.array([0, 0]))
     laygen.add_template_from_cell()
     #2. calculate spacing param and regenerate
@@ -351,7 +353,7 @@ if __name__ == '__main__':
     generate_sarclkgen_static(laygen, objectname_pfix='CKG0', templib_logic=logictemplib, placement_grid=pg,
                        routing_grid_m3m4=rg_m3m4,
                        m=m, fo=fo, m_space_left_4x=m_space_left_4x, 
-                       m_space_4x=m_space_4x, m_space_2x=m_space_2x, m_space_1x=m_space_1x, origin=np.array([0, 0]))
+                       m_space_4x=m_space_4x, m_space_2x=m_space_2x, m_space_1x=m_space_1x, fast=fast, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)

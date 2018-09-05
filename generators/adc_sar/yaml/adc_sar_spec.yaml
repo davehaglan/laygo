@@ -46,4 +46,8 @@ trf_fo4: 8.0e-12 #nominal logic transition timing
 tfo4: 10.0e-12 #nominal fo4 delay
 #True if laygo is used for sampler generation. If false, AnalogBase is used
 samp_use_laygo: True
+#True if tgate is used for sampling switch. If false, NMOS-only sampler is used
+samp_with_tgate: True
 pmos_body: 'VDD' #'VSS' or 'VDD'
+use_offset: false
+clk_pulse_overlap: True # default: False

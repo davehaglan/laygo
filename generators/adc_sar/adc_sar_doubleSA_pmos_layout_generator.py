@@ -59,7 +59,7 @@ def generate_doubleSA_pmos(laygen, objectname_pfix, workinglib, placement_grid,
                                 laygen.get_inst_xy(i2nd.name, rg_m3m4)[1]-2, rg_m3m4,
                                 layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5)
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],
-                                laygen.get_inst_pin_xy(i1st.name, 'OM', rg_m3m4)[0],
+                                laygen.get_inst_pin_xy(i1st.name, 'OM', rg_m3m4)[1],
                                 laygen.get_inst_pin_xy(i2nd.name, 'OM', rg_m4m5)[0],
                                 laygen.get_inst_xy(i2nd.name, rg_m3m4)[1]-2, rg_m3m4,
                                 layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5)
@@ -96,19 +96,20 @@ def generate_doubleSA_pmos(laygen, objectname_pfix, workinglib, placement_grid,
     vssl=0
     vssr=0
     for p in pdict_m3m4[i2nd.name]:
-        if p.startswith('VDD'):
+        if p.startswith('VDDL'):
             r0=laygen.route(None, laygen.layers['metal'][3], xy0=pdict_m3m4[i2nd.name][p][1], 
                             xy1=np.array([pdict_m3m4[i2nd.name][p][0][0],pdict_m3m4[i1st.name][p][0][1]]), gridname0=rg_m3m4)
-            if pdict_m3m4[i2nd.name][p][0][0] < xsa_center:
-                rvddl_m3.append(r0)
-                laygen.pin(name='VDDL'+str(vddl), layer=laygen.layers['pin'][3],
-                   xy=laygen.get_rect_xy(r0.name, rg_m3m4), gridname=rg_m3m4, netname='VDD')
-                vddl+=1
-            else:
-                rvddr_m3.append(r0)
-                laygen.pin(name='VDDR'+str(vddr), layer=laygen.layers['pin'][3],
-                   xy=laygen.get_rect_xy(r0.name, rg_m3m4), gridname=rg_m3m4, netname='VDD')
-                vddr+=1
+            rvddl_m3.append(r0)
+            laygen.pin(name='VDDL'+str(vddl), layer=laygen.layers['pin'][3],
+               xy=laygen.get_rect_xy(r0.name, rg_m3m4), gridname=rg_m3m4, netname='VDD')
+            vddl+=1
+        if p.startswith('VDDR'):
+            r0=laygen.route(None, laygen.layers['metal'][3], xy0=pdict_m3m4[i2nd.name][p][1],
+                            xy1=np.array([pdict_m3m4[i2nd.name][p][0][0],pdict_m3m4[i1st.name][p][0][1]]), gridname0=rg_m3m4)
+            rvddr_m3.append(r0)
+            laygen.pin(name='VDDR'+str(vddr), layer=laygen.layers['pin'][3],
+               xy=laygen.get_rect_xy(r0.name, rg_m3m4), gridname=rg_m3m4, netname='VDD')
+            vddr+=1
         if p.startswith('VSSL'):
             r0=laygen.route(None, laygen.layers['metal'][3], xy0=pdict_m3m4[i2nd.name][p][1], 
                             xy1=np.array([pdict_m3m4[i2nd.name][p][0][0],pdict_m3m4[i1st.name][p][0][1]]), gridname0=rg_m3m4)

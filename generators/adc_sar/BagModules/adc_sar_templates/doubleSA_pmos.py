@@ -46,7 +46,7 @@ class adc_sar_templates__doubleSA_pmos(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, m, m_d, m_rst, m_rst_d, m_rgnn, m_rgnp_d, m_buf, device_intent='fast'):
+    def design(self, lch, pw, nw, m, m_d, m_rst, m_rst_d, m_rgnn, m_rgnp_d, m_buf, pmos_body, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -72,10 +72,11 @@ class adc_sar_templates__doubleSA_pmos(Module):
         self.parameters['m_rgnn'] = m_rgnn
         self.parameters['m_rgnp_d'] = m_rgnp_d
         self.parameters['m_buf'] = m_buf
+        self.parameters['pmos_body'] = pmos_body
         self.parameters['device_intent'] = device_intent
 
-        self.instances['I1st'].design(lch=lch, pw=pw, nw=nw, m=m, m_rst=m_rst, m_rgnn=m_rgnn, m_buf=m_buf, device_intent=device_intent)
-        self.instances['I2nd'].design(lch=lch, pw=pw, nw=nw, m=m, m_d=m_d, m_rst=m_rst, m_rst_d=m_rst_d, m_rgnn=m_rgnn, m_rgnp_d=m_rgnp_d, m_buf=m_buf, device_intent=device_intent)
+        self.instances['I1st'].design(lch=lch, pw=pw, nw=nw, m=m, m_rst=m_rst, m_rgnn=m_rgnn, m_buf=m_buf, pmos_body=pmos_body, device_intent=device_intent)
+        self.instances['I2nd'].design(lch=lch, pw=pw, nw=nw, m=m, m_d=m_d, m_rst=m_rst, m_rst_d=m_rst_d, m_rgnn=m_rgnn, m_rgnp_d=m_rgnp_d, m_buf=m_buf, pmos_body=pmos_body, device_intent=device_intent)
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

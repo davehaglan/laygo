@@ -38,6 +38,7 @@ files=[
     'laygo/generators/adc_sar/clk_dis_htree_layout_generator.py',
     'laygo/generators/adc_sar/clk_dis_viadel_htree_layout_generator.py',
     'laygo/generators/adc_sar/adc_retimer_layout_generator.py',
+    'laygo/generators/adc_sar/tisaradc_retimer_layout_generator.py',
     'laygo/generators/adc_sar/tisaradc_body_core_layout_generator.py',
     'laygo/generators/adc_sar/tisaradc_body_core_schematic_generator.py',
     'laygo/generators/adc_sar/tisaradc_body_core_lvs.py',

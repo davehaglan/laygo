@@ -109,8 +109,8 @@ def generate_sarret2_wckbuf(laygen, objectname_pfix, templib_logic, placement_gr
 
     tap_name='tap'
     slice_name='sarretslice'
-    ckbuf0_name = 'inv_'+str(int(max(1, m_slice*int(num_bits/2)*2/4)))+'x'
-    ckbuf1_name = 'inv_'+str(int(max(4, m_slice*int(num_bits/2)*2)))+'x'
+    ckbuf0_name = 'inv_'+str(int(max(1, m_slice*int(num_bits/2)/4*2)))+'x'
+    ckbuf1_name = 'inv_'+str(int(max(4, m_slice*int(num_bits/2)/4*2*4)))+'x'
     space_1x_name = 'space_1x'
     space_2x_name = 'space_2x'
     space_4x_name = 'space_4x'

@@ -92,8 +92,6 @@ def generate_clkdis_viadel(laygen, objectname_pfix, logictemp_lib, working_lib, 
         else:
             wire_num_odd = wire_num_odd + 1
 
-        #print(wire_num_even)
-        #print(wire_num_odd)
         if (i<int(num_ways/2)-1):
             dff_O_xy_even = laygen.get_inst_pin_xy(viacell[way_index_even[i]].name, 'DATAO', rg_m3m4)
             dff_I_xy_even = laygen.get_inst_pin_xy(viacell[way_index_even[i + 1]].name, 'DATAI', rg_m3m4)
@@ -105,11 +103,14 @@ def generate_clkdis_viadel(laygen, objectname_pfix, logictemp_lib, working_lib, 
             dff_O_xy_odd = laygen.get_inst_pin_xy(viacell[way_index_odd[i]].name, 'DATAO', rg_m3m4)
             dff_I_xy_odd = laygen.get_inst_pin_xy(viacell[way_index_odd[0]].name, 'DATAI', rg_m3m4)
         y_cood = dff_I_xy_even[0][1]
-        laygen.pin(name='DATAO<'+str(way_order[way_index_even[i]])+'>', layer=laygen.layers['pin'][3], xy=dff_I_xy_even, gridname=rg_m3m4) 
-        laygen.pin(name='DATAO<'+str(way_order[way_index_odd[i]])+'>', layer=laygen.layers['pin'][3], xy=dff_I_xy_odd, gridname=rg_m3m4) 
-        laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], dff_O_xy_even[0], dff_I_xy_even[0], y_cood-7-wire_num_even, rg_m3m4)
-        laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], dff_O_xy_odd[0], dff_I_xy_odd[0], y_cood-7-wire_num_odd, rg_m3m4)
-
+        laygen.pin(name='DATAO<'+str(way_order[way_index_even[i]])+'>', layer=laygen.layers['pin'][3], xy=dff_O_xy_even, gridname=rg_m3m4)
+        laygen.pin(name='DATAO<'+str(way_order[way_index_odd[i]])+'>', layer=laygen.layers['pin'][3], xy=dff_O_xy_odd, gridname=rg_m3m4)
+        if i<(num_ways+1)/4-1:
+            laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], dff_O_xy_even[0], dff_I_xy_even[0], y_cood-7-i%2, rg_m3m4)
+            laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], dff_O_xy_odd[0], dff_I_xy_odd[0], y_cood-7-i%2, rg_m3m4)
+        else:
+            laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], dff_O_xy_even[0], dff_I_xy_even[0], y_cood-7-i%2-2, rg_m3m4)
+            laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], dff_O_xy_odd[0], dff_I_xy_odd[0], y_cood-7-i%2-2, rg_m3m4)
 
     ##Route, clock connection from TGATE to input
     for i in range(num_ways):
@@ -227,8 +228,8 @@ if __name__ == '__main__':
     #params
     params = dict(
         way_order = [0, 2, 4, 6, 1, 3, 5, 7],
-        m_clki = 12,
-        m_clko = 4,
+        m_clki = 24,
+        m_clko = 2,
         num_bits = 5,
         pitch_x = 20,
     )
@@ -242,7 +243,10 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         params['way_order']=sizedict['slice_order']
-        params['pitch_x']=laygen.get_xy(obj=laygen.get_template(name='clk_dis_viadel_cell', libname=workinglib))[0]
+        params['pitch_x']=laygen.get_template_xy(name='clk_dis_viadel_cell', libname=workinglib)[0]
+        params['m_clki'] = sizedict['clk_dis_htree']['m_track']
+        params['m_clko'] = sizedict['clk_dis_htree']['m_clko']
+        params['num_bits'] = sizedict['clk_dis_cdac']['num_bits']
 
     #grid
     grid = dict(

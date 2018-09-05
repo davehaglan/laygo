@@ -46,7 +46,7 @@ class adc_sar_templates__sarclkgen_static(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, m, fo, ndelay, device_intent='fast'):
+    def design(self, lch, pw, nw, m, fo, ndelay, fast, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -68,6 +68,7 @@ class adc_sar_templates__sarclkgen_static(Module):
         self.parameters['m'] = m
         self.parameters['fo'] = fo
         self.parameters['ndelay'] = ndelay
+        self.parameters['fast'] = fast
         self.parameters['device_intent'] = device_intent
 
         self.instances['IINV0'].design(lch=lch, pw=pw, nw=nw, m=1, device_intent=device_intent)
@@ -86,6 +87,8 @@ class adc_sar_templates__sarclkgen_static(Module):
         self.instances['IINV8C'].design(lch=lch, pw=pw, nw=nw, m=m*2*fo, device_intent=device_intent)
 
         self.instances['ICORE0'].design(lch=lch, pw=pw, nw=nw, m=m*2, device_intent=device_intent)
+        if fast == False:
+            self.reconnect_instance_terminal('ICORE0', 'UPB', 'VDD')
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

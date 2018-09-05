@@ -39,7 +39,7 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
                     routing_grid_m4m5_thick, 
                     routing_grid_m5m6, routing_grid_m5m6_thick, routing_grid_m5m6_basic_thick,
                     routing_grid_m6m7,
-                    num_bits=8, num_bits_vertical=6, num_cdrv_output_routes=2, m_sa=8, origin=np.array([0, 0])):
+                    num_bits=8, num_bits_vertical=6, num_cdrv_output_routes=2, m_sa=8, double_sa=False, origin=np.array([0, 0])):
     """generate sar analog frontend """
     pg = placement_grid
 
@@ -51,7 +51,10 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     cdrv_name='capdrv_nsw_array'
     #cdac_name='capdac_'+str(num_bits)+'b'
     cdac_name='capdac'
-    sa_name='salatch_pmos'
+    if double_sa == False:
+        sa_name='salatch_pmos'
+    elif double_sa == True:
+        sa_name='doubleSA_pmos'
 
     # placement
     xy0 = origin + (laygen.get_xy(obj=laygen.get_template(name = cdrv_name, libname=workinglib), gridname=pg) * np.array([1, 0]))
@@ -472,6 +475,8 @@ if __name__ == '__main__':
         num_bits=specdict['n_bit']-1
         m_sa=sizedict['salatch']['m']
         num_bits_vertical=sizedict['capdac']['num_bits_vertical']
+        doubleSA=sizedict['salatch']['doubleSA']
+
     #sarafe generation
     cellname='sarafe_nsw'
     print(cellname+" generating")
@@ -483,7 +488,7 @@ if __name__ == '__main__':
                     routing_grid_m4m5_thick=rg_m4m5_thick, routing_grid_m5m6=rg_m5m6, 
                     routing_grid_m5m6_basic_thick=rg_m5m6_basic_thick, routing_grid_m5m6_thick=rg_m5m6_thick,
                     routing_grid_m6m7=rg_m6m7, num_bits=num_bits, num_bits_vertical=num_bits_vertical,
-                    num_cdrv_output_routes=2, m_sa=m_sa,
+                    num_cdrv_output_routes=2, m_sa=m_sa, double_sa=doubleSA,
                     origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 

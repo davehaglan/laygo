@@ -757,8 +757,8 @@ def generate_adc_retimer(laygen, objectname_pfix, ret_libname, sar_libname, clkd
                             xy1=laygen.get_inst_pin_xy(ickbuf_o.name, 'O', rg_m3m4, index=[i + 1, 0])[1]-[0,1],
                             via0=[0, 0], via1=[0, 0], gridname0=rg_m3m4)
         rckbo_m5 = laygen.route(None, laygen.layers['metal'][5],
-                            xy0=laygen.get_inst_pin_xy(ickbuf_o.name, 'O', rg_m4m5, index=[0, 0])[1]-[0,1],
-                            xy1=[laygen.get_inst_pin_xy(ickbuf_o.name, 'O', rg_m4m5, index=[0, 0])[1][0], 0],
+                            xy0=laygen.get_inst_pin_xy(ickbuf_o.name, 'O', rg_m4m5, index=[1, 0])[1]-[0,1],
+                            xy1=[laygen.get_inst_pin_xy(ickbuf_o.name, 'O', rg_m4m5, index=[1, 0])[1][0], 0],
                             via0=[0, 0], gridname0=rg_m4m5)
     # laygen.route(None, laygen.layers['metal'][4], [0, 0], [0, 0], rg_m3m4, refobj0=rckb1, refobj1=rcko)
 
@@ -909,8 +909,14 @@ def generate_adc_retimer(laygen, objectname_pfix, ret_libname, sar_libname, clkd
     # Input pins
     for i in range(num_slices):
         for j in range(num_bits):
-            pxy = laygen.get_inst_pin_xy(iret.name, 'in<%d>'%j, rg_m3m4, index=[i, 0])
-            laygen.pin(name='in_'+str(slice_order[i])+'<'+str(j)+'>', layer=laygen.layers['pin'][3], xy=pxy, gridname=rg_m3m4)
+            pxy_34 = laygen.get_inst_pin_xy(iret.name, 'in<%d>' % j, rg_m3m4, index=[i, 0])
+            pxy_45 = laygen.get_inst_pin_xy(iret.name, 'in<%d>' % j, rg_m4m5, index=[i, 0])
+            if j == num_bits-1:
+                rh0 = laygen.route(None, laygen.layers['metal'][4], xy0=pxy_34[0], xy1=pxy_34[0]+[-4,0], gridname0=rg_m3m4, via0=[0,0])
+                rv0 = laygen.route(None, laygen.layers['metal'][5], xy0=pxy_45[0], xy1=pxy_45[0]+[0,5], gridname0=rg_m4m5, via0=[0,0])
+                laygen.boundary_pin_from_rect(rv0, rg_m4m5, 'in_'+str(slice_order[i])+'<'+str(j)+'>', laygen.layers['pin'][5], size=4, direction='top')
+            else:
+                laygen.pin(name='in_'+str(slice_order[i])+'<'+str(j)+'>', layer=laygen.layers['pin'][3], xy=pxy_34, gridname=rg_m3m4)
 
     # Clock pins
     # laygen.pin_from_rect('clk'+str(ck_phase_2), laygen.layers['pin'][4], rck2, rg_m3m4)

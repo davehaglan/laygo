@@ -54,11 +54,14 @@ print("")
 print("[Sampling bandwidth analysis]")
 samp_settle_error=n_bit_samp_settle/n_bit #settling error
 samp_ntau=2.3*log10(1/samp_settle_error) #ntau of sampling network
-f_samp_bw=samp_ntau*fsamp/6.28      #sampling bandwidth
-r_samp=1/f_samp_bw/c_samp           #sampling network switch resistance
+#f_samp_bw=samp_ntau*fsamp/6.28      #sampling bandwidth
+f_samp_bw=samp_ntau*fsamp      #sampling bandwidth
+#r_samp=1/f_samp_bw/c_samp           #sampling network switch resistance
+r_samp=1/f_samp_bw/c_samp/6.28           #sampling network switch resistance
 print("samp_settle_error:"+str(samp_settle_error))
 print("samp_ntau:"+str(samp_ntau))
 print("f_samp_bw:"+str(f_samp_bw/1e9)+"GHz")
+print("r_samp:"+str(r_samp))
 print("Use the bandwidth parameter for sampling frontend design")
 #redundancy 
 print("")

@@ -41,6 +41,13 @@ if load_from_file==True:
     params['pw']=sizedict['pw']
     params['nw']=sizedict['nw']
     params['device_intent']=sizedict['device_intent']
+    params['m_dff']=sizedict['clk_dis_cell']['m_dff']
+    params['m_inv1']=sizedict['clk_dis_cell']['m_inv1']
+    params['m_inv2']=sizedict['clk_dis_cell']['m_inv2']
+    params['m_tgate']=sizedict['clk_dis_cell']['m_tgate']
+    params['unit_cell']=sizedict['clk_dis_cdac']['m']
+    params['num_bits']=sizedict['clk_dis_cdac']['num_bits']
+    params['m_capsw']=sizedict['clk_dis_capsw']['m']
 
 print('creating BAG project')
 prj = bag.BagProject()

@@ -69,6 +69,7 @@ if load_from_file==True:
     params['pw']=sizedict['pw']
     params['nw']=sizedict['nw']
     params['device_intent']=sizedict['device_intent']
+    params['tgate']=specdict['samp_with_tgate']
 
 print('creating BAG project')
 prj = bag.BagProject()

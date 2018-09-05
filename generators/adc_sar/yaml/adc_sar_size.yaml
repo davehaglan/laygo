@@ -3,7 +3,7 @@ capdac: {c_m: 1, num_bits_horizontal: 2, num_bits_vertical: 6}
 capdrv:
   m_list: [2, 2, 2, 2, 2, 2, 4, 8]
   space_offset: 0
-clk_dis_capsw: {m: 2}
+clk_dis_capsw: {m: 1}
 clk_dis_cdac: {m: 1, num_bits: 5}
 clk_dis_cell: {m_dff: 4, m_inv1: 6, m_inv2: 16, m_tgate: 16}
 clk_dis_htree: {m_clko: 1, m_track: 28}
@@ -25,6 +25,19 @@ salatch_preset:
   m_buf: [4, 8, 12, 16]
   m_rgnn: [4, 8, 12, 16]
   m_rst: [2, 4, 6, 8]
+sampler_nmos:
+  fg_inbuf_list:
+  - [8, 8]
+  - [14, 14]
+  fg_outbuf_list:
+  - [4, 4]
+  - [24, 24]
+  fgn: 12
+  nduml: 10
+  ndumr: 4
+  nsep: 2
+  wn: 8
+  wp: 8
 sarabe_m_space_left_4x: 0
 sarabe_supply_rail_mode: 0
 sarclkgen: {fast: true, fo: 4, m: 2, ndelay: 1}
@@ -51,7 +64,4 @@ sarsamp_preset:
   - [16, 64]
   m_sw: [4, 4, 4, 4, 4]
   m_sw_arr: [2, 4, 8, 12, 16]
-#slice_order: [0, 30, 2, 28, 4, 26, 6, 24, 8, 22, 10, 20, 12, 18, 14, 16, 1, 31, 3,
-#  29, 5, 27, 7, 25, 9, 23, 11, 21, 13, 19, 15, 17]
 slice_order: [0, 6, 2, 4, 1, 7, 3, 5]
-use_offset: false

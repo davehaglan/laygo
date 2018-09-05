@@ -59,9 +59,9 @@ def generate_clkdis_hcell(laygen, objectname_pfix, logictemp_lib, working_lib, g
         print('Some error with metal assignment!')
         return
     
-    len_v1 = laygen.grids.get_absgrid_coord_y(gridname=rg1, y=len_v1)
+    len_v1 = len_v1
     len_h = laygen.grids.get_absgrid_coord_x(gridname=rg1, x=len_h)
-    len_v2 = laygen.grids.get_absgrid_coord_y(gridname=rg2, y=len_v2)
+    len_v2 = len_v2
     #print(rg2)
 
     ## vertical tracks 1 and vias
@@ -216,7 +216,7 @@ if __name__ == '__main__':
         rg_m2m3_pin = 'route_M2_M3_basic',
     )
     #parameters
-    pitch_x=laygen.get_xy(obj=laygen.get_template(name='clk_dis_viadel_cell', libname=workinglib))[0]
+    pitch_x=laygen.get_template_xy(name='clk_dis_viadel_cell', libname=workinglib)[0]
     params = dict(
         #stage
         level = 2,
@@ -232,11 +232,11 @@ if __name__ == '__main__':
         #pitch_h = [100, 50],    #um
         pitch_h = [pitch_x*2, pitch_x],    #um
         #length
-        len_v1 = [1, 0.5],        #um 
+        len_v1 = [10, 6],
         len_h = [None, None],   #um
-        len_v2 = [0.5, 1],        #um
+        len_v2 = [6, 10],
         #offset
-        offset = [0, 0],        #um
+        offset = [0, 0],
     )
     #load from preset
     load_from_file=True
@@ -257,7 +257,7 @@ if __name__ == '__main__':
             #stage
             level = lvl,
             #track number
-            trackm = 12,
+            trackm = 24,
             #divide ratio
             ratio = [ratio]*lvl,
             #metal layer
@@ -268,12 +268,22 @@ if __name__ == '__main__':
             #pitch_h = [100, 50],    #um
             pitch_h = [pitch_x*int(2**(lvl-i-1)) for i in range(lvl)],
             #length
-            len_v1 = [1]*lvl,        #um 
+            len_v1 = [10]*lvl,
             len_h = [None]*lvl,   #um
-            len_v2 = [1]*lvl,        #um
+            len_v2 = [10]*lvl,
             #offset
-            offset = [0]*lvl,        #um
+            offset = [0]*lvl,
         )
+    #load from preset
+    load_from_file=True
+    yamlfile_spec="adc_sar_spec.yaml"
+    yamlfile_size="adc_sar_size.yaml"
+    if load_from_file==True:
+        with open(yamlfile_spec, 'r') as stream:
+            specdict = yaml.load(stream)
+        with open(yamlfile_size, 'r') as stream:
+            sizedict = yaml.load(stream)
+        params['trackm']=sizedict['clk_dis_htree']['m_track']
 
     print(workinglib)
 
