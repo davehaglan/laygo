@@ -18,8 +18,8 @@ num_space_sar: 52
 nw: 4
 pw: 4
 retimer: {ret_m_ibuf: 16, ret_m_latch: 2, ret_m_obuf: 2, ret_m_sr: 2, ret_m_srbuf: 4}
-salatch: {doubleSA: true, m: 12, m_buf: 12, m_d: 12, m_rgnn: 12, m_rgnp_d: 12, m_rst: 6,
-  m_rst_d: 6}
+salatch: {doubleSA: false, m: 12, m_buf: 12, m_d: 12, m_rgnn: 12, m_rgnp_d: 12, m_rst: 6,
+  m_rst_d: 6, num_row_ptap: 2}
 salatch_preset:
   m: [4, 8, 12, 16]
   m_buf: [4, 8, 12, 16]
