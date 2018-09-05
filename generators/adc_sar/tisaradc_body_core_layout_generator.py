@@ -360,7 +360,6 @@ if __name__ == '__main__':
     tech=laygen.tech
     utemplib = tech+'_microtemplates_dense'
     logictemplib = tech+'_logic_templates'
-    # ret_libname = 'adc_retimer_ec'
     ret_libname = 'adc_sar_generated'
     clkdist_libname = 'clk_dis_generated'
     laygen.load_template(filename=tech+'_microtemplates_dense_templates.yaml', libname=utemplib)
@@ -414,10 +413,15 @@ if __name__ == '__main__':
         num_bits=specdict['n_bit']
         num_slices=specdict['n_interleave']
         use_offset=specdict['use_offset']
+        ret_use_laygo=specdict['ret_use_laygo']
         clkin_trackm=sizedict['clk_dis_htree']['m_track']
         clk_cdac_bits = sizedict['clk_dis_cdac']['num_bits']
         clk_pulse=specdict['clk_pulse_overlap']
 
+    if ret_use_laygo == False:
+        ret_libname = 'adc_retimer_ec'
+    elif ret_use_laygo == True:
+        ret_libname = 'adc_sar_generated'
     cellname = 'tisaradc_body_core'
     sar_name = 'sar_wsamp_array'
     #sar_name = 'sar_wsamp_'+str(num_bits)+'b_array_'+str(num_slices)+'slice'
