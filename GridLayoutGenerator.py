@@ -590,7 +590,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
             refinst0 = None
             refinst1 = None
             offset0 = np.asarray(offset0)
-            if not offset1 == None: offset1 = np.asarray(offset1)
+            if not offset1 is None: offset1 = np.asarray(offset1)
             if gridname1 == None: gridname1 = gridname0
             if not isinstance(offset1,np.ndarray): offset1 = offset0
             if transform1 == None: transform1 = transform0
