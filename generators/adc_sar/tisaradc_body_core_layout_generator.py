@@ -35,9 +35,9 @@ import laygo.GridLayoutGeneratorHelper as laygenhelper #utility functions
 def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libname, clkdist_libname, space_1x_libname, ret_name, sar_name, clkdist_name, space_1x_name,
                                 placement_grid,
                                 routing_grid_m3m4, routing_grid_m4m5, routing_grid_m4m5_basic_thick, routing_grid_m5m6, routing_grid_m5m6_thick, 
-                                routing_grid_m5m6_thick_basic,
-                                routing_grid_m6m7_thick, 
-                                num_bits=9, num_slices=8, use_offset=True, clkin_trackm=12, clk_cdac_bits=5, clk_pulse=False, clkdist_offset=2, origin=np.array([0, 0])):
+                                routing_grid_m5m6_thick_basic, routing_grid_m6m7_thick,
+                                num_bits=9, num_slices=8, use_offset=True, clkin_trackm=12, clk_cdac_bits=5, clk_pulse=False,
+                                clkdist_offset=2, ret_use_laygo=True, origin=np.array([0, 0])):
     """generate sar array """
     pg = placement_grid
 
@@ -299,18 +299,27 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
     #sar-retimer routes (data)
     for i in range(num_slices):
         for j in range(num_bits):
-            if j == num_bits-1:
-                laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
-                             xy0=pdict_m4m5[isar.name]['ADCOUT' + str(i) + '<' + str(j) + '>'][0],
-                             xy1=pdict_m4m5[iret.name]['in_' + str(i) + '<' + str(j) + '>'][0],
-                             track_y=pdict_m4m5[isar.name]['ADCOUT' + str(i) + '<' + str(j) + '>'][0][1] + j * 2 + 2,
-                             gridname0=rg_m4m5, layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5, extendl=0, extendr=0)
+            if ret_use_laygo == True:
+                if j == num_bits-1:
+                    laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
+                                 xy0=pdict_m4m5[isar.name]['ADCOUT' + str(i) + '<' + str(j) + '>'][0],
+                                 xy1=pdict_m4m5[iret.name]['in_' + str(i) + '<' + str(j) + '>'][0],
+                                 track_y=pdict_m4m5[isar.name]['ADCOUT' + str(i) + '<' + str(j) + '>'][0][1] + j * 2 + 2,
+                                 gridname0=rg_m4m5, layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5, extendl=0, extendr=0)
+                else:
+                    laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
+                                xy0=pdict_m4m5[isar.name]['ADCOUT'+str(i)+'<'+str(j)+'>'][0],
+                                xy1=pdict_m3m4[iret.name]['in_'+str(i)+'<'+str(j)+'>'][0],
+                                track_y=pdict_m4m5[isar.name]['ADCOUT'+str(i)+'<'+str(j)+'>'][0][1]+j*2+2,
+                                gridname0=rg_m4m5, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4, extendl=0, extendr=0)
             else:
                 laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
-                            xy0=pdict_m4m5[isar.name]['ADCOUT'+str(i)+'<'+str(j)+'>'][0],
-                            xy1=pdict_m3m4[iret.name]['in_'+str(i)+'<'+str(j)+'>'][0],
-                            track_y=pdict_m4m5[isar.name]['ADCOUT'+str(i)+'<'+str(j)+'>'][0][1]+j*2+2,
-                            gridname0=rg_m4m5, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4, extendl=0, extendr=0)
+                                 xy0=pdict_m4m5[isar.name]['ADCOUT' + str(i) + '<' + str(j) + '>'][0],
+                                 xy1=pdict_m3m4[iret.name]['in_' + str(i) + '<' + str(j) + '>'][0],
+                                 track_y=pdict_m4m5[isar.name]['ADCOUT' + str(i) + '<' + str(j) + '>'][0][
+                                             1] + j * 2 + 2,
+                                 gridname0=rg_m4m5, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4, extendl=0,
+                                 extendr=0)
 
     #sar-retimer routes (clock)
     #finding clock_bar phases <- added by Jaeduk
@@ -357,16 +366,39 @@ if __name__ == '__main__':
     except ImportError:
         laygen.use_phantom = True
 
+    mycell_list = []
+    num_bits = 9
+    num_slices = 9
+    #load from preset
+    load_from_file=True
+    yamlfile_spec="adc_sar_spec.yaml"
+    yamlfile_size="adc_sar_size.yaml"
+    if load_from_file==True:
+        with open(yamlfile_spec, 'r') as stream:
+            specdict = yaml.load(stream)
+        with open(yamlfile_size, 'r') as stream:
+            sizedict = yaml.load(stream)
+        num_bits=specdict['n_bit']
+        num_slices=specdict['n_interleave']
+        use_offset=specdict['use_offset']
+        ret_use_laygo=specdict['ret_use_laygo']
+        clkin_trackm=sizedict['clk_dis_htree']['m_track']
+        clk_cdac_bits = sizedict['clk_dis_cdac']['num_bits']
+        clk_pulse=specdict['clk_pulse_overlap']
+
     tech=laygen.tech
     utemplib = tech+'_microtemplates_dense'
     logictemplib = tech+'_logic_templates'
-    ret_libname = 'adc_sar_generated'
+    if ret_use_laygo == False:
+        ret_libname = 'adc_retimer_ec'
+        laygen.load_template(filename='adc_retimer.yaml', libname=ret_libname)
+    elif ret_use_laygo == True:
+        ret_libname = 'adc_sar_generated'
+        laygen.load_template(filename=ret_libname + '.yaml', libname=ret_libname)
     clkdist_libname = 'clk_dis_generated'
     laygen.load_template(filename=tech+'_microtemplates_dense_templates.yaml', libname=utemplib)
     laygen.load_grid(filename=tech+'_microtemplates_dense_grids.yaml', libname=utemplib)
     laygen.load_template(filename=logictemplib+'.yaml', libname=logictemplib)
-    laygen.load_template(filename='adc_retimer.yaml', libname=ret_libname)
-    #laygen.load_template(filename=ret_libname+'.yaml', libname=ret_libname)
     laygen.load_template(filename=clkdist_libname+'.yaml', libname=clkdist_libname)
     laygen.templates.sel_library(utemplib)
     laygen.grids.sel_library(utemplib)
@@ -398,30 +430,7 @@ if __name__ == '__main__':
     rg_m1m2_pin = 'route_M1_M2_basic'
     rg_m2m3_pin = 'route_M2_M3_basic'
 
-    mycell_list = []
-    num_bits=9
-    num_slices=9
-    #load from preset
-    load_from_file=True
-    yamlfile_spec="adc_sar_spec.yaml"
-    yamlfile_size="adc_sar_size.yaml"
-    if load_from_file==True:
-        with open(yamlfile_spec, 'r') as stream:
-            specdict = yaml.load(stream)
-        with open(yamlfile_size, 'r') as stream:
-            sizedict = yaml.load(stream)
-        num_bits=specdict['n_bit']
-        num_slices=specdict['n_interleave']
-        use_offset=specdict['use_offset']
-        ret_use_laygo=specdict['ret_use_laygo']
-        clkin_trackm=sizedict['clk_dis_htree']['m_track']
-        clk_cdac_bits = sizedict['clk_dis_cdac']['num_bits']
-        clk_pulse=specdict['clk_pulse_overlap']
 
-    if ret_use_laygo == False:
-        ret_libname = 'adc_retimer_ec'
-    elif ret_use_laygo == True:
-        ret_libname = 'adc_sar_generated'
     cellname = 'tisaradc_body_core'
     sar_name = 'sar_wsamp_array'
     #sar_name = 'sar_wsamp_'+str(num_bits)+'b_array_'+str(num_slices)+'slice'
@@ -429,7 +438,6 @@ if __name__ == '__main__':
     clkdist_name = 'clk_dis_viadel_htree'
     #tisar_space_name = 'tisaradc_body_space'
     space_1x_name = 'space_1x'
-     
 
     #sar generation
     print(cellname+" generating")
@@ -445,7 +453,7 @@ if __name__ == '__main__':
                  routing_grid_m5m6_thick_basic=rg_m5m6_thick_basic, 
                  routing_grid_m6m7_thick=rg_m6m7_thick,
                  num_bits=num_bits, num_slices=num_slices, use_offset=use_offset, clkin_trackm=clkin_trackm, clk_cdac_bits=clk_cdac_bits,
-                 clk_pulse=clk_pulse, clkdist_offset=2, origin=np.array([0, 0]))
+                 clk_pulse=clk_pulse, clkdist_offset=2, ret_use_laygo=ret_use_laygo, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
     
 
