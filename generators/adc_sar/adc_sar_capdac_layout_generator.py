@@ -317,7 +317,7 @@ if __name__ == '__main__':
     laygen.sel_cell(cell_name)
     #routing grid used as placement grid
     generate_capdac(laygen, objectname_pfix='CDAC0', placement_grid=rg_m6m7, routing_grid_m6m7=rg_m6m7,
-                    devname_cap_body='momcap_center_1x', devname_cap_dmy='momcap_dmy_1x', 
+                    devname_cap_body='momcap_center_1x', devname_cap_dmy='momcap_dmy_1x',
                     devname_cap_boundary='momcap_boundary_1x',
                     devname_list_overlay_boundary_left=['momcap_dmyblk_1x', 
                                                         'momcap_dmyptn_m1_1x',

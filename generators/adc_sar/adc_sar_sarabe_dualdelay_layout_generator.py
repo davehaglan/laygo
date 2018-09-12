@@ -605,8 +605,12 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                 layer=laygen.layers['metal'][6], gridname=rg_m5m6_thick, netnames=['VDD', 'VSS'], direction='x', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=None,
                 offset_start_index=1, offset_end_index=-1)
-    x1 = laygen.get_xy(obj =bnd_right[0], gridname=rg_m5m6_thick)[0]\
-         +laygen.get_xy(obj =bnd_right[0].template, gridname=rg_m5m6_thick)[0]
+    if laygen.grids.get_phygrid_x(rg_m5m6_thick, 1)==laygen.grids.get_phygrid_x(rg_m1m2, 1)*3:
+        x1 = laygen.get_xy(obj =bnd_right[0], gridname=rg_m5m6_thick)[0]\
+             +laygen.get_xy(obj =bnd_right[0].template, gridname=rg_m5m6_thick)[0] - 1
+    else:
+        x1 = laygen.get_xy(obj=bnd_right[0], gridname=rg_m5m6_thick)[0] \
+             + laygen.get_xy(obj=bnd_right[0].template, gridname=rg_m5m6_thick)[0] - 0
     x1_phy = laygen.get_xy(obj =bnd_right[0])[0]\
          +laygen.get_xy(obj =bnd_right[0].template)[0]
     input_rails_rect = [rvddr_m5, rvssr_m5]
@@ -631,8 +635,6 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     for i, inst in enumerate(inst_reference):
         num_route.append(laygen.get_xy(obj =inst.template, gridname=rg_m5m6_thick)[1] - 2)
     x0 = laygen.get_xy(obj =bnd_left[0], gridname=rg_m5m6_thick)[0]
-    x1 = laygen.get_xy(obj =bnd_right[0], gridname=rg_m5m6_thick)[0]\
-         +laygen.get_xy(obj =bnd_right[0].template, gridname=rg_m5m6_thick)[0]
     n_vdd_m6=0 #number for m6 wires
     n_vss_m6=0 #number for m6 wires
     for i, inst in enumerate(inst_reference):

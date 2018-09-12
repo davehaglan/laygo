@@ -111,6 +111,7 @@ def generate_clkdis_viadel_cell(laygen, objectname_pfix, logictemp_lib, working_
         viadel_SW_xy = laygen.get_inst_pin_xy(viacell.name, 'CAPSW<' + str(i) + '>', rg_m3m4)[0]
         laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], capdac_C_xy0, viadel_SW_xy,
                          -2 * i + ofst_grid_34, rg_m3m4_dense, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4)
+        print(-2 * i + ofst_grid_34)
 
     ##Route, for calibration signals
     #Get the right coodinate on grid m3m4
