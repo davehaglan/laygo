@@ -1378,9 +1378,9 @@ def generate_tgate(laygen, objectname_pfix,
     # power and groud rail
     xy = laygen.get_xy(obj = in2.template, gridname = rg_m1m2) * np.array([1, 0])
     rvdd = laygen.route("R"+objectname_pfix+"VDD0", laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=xy, gridname0=rg_m1m2,
-                        refinstname0=ip0.name, refinstname1=ip2.name)
+                        refinstname0=ip_space.name, refinstname1=ip2.name)
     rvss = laygen.route("R"+objectname_pfix+"VSS0", laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=xy, gridname0=rg_m1m2,
-                        refinstname0=in0.name, refinstname1=in2.name)
+                        refinstname0=in_space.name, refinstname1=in2.name)
     # pin
     if create_pin == True:
         create_io_pin(laygen, layer=laygen.layers['pin'][3], gridname=rg_m2m3_pin,
