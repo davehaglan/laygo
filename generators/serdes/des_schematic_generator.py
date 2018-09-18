@@ -20,7 +20,7 @@ params = dict(
     m_des_dff=1, 
     clkbuf_list=[1,2,4,8], 
     divbuf_list=[1,2,4,8], 
-    device_intent='fast'
+    device_intent='fast',
     )
 load_from_file=True
 yamlfile_spec="serdes_spec.yaml"
@@ -56,5 +56,6 @@ dsn.design(**params)
 
 # implement the design
 print('implementing design with library %s' % impl_lib)
-dsn.implement_design(impl_lib, top_cell_name=cell_name, suffix=suffix_name, erase=True)
+# dsn.implement_design(impl_lib, top_cell_name=cell_name, suffix=suffix_name, erase=True)
+dsn.implement_design(impl_lib, top_cell_name=cell_name+suffix_name, erase=True)
 

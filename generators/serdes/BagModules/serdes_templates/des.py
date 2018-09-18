@@ -125,7 +125,7 @@ class serdes_templates__des(Module):
         #print(term_list)
         #print(name_list)
 
-        self.instances['ICBUF1'].design(lch=lch, pw=pw, nw=nw, m=m_cbuf1, device_intent=device_intent)   
+        self.instances['ICBUF1'].design(lch=lch, pw=pw, nw=nw, m=m_cbuf1, device_intent=device_intent)
         self.instances['ICBUF2'].design(lch=lch, pw=pw, nw=nw, m=m_cbuf2, device_intent=device_intent)   
         self.instances['ICBUF3'].design(lch=lch, pw=pw, nw=nw, m=m_cbuf3, device_intent=device_intent)   
         self.instances['ICBUF4'].design(lch=lch, pw=pw, nw=nw, m=m_cbuf4, device_intent=device_intent)   
