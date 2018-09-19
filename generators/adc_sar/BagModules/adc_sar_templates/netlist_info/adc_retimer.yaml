@@ -26,13 +26,13 @@ instances:
     lib_name: basic
     cell_name: iopin
     instpins: {}
-  IIBUF2:
+  IOBUF0:
     lib_name: logic_templates
     cell_name: inv
     instpins:
       I:
         direction: input
-        net_name: "clk"
+        net_name: "clkb"
         num_bits: 1
       VSS:
         direction: inputOutput
@@ -44,7 +44,7 @@ instances:
         num_bits: 1
       O:
         direction: output
-        net_name: "iclkb"
+        net_name: "ck_out"
         num_bits: 1
   IIBUF1:
     lib_name: logic_templates
@@ -66,26 +66,6 @@ instances:
         direction: output
         net_name: "iclk"
         num_bits: 1
-  IOBUF0:
-    lib_name: logic_templates
-    cell_name: inv
-    instpins:
-      I:
-        direction: input
-        net_name: "clkb"
-        num_bits: 1
-      VSS:
-        direction: inputOutput
-        net_name: "VSS"
-        num_bits: 1
-      VDD:
-        direction: inputOutput
-        net_name: "VDD"
-        num_bits: 1
-      O:
-        direction: output
-        net_name: "ck_out"
-        num_bits: 1
   IIBUF0:
     lib_name: logic_templates
     cell_name: inv
@@ -105,6 +85,26 @@ instances:
       O:
         direction: output
         net_name: "clkb"
+        num_bits: 1
+  IIBUF2:
+    lib_name: logic_templates
+    cell_name: inv
+    instpins:
+      I:
+        direction: input
+        net_name: "clk"
+        num_bits: 1
+      VSS:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      VDD:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      O:
+        direction: output
+        net_name: "iclkb"
         num_bits: 1
   I19:
     lib_name: basic
