@@ -1153,7 +1153,7 @@ class GridLayoutGenerator(BaseLayoutGenerator):
         else:
             GridLayoutGenerator.via(self, None, xy0, gridname=gridname0)
         if not track_x == xy1[0]:
-            rh1 = GridLayoutGenerator.route(self, None, layerh1, xy0=np.array([track_x, xy1[1]]), xy1=xy1, gridname0=gridname0, via0=[[0, 0]])
+            rh1 = GridLayoutGenerator.route(self, None, layerh1, xy0=np.array([track_x, xy1[1]]), xy1=xy1, gridname0=gridname1, via0=[[0, 0]])
         else:
             GridLayoutGenerator.via(self, None, xy1, gridname=gridname0)
         return [rh0, rv0, rh1]
