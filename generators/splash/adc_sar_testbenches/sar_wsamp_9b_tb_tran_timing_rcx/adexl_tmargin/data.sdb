@@ -281,7 +281,7 @@
 				</dependentTests>
 			</var>
 			<var>pper
-				<value>{Inclusion List}3.2n{Inclusion List}</value>
+				<value>{Inclusion List}2n{Inclusion List}</value>
 				<dependentTests>
 					<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 				</dependentTests>
@@ -305,7 +305,7 @@
 				</dependentTests>
 			</var>
 			<var>pvidm
-				<value>-170m</value>
+				<value>{Inclusion List}-100m{Inclusion List}</value>
 				<dependentTests>
 					<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 				</dependentTests>
@@ -2549,7 +2549,7 @@
 			<resultsisuserpath>1</resultsisuserpath>
 			<locked>1</locked>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.203
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.217
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -2691,7 +2691,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.203</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.217</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -2855,7 +2855,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>-270m</value>
+						<value>{Inclusion List}-100m{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -3173,22 +3173,22 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Feb 8 18:04:08 2018</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.203.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.203.rdb</simresults>
+			<timestamp>Feb 22 22:02:02 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.217.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.217.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr820-1_wrbae_180408484</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.203</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.203</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_220202978</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.217</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.217</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.203.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.203.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.217.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.217.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.204
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.218
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -3330,7 +3330,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.204</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.218</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -3494,7 +3494,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>-186m</value>
+						<value>{Inclusion List}-100m{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -3812,22 +3812,22 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Feb 8 23:55:44 2018</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.204.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.204.rdb</simresults>
+			<timestamp>Feb 23 09:41:34 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.218.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.218.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr820-1_wrbae_235544685</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.204</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.204</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_094134819</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.218</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.218</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.204.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.204.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.218.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.218.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.205
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.219
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -3969,7 +3969,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.205</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.219</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -4133,7 +4133,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>-191m</value>
+						<value>{Inclusion List}-100m{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -4451,22 +4451,22 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Feb 8 23:58:57 2018</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.205.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.205.rdb</simresults>
+			<timestamp>Feb 23 10:11:48 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.219.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.219.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr820-1_wrbae_235857203</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.205</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.205</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_101148041</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.219</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.219</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.205.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.205.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.219.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.219.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.206
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.220
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -4608,7 +4608,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.206</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.220</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -4772,7 +4772,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>-191m</value>
+						<value>{Inclusion List}-100m{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -5090,22 +5090,22 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Feb 9 00:02:46 2018</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.206.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.206.rdb</simresults>
+			<timestamp>Feb 23 10:27:29 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.220.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.220.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr820-1_wrbae_000246508</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.206</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.206</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_102729522</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.220</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.220</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.206.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.206.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.220.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.220.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.207
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.221
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -5247,7 +5247,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.207</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.221</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -5411,7 +5411,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>-186m</value>
+						<value>{Inclusion List}-100m{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -5729,22 +5729,22 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Feb 9 00:06:21 2018</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.207.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.207.rdb</simresults>
+			<timestamp>Feb 23 10:35:31 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.221.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.221.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr820-1_wrbae_000621551</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.207</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.207</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_103531463</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.221</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.221</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.207.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.207.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.221.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.221.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.208
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.222
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -5886,7 +5886,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.208</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.222</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -6050,7 +6050,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>-160m</value>
+						<value>{Inclusion List}-100m{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -6368,22 +6368,22 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Feb 9 21:47:58 2018</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.208.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.208.rdb</simresults>
+			<timestamp>Feb 23 10:42:57 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.222.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.222.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr820-1_wrbae_214758207</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.208</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.208</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_104257914</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.222</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.222</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.208.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.208.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.222.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.222.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.209
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.223
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -6525,7 +6525,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.209</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.223</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -6689,7 +6689,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>-170m</value>
+						<value>{Inclusion List}-100m{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -7007,22 +7007,22 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Feb 9 22:02:27 2018</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.209.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.209.rdb</simresults>
+			<timestamp>Feb 23 11:00:17 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.223.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.223.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr820-1_wrbae_220227623</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.209</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.209</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_110017688</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.223</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.223</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.209.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.209.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.223.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.223.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.210
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.224
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -7164,7 +7164,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.210</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.224</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -7328,7 +7328,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>-170m</value>
+						<value>{Inclusion List}-100m{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -7646,22 +7646,22 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Feb 9 23:49:16 2018</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.210.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.210.rdb</simresults>
+			<timestamp>Feb 23 14:47:15 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.224.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.224.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr820-1_wrbae_234916968</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.210</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.210</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_144715901</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.224</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.224</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.210.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.210.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.224.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.224.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.211
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.225
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -7803,7 +7803,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.211</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.225</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -7967,7 +7967,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>-170m</value>
+						<value>{Inclusion List}-100m{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -8285,22 +8285,22 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Feb 10 00:30:39 2018</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.211.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.211.rdb</simresults>
+			<timestamp>Feb 23 15:14:03 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.225.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.225.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr820-1_wrbae_003039339</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.211</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.211</simdir>
+			<localpsfdir>/tmp/bwrcr820-1_wrbae_151403803</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.225</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.225</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.211.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.211.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.225.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.225.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
-		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.212
+		<historyentry assemblerOrExplorer="adexl" roOrView="view">Interactive.226
 			<checkpoint>
 				<corners>
 					<corner enabled="1">_default</corner>
@@ -8442,7 +8442,7 @@
 								<value>$AXL_SETUPDB_DIR/test_states</value>
 							</option>
 							<option>state
-								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.212</value>
+								<value>adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1_spectre_state1_10g_rcx_Interactive.226</value>
 							</option>
 						</tooloptions>
 						<origoptions>
@@ -8582,7 +8582,7 @@
 						</dependentTests>
 					</var>
 					<var>pper
-						<value>{Inclusion List}3.2n{Inclusion List}</value>
+						<value>{Inclusion List}2n{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -8606,7 +8606,7 @@
 						</dependentTests>
 					</var>
 					<var>pvidm
-						<value>-170m</value>
+						<value>{Inclusion List}-100m{Inclusion List}</value>
 						<dependentTests>
 							<dependentTest enabled="1">adc_sar_testbenches:sar_wsamp_9b_tb_tran_timing_rcx:1</dependentTest>
 						</dependentTests>
@@ -8924,18 +8924,18 @@
 				</incrementalsimulationoptions>
 				<sortVariableValues>0</sortVariableValues>
 			</checkpoint>
-			<timestamp>Feb 10 00:39:56 2018</timestamp>
-			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.212.rdb</resultsname>
-			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.212.rdb</simresults>
+			<timestamp>Apr 19 15:58:29 2018</timestamp>
+			<resultsname>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.226.rdb</resultsname>
+			<simresults>$AXL_SETUPDB_DIR/results/data/Interactive.226.rdb</simresults>
 			<rawdatadelstrategy>SaveAll</rawdatadelstrategy>
 			<netlistdelstrategy>SaveAll</netlistdelstrategy>
 			<uselocalpsfdir>false</uselocalpsfdir>
-			<localpsfdir>/tmp/bwrcr820-1_wrbae_003956561</localpsfdir>
-			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.212</psfdir>
-			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.212</simdir>
+			<localpsfdir>/tmp/bwrcr640-3.eecs.berkeley.edu_wrbae_155829697</localpsfdir>
+			<psfdir>/users/wrbae/simulation/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.226</psfdir>
+			<simdir>$AXL_PROJECT_DIR/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.226</simdir>
 			<gendatasheetplotsonsimulation>1</gendatasheetplotsonsimulation>
-			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.212.log</runlog>
-			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.212.log</runlogfile>
+			<runlog>/tools/projects/wrbae/28FDSOI/laygo/generators/splash/adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing_rcx/adexl_tmargin/results/data/Interactive.226.log</runlog>
+			<runlogfile>$AXL_SETUPDB_DIR/results/data/Interactive.226.log</runlogfile>
 			<schematicpoint></schematicpoint>
 			<test>all</test>
 		</historyentry>
