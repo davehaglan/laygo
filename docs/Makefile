@@ -3,7 +3,7 @@
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
-SPHINXBUILD   = sphinx-build
+SPHINXBUILD   = /tools/projects/erichang/programs/anaconda3d6/bin/sphinx-build
 PAPER         =
 BUILDDIR      = build
 BUILDDIR_GH   = ../../laygo-docs

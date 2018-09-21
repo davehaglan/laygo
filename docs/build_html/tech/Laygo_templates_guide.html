@@ -1,0 +1,321 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>&lt;no title&gt; &#8212; laygo_documentation 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="laygo" href="../api/modules.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="tech.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p># Laygo Template Library Setup Guide</p>
+<p>This section describes how to construct microtemplates_dense library.</p>
+<p>## Introduction
+The guideline provided in this section is not a golden flow; It is based on my (Woorham Bae’s) limited experience, so there must be better solutions.
+The intend is just to provide some tips that can reduce number of trials and errors I did.
+Just refer and do not rely!</p>
+<ul class="simple">
+<li>For now, Laygo does not support ‘path’ drawing, so please use ‘rectangle’ for all routings</li>
+<li>It is hard to get a perfect templates in your first trial. Don’t be frustrated if you cannot make it.</li>
+<li>Best idea is to refer microtemplates_dense library for other technologies if you can access to.</li>
+</ul>
+<p>But you need to understand some basics of template library before you replicate.</p>
+<p>## Let’s start with via(wire) template
+1) Draw horizontal/vertical metals with minimum width</p>
+<blockquote>
+<div><ul class="simple">
+<li>Create =&gt; Via =&gt; Auto for creating via</li>
+</ul>
+<p>![template](images/1_via.png)</p>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><dl class="first docutils">
+<dt>Make the via object a separate instance</dt>
+<dd><ul class="first simple">
+<li>Edit =&gt; Hierarchy =&gt; Make cell (ex. via_M1_M2_0)</li>
+</ul>
+<p class="last">![template](images/2_via_instance.png)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Draw other via templates</dt>
+<dd><ul class="first simple">
+<li>There are various via templates for each layer</li>
+</ul>
+<p class="last">![template](images/3_via_templates.png)</p>
+</dd>
+</dl>
+</li>
+</ol>
+<p>## Transistor template
+* <strong>Nmos4_fast_center_nf2</strong>: Most important templates!</p>
+<p>![template](images/4_nmos4_fast_center_nf2.png)</p>
+<ul class="simple">
+<li>Before placing an NMOS, we have to decide width (or number of fin) per finger</li>
+<li>Note that two M2 routing can be placed within S/D area</li>
+</ul>
+<p>1) Check M2 spacing rule
+* With whatever you can do (Options =&gt; DRD Options =&gt; Enabling DRD Mode is useful)
+![template](images/5_M2_spacing.png)</p>
+<p>2) Check V1 spacing rule as well
+* Generally it is wider than M1 spacing
+* It is not required, just suggested</p>
+<p>![template](images/6_V1_spacing.png)</p>
+<p>3) Choose number
+* Choose a proper number of fins which is available to include two M2 routings/vias and place NMOS
+* Turn off poly dummy options: it will be handled later</p>
+<p>![template](images/7_unit_width.png)</p>
+<p>4) Adjust coordinate of NMOS
+* x: Center of left source should be at x=0
+* y: Set intuitively(?). Consider a VSS rail will be placed at the bottom. We may modify it later.</p>
+<p>![template](images/8_coordinate.png)</p>
+<p>5) Draw gate contact
+* One of the hardest part
+* Best way is to refer standard cells
+* You can activate poly connect option, but…</p>
+<p>![template](images/9_gate_contact.png)</p>
+<ul class="simple">
+<li>Note that it will be placed in array</li>
+<li>If poly connect option gives a horizontally long M1 connection, you’d better to find an alternate way</li>
+</ul>
+<p>![template](images/10_gate_contact_array.png)</p>
+<p>6) Draw additional M1 rectangle
+* To meet minimum area requirement for M1
+* and to avoid ‘+’ shape when a M1_M2 via is placed
+* Again, note that it will be placed in array</p>
+<p>![template](images/11_gate_contact_M1.png)</p>
+<p>7) Draw some layers (technology dependent)
+* Draw some other layers such as finfet and CPO if needed, refer related options embedded in pcell</p>
+<p>![template](images/12_final touch.png)</p>
+<p>8) Attach pin/label on M1
+* Draw M1 pin or label layer on existing M1 drawing layers</p>
+<blockquote>
+<div><ul class="simple">
+<li>On gate and every source/drain</li>
+<li>Choice of pin/label layer depends on technology</li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>Attach label at the middle of each pin/label layer</dt>
+<dd><ul class="first last">
+<li>S0, D0, S1, and G0</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>![template](images/13_attach_label.png)</p>
+<ul class="simple">
+<li>You can specify the pin area with a rectangle of [M1, pin] and net name with a label of [M1, pin]</li>
+<li>Optionally, you can specify the pin name with a label of &nbsp;[text, drawing]. This is useful if you want to assign multi pins for same nets.</li>
+</ul>
+<p>9) Set boundary
+* Use prboundary layer (or corresponding layer) to define the placement boundary of the cell
+* Note that one M2 routing will be placed at the top</p>
+<p>![template](images/14_set_boundary.png)</p>
+<ul class="simple">
+<li>It is recommended to set the height of the template as a common multiples of variety of numbers (i.e. 0.48um, 0.6um…)</li>
+<li>To be compatible with all the routing grids, all placement will be done based on prboundary!</li>
+</ul>
+<p>![template](images/15_grid_mismatch.png)</p>
+<p>10) Draw pmos4_fast_center_nf2
+* It should be very easy if you have drawn nmos4_fast_center_nf2</p>
+<p>![template](images/16_pmos4_fast_center_nf2.png)</p>
+<p>11) Draw placement_basic
+* There is only a prboundary rectangle
+* xy0 = (0,0), xy1 = (poly pitch, one of divisions of height of nmos_fast_center_nf2)</p>
+<blockquote>
+<div><ul class="simple">
+<li>All x coordinates should be multiples of poly pitch</li>
+</ul>
+</div></blockquote>
+<p>![template](images/17_placement_basic.png)</p>
+<p>## Routing grids</p>
+<p><strong>Draw route_M1_M2_cmos</strong>
+* Most important routing grid
+* Before drawing that, place nmos and pmos templates</p>
+<p>![template](images/18_route_M1_M2_cmos.png)</p>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>8 horizontal routings within the CMOS template</dt>
+<dd><ul class="first last">
+<li>1 for VDD/VSS rail, 2 for NMOS S/D, 2 for PMOS S/D, 2 for CMOS gate, and 1 for additional gate routing</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>![template](images/19_route_M1_M2_cmos.png)</p>
+<p>1) Draw prboundary
+* xy0 = (0,0), xy1 = (poly pitch, height of cmos)</p>
+<p>![template](images/20_prboundary.png)</p>
+<p>2) Place M1_M2 vias
+* x=0 for all vias, so what you have to do is to set y
+* We have already considered that when we drawn nmos, so we can easily find proper y coordinates</p>
+<p>![template](images/21_place_M1_M2_vias.png)</p>
+<p>3) Draw M1/M2 wires
+* Make sure your routing grid is compatible with CMOS template
+* After that, delete nmos/pmos templates</p>
+<p>![template](images/22_draw_M1M2_wires.png)</p>
+<p>4) Draw route_M2_M3_cmos
+* CMOS-compatible M2_M3 grid is also required
+* Just modify M1_M2 vias and M1 rectangle with M2_M3 vias and M3 rectangle from route_M1_M2</p>
+<p>![template](images/23_route_M2_M3_cmos.png)</p>
+<p>5) Define rest of routing grids
+* Draw prboundary: if min. pitch of vertical layer is narrower than PC pitch, x=PC pitch
+* else, x=N x PC pitch, where N x PC pitch &gt; min. pitch</p>
+<p>![template](images/24_routing_grids.png)</p>
+<ul class="simple">
+<li>When we define y grid, we have to consider spacing rule for horizontal layer and height of MOS template</li>
+<li>So basically, y of prboundary is height of MOS</li>
+</ul>
+<p>![template](images/25_routing_grids.png)</p>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>After that, all the horizontal routing grid within prboundary should be defined as follows</dt>
+<dd><ul class="first last">
+<li>If you want to utilize existing generators, set the number of horizontal wires be the same as tsmc16n</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>![template](images/26_routing_grids.png)</p>
+<ul class="simple">
+<li>However, if y grid is one of divisions of height of MOS and also meets the spacing rule, a simple template shown below is sufficient</li>
+</ul>
+<p>![template](images/27_routing_grids.png)</p>
+<p>## Draw rest of transistor templates
+* nf1, stack, dummy, filler, boundary, and tap</p>
+<p>![template](images/28_transistor_templates.png)</p>
+<p>1) nf1
+* nf1_left and nf1_right according to the direction of gate contact
+* Consider DRCs for gate connection</p>
+<p>![template](images/29_nf1.png)</p>
+<p>2) 2stack
+* Used for NAND_1x, TINV_1x…
+* Utilize gate connection technique you found in nf1 template</p>
+<p>![template](images/30_2stack.png)</p>
+<p>3) Dummy
+* Use center_nf2 template
+* Just connect gate-drain and remove pin on the gate</p>
+<p>![template](images/31_dummy.png)</p>
+<p>4) Space
+* For filling space
+* Note that RX layer might be included in 4x cell, in order to satisfy RX density rule (not in this layout)</p>
+<p>![template](images/32_space.png)</p>
+<p>5) Boundary
+* Usually, nmos_fast_boundary == space_1x
+* boundary_left/right should resolve design rules regarding poly dummy</p>
+<p>![template](images/33_boundary.png)</p>
+<ul class="simple">
+<li>Number and pattern of poly dummy depends on technology</li>
+<li>Refer dummy option in pcell</li>
+</ul>
+<p>![template](images/34_boundary_example.png)</p>
+<p>6) Tap
+* For connecting body to VDD/VSS</p>
+<p>![template](images/35_tap.png)</p>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>Refer to psub/nwell contact provided by foundry</dt>
+<dd><ul class="first last">
+<li>Create =&gt; Via =&gt; Via Definition</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>![template](images/36_psub_contact.png)</p>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>Two M1s in tap cell</dt>
+<dd><ul class="first last">
+<li>VSS M1-pin to both of them</li>
+<li>TAP0/TAP1 pin using text drawing</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>![template](images/37_tap_pin.png)</p>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="tech.html" title="previous chapter">&lt;no title&gt;</a></li>
+      <li>Next: <a href="../api/modules.html" title="next chapter">laygo</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tech/Laygo_templates_guide.md.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Jaeduk Han.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/tech/Laygo_templates_guide.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

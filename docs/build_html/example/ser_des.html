@@ -1,314 +1,163 @@
 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>CMOS SER/DES generator &mdash; laygo_documentation 1.0 documentation</title>
-  
-
-  
-  
-
-  
-  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-
-  
-  
-    
-
-  
-
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>&lt;no title&gt; &#8212; laygo_documentation 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="tisar.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="serdes.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
   
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
   
 
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="laygo_documentation 1.0 documentation" href="../index.html"/>
-        <link rel="next" title="Time-interleaved SAR ADC generator" href="tisar.html"/>
-        <link rel="prev" title="CMOS SERDES generator" href="serdes.html"/> 
-
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
-
-</head>
-
-<body class="wy-body-for-nav" role="document">
-
-  <div class="wy-grid-for-nav">
-
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-nav-search">
-        
-          <a href="../index.html" class="fa fa-home"> laygo_documentation</a>
-        
-        
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-      </div>
-
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-        
-          
-          
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../introduction/introduction.html">Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#installation-and-quick-start">Installation and Quick Start</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#documentations">Documentations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#example-labs">Example Labs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#example-generators">Example Generators</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../introduction/introduction.html#license">License</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial_GDS.html">Tutorial (GDS flow)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#setup">Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#load-template-and-grid-database">Load template and grid database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#library-and-cell-creation">Library and cell creation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#cell-placements">Cell placements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#signal-routing">Signal routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#power-routing">Power routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#pin-creation">Pin creation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_GDS.html#gds-export">GDS export</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial_BAG.html">Tutorial (BAG flow)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#setup-and-running">Setup and running</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#initialize-gridlayoutgenerator">Initialize GridLayoutGenerator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#load-template-and-grid-database">Load template and grid database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#library-and-cell-creation">Library and cell creation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#cell-placements">Cell placements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#signal-routing">Signal routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#power-routing">Power routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#pin-creation">Pin creation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG.html#export-to-bag">Export to BAG</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html">Tutorial (BAG flow, new version)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#setup-and-running">Setup and running</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#initialize-gridlayoutgenerator2">Initialize GridLayoutGenerator2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#load-template-and-grid-database">Load template and grid database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#library-and-cell-creation">Library and cell creation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#cell-placements">Cell placements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#signal-routing">Signal routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#power-routing">Power routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#pin-creation">Pin creation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorial/tutorial_BAG_v2.html#export-to-bag">Export to BAG</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../architecture/architecture.html">Architecture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="logic.html">Generator example - CMOS logic family</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="logic.html#install-and-launch">Install and launch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="logic.html#supported-logic-gate-types">Supported logic gate types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="logic.html#schematic-templates">Schematic templates</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="serdes.html">Generator example - CMOS 2:1 mux serializer (obsolete)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="serdes.html#install-and-launch">Install and launch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="serdes.html#parameterizations">Parameterizations</a></li>
-</ul>
-</li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Generator example - Flexible CMOS SERDES</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#setup-for-bwrc-users">Setup (for BWRC users)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#serializer-generation">Serializer Generation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#deserializer-generation">Deserializer Generation</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tisar.html">Generator example - TISAR ADC</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tisar.html#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tisar.html#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tisar.html#setting-up-parameters">Setting up parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tisar.html#tisaradc-architecture">TISARADC architecture</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tisar.html#subadc-frontend-layout-generation">SubADC frontend layout generation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tisar.html#subadc-backend-layout-generation">SubADC backend layout generation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tisar.html#subadc-switch-generation">SubADC switch generation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tisar.html#subadc-top-generation">SubADC top generation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tisar.html#array-generation">Array generation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tisar.html#clocking-path-generation">Clocking path generation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tisar.html#retimer">Retimer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tisar.html#tisaradc-body-clock-sar-retimer">TISARADC body (clock+sar+retimer)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tisar.html#bias">Bias</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tisar.html#top">Top</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tisar.html#full-stack-generation">Full stack generation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tisar.html#contributors">Contributors</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">Code examples (to be uploaded)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="code.html#code-example-1-low-level-building-block-generations-using-primitive-templates">Code example 1: low-level building block generations using primitive templates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#code-example-2-high-level-building-block-top-generations">Code example 2: high-level building block / top generations</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../tech/tech.html">Technology setup instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#example-setup-files">Example setup files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#bag-setup">BAG setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#config-file-laygo-config-yaml">Config file (laygo_config.yaml)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#tech-lib-layermap-gds-flow-only">(tech_lib).layermap (GDS flow only)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/tech.html#template-library">Template library</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../tech/Laygo_templates_guide.html">Template library setup guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../tech/Laygo_templates_guide.html#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/Laygo_templates_guide.html#let-s-start-with-via-wire-template">Let&#8217;s start with via(wire) template</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/Laygo_templates_guide.html#transistor-template">Transistor template</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/Laygo_templates_guide.html#routing-grids">Routing grids</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tech/Laygo_templates_guide.html#draw-rest-of-transistor-templates">Draw rest of transistor templates</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">API documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../api/laygo.html">laygo package</a></li>
-</ul>
-</li>
-</ul>
-
-          
-        
-      </div>
-      &nbsp;
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">laygo_documentation</a>
-      </nav>
-
-
-      
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="breadcrumbs navigation">
-  <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
-    <li>CMOS SER/DES generator</li>
-      <li class="wy-breadcrumbs-aside">
-        
-          <a href="../_sources/example/ser_des.txt" rel="nofollow"> View page source</a>
-        
-      </li>
-  </ul>
-  <hr/>
-</div>
-          <div role="main" class="document">
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
             
-  <div class="section" id="cmos-ser-des-generator">
-<span id="cmos-ser-des-generator"></span><h1>CMOS SER/DES generator<a class="headerlink" href="#cmos-ser-des-generator" title="Permalink to this headline">¶</a></h1>
+  <p># CMOS SER/DES generator</p>
 <p>This section describes how to generate CMOS SER/DES with a flexible SER/DES ratio.</p>
-<div class="section" id="structure">
-<span id="structure"></span><h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
-<ol>
-<li><p class="first">2N:1 serializer</p>
-<p><img alt="serdes" src="../_images/ser_2Nto1.png" /></p>
+<p>## Structure
+1) 2N:1 serializer</p>
+<blockquote>
+<div><p>![serdes](images/ser_2Nto1.png)</p>
 <ul class="simple">
 <li>Assuming half-rate clocking</li>
 <li>Two step: 2N:2, 2:1 for arbitrary N</li>
 <li>Not 2:1 tree structure: more flexible SER ratio</li>
 </ul>
-</li>
+</div></blockquote>
+<ol class="arabic" start="2">
 <li><p class="first">N:1 serializer</p>
-<p><img alt="serdes" src="../_images/ser_Nto1.png" /></p>
+<blockquote>
+<div><p>![serdes](images/ser_Nto1.png)</p>
 <ul class="simple">
-<li>Multi-phase divider using shift register<ul>
+<li><dl class="first docutils">
+<dt>Multi-phase divider using shift register</dt>
+<dd><ul class="first last">
 <li>RESET signal required</li>
 <li>One FF in divider reset to high, and the others reset to low</li>
 </ul>
+</dd>
+</dl>
 </li>
 <li>Retiming flip-flops for the input</li>
 <li>N:1 MUX using tri-state inverters</li>
 </ul>
+</div></blockquote>
 </li>
 <li><p class="first">2NM:1 serializer</p>
-<p><img alt="serdes" src="../_images/ser_3stage.png" /></p>
+<blockquote>
+<div><p>![serdes](images/ser_3stage.png)</p>
 <ul class="simple">
 <li>3 stage (2NM:2N:2:1)</li>
 <li>For high serialization ratio</li>
 </ul>
+</div></blockquote>
 </li>
 <li><p class="first">1:N deserializer</p>
-<p><img alt="serdes" src="../_images/des_1toN.png" /></p>
+<blockquote>
+<div><p>![serdes](images/des_1toN.png)</p>
 <ul class="simple">
-<li>Shift-register divider for arbitrary division ratio<ul>
+<li><dl class="first docutils">
+<dt>Shift-register divider for arbitrary division ratio</dt>
+<dd><ul class="first last">
 <li>First half of the FFs reset to high, and the rest of them reset to low</li>
 <li>No narrow pulse from the divider</li>
 </ul>
+</dd>
+</dl>
 </li>
 <li>One stage: less speed limitation with increased division ratio unlike SER</li>
 </ul>
+</div></blockquote>
 </li>
 </ol>
-</div>
-<div class="section" id="setup-for-bwrc-users">
-<span id="setup-for-bwrc-users"></span><h2>Setup (for BWRC users)<a class="headerlink" href="#setup-for-bwrc-users" title="Permalink to this headline">¶</a></h2>
-<ol>
+<p>## Setup (for BWRC users)</p>
+<ol class="arabic">
 <li><p class="first">Clone main repo (tsmc16FFC).</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git@bwrcrepo.eecs.berkeley.edu:erichang/craft_adc.git
-$ cd craft_adc
-$ git submodule init
-$ git submodule update
-</pre></div>
-</div>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">$</span> <span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;bwrcrepo.eecs.berkeley.edu:erichang/craft_adc.git</span>
+<span class="pre">$</span> <span class="pre">cd</span> <span class="pre">craft_adc</span>
+<span class="pre">$</span> <span class="pre">git</span> <span class="pre">submodule</span> <span class="pre">init</span>
+<span class="pre">$</span> <span class="pre">git</span> <span class="pre">submodule</span> <span class="pre">update</span>
+<span class="pre">`</span></code></p>
+</div></blockquote>
 </li>
-<li><p class="first">Clone laygo</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git@github.com:ucb-art/laygo.git
-</pre></div>
-</div>
+<li><dl class="first docutils">
+<dt>Clone laygo</dt>
+<dd><p class="first last"><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">$</span> <span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:ucb-art/laygo.git</span>
+<span class="pre">`</span></code></p>
+</dd>
+</dl>
 </li>
-<li><p class="first">Copy some files to your working directory (if you don&#8217;t have them)</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="o">/</span><span class="n">tools</span><span class="o">/</span><span class="n">projects</span><span class="o">/</span><span class="n">wrbae</span><span class="o">/</span><span class="n">serdes_test</span><span class="o">/</span><span class="n">craft_adc</span><span class="o">/</span><span class="n">serdes_spec</span><span class="o">.</span><span class="n">yaml</span> <span class="o">.</span>
-<span class="n">cp</span> <span class="o">/</span><span class="n">tools</span><span class="o">/</span><span class="n">projects</span><span class="o">/</span><span class="n">wrbae</span><span class="o">/</span><span class="n">serdes_test</span><span class="o">/</span><span class="n">craft_adc</span><span class="o">/</span><span class="n">serdes_size</span><span class="o">.</span><span class="n">yaml</span> <span class="o">.</span>
-<span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">tools</span><span class="o">/</span><span class="n">projects</span><span class="o">/</span><span class="n">jdhan</span><span class="o">/</span><span class="n">BAG</span><span class="o">/</span><span class="n">TISARADC_TSMC16FFC</span><span class="o">/</span><span class="n">tsmcN16_microtemplates_dense</span> <span class="o">.</span>
-<span class="n">cp</span> <span class="o">/</span><span class="n">tools</span><span class="o">/</span><span class="n">projects</span><span class="o">/</span><span class="n">wrbae</span><span class="o">/</span><span class="n">serdes_test</span><span class="o">/</span><span class="n">craft_adc</span><span class="o">/</span><span class="n">laygo_config</span><span class="o">.</span><span class="n">yaml</span> <span class="o">.</span>
-</pre></div>
-</div>
+<li><dl class="first docutils">
+<dt>Copy some files to your working directory (if you don’t have them)</dt>
+<dd><p class="first last"><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">cp</span> <span class="pre">/tools/projects/wrbae/serdes_test/craft_adc/serdes_spec.yaml</span> <span class="pre">.</span>
+<span class="pre">cp</span> <span class="pre">/tools/projects/wrbae/serdes_test/craft_adc/serdes_size.yaml</span> <span class="pre">.</span>
+<span class="pre">ln</span> <span class="pre">-s</span> <span class="pre">/tools/projects/jdhan/BAG/TISARADC_TSMC16FFC/tsmcN16_microtemplates_dense</span> <span class="pre">.</span>
+<span class="pre">cp</span> <span class="pre">/tools/projects/wrbae/serdes_test/craft_adc/laygo_config.yaml</span> <span class="pre">.</span>
+<span class="pre">`</span></code></p>
+</dd>
+</dl>
 </li>
-<li><p class="first">Open cds.lib and add</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">DEFINE</span> <span class="n">serdes_templates</span> <span class="o">./</span><span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">serdes</span><span class="o">/</span><span class="n">serdes_templates</span>
-</pre></div>
-</div>
+<li><dl class="first docutils">
+<dt>Open cds.lib and add</dt>
+<dd><p class="first last"><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">DEFINE</span> <span class="pre">serdes_templates</span> <span class="pre">./laygo/generators/serdes/serdes_templates</span>
+<span class="pre">`</span></code></p>
+</dd>
+</dl>
 </li>
-<li><p class="first">Open bag_libs.def and add</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>serdes_templates $BAG_WORK_DIR/laygo/generators/serdes/BagModules
-and modify &#39;logic_templates&#39; path to
-$BAG_WORK_DIR/laygo/generators/logic/BagModules
-</pre></div>
-</div>
+<li><dl class="first docutils">
+<dt>Open bag_libs.def and add</dt>
+<dd><p class="first last"><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">serdes_templates</span> <span class="pre">$BAG_WORK_DIR/laygo/generators/serdes/BagModules</span>
+<span class="pre">and</span> <span class="pre">modify</span> <span class="pre">'logic_templates'</span> <span class="pre">path</span> <span class="pre">to</span>
+<span class="pre">$BAG_WORK_DIR/laygo/generators/logic/BagModules</span>
+<span class="pre">`</span></code></p>
+</dd>
+</dl>
 </li>
 <li><p class="first">Open .cshrc_bag and comment out</p>
-<p><code class="docutils literal"><span class="pre">setenv</span> <span class="pre">BAG_PYTHON</span> <span class="pre">&quot;/tools/projects/erichang/programs/anaconda3/bin/python&quot;</span></code></p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">`setenv</span> <span class="pre">BAG_PYTHON</span> <span class="pre">&quot;/tools/projects/erichang/programs/anaconda3/bin/python&quot;`</span></code></p>
 <p>and add</p>
-<p><code class="docutils literal"><span class="pre">setenv</span> <span class="pre">BAG_PYTHON</span> <span class="pre">&quot;/tools/projects/eeis/BAG_2.0/anaconda2/bin/python&quot;</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">`setenv</span> <span class="pre">BAG_PYTHON</span> <span class="pre">&quot;/tools/projects/eeis/BAG_2.0/anaconda2/bin/python&quot;`</span></code></p>
+</div></blockquote>
 </li>
-<li><p class="first">Open start bag.sh and comment out <code class="docutils literal"><span class="pre">&quot;set</span> <span class="pre">=</span> <span class="pre">cmd~~&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;exec</span> <span class="pre">$cmd~~&quot;</span></code> and add this</p>
-<p><code class="docutils literal"><span class="pre">exec</span> <span class="pre">${BAG_PYTHON}</span> <span class="pre">-m</span> <span class="pre">IPython</span></code></p>
+<li><p class="first">Open start bag.sh and comment out <code class="docutils literal notranslate"><span class="pre">`&quot;set</span> <span class="pre">=</span> <span class="pre">cmd~~&quot;`</span></code> and <code class="docutils literal notranslate"><span class="pre">`&quot;exec</span> <span class="pre">$cmd~~&quot;`</span></code> and add this</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">`exec</span> <span class="pre">${BAG_PYTHON}</span> <span class="pre">-m</span> <span class="pre">IPython`</span></code></p>
+</div></blockquote>
 </li>
 <li><p class="first">In virtuoso, create a new library called serdes_generated</p>
 </li>
 </ol>
-</div>
-<div class="section" id="serializer-generation">
-<span id="serializer-generation"></span><h2>Serializer Generation<a class="headerlink" href="#serializer-generation" title="Permalink to this headline">¶</a></h2>
-<ol>
-<li><p class="first">Set your SER parameters in serdes_spec.yaml and serdes_size.yaml</p>
-<ul class="simple">
+<p>## Serializer Generation</p>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>Set your SER parameters in serdes_spec.yaml and serdes_size.yaml</dt>
+<dd><ul class="first last simple">
 <li><strong>num_ser</strong>: 2Nto1 SER ratio, 2N = num_ser (even number only)</li>
 <li><strong>num_ser_3rd</strong>: 3rd stage SER ratio for 3-stage SER</li>
 <li><strong>m_dff</strong>: DFF size</li>
@@ -320,170 +169,200 @@ $BAG_WORK_DIR/laygo/generators/logic/BagModules
 <li><strong>m_out</strong>: Output inv size</li>
 <li><strong>m_ser</strong>: 2to1 halfrate SER size</li>
 </ul>
+</dd>
+</dl>
 </li>
 <li><p class="first">Generate N:1 SER</p>
-<p>a) Please note that num_ser in serdes_spec.yaml equals 2N</p>
-<p>b) Generate layout</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">In</span> <span class="n">BAG</span> <span class="n">window</span><span class="p">,</span> <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">serdes</span><span class="o">/</span><span class="n">ser_layout_generator</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
+<blockquote>
+<div><ol class="loweralpha">
+<li><p class="first">Please note that num_ser in serdes_spec.yaml equals 2N</p>
+</li>
+<li><p class="first">Generate layout</p>
+<blockquote>
+<div><p>In BAG window, run laygo/generators/serdes/ser_layout_generator.py</p>
+</div></blockquote>
+</li>
+</ol>
 <p>The layout shown below is for 5:1 serializer.</p>
-<p><img alt="serdes" src="../_images/ser_5to1_layout.png" /></p>
-<p>c) Generate schematic</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">serdes</span><span class="o">/</span><span class="n">ser_schematic_generator</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
+<p>![serdes](images/ser_5to1_layout.png)</p>
+<ol class="loweralpha" start="3">
+<li><p class="first">Generate schematic</p>
+<blockquote>
+<div><p>run laygo/generators/serdes/ser_schematic_generator.py</p>
+</div></blockquote>
+</li>
+</ol>
 <p>The schematic shown below is for 5:1 serializer.</p>
-<p><img alt="serdes" src="../_images/ser_5to1_schematic.png" /></p>
+<p>![serdes](images/ser_5to1_schematic.png)</p>
+</div></blockquote>
 </li>
 <li><p class="first">Generate 2:1 SER with a half-rate clock</p>
-<p>a) Generate layout</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">serdes</span><span class="o">/</span><span class="n">ser_2to1_halfrate_layout_generator</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
-<p>b) Generate schematic</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">serdes</span><span class="o">/</span><span class="n">ser_2to1_halfrate_schematic_generator</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
+<blockquote>
+<div><ol class="loweralpha">
+<li><p class="first">Generate layout</p>
+<blockquote>
+<div><p>run laygo/generators/serdes/ser_2to1_halfrate_layout_generator.py</p>
+</div></blockquote>
+</li>
+<li><p class="first">Generate schematic</p>
+<blockquote>
+<div><p>run laygo/generators/serdes/ser_2to1_halfrate_schematic_generator.py</p>
+</div></blockquote>
+</li>
+</ol>
+</div></blockquote>
 </li>
 <li><p class="first">Generate 2N:1 SER</p>
-<p>a) Generate layout</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">serdes</span><span class="o">/</span><span class="n">ser_2Nto1_layout_generator</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
-<p>The layout shown below is for 10:1 serializer.</p>
-<p><img alt="serdes" src="../_images/ser_10to1_layout.png" /></p>
-<p>b) Generate schematic</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">serdes</span><span class="o">/</span><span class="n">ser_2Nto1_schematic_generator</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
+<blockquote>
+<div><ol class="loweralpha">
+<li><p class="first">Generate layout</p>
+<blockquote>
+<div><p>run laygo/generators/serdes/ser_2Nto1_layout_generator.py</p>
+</div></blockquote>
 </li>
 </ol>
-<div class="section" id="optional-generate-3-stage-ser-for-higher-serialization-ratio-of-m-x-2n">
-<span id="optional-generate-3-stage-ser-for-higher-serialization-ratio-of-m-x-2n"></span><h3>(Optional) Generate 3-stage SER for higher serialization ratio of M x 2N<a class="headerlink" href="#optional-generate-3-stage-ser-for-higher-serialization-ratio-of-m-x-2n" title="Permalink to this headline">¶</a></h3>
-<ol>
-<li><p class="first">Generate M:1 SER</p>
-<p>a) Open serdes_spec.yaml and set num_ser to 2M</p>
-<p>b) Generate layout of M:1 SER</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">serdes</span><span class="o">/</span><span class="n">ser_layout_generator</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
+<p>The layout shown below is for 10:1 serializer.</p>
+<p>![serdes](images/ser_10to1_layout.png)</p>
+<ol class="loweralpha" start="2">
+<li><p class="first">Generate schematic</p>
+<blockquote>
+<div><p>run laygo/generators/serdes/ser_2Nto1_schematic_generator.py</p>
+</div></blockquote>
 </li>
+</ol>
+</div></blockquote>
+</li>
+</ol>
+<p>### (Optional) Generate 3-stage SER for higher serialization ratio of M x 2N
+1) Generate M:1 SER</p>
+<blockquote>
+<div><ol class="loweralpha">
+<li><p class="first">Open serdes_spec.yaml and set num_ser to 2M</p>
+</li>
+<li><p class="first">Generate layout of M:1 SER</p>
+<blockquote>
+<div><p>run laygo/generators/serdes/ser_layout_generator.py</p>
+</div></blockquote>
+</li>
+</ol>
+</div></blockquote>
+<ol class="arabic" start="2">
 <li><p class="first">Generate (M x 2N):1 SER</p>
-<p>a) Open serdes_spec.yaml. Return num_ser to 2N and set num_ser_3rd to M</p>
-<p>b) Generate layout</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">serdes</span><span class="o">/</span><span class="n">ser_3stage_layout_generator</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
-<p>The layout shown below is for 10:1 serializer.</p>
-<p><img alt="serdes" src="../_images/ser_30to1_layout.png" /></p>
-<p>c) Generate schematic</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">serdes</span><span class="o">/</span><span class="n">ser_3stage_schematic_generator</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
+<blockquote>
+<div><ol class="loweralpha">
+<li><p class="first">Open serdes_spec.yaml. Return num_ser to 2N and set num_ser_3rd to M</p>
+</li>
+<li><p class="first">Generate layout</p>
+<blockquote>
+<div><p>run laygo/generators/serdes/ser_3stage_layout_generator.py</p>
+</div></blockquote>
 </li>
 </ol>
-</div>
-</div>
-<div class="section" id="deserializer-generation">
-<span id="deserializer-generation"></span><h2>Deserializer Generation<a class="headerlink" href="#deserializer-generation" title="Permalink to this headline">¶</a></h2>
-<ol>
-<li><p class="first">Set your DES parameters in serdes_spec.yaml and serdes_size.yaml</p>
-<ul class="simple">
+<p>The layout shown below is for 10:1 serializer.</p>
+<p>![serdes](images/ser_30to1_layout.png)</p>
+<ol class="loweralpha" start="3">
+<li><p class="first">Generate schematic</p>
+<blockquote>
+<div><p>run laygo/generators/serdes/ser_3stage_schematic_generator.py</p>
+</div></blockquote>
+</li>
+</ol>
+</div></blockquote>
+</li>
+</ol>
+<p>## Deserializer Generation</p>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>Set your DES parameters in serdes_spec.yaml and serdes_size.yaml</dt>
+<dd><ul class="first last simple">
 <li><strong>num_des</strong>: Deserialization ratio</li>
 <li><strong>num_flop</strong>: No. flops in a single column, for reducing layout height for higher N</li>
 <li><strong>m_des_dff</strong>: DFF size</li>
 </ul>
+</dd>
+</dl>
 </li>
 <li><p class="first">Generate 1:N DES</p>
-<p>a) Open serdes_spec.yaml and set num_des and num_flop</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">num_des</span> <span class="o">=</span> <span class="n">N</span><span class="p">,</span> <span class="n">num_flop</span> <span class="n">can</span> <span class="n">be</span> <span class="mi">1</span> <span class="ow">or</span> <span class="mi">2</span><span class="p">,</span> <span class="n">num_flop</span> <span class="n">adjusts</span> <span class="n">the</span> <span class="n">aspect</span> <span class="n">ratio</span> <span class="n">of</span> <span class="n">the</span> <span class="n">layout</span>
-</pre></div>
-</div>
-<p>b) Generate layout</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">serdes</span><span class="o">/</span><span class="n">des_layout_generator</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
-<p>c) Generate schematic</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">serdes</span><span class="o">/</span><span class="n">des_schematic_generator</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
+<blockquote>
+<div><ol class="loweralpha">
+<li><p class="first">Open serdes_spec.yaml and set num_des and num_flop</p>
+<blockquote>
+<div><p>num_des = N, num_flop can be 1 or 2, num_flop adjusts the aspect ratio of the layout</p>
+</div></blockquote>
+</li>
+<li><p class="first">Generate layout</p>
+<blockquote>
+<div><p>run laygo/generators/serdes/des_layout_generator.py</p>
+</div></blockquote>
+</li>
+<li><p class="first">Generate schematic</p>
+<blockquote>
+<div><p>run laygo/generators/serdes/des_schematic_generator.py</p>
+</div></blockquote>
+</li>
+</ol>
+</div></blockquote>
 </li>
 </ol>
 <p>The layout shown below is for 1:32 deserializer.</p>
-<p><img alt="serdes" src="../_images/des_1to32_layout.png" /></p>
+<p>![serdes](images/des_1to32_layout.png)</p>
 <p>You can modify the aspect ratio of the layout by changing num_flop in serdes_spec.yaml.
 (num_flop = 1 or 2)</p>
-<p><img alt="serdes16" src="../_images/des_1to32_2_layout.png" /></p>
+<p>![serdes16](images/des_1to32_2_layout.png)</p>
 <p>The schematic shown below is for 1:4 deserializer.</p>
-<p><img alt="serdes" src="../_images/des_1to4_schematic.png" /></p>
-</div>
-</div>
+<p>![serdes](images/des_1to4_schematic.png)</p>
 
 
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="tisar.html" class="btn btn-neutral float-right" title="Time-interleaved SAR ADC generator">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="serdes.html" class="btn btn-neutral" title="CMOS SERDES generator"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
-  
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &copy; Copyright 2017, Jaeduk Han.
-    </p>
-  </div>
-
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
-  
-</footer>
         </div>
       </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="serdes.html" title="previous chapter">&lt;no title&gt;</a></li>
+      <li>Next: <a href="tisar.html" title="next chapter">&lt;no title&gt;</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/example/ser_des.md.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Jaeduk Han.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/example/ser_des.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
 
-    </section>
+    
 
-  </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'1.0',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
-      });
-  </script>
-   
-
-</body>
+    
+  </body>
 </html>
