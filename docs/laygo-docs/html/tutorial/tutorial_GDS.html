@@ -1,0 +1,407 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>&lt;no title&gt; &#8212; laygo_documentation 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="tutorial_BAG.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="../introduction/introduction.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p># NAND gate generation and GDS export tutorial</p>
+<p>In this tutorial, you will create a simple NAND gate layout and export it to a GDS file.
+The scripts used in this tutorial are in [quick_start_GDS.py](../../../quick_start_GDS.py).</p>
+<p>## Setup
+Run the following commands to install laygo and run ipython.</p>
+<ol class="arabic">
+<li><p class="first">Clone laygo repo</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">$</span> <span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:ucb-art/laygo.git</span>
+<span class="pre">`</span></code></p>
+</div></blockquote>
+</li>
+<li><p class="first">Launch ipython (or bag)</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">$</span> <span class="pre">ipython</span>
+<span class="pre">`</span></code></p>
+</div></blockquote>
+</li>
+<li><p class="first">In ipython, import laygo and numpy</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">import</span> <span class="pre">laygo</span>
+<span class="pre">import</span> <span class="pre">numpy</span> <span class="pre">as</span> <span class="pre">np</span>
+<span class="pre">`</span></code></p>
+</div></blockquote>
+</li>
+</ol>
+<p>## Initialize GridLayoutGenerator
+Run the following commands to initialize GridLayoutGenerator, the main
+generator object that contains all layout generation functions.</p>
+<p><code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">laygen</span> <span class="pre">=</span> <span class="pre">laygo.GridLayoutGenerator(config_file=&quot;./labs/laygo_config.yaml&quot;)</span>
+<span class="pre">laygen.use_phantom</span> <span class="pre">=</span> <span class="pre">True</span>&#160; <span class="pre">#</span> <span class="pre">for</span> <span class="pre">abstract</span> <span class="pre">generation.</span> <span class="pre">False</span> <span class="pre">when</span> <span class="pre">generating</span> <span class="pre">a</span> <span class="pre">real</span> <span class="pre">layout.</span>
+<span class="pre">laygen.use_array</span> <span class="pre">=</span> <span class="pre">True</span>&#160; <span class="pre">#</span> <span class="pre">use</span> <span class="pre">InstanceArray</span> <span class="pre">instead</span> <span class="pre">of</span> <span class="pre">Instance</span>
+<span class="pre">`</span></code></p>
+<p>Note that <strong>use_phantom</strong> tag is set to <strong>True</strong>, which means you are
+exporting to a phantom cell. This option is useful for the GDS flow,
+because in many cases you are not exporting the whole hierarchy to a
+single GDS file. This option allows users to display the layout and
+debug without exporting primitive templates.</p>
+<p><strong>use_array</strong> is used to enable a recently added feature; InstanceArray.
+Most legacy generator codes are not using this option.</p>
+<p>## Load template and grid database
+The example technology setup uses <em>laygo_faketech_microtemplates_dense</em>
+for the primitive template library. All primitive template and grid
+information are stored in [labs/laygo_faketech_microtemplates_dense_templates.yaml](../../../labs/laygo_faketech_microtemplates_dense_templates.yaml),
+[labs/laygo_faketech_microtemplates_dense_grids.yaml](../../../labs/laygo_faketech_microtemplates_dense_grids.yaml)
+and the files need to be loaded before the actual layout generation steps.
+Run the following commands to load template and grid database.</p>
+<p><code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">#</span> <span class="pre">load</span> <span class="pre">template</span> <span class="pre">and</span> <span class="pre">grid</span>
+<span class="pre">utemplib</span> <span class="pre">=</span> <span class="pre">laygen.tech</span> <span class="pre">+</span> <span class="pre">'_microtemplates_dense'</span>&#160; <span class="pre">#</span> <span class="pre">device</span> <span class="pre">template</span> <span class="pre">library</span> <span class="pre">name</span>
+<span class="pre">laygen.load_template(filename='./labs/'</span> <span class="pre">+</span> <span class="pre">utemplib</span> <span class="pre">+</span> <span class="pre">'_templates.yaml',</span> <span class="pre">libname=utemplib)</span>
+<span class="pre">laygen.load_grid(filename='./labs/'</span> <span class="pre">+</span> <span class="pre">utemplib</span> <span class="pre">+</span> <span class="pre">'_grids.yaml',</span> <span class="pre">libname=utemplib)</span>
+<span class="pre">laygen.templates.sel_library(utemplib)</span>
+<span class="pre">laygen.grids.sel_library(utemplib)</span>
+<span class="pre">`</span></code></p>
+<dl class="docutils">
+<dt><strong>load_template</strong> and <strong>load_grid</strong> functions read yaml files and dump</dt>
+<dd>to laygen.templates and laygen.grid.</dd>
+</dl>
+<p>The following commands shows the loaded template and grid information.</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">laygen.templates.display()</span>
+<span class="pre">laygen.grids.display()</span>
+<span class="pre">`</span></code></p>
+<p>Or you can specify a template (or grid) to display, like the following:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">laygen.templates.display(libname='laygo_faketech_microtemplates_dense',</span> <span class="pre">templatename='nmos4_fast_center_nf2')</span>
+<span class="pre">laygen.grids.display(libname='laygo_faketech_microtemplates_dense',</span> <span class="pre">gridname='route_M1_M2_basic')</span>
+<span class="pre">`</span></code></p>
+<p>Then you can see the specified template and grid information.</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a>`
+Display lib:laygo_faketech_microtemplates_dense, template:nmos4_fast_center_nf2
+[Library]laygo_faketech_microtemplates_dense</p>
+<blockquote>
+<div><p>[Template]nmos4_fast_center_nf2
+xy:[[0.0, 0.0], [0.4, 0.9]] pins:{‘S0’: {‘netname’: ‘S0’, ‘layer’: [‘M1’, ‘pin’], ‘xy’: array([[-0.05,  0.2 ],</p>
+<blockquote>
+<div>[ 0.05,  0.5 ]])}, ‘S1’: {‘netname’: ‘S1’, ‘layer’: [‘M1’, ‘pin’], ‘xy’: array([[ 0.35,  0.2 ],
+[ 0.45,  0.5 ]])}, ‘D0’: {‘netname’: ‘D0’, ‘layer’: [‘M1’, ‘pin’], ‘xy’: array([[ 0.15,  0.2 ],
+[ 0.25,  0.5 ]])}, ‘G0’: {‘netname’: ‘G0’, ‘layer’: [‘M1’, ‘pin’], ‘xy’: array([[ 0.125,  0.625],
+[ 0.275,  0.775]])}}</div></blockquote>
+</div></blockquote>
+<p>Display lib:laygo_faketech_microtemplates_dense, grid:route_M1_M2_basic
+[Library]laygo_faketech_microtemplates_dense</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>[Grid]route_M1_M2_basic</dt>
+<dd>route_M1_M2_basic width:0.2 height:0.2 xgrid:[ 0.] ygrid:[ 0.] xwidth:[ 0.1] ywidth:[ 0.1] viamap:{via_M1_M2_0: [0, 0] }</dd>
+</dl>
+</div></blockquote>
+<p><a href="#id3"><span class="problematic" id="id4">``</span></a><a href="#id5"><span class="problematic" id="id6">`</span></a></p>
+<p>## Library and cell creation
+The next step is creating a library and cell to work on.
+Run the following commands to create a workspace.</p>
+<p><code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">#</span> <span class="pre">library</span> <span class="pre">&amp;</span> <span class="pre">cell</span> <span class="pre">creation</span>
+<span class="pre">laygen.add_library('laygo_working')</span>
+<span class="pre">laygen.add_cell('nand_demo')</span>
+<span class="pre">`</span></code></p>
+<p>The commands will create library and cell to work on. In order to
+display the contents, simply type <code class="docutils literal notranslate"><span class="pre">`laygen.display()`</span></code>.
+The output will be like this. (The nand_test is empty because we did not
+create anything yet).</p>
+<p><a href="#id7"><span class="problematic" id="id8">``</span></a>`
+Display
+[Library]laygo_test</p>
+<blockquote>
+<div>[Cell]nand_test</div></blockquote>
+<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a></p>
+<p>## Cell placements
+The following commands will place 4 2-fingered transistors (2 nmos, 2 pmos)
+and cluster them to 2 lists, nd and pd.</p>
+<p><a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a>python
+# placement ########################################################################################################
+# placement parameters
+pg = ‘placement_basic’  # placement grid</p>
+<p>nd = [] # nmos
+nd += [laygen.relplace(cellname=’nmos4_fast_boundary’, gridname=pg, refobj=None, shape=None)]
+nd += [laygen.relplace(cellname=’nmos4_fast_center_nf2’, gridname=pg, refobj=nd[-1].right, shape=[1, 1])]
+nd += [laygen.relplace(cellname=’nmos4_fast_boundary’, gridname=pg, refobj=nd[-1].right, shape=None)]
+nd += [laygen.relplace(cellname=’nmos4_fast_boundary’, gridname=pg, refobj=nd[-1].right, shape=None)]
+nd += [laygen.relplace(cellname=’nmos4_fast_center_nf2’, gridname=pg, refobj=nd[-1].right, shape=[1, 1])]
+nd += [laygen.relplace(cellname=’nmos4_fast_boundary’, gridname=pg, refobj=nd[-1].right, shape=None)]
+pd = [] # pmos
+pd += [laygen.relplace(cellname=’pmos4_fast_boundary’, gridname=pg, refobj=nd[0].top, shape=None, transform=’MX’)]
+pd += [laygen.relplace(cellname=’pmos4_fast_center_nf2’, gridname=pg, refobj=pd[-1].right, shape=[1, 1], transform=’MX’)]
+pd += [laygen.relplace(cellname=’pmos4_fast_boundary’, gridname=pg, refobj=pd[-1].right, shape=None, transform=’MX’)]
+pd += [laygen.relplace(cellname=’pmos4_fast_boundary’, gridname=pg, refobj=pd[-1].right, shape=None, transform=’MX’)]
+pd += [laygen.relplace(cellname=’pmos4_fast_center_nf2’, gridname=pg, refobj=pd[-1].right, shape=[1, 1], transform=’MX’)]
+pd += [laygen.relplace(cellname=’pmos4_fast_boundary’, gridname=pg, refobj=pd[-1].right, shape=None, transform=’MX’)]
+<a href="#id17"><span class="problematic" id="id18">``</span></a><a href="#id19"><span class="problematic" id="id20">`</span></a></p>
+<p><strong>GridLayoutGenerator.relplace</strong> function places templates on grid,
+using relative geometry information provided as arguments. Basically
+there are 2 ways to place templates:</p>
+<p>1. <strong>xy</strong>: with <strong>xy</strong> argument, the function places the
+template (specified by templatename) at <strong>xy</strong> on grid, specified by
+gridname. The default value is [0, 0].</p>
+<blockquote>
+<div><p>For example, the following command will place <em>inst0</em> (cellname is <em>mycell0</em>) at <em>[3, 1]</em>, on <em>mygrid</em>.
+<code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">inst0</span> <span class="pre">=</span> <span class="pre">laygen.relplace(cellname='mycell0',</span> <span class="pre">gridname='mygrid',</span> <span class="pre">xy=[1,</span> <span class="pre">3])</span>
+<span class="pre">`</span></code></p>
+<p><strong>transform</strong> paramter is used for mirroring/rotation. For example, this
+command will do a mirrored placement in x-axis.
+<code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">inst0</span> <span class="pre">=</span> <span class="pre">laygen.relplace(cellname='mycell0',</span> <span class="pre">gridname='mygrid',</span> <span class="pre">xy=[1,</span> <span class="pre">3],</span> <span class="pre">transform='MX')</span>
+<span class="pre">`</span></code></p>
+<p>Possible <strong>transform</strong> parameters are <strong>R0</strong>, <strong>R180</strong>, <strong>MX</strong>, <strong>MY</strong>, and <strong>MXY</strong>.
+The following figure shows how instances are placed by running the above two commands.</p>
+<p>![placement](images/laygo_bag_placement0.png)</p>
+</div></blockquote>
+<p>2. <strong>refobj</strong>: You can use the <strong>refobj</strong> argument to specify the reference
+object that the new object is placed from.</p>
+<blockquote>
+<div><p>Following objects can be used for the <strong>refobj</strong> argument.</p>
+<ul>
+<li><p class="first"><strong>Instance / InstanceArray</strong> : the new instance will be placed at the <strong>right</strong> side of <strong>refobj</strong>.</p>
+<blockquote>
+<div><p>For example, the following command will place inst1 (mycell1) at the right side of inst0, on mygrid.
+<code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">#pseudo</span> <span class="pre">code.</span> <span class="pre">modify</span> <span class="pre">parameter</span> <span class="pre">values</span> <span class="pre">for</span> <span class="pre">actual</span> <span class="pre">use</span>
+<span class="pre">inst1</span> <span class="pre">=</span> <span class="pre">laygen.relplace(cellname='mycell1',</span> <span class="pre">gridname='mygrid',</span> <span class="pre">refobj=inst0)</span>
+<span class="pre">`</span></code></p>
+<p>![placement](images/laygo_bag_placement1.png)</p>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Pointer</strong> objects defined in <strong>Instance / InstanceArray</strong> : The <strong>Instance</strong></p>
+</li>
+</ul>
+<p>and <strong>InstanceArray</strong> objects have various Pointer objects to contain geometry information. The Pointers can
+be used for <strong>refobj</strong>. Supported <strong>Pointer</strong> objects are <strong>left, right, top, bottom</strong>.</p>
+<blockquote>
+<div><p>For example, the following command will place inst2 at the bottom side of inst1, mirrored in x-axis.
+<code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">#pseudo</span> <span class="pre">code.</span> <span class="pre">modify</span> <span class="pre">parameter</span> <span class="pre">values</span> <span class="pre">for</span> <span class="pre">actual</span> <span class="pre">use</span>
+<span class="pre">inst2</span> <span class="pre">=</span> <span class="pre">laygen.relplace(cellname='mycell2',</span> <span class="pre">gridname='mygrid',</span> <span class="pre">refobj=inst1.bottom)</span>
+<span class="pre">`</span></code></p>
+<p>![placement](images/laygo_bag_placement2.png)</p>
+</div></blockquote>
+</div></blockquote>
+<dl class="docutils">
+<dt>You can also combine the two ways of placement. The following example will place inst3 at</dt>
+<dd>the right side of inst2, with [1, 0] offset on ‘mygrid’, mirrored in x-axis.</dd>
+</dl>
+<p><code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">#pseudo</span> <span class="pre">code.</span> <span class="pre">modify</span> <span class="pre">parameter</span> <span class="pre">values</span> <span class="pre">for</span> <span class="pre">actual</span> <span class="pre">use</span>
+<span class="pre">inst3</span> <span class="pre">=</span> <span class="pre">laygen.relplace(cellname='mycell3',</span> <span class="pre">gridname='mygrid',</span> <span class="pre">xy=[1,</span> <span class="pre">0],</span> <span class="pre">refobj=inst2.right,</span> <span class="pre">transform='MX')</span>
+<span class="pre">`</span></code></p>
+<p>![placement](images/laygo_bag_placement3.png)</p>
+<p>The way of architecting your templates completely depends on your preference.
+The example generator codes assume <strong>nmos4_fast_center_nf2</strong> and
+<strong>pmos4_fast_center_nf2</strong> templates are used for 2-fingered NMOS/PMOS devices, and
+<strong>nmos4_fast_boundary</strong> and <strong>pmos4_fast_boundary</strong> templates for
+boundary geometries for NMOS/PMOS devices.</p>
+<p>The resulting layout should look like this.</p>
+<p>![placement](images/placement.png)</p>
+<p>If you want to display the layout, run the following command and open
+<strong>output.gds</strong> file. Note that actual NMOS/PMOS shapes are not shown
+because they are abstracted.</p>
+<p><code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">laygen.export_GDS('output.gds',</span> <span class="pre">cellname='nand_test',</span> <span class="pre">layermapfile=&quot;./laygo/labs/laygo_faketech.layermap&quot;)</span>
+<span class="pre">`</span></code></p>
+<p>The <strong>relplace</strong> function has several useful arguments, explained below:</p>
+<p>1. <strong>shape</strong> parameter sets the array dimension, for mosaic
+placements. (eg. shape=[2, 3] will create a 2x3 dimensional array).
+Default value is [1, 1] and if <strong>shape</strong> is set to None, it will generate
+a single instance. The difference between shape=[1, 1] and None is that
+InstanceArray is generated for shape=[1, 1], while Instance is generated
+for shape=None.
+2. <strong>spacing</strong> parameter sets the ‘pitch’ of the array placement.
+If None, laygo automatically calculates the spacing values from the size of
+template.
+3. <strong>transform</strong> parameter sets the transformation of the instance, as explained above.
+Possible values are <strong>R0</strong>, <strong>R180</strong>, <strong>MX</strong>, <strong>MY</strong>, and <strong>MXY</strong>.</p>
+<p>Refer to the laygo API documentation for details.</p>
+<p>## Signal routing
+<strong>GridLayoutGenerator.route</strong> function is used for creating metal wires.
+Like the <strong>relplace</strong> function, the route function can use xy0/xy1, and/or</p>
+<blockquote>
+<div>refobj0/refobj1. <strong>route</strong> uses two arguments for each type of input because
+the <strong>route</strong> needs to calculate the starting and ending point of wire.</div></blockquote>
+<p>This example creates a vertical and a horizontal route on grid. Layers are
+automatically selected based on their routing directions.
+<code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">#pseudo</span> <span class="pre">code.</span> <span class="pre">modify</span> <span class="pre">parameter</span> <span class="pre">values</span> <span class="pre">for</span> <span class="pre">actual</span> <span class="pre">use</span>
+<span class="pre">laygen.route(gridname0='myroutegrid',</span> <span class="pre">xy0=[2,</span> <span class="pre">4],</span> <span class="pre">xy1=[2,</span> <span class="pre">6])</span> <span class="pre">#vertical</span>
+<span class="pre">laygen.route(gridname0='myroutegrid',</span> <span class="pre">xy0=[2,</span> <span class="pre">4],</span> <span class="pre">xy1=[5,</span> <span class="pre">4])</span> <span class="pre">#horizontal</span>
+<span class="pre">`</span></code></p>
+<p>This example shows a routing example using refobj (from A pin of inst0 to B pin of inst1).
+<code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">#pseudo</span> <span class="pre">code.</span> <span class="pre">modify</span> <span class="pre">parameter</span> <span class="pre">values</span> <span class="pre">for</span> <span class="pre">actual</span> <span class="pre">use</span>
+<span class="pre">laygen.route(gridname0='myroutegrid',</span> <span class="pre">refobj0=inst0.pins['A'],</span> <span class="pre">refobj1=inst1.pins['B'])</span>
+<span class="pre">`</span></code></p>
+<p>As shown in the <strong>relplace</strong> section, the xy and refobj parameters can be combined.
+<code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">#pseudo</span> <span class="pre">code.</span> <span class="pre">modify</span> <span class="pre">parameter</span> <span class="pre">values</span> <span class="pre">for</span> <span class="pre">actual</span> <span class="pre">use</span>
+<span class="pre">laygen.route(gridname0='myroutegrid',</span> <span class="pre">refobj0=inst0.pins['A'],</span> <span class="pre">xy0=[2,</span> <span class="pre">1],</span> <span class="pre">refobj1=inst1.pins['B'],</span> <span class="pre">xy=[0,</span> <span class="pre">1])</span>
+<span class="pre">`</span></code></p>
+<dl class="docutils">
+<dt>Let’s go back to the real example. Running the following commands creates a rotated L shape route structure,</dt>
+<dd>stacked from M1 to M3, for one of the nand gate input.</dd>
+</dl>
+<p><code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">#</span> <span class="pre">a</span>
+<span class="pre">r0</span> <span class="pre">=</span> <span class="pre">laygen.route(gridname0=rg12,</span> <span class="pre">refobj0=nd[4].pins['G0'],</span> <span class="pre">refobj1=pd[4].pins['G0'],</span> <span class="pre">via1=[0,</span> <span class="pre">0])</span>
+<span class="pre">r1</span> <span class="pre">=</span> <span class="pre">laygen.route(gridname0=rg12,</span> <span class="pre">xy0=[-2,</span> <span class="pre">0],</span> <span class="pre">xy1=[0,</span> <span class="pre">0],</span> <span class="pre">refobj0=pd[4].pins['G0'][0,</span> <span class="pre">0],</span> <span class="pre">refobj1=pd[4].pins['G0'][-1,</span> <span class="pre">0])</span>
+<span class="pre">ra</span> <span class="pre">=</span> <span class="pre">laygen.route(gridname0=rg23,</span> <span class="pre">xy0=[0,</span> <span class="pre">0],</span> <span class="pre">xy1=[0,</span> <span class="pre">2],</span> <span class="pre">refobj0=pd[4].pins['G0'][0,</span> <span class="pre">0],</span> <span class="pre">refobj1=pd[4].pins['G0'][0,</span> <span class="pre">0],</span> <span class="pre">via0=[0,</span> <span class="pre">0])</span>
+<span class="pre">`</span></code></p>
+<dl class="docutils">
+<dt>The first line creates a route from the <strong>G0</strong> pin of <strong>nd[4]</strong> (which is the second NMOS)</dt>
+<dd>to the <strong>G0</strong> pin of <strong>pd[4]</strong> (which is the second PMOS) on rg12, with an additional via placement at the end point.
+So this is basically connecting the gates of NMOS and PMOS.</dd>
+</dl>
+<p>The second line will create a horizontal route over the gate row, with a -2 offset at the starting point.
+Since we already create the connecting vias in the first line, there’s no need to add more vias.</p>
+<p>The third line is creating the final vertical metal stub for the pin connection.</p>
+<p>The generated routing pattern should look like this:</p>
+<p>![route a](images/route0.png)</p>
+<p>Running following commands will generate rest wire connections.</p>
+<p><a href="#id21"><span class="problematic" id="id22">``</span></a><a href="#id23"><span class="problematic" id="id24">`</span></a>python
+# b
+laygen.route(gridname0=rg12, refobj0=nd[1].pins[‘G0’], refobj1=pd[1].pins[‘G0’], via0=[0, 0])
+laygen.route(gridname0=rg12, xy0=[0, 0], xy1=[2, 0], refobj0=nd[1].pins[‘G0’][0, 0], refobj1=nd[1].pins[‘G0’][-1, 0])
+rb = laygen.route(gridname0=rg23, xy0=[0, 0], xy1=[0, 2], refobj0=nd[1].pins[‘G0’][0, 0], refobj1=nd[1].pins[‘G0’][0, 0], via0=[0, 0])
+# internal connections
+ri = laygen.route(xy0=[0, 1], xy1=[0, 1], gridname0=rg12, refobj0=nd[1].pins[‘D0’][0, 0],</p>
+<blockquote>
+<div>refobj1=nd[4].pins[‘S1’][-1, 0])</div></blockquote>
+<dl class="docutils">
+<dt>for _p in np.concatenate((nd[1].pins[‘D0’], nd[4].pins[‘S0’], nd[4].pins[‘S1’])):</dt>
+<dd>laygen.via(xy=[0, 0], refobj=_p, gridname=rg12, overlay=ri)</dd>
+</dl>
+<p># output
+ron = laygen.route(gridname0=rg12, xy0=[-1, 0], xy1=[1, 0], refobj0=nd[4].pins[‘D0’][0, 0], refobj1=nd[4].pins[‘D0’][-1, 0])
+rop = laygen.route(gridname0=rg12, xy0=[0, 0], xy1=[1, 0], refobj0=pd[1].pins[‘D0’][0, 0], refobj1=pd[4].pins[‘D0’][-1, 0])
+laygen.via(refobj=nd[4].pins[‘D0’], gridname=rg12, overlay=ron)
+laygen.via(refobj=pd[1].pins[‘D0’], gridname=rg12, overlay=rop)
+laygen.via(refobj=pd[4].pins[‘D0’], gridname=rg12, overlay=rop)
+ro = laygen.route(gridname0=rg23, refobj0=ron.right, refobj1=rop.right, xy0=[0, 0], xy1=[0, 0], via0=[0, 0], via1=[0, 0])
+<a href="#id25"><span class="problematic" id="id26">``</span></a><a href="#id27"><span class="problematic" id="id28">`</span></a></p>
+<p>## Power routing
+Power routing is very similar to signal routing. Run following commands
+to creat power rail shapes.</p>
+<p><a href="#id29"><span class="problematic" id="id30">``</span></a><a href="#id31"><span class="problematic" id="id32">`</span></a>python
+# power and ground route
+for dev in [nd[1], pd[1], pd[4]]:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>for pn in [‘S0’, ‘S1’]:</dt>
+<dd>laygen.route(gridname0=rg12, refobj0=dev.pins[pn], refobj1=dev.bottom, direction=’y’, via1=[0, 0])</dd>
+</dl>
+</div></blockquote>
+<p># power and groud rails
+rvdd = laygen.route(gridname0=rg12, refobj0=pd[0].bottom_left, refobj1=pd[5].bottom_right)
+rvss = laygen.route(gridname0=rg12, refobj0=nd[0].bottom_left, refobj1=nd[5].bottom_right)
+<a href="#id33"><span class="problematic" id="id34">``</span></a><a href="#id35"><span class="problematic" id="id36">`</span></a></p>
+<p>After finishing the route, your layout will look like this:</p>
+<p>![route](images/route1.png)</p>
+<p>## Pin creation
+<strong>GridLayoutGenerator.pin</strong> function creates a pin and paste it to the
+generated layout. The function gets <strong>refobj</strong> argument, as <strong>relplace</strong> and <strong>route</strong> functions do.</p>
+<p><code class="docutils literal notranslate"><span class="pre">`python</span>
+<span class="pre">#</span> <span class="pre">pins</span>
+<span class="pre">for</span> <span class="pre">pn,</span> <span class="pre">pg,</span> <span class="pre">pr</span> <span class="pre">in</span> <span class="pre">zip(['A',</span> <span class="pre">'B',</span> <span class="pre">'O',</span> <span class="pre">'VDD',</span> <span class="pre">'VSS'],</span> <span class="pre">[rg12,</span> <span class="pre">rg12,</span> <span class="pre">rg23,</span> <span class="pre">rg12,</span> <span class="pre">rg12],</span> <span class="pre">[ra,</span> <span class="pre">rb,</span> <span class="pre">ro,</span> <span class="pre">rvdd,</span> <span class="pre">rvss]):</span>
+<span class="pre">laygen.pin(name=pn,</span> <span class="pre">gridname=pg,</span> <span class="pre">refobj=pr)</span>
+<span class="pre">`</span></code></p>
+<p>## GDS export
+Running the following command will give a final layout exported in GDS
+format.</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">#</span> <span class="pre">GDS</span> <span class="pre">export</span>
+<span class="pre">laygen.export_GDS('output.gds',</span> <span class="pre">cellname='nand_test',</span> <span class="pre">layermapfile=&quot;./laygo/labs/laygo_faketech.layermap&quot;)</span>
+<span class="pre">`</span></code></p>
+<p>The resulting layout will look like this.</p>
+<p>![route a](images/laygo_quickstart.png)</p>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../introduction/introduction.html" title="previous chapter">&lt;no title&gt;</a></li>
+      <li>Next: <a href="tutorial_BAG.html" title="next chapter">&lt;no title&gt;</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorial/tutorial_GDS.md.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Jaeduk Han.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/tutorial/tutorial_GDS.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
