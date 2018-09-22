@@ -6,7 +6,7 @@ SPHINXOPTS    =
 SPHINXBUILD   = /tools/projects/erichang/programs/anaconda3d6/bin/sphinx-build
 PAPER         =
 BUILDDIR      = build
-BUILDDIR_GH   = ../../laygo-docs
+BUILDDIR_GH   = ../laygo-docs
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4

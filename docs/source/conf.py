@@ -53,11 +53,11 @@ extensions = [
 ]
 
 #markdown support
-#from recommonmark.parser import CommonMarkParser
+from recommonmark.parser import CommonMarkParser
 
-#source_parsers = {
-#   '.md': 'recommonmark.parser.CommonMarkParser',
-#}
+source_parsers = {
+   '.md': 'recommonmark.parser.CommonMarkParser',
+}
 
 # make numpydoc work with autosummary
 numpydoc_show_class_members = False

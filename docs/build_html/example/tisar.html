@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>&lt;no title&gt; &#8212; laygo_documentation 1.0 documentation</title>
+    <title>Time-interleaved SAR ADC generator &#8212; laygo_documentation 1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" src="../_static/documentation_options.js"></script>
@@ -15,8 +15,8 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="code.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="ser_des.html" />
+    <link rel="next" title="Example codes" href="code.html" />
+    <link rel="prev" title="CMOS SER/DES generator" href="ser_des.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -31,113 +31,114 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p># Time-interleaved SAR ADC generator</p>
-<p>### (Notice: Sep. 4th 2018)
-#### The TISARADC generator has been completely refactored/fixed by Woorham Bae. Please carefully read this document.</p>
+  <div class="section" id="time-interleaved-sar-adc-generator">
+<span id="time-interleaved-sar-adc-generator"></span><h1>Time-interleaved SAR ADC generator<a class="headerlink" href="#time-interleaved-sar-adc-generator" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="notice-sep-4th-2018">
+<span id="notice-sep-4th-2018"></span><h2>(Notice: Sep. 4th 2018)<a class="headerlink" href="#notice-sep-4th-2018" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="the-tisaradc-generator-has-been-completely-refactored-fixed-by-woorham-bae-please-carefully-read-this-document">
+<span id="the-tisaradc-generator-has-been-completely-refactored-fixed-by-woorham-bae-please-carefully-read-this-document"></span><h3>The TISARADC generator has been completely refactored/fixed by Woorham Bae. Please carefully read this document.<a class="headerlink" href="#the-tisaradc-generator-has-been-completely-refactored-fixed-by-woorham-bae-please-carefully-read-this-document" title="Permalink to this headline">¶</a></h3>
 <p>This section describes how to generate a time-interleaved SAR ADC
 schematic and layout using BAG and laygo.</p>
-<p>## Overview</p>
+</div>
+</div>
+<div class="section" id="overview">
+<span id="overview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>Time Interleaved Successive Approximation ADC (TISARADC) is a popular
 way of implementing a moderate precision (4-10 bits) ADC that operates
-at higher sampling rates than single SAR ADCs can achieve. As an example</p>
-<blockquote>
-<div>of demonstrating the automated analog and mixed signal circuits
-generation flow, the entire TISARADC generator is explained here.</div></blockquote>
-<p>## Installation</p>
-<p>1. Set up a BAG/laygo working directory for the your technology.
+at higher sampling rates than single SAR ADCs can achieve. As an example
+of demonstrating the automated analog and mixed signal circuits
+generation flow, the entire TISARADC generator is explained here.</p>
+</div>
+<div class="section" id="installation">
+<span id="installation"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<ol>
+<li><p class="first">Set up a BAG/laygo working directory for the your technology.
 For example, cds_ff_mpt environment can be set up by running the
 following commands.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone git@github.com:ucb-art/BAG2_cds_ff_mpt.git
+$ cd BAG2_cds_ff_mpt
+$ git submodule init
+$ git submodule update
+$ git submodule foreach git pull origin master
+</pre></div>
+</div>
 <blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">$</span> <span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:ucb-art/BAG2_cds_ff_mpt.git</span>
-<span class="pre">$</span> <span class="pre">cd</span> <span class="pre">BAG2_cds_ff_mpt</span>
-<span class="pre">$</span> <span class="pre">git</span> <span class="pre">submodule</span> <span class="pre">init</span>
-<span class="pre">$</span> <span class="pre">git</span> <span class="pre">submodule</span> <span class="pre">update</span>
-<span class="pre">$</span> <span class="pre">git</span> <span class="pre">submodule</span> <span class="pre">foreach</span> <span class="pre">git</span> <span class="pre">pull</span> <span class="pre">origin</span> <span class="pre">master</span>
-<span class="pre">`</span></code></p>
-<p>&gt; Note: for BWRC users, comprehensive working environments are
+<div><p>Note: for BWRC users, comprehensive working environments are
 provided under proper NDAs for certain technologies. Use the
 following repos and skip step 2, 3, 5, 6.</p>
-<p>&gt; 1. <strong>tsmc16FFC</strong>: <code class="docutils literal notranslate"><span class="pre">`git&#64;bwrcrepo.eecs.berkeley.edu:jdhan/TISARADC_TSMC16FFC.git`</span></code>
-&gt; 2. <strong>tsmc28hpm</strong>:</p>
 </div></blockquote>
-<p>2. Copy configuration files and design libraries from
-laygo/generators/adc_sar/yaml by typing:</p>
 <blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">cp</span> <span class="pre">laygo/generators/adc_sar/yaml/adc_sar_spec.yaml</span> <span class="pre">.</span>
-<span class="pre">cp</span> <span class="pre">laygo/generators/adc_sar/yaml/adc_sar_size.yaml</span> <span class="pre">.</span>
-<span class="pre">cp</span> <span class="pre">-r</span> <span class="pre">laygo/generators/adc_sar/BagModules/adc_sar_templates</span> <span class="pre">BagModules/</span>
-<span class="pre">cp</span> <span class="pre">-r</span> <span class="pre">laygo/generators/adc_sar/adc_sar_templates</span> <span class="pre">.</span>
-<span class="pre">cp</span> <span class="pre">-r</span> <span class="pre">laygo/generators/adc_sar/adc_sar_testbenches</span> <span class="pre">.</span>
-<span class="pre">`</span></code></p>
-<p>&gt; Note: some repos may already have those files in their working
+<div><ol class="simple">
+<li><strong>tsmc16FFC</strong>: <code class="docutils literal notranslate"><span class="pre">git&#64;bwrcrepo.eecs.berkeley.edu:jdhan/TISARADC_TSMC16FFC.git</span></code></li>
+<li><strong>tsmc28hpm</strong>:</li>
+</ol>
+</div></blockquote>
+</li>
+<li><p class="first">Copy configuration files and design libraries from
+laygo/generators/adc_sar/yaml by typing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">yaml</span><span class="o">/</span><span class="n">adc_sar_spec</span><span class="o">.</span><span class="n">yaml</span> <span class="o">.</span>
+<span class="n">cp</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">yaml</span><span class="o">/</span><span class="n">adc_sar_size</span><span class="o">.</span><span class="n">yaml</span> <span class="o">.</span>
+<span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">BagModules</span><span class="o">/</span><span class="n">adc_sar_templates</span> <span class="n">BagModules</span><span class="o">/</span>
+<span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_templates</span> <span class="o">.</span>
+<span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_testbenches</span> <span class="o">.</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>Note: some repos may already have those files in their working
 directories.</p>
 </div></blockquote>
-<ol class="arabic" start="3">
+</li>
 <li><p class="first">Add library definitions to your cds.lib (some distributions use cds.lib.core instead of cds.lib)</p>
-<blockquote>
-<div><p><em>In cds.lib</em>
-<code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">DEFINE</span> <span class="pre">adc_sar_templates</span> <span class="pre">./adc_sar_templates</span>
-<span class="pre">DEFINE</span> <span class="pre">adc_sar_testbenches</span> <span class="pre">./adc_sar_testbenches</span>
-<span class="pre">`</span></code></p>
-</div></blockquote>
+<p><em>In cds.lib</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DEFINE</span> <span class="n">adc_sar_templates</span> <span class="o">./</span><span class="n">adc_sar_templates</span>
+<span class="n">DEFINE</span> <span class="n">adc_sar_testbenches</span> <span class="o">./</span><span class="n">adc_sar_testbenches</span>
+</pre></div>
+</div>
 </li>
-</ol>
-<p>3. Open bag_lib.defs and remove the definition of adc_sar_templates if
+<li><p class="first">Open bag_lib.defs and remove the definition of adc_sar_templates if
 exist</p>
-<blockquote>
-<div><em>In bag_lib.defs</em>
-<code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">adc_sar_templates</span> <span class="pre">BagModules</span> <span class="pre">#remove</span> <span class="pre">this</span>
-<span class="pre">`</span></code></div></blockquote>
-<ol class="arabic simple" start="4">
-<li><dl class="first docutils">
-<dt>Run virtuoso and type the following command in CIW.</dt>
-<dd><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">load</span> <span class="pre">&quot;start_bag.il&quot;</span>
-<span class="pre">`</span></code></dd>
-</dl>
+<p><em>In bag_lib.defs</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adc_sar_templates</span> <span class="n">BagModules</span> <span class="c1">#remove this</span>
+</pre></div>
+</div>
 </li>
-<li>Open <strong>adc_sar_templates/capdac</strong> and update the library name of C0 and</li>
-</ol>
-<blockquote>
-<div><p>CDAC0 to <strong>(technology_name)_micretemplates_dense</strong>, as shown below.</p>
-<blockquote>
-<div>![CDAC](images/tisaradc_capdac_template.png)</div></blockquote>
-</div></blockquote>
-<ol class="arabic" start="6">
+<li><p class="first">Run virtuoso and type the following command in CIW.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">load</span> <span class="s2">&quot;start_bag.il&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Open <strong>adc_sar_templates/capdac</strong> and update the library name of C0 and
+CDAC0 to **(technology_name)_micretemplates_dense**, as shown below.</p>
+<p><img alt="CDAC" src="../_images/tisaradc_capdac_template.png" /></p>
+</li>
 <li><p class="first">Launch bag and run the following import script.</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_import.py</span>
-<span class="pre">`</span></code></p>
-</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_import</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
 </li>
-</ol>
-<p>5. In the IPython interpreter, type the following command to construct
+<li><p class="first">In the IPython interpreter, type the following command to construct
 the template and grid database. (Make sure proper techlib is attached
 to the microtemplate library)</p>
-<blockquote>
-<div><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">run</span> <span class="pre">laygo/labs/lab2_a_gridlayoutgenerator_constructtemplate.py</span>
-<span class="pre">`</span></code></div></blockquote>
-<p>6. Run the following command to generate the logic gate template
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">labs</span><span class="o">/</span><span class="n">lab2_a_gridlayoutgenerator_constructtemplate</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Run the following command to generate the logic gate template
 library. The library name will be (technology_name)_logic_templates.</p>
-<blockquote>
-<div><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/logic/logic_templates_layout_generator.py</span>
-<span class="pre">`</span></code></div></blockquote>
-<p>## Setting up parameters</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">logic</span><span class="o">/</span><span class="n">logic_templates_layout_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="setting-up-parameters">
+<span id="setting-up-parameters"></span><h2>Setting up parameters<a class="headerlink" href="#setting-up-parameters" title="Permalink to this headline">¶</a></h2>
 <p>ADC schematic and layout are constructed based on spec/size parameters
 defined in 2 configuration files in <strong>YAML</strong> format
 (<strong>adc_sar_spec.yaml, adc_sar_size.yaml</strong>).</p>
 <p>Following parameters are defined in the configuration files:</p>
-<ol class="arabic">
-<li><p class="first">adc_sar_spec.yaml</p>
-<blockquote>
-<div><ul class="simple">
+<ol class="simple">
+<li>adc_sar_spec.yaml<ul>
 <li><strong>temp</strong>: nominal temperature</li>
 <li><strong>temp_min</strong>: minimum temperature</li>
 <li><strong>temp_max</strong>: maximum temperature</li>
@@ -150,59 +151,46 @@ defined in 2 configuration files in <strong>YAML</strong> format
 <li><strong>n_interleave</strong>: interleaving ratio</li>
 <li><strong>c_unit</strong>: minimum unit capacitance of CDAC</li>
 <li><strong>c_ground</strong>: grounded parasitic capacitance of c_unit</li>
-<li><strong>c_delta</strong>: maximum capacitance mismatch of c_unit (normalized by</li>
+<li><strong>c_delta</strong>: maximum capacitance mismatch of c_unit (normalized by
+c_unit)</li>
+<li><strong>n_bit_samp_noise</strong>: standard deviation of sampling noise (in bits)</li>
+<li><strong>n_bit_samp_settle</strong>: maximum sampler settling error in bits</li>
+<li><strong>n_bit_comp_noise</strong>: standard deviation of comparator noise in bits</li>
+<li><strong>rdx_array</strong>: CDAC radix array</li>
+<li><strong>rdx_enob</strong>: Target ENOB after calibration</li>
+<li><strong>cycle_comp</strong>: Comparator timing budget in cycle</li>
+<li><strong>cycle_logic</strong>: Logic timing budget in cycle</li>
+<li><strong>cycle_dac</strong>: DAC timing budget in cycle</li>
+<li><strong>vdd</strong>: nominal supply voltage</li>
+<li><strong>vdd_min</strong>: minimum supply voltage</li>
+<li><strong>vdd_max</strong>: maximum supply voltage</li>
+<li><strong>trf_fo4</strong>: nominal logic transition timing</li>
+<li><strong>tfo4</strong>: nominal fo4 delay</li>
+<li><strong>samp_use_laygo</strong>: True if laygo is used for sampler generation. If false, AnalogBase is used</li>
+<li><strong>samp_with_tgate</strong>: True if T-gate sampler is used. IF false, NMOS-only sampler is used. Valid only if laygo is used for sampler generation.</li>
+<li><strong>ret_use_laygo</strong>: True if laygo is used for retimer generation. If false, AnalogBase is used</li>
+<li><strong>pmos_body</strong>: Default: VDD. Use VSS if flipped well is used.</li>
+<li><strong>use_offset</strong>: True if offset calibration is used for the comparator.</li>
+<li><strong>clk_pulse_overlap</strong>: Default: False. If true, sampling clock pulses for adjacent ADC slices will be overlapped.</li>
 </ul>
-<p>c_unit)
-* <strong>n_bit_samp_noise</strong>: standard deviation of sampling noise (in bits)
-* <strong>n_bit_samp_settle</strong>: maximum sampler settling error in bits
-* <strong>n_bit_comp_noise</strong>: standard deviation of comparator noise in bits
-* <strong>rdx_array</strong>: CDAC radix array
-* <strong>rdx_enob</strong>: Target ENOB after calibration
-* <strong>cycle_comp</strong>: Comparator timing budget in cycle
-* <strong>cycle_logic</strong>: Logic timing budget in cycle
-* <strong>cycle_dac</strong>: DAC timing budget in cycle
-* <strong>vdd</strong>: nominal supply voltage
-* <strong>vdd_min</strong>: minimum supply voltage
-* <strong>vdd_max</strong>: maximum supply voltage
-* <strong>trf_fo4</strong>: nominal logic transition timing
-* <strong>tfo4</strong>: nominal fo4 delay
-* <strong>samp_use_laygo</strong>: True if laygo is used for sampler generation. If false, AnalogBase is used
-* <strong>samp_with_tgate</strong>: True if T-gate sampler is used. IF false, NMOS-only sampler is used. Valid only if laygo is used for sampler generation.
-* <strong>ret_use_laygo</strong>: True if laygo is used for retimer generation. If false, AnalogBase is used
-* <strong>pmos_body</strong>: Default: VDD. Use VSS if flipped well is used.
-* <strong>use_offset</strong>: True if offset calibration is used for the comparator.
-* <strong>clk_pulse_overlap</strong>: Default: False. If true, sampling clock pulses for adjacent ADC slices will be overlapped.</p>
-</div></blockquote>
 </li>
-<li><dl class="first docutils">
-<dt>adc_sar_size.yaml</dt>
-<dd><ul class="first last simple">
+<li>adc_sar_size.yaml<ul>
 <li><strong>device_intent</strong>: device intent (i.e. standard, lvt, hvt)</li>
 <li><strong>lch</strong>: device channel length</li>
 <li><strong>nw</strong>: width (number of fins) of unit NMOS</li>
 <li><strong>pw</strong>: width (number of fins) of unit PMOS</li>
-<li><dl class="first docutils">
-<dt><strong>capdac</strong></dt>
-<dd><ul class="first last">
+<li><strong>capdac</strong><ul>
 <li><strong>c_m</strong>: multiplier of CDAC unit capacitor</li>
 <li><strong>num_bits_horizontal</strong>: CDAC number of bits in horizontal direction</li>
 <li><strong>num_bits_vertical</strong>: CDAC number of bits in vertical direction</li>
 </ul>
-</dd>
-</dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>capdrv</strong></dt>
-<dd><ul class="first last">
+<li><strong>capdrv</strong><ul>
 <li><strong>m_list</strong>: cap driver multiplier list</li>
 <li><strong>space_offset</strong>: cap driver spacing parameter, for routing</li>
 </ul>
-</dd>
-</dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>salatch</strong></dt>
-<dd><ul class="first last">
+<li><strong>salatch</strong><ul>
 <li><strong>doubleSA</strong>: True if double-tail sense amplifier is used</li>
 <li><strong>m</strong>: strongArm latch input device sizing</li>
 <li><strong>m_buf</strong>: strongArm latch output buffer sizing</li>
@@ -212,51 +200,31 @@ defined in 2 configuration files in <strong>YAML</strong> format
 <li><strong>m_rst</strong>: strongArm latch reset device sizing</li>
 <li><strong>m_rst_d</strong>: double-tail SA (second stage) reset device sizing</li>
 </ul>
-</dd>
-</dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>sarfsm</strong></dt>
-<dd><ul class="first last">
+<li><strong>sarfsm</strong><ul>
 <li><strong>m</strong>: SAR FSM sizing</li>
 </ul>
-</dd>
-</dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>sarlogic</strong></dt>
-<dd><ul class="first last">
+<li><strong>sarlogic</strong><ul>
 <li><strong>m</strong>: SAR logic sizing</li>
 <li><strong>num_inv_bb</strong>: Length of inverter chain for bottom-plate timing calibration</li>
 </ul>
-</dd>
-</dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>sarclkgen</strong></dt>
-<dd><ul class="first last">
+<li><strong>sarclkgen</strong><ul>
 <li><strong>fast</strong>: Fast mode - forced negative SARCLK (comparator clock) edge</li>
 <li><strong>fo</strong>: SARCLK buffer fanout</li>
 <li><strong>m</strong>: SARCLK generator sizing</li>
 <li><strong>ndelay</strong>: For fast mode, # of delay units for negative edge</li>
 </ul>
-</dd>
-</dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>sarret</strong></dt>
-<dd><ul class="first last">
+<li><strong>sarret</strong><ul>
 <li><strong>m</strong>: SAR logic output retimer sizing</li>
 <li><strong>fo</strong>: SAR logic output retimer buffer fanout</li>
 </ul>
-</dd>
-</dl>
 </li>
 <li><strong>sarabe_m_space_left_4x</strong>: number of space cells</li>
 <li><strong>sarabe_supply_rail_mode</strong>: Default:0. If VDD/VSS short is observed in “sar” hierarchy, use 1 and regenerate sarabe.</li>
-<li><dl class="first docutils">
-<dt><strong>sampler_nmos</strong>: for AnalogBase sampler</dt>
-<dd><ul class="first last">
+<li><strong>sampler_nmos</strong>: for AnalogBase sampler<ul>
 <li><strong>fg_inbuf_list</strong>: input sampling clock buffer sizing</li>
 <li><strong>fg_outbuf_list</strong>: output sampling clock buffer sizing</li>
 <li><strong>fgn</strong>: sampler sizing</li>
@@ -265,458 +233,473 @@ defined in 2 configuration files in <strong>YAML</strong> format
 <li><strong>wn</strong>: NMOS width</li>
 <li><strong>wp</strong>: PMOS width</li>
 </ul>
-</dd>
-</dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>sarsamp</strong>: for Laygo sampler</dt>
-<dd><ul class="first last">
+<li><strong>sarsamp</strong>: for Laygo sampler<ul>
 <li><strong>m_inbuf_list</strong>: input sampling clock buffer sizing</li>
 <li><strong>m_outbuf_list</strong>: output sampling clock buffer sizing</li>
 <li><strong>m_sw</strong>: unit sampler sizing</li>
 <li><strong>m_sw_arr</strong>: # of unit sampler</li>
 </ul>
-</dd>
-</dl>
 </li>
 <li><strong>slice_order</strong>: Order of ADC slices, even number on the left side</li>
-<li><dl class="first docutils">
-<dt><strong>clk_dis_capsw</strong></dt>
-<dd><ul class="first last">
+<li><strong>clk_dis_capsw</strong><ul>
 <li><strong>m</strong>: clock generator capdac driving switch sizing</li>
 </ul>
-</dd>
-</dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>clk_dis_cell</strong></dt>
-<dd><ul class="first last">
+<li><strong>clk_dis_cell</strong><ul>
 <li><strong>m_dff</strong>: DFF sizing</li>
 <li><strong>m_inv1</strong>: DFF Q buffer sizing (1st)</li>
 <li><strong>m_inv2</strong>: DFF Q buffer sizing (2nd)</li>
 <li><strong>m_tgate</strong>: Clock output tgate sizing</li>
 </ul>
-</dd>
-</dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>clk_dis_cdac</strong></dt>
-<dd><ul class="first last">
+<li><strong>clk_dis_cdac</strong><ul>
 <li><strong>m</strong>: multiplier of CDAC unit capacitor</li>
 <li><strong>num_bits</strong>: CDAC number of bits</li>
 </ul>
-</dd>
-</dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>clk_dis_htree</strong></dt>
-<dd><ul class="first last">
+<li><strong>clk_dis_htree</strong><ul>
 <li><strong>m_clko</strong>: number of tracks for clk_dis output clock</li>
 <li><strong>m_track</strong>: number of tracks for input clock H-tree</li>
 </ul>
-</dd>
-</dl>
 </li>
-<li><dl class="first docutils">
-<dt><strong>retimer</strong></dt>
-<dd><ul class="first last">
+<li><strong>retimer</strong><ul>
 <li><strong>ret_m_ibuf</strong>: input clock buffer sizing (last stage: ret_m_ibuf x 16)</li>
 <li><strong>ret_m_latch</strong>: retimer latch sizing</li>
 <li><strong>ret_m_obuf</strong>: output clock buffer sizing (ret_m_obuf x 4)</li>
 <li><strong>ret_m_sr</strong>: duty-cycle correcting SR latch sizing</li>
 <li><strong>ret_m_srbuf</strong>: SR latch output buffer sizing</li>
 </ul>
-</dd>
-</dl>
 </li>
 </ul>
-</dd>
-</dl>
 </li>
 </ol>
 <p>For the starting point, following preset files are provided. They are
 not 100% finalized, but will serve well for initializations.</p>
-<p>1. <strong>laygo/generators/adc_sar/yaml/adc_sar_spec(size).yaml</strong> : 8-way interleaved, 9bit ADC with digital
-calibration.</p>
-<p>## TISARADC architecture</p>
+<ol class="simple">
+<li><strong>laygo/generators/adc_sar/yaml/adc_sar_spec(size).yaml</strong> : 8-way interleaved, 9bit ADC with digital
+calibration.</li>
+</ol>
+</div>
+<div class="section" id="tisaradc-architecture">
+<span id="tisaradc-architecture"></span><h2>TISARADC architecture<a class="headerlink" href="#tisaradc-architecture" title="Permalink to this headline">¶</a></h2>
 <p>TISARADC is composed of 4 parts in the top level: ADC core, clock
 generator, output retimer and biasing.</p>
 <ul class="simple">
-<li>The <strong>ADC core</strong> performs the actual conversion operation. It is</li>
-</ul>
-<p>composed of multi-phased sampling frontend and N subADC that
+<li>The <strong>ADC core</strong> performs the actual conversion operation. It is
+composed of multi-phased sampling frontend and N subADC that
 converts the actual ADC operation at (sampling_rate/N), where N is
-the interleaving ratio.
-* The <strong>clock generator</strong> receives the high frequency clock at sampling
-rate, generates multi-phased clock for the interleaved ADC operation.
-* The <strong>output retimer</strong> receives the output from the ADC core, aligns
+the interleaving ratio.</li>
+<li>The <strong>clock generator</strong> receives the high frequency clock at sampling
+rate, generates multi-phased clock for the interleaved ADC operation.</li>
+<li>The <strong>output retimer</strong> receives the output from the ADC core, aligns
 multi-phased signals to a single clock to be received by the
-following digital backend.</p>
-<p>![TISARADC](images/tisaradc_architecture.png)</p>
-<p>## SubADC frontend layout generation</p>
+following digital backend.</li>
+</ul>
+<p><img alt="TISARADC" src="../_images/tisaradc_architecture.png" /></p>
+</div>
+<div class="section" id="subadc-frontend-layout-generation">
+<span id="subadc-frontend-layout-generation"></span><h2>SubADC frontend layout generation<a class="headerlink" href="#subadc-frontend-layout-generation" title="Permalink to this headline">¶</a></h2>
 <p>The frontend of subADCs is composed of three parts: capdac (CDAC),
 strongArm comparator (salatch), cap driver (capdrv). In the proposed
-flow, the ‘very’ frontend sampling switches are not the part of</p>
-<blockquote>
-<div>subADC frontend because they are designed separately, but obviously
-this is not the only way of partition.</div></blockquote>
-<p>1. The first block to be generated is CDAC, since this generator
+flow, the ‘very’ frontend sampling switches are not the part of
+subADC frontend because they are designed separately, but obviously
+this is not the only way of partition.</p>
+<ol>
+<li><p class="first">The first block to be generated is CDAC, since this generator
 assumes the horizontal dimension is limited by CDAC size in x-direction.
 In order to generate CDAC layout, type:</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_capdac_layout_generator.py</span>
-<span class="pre">`</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_capdac_layout_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
 <p>This command will create a CDAC layout in
 <strong>adc_sar_generated/capdac</strong>, as shown below.</p>
-<p>![CDAC](images/tisaradc_capdac.png)</p>
+<p><img alt="CDAC" src="../_images/tisaradc_capdac.png" /></p>
 <ul class="simple">
-<li>The capdac generator reads <strong>n_bit</strong> and <strong>rdx_array</strong> parameters</li>
-</ul>
-<p>from <strong>adc_sar_spec.yaml</strong>, and <strong>capdac_c_m</strong>,
+<li>The capdac generator reads <strong>n_bit</strong> and <strong>rdx_array</strong> parameters
+from <strong>adc_sar_spec.yaml</strong>, and <strong>capdac_c_m</strong>,
 <strong>capdac_num_bits_vertical</strong>, <strong>capdac_num_bits_horizontal</strong>
 parameters from <strong>adc_sar_size.yaml</strong> (or use default settings in
 the python code if <strong>load_from_file</strong> is set to <strong>false</strong>), users
 can update those parameters and regenerate the capdac. It will
-create a new CDAC with different shapes, as shown below.</p>
-<p>![CDAC](images/tisaradc_capdac_architecture.png)</p>
-<p>![CDAC](images/tisaradc_capdac2.png)</p>
+create a new CDAC with different shapes, as shown below.</li>
+</ul>
+<p><img alt="CDAC" src="../_images/tisaradc_capdac_architecture.png" /></p>
+<p><img alt="CDAC" src="../_images/tisaradc_capdac2.png" /></p>
 <ul>
 <li><p class="first">If you want to generate the schematic as well, type:</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_capdac_schematic_generator.py</span>
-<span class="pre">`</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_capdac_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
 <p>The figure shown below is one example of generated schematic.
 Note that CDAC capacitors (I0-I7) are arrayed, with radix
 parameters specified by <strong>rdx_array</strong>.</p>
-</div></blockquote>
 </li>
 </ul>
-<p>![CDAC](images/tisaradc_capdac_sch.png)</p>
-<ul class="simple">
-<li>The schematic generation is not required for full-ADC</li>
-</ul>
-<p>generations, since you can generate the whole ADC schematic by
+<p><img alt="CDAC" src="../_images/tisaradc_capdac_sch.png" /></p>
+<ul>
+<li><p class="first">The schematic generation is not required for full-ADC
+generations, since you can generate the whole ADC schematic by
 running a top-cell generation script (unlike the layout counterpart,
 which requires running several scripts in series to generate the
 entire ADC). The CDAC schematic generation is used for cell level
 verifications though, such as LVS or transfer curve extraction. For
 LVS, type:</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_capdac_lvs.py</span>
-<span class="pre">`</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_capdac_lvs</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
 <p>It will give a <strong>lvs passed</strong>  message if the design is LVS
 clean.</p>
-<p>&gt;Note: BAG2_cds_ff_mpt / FreePDK45 does not support LVS &amp;
+<blockquote>
+<div><p>Note: BAG2_cds_ff_mpt / FreePDK45 does not support LVS &amp;
 extraction at this moment. Skip these steps for those processes</p>
 </div></blockquote>
-<ul>
+</li>
 <li><p class="first">For parasitic extraction, type the following command.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_capdac_extract</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
 <blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_capdac_extract.py</span>
-<span class="pre">`</span></code></p>
-<p>&gt; Note: this step could take a long time, depending on your
+<div><p>Note: this step could take a long time, depending on your
 extraction setup. Skip this if you just want to quickly go
 through steps.</p>
 </div></blockquote>
 </li>
-<li><p class="first">You can run simulations on CDAC via BAG framework. The following</p>
-</li>
-</ul>
-<p>command will launch the transfer curve simulation with
+<li><p class="first">You can run simulations on CDAC via BAG framework. The following
+command will launch the transfer curve simulation with
 schematic netlists. For the post-extract simulation, set
 <strong>extracted = True</strong> in the script.</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_capdac_verify.py</span>
-<span class="pre">`</span></code></p>
-<p>![CDAC testbench options](images/tisaradc_capsim1.png)</p>
-<p>![CDAC curve](images/tisaradc_capsim2.png)</p>
-<p>![CDAC noise](images/tisaradc_capsim3.png)</p>
-</div></blockquote>
-</div></blockquote>
-<p>2. After CDAC generation, PMOS-input sense amplifier layout can be generated by
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_capdac_verify</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p><img alt="CDAC testbench options" src="../_images/tisaradc_capsim1.png" /></p>
+<p><img alt="CDAC curve" src="../_images/tisaradc_capsim2.png" /></p>
+<p><img alt="CDAC noise" src="../_images/tisaradc_capsim3.png" /></p>
+</li>
+</ul>
+</li>
+</ol>
+<ol>
+<li><p class="first">After CDAC generation, PMOS-input sense amplifier layout can be generated by
 running:</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_salatch_pmos_layout_generator.py</span>
-<span class="pre">`</span></code></p>
-<p>![salatch](images/tisaradc_salatch_wDummy.png)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_salatch_pmos_layout_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p><img alt="salatch" src="../_images/tisaradc_salatch_wDummy.png" /></p>
 <p>Note that the generator assumes the sense amplifier width is narrower than 2x of the CDAC width.</p>
 <ul>
 <li><p class="first">Two topologies available: StrongArm latch and double-tail sense amplifier</p>
 </li>
 <li><p class="first">Here are additional scripts regarding the strongArm latch:</p>
-<blockquote>
-<div><ol class="arabic simple">
+<ol class="simple">
 <li><strong>adc_sar_salatch_pmos_size.py</strong>: transistor size calculator</li>
 </ol>
-<p>![salatch](images/tisaradc_salatch_size.png)</p>
-<p>2. <strong>adc_sar_salatch_pmos_schematic_generator.py</strong>: schematic
-generation
-3. <strong>adc_sar_salatch_pmos_schematic_lvs.py</strong>: LVS
-4. <strong>adc_sar_salatch_pmos_schematic_extract.py</strong>: RC extraction
-5. <strong>adc_sar_salatch_pmos_verify.py</strong>: verifications (clk-q,
-noise)</p>
-<p>![salatch](images/tisaradc_salatch_verify.png)</p>
-</div></blockquote>
+<p><img alt="salatch" src="../_images/tisaradc_salatch_size.png" /></p>
+<ol class="simple">
+<li><strong>adc_sar_salatch_pmos_schematic_generator.py</strong>: schematic
+generation</li>
+<li><strong>adc_sar_salatch_pmos_schematic_lvs.py</strong>: LVS</li>
+<li><strong>adc_sar_salatch_pmos_schematic_extract.py</strong>: RC extraction</li>
+<li><strong>adc_sar_salatch_pmos_verify.py</strong>: verifications (clk-q,
+noise)</li>
+</ol>
+<p><img alt="salatch" src="../_images/tisaradc_salatch_verify.png" /></p>
 </li>
 </ul>
-</div></blockquote>
-<p>3. The next step is generating capacitor drivers that drive CDAC. Run
+</li>
+<li><p class="first">The next step is generating capacitor drivers that drive CDAC. Run
 the following scripts:</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_capdrv_nsw_layout_generator.py</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_capdrv_nsw_array_layout_generator.py</span>
-<span class="pre">`</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_capdrv_nsw_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_capdrv_nsw_array_layout_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
 <p>This is a 2-step generation; in the first script, individual driver
 cells are generated. The second script places driver cells (with
 the sizing parameters defined by <strong>capdrv_m_list</strong> in
 <strong>adc_sar_size.yaml</strong>.</p>
-<p>![capdrv](images/tisaradc_capdrv_structure.png)</p>
-<p>![capdrv](images/tisaradc_capdrv_m_list.png)</p>
+<p><img alt="capdrv" src="../_images/tisaradc_capdrv_structure.png" /></p>
+<p><img alt="capdrv" src="../_images/tisaradc_capdrv_m_list.png" /></p>
 <p>Here’s one example layout of the capdrv.</p>
-<p>![capdrv](images/tisaradc_capdrv.png)</p>
+<p><img alt="capdrv" src="../_images/tisaradc_capdrv.png" /></p>
 <p>Here’s the capdrv_array layout (primitive cells are hidden).</p>
-<p>![capdrv](images/tisaradc_capdrv_array.png)</p>
-</div></blockquote>
-<ol class="arabic" start="4">
+<p><img alt="capdrv" src="../_images/tisaradc_capdrv_array.png" /></p>
+</li>
 <li><p class="first">Now it’s time to generate the frontend top layout/schematic. Type:</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarafe_nsw_layout_generator.py</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarafe_nsw_schematic_generator.py</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarafe_nsw_lvs.py</span>
-<span class="pre">`</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarafe_nsw_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarafe_nsw_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarafe_nsw_lvs</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
 <p>The commands will create a layout (and schematic) of <strong>sarafe_nsw</strong>,
 which is the frontend top of subADC, and run LVS. Try different
 presets introduced before and see if designs are generated properly.</p>
-<p>![sarafe](images/tisaradc_sarafe.png)</p>
-</div></blockquote>
+<p><img alt="sarafe" src="../_images/tisaradc_sarafe.png" /></p>
 </li>
 </ol>
-<p>## SubADC backend layout generation</p>
-<p>1. The backend of subADCs is composed of FSM(sarfsm), SAR logic(sarlogic),
+</div>
+<div class="section" id="subadc-backend-layout-generation">
+<span id="subadc-backend-layout-generation"></span><h2>SubADC backend layout generation<a class="headerlink" href="#subadc-backend-layout-generation" title="Permalink to this headline">¶</a></h2>
+<ol>
+<li><p class="first">The backend of subADCs is composed of FSM(sarfsm), SAR logic(sarlogic),
 clock generator(sarclkgen), and retimer(sarret).</p>
-<blockquote>
-<div><blockquote>
-<div><p>![sarabe](images/tisaradc_sarabe_architecture.png)</p>
+<p><img alt="sarabe" src="../_images/tisaradc_sarabe_architecture.png" /></p>
 <ul class="simple">
-<li>SAR FSM: generates window signals that determines which SAR bit</li>
-</ul>
-<p>corresponds to the current sense amplifier output.</p>
-<ul class="simple">
+<li>SAR FSM: generates window signals that determines which SAR bit
+corresponds to the current sense amplifier output.</li>
 <li>SAR logic: generates capdac control signal</li>
 </ul>
-<p>![sarlogic](images/tisaradc_sarlogic_timingdiagram.png)</p>
+<p><img alt="sarlogic" src="../_images/tisaradc_sarlogic_timingdiagram.png" /></p>
 <p>There are two path to the SAR logic, SA output and CLKgen/FSM,
 so timing between them should be checked. (t_ckgen + t_fsm + t_hold &lt; T_SARCLK/2)</p>
-<p>![sarlogic](images/tisaradc_sarlogic_timingcheck.png)</p>
+<p><img alt="sarlogic" src="../_images/tisaradc_sarlogic_timingcheck.png" /></p>
 <p>Timing check script: adc_sar_sarabe_dualdelay_verify.py</p>
 <ul>
-<li><dl class="first docutils">
-<dt>SAR clock generator: generates the asynchronous clock for SAR search operation</dt>
-<dd><ul class="first simple">
+<li><p class="first">SAR clock generator: generates the asynchronous clock for SAR search operation</p>
+<ul class="simple">
 <li>Fast mode on: clock pulsewidth is adjusted by a variable delay line. Clock pulse becomes narrower, eventually disappears.</li>
 </ul>
-<p>![sarclkgen](images/tisaradc_sarclkgen_faston.png)</p>
+<p><img alt="sarclkgen" src="../_images/tisaradc_sarclkgen_faston.png" /></p>
 <ul class="simple">
 <li>Fast mode off: More like a ring oscillator. Clock pulse will not disappear.</li>
 </ul>
-<p class="last">![sarclkgen](images/tisaradc_sarclkgen_fastoff.png)</p>
-</dd>
-</dl>
+<p><img alt="sarclkgen" src="../_images/tisaradc_sarclkgen_fastoff.png" /></p>
 </li>
 <li><p class="first">SAR retimer: retimes the SAR logic output from the asynchronous clock domain with the synchoronous clock (sampling clock).</p>
 </li>
+<li><p class="first">SAR backend top</p>
+</li>
 </ul>
-</div></blockquote>
-<ul class="simple">
-<li>SAR backend top</li>
-</ul>
-<blockquote>
-<div><p>![sarabe](images/tisaradc_sarabe.png)</p>
+<p><img alt="sarabe" src="../_images/tisaradc_sarabe.png" /></p>
 <p>Run following scripts to generate those building blocks.</p>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">#FSM</span> <span class="pre">layout</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarfsm_layout_generator.py</span>
-<span class="pre">#SAR</span> <span class="pre">logic</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarlogic_wret_layout_generator.py</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarlogic_wret_array_layout_generator.py</span>
-<span class="pre">#SAR</span> <span class="pre">clock</span> <span class="pre">generator</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarclkdelay_layout_generator.py</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarclkgen_core_static2_layout_generator.py</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarclkgen_static_layout_generator.py</span>
-<span class="pre">#SAR</span> <span class="pre">retimer</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarret_wckbuf_layout_generator.py</span>
-<span class="pre">#spacing</span> <span class="pre">elements</span> <span class="pre">for</span> <span class="pre">routing/filling</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_space_layout_generator.py</span>
-<span class="pre">#SAR</span> <span class="pre">backend</span> <span class="pre">generation</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarabe_dualdelay_layout_generator.py</span>
-<span class="pre">`</span></code></p>
-</div></blockquote>
-</div></blockquote>
-<p>2. For schematic generation, run scripts. Again, BAG is generating
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#FSM layout</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarfsm_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="c1">#SAR logic</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarlogic_wret_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarlogic_wret_array_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="c1">#SAR clock generator</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarclkdelay_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarclkgen_core_static2_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarclkgen_static_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="c1">#SAR retimer</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarret_wckbuf_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="c1">#spacing elements for routing/filling</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_space_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="c1">#SAR backend generation</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarabe_dualdelay_layout_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<ol>
+<li><p class="first">For schematic generation, run scripts. Again, BAG is generating
 schematics in hierarachical order, so you don’t need to run these
 scripts if you want to generate in top level.</p>
-<blockquote>
-<div><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">#FSM</span> <span class="pre">layout</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarfsm_schematic_generator.py</span>
-<span class="pre">#SAR</span> <span class="pre">logic</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarlogic_wret_array_schematic_generator.py</span>
-<span class="pre">#SAR</span> <span class="pre">clock</span> <span class="pre">generator</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarclkgen_static_schematic_generator.py</span>
-<span class="pre">#SAR</span> <span class="pre">retimer</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarret_wckbuf_schematic_generator.py</span>
-<span class="pre">#spacing</span> <span class="pre">elements</span> <span class="pre">for</span> <span class="pre">routing/filling</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_space_schematic_generator.py</span>
-<span class="pre">#SAR</span> <span class="pre">backend</span> <span class="pre">generation</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarabe_dualdelay_schematic_generator.py</span>
-<span class="pre">`</span></code></div></blockquote>
-<p>3. The frontend and backend can be integrated by running following
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#FSM layout</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarfsm_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="c1">#SAR logic</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarlogic_wret_array_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="c1">#SAR clock generator</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarclkgen_static_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="c1">#SAR retimer</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarret_wckbuf_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="c1">#spacing elements for routing/filling</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_space_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="c1">#SAR backend generation</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarabe_dualdelay_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">The frontend and backend can be integrated by running following
 scripts.</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">#</span> <span class="pre">layout</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sar_layout_generator.py</span>
-<span class="pre">#</span> <span class="pre">schematic</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sar_schematic_generator.py</span>
-<span class="pre">`</span></code></p>
-<p>![sar](images/tisaradc_sar.png)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># layout</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sar_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="c1"># schematic</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sar_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p><img alt="sar" src="../_images/tisaradc_sar.png" /></p>
 <ul class="simple">
 <li>Use “sarabe_supply_rail_mode” in adc_sar_size.yaml to avoid VDD/VSS short.</li>
 </ul>
-</div></blockquote>
-<p>## SubADC switch generation</p>
+</li>
+</ol>
+</div>
+<div class="section" id="subadc-switch-generation">
+<span id="subadc-switch-generation"></span><h2>SubADC switch generation<a class="headerlink" href="#subadc-switch-generation" title="Permalink to this headline">¶</a></h2>
 <p>The sampling frontend can be generated either from laygo or AnalogBase.
 While the sampler generated from AnalogBase (written by Eric Chang) is
 more flexible, associated APIs need to be set up (which is not for the
 cds_ff_mpt technology), so laygo based sampler is used for this example.</p>
 <p>Sizing script gives a simple calculation using the extracted MOS data.</p>
-<p>![sarsamp](images/tisaradc_sarsamp_size.png)</p>
+<p><img alt="sarsamp" src="../_images/tisaradc_sarsamp_size.png" /></p>
 <p>Run the following script to generate the sampling switches.</p>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">#</span> <span class="pre">size</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarsamp_size.py</span>
-<span class="pre">#</span> <span class="pre">layout</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarsamp_layout_generator.py</span>
-<span class="pre">#</span> <span class="pre">schematic</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarsamp_schematic_generator.py</span>
-<span class="pre">#</span> <span class="pre">testbench</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sarsamp_verify.py</span>
-<span class="pre">`</span></code></p>
-<p>![sarsamp](images/tisaradc_sarsamp.png)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># size</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarsamp_size</span><span class="o">.</span><span class="n">py</span>
+<span class="c1"># layout</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarsamp_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="c1"># schematic</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarsamp_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="c1"># testbench</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sarsamp_verify</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p><img alt="sarsamp" src="../_images/tisaradc_sarsamp.png" /></p>
 <p>If the AnalogBase is set up for your technology, these scripts will
 generate the sampling switches.</p>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">#</span> <span class="pre">layout</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/sampler_nmos_layout_generator.py</span>
-<span class="pre">#</span> <span class="pre">schematic</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/sampler_nmos_schematic_generator.py</span>
-<span class="pre">`</span></code>
-Note that the Laygo provides a transmission gate switch option, but the AnalogBase provides guardring option.</p>
-<p>## SubADC top generation</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># layout</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">sampler_nmos_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="c1"># schematic</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">sampler_nmos_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>Note that the Laygo provides a transmission gate switch option, but the AnalogBase provides guardring option.</p>
+</div>
+<div class="section" id="subadc-top-generation">
+<span id="subadc-top-generation"></span><h2>SubADC top generation<a class="headerlink" href="#subadc-top-generation" title="Permalink to this headline">¶</a></h2>
 <p>If all subblocks are generated sucessfully, the SubADC top (sar_wsamp)
 can be easily generated by placing and routing subcells. Run the following
 scripts to generate the SubADC top.</p>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">#</span> <span class="pre">layout</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sar_wsamp_layout_generator.py</span>
-<span class="pre">#</span> <span class="pre">schematic</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sar_wsamp_schematic_generator.py</span>
-<span class="pre">`</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># layout</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sar_wsamp_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="c1"># schematic</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sar_wsamp_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
 <p>The generated layouts shown below are from the full-stack subADC
 generation with different settings (9b, 6b, 10bits and different
 sizing parameters).</p>
-<p>![sar](images/tisaradc_sar_wsamp.png)</p>
-<p>## SubADC testbench</p>
+<p><img alt="sar" src="example/images/tisaradc_sar_wsamp.png" /></p>
+</div>
+<div class="section" id="subadc-testbench">
+<span id="subadc-testbench"></span><h2>SubADC testbench<a class="headerlink" href="#subadc-testbench" title="Permalink to this headline">¶</a></h2>
 <p>Timing check: adc_sar_testbenches/sar_wsamp_9b_tb_tran_timing</p>
 <p>Static testbench: adc_sar_testbenches/sar_wsamp_9b_tb_tran_static (ADC curve, calibration map, SNDR)</p>
-<p>![ADC curve](images/tisaradc_sarwsamp_testbench1.png)</p>
-<p>![SNDR](images/tisaradc_sarwsamp_testbench2.png)</p>
-<p>## Array generation</p>
+<p><img alt="ADC curve" src="../_images/tisaradc_sarwsamp_testbench1.png" /></p>
+<p><img alt="SNDR" src="../_images/tisaradc_sarwsamp_testbench2.png" /></p>
+</div>
+<div class="section" id="array-generation">
+<span id="array-generation"></span><h2>Array generation<a class="headerlink" href="#array-generation" title="Permalink to this headline">¶</a></h2>
 <p>The SAR array can be easily made from running the following scripts.</p>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">#</span> <span class="pre">layout</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sar_wsamp_array_layout_generator.py</span>
-<span class="pre">#</span> <span class="pre">schematic</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_sar_sar_wsamp_array_schematic_generator.py</span>
-<span class="pre">`</span></code></p>
-<p>![sar](images/tisaradc_sar_wsamp_array.png)</p>
-<p>## Clocking path generation</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># layout</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sar_wsamp_array_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="c1"># schematic</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_sar_sar_wsamp_array_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p><img alt="sar" src="example/images/tisaradc_sar_wsamp_array.png" /></p>
+</div>
+<div class="section" id="clocking-path-generation">
+<span id="clocking-path-generation"></span><h2>Clocking path generation<a class="headerlink" href="#clocking-path-generation" title="Permalink to this headline">¶</a></h2>
 <p>Zhongkai Wang and Woorham Bae made schematic and layout generators for the clock
 generation. The clock generator is basically a shift-register based divider,
 and each of the divided phaes is assinged to an ADC slice.
 The order of ADC slices is free to change, as long as we do not mess up the even and odd order.</p>
-<p>![clkdis](images/tisaradc_clkdis_diagram.png)</p>
-<p>![clkdis](images/tisaradc_clkdis_order.png)</p>
+<p><img alt="clkdis" src="../_images/tisaradc_clkdis_diagram.png" /></p>
+<p><img alt="clkdis" src="../_images/tisaradc_clkdis_order.png" /></p>
 <p>The clock generator provides two modes: short pulse mode (default) and 2x pulse mode.</p>
-<p>![clkdis](images/tisaradc_clkdis_mode.png)</p>
+<p><img alt="clkdis" src="../_images/tisaradc_clkdis_mode.png" /></p>
 <p>Running following scripts will generate the clocking
 frontend. (You don’t need this for non-interleaving ADCs)</p>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/clk_dis_capsw_array_layout_generator.py</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/clk_dis_clk_dis_cell_layout_generator.py</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/clk_dis_capdac_layout_generator.py</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/clk_dis_viadel_cell_layout_generator.py</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/clk_dis_viadel_layout_generator.py</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/clk_dis_htree_layout_generator.py</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/clk_dis_viadel_htree_layout_generator.py</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/clk_dis_viadel_htree_schematic_generator.py</span>
-<span class="pre">`</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">clk_dis_capsw_array_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">clk_dis_clk_dis_cell_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">clk_dis_capdac_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">clk_dis_viadel_cell_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">clk_dis_viadel_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">clk_dis_htree_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">clk_dis_viadel_htree_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">clk_dis_viadel_htree_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
 <p>The following picture shows generated clocking paths for different
 interleaving ratio settings</p>
-<p>![clkdis](images/tisaradc_clking.png)</p>
-<p>## Retimer</p>
+<p><img alt="clkdis" src="example/images/tisaradc_clking.png" /></p>
+</div>
+<div class="section" id="retimer">
+<span id="retimer"></span><h2>Retimer<a class="headerlink" href="#retimer" title="Permalink to this headline">¶</a></h2>
 <p>The retimer is generated either of Laygo and AnalogBase.</p>
-<p>![retimer](images/tisaradc_retimer.png)</p>
-<p>![retimer](images/tisaradc_retimer_diagram.png)</p>
+<p><img alt="retimer" src="../_images/tisaradc_retimer.png" /></p>
+<p><img alt="retimer" src="../_images/tisaradc_retimer_diagram.png" /></p>
 <p>Laygo generator codes for the final retimer is written by Woorham Bae. Run
 these scripts to generate the retimer schematic and layout.</p>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/tisaradc_retimer_layout_generator.py</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/tisaradc_retimer_schematic_generator.py</span>
-<span class="pre">`</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">tisaradc_retimer_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">tisaradc_retimer_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
 <p>AnalogBase generator codes for the final retimer is written by Eric Chang. Run
 these scripts to generate the retimer schematic and layout.</p>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_retimer_layout_generator.py</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/adc_retimer_schematic_generator.py</span>
-<span class="pre">`</span></code></p>
-<p>## TISARADC body (clock+sar+retimer)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_retimer_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">adc_retimer_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tisaradc-body-clock-sar-retimer">
+<span id="tisaradc-body-clock-sar-retimer"></span><h2>TISARADC body (clock+sar+retimer)<a class="headerlink" href="#tisaradc-body-clock-sar-retimer" title="Permalink to this headline">¶</a></h2>
 <p>Following scripts are for generating layout and schematic of TISARADC
 body.</p>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/tisaradc_body_core_layout_generator.py</span>
-<span class="pre">run</span> <span class="pre">laygo/generators/adc_sar/tisaradc_body_core_schematic_generator.py</span>
-<span class="pre">`</span></code></p>
-<p>![clkdis](images/tisaradc_body_core.png)</p>
-<p>## Bias</p>
-<p>## Top</p>
-<p>## Full stack generation</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">tisaradc_body_core_layout_generator</span><span class="o">.</span><span class="n">py</span>
+<span class="n">run</span> <span class="n">laygo</span><span class="o">/</span><span class="n">generators</span><span class="o">/</span><span class="n">adc_sar</span><span class="o">/</span><span class="n">tisaradc_body_core_schematic_generator</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p><img alt="clkdis" src="../_images/tisaradc_body_core.png" /></p>
+</div>
+<div class="section" id="bias">
+<span id="bias"></span><h2>Bias<a class="headerlink" href="#bias" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="top">
+<span id="top"></span><h2>Top<a class="headerlink" href="#top" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="full-stack-generation">
+<span id="full-stack-generation"></span><h2>Full stack generation<a class="headerlink" href="#full-stack-generation" title="Permalink to this headline">¶</a></h2>
 <p>in laygo/generators/adc_sar, there are various levels of full-stack
 generators (generating all up to the specified hierarchy). Their filenames
 end with <strong>fullstack_generator.py</strong></p>
-<p>## Contributors</p>
+</div>
+<div class="section" id="contributors">
+<span id="contributors"></span><h2>Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline">¶</a></h2>
 <p>The generator codes are written by Jaeduk Han, Woorham Bae, Eric Chang, Zhongkai Wang,
 and Pengpeng Lu. This document is written by Jaeduk Han and Woorham Bae.</p>
+</div>
+</div>
 
 
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Time-interleaved SAR ADC generator</a><ul>
+<li><a class="reference internal" href="#notice-sep-4th-2018">(Notice: Sep. 4th 2018)</a><ul>
+<li><a class="reference internal" href="#the-tisaradc-generator-has-been-completely-refactored-fixed-by-woorham-bae-please-carefully-read-this-document">The TISARADC generator has been completely refactored/fixed by Woorham Bae. Please carefully read this document.</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#setting-up-parameters">Setting up parameters</a></li>
+<li><a class="reference internal" href="#tisaradc-architecture">TISARADC architecture</a></li>
+<li><a class="reference internal" href="#subadc-frontend-layout-generation">SubADC frontend layout generation</a></li>
+<li><a class="reference internal" href="#subadc-backend-layout-generation">SubADC backend layout generation</a></li>
+<li><a class="reference internal" href="#subadc-switch-generation">SubADC switch generation</a></li>
+<li><a class="reference internal" href="#subadc-top-generation">SubADC top generation</a></li>
+<li><a class="reference internal" href="#subadc-testbench">SubADC testbench</a></li>
+<li><a class="reference internal" href="#array-generation">Array generation</a></li>
+<li><a class="reference internal" href="#clocking-path-generation">Clocking path generation</a></li>
+<li><a class="reference internal" href="#retimer">Retimer</a></li>
+<li><a class="reference internal" href="#tisaradc-body-clock-sar-retimer">TISARADC body (clock+sar+retimer)</a></li>
+<li><a class="reference internal" href="#bias">Bias</a></li>
+<li><a class="reference internal" href="#top">Top</a></li>
+<li><a class="reference internal" href="#full-stack-generation">Full stack generation</a></li>
+<li><a class="reference internal" href="#contributors">Contributors</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="ser_des.html" title="previous chapter">&lt;no title&gt;</a></li>
-      <li>Next: <a href="code.html" title="next chapter">&lt;no title&gt;</a></li>
+      <li>Previous: <a href="ser_des.html" title="previous chapter">CMOS SER/DES generator</a></li>
+      <li>Next: <a href="code.html" title="next chapter">Example codes</a></li>
   </ul></li>
 </ul>
 </div>

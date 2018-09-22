@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>&lt;no title&gt; &#8212; laygo_documentation 1.0 documentation</title>
+    <title>Laygo architecture &#8212; laygo_documentation 1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" src="../_static/documentation_options.js"></script>
@@ -15,8 +15,8 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="../example/logic.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="../tutorial/tutorial_BAG_v2.html" />
+    <link rel="next" title="Logic family generator" href="../example/logic.html" />
+    <link rel="prev" title="NAND gate generation and BAG export tutorial (API v2)" href="../tutorial/tutorial_BAG_v2.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -31,17 +31,16 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p># Laygo architecture</p>
-<p>![Laygo package structure](images/architecture.png)</p>
+  <div class="section" id="laygo-architecture">
+<span id="laygo-architecture"></span><h1>Laygo architecture<a class="headerlink" href="#laygo-architecture" title="Permalink to this headline">¶</a></h1>
+<p><img alt="Laygo package structure" src="../_images/architecture.png" /></p>
 <p>Laygo package has 10 submodules, classified into 4 categories;
 <strong>Generator</strong>, <strong>Database</strong>, <strong>Object</strong>, and <strong>IO</strong>.</p>
-<ul class="simple">
-<li><strong>Generator</strong> modules interact with user input (scripts) and command</li>
-</ul>
-<p>database and IO modules to do actual layout generation jobs.
+<ul>
+<li><p class="first"><strong>Generator</strong> modules interact with user input (scripts) and command
+database and IO modules to do actual layout generation jobs.
 There are 2 generator modules implemented in laygo.</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><strong>BaseLayoutGenerator</strong>: generates layout on physical grids.</li>
 <li><strong>GridLayoutGenerator</strong>: generates layout on abstract grids.</li>
 <li><strong>GridLayoutGenerator2</strong>: improved version of GridLayoutGenerator. Not backward compatible.</li>
@@ -49,46 +48,38 @@ There are 2 generator modules implemented in laygo.</p>
 <p>Since the GridLayoutGenerator class is based on BaseLayoutGenerator,
 users may instantiate the GridLayoutGenerator even for physical grid
 tasks.</p>
-</div></blockquote>
+</li>
+<li><p class="first"><strong>Database</strong> modules store the design hierarchary (as a form of
+Python dictionary). 3 types of Database modules are used.</p>
 <ul class="simple">
-<li><strong>Database</strong> modules store the design hierarchary (as a form of</li>
-</ul>
-<p>Python dictionary). 3 types of Database modules are used.</p>
-<blockquote>
-<div><ul class="simple">
 <li><strong>LayoutDB</strong>: stores layout data (Rects, Instances, Pins, …)</li>
 <li><strong>TemplateDB</strong>: stores template data for placements</li>
 <li><strong>GridDB</strong>: stores grid data for placements and routings</li>
 </ul>
-</div></blockquote>
+</li>
+<li><p class="first"><strong>Object</strong> modules compose the database module and implement actual
+layout/template/grid components.</p>
 <ul class="simple">
-<li><strong>Object</strong> modules compose the database module and implement actual</li>
+<li><strong>LayoutObject</strong>: implements layout objects. Supported
+types are <strong>Rect</strong>, <strong>Pin</strong>, <strong>Text</strong>, and <strong>Instance</strong>.</li>
+<li><strong>TemplateObject</strong>: implements templates.</li>
+<li><strong>GridObject</strong>: implements grids. The GridObject class has
+<strong>PlacementGrid</strong> and <strong>RouteGrid</strong> as derived classes.</li>
 </ul>
-<p>layout/template/grid components.</p>
-<blockquote>
-<div><ul class="simple">
-<li><strong>LayoutObject</strong>: implements layout objects. Supported</li>
-</ul>
-<p>types are <strong>Rect</strong>, <strong>Pin</strong>, <strong>Text</strong>, and <strong>Instance</strong>.
-* <strong>TemplateObject</strong>: implements templates.
-* <strong>GridObject</strong>: implements grids. The GridObject class has</p>
-<blockquote>
-<div><strong>PlacementGrid</strong> and <strong>RouteGrid</strong> as derived classes.</div></blockquote>
-</div></blockquote>
-<ul class="simple">
-<li><strong>IO</strong> modules import/export generated layout data in various</li>
-</ul>
-<p>formats. While template and grid IO functions are embedded in
+</li>
+<li><p class="first"><strong>IO</strong> modules import/export generated layout data in various
+formats. While template and grid IO functions are embedded in
 <strong>TemplateDB</strong> and <strong>GridDB</strong> classes, separate modules are implemented
 for layout objects for their complexity.</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><strong>LayoutIO</strong> is used for importing / exporting layout data.
 Currently it supports 2 options: BAG and GDS. Yaml/OA/Skill/pyplot
 options will be supported in later versions.</li>
 <li><strong>GDSIO</strong> is a dedicated class for GDS file support.</li>
 </ul>
-</div></blockquote>
+</li>
+</ul>
+</div>
 
 
           </div>
@@ -99,8 +90,8 @@ options will be supported in later versions.</li>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../tutorial/tutorial_BAG_v2.html" title="previous chapter">&lt;no title&gt;</a></li>
-      <li>Next: <a href="../example/logic.html" title="next chapter">&lt;no title&gt;</a></li>
+      <li>Previous: <a href="../tutorial/tutorial_BAG_v2.html" title="previous chapter">NAND gate generation and BAG export tutorial (API v2)</a></li>
+      <li>Next: <a href="../example/logic.html" title="next chapter">Logic family generator</a></li>
   </ul></li>
 </ul>
 </div>
