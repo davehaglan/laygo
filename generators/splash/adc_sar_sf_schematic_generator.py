@@ -24,6 +24,8 @@ params = dict(
     m_in=4,
     m_bias_dum=4,
     m_in_dum=4,
+    m_byp=8,
+    m_byp_bias=4,
     device_intent='fast',
     )
 
@@ -42,6 +44,8 @@ if load_from_file==True:
     params['m_in']=sizedict['sourceFollower']['m_in']
     params['m_bias_dum']=sizedict['sourceFollower']['m_bias_dum']
     params['m_in_dum']=sizedict['sourceFollower']['m_in_dum']
+    params['m_byp']=sizedict['sourceFollower']['m_byp']
+    params['m_byp_bias']=sizedict['sourceFollower']['m_byp_bias']
     params['lch']=sizedict['lch']
     params['nw']=sizedict['nw']
     params['device_intent']=sizedict['device_intent']
