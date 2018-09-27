@@ -107,7 +107,7 @@ def generate_boundary(laygen, objectname_pfix, placement_grid,
 
 def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, grid, origin=np.array([0, 0]), num_bits=5, phy_width=20.16, num_capsw_dmy=10, num_dff_dmy=90, 
         len_cal=30, len_capsw=10, m_clki=2, y1_clki=5, y2_clki=10, m_clko=2, y1_clko=25, y2_clko=10, num_vss_vleft=2, num_vdd_vleft=2, num_vss_vright=3, num_vdd_vright=3,
-        num_vss_h=4, num_vdd_h=4, m_tgate=4, m_dff=2, m_inv1=2, m_inv2=4, pmos_body='VDD'):
+        num_vss_h=4, num_vdd_h=4, m_tgate=4, m_dff=2, m_inv1=2, m_inv2=4, clock_pulse='False', pmos_body='VDD'):
     """generate cap driver """
     
 
@@ -289,9 +289,16 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     #route from dff0_CLKB to tgated_IN
     dff0_CLKB_xy = laygen.get_inst_pin_xy(dff0.name, 'CLKB', rg_m3m4)[0]
     tgated_I_xy = laygen.get_inst_pin_xy(tgated0.name, 'I_' + str(m_in - 1), rg_m3m4)[0]
-    laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], dff0_CLKB_xy, tgated_I_xy, dff0_O_y-1, rg_m3m4)
-    for i in range(m_in):
-            clkiv=laygen.via(None, np.array([tgated_I_xy[0]+2*i, dff0_O_y-1]), gridname=rg_m3m4)
+    if clock_pulse == False:
+        laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], dff0_CLKB_xy, tgated_I_xy, dff0_O_y-1, rg_m3m4)
+        for i in range(m_in):
+                clkiv=laygen.via(None, np.array([tgated_I_xy[0]+2*i, dff0_O_y-1]), gridname=rg_m3m4)
+    else:
+        for i in range(m_in):
+            tgated_I_xy = laygen.get_inst_pin_xy(tgated0.name, 'I_' + str(i), rg_m3m4)[0]
+            laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][3],
+                            xy0=tgated_EN_xy, xy1=tgated_I_xy, gridname0=rg_m3m4,
+                         via0=[0,0])
 
     #I/O and Pin
     #I Pin
@@ -329,17 +336,25 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
         laygen.boundary_pin_from_rect(ctrlp0, gridname=rg_m3m4, name='CAPSW<' + str(i) + '>',
                                       layer=laygen.layers['pin'][3], size=1, direction='bottom')
 
-
-    clki_x = laygen.get_inst_pin_xy(tgated0.name, 'I_0', rg_m3m4)[0]
+    if clock_pulse == False: clki_x = laygen.get_inst_pin_xy(tgated0.name, 'I_0', rg_m3m4)[0]
+    else: clki_x = dff0_CLKB_xy
     clkp_x = laygen.grids.get_absgrid_coord_x(gridname=rg_m4m5, x=phy_width/2)    
     ##Create muti tracks to clki and create pin
     for i in range(m_clki):
-        for j in range(m_in):
-            clkiv=laygen.via(None, np.array([clki_x[0]-2*j, clki_x[1]+y1_clki+2*i]), gridname=rg_m3m4)
-            laygen.route(None, laygen.layers['metal'][3], xy0=np.array([clki_x[0]-2*j, clki_x[1]]), xy1=np.array([clki_x[0]-2*j, clki_x[1]+y1_clki+2*(m_clki-1)]), gridname0=rg_m3m4)
-            if i==0 and j==m_in-1:
-                v_xy=laygen.get_inst_xy(name = clkiv.name, gridname = rg_m4m5)
-        clki_d=clkp_x-v_xy[0] 
+        if clock_pulse==False:
+            for j in range(m_in):
+                clkiv=laygen.via(None, np.array([clki_x[0]-2*j, clki_x[1]+y1_clki+2*i]), gridname=rg_m3m4)
+                laygen.route(None, laygen.layers['metal'][3], xy0=np.array([clki_x[0]-2*j, clki_x[1]]), xy1=np.array([clki_x[0]-2*j, clki_x[1]+y1_clki+2*(m_clki-1)]), gridname0=rg_m3m4)
+                if i==0 and j==m_in-1:
+                    v_xy=laygen.get_inst_xy(name = clkiv.name, gridname = rg_m4m5)
+            clki_d=clkp_x-v_xy[0]
+        else:
+            clkiv = laygen.via(None, np.array([clki_x[0], clki_x[1] + y1_clki + 2 * i]), gridname=rg_m3m4)
+            laygen.route(None, laygen.layers['metal'][3], xy0=np.array([clki_x[0], clki_x[1]]),
+                         xy1=np.array([clki_x[0], clki_x[1] + y1_clki + 2 * (m_clki - 1)]), gridname0=rg_m3m4)
+            if i == 0:
+                v_xy = laygen.get_inst_xy(name=clkiv.name, gridname=rg_m4m5)
+            clki_d = clkp_x - v_xy[0]
         for j in range(m_clki):
             [clkh, clkv]=laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], np.array([v_xy[0]-1, v_xy[1]+2*i]), 
                     np.array([v_xy[0]+clki_d+m_clki/2-2*j+1,v_xy[1]+y2_clki]), rg_m4m5)
@@ -634,6 +649,7 @@ if __name__ == '__main__':
         params['m_clko'] = sizedict['clk_dis_htree']['m_clko']
         params['m_clki']=sizedict['clk_dis_htree']['m_track']
         params['num_bits']=sizedict['clk_dis_cdac']['num_bits']
+        params['clock_pulse']=specdict['clk_pulse_overlap']
         pmos_body=specdict['pmos_body']
 
     load_from_file=True

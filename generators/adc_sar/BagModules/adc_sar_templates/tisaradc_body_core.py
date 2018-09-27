@@ -174,43 +174,43 @@ class adc_sar_templates__tisaradc_body_core(Module):
         self.parameters['ret_device_intent'] = ret_device_intent
 
         #sar_wsamp_array generation
-        if clk_pulse == False:
-            term_list=[{
-                ','.join(['INP%d'%(i) for i in range(num_slices)]): 'INP',
-                ','.join(['INM%d'%(i) for i in range(num_slices)]): 'INM',
-                ','.join(['CLK%d'%(i) for i in range(num_slices)]):
-                    ','.join(['ICLK%d'%(i) for i in range(num_slices)]),
-                ','.join(['OSP%d'%(i) for i in range(num_slices)]):
-                    ','.join(['OSP%d'%(i) for i in range(num_slices)]),
-                ','.join(['OSM%d'%(i) for i in range(num_slices)]):
-                    ','.join(['OSM%d'%(i) for i in range(num_slices)]),
-                ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]):
-                    ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]),
-                ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]):
-                    ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]),
-                ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]):
-                    ','.join(['ADCO%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
-                ','.join(['CLKO%d'%(i) for i in range(num_slices)]):
-                    ','.join(['CLKO%d'%(i) for i in range(num_slices)]),
-            }]
-        else:
-            term_list=[{
-                ','.join(['INP%d'%(i) for i in range(num_slices)]): 'INP',
-                ','.join(['INM%d'%(i) for i in range(num_slices)]): 'INM',
-                ','.join(['CLK%d'%(i) for i in range(num_slices)]): 'DATAO<0:%d>'%(num_slices-1),
-                ','.join(['OSP%d'%(i) for i in range(num_slices)]):
-                    ','.join(['OSP%d'%(i) for i in range(num_slices)]),
-                ','.join(['OSM%d'%(i) for i in range(num_slices)]):
-                    ','.join(['OSM%d'%(i) for i in range(num_slices)]),
-                ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]):
-                    ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]),
-                ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]):
-                    ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]),
-                ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]):
-                    ','.join(['ADCO%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
-                ','.join(['CLKO%d'%(i) for i in range(num_slices)]):
-                    ','.join(['CLKO%d'%(i) for i in range(num_slices)]),
-            }]
+        # if clk_pulse == False:
+        term_list=[{
+            ','.join(['INP%d'%(i) for i in range(num_slices)]): 'INP',
+            ','.join(['INM%d'%(i) for i in range(num_slices)]): 'INM',
+            ','.join(['CLK%d'%(i) for i in range(num_slices)]):
+                ','.join(['ICLK%d'%(i) for i in range(num_slices)]),
+            ','.join(['OSP%d'%(i) for i in range(num_slices)]):
+                ','.join(['OSP%d'%(i) for i in range(num_slices)]),
+            ','.join(['OSM%d'%(i) for i in range(num_slices)]):
+                ','.join(['OSM%d'%(i) for i in range(num_slices)]),
+            ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]):
+                ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]),
+            ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]):
+                ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]),
+            ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]):
+                ','.join(['ADCO%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
+            ','.join(['CLKO%d'%(i) for i in range(num_slices)]):
+                ','.join(['CLKO%d'%(i) for i in range(num_slices)]),
+        }]
+        # else:
+        #     term_list=[{
+        #         ','.join(['INP%d'%(i) for i in range(num_slices)]): 'INP',
+        #         ','.join(['INM%d'%(i) for i in range(num_slices)]): 'INM',
+        #         ','.join(['CLK%d'%(i) for i in range(num_slices)]): 'DATAO<0:%d>'%(num_slices-1),
+        #         ','.join(['OSP%d'%(i) for i in range(num_slices)]):
+        #             ','.join(['OSP%d'%(i) for i in range(num_slices)]),
+        #         ','.join(['OSM%d'%(i) for i in range(num_slices)]):
+        #             ','.join(['OSM%d'%(i) for i in range(num_slices)]),
+        #         ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]):
+        #             ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]),
+        #         ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]):
+        #             ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]),
+        #         ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]):
+        #             ','.join(['ADCO%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
+        #         ','.join(['CLKO%d'%(i) for i in range(num_slices)]):
+        #             ','.join(['CLKO%d'%(i) for i in range(num_slices)]),
+        #     }]
         name_list=(['ISAR0'])
         self.array_instance('ISAR0', name_list, term_list=term_list)
         self.instances['ISAR0'][0].design(
@@ -243,7 +243,8 @@ class adc_sar_templates__tisaradc_body_core(Module):
             m_capsw=clk_m_capsw, 
             num_bits=clk_cdac_bits,
             num_ways=num_slices, 
-            unit_cell=clk_unit_cell, 
+            unit_cell=clk_unit_cell,
+            clock_pulse=clk_pulse,
             device_intent=clk_device_intent,
         )
 

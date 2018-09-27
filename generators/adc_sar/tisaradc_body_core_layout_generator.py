@@ -257,44 +257,44 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
                                           instname=isar.name,
                                           inst_pin_prefix=['CLK'], xy_grid_type='xgrid')
     pdict_m4m5_temp = laygen.get_inst_pin_xy(None, None, rg_m4m5_temp)
-    if clk_pulse == False:
-        for i in range(num_slices):
-            x0=pdict_m4m5[isar.name]['CLK'+str(i)][0][0]
-            y1=pdict_m4m5[iclkdist.name]['CLKO'+str(i)+'<0>'][0][1]+4
-            laygen.route_vh(layerv=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
-                            xy0=pdict_m4m5[iclkdist.name]['CLKO'+str(i)+'<0>'][0],
-                            xy1=np.array([x0, y1]), gridname0=rg_m4m5)
-            # laygen.route_vh(layerv=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
-            #                 xy0=pdict_m4m5[iclkdist.name]['CLKO'+str(i)+'<1>'][0],
-            #                 xy1=np.array([x0, y1+2]), gridname=rg_m4m5)
-            # laygen.route_vh(layerv=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
-            #                 xy0=pdict_m4m5[iclkdist.name]['CLKO'+str(i)+'<0>'][0]+np.array([4,0]),
-            #                 xy1=np.array([x0, y1+4]), gridname=rg_m4m5)
-            # laygen.route_vh(layerv=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
-            #                 xy0=pdict_m4m5[iclkdist.name]['CLKO'+str(i)+'<1>'][0]+np.array([4,0]),
-            #                 xy1=np.array([x0, y1+6]), gridname=rg_m4m5)
-            laygen.route(None, layer=laygen.layers['metal'][5],
-                            xy0=pdict_m4m5_temp[isar.name]['CLK'+str(i)][0],
-                            xy1=np.array([pdict_m4m5_temp[isar.name]['CLK'+str(i)][0][0], y1+0]),
-                            gridname0=rg_m4m5_temp)
-            laygen.via(None,np.array([pdict_m4m5_temp[isar.name]['CLK'+str(i)][0][0], y1]), rg_m4m5_temp)
-            # laygen.via(None,np.array([pdict_m4m5_temp[isar.name]['CLK'+str(i)][0][0], y1+2]), rg_m4m5_temp)
-            # laygen.via(None,np.array([pdict_m4m5_temp[isar.name]['CLK'+str(i)][0][0], y1+4]), rg_m4m5_temp)
-            # laygen.via(None,np.array([pdict_m4m5_temp[isar.name]['CLK'+str(i)][0][0], y1+6]), rg_m4m5_temp)
+    # if clk_pulse == False:
+    for i in range(num_slices):
+        x0=pdict_m4m5[isar.name]['CLK'+str(i)][0][0]
+        y1=pdict_m4m5[iclkdist.name]['CLKO'+str(i)+'<0>'][0][1]+4
+        laygen.route_vh(layerv=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
+                        xy0=pdict_m4m5[iclkdist.name]['CLKO'+str(i)+'<0>'][0],
+                        xy1=np.array([x0, y1]), gridname0=rg_m4m5)
+        # laygen.route_vh(layerv=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
+        #                 xy0=pdict_m4m5[iclkdist.name]['CLKO'+str(i)+'<1>'][0],
+        #                 xy1=np.array([x0, y1+2]), gridname=rg_m4m5)
+        # laygen.route_vh(layerv=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
+        #                 xy0=pdict_m4m5[iclkdist.name]['CLKO'+str(i)+'<0>'][0]+np.array([4,0]),
+        #                 xy1=np.array([x0, y1+4]), gridname=rg_m4m5)
+        # laygen.route_vh(layerv=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
+        #                 xy0=pdict_m4m5[iclkdist.name]['CLKO'+str(i)+'<1>'][0]+np.array([4,0]),
+        #                 xy1=np.array([x0, y1+6]), gridname=rg_m4m5)
+        laygen.route(None, layer=laygen.layers['metal'][5],
+                        xy0=pdict_m4m5_temp[isar.name]['CLK'+str(i)][0],
+                        xy1=np.array([pdict_m4m5_temp[isar.name]['CLK'+str(i)][0][0], y1+0]),
+                        gridname0=rg_m4m5_temp)
+        laygen.via(None,np.array([pdict_m4m5_temp[isar.name]['CLK'+str(i)][0][0], y1]), rg_m4m5_temp)
+        # laygen.via(None,np.array([pdict_m4m5_temp[isar.name]['CLK'+str(i)][0][0], y1+2]), rg_m4m5_temp)
+        # laygen.via(None,np.array([pdict_m4m5_temp[isar.name]['CLK'+str(i)][0][0], y1+4]), rg_m4m5_temp)
+        # laygen.via(None,np.array([pdict_m4m5_temp[isar.name]['CLK'+str(i)][0][0], y1+6]), rg_m4m5_temp)
 
-    # clock routing for TISAR: 2x pulsewidth
-    elif clk_pulse == True:
-        for i in range(num_slices):
-            laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
-                            xy0=pdict_m4m5_basic_thick[isar.name]['CLK'+str(i)][0],
-                            xy1=[pdict_m4m5[iclkdist.name]['CLKO%d<0>'%i][0][0]-3, pdict_m4m5[iclkdist.name]['DATAO<%d>'%i][0][1]-16],
-                            track_y=pdict_m4m5[isar.name]['CLK'+str(i)][0][1]+3,
-                            gridname0=rg_m4m5_basic_thick, layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5, extendl=0, extendr=0)
-            laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
-                         xy0=[pdict_m4m5[iclkdist.name]['CLKO%d<0>'%i][0][0]-3, pdict_m4m5[iclkdist.name]['DATAO<%d>'%i][0][1]-16],
-                         xy1=pdict_m3m4[iclkdist.name]['DATAO<%d>'%i][0],
-                         track_y=pdict_m4m5[iclkdist.name]['DATAO<%d>'%i][0][1]-14,
-                         gridname0=rg_m4m5, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4, extendl=0, extendr=0)
+    # # clock routing for TISAR: 2x pulsewidth
+    # elif clk_pulse == True:
+    #     for i in range(num_slices):
+    #         laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
+    #                         xy0=pdict_m4m5_basic_thick[isar.name]['CLK'+str(i)][0],
+    #                         xy1=[pdict_m4m5[iclkdist.name]['CLKO%d<0>'%i][0][0]-3, pdict_m4m5[iclkdist.name]['DATAO<%d>'%i][0][1]-16],
+    #                         track_y=pdict_m4m5[isar.name]['CLK'+str(i)][0][1]+3,
+    #                         gridname0=rg_m4m5_basic_thick, layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5, extendl=0, extendr=0)
+    #         laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
+    #                      xy0=[pdict_m4m5[iclkdist.name]['CLKO%d<0>'%i][0][0]-3, pdict_m4m5[iclkdist.name]['DATAO<%d>'%i][0][1]-16],
+    #                      xy1=pdict_m3m4[iclkdist.name]['DATAO<%d>'%i][0],
+    #                      track_y=pdict_m4m5[iclkdist.name]['DATAO<%d>'%i][0][1]-14,
+    #                      gridname0=rg_m4m5, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4, extendl=0, extendr=0)
 
     #sar-retimer routes (data)
     for i in range(num_slices):
