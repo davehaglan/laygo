@@ -650,7 +650,7 @@ if __name__ == '__main__':
         params['m_clki']=sizedict['clk_dis_htree']['m_track']
         params['num_bits']=sizedict['clk_dis_cdac']['num_bits']
         params['clock_pulse']=specdict['clk_pulse_overlap']
-        pmos_body=specdict['pmos_body']
+        params['pmos_body']=specdict['pmos_body']
 
     load_from_file=True
     if load_from_file==True:
