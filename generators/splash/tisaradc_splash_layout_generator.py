@@ -37,7 +37,7 @@ def generate_tisaradc_splash(laygen, objectname_pfix, ret_libname, sar_libname, 
                                 routing_grid_m3m4, routing_grid_m4m5, routing_grid_m4m5_basic_thick, routing_grid_m5m6, routing_grid_m5m6_thick,
                                 routing_grid_m5m6_basic_thick, routing_grid_m5m6_thick_basic,
                                 routing_grid_m6m7_thick, routing_grid_m7m8_thick,
-                                num_bits=9, num_slices=8, clkdist_offset=14.4, trackm=4, origin=np.array([0, 0])):
+                                num_bits=9, num_slices=8, clk_pulse=True, clkdist_offset=14.4, trackm=4, origin=np.array([0, 0])):
     """generate sar array """
     pg = placement_grid
 
@@ -173,16 +173,26 @@ def generate_tisaradc_splash(laygen, objectname_pfix, ret_libname, sar_libname, 
 
     # clock routing for TISAR
     for i in range(num_slices):
-        laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
-                        xy0=pdict_m4m5_basic_thick[isar.name]['CLK'+str(i)][0],
-                        xy1=[pdict_m4m5[iclkdist.name]['CLKO%d<0>'%i][0][0]-3, pdict_m4m5[iclkdist.name]['DATAO<%d>'%i][0][1]-16],
-                        track_y=pdict_m4m5[isar.name]['CLK'+str(i)][0][1]+3,
-                        gridname=rg_m4m5_basic_thick, layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5, extendl=0, extendr=0)
-        laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
-                     xy0=[pdict_m4m5[iclkdist.name]['CLKO%d<0>'%i][0][0]-3, pdict_m4m5[iclkdist.name]['DATAO<%d>'%i][0][1]-16],
-                     xy1=pdict_m4m5[iclkdist.name]['DATAO<%d>'%i][0],
-                     track_y=pdict_m4m5[iclkdist.name]['DATAO<%d>'%i][0][1]-14,
-                     gridname=rg_m4m5, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4, extendl=0, extendr=0)
+        # laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
+        #                 xy0=pdict_m4m5_basic_thick[isar.name]['CLK'+str(i)][0],
+        #                 xy1=[pdict_m4m5[iclkdist.name]['CLKO%d<0>'%i][0][0]-3, pdict_m4m5[iclkdist.name]['DATAO<%d>'%i][0][1]-16],
+        #                 track_y=pdict_m4m5[isar.name]['CLK'+str(i)][0][1]+3,
+        #                 gridname=rg_m4m5_basic_thick, layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5, extendl=0, extendr=0)
+        # laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
+        #              xy0=[pdict_m4m5[iclkdist.name]['CLKO%d<0>'%i][0][0]-3, pdict_m4m5[iclkdist.name]['DATAO<%d>'%i][0][1]-16],
+        #              xy1=pdict_m4m5[iclkdist.name]['DATAO<%d>'%i][0],
+        #              track_y=pdict_m4m5[iclkdist.name]['DATAO<%d>'%i][0][1]-14,
+        #              gridname=rg_m4m5, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4, extendl=0, extendr=0)
+        x0 = pdict_m4m5[isar.name]['CLK' + str(i)][0][0]
+        y1 = pdict_m4m5[iclkdist.name]['CLKO' + str(i) + '<0>'][0][1] + 4
+        laygen.route_vh(layerv=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
+                        xy0=pdict_m4m5[iclkdist.name]['CLKO' + str(i) + '<0>'][0],
+                        xy1=np.array([x0, y1]), gridname0=rg_m4m5)
+        laygen.route(None, layer=laygen.layers['metal'][5],
+                     xy0=pdict_m4m5_temp[isar.name]['CLK' + str(i)][0],
+                     xy1=np.array([pdict_m4m5_temp[isar.name]['CLK' + str(i)][0][0], y1 + 0]),
+                     gridname0=rg_m4m5_temp)
+        laygen.via(None, np.array([pdict_m4m5_temp[isar.name]['CLK' + str(i)][0][0], y1]), rg_m4m5_temp)
 
     # ADC input route
     rinp_m7=[]
@@ -700,6 +710,7 @@ if __name__ == '__main__':
         num_bits=specdict['n_bit']
         num_slices=specdict['n_interleave']
         trackm=sizedict['clk_dis_htree']['m_track']
+        clk_pulse=specdict['clk_pulse_overlap']
 
     cellname = 'tisaradc_splash'
     sar_name = 'sar_wsamp_bb_doubleSA_array'
@@ -724,7 +735,7 @@ if __name__ == '__main__':
                  routing_grid_m5m6_thick=rg_m5m6_thick, routing_grid_m5m6_basic_thick=rg_m5m6_basic_thick,
                  routing_grid_m5m6_thick_basic=rg_m5m6_thick_basic, 
                  routing_grid_m6m7_thick=rg_m6m7_thick, routing_grid_m7m8_thick=rg_m7m8_thick,
-                 num_bits=num_bits, num_slices=num_slices, clkdist_offset=21.12, trackm=trackm, origin=np.array([0, 0]))
+                 num_bits=num_bits, num_slices=num_slices, clk_pulse=clk_pulse, clkdist_offset=21.12, trackm=trackm, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
     
 

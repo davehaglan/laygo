@@ -37,6 +37,7 @@ if load_from_file==True:
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
     params['num_ways']=specdict['n_interleave']
+    params['clock_pulse']=specdict['clk_pulse_overlap']
     params['lch']=sizedict['lch']
     params['pw']=sizedict['pw']
     params['nw']=sizedict['nw']
