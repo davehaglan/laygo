@@ -73,12 +73,20 @@ class adc_sar_templates__sarlogic_wret_v2_array_bb(Module):
         name_list=[]
         term_list=[]
         for i in range(num_bits):
-            term_list.append({'SB': 'SB<%d>'%(i), 
-                              'ZP': 'ZP0<%d>'%(i),
-                              'ZMID': 'ZMID0<%d>'%(i),
-                              'ZM': 'ZM0<%d>'%(i),
-                              'RETO': 'RETO<%d>'%(i),
-                             })
+            if not num_inv_bb==0:
+                term_list.append({'SB': 'SB<%d>'%(i),
+                                  'ZP': 'ZP0<%d>'%(i),
+                                  'ZMID': 'ZMID0<%d>'%(i),
+                                  'ZM': 'ZM0<%d>'%(i),
+                                  'RETO': 'RETO<%d>'%(i),
+                                 })
+            else:
+                term_list.append({'SB': 'SB<%d>' % (i),
+                                  'ZP': 'ZP<%d>' % (i),
+                                  'ZMID': 'ZMID<%d>' % (i),
+                                  'ZM': 'ZM<%d>' % (i),
+                                  'RETO': 'RETO<%d>' % (i),
+                                  })
             name_list.append('ISL%d'%(i))
         self.array_instance('ISL0', name_list, term_list=term_list)
         for i in range(num_bits):
@@ -150,11 +158,6 @@ class adc_sar_templates__sarlogic_wret_v2_array_bb(Module):
         for i in range(num_bits*num_inv_bb):
             self.instances['IBUFP2'][i].design(w=pw, l=lch, nf=m, intent=device_intent)
             self.instances['IBUFN2'][i].design(w=pw, l=lch, nf=m, intent=device_intent)
-
-        for i in range(num_bits):
-            self.reconnect_instance_terminal('ISL%d'%(i), 'ZP', 'ZP<%d>'%i)
-            self.reconnect_instance_terminal('ISL%d'%(i), 'ZMID', 'ZMID<%d>'%i)
-            self.reconnect_instance_terminal('ISL%d'%(i), 'ZM', 'ZM<%d>'%i)
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.
