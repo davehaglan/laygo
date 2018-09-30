@@ -151,6 +151,11 @@ class adc_sar_templates__sarlogic_wret_v2_array_bb(Module):
             self.instances['IBUFP2'][i].design(w=pw, l=lch, nf=m, intent=device_intent)
             self.instances['IBUFN2'][i].design(w=pw, l=lch, nf=m, intent=device_intent)
 
+        for i in range(num_bits):
+            self.reconnect_instance_terminal('ISL%d'%(i), 'ZP', 'ZP<%d>'%i)
+            self.reconnect_instance_terminal('ISL%d'%(i), 'ZMID', 'ZMID<%d>'%i)
+            self.reconnect_instance_terminal('ISL%d'%(i), 'ZM', 'ZM<%d>'%i)
+
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.
 
