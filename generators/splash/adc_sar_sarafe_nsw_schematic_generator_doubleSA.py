@@ -45,6 +45,7 @@ if load_from_file==True:
     params['sa_m_rgnn']=sizedict['salatch']['m_rgnn']
     params['sa_m_rgnp_d']=sizedict['salatch']['m_rgnp_d']
     params['sa_m_buf']=sizedict['salatch']['m_buf']
+    params['doubleSA']=sizedict['salatch']['doubleSA']
     params['num_bits']=specdict['n_bit']-1
     params['c_m']=sizedict['capdac']['c_m']
     params['rdx_array']=specdict['rdx_array']

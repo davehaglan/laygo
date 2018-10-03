@@ -398,15 +398,20 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                                      pdict_m4m5[ickg.name]['SHORTB'][0],
                                      pdict_m4m5[isl.name]['ZMID<'+str(max(0, num_bits-3))+'>'][0], rg_m4m5)
     # ckdsel
+    x_ref_ckdsel = laygen.get_inst_bbox(ickg.name, rg_m4m5)[1][0]
     for i in range(2):
         rh0, rclkdsel0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                          pdict_m4m5[ickg.name]['SEL<' + str(i) + '>'][0],
-                                         np.array([pdict_m4m5[ickg.name]['SEL<'+str(i)+'>'][1][0]+1+i+2+2-1, 0]), rg_m4m5)
-        laygen.boundary_pin_from_rect(rclkdsel0, rg_m4m5, 'CKDSEL0<' + str(i) + '>', laygen.layers['pin'][5], size=6,direction='bottom')
+                                         np.array([x_ref_ckdsel-11+i, 0]), rg_m4m5)
+        laygen.boundary_pin_from_rect(rclkdsel0, rg_m4m5, 'CKDSEL0<' + str(i) + '>', laygen.layers['pin'][5],
+                                      size=6, direction='bottom')
+        xy = laygen.get_rect_xy(rclkdsel0.name, rg_m4m5)
     rh0, rclkdsel1 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                      pdict_m4m5[ickg.name]['SEL<2>'][0],
-                                     np.array([pdict_m4m5[ickg.name]['SEL<2>'][1][0]+1+3+2+2-1, 0]), rg_m4m5)
-    laygen.boundary_pin_from_rect(rclkdsel1, rg_m4m5, 'CKDSEL1<0>', laygen.layers['pin'][5], size=6,direction='bottom')
+                                     np.array([x_ref_ckdsel-8, 0]), rg_m4m5)
+    laygen.boundary_pin_from_rect(rclkdsel1, rg_m4m5, 'CKDSEL1<0>', laygen.layers['pin'][5], size=6,
+                                  direction='bottom')
+    xy = laygen.get_rect_xy(rclkdsel1.name, rg_m4m5)
     #ckdsel dummy
     xy0 = laygen.get_rect_xy(name=rclkdsel0.name, gridname=rg_m4m5, sort=True)
     rclkdsel1 = laygen.route(None, laygen.layers['metal'][5], xy0=xy0[0]+np.array([3,0]), xy1=xy0[0]+np.array([3,4]), gridname0=rg_m4m5)

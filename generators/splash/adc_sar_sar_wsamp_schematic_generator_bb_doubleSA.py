@@ -58,6 +58,7 @@ if load_from_file==True:
     params['sar_sa_m_rgnn']=sizedict['salatch']['m_rgnn']
     params['sar_sa_m_rgnp_d']=sizedict['salatch']['m_rgnp_d']
     params['sar_sa_m_buf']=sizedict['salatch']['m_buf']
+    params['doubleSA']=sizedict['salatch']['doubleSA']
     params['sar_drv_m_list']=sizedict['capdrv']['m_list']
     params['sar_logic_m']=sizedict['sarlogic']['m']
     params['num_inv_bb']=sizedict['sarlogic']['num_inv_bb']

@@ -68,7 +68,7 @@ instances:
         num_bits: 1
   ISA0:
     lib_name: adc_sar_templates
-    cell_name: doubleSA_pmos
+    cell_name: salatch_pmos
     instpins:
       CLKB:
         direction: input
