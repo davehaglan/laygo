@@ -52,6 +52,8 @@ def generate_source_follower_diff(laygen, objectname_pfix, placement_grid, routi
     sfl_xy=isfl.xy
     sfr_xy=isfr.xy
     pdict_m3m4=laygen.get_inst_pin_xy(None, None, rg_m3m4)
+    pdict_m3m4_thick=laygen.get_inst_pin_xy(None, None, rg_m3m4_basic_thick)
+    pdict_m4m5_thick=laygen.get_inst_pin_xy(None, None, rg_m4m5_thick)
 
     outcnt = [0, 0]
     incnt = [0, 0]
@@ -62,9 +64,9 @@ def generate_source_follower_diff(laygen, objectname_pfix, placement_grid, routi
         if pn.startswith('out'):
             for i in range(len(isf_list)):
                 # pn='out'
-                pn_out='out'+isf_suffix_list[i]+str(outcnt[i])
+                pn_out='out'+isf_suffix_list[i]
                 laygen.pin(name=pn_out, layer=sf_pins[pn]['layer'], netname='out'+isf_suffix_list[i],
-                           xy=pdict_m3m4[isf_list[i].name][pn], gridname=rg_m3m4)
+                           xy=pdict_m3m4_thick[isf_list[i].name][pn], gridname=rg_m3m4_basic_thick)
                 outcnt[i]+=1
     # # input pins
     # for pn, p in sf_pins.items():
@@ -76,9 +78,9 @@ def generate_source_follower_diff(laygen, objectname_pfix, placement_grid, routi
     #             incnt[i] += 1
     pn = 'in'
     for i in range(len(isf_list)):
-        pn_out = 'in' + isf_suffix_list[i] + str(incnt[i])
+        pn_out = 'in' + isf_suffix_list[i]
         laygen.pin(name=pn_out, layer=sf_pins[pn]['layer'], netname='in' + isf_suffix_list[i],
-                   xy=pdict_m3m4[isf_list[i].name][pn], gridname=rg_m3m4)
+                   xy=pdict_m4m5_thick[isf_list[i].name][pn], gridname=rg_m4m5_thick)
     # vbias pins
     for pn, p in sf_pins.items():
         if pn.startswith('VBIAS'):
@@ -208,6 +210,7 @@ if __name__ == '__main__':
     rg_m3m4 = 'route_M3_M4_basic'
     rg_m3m4_basic_thick = 'route_M3_M4_basic_thick'
     rg_m4m5 = 'route_M4_M5_basic'
+    rg_m4m5_thick = 'route_M4_M5_thick'
     rg_m5m6 = 'route_M5_M6_basic'
     rg_m1m2_pin = 'route_M1_M2_basic'
     rg_m2m3_pin = 'route_M2_M3_basic'

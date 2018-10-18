@@ -1,7 +1,55 @@
 lib_name: adc_sar_templates
 cell_name: sar_wsamp_bb_doubleSA
-pins: [ "VDDSAMP", "CLKO", "VREF<2:0>", "OSM", "OSP", "INM", "INP", "EXTSEL_CLK", "CKDSEL0<1:0>", "CKDSEL1<1:0>", "CLK", "VOR<0>", "VOL<0>", "samp_body", "bottom_body", "ADCOUT<0>", "ICLK", "CLKPRB_SAMP", "SAOP", "UP", "SB<0>", "SARCLKB", "ZM<0>", "SARCLK", "ZMID<0>", "DONE", "ZP<0>", "PHI0", "SAMPP", "SAMPM", "VDDSAR", "VSS", "SAOM" ]
+pins: [ "VDDSAMP", "CLKO", "VREF<2:0>", "OSM", "OSP", "INM", "INP", "EXTSEL_CLK", "CKDSEL0<1:0>", "CKDSEL1<1:0>", "CLK", "VOR<0>", "VOL<0>", "samp_body", "bottom_body", "SF_bypass", "SF_Voffn", "SF_Voffp", "SF_BIASp", "SF_BIASn", "ADCOUT<0>", "ICLK", "CLKPRB_SAMP", "SAOP", "UP", "SB<0>", "SARCLKB", "ZM<0>", "SARCLK", "ZMID<0>", "DONE", "ZP<0>", "PHI0", "SAMPP", "SAMPM", "VDDSAR", "VSS", "SAOM" ]
 instances:
+  ISF:
+    lib_name: adc_sar_templates
+    cell_name: sourceFollower_diff
+    instpins:
+      VSS:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      VBIASn:
+        direction: inputOutput
+        net_name: "SF_BIASn"
+        num_bits: 1
+      VBIASp:
+        direction: inputOutput
+        net_name: "SF_BIASp"
+        num_bits: 1
+      VDD:
+        direction: inputOutput
+        net_name: "VDDSAMP"
+        num_bits: 1
+      outn:
+        direction: output
+        net_name: "SAMP_INN"
+        num_bits: 1
+      outp:
+        direction: output
+        net_name: "SAMP_INP"
+        num_bits: 1
+      Voffn:
+        direction: input
+        net_name: "SF_Voffn"
+        num_bits: 1
+      Voffp:
+        direction: input
+        net_name: "SF_Voffp"
+        num_bits: 1
+      bypass:
+        direction: input
+        net_name: "SF_bypass"
+        num_bits: 1
+      inn:
+        direction: input
+        net_name: "INM"
+        num_bits: 1
+      inp:
+        direction: input
+        net_name: "INP"
+        num_bits: 1
   XSAMP0:
     lib_name: adc_sar_templates
     cell_name: sarsamp_bb
@@ -40,12 +88,20 @@ instances:
         num_bits: 1
       inp:
         direction: inputOutput
-        net_name: "INP"
+        net_name: "SAMP_INP"
         num_bits: 1
       inn:
         direction: inputOutput
-        net_name: "INM"
+        net_name: "SAMP_INN"
         num_bits: 1
+  PIN38:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
+  PIN31:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
   PIN25:
     lib_name: basic
     cell_name: iopin
@@ -65,6 +121,18 @@ instances:
   PIN15:
     lib_name: basic
     cell_name: iopin
+    instpins: {}
+  PIN19:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN13:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN11:
+    lib_name: basic
+    cell_name: ipin
     instpins: {}
   PIN7:
     lib_name: basic

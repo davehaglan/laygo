@@ -167,12 +167,13 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     #rosm=laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 0]),
     #                  refinstname0=isa.name, refpinname0='OSM', gridname0=rg_m2m3, direction='y')
     pdict_m3m4 = laygen.get_inst_pin_xy(None, None, rg_m3m4)
+    laygen.get_inst_xy(icdacr.name, rg_m3m4)
     yos=laygen.get_inst_xy(isa.name, rg_m3m4)[1] \
         - laygen.get_template_size(name=isa.cellname, gridname=rg_m3m4, libname=workinglib)[1]
     [rv0, rh0, rosp] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict_m3m4[isa.name]['OSP'][0],
-                                       np.array([pdict_m3m4[isa.name]['OSP'][0][0]+m_sa, 0]), yos, rg_m3m4)
+                                       np.array([laygen.get_inst_xy(icdacr.name, rg_m3m4)[0]-2, 0]), yos, rg_m3m4)
     [rv0, rh0, rosm] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict_m3m4[isa.name]['OSM'][0],
-                                       np.array([pdict_m3m4[isa.name]['OSM'][0][0]-m_sa, 0]), yos, rg_m3m4)
+                                       np.array([laygen.get_inst_xy(icdacr.name, rg_m3m4)[0]+2, 0]), yos, rg_m3m4)
     renl0 = []
     renl1 = []
     renl2 = []

@@ -81,6 +81,19 @@ if load_from_file==True:
     #params['samp_pw']=sizedict['pw']
     #params['samp_nw']=sizedict['nw']
     params['samp_intent']=sizedict['device_intent']
+    params['sf_lch'] = sizedict['lch']
+    params['sf_nw'] = sizedict['nw']
+    params['sf_m_mirror'] = sizedict['sourceFollower']['m_mirror']
+    params['sf_m_bias'] = sizedict['sourceFollower']['m_bias']
+    params['sf_m_in'] = sizedict['sourceFollower']['m_in']
+    params['sf_m_off'] = sizedict['sourceFollower']['m_off']
+    params['sf_m_bias_dum'] = sizedict['sourceFollower']['m_bias_dum']
+    params['sf_m_in_dum'] = sizedict['sourceFollower']['m_in_dum']
+    params['sf_m_byp'] = sizedict['sourceFollower']['m_byp']
+    params['sf_m_byp_bias'] = sizedict['sourceFollower']['m_byp_bias']
+    params['sf_intent'] = sizedict['device_intent']
+    params['use_sf'] = specdict['use_sf']
+
 #sampler sizing
 if params['samp_use_laygo']==True:
     params['samp_wp']=params['sar_pw']

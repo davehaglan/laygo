@@ -47,7 +47,12 @@ class adc_sar_templates__sar_wsamp_bb_doubleSA(Module):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
     #def design(self, sar_lch, sar_pw, sar_nw, sar_sa_m, sar_sa_m_d, sar_sa_m_rst, sar_sa_m_rst_d, sar_sa_m_rgnn, sar_sa_m_rgnp_d, sar_sa_m_buf, sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay, sar_logic_m, sar_fsm_m, sar_ret_m, sar_ret_fo, sar_device_intent, sar_c_m, sar_rdx_array, samp_lch, samp_wp, samp_wn, samp_fgn, samp_fg_inbuf_list, samp_fg_outbuf_list, samp_nduml, samp_ndumr, samp_nsep, samp_intent, num_bits, num_inv_bb, samp_use_laygo=False):
-    def design(self, sar_lch, sar_pw, sar_nw, sar_sa_m, sar_sa_m_d, sar_sa_m_rst, sar_sa_m_rst_d, sar_sa_m_rgnn, sar_sa_m_rgnp_d, sar_sa_m_buf, doubleSA, sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay, sar_ckgen_fast, sar_logic_m, sar_fsm_m, sar_ret_m, sar_ret_fo, sar_device_intent, sar_c_m, sar_rdx_array, samp_lch, samp_wp, samp_wn, samp_fgn, samp_fg_inbuf_list, samp_fg_outbuf_list, samp_nduml, samp_ndumr, samp_nsep, samp_intent, num_bits, num_inv_bb, samp_use_laygo=False):
+    def design(self, sar_lch, sar_pw, sar_nw, sar_sa_m, sar_sa_m_d, sar_sa_m_rst, sar_sa_m_rst_d, sar_sa_m_rgnn,
+               sar_sa_m_rgnp_d, sar_sa_m_buf, doubleSA, sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay,
+               sar_ckgen_fast, sar_logic_m, sar_fsm_m, sar_ret_m, sar_ret_fo, sar_device_intent, sar_c_m, sar_rdx_array,
+               samp_lch, samp_wp, samp_wn, samp_fgn, samp_fg_inbuf_list, samp_fg_outbuf_list, samp_nduml, samp_ndumr,
+               samp_nsep, samp_intent, num_bits, num_inv_bb, samp_use_laygo,
+               sf_lch, sf_nw, sf_m_mirror, sf_m_bias, sf_m_off, sf_m_in, sf_m_bias_dum, sf_m_in_dum, sf_m_byp, sf_m_byp_bias, sf_intent, use_sf=False):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -99,6 +104,18 @@ class adc_sar_templates__sar_wsamp_bb_doubleSA(Module):
         self.parameters['num_bits'] = num_bits
         self.parameters['num_inv_bb'] = num_inv_bb
         self.parameters['samp_use_laygo'] = samp_use_laygo #if true, use laygo for sampler generation
+        self.parameters['sf_lch'] = sf_lch
+        self.parameters['sf_nw'] = sf_nw
+        self.parameters['sf_m_mirror'] = sf_m_mirror
+        self.parameters['sf_m_bias'] = sf_m_bias
+        self.parameters['sf_m_in'] = sf_m_in
+        self.parameters['sf_m_off'] = sf_m_off
+        self.parameters['sf_m_bias_dum'] = sf_m_bias_dum
+        self.parameters['sf_m_in_dum'] = sf_m_in_dum
+        self.parameters['sf_m_byp'] = sf_m_byp
+        self.parameters['sf_m_byp_bias'] = sf_m_byp_bias
+        self.parameters['sf_intent'] = sf_intent
+        self.parameters['use_sf'] = use_sf #if true, source follower is used before the sampler
 
         self.instances['ISAR0'].design(lch=sar_lch, pw=sar_pw, nw=sar_nw, sa_m=sar_sa_m, sa_m_d=sar_sa_m_d, sa_m_rst=sar_sa_m_rst, sa_m_rst_d=sar_sa_m_rst_d, sa_m_rgnn=sar_sa_m_rgnn, sa_m_rgnp_d=sar_sa_m_rgnp_d, sa_m_buf=sar_sa_m_buf, doubleSA=doubleSA,
                                        drv_m_list=sar_drv_m_list, ckgen_m=sar_ckgen_m, ckgen_fo=sar_ckgen_fo, ckgen_ndelay=sar_ckgen_ndelay, ckgen_fast=sar_ckgen_fast, logic_m=sar_logic_m, 
@@ -110,6 +127,21 @@ class adc_sar_templates__sar_wsamp_bb_doubleSA(Module):
         else:
             self.replace_instance_master(inst_name='XSAMP0', lib_name='adc_ec_templates', cell_name='sampler_nmos')
             self.instances['XSAMP0'].design_specs(lch=samp_lch, pw=samp_wp, nw=samp_wn, m_sw=samp_fgn, fg_inbuf_list=samp_fg_inbuf_list, fg_outbuf_list=samp_fg_outbuf_list, nduml=samp_nduml, ndumr=samp_ndumr, nsep=samp_nsep, intent=samp_intent)
+
+        if use_sf == False:
+            self.delete_instance('ISF')
+            self.remove_pin('SF_bypass')
+            self.remove_pin('SF_Voffp')
+            self.remove_pin('SF_Voffn')
+            self.remove_pin('SF_BIASp')
+            self.remove_pin('SF_BIASn')
+            self.reconnect_instance_terminal(inst_name='XSAMP0', term_name='inp', net_name='INP')
+            self.reconnect_instance_terminal(inst_name='XSAMP0', term_name='inn', net_name='INM')
+        else:
+            self.instances['ISF'].design(lch=sf_lch, nw=sf_nw, m_mirror=sf_m_mirror, m_bias=sf_m_bias, m_off=sf_m_off,
+                                            m_in=sf_m_in, m_bias_dum=sf_m_bias_dum, m_in_dum=sf_m_in_dum, m_byp=sf_m_byp,
+                                            m_byp_bias=sf_m_byp_bias, device_intent=sf_intent)
+
         #rewiring
         self.reconnect_instance_terminal(inst_name='XSAMP0', term_name='ckout', net_name='ICLK')
         self.reconnect_instance_terminal(inst_name='XSAMP0', term_name='outp', net_name='SAMPP')

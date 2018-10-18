@@ -78,6 +78,7 @@ class adc_sar_templates__sarafe_nsw_doubleSA(Module):
         self.parameters['c_m'] = c_m
         self.parameters['rdx_array'] = rdx_array
         self.parameters['device_intent'] = device_intent
+
         #self.replace_instance_master('ISA0', 'adc_sar_templates', 'doubleSA_pmos')
         if doubleSA==False:
             self.instances['ISA0'].design(lch=lch, pw=pw, nw=nw, m=sa_m, m_rst=sa_m_rst, m_rgnn=sa_m_rgnn,
@@ -86,7 +87,7 @@ class adc_sar_templates__sarafe_nsw_doubleSA(Module):
             self.replace_instance_master('ISA0', 'adc_sar_templates', 'doubleSA_pmos')
             self.instances['ISA0'].design(lch=lch, pw=pw, nw=nw, m=sa_m, m_rst=sa_m_rst, m_rgnn=sa_m_rgnn,
                                           m_buf=sa_m_buf, m_d=sa_m_d, m_rst_d=sa_m_rst_d, m_rgnp_d=sa_m_rgnp_d,
-                                          pmos_body=pmos_body, device_intent=device_intent)
+                                          device_intent=device_intent)
         self.instances['ICDRVP0'].design(lch=lch, pw=pw, nw=nw, num_bits=num_bits, m_list=drv_m_list, device_intent=device_intent)
         self.instances['ICDRVM0'].design(lch=lch, pw=pw, nw=nw, num_bits=num_bits, m_list=drv_m_list, device_intent=device_intent)
         self.instances['ICAPP0'].design(num_bits=num_bits, c_m=c_m, rdx_array=rdx_array)
