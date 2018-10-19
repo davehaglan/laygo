@@ -39,7 +39,7 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
                     routing_grid_m4m5_thick, 
                     routing_grid_m5m6, routing_grid_m5m6_thick, routing_grid_m5m6_basic_thick,
                     routing_grid_m6m7,
-                    num_bits=8, num_bits_vertical=6, num_cdrv_output_routes=2, m_sa=8, double_sa=False, origin=np.array([0, 0])):
+                    num_bits=8, num_bits_vertical=6, num_cdrv_output_routes=2, m_sa=8, double_sa=False, mom_layer=6, origin=np.array([0, 0])):
     """generate sar analog frontend """
     pg = placement_grid
 
@@ -110,34 +110,34 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     y0 = origin[1] + laygen.get_xy(obj=laygen.get_template(name = cdrv_name, libname=workinglib), gridname=rg_m5m6)[1] \
          + laygen.get_xy(obj=laygen.get_template(name = sa_name, libname=workinglib), gridname=rg_m5m6)[1] - 4 #refer to sa
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvl_vo_c0_xy[0],
-                                       icdacl_i_c0_xy[0], y0 + 1, rg_m5m6, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7)
+                                       icdacl_i_c0_xy[0], y0 + 1, rg_m5m6, layerv1=laygen.layers['metal'][mom_layer+1], gridname1=rg_m6m7)
     laygen.boundary_pin_from_rect(rv0, rg_m5m6, "VOL_C0", laygen.layers['pin'][5], size=4, direction='bottom',
                                   netname='VREF<1>')
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvr_vo_c0_xy[0],
-                                       icdacr_i_c0_xy[0], y0 + 1, rg_m5m6, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7)
+                                       icdacr_i_c0_xy[0], y0 + 1, rg_m5m6, layerv1=laygen.layers['metal'][mom_layer+1], gridname1=rg_m6m7)
     laygen.boundary_pin_from_rect(rv0, rg_m5m6, "VOR_C0", laygen.layers['pin'][5], size=4, direction='bottom',
                                   netname='VREF<1>')
 
     for j in range(num_cdrv_output_routes):
         for i in range(num_bits):
             [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvl_vo_xy[i+j*num_bits][0],
-                                               icdacl_i_xy[i][0], y0 - i, rg_m5m6, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7)
+                                               icdacl_i_xy[i][0], y0 - i, rg_m5m6, layerv1=laygen.layers['metal'][mom_layer+1], gridname1=rg_m6m7)
             laygen.boundary_pin_from_rect(rv0, rg_m5m6, "VOL<" + str(i) + ">", laygen.layers['pin'][5], size=4,
                                           direction='bottom')
             [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvr_vo_xy[i+j*num_bits][0],
-                                               icdacr_i_xy[i][0], y0 - i, rg_m5m6, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7)
+                                               icdacr_i_xy[i][0], y0 - i, rg_m5m6, layerv1=laygen.layers['metal'][mom_layer+1], gridname1=rg_m6m7)
             laygen.boundary_pin_from_rect(rv0, rg_m5m6, "VOR<" + str(i) + ">", laygen.layers['pin'][5], size=4,
                                           direction='bottom')
             #more routes for horizontal dacs
             if i>=num_bits_vertical:
                 [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvl_vo_xy[i+j*num_bits][0],
-                                                   icdacl_i_xy[i][0], y0 + 2 + i - num_bits_vertical, rg_m5m6, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7)
+                                                   icdacl_i_xy[i][0], y0 + 2 + i - num_bits_vertical, rg_m5m6, layerv1=laygen.layers['metal'][mom_layer+1], gridname1=rg_m6m7)
                 [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvr_vo_xy[i+j*num_bits][0],
-                                                   icdacr_i_xy[i][0], y0 + 2 + i - num_bits_vertical, rg_m5m6, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7)
+                                                   icdacr_i_xy[i][0], y0 + 2 + i - num_bits_vertical, rg_m5m6, layerv1=laygen.layers['metal'][mom_layer+1], gridname1=rg_m6m7)
                 [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvl_vo_xy[i+j*num_bits][0],
-                                                   icdacl_i2_xy[i-num_bits_vertical][0], y0 + 2 + i - num_bits_vertical, rg_m5m6, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7)
+                                                   icdacl_i2_xy[i-num_bits_vertical][0], y0 + 2 + i - num_bits_vertical, rg_m5m6, layerv1=laygen.layers['metal'][mom_layer+1], gridname1=rg_m6m7)
                 [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvr_vo_xy[i+j*num_bits][0],
-                                                   icdacr_i2_xy[i-num_bits_vertical][0], y0 + 2 + i - num_bits_vertical, rg_m5m6, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7)
+                                                   icdacr_i2_xy[i-num_bits_vertical][0], y0 + 2 + i - num_bits_vertical, rg_m5m6, layerv1=laygen.layers['metal'][mom_layer+1], gridname1=rg_m6m7)
 
 
 
@@ -476,7 +476,12 @@ if __name__ == '__main__':
         m_sa=sizedict['salatch']['m']
         num_bits_vertical=sizedict['capdac']['num_bits_vertical']
         doubleSA=sizedict['salatch']['doubleSA']
+        mom_layer=specdict['momcap_layer']
 
+    if mom_layer == 6:
+        rg_cdac = rg_m6m7
+    elif mom_layer == 4:
+        rg_cdac = rg_m4m5
     #sarafe generation
     cellname='sarafe_nsw'
     print(cellname+" generating")
@@ -487,9 +492,9 @@ if __name__ == '__main__':
                     placement_grid=pg, routing_grid_m2m3_thick=rg_m2m3_thick, routing_grid_m3m4_thick=rg_m3m4_thick,
                     routing_grid_m4m5_thick=rg_m4m5_thick, routing_grid_m5m6=rg_m5m6, 
                     routing_grid_m5m6_basic_thick=rg_m5m6_basic_thick, routing_grid_m5m6_thick=rg_m5m6_thick,
-                    routing_grid_m6m7=rg_m6m7, num_bits=num_bits, num_bits_vertical=num_bits_vertical,
+                    routing_grid_m6m7=rg_cdac, num_bits=num_bits, num_bits_vertical=num_bits_vertical,
                     num_cdrv_output_routes=2, m_sa=m_sa, double_sa=doubleSA,
-                    origin=np.array([0, 0]))
+                        mom_layer=mom_layer, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)

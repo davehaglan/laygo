@@ -605,14 +605,16 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                 layer=laygen.layers['metal'][6], gridname=rg_m5m6_thick, netnames=['VDD', 'VSS'], direction='x', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=None,
                 offset_start_index=1, offset_end_index=-1)
-    if laygen.grids.get_phygrid_x(rg_m5m6_thick, 1)==laygen.grids.get_phygrid_x(rg_m1m2, 1)*3:
-        x1 = laygen.get_xy(obj =bnd_right[0], gridname=rg_m5m6_thick)[0]\
-             +laygen.get_xy(obj =bnd_right[0].template, gridname=rg_m5m6_thick)[0] - 1
-    else:
-        x1 = laygen.get_xy(obj=bnd_right[0], gridname=rg_m5m6_thick)[0] \
-             + laygen.get_xy(obj=bnd_right[0].template, gridname=rg_m5m6_thick)[0] - 0
+    # if laygen.grids.get_phygrid_x(rg_m5m6_thick, 1)==laygen.grids.get_phygrid_x(rg_m1m2, 1)*3:
+    #     x1 = laygen.get_xy(obj =bnd_right[0], gridname=rg_m5m6_thick)[0]\
+    #          +laygen.get_xy(obj =bnd_right[0].template, gridname=rg_m5m6_thick)[0] - 1
+    # else:
+    #     x1 = laygen.get_xy(obj=bnd_right[0], gridname=rg_m5m6_thick)[0] \
+    #          + laygen.get_xy(obj=bnd_right[0].template, gridname=rg_m5m6_thick)[0] - 0
     x1_phy = laygen.get_xy(obj =bnd_right[0])[0]\
          +laygen.get_xy(obj =bnd_right[0].template)[0]
+    x1 = laygen.grids.get_absgrid_x(rg_m5m6_thick, x1_phy)
+    print(x1_phy, x1)
     input_rails_rect = [rvddr_m5, rvssr_m5]
     rvddr_m6, rvssr_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='R_M6_', 
                 layer=laygen.layers['metal'][6], gridname=rg_m5m6_thick, netnames=['VDD', 'VSS'], direction='x', 
