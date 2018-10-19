@@ -481,7 +481,7 @@ if __name__ == '__main__':
     if mom_layer == 6:
         rg_cdac = rg_m6m7
     elif mom_layer == 4:
-        rg_cdac = rg_m4m5
+        rg_cdac = rg_m5m6
     #sarafe generation
     cellname='sarafe_nsw'
     print(cellname+" generating")
