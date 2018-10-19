@@ -203,7 +203,7 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
                 laygen.via(None, c_bot_xy2 + np.array([num_bits_vertical*2, 0]), refinstname=c.name, refinstindex=np.array([k, j]), gridname=rg_m6m7)
         #col shorts
         if not i==0:
-            laygen.route(None, laygen.layers['metal'][6], xy0=np.array([c_bot_xy[0], y0+1]), xy1=np.array([c_bot_xy3[0]+num_bits_vertical*2, y0+1]), gridname0=rg_m6m7)
+            laygen.route(None, laygen.layers['metal'][mom_layer], xy0=np.array([c_bot_xy[0], y0+1]), xy1=np.array([c_bot_xy3[0]+num_bits_vertical*2, y0+1]), gridname0=rg_m6m7)
             laygen.via(None, np.array([c_bot_xy[0], y0+1]), gridname=rg_m6m7)
             laygen.via(None, np.array([c_bot_xy[0]+num_bits_vertical*2, y0+1]), gridname=rg_m6m7)
             for k in range(2**i):
@@ -225,8 +225,8 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
         #for j in range(m * m_vertical[i]):
         for j in range(m * 2 ** i): #radix2
             c_top_xy = laygen.get_inst_pin_xy(c.name, 'TOP', rg_m6m7, index=np.array([0, j]))
-            rtop = laygen.route(None, laygen.layers['metal'][6], xy0=c_top_xy[0], xy1=c_top_xy[1], gridname0=rg_m6m7)
-            laygen.boundary_pin_from_rect(rtop, rg_m6m7, "O" + str(cnt), laygen.layers['pin'][6], size=4,
+            rtop = laygen.route(None, laygen.layers['metal'][mom_layer], xy0=c_top_xy[0], xy1=c_top_xy[1], gridname0=rg_m6m7)
+            laygen.boundary_pin_from_rect(rtop, rg_m6m7, "O" + str(cnt), laygen.layers['pin'][mom_layer], size=4,
                                           direction='left', netname="O")
             cnt+=1
     #grid alignment
@@ -316,7 +316,7 @@ if __name__ == '__main__':
     if mom_layer == 6:
         rg_cdac = rg_m6m7
     elif mom_layer == 4:
-        rg_cdac = rg_m5m6
+        rg_cdac = rg_m4m5
 
     print(cell_name+" generating")
     mycell_list.append(cell_name)

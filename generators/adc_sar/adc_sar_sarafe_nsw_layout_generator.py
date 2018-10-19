@@ -109,34 +109,34 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     #y0 = origin[1] + laygen.get_xy(obj=laygen.get_template(name = cdrv_name, libname=workinglib), gridname=rg_m5m6)[1]-2 #refer to capdrv
     y0 = origin[1] + laygen.get_xy(obj=laygen.get_template(name = cdrv_name, libname=workinglib), gridname=rg_m5m6)[1] \
          + laygen.get_xy(obj=laygen.get_template(name = sa_name, libname=workinglib), gridname=rg_m5m6)[1] - 4 #refer to sa
-    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvl_vo_c0_xy[0],
+    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][mom_layer], icdrvl_vo_c0_xy[0],
                                        icdacl_i_c0_xy[0], y0 + 1, rg_m5m6, layerv1=laygen.layers['metal'][mom_layer+1], gridname1=rg_m6m7)
     laygen.boundary_pin_from_rect(rv0, rg_m5m6, "VOL_C0", laygen.layers['pin'][5], size=4, direction='bottom',
                                   netname='VREF<1>')
-    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvr_vo_c0_xy[0],
+    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][mom_layer], icdrvr_vo_c0_xy[0],
                                        icdacr_i_c0_xy[0], y0 + 1, rg_m5m6, layerv1=laygen.layers['metal'][mom_layer+1], gridname1=rg_m6m7)
     laygen.boundary_pin_from_rect(rv0, rg_m5m6, "VOR_C0", laygen.layers['pin'][5], size=4, direction='bottom',
                                   netname='VREF<1>')
 
     for j in range(num_cdrv_output_routes):
         for i in range(num_bits):
-            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvl_vo_xy[i+j*num_bits][0],
+            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][mom_layer], icdrvl_vo_xy[i+j*num_bits][0],
                                                icdacl_i_xy[i][0], y0 - i, rg_m5m6, layerv1=laygen.layers['metal'][mom_layer+1], gridname1=rg_m6m7)
             laygen.boundary_pin_from_rect(rv0, rg_m5m6, "VOL<" + str(i) + ">", laygen.layers['pin'][5], size=4,
                                           direction='bottom')
-            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvr_vo_xy[i+j*num_bits][0],
+            [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][mom_layer], icdrvr_vo_xy[i+j*num_bits][0],
                                                icdacr_i_xy[i][0], y0 - i, rg_m5m6, layerv1=laygen.layers['metal'][mom_layer+1], gridname1=rg_m6m7)
             laygen.boundary_pin_from_rect(rv0, rg_m5m6, "VOR<" + str(i) + ">", laygen.layers['pin'][5], size=4,
                                           direction='bottom')
             #more routes for horizontal dacs
             if i>=num_bits_vertical:
-                [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvl_vo_xy[i+j*num_bits][0],
+                [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][mom_layer], icdrvl_vo_xy[i+j*num_bits][0],
                                                    icdacl_i_xy[i][0], y0 + 2 + i - num_bits_vertical, rg_m5m6, layerv1=laygen.layers['metal'][mom_layer+1], gridname1=rg_m6m7)
-                [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvr_vo_xy[i+j*num_bits][0],
+                [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][mom_layer], icdrvr_vo_xy[i+j*num_bits][0],
                                                    icdacr_i_xy[i][0], y0 + 2 + i - num_bits_vertical, rg_m5m6, layerv1=laygen.layers['metal'][mom_layer+1], gridname1=rg_m6m7)
-                [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvl_vo_xy[i+j*num_bits][0],
+                [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][mom_layer], icdrvl_vo_xy[i+j*num_bits][0],
                                                    icdacl_i2_xy[i-num_bits_vertical][0], y0 + 2 + i - num_bits_vertical, rg_m5m6, layerv1=laygen.layers['metal'][mom_layer+1], gridname1=rg_m6m7)
-                [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][6], icdrvr_vo_xy[i+j*num_bits][0],
+                [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][mom_layer], icdrvr_vo_xy[i+j*num_bits][0],
                                                    icdacr_i2_xy[i-num_bits_vertical][0], y0 + 2 + i - num_bits_vertical, rg_m5m6, layerv1=laygen.layers['metal'][mom_layer+1], gridname1=rg_m6m7)
 
 
@@ -294,7 +294,7 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     rvdd_sal_m4, rvss_sal_m4 = laygenhelper.generate_power_rails_from_rails_xy(laygen, routename_tag='_SAL_M4_', 
                 layer=laygen.layers['metal'][4], gridname=rg_m3m4_thick, netnames=['VDD', 'VSS'], direction='x', 
                 input_rails_xy=input_rails_xy, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=None,
-                offset_start_index=0, offset_end_index=0)
+                offset_start_index=0, offset_end_index=-4)
     #input_rails_rect = [rvdd_sal_m4+rvdd_cdrvl_m4, rvss_sal_m4+rvss_cdrvl_m4]
     input_rails_rect = [rvdd_sal_m4, rvss_sal_m4+rvss_cdrvl_m4]
     rvdd_sal_m5, rvss_sal_m5 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAL_M5_', 
@@ -315,7 +315,7 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     rvdd_sar_m4, rvss_sar_m4 = laygenhelper.generate_power_rails_from_rails_xy(laygen, routename_tag='_SAR_M4_', 
                 layer=laygen.layers['metal'][4], gridname=rg_m3m4_thick, netnames=['VDD', 'VSS'], direction='x', 
                 input_rails_xy=input_rails_xy, generate_pin=False, overwrite_start_coord=None, overwrite_end_coord=x1,
-                offset_start_index=0, offset_end_index=0)
+                offset_start_index=0, offset_end_index=-4)
     #input_rails_rect = [rvdd_sar_m4+rvdd_cdrvr_m4, rvss_sar_m4+rvss_cdrvr_m4]
     input_rails_rect = [rvdd_sar_m4, rvss_sar_m4+rvss_cdrvr_m4]
     rvdd_sar_m5, rvss_sar_m5 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAR_M5_', 
@@ -481,7 +481,7 @@ if __name__ == '__main__':
     if mom_layer == 6:
         rg_cdac = rg_m6m7
     elif mom_layer == 4:
-        rg_cdac = rg_m5m6
+        rg_cdac = rg_m4m5
     #sarafe generation
     cellname='sarafe_nsw'
     print(cellname+" generating")
