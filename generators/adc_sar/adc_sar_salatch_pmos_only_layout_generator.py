@@ -608,26 +608,56 @@ def generate_salatch_regen(laygen, objectname_pfix, placement_grid, routing_grid
         laygen.via(None, np.array([0, 0]), refinstname=imdmyrp0.name, refpinname='D0', refinstindex=np.array([i, 0]), gridname=rg12)
     #dmy-n
     for i in range(m_rgnn_dmy):
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
+        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg12,
                      refinstname0=imdmyln0.name, refpinname0='S0', refinstindex0=np.array([i, 0]),
                      refinstname1=itapn0.name, refpinname1='TAP0', refinstindex1=np.array([i, 0]),
                      direction='y'
                      )
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
+        laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, -1]), xy1=np.array([0, 0]), gridname0=rg23,
                      refinstname0=imdmyln0.name, refpinname0='D0', refinstindex0=np.array([i, 0]),
-                     refinstname1=itapn0.name, refpinname1='TAP0', refinstindex1=np.array([i+1, 0]),
+                     refinstname1=itapn0.name, refpinname1='TAP0', refinstindex1=np.array([i, 0]),
+                     direction='y', via1=[[0, 0]]
+                     )
+        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, -1]), gridname0=rg12,
+                     refinstname0=imdmyln0.name, refpinname0='D0', refinstindex0=np.array([i, 0]),
+                     refinstname1=imdmyln0.name, refpinname1='D0', refinstindex1=np.array([i, 0]),
                      direction='y'
                      )
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
+        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([-1, -1]), xy1=np.array([1, -1]), gridname0=rg12,
+                     refinstname0=imdmyln0.name, refpinname0='D0', refinstindex0=np.array([i, 0]),
+                     refinstname1=imdmyln0.name, refpinname1='D0', refinstindex1=np.array([i, 0]),
+                     direction='x'
+                     )
+        laygen.via(None, np.array([0, -1]), refinstname=imdmyln0.name, refpinname='D0', refinstindex=np.array([i, 0]),
+                   gridname=rg12)
+        laygen.via(None, np.array([0, -1]), refinstname=imdmyln0.name, refpinname='D0', refinstindex=np.array([i, 0]),
+                   gridname=rg23)
+        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg12,
                      refinstname0=imdmyrn0.name, refpinname0='S0', refinstindex0=np.array([i, 0]),
-                     refinstname1=itapn0.name, refpinname1='TAP0', refinstindex1=np.array([m_tap-i, 0]),
+                     refinstname1=itapn0.name, refpinname1='TAP0', refinstindex1=np.array([m_tap - i, 0]),
                      direction='y'
                      )
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
+        laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, -1]), xy1=np.array([0, 0]), gridname0=rg23,
                      refinstname0=imdmyrn0.name, refpinname0='D0', refinstindex0=np.array([i, 0]),
-                     refinstname1=itapn0.name, refpinname1='TAP0', refinstindex1=np.array([m_tap-i-1, 0]),
+                     refinstname1=itapn0.name, refpinname1='TAP0', refinstindex1=np.array([m_tap - m_buf - i - 1, 0]),
+                     direction='y',
+                     )
+        laygen.via(None, np.array([0, 0]), refinstname=itapn0.name, refpinname='TAP1',
+                   refinstindex=np.array([m_tap - m_buf - i - 1, 0]), gridname=rg23)
+        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, -1]), gridname0=rg12,
+                     refinstname0=imdmyrn0.name, refpinname0='D0', refinstindex0=np.array([i, 0]),
+                     refinstname1=imdmyrn0.name, refpinname1='D0', refinstindex1=np.array([i, 0]),
                      direction='y'
                      )
+        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([-1, -1]), xy1=np.array([1, 0]), gridname0=rg12,
+                     refinstname0=imdmyrn0.name, refpinname0='D0', refinstindex0=np.array([i, 0]),
+                     refinstname1=imdmyrn0.name, refpinname1='D0', refinstindex1=np.array([i, 0]),
+                     direction='x'
+                     )
+        laygen.via(None, np.array([0, -1]), refinstname=imdmyrn0.name, refpinname='D0', refinstindex=np.array([i, 0]),
+                   gridname=rg12)
+        laygen.via(None, np.array([0, -1]), refinstname=imdmyrn0.name, refpinname='D0', refinstindex=np.array([i, 0]),
+                   gridname=rg23)
     return [itapbln0, itapn0, itapbrn0, imbln0, imbufln0, imdmyln0, imln0, imln1, imrn1, imrn0, imdmyrn0, imbufrn0, imbrn0,
             imblp0, imbuflp0, imdmylp0, imlp0, imrstlp0, imrstlp1, imrstrp1, imrstrp0, imrp0, imdmyrp0, imbufrp0, imbrp0,
             itapbl0, itap0, itapbr0]
