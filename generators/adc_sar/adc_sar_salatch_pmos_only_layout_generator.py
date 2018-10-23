@@ -335,7 +335,7 @@ def generate_clkdiffpair_ofst(laygen, objectname_pfix, placement_grid, routing_g
     return [itapbl0, itap0, itapbr0, ickbl0, ick0, ickbr0, iinbl0, iindmyl0, iofstl0, iinl0, iinr0, iofstr0, iindmyr0, iinbr0]
 
 def generate_salatch_regen(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, routing_grid_m1m2_thick,
-                   routing_grid_m2m3, routing_grid_m3m4,
+                   routing_grid_m2m3, routing_grid_m3m4, routing_grid_m2m3_thick_basic,
                    devname_nmos_boundary, devname_nmos_body, devname_nmos_dmy,
                    devname_pmos_boundary, devname_pmos_body, devname_pmos_dmy,
                    devname_ptap_boundary, devname_ptap_body, devname_ntap_boundary, devname_ntap_body,
@@ -345,6 +345,7 @@ def generate_salatch_regen(laygen, objectname_pfix, placement_grid, routing_grid
     rg12 = routing_grid_m1m2
     rg12t = routing_grid_m1m2_thick
     rg23 = routing_grid_m2m3
+    rg23tb = routing_grid_m2m3_thick_basic
     rg34 = routing_grid_m3m4
     pfix = objectname_pfix
 
@@ -531,12 +532,24 @@ def generate_salatch_regen(laygen, objectname_pfix, placement_grid, routing_grid
         laygen.via(name=None, xy=[0, 0], refobj=_m.pins['S0'], gridname=rg12)
     laygen.via(name=None, xy=[0, 0], refobj=imrn1.elements[0, 0].pins['S0'], gridname=rg12)
     #tap to rgnn
-    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
-                 refobj0=imln1.elements[0, 0].pins['D0'], refobj1=itapn0.elements[0, 0].pins['TAP0'], direction='y')
+    # laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+    #              refobj0=imln1.elements[0, 0].pins['D0'], refobj1=itapn0.elements[0, 0].pins['TAP0'], direction='y')
+    # laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+    #              refobj0=imln1.elements[0, 0].pins['S1'], refobj1=itapn0.elements[0, 0].pins['TAP0'], direction='y')
+    # laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+    #              refobj0=imrn1.elements[0, 0].pins['D0'], refobj1=itapn0.elements[0, 0].pins['TAP0'], direction='y')
+    laygen.route(name=None, xy0=[0, 1], xy1=[0, 0], gridname0=rg23tb,
+                 refobj0=imln1.elements[0, 0].pins['D0'], refobj1=itapn0.elements[0, 0].pins['TAP0'], direction='y', via1=[[0, 0]])
     laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
                  refobj0=imln1.elements[0, 0].pins['S1'], refobj1=itapn0.elements[0, 0].pins['TAP0'], direction='y')
-    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
-                 refobj0=imrn1.elements[0, 0].pins['D0'], refobj1=itapn0.elements[0, 0].pins['TAP0'], direction='y')
+    laygen.route(name=None, xy0=[0, 1], xy1=[0, 0], gridname0=rg23tb,
+                 refobj0=imrn1.elements[0, 0].pins['D0'], refobj1=itapn0.elements[0, 0].pins['TAP0'], direction='y', via1=[[0, 0]])
+    laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg12,
+                 refobj0=imrn1.elements[0, 0].pins['D0'], refobj1=imln1.elements[0, 0].pins['D0'], direction='x')
+    laygen.via(name=None, xy=[0, 1], refobj=imln1.elements[0, 0].pins['D0'], gridname=rg12)
+    laygen.via(name=None, xy=[0, 1], refobj=imln1.elements[0, 0].pins['D0'], gridname=rg23)
+    laygen.via(name=None, xy=[0, 1], refobj=imrn1.elements[0, 0].pins['D0'], gridname=rg12)
+    laygen.via(name=None, xy=[0, 1], refobj=imrn1.elements[0, 0].pins['D0'], gridname=rg23)
     #buf tap to rgnn
     for i in range(m_buf):
         laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
@@ -721,6 +734,7 @@ def generate_salatch_pmos(laygen, objectname_pfix, placement_grid,
      irgntapbl0, irgntap0, irgntapbr0]=\
     generate_salatch_regen(laygen, objectname_pfix=objectname_pfix+'RGN0', placement_grid=pg,
                            routing_grid_m1m2=rg_m1m2, routing_grid_m1m2_thick=rg_m1m2_thick, routing_grid_m2m3=rg_m2m3, routing_grid_m3m4=rg_m3m4,
+                           routing_grid_m2m3_thick_basic=rg_m2m3_thick,
                            devname_nmos_boundary=devname_pmos_boundary, devname_nmos_body=devname_pmos_body, devname_nmos_dmy=devname_pmos_dmy,
                            devname_pmos_boundary=devname_nmos_boundary, devname_pmos_body=devname_nmos_body, devname_pmos_dmy=devname_nmos_dmy,
                            devname_ptap_boundary=devname_ntap_boundary, devname_ptap_body=devname_ntap_body,
