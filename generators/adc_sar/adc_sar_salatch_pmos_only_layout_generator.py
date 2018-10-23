@@ -192,8 +192,9 @@ def generate_diff_mos_ofst(laygen, objectname_pfix, placement_grid, routing_grid
     imbl0 = laygen.relplace(name="I" + pfix + 'BL0', templatename=devname_mos_boundary, gridname=pg, xy=origin)
     refi=imbl0
     if not m_dmy==0:
-        imdmyl0 = laygen.relplace(name="I" + pfix + 'DMYL0', templatename=devname_mos_body, gridname=pg, refobj=refi, shape=[m_dmy, 1])
-        refi=imdmyl0
+        imdmyl0 = laygen.relplace(name="I" + pfix + 'DMYL0', templatename=devname_mos_body, gridname=pg, refobj=refi, shape=[m_dmy-1, 1])
+        imdmyl1 = laygen.relplace(name="I" + pfix + 'DMYL1', templatename=devname_mos_dmy, gridname=pg, refobj=imdmyl0)
+        refi=imdmyl1
     else:
         imdmyl0=None
     imofstl0 = laygen.relplace(name="I" + pfix + 'OFST0', templatename=devname_mos_body, gridname=pg, refobj=refi, shape=[m_ofst, 1])
@@ -202,7 +203,8 @@ def generate_diff_mos_ofst(laygen, objectname_pfix, placement_grid, routing_grid
     imofstr0 = laygen.relplace(name="I" + pfix + 'OFST1', templatename=devname_mos_body, gridname=pg, refobj=imr0, shape=[m_ofst, 1], transform='MY')
     refi=imofstr0
     if not m_dmy==0:
-        imdmyr0 = laygen.relplace(name="I" + pfix + 'DMYR0', templatename=devname_mos_body, gridname=pg, refobj=imofstr0, shape=[m_dmy, 1], transform='MY')
+        imdmyr1 = laygen.relplace(name="I" + pfix + 'DMYR1', templatename=devname_mos_dmy, gridname=pg, refobj=refi, transform='MY')
+        imdmyr0 = laygen.relplace(name="I" + pfix + 'DMYR0', templatename=devname_mos_body, gridname=pg, refobj=imdmyr1, shape=[m_dmy-1, 1], transform='MY')
         refi=imdmyr0
     else:
         imdmyr0=None
@@ -250,15 +252,20 @@ def generate_diff_mos_ofst(laygen, objectname_pfix, placement_grid, routing_grid
     if m_dmy>=2:
         mdmyl=imdmyl0.elements[:, 0]
         mdmyr=imdmyr0.elements[:, 0]
-        laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg12, refobj0=mdmyl[0].pins['D0'], refobj1=mdmyl[-1].pins['D0'])
-        laygen.route(name=None, xy0=[0, 1], xy1=[0, 1], gridname0=rg12, refobj0=mdmyr[0].pins['D0'], refobj1=mdmyr[-1].pins['D0'])
-        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=mdmyl[0].pins['S0'], refobj1=mdmyl[-1].pins['S0'])
-        laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, refobj0=mdmyr[0].pins['S0'], refobj1=mdmyr[-1].pins['S0'])
+        laygen.route(name=None, xy0=[0, 1], xy1=[2, 1], gridname0=rg12, refobj0=mdmyl[0].pins['D0'], refobj1=mdmyl[-1].pins['D0'])
+        laygen.route(name=None, xy0=[0, 1], xy1=[2, 1], gridname0=rg12, refobj0=mdmyr[0].pins['D0'], refobj1=mdmyr[-1].pins['D0'])
+        laygen.route(name=None, xy0=[0, 0], xy1=[2, 0], gridname0=rg12, refobj0=mdmyl[0].pins['S0'], refobj1=mdmyl[-1].pins['S0'])
+        laygen.route(name=None, xy0=[0, 0], xy1=[2, 0], gridname0=rg12, refobj0=mdmyr[0].pins['S0'], refobj1=mdmyr[-1].pins['S0'])
         for _mdmyl, _mdmyr in zip(mdmyl, mdmyr):
             laygen.via(name=None, xy=[0, 1], refobj=_mdmyl.pins['D0'], gridname=rg12)
             laygen.via(name=None, xy=[0, 1], refobj=_mdmyr.pins['D0'], gridname=rg12)
             laygen.via(name=None, xy=[0, 0], refobj=_mdmyl.pins['S0'], gridname=rg12)
             laygen.via(name=None, xy=[0, 0], refobj=_mdmyr.pins['S0'], gridname=rg12)
+        laygen.via(name=None, xy=[0, 1], refobj=imdmyl1.pins['D0'], gridname=rg12)
+        laygen.via(name=None, xy=[0, 0], refobj=imdmyl1.pins['S0'], gridname=rg12)
+        laygen.via(name=None, xy=[0, 1], refobj=imdmyr1.pins['D0'], gridname=rg12)
+        laygen.via(name=None, xy=[0, 0], refobj=imdmyr1.pins['S0'], gridname=rg12)
+
     return [imbl0, imdmyl0, imofstl0, iml0, imr0, imofstr0, imdmyr0, imbr0]
 
 def generate_clkdiffpair_ofst(laygen, objectname_pfix, placement_grid, routing_grid_m1m2, routing_grid_m1m2_thick, routing_grid_m2m3, routing_grid_m2m3_thick,
@@ -302,19 +309,19 @@ def generate_clkdiffpair_ofst(laygen, objectname_pfix, placement_grid, routing_g
                      refobj0=iinr0.elements[m_in-i-1, 0].pins['D0'], via0=[0, 0],
                      refobj1=ick0.elements[m_clkh+i, 0].pins['D0'], via1=[0, 0])
     #biascap for ofst
-    laygen.route(name=None, xy0=[0, 0], xy1=[2, 0], gridname0=rg12, 
+    laygen.route(name=None, xy0=[0, 0], xy1=[4, 0], gridname0=rg12,
                  refobj0=iindmyl0.elements[1, 0].pins['G0'], refobj1=iindmyl0.elements[-1, 0].pins['G0'])
-    laygen.route(name=None, xy0=[0, 0], xy1=[2, 0], gridname0=rg12,
+    laygen.route(name=None, xy0=[0, 0], xy1=[4, 0], gridname0=rg12,
                  refobj0=iindmyr0.elements[1, 0].pins['G0'], refobj1=iindmyr0.elements[-1, 0].pins['G0'])
-    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12, 
-                 refobj0=iindmyl0.elements[0, 0].pins['G0'], refobj1=iindmyl0.elements[0, 0].pins['D0'])
     laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
-                 refobj0=iindmyl0.elements[-1, 0].pins['G0'], refobj1=iindmyl0.elements[-1, 0].pins['D0'])
+                 refobj0=iindmyl0.elements[0, 0].pins['G0'], refobj1=iindmyl0.elements[0, 0].pins['D0'])
+    # laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+    #              refobj0=iindmyl0.elements[-1, 0].pins['G0'], refobj1=iindmyl0.elements[-1, 0].pins['D0'])
     laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
                  refobj0=iindmyr0.elements[0, 0].pins['G0'], refobj1=iindmyr0.elements[0, 0].pins['D0'])
-    laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
-                 refobj0=iindmyr0.elements[-1, 0].pins['G0'], refobj1=iindmyr0.elements[-1, 0].pins['D0'])
-    for _dmyl, _dmyr in zip(iindmyl0.elements[1:-1, 0], iindmyr0.elements[1:-1, 0]):
+    # laygen.route(name=None, xy0=[0, 0], xy1=[0, 0], gridname0=rg12,
+    #              refobj0=iindmyr0.elements[-1, 0].pins['G0'], refobj1=iindmyr0.elements[-1, 0].pins['D0'])
+    for _dmyl, _dmyr in zip(iindmyl0.elements[1:, 0], iindmyr0.elements[1:, 0]):
         laygen.via(name=None, xy=[0, 0], refobj=_dmyl.pins['G0'], gridname=rg12)
         laygen.via(name=None, xy=[0, 0], refobj=_dmyr.pins['G0'], gridname=rg12)
     #dmy route
