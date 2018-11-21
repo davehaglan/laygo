@@ -44,12 +44,13 @@ vdd_max: 0.88
 #logic timing
 trf_fo4: 8.0e-12 #nominal logic transition timing
 tfo4: 10.0e-12 #nominal fo4 delay
+momcap_layer: 6
 #True if laygo is used for sampler generation. If false, AnalogBase is used
 samp_use_laygo: True
 #True if tgate is used for sampling switch. If false, NMOS-only sampler is used
-samp_with_tgate: false
+samp_with_tgate: True
 #True if laygo is used for retimer generation. If false, AnalogBase is used
-ret_use_laygo: False
+ret_use_laygo: True
 pmos_body: 'VDD' #'VSS' or 'VDD'
 use_offset: true
-clk_pulse_overlap: false # default: False
+clk_pulse_overlap: True # default: False
