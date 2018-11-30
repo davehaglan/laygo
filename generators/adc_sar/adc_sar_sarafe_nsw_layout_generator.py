@@ -194,13 +194,13 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
         renr2.append(laygen.route(None, laygen.layers['metal'][5], xy0=np.array([0, 0]), xy1=np.array([0, 0]),
                      refinstname0=icdrvr.name, refpinname0='EN'+str(i)+'<2>', gridname0=rg_m5m6, direction='y'))
     #inp/inm
-    pdict_m5m6 = laygen.get_inst_pin_xy(None, None, rg_m5m6)
+    pdict_m5m6 = laygen.get_inst_pin_xy(None, None, rg0)
     outcnt=0
     for pn in pdict_m5m6[icdacl.name]:
         if pn.startswith('O'): #out pin
             outcnt+=1
-    _x0 = laygen.get_xy(obj = icdacl, gridname = rg_m5m6)[0] 
-    _x1 = laygen.get_xy(obj = icdacr, gridname = rg_m5m6)[0] 
+    _x0 = laygen.get_xy(obj = icdacl, gridname = rg0)[0]
+    _x1 = laygen.get_xy(obj = icdacr, gridname = rg0)[0]
     x0 = _x0+(_x1-_x0)-4
     x1 = _x1-(_x1-_x0)+4
     nrin_sa = 4  # number of M6 horizontal route stacks for cdac to sa
@@ -210,16 +210,16 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     rinp=[]
     rinm=[]
     for i in range(nrin):
-        xy0=laygen.get_inst_pin_xy(icdacl.name, "O" + str(outcnt - 1 - i), rg_m5m6, index=np.array([0, 0]), sort=True)[0]
-        r = laygen.route(None, laygen.layers['metal'][6], xy0=xy0, xy1=np.array([x0, xy0[1]]), gridname0=rg_m5m6)
+        xy0=laygen.get_inst_pin_xy(icdacl.name, "O" + str(outcnt - 1 - i), rg0, index=np.array([0, 0]), sort=True)[0]
+        r = laygen.route(None, laygen.layers['metal'][mom_layer], xy0=xy0, xy1=np.array([x0, xy0[1]]), gridname0=rg0)
         rinp.append(r)
         '''
         #additional routes for dummy for density rules; may not process portable
         for j in range(3):
             laygen.route(None, laygen.layers['metal'][6], xy0=xy0+np.array([0, 2*j+2]), xy1=np.array([x0, xy0[1]+2*j+2]), gridname0=rg_m5m6)
         '''
-        xy0=laygen.get_inst_pin_xy(icdacr.name, "O" + str(outcnt - 1 - i), rg_m5m6, index=np.array([0, 0]), sort=True)[1]
-        r = laygen.route(None, laygen.layers['metal'][6], xy0=xy0, xy1=np.array([x1, xy0[1]]), gridname0=rg_m5m6)
+        xy0=laygen.get_inst_pin_xy(icdacr.name, "O" + str(outcnt - 1 - i), rg0, index=np.array([0, 0]), sort=True)[1]
+        r = laygen.route(None, laygen.layers['metal'][mom_layer], xy0=xy0, xy1=np.array([x1, xy0[1]]), gridname0=rg0)
         rinm.append(r)
         '''
         #additional routes for dummy for density rules; may not process portable
@@ -228,22 +228,22 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
         '''
 
     for i in range(nrin_sa):
-        xy0=laygen.get_inst_pin_xy(icdacl.name, "O" + str(i), rg_m5m6, index=np.array([0, 0]), sort=True)[0]
-        laygen.route(None, laygen.layers['metal'][6], xy0=xy0, xy1=np.array([x0, xy0[1]]), gridname0=rg_m5m6)
+        xy0=laygen.get_inst_pin_xy(icdacl.name, "O" + str(i), rg0, index=np.array([0, 0]), sort=True)[0]
+        laygen.route(None, laygen.layers['metal'][mom_layer], xy0=xy0, xy1=np.array([x0, xy0[1]]), gridname0=rg0)
         for j in range(4):
-            laygen.via(None, [x0-2*j, xy0[1]], rg_m5m6)
-        xy0=laygen.get_inst_pin_xy(icdacr.name, "O" + str(i), rg_m5m6, index=np.array([0, 0]), sort=True)[1]
-        laygen.route(None, laygen.layers['metal'][6], xy0=xy0, xy1=np.array([x1, xy0[1]]), gridname0=rg_m5m6)
+            laygen.via(None, [x0-2*j, xy0[1]], rg0)
+        xy0=laygen.get_inst_pin_xy(icdacr.name, "O" + str(i), rg0, index=np.array([0, 0]), sort=True)[1]
+        laygen.route(None, laygen.layers['metal'][mom_layer], xy0=xy0, xy1=np.array([x1, xy0[1]]), gridname0=rg0)
         for j in range(4):
-            laygen.via(None, [x1+2*j, xy0[1]], rg_m5m6)
+            laygen.via(None, [x1+2*j, xy0[1]], rg0)
     xy0 = laygen.get_inst_pin_xy(isa.name, "INP", rg_m3m4, index=np.array([0, 0]), sort=True)[0]
-    xy1 = laygen.get_inst_pin_xy(icdacl.name, "O" + str(nrin_sa - 1), rg_m5m6, index=np.array([0, 0]), sort=True)[0]
+    xy1 = laygen.get_inst_pin_xy(icdacl.name, "O" + str(nrin_sa - 1), rg0, index=np.array([0, 0]), sort=True)[0]
     for j in range(4):
-        laygen.route(None, laygen.layers['metal'][5], xy0=np.array([x0-2*j, xy0[1]]), xy1=np.array([x0-2*j, xy1[1]]), gridname0=rg_m5m6)
+        laygen.route(None, laygen.layers['metal'][5], xy0=np.array([x0-2*j, xy0[1]]), xy1=np.array([x0-2*j, xy1[1]]), gridname0=rg0)
     xy0 = laygen.get_inst_pin_xy(isa.name, "INM", rg_m4m5, index=np.array([0, 0]), sort=True)[0]
-    xy1 = laygen.get_inst_pin_xy(icdacr.name, "O" + str(nrin_sa - 1), rg_m5m6, index=np.array([0, 0]), sort=True)[0]
+    xy1 = laygen.get_inst_pin_xy(icdacr.name, "O" + str(nrin_sa - 1), rg0, index=np.array([0, 0]), sort=True)[0]
     for j in range(4):
-        laygen.route(None, laygen.layers['metal'][5], xy0=np.array([x1+2*j, xy0[1]]), xy1=np.array([x1+2*j, xy1[1]]), gridname0=rg_m5m6)
+        laygen.route(None, laygen.layers['metal'][5], xy0=np.array([x1+2*j, xy0[1]]), xy1=np.array([x1+2*j, xy1[1]]), gridname0=rg0)
     #inp/inm - sa to capdac
     xy0 = laygen.get_inst_pin_xy(isa.name, "INP", rg_m4m5, index=np.array([0, 0]), sort=True)[0]
     xy1 = laygen.get_inst_pin_xy(isa.name, "INM", rg_m4m5, index=np.array([0, 0]), sort=True)[0]
@@ -415,10 +415,10 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     laygen.pin(name='SAINP', layer=laygen.layers['pin'][4], refobj=rsainp, gridname=rg_m4m5, netname='INP')
     laygen.pin(name='SAINM', layer=laygen.layers['pin'][4], refobj=rsainm, gridname=rg_m4m5, netname='INM')
     for i, r in enumerate(rinp):
-        laygen.boundary_pin_from_rect(r, rg_m5m6, "INP" + str(i), laygen.layers['pin'][6], size=8,
+        laygen.boundary_pin_from_rect(r, rg0, "INP" + str(i), laygen.layers['pin'][mom_layer], size=8,
                                       direction='right', netname="INP")
     for i, r in enumerate(rinm):
-        laygen.boundary_pin_from_rect(r, rg_m5m6, "INM" + str(i), laygen.layers['pin'][6], size=8,
+        laygen.boundary_pin_from_rect(r, rg0, "INM" + str(i), laygen.layers['pin'][mom_layer], size=8,
                                       direction='left', netname="INM")
 
 if __name__ == '__main__':

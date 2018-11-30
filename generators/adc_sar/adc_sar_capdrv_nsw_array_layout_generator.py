@@ -107,7 +107,7 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
     x0 = laygen.templates.get_template(cdac_name, libname=workinglib).xy[1][0] \
          - laygen.templates.get_template('nmos4_fast_left').xy[1][0] * 2 \
          - laygen.templates.get_template(cdrv_name_list[0], libname=workinglib).xy[1][0] * num_bits_row \
-         - laygen.templates.get_template(tap_name, libname=templib_logic).xy[1][0] * 3 
+         - laygen.templates.get_template(tap_name, libname=templib_logic).xy[1][0] * 3
     m_space = int(round(x0 / laygen.templates.get_template(space_1x_name, libname=templib_logic).xy[1][0]))
     m_space = max(0, m_space)
     m_space_4x = 0
@@ -119,6 +119,7 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
          + laygen.templates.get_template(cdrv_name_list[0], libname=workinglib).xy[1][0] * num_bits_row \
          + laygen.templates.get_template(space_1x_name, libname=templib_logic).xy[1][0] * m_space_1x \
          + laygen.templates.get_template(space_2x_name, libname=templib_logic).xy[1][0] * m_space_2x
+    print(x0, m_space)
     m_space_4x = int(m_space / 4)
     m_space_2x = int((m_space - m_space_4x * 4) / 2)
     m_space_1x = int(m_space - m_space_4x * 4 - m_space_2x * 2)
@@ -316,9 +317,12 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
                                              np.array([icdrv_en2_xy[num_bits_row * i + j][0][0] + i*3 + 5 + 12, y0]), rg_m4m5)
                 ren2.append(_ren2)
     # vc0 route
+    x0 = laygen.get_template_pin_xy(cdac_name, 'I<'+str(num_bits-num_bits_h)+'>', rg_m4m5, libname=workinglib)[0][0]
+    x1 = laygen.get_template_size(cdrv_name_list[0], gridname=rg_m4m5, libname=workinglib)[0]
     rh0, rvc0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                  icdrv_vref1_xy[0][0],
-                                 np.array([icdrv_en0_xy[0][0][0] + num_row*3 + 4 + 12, y1]), rg_m4m5)
+                                 np.array([x0+1, y1]), rg_m4m5)
+                                 # np.array([icdrv_en0_xy[0][0][0] + num_row*3 + 4 + 12, y1]), rg_m4m5)
     # vo route
     rvo = []
     for k in range(num_output_routes):
@@ -327,7 +331,8 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
                 if num_bits_row*i+j < num_bits:
                     rh0, _rvo = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                                 icdrv_vo_xy[num_bits_row * i + j][0],
-                                                np.array([icdrv_en0_xy[num_bits_row * i + j][0][0] + num_row*3 + 6 + i + 12 + k*num_row, y1]), rg_m4m5)
+                                                np.array([x0 + 2 + i + k*num_row + j * x1, y1]), rg_m4m5)
+                                                # np.array([icdrv_en0_xy[num_bits_row * i + j][0][0] + num_row*3 + 6 + i + 12 + k*num_row, y1]), rg_m4m5)
                     rvo.append(_rvo)
                     #output_pin
                     laygen.boundary_pin_from_rect(_rvo, rg_m4m5,
@@ -460,6 +465,7 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']-1
+        num_bits_h=sizedict['capdac']['num_bits_horizontal']
         m_list=sizedict['capdrv']['m_list']
         cdrv_name_list=[]
         for i, m in enumerate(m_list):
