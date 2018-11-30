@@ -127,7 +127,7 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
 
 
     #boundaries
-    m_bnd = int(x0 / laygen.templates.get_template('boundary_bottom').xy[1][0])
+    m_bnd = int(round(x0 / laygen.templates.get_template('boundary_bottom').xy[1][0]))
     devname_bnd_left = []
     devname_bnd_right = []
     transform_bnd_left = []
