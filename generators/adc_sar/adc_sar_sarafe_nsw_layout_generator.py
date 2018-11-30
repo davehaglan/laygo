@@ -109,8 +109,12 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     #y0 = origin[1] + laygen.get_xy(obj=laygen.get_template(name = cdrv_name, libname=workinglib), gridname=rg_m5m6)[1]-2 #refer to capdrv
     if mom_layer == 6:
         rg0 = rg_m5m6
+        rg1 = rg_m5m6
+        rg2 = rg_m4m5
     elif mom_layer == 4:
         rg0 = rg_m4m5
+        rg1 = rg_m3m4
+        rg2 = rg_m3m4
     y0 = origin[1] + laygen.get_xy(obj=laygen.get_template(name = cdrv_name, libname=workinglib), gridname=rg0)[1] \
          + laygen.get_xy(obj=laygen.get_template(name = sa_name, libname=workinglib), gridname=rg0)[1] - 4 #refer to sa
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][mom_layer], icdrvl_vo_c0_xy[0],
@@ -239,19 +243,19 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     xy0 = laygen.get_inst_pin_xy(isa.name, "INP", rg_m3m4, index=np.array([0, 0]), sort=True)[0]
     xy1 = laygen.get_inst_pin_xy(icdacl.name, "O" + str(nrin_sa - 1), rg0, index=np.array([0, 0]), sort=True)[0]
     for j in range(4):
-        laygen.route(None, laygen.layers['metal'][5], xy0=np.array([x0-2*j, xy0[1]]), xy1=np.array([x0-2*j, xy1[1]]), gridname0=rg0)
+        laygen.route(None, laygen.layers['metal'][5], xy0=np.array([x0-2*j, xy0[1]]), xy1=np.array([x0-2*j, xy1[1]]), gridname0=rg1)
     xy0 = laygen.get_inst_pin_xy(isa.name, "INM", rg_m4m5, index=np.array([0, 0]), sort=True)[0]
     xy1 = laygen.get_inst_pin_xy(icdacr.name, "O" + str(nrin_sa - 1), rg0, index=np.array([0, 0]), sort=True)[0]
     for j in range(4):
-        laygen.route(None, laygen.layers['metal'][5], xy0=np.array([x1+2*j, xy0[1]]), xy1=np.array([x1+2*j, xy1[1]]), gridname0=rg0)
+        laygen.route(None, laygen.layers['metal'][5], xy0=np.array([x1+2*j, xy0[1]]), xy1=np.array([x1+2*j, xy1[1]]), gridname0=rg1)
     #inp/inm - sa to capdac
     xy0 = laygen.get_inst_pin_xy(isa.name, "INP", rg_m4m5, index=np.array([0, 0]), sort=True)[0]
     xy1 = laygen.get_inst_pin_xy(isa.name, "INM", rg_m4m5, index=np.array([0, 0]), sort=True)[0]
     rsainp=laygen.route(None, laygen.layers['metal'][4], xy0=np.array([x0-8, xy0[1]]), xy1=xy0, gridname0=rg_m4m5)
     rsainm=laygen.route(None, laygen.layers['metal'][4], xy0=np.array([x1+8, xy1[1]]), xy1=xy1, gridname0=rg_m4m5)
     for j in range(4):
-        laygen.via(None, [x0 - 2 * j, xy0[1]], rg_m4m5)
-        laygen.via(None, [x1 + 2 * j, xy1[1]], rg_m4m5)
+        laygen.via(None, [x0 - 2 * j, xy0[1]], rg2)
+        laygen.via(None, [x1 + 2 * j, xy1[1]], rg2)
     x0 = laygen.get_xy(obj = icdacl, gridname = rg_m3m4)[0] - 1
     x1 = laygen.get_xy(obj = icdacr, gridname = rg_m3m4)[0] + 1
     xy0 = laygen.get_inst_pin_xy(isa.name, "INP", rg_m3m4, index=np.array([0, 0]), sort=True)[0]
