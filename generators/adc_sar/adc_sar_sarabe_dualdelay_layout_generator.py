@@ -265,8 +265,8 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
         refi = isp_r[-1].name
         devname_bnd_left += ['nmos4_fast_left', 'pmos4_fast_left']
         devname_bnd_right += ['nmos4_fast_right', 'pmos4_fast_right']
-        transform_bnd_left += ['MX', 'R0']
-        transform_bnd_right += ['MX', 'R0']
+        transform_bnd_left += ['R0', 'MX']
+        transform_bnd_right += ['R0', 'MX']
         isp_r.append(laygen.relplace(name="I" + objectname_pfix + 'SP_route1', templatename=space_name,
                                    gridname=pg, refinstname=refi, direction='top', transform='MX',
                                    template_libname=workinglib))
@@ -283,8 +283,8 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
         refi = isp_r[-1].name
         devname_bnd_left += ['nmos4_fast_left', 'pmos4_fast_left']
         devname_bnd_right += ['nmos4_fast_right', 'pmos4_fast_right']
-        transform_bnd_left += ['MX', 'R0']
-        transform_bnd_right += ['MX', 'R0']
+        transform_bnd_left += ['R0', 'MX']
+        transform_bnd_right += ['R0', 'MX']
         isp_r.append(laygen.relplace(name="I" + objectname_pfix + 'SP_route3', templatename=space_name,
                                    gridname=pg, refinstname=refi, direction='top', transform='MX',
                                    template_libname=workinglib))
