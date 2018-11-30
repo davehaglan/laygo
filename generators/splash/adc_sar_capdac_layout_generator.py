@@ -105,6 +105,13 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
                                      gridname=pg, refinstname=refin, shape=np.array([1, m*(2**i-m_vertical[i])]), direction='top')
             refin=idmy.name
             idmydac.append(idmy)
+        if i == num_bits_vertical-1 and m_vertical[i]==2**i:
+            idmy_rdx2 = laygen.relplace(name="I" + objectname_pfix + 'VDACDMY_rdx2' + str(i), templatename=devname_cap_dmy,
+                           gridname=pg, refinstname=ivdac[-1].name, shape=np.array([1, 4]),
+                           direction='top')
+    idmy_rdx2_bot = laygen.relplace(name="I" + objectname_pfix + 'VDACDMY_rdx2_bot', templatename=devname_cap_dmy,
+                                gridname=pg, refinstname=ic0.name, shape=np.array([1, 2]),
+                                direction='bottom', transform='MX')
     ibndt=[]
     ibndt.append(laygen.relplace(name="I" + objectname_pfix + 'BNDT0', templatename=devname_cap_boundary,
                                  gridname=pg, refinstname=refin, shape=np.array([1, num_space_top]), direction='top'))
@@ -123,6 +130,13 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
                                      gridname=pg, refinstname=refin, shape=np.array([2**i, m*(2**num_bits_vertical-m_horizontal[i])]), direction='top')
             refin=idmy.name
             idmydac.append(idmy)
+        if m_vertical[i]==2**i:
+            idmy_rdx2 = laygen.relplace(name="I" + objectname_pfix + 'HDACDMY_rdx2' + str(i), templatename=devname_cap_dmy,
+                           gridname=pg, refinstname=ihdac[-1].name, shape=np.array([2**i, 4]),
+                           direction='top')
+        idmy_rdx2_bot = laygen.relplace(name="I" + objectname_pfix + 'HDACDMY_rdx2_bot' + str(i), templatename=devname_cap_dmy,
+                                    gridname=pg, refinstname=ihdac[i].name, shape=np.array([2 ** i, 2]),
+                                    direction='bottom', transform='MX')
         ibndt.append(laygen.relplace(name="I" + objectname_pfix + 'BNDT' + str(i+1), templatename=devname_cap_boundary,
                                      gridname=pg, refinstname=refin, shape=np.array([2**i, num_space_top]), direction='top'))
     #right boundaries

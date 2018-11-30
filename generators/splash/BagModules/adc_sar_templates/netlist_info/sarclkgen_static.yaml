@@ -160,7 +160,7 @@ instances:
         num_bits: 1
       O:
         direction: output
-        net_name: "net09"
+        net_name: "UPB"
         num_bits: 1
   PIN24:
     lib_name: basic
@@ -296,5 +296,5 @@ instances:
         num_bits: 1
       UPB:
         direction: input
-        net_name: "VDD"
+        net_name: "UPB"
         num_bits: 1

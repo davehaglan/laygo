@@ -49,6 +49,7 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
                     num_space_right=1,
                     num_space_top=1,
                     num_space_bottom=1,
+                    mom_layer=6,
                     placement_resolution=[None, None],
                     origin=np.array([0, 0])):
 
@@ -75,6 +76,7 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
     pg = placement_grid
     rg_m6m7 = routing_grid_m6m7
     m=m_unit
+    mom_layer=mom_layer
 
     # placement
     #left boundaries
@@ -170,7 +172,7 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
     #c0 route
     c_bot_xy = laygen.get_inst_pin_xy(ic0.name, 'BOTTOM', rg_m6m7, index=np.array([0, m - 1]))[0]
     c_bot_xy2 = laygen.get_template_pin_xy(ic0.cellname, 'BOTTOM', rg_m6m7)[0]
-    rc0=laygen.route(None, laygen.layers['metal'][7], xy0=c_bot_xy + np.array([0, 0]), xy1=np.array([0, y0]), gridname0=rg_m6m7, direction='y')
+    rc0=laygen.route(None, laygen.layers['metal'][mom_layer+1], xy0=c_bot_xy + np.array([0, 0]), xy1=np.array([0, y0]), gridname0=rg_m6m7, direction='y')
     for j in range(m):
         laygen.via(None, c_bot_xy2, refinstname=ic0.name, refinstindex=np.array([0, j]), gridname=rg_m6m7)
     #bottom route
@@ -179,29 +181,29 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
     for i, c in enumerate(ivdac):
         c_bot_xy = laygen.get_inst_pin_xy(c.name, 'BOTTOM', rg_m6m7, index=np.array([0, m * m_vertical[i] - 1]))[0]
         c_bot_xy2 = laygen.get_template_pin_xy(c.cellname, 'BOTTOM', rg_m6m7)[0]
-        rbot.append(laygen.route(None, laygen.layers['metal'][7], xy0=c_bot_xy + np.array([2*(num_bits_vertical-i), 0]), xy1=np.array([0, y0]), gridname0=rg_m6m7, direction='y'))
+        rbot.append(laygen.route(None, laygen.layers['metal'][mom_layer+1], xy0=c_bot_xy + np.array([2*(num_bits_vertical-i), 0]), xy1=np.array([0, y0]), gridname0=rg_m6m7, direction='y'))
         #for j in range(m*2**i): #radix2
         for j in range(m * m_vertical[i]):
             laygen.via(None, c_bot_xy2 + np.array([2*(num_bits_vertical-i), 0]), refinstname=c.name, refinstindex=np.array([0, j]), gridname=rg_m6m7)
     for i, c in enumerate(ihdac):
         c_bot_xy = laygen.get_inst_pin_xy(c.name, 'BOTTOM', rg_m6m7, index=np.array([0, m * m_horizontal[i] - 1]))[0]
         c_bot_xy2 = laygen.get_template_pin_xy(c.cellname, 'BOTTOM', rg_m6m7)[0]
-        rbot.append(laygen.route(None, laygen.layers['metal'][7], xy0=c_bot_xy + np.array([0, 0]), xy1=np.array([0, y0]), gridname0=rg_m6m7, direction='y'))
-        rbot2_hdac.append(laygen.route(None, laygen.layers['metal'][7], xy0=c_bot_xy + np.array([num_bits_vertical*2, 0]), xy1=np.array([num_bits_vertical*2, y0]), gridname0=rg_m6m7, direction='y'))
+        rbot.append(laygen.route(None, laygen.layers['metal'][mom_layer+1], xy0=c_bot_xy + np.array([0, 0]), xy1=np.array([0, y0]), gridname0=rg_m6m7, direction='y'))
+        rbot2_hdac.append(laygen.route(None, laygen.layers['metal'][mom_layer+1], xy0=c_bot_xy + np.array([num_bits_vertical*2, 0]), xy1=np.array([num_bits_vertical*2, y0]), gridname0=rg_m6m7, direction='y'))
         for j in range(m*m_horizontal[i]):
             laygen.via(None, c_bot_xy2 + np.array([0, 0]), refinstname=c.name, refinstindex=np.array([0, j]), gridname=rg_m6m7)
             laygen.via(None, c_bot_xy2 + np.array([num_bits_vertical*2, 0]), refinstname=c.name, refinstindex=np.array([0, j]), gridname=rg_m6m7)
         #parallel connections
         for k in range(2**i):
             c_bot_xy3 = laygen.get_inst_pin_xy(c.name, 'BOTTOM', rg_m6m7, index=np.array([k, m * m_horizontal[i] - 1]))[0]
-            laygen.route(None, laygen.layers['metal'][7], xy0=c_bot_xy3 + np.array([0, 0]), xy1=np.array([0, y0+1]), gridname0=rg_m6m7, direction='y')
-            laygen.route(None, laygen.layers['metal'][7], xy0=c_bot_xy3 + np.array([num_bits_vertical*2, 0]), xy1=np.array([num_bits_vertical*2, y0+1]), gridname0=rg_m6m7, direction='y')
+            laygen.route(None, laygen.layers['metal'][mom_layer+1], xy0=c_bot_xy3 + np.array([0, 0]), xy1=np.array([0, y0+1]), gridname0=rg_m6m7, direction='y')
+            laygen.route(None, laygen.layers['metal'][mom_layer+1], xy0=c_bot_xy3 + np.array([num_bits_vertical*2, 0]), xy1=np.array([num_bits_vertical*2, y0+1]), gridname0=rg_m6m7, direction='y')
             for j in range(m*m_horizontal[i]):
                 laygen.via(None, c_bot_xy2 + np.array([0, 0]), refinstname=c.name, refinstindex=np.array([k, j]), gridname=rg_m6m7)
                 laygen.via(None, c_bot_xy2 + np.array([num_bits_vertical*2, 0]), refinstname=c.name, refinstindex=np.array([k, j]), gridname=rg_m6m7)
         #col shorts
         if not i==0:
-            laygen.route(None, laygen.layers['metal'][6], xy0=np.array([c_bot_xy[0], y0+1]), xy1=np.array([c_bot_xy3[0]+num_bits_vertical*2, y0+1]), gridname0=rg_m6m7)
+            laygen.route(None, laygen.layers['metal'][mom_layer], xy0=np.array([c_bot_xy[0], y0+1]), xy1=np.array([c_bot_xy3[0]+num_bits_vertical*2, y0+1]), gridname0=rg_m6m7)
             laygen.via(None, np.array([c_bot_xy[0], y0+1]), gridname=rg_m6m7)
             laygen.via(None, np.array([c_bot_xy[0]+num_bits_vertical*2, y0+1]), gridname=rg_m6m7)
             for k in range(2**i):
@@ -209,13 +211,13 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
                 laygen.via(None, np.array([c_bot_xy3[0], y0+1]), gridname=rg_m6m7)
                 laygen.via(None, np.array([c_bot_xy3[0]+num_bits_vertical*2, y0+1]), gridname=rg_m6m7)
     #pins 
-    laygen.boundary_pin_from_rect(rc0, rg_m6m7, "I_C0", laygen.layers['pin'][7], size=4, direction='bottom')
+    laygen.boundary_pin_from_rect(rc0, rg_m6m7, "I_C0", laygen.layers['pin'][mom_layer+1], size=4, direction='bottom')
     for i, r in enumerate(rbot):
-        laygen.boundary_pin_from_rect(r, rg_m6m7, "I<" + str(i) + ">", laygen.layers['pin'][7], size=4,
+        laygen.boundary_pin_from_rect(r, rg_m6m7, "I<" + str(i) + ">", laygen.layers['pin'][mom_layer+1], size=4,
                                       direction='bottom')
     for i, r in enumerate(rbot2_hdac):
         laygen.boundary_pin_from_rect(r, rg_m6m7, "I2<" + str(i + num_bits_vertical) + ">",
-                                      laygen.layers['pin'][7], size=4, direction='bottom',
+                                      laygen.layers['pin'][mom_layer+1], size=4, direction='bottom',
                                       netname="I<" + str(i + num_bits_vertical) + ">")
     cnt=0
     for i, c in enumerate(ivdac):
@@ -223,8 +225,8 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m6m7,
         #for j in range(m * m_vertical[i]):
         for j in range(m * 2 ** i): #radix2
             c_top_xy = laygen.get_inst_pin_xy(c.name, 'TOP', rg_m6m7, index=np.array([0, j]))
-            rtop = laygen.route(None, laygen.layers['metal'][6], xy0=c_top_xy[0], xy1=c_top_xy[1], gridname0=rg_m6m7)
-            laygen.boundary_pin_from_rect(rtop, rg_m6m7, "O" + str(cnt), laygen.layers['pin'][6], size=4,
+            rtop = laygen.route(None, laygen.layers['metal'][mom_layer], xy0=c_top_xy[0], xy1=c_top_xy[1], gridname0=rg_m6m7)
+            laygen.boundary_pin_from_rect(rtop, rg_m6m7, "O" + str(cnt), laygen.layers['pin'][mom_layer], size=4,
                                           direction='left', netname="O")
             cnt+=1
     #grid alignment
@@ -301,6 +303,7 @@ if __name__ == '__main__':
         num_bits_horizontal=sizedict['capdac']['num_bits_horizontal']
         m_vertical=specdict['rdx_array'][:int(-1*(num_bits_horizontal))]
         m_horizontal=specdict['rdx_array'][int(-1*(num_bits_horizontal)):]
+        mom_layer=specdict['momcap_layer']
         for i, m in enumerate(m_horizontal):
             m_horizontal[i]=int(m_horizontal[i]/(2**i))
         if 'num_space_left' in sizedict['capdac']:
@@ -310,13 +313,18 @@ if __name__ == '__main__':
         #print(m_vertical, m_horizontal)
 
     yres= laygen.get_xy(obj=laygen.get_template(name='nmos4_fast_center_nf2'))[1] * 2
+    if mom_layer == 6:
+        rg_cdac = rg_m6m7
+    elif mom_layer == 4:
+        rg_cdac = rg_m4m5
 
     print(cell_name+" generating")
     mycell_list.append(cell_name)
     laygen.add_cell(cell_name)
     laygen.sel_cell(cell_name)
     #routing grid used as placement grid
-    generate_capdac(laygen, objectname_pfix='CDAC0', placement_grid=rg_m6m7, routing_grid_m6m7=rg_m6m7,
+    if mom_layer ==6:
+        generate_capdac(laygen, objectname_pfix='CDAC0', placement_grid=rg_cdac, routing_grid_m6m7=rg_cdac,
                     devname_cap_body='momcap_center_1x', devname_cap_dmy='momcap_dmy_1x',
                     devname_cap_boundary='momcap_boundary_1x',
                     devname_list_overlay_boundary_left=['momcap_dmyblk_1x', 
@@ -381,6 +389,76 @@ if __name__ == '__main__':
                     num_space_right=num_space_right,
                     num_space_top=num_space_top,
                     num_space_bottom=num_space_bottom,
+                    mom_layer=mom_layer,
+                    placement_resolution=[None, yres],
+                    origin=np.array([0, 0]))
+    elif mom_layer == 4:
+        generate_capdac(laygen, objectname_pfix='CDAC0', placement_grid=rg_cdac, routing_grid_m6m7=rg_cdac,
+                    devname_cap_body='momcap_center_1x', devname_cap_dmy='momcap_dmy_1x',
+                    devname_cap_boundary='momcap_boundary_1x',
+                    devname_list_overlay_boundary_left=['momcap_dmyblk_1x',
+                                                        'momcap_dmyptn_m1_1x',
+                                                        'momcap_dmyptn_m2_1x',
+                                                        'momcap_dmyptn_m5_1x',
+                                                        'momcap_dmyptn_m6_1x',
+                                                        'momcap_dmyptn_m7_1x',
+                                                        'momcap_dmyptn_m8_1x',
+                                                        'momcap_dmyptn_m9_1x',
+                                                        ],
+                    devname_list_overlay_boundary_bottom=['momcap_dmyblk_1x',
+                                                          'momcap_dmyptn_m1_1x',
+                                                          'momcap_dmyptn_m2_1x',
+                                                          'momcap_dmyptn_m6_1x',
+                                                          'momcap_dmyptn_m7_1x',
+                                                          'momcap_dmyptn_m8_1x',
+                                                          'momcap_dmyptn_m9_1x',
+                                                          ],
+                    devname_list_overlay_boundary_right=['momcap_dmyblk_1x',
+                                                         'momcap_dmyptn_m1_1x',
+                                                         'momcap_dmyptn_m2_1x',
+                                                         'momcap_dmyptn_m3_1x',
+                                                         'momcap_dmyptn_m4_1x',
+                                                         'momcap_dmyptn_m5_1x',
+                                                         'momcap_dmyptn_m6_1x',
+                                                         'momcap_dmyptn_m7_1x',
+                                                         'momcap_dmyptn_m8_1x',
+                                                         'momcap_dmyptn_m9_1x',
+                                                         ],
+                    devname_list_overlay_boundary_top=['momcap_dmyblk_1x',
+                                                       'momcap_dmyptn_m1_1x',
+                                                       'momcap_dmyptn_m2_1x',
+                                                       'momcap_dmyptn_m6_1x',
+                                                       'momcap_dmyptn_m7_1x',
+                                                       'momcap_dmyptn_m8_1x',
+                                                       'momcap_dmyptn_m9_1x',
+                                                       ],
+                    devname_list_overlay_body=['momcap_dmyblk_1x',
+                                               'momcap_dmyptn_m1_1x',
+                                               'momcap_dmyptn_m2_1x',
+                                               'momcap_dmyptn_m6_1x',
+                                               'momcap_dmyptn_m7_1x',
+                                               'momcap_dmyptn_m8_1x',
+                                               'momcap_dmyptn_m9_1x',
+                                               ],
+                    devname_list_overlay_dmy=['momcap_dmyblk_1x',
+                                              'momcap_dmyptn_m1_1x',
+                                              'momcap_dmyptn_m2_1x',
+                                              'momcap_dmyptn_m5_1x',
+                                              'momcap_dmyptn_m6_1x',
+                                              'momcap_dmyptn_m7_1x',
+                                              'momcap_dmyptn_m8_1x',
+                                              'momcap_dmyptn_m9_1x',
+                                              ],
+                    m_unit=m_unit,
+                    num_bits_vertical=num_bits_vertical,
+                    m_vertical=m_vertical,
+                    num_bits_horizontal=num_bits_horizontal,
+                    m_horizontal=m_horizontal,
+                    num_space_left=num_space_left,
+                    num_space_right=num_space_right,
+                    num_space_top=num_space_top,
+                    num_space_bottom=num_space_bottom,
+                    mom_layer=mom_layer,
                     placement_resolution=[None, yres],
                     origin=np.array([0, 0]))
     laygen.add_template_from_cell()

@@ -118,6 +118,7 @@ class serdes_templates__des(Module):
             in_name_list.append('IIN%d'%i)
             if ext_clk==False:
                 div_term_list.append({'I': divi_pin, 'O':divo_pin, 'CLK':'clk_int', 'ST':ST_pin, 'RST':RST_pin, 'VSS':VSS_pin, 'VDD':VDD_pin})
+                self.remove_pin('div<0>')
             else:
                 div_term_list.append({'I': 'VSS', 'O':'VSS', 'CLK':'VSS', 'ST':ST_pin, 'RST':RST_pin, 'VSS':VSS_pin, 'VDD':VDD_pin})
             div_name_list.append('IDIV%d'%i)

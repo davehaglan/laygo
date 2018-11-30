@@ -407,7 +407,7 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
         ro_v0, ro_h0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], xy0=np.array([0, 1]), xy1=np.array([0, 1]),
                         gridname0=rg_m2m3, refinstname0=imin0.name, refpinname0='D0', refinstindex0=np.array([i, 0]),
                         refinstname1 = imbias0.name, refpinname1 = 'D0', refinstindex1 = np.array([0, 0]), via0=[0,0])
-        laygen.boundary_pin_from_rect(ro_v0, rg_m2m3, 'out'+str(i), laygen.layers['pin'][3], size=4, direction='top', netname='out')
+        # laygen.boundary_pin_from_rect(ro_v0, rg_m2m3, 'out'+str(i), laygen.layers['pin'][3], size=4, direction='top', netname='out')
 
     laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 1]), xy1=np.array([0, 1]), gridname0=rg_m1m2,
                  refinstname0=imdmyl0.name, refpinname0='S0', refinstindex0=np.array([m_bias_dum - 1, 0]),
@@ -418,8 +418,14 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
                                    xy1=np.array([0, 1]), gridname0=rg_m2m3, refinstname0=imbias0.name, refpinname0='D0',
                                    refinstindex0=np.array([i, 0]), refinstname1=imin0.name, refpinname1='D0',
                                    refinstindex1=np.array([0, 0]), via0=[0, 0])
-        laygen.boundary_pin_from_rect(ro_v0, rg_m2m3, 'out' + str(m_in+i), laygen.layers['pin'][3], size=4, direction='top',
-                                  netname='out')
+        laygen.via(None, np.array([0, 0]), rg_m3m4_thick, refinstname=imbias0.name, refpinname='D0',refinstindex=np.array([i, 0]))
+        # laygen.boundary_pin_from_rect(ro_v0, rg_m2m3, 'out' + str(m_in+i), laygen.layers['pin'][3], size=4, direction='top',
+        #                           netname='out')
+    ro_m4=laygen.route(None, laygen.layers['metal'][4], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m3m4_thick,
+                 refinstname0=imbias0.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
+                 refinstname1=imbias0.name, refpinname1='D0', refinstindex1=np.array([m_bias-1, 0]))
+    laygen.pin(name='out', layer=laygen.layers['pin'][4], xy=laygen.get_rect_xy(ro_m4.name, rg_m3m4_thick), gridname=rg_m3m4_thick)
+
     for i in range(m_ofst):
         laygen.via(None, np.array([0, 1]), rg_m1m2, refinstname=imofst0.name, refpinname='D0',refinstindex=np.array([i, 0]))
 
@@ -428,10 +434,20 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
         laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
                      refinstname0=imin0.name, refpinname0='G0', refinstindex0=np.array([i, 0]), via0=[0,0],
                      refinstname1=imin0.name, refpinname1='G0', refinstindex1=np.array([i+1, 0]), via1=[0,0])
-    rin = laygen.route(None, laygen.layers['metal'][3], xy0=np.array([1, 0]), xy1=np.array([1, -6]), gridname0=rg_m2m3,
+    rin_m3 = laygen.route(None, laygen.layers['metal'][3], xy0=np.array([1, 0]), xy1=np.array([1, 3]), gridname0=rg_m2m3,
                  refinstname0=imin0.name, refpinname0='G0', refinstindex0=np.array([0, 0]), via0=[0, 0],
                  refinstname1=imin0.name, refpinname1='G0', refinstindex1=np.array([0, 0]))
-    laygen.boundary_pin_from_rect(rin, rg_m2m3, 'in', laygen.layers['pin'][3], size=4, direction='top')
+    rin_m4 = laygen.route(None, laygen.layers['metal'][4], xy0=laygen.get_rect_xy(rin_m3.name, rg_m3m4)[0],
+                          xy1=laygen.get_rect_xy(rin_m3.name, rg_m3m4)[0]-np.array([3, 0]), gridname0=rg_m3m4,
+                          via0=[0, 0])
+    rin = laygen.route(None, laygen.layers['metal'][5], xy0=laygen.get_rect_xy(rin_m4.name, rg_m4m5_thick)[1],
+                          xy1=laygen.get_rect_xy(rin_m4.name, rg_m4m5_thick)[1]+np.array([0, 6]), gridname0=rg_m4m5_thick,
+                          via0=[0, 0])
+    # rin_m4, rin = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], xy0=np.array([1, 3]),
+    #                 xy1=np.array([4, -4]), gridname0=rg_m3m4, gridname1=rg_m4m5_thick,
+    #                               refinstname0=imin0.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
+    #                 refinstname1=imin0.name, refpinname1='G0', refinstindex1=np.array([0, 0]))
+    laygen.boundary_pin_from_rect(rin, rg_m4m5_thick, 'in', laygen.layers['pin'][5], size=4, direction='top')
 
     # In-Out bypass
     for i in range(m_byp):
@@ -535,7 +551,7 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
 
     # VSS/VDD
     num_vert_pwr_l = 3
-    num_vert_pwr_r = 1 + m_sp4x*2
+    num_vert_pwr_r = 0 + m_sp4x*2
     # M2 VSS rails
     rvss0 = laygen.route(None, laygen.layers['metal'][2], xy0=np.array([-2*num_vert_pwr_l, 0]), xy1=np.array([2*num_vert_pwr_r, 0]), gridname0=rg_m2m3_thick,
                         refinstname0=itap0.name, refpinname0='TAP0', refinstindex0=np.array([0, 0]),
@@ -568,29 +584,29 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
 
     # M3 VDD/VSS vertical
     for i in range(num_vert_pwr_l):
-        rvvss_l = laygen.route(None, laygen.layers['metal'][3], xy0=np.array([-2*i-1, 1]), xy1=np.array([-2*i-1, 1]), gridname0=rg_m2m3_thick,
+        rvvss_l = laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+1, 1]), xy1=np.array([2*i+1, 1]), gridname0=rg_m2m3_thick,
                                refinstname0=itap0.name, refpinname0='TAP0', refinstindex0=np.array([0, 0]),
                                refinstname1=itap1.name, refpinname1='TAP0', refinstindex1=np.array([0, 0]))
-        rvvdd_l = laygen.route(None, laygen.layers['metal'][3], xy0=np.array([-2*i-2, 1]), xy1=np.array([-2*i-2, 1]), gridname0=rg_m2m3_thick,
+        rvvdd_l = laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+0, 1]), xy1=np.array([2*i+0, 1]), gridname0=rg_m2m3_thick,
                                refinstname0=itap0.name, refpinname0='TAP0', refinstindex0=np.array([0, 0]),
                                refinstname1=itap1.name, refpinname1='TAP0', refinstindex1=np.array([0, 0]))
-        laygen.via(None, np.array([-2*i-1, 1]), refinstname=itap0.name, refpinname='TAP0', refinstindex=np.array([0, 0]),
+        laygen.via(None, np.array([2*i+1, 1]), refinstname=itap0.name, refpinname='TAP0', refinstindex=np.array([0, 0]),
                        gridname=rg_m2m3_thick)
-        laygen.via(None, np.array([-2*i-1, 0]), refinstname=itap0.name, refpinname='TAP0', refinstindex=np.array([0, 0]),
+        laygen.via(None, np.array([2*i+1, 0]), refinstname=itap0.name, refpinname='TAP0', refinstindex=np.array([0, 0]),
                        gridname=rg_m2m3_thick)
-        laygen.via(None, np.array([-2 * i - 1, 1]), refinstname=itap1.name, refpinname='TAP0',
+        laygen.via(None, np.array([2*i+1, 1]), refinstname=itap1.name, refpinname='TAP0',
                    refinstindex=np.array([0, 0]), gridname=rg_m2m3_thick)
-        laygen.via(None, np.array([-2*i-1, 0]), refinstname=itap1.name, refpinname='TAP0', refinstindex=np.array([0, 0]),
+        laygen.via(None, np.array([2*i+1, 0]), refinstname=itap1.name, refpinname='TAP0', refinstindex=np.array([0, 0]),
                        gridname=rg_m2m3_thick)
-        laygen.via(None, np.array([-2*i-1, 1]), refinstname=itap2.name, refpinname='TAP0', refinstindex=np.array([0, 0]),
+        laygen.via(None, np.array([2*i+1, 1]), refinstname=itap2.name, refpinname='TAP0', refinstindex=np.array([0, 0]),
                        gridname=rg_m2m3_thick)
-        laygen.via(None, np.array([-2*i-1, 0]), refinstname=itap2.name, refpinname='TAP0', refinstindex=np.array([0, 0]),
+        laygen.via(None, np.array([2*i+1, 0]), refinstname=itap2.name, refpinname='TAP0', refinstindex=np.array([0, 0]),
                        gridname=rg_m2m3_thick)
-        laygen.via(None, np.array([-2 * i - 1, 1]), refinstname=itap3.name, refpinname='TAP0',
+        laygen.via(None, np.array([2*i+1, 1]), refinstname=itap3.name, refpinname='TAP0',
                    refinstindex=np.array([0, 0]), gridname=rg_m2m3_thick)
-        laygen.via(None, np.array([-2*i-1, 0]), refinstname=itap3.name, refpinname='TAP0', refinstindex=np.array([0, 0]),
+        laygen.via(None, np.array([2*i+1, 0]), refinstname=itap3.name, refpinname='TAP0', refinstindex=np.array([0, 0]),
                        gridname=rg_m2m3_thick)
-        laygen.via(None, np.array([-2*i-2-8, -1]), refinstname=imdmyl_in0.name, refpinname='S0', refinstindex=np.array([0, 0]),
+        laygen.via(None, np.array([2*i+0-8, -1]), refinstname=imdmyl_in0.name, refpinname='S0', refinstindex=np.array([0, 0]),
                        gridname=rg_m2m3)
         laygen.pin(name='VSS'+str(i), layer=laygen.layers['pin'][3], xy=laygen.get_rect_xy(rvvss_l.name, rg_m2m3_thick),
                    gridname=rg_m2m3_thick, netname='VSS')
@@ -654,7 +670,9 @@ if __name__ == '__main__':
     rg_m2m3 = 'route_M2_M3_cmos'
     rg_m2m3_thick = 'route_M2_M3_thick_basic'
     rg_m3m4 = 'route_M3_M4_basic'
+    rg_m3m4_thick = 'route_M3_M4_basic_thick'
     rg_m4m5 = 'route_M4_M5_basic'
+    rg_m4m5_thick = 'route_M4_M5_basic_thick'
     rg_m5m6 = 'route_M5_M6_basic'
     rg_m1m2_pin = 'route_M1_M2_basic'
     rg_m2m3_pin = 'route_M2_M3_basic'

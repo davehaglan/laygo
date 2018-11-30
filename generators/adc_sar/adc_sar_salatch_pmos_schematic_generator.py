@@ -21,13 +21,13 @@ params = dict(
     pw=4,
     nw=4,
     m=8, #larger than 8, even number
-    m_d=8, #larger than 8, even number
+    # m_d=8, #larger than 8, even number
     m_rst=4,
-    m_rst_d=4,
+    # m_rst_d=4,
     m_rgnn=4,
-    m_rgnp_d=4,
+    # m_rgnp_d=4,
     m_buf=8,
-    pmos_body='VDD',
+    # pmos_body='VDD',
     device_intent='fast',
     )
 
@@ -41,21 +41,21 @@ if load_from_file==True:
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
     params['m']=sizedict['salatch']['m']
-    params['m_d']=sizedict['salatch']['m_d']
     params['m_rst']=sizedict['salatch']['m_rst']
-    params['m_rst_d']=sizedict['salatch']['m_rst_d']
     params['m_rgnn']=sizedict['salatch']['m_rgnn']
-    params['m_rgnp_d']=sizedict['salatch']['m_rgnp_d']
     params['m_buf']=sizedict['salatch']['m_buf']
-    params['doubleSA']=sizedict['salatch']['doubleSA']
+    # params['doubleSA']=sizedict['salatch']['doubleSA']
     params['lch']=sizedict['lch']
     params['pw']=sizedict['pw']
     params['nw']=sizedict['nw']
     params['device_intent']=sizedict['device_intent']
-    params['pmos_body']=specdict['pmos_body']
 
-if params['doubleSA'] == True:
+if sizedict['salatch']['doubleSA'] == True:
     cell_name = 'doubleSA_pmos'
+    params['m_d']=sizedict['salatch']['m_d']
+    params['m_rst_d']=sizedict['salatch']['m_rst_d']
+    params['m_rgnp_d']=sizedict['salatch']['m_rgnp_d']
+    params['pmos_body']=specdict['pmos_body']
 
 print('creating BAG project')
 prj = bag.BagProject()
