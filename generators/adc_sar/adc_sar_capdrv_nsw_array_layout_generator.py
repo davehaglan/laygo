@@ -298,6 +298,8 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
             
             
     # en route
+    x0 = laygen.get_template_pin_xy(cdac_name, 'I<' + str(num_bits - num_bits_h) + '>', rg_m4m5, libname=workinglib)[0][0]
+    x1 = laygen.get_template_size(cdrv_name_list[0], gridname=rg_m4m5, libname=workinglib)[0]
     ren0 = []
     ren1 = []
     ren2 = []
@@ -306,19 +308,20 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
             if num_bits_row*i+j < num_bits:
                 rh0, _ren0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                              icdrv_en0_xy[num_bits_row * i + j][0],
-                                             np.array([icdrv_en0_xy[num_bits_row * i + j][0][0] + i*3 + 3 + 12, y0]), rg_m4m5)
+                                             np.array([x0 + 2 + num_row * 0 + num_output_routes*num_row + i + j * x1, y0]), rg_m4m5)
+                                             # np.array([icdrv_en0_xy[num_bits_row * i + j][0][0] + i*3 + 3 + 12, y0]), rg_m4m5)
                 ren0.append(_ren0)
                 rh0, _ren1 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                              icdrv_en1_xy[num_bits_row * i + j][0],
-                                             np.array([icdrv_en1_xy[num_bits_row * i + j][0][0] + i*3 + 4 + 12, y0]), rg_m4m5)
+                                             np.array([x0 + 2 + num_row * 1 + num_output_routes*num_row + i + j * x1, y0]), rg_m4m5)
+                                             # np.array([icdrv_en1_xy[num_bits_row * i + j][0][0] + i*3 + 4 + 12, y0]), rg_m4m5)
                 ren1.append(_ren1)
                 rh0, _ren2 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                              icdrv_en2_xy[num_bits_row * i + j][0],
-                                             np.array([icdrv_en2_xy[num_bits_row * i + j][0][0] + i*3 + 5 + 12, y0]), rg_m4m5)
+                                             np.array([x0 + 2 + num_row * 2 + num_output_routes*num_row + i + j * x1, y0]), rg_m4m5)
+                                             # np.array([icdrv_en2_xy[num_bits_row * i + j][0][0] + i*3 + 5 + 12, y0]), rg_m4m5)
                 ren2.append(_ren2)
     # vc0 route
-    x0 = laygen.get_template_pin_xy(cdac_name, 'I<'+str(num_bits-num_bits_h)+'>', rg_m4m5, libname=workinglib)[0][0]
-    x1 = laygen.get_template_size(cdrv_name_list[0], gridname=rg_m4m5, libname=workinglib)[0]
     rh0, rvc0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                  icdrv_vref1_xy[0][0],
                                  np.array([x0+1, y1]), rg_m4m5)
