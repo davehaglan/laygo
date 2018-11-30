@@ -372,8 +372,7 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
     pwr_dim_left=laygen.get_xy(obj =itapl[-1].template, gridname=rg_m2m3)[0]
     pwr_dim_right=pwr_dim_left
     if m_space_4x>1:
-        # pwr_dim_right+= laygen.get_xy(obj =isp4x[0].template, gridname=rg_m2m3)[0] * (m_space_4x - 1)
-        pwr_dim_right+= laygen.get_xy(obj =isp4x[0].template, gridname=rg_m2m3)[0] * (2 - 1)
+        pwr_dim_right+= laygen.get_xy(obj =isp4x[0].template, gridname=rg_m2m3)[0] * (m_space_4x - 1)
     pwr_dim_delta=pwr_dim_right-pwr_dim_left
     rvdd = []
     rvss = []
