@@ -113,8 +113,8 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
         rg2 = rg_m4m5
     elif mom_layer == 4:
         rg0 = rg_m4m5
-        rg1 = rg_m3m4
-        rg2 = rg_m3m4
+        rg1 = rg_m4m5
+        rg2 = rg_m4m5
     y0 = origin[1] + laygen.get_xy(obj=laygen.get_template(name = cdrv_name, libname=workinglib), gridname=rg0)[1] \
          + laygen.get_xy(obj=laygen.get_template(name = sa_name, libname=workinglib), gridname=rg0)[1] - 4 #refer to sa
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][mom_layer], icdrvl_vo_c0_xy[0],
@@ -243,11 +243,11 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     xy0 = laygen.get_inst_pin_xy(isa.name, "INP", rg_m3m4, index=np.array([0, 0]), sort=True)[0]
     xy1 = laygen.get_inst_pin_xy(icdacl.name, "O" + str(nrin_sa - 1), rg1, index=np.array([0, 0]), sort=True)[0]
     for j in range(4):
-        laygen.route(None, laygen.layers['metal'][mom_layer-1], xy0=np.array([x0-2*j, xy0[1]]), xy1=np.array([x0-2*j, xy1[1]]), gridname0=rg2)
+        laygen.route(None, laygen.layers['metal'][5], xy0=np.array([x0-2*j, xy0[1]]), xy1=np.array([x0-2*j, xy1[1]]), gridname0=rg1)
     xy0 = laygen.get_inst_pin_xy(isa.name, "INM", rg_m4m5, index=np.array([0, 0]), sort=True)[0]
     xy1 = laygen.get_inst_pin_xy(icdacr.name, "O" + str(nrin_sa - 1), rg1, index=np.array([0, 0]), sort=True)[0]
     for j in range(4):
-        laygen.route(None, laygen.layers['metal'][mom_layer-1], xy0=np.array([x1+2*j, xy0[1]]), xy1=np.array([x1+2*j, xy1[1]]), gridname0=rg2)
+        laygen.route(None, laygen.layers['metal'][5], xy0=np.array([x1+2*j, xy0[1]]), xy1=np.array([x1+2*j, xy1[1]]), gridname0=rg1)
     #inp/inm - sa to capdac
     xy0 = laygen.get_inst_pin_xy(isa.name, "INP", rg_m4m5, index=np.array([0, 0]), sort=True)[0]
     xy1 = laygen.get_inst_pin_xy(isa.name, "INM", rg_m4m5, index=np.array([0, 0]), sort=True)[0]
