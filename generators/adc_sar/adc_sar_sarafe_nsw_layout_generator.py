@@ -114,7 +114,7 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     elif mom_layer == 4:
         rg0 = rg_m4m5
         rg1 = rg_m4m5
-        rg2 = rg_m3m4
+        rg2 = rg_m4m5
     y0 = origin[1] + laygen.get_xy(obj=laygen.get_template(name = cdrv_name, libname=workinglib), gridname=rg0)[1] \
          + laygen.get_xy(obj=laygen.get_template(name = sa_name, libname=workinglib), gridname=rg0)[1] - 4 #refer to sa
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][mom_layer], icdrvl_vo_c0_xy[0],
