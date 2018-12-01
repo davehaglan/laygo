@@ -309,19 +309,19 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
                 rh0, _ren0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                              icdrv_en0_xy[num_bits_row * i + j][0],
                                              # np.array([x0 - num_row * 2 - i - j * x1, y0]), rg_m4m5)
-                                             np.array([x0 + 0 + num_row * 0 + num_output_routes*num_row + i + j * x1, y0]), rg_m4m5)
+                                             np.array([x0 - 1 + num_row * 0 + num_output_routes*num_row + i + j * x1, y0]), rg_m4m5)
                                              # np.array([icdrv_en0_xy[num_bits_row * i + j][0][0] + i*3 + 3 + 12, y0]), rg_m4m5)
                 ren0.append(_ren0)
                 rh0, _ren1 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                              icdrv_en1_xy[num_bits_row * i + j][0],
                                              # np.array([x0 - num_row * 1 - i - j * x1, y0]), rg_m4m5)
-                                             np.array([x0 + 0 + num_row * 1 + num_output_routes*num_row + i + j * x1, y0]), rg_m4m5)
+                                             np.array([x0 - 1 + num_row * 1 + num_output_routes*num_row + i + j * x1, y0]), rg_m4m5)
                                              # np.array([icdrv_en1_xy[num_bits_row * i + j][0][0] + i*3 + 4 + 12, y0]), rg_m4m5)
                 ren1.append(_ren1)
                 rh0, _ren2 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                              icdrv_en2_xy[num_bits_row * i + j][0],
                                              # np.array([x0 - num_row* 0 - i - j * x1, y0]), rg_m4m5)
-                                             np.array([x0 + 0 + num_row * 2 + num_output_routes*num_row + i + j * x1, y0]), rg_m4m5)
+                                             np.array([x0 - 1 + num_row * 2 + num_output_routes*num_row + i + j * x1, y0]), rg_m4m5)
                                              # np.array([icdrv_en2_xy[num_bits_row * i + j][0][0] + i*3 + 5 + 12, y0]), rg_m4m5)
                 ren2.append(_ren2)
     # vc0 route
