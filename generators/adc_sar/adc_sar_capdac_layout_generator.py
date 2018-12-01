@@ -399,7 +399,7 @@ if __name__ == '__main__':
                     devname_list_overlay_boundary_left=['momcap_dmyblk_1x',
                                                         'momcap_dmyptn_m1_1x',
                                                         'momcap_dmyptn_m2_1x',
-                                                        'momcap_dmyptn_m5_1x',
+                                                        # 'momcap_dmyptn_m5_1x',
                                                         'momcap_dmyptn_m6_1x',
                                                         'momcap_dmyptn_m7_1x',
                                                         'momcap_dmyptn_m8_1x',
