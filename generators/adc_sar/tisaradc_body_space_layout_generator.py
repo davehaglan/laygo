@@ -140,8 +140,8 @@ def generate_tisaradc_space(laygen, objectname_pfix, tisar_libname, space_libnam
                                               template_name=tisar_name, template_libname=tisar_libname,
                                               template_pin_prefix=['VSS'], xy_grid_type='ygrid')
     input_rails_rect = [rvss_m5]
-    rvss_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_', 
-                layer=laygen.layers['pin'][6], gridname=rg_m5m6_thick_temp_tisar, netnames=['VSS'], direction='x', 
+    rvss_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
+                layer=laygen.layers['pin'][6], gridname=rg_m5m6_thick_temp_tisar, netnames=['VSS'], direction='x',
                 input_rails_rect=input_rails_rect, generate_pin=True, overwrite_start_coord=None, overwrite_end_coord=None,
                 offset_start_index=0, offset_end_index=-2)
 

@@ -60,7 +60,7 @@ def generate_tisaradc_top(laygen, objectname_pfix, tisar_libname, bias_libname,
     clkgbuf_xy=origin+np.array([bias_size_pg[0], 0])+tisar_size_pg-2*np.array([clkgbuf_size_pg[0], 0])
     iclkgbuf = laygen.place(name="I" + objectname_pfix + 'CLKGBUF0', templatename='clkgcalbuf_wbnd',
                             gridname=pg, xy=clkgbuf_xy, template_libname=workinglib)
-    # manual eco 
+    # manual eco
     laygen.add_inst(None, workinglib, 'tisaradc_top_manual', xy=np.array([0, 0]))
 
     bias_template = laygen.templates.get_template(bias_name, bias_libname)
@@ -112,9 +112,9 @@ def generate_tisaradc_top(laygen, objectname_pfix, tisar_libname, bias_libname,
     pdict=laygen.get_inst_pin_xy(None, None, rg_m5m6_thick)
     for i, cnb in enumerate(connmap_bias):
         cnt=connmap_tisar[i]
-        rv0, rh0 = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6], 
-                                   pdict[ibias.name][cnb][0], pdict[itisar.name][cnt][0], 
-                                   gridname=rg_m5m6_thick)
+        rv0, rh0 = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6],
+                                   pdict[ibias.name][cnb][0], pdict[itisar.name][cnt][0],
+                                   gridname0=rg_m5m6_thick)
     #pins
     for pn in bias_pins:
         if pn.startswith('ADCBIAS'):
@@ -165,20 +165,20 @@ def generate_tisaradc_top(laygen, objectname_pfix, tisar_libname, bias_libname,
     for i in range(num_slices):
         rclk_m2m3.append([])
         for j in range(5):
-            rh0, rv0 = laygen.route_hv(laygen.layers['metal'][2], laygen.layers['metal'][3], 
-                            xy0=pdict_m2m3[itisar.name]['CLKCAL'+str(i)+'<'+str(j)+'>'][0], 
+            rh0, rv0 = laygen.route_hv(laygen.layers['metal'][2], laygen.layers['metal'][3],
+                            xy0=pdict_m2m3[itisar.name]['CLKCAL'+str(i)+'<'+str(j)+'>'][0],
                             xy1=xy1-np.array([10*i+2*j,-4]),
-                            gridname=rg_m2m3)
+                            gridname0=rg_m2m3)
             rclk_m2m3[i].append(rv0)
     for i in range(num_slices):
         for j in range(5):
             xy0=laygen.get_rect_xy(rclk_m2m3[i][j].name, gridname=rg_m3m4, sort=True)[1]
             #xy0=laygen.get_rect_xy(rclk_m3m4[i][j].name, gridname=rg_m3m4, sort=True)[1]
-            rv0, rh0, rv1 = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], 
+            rv0, rh0, rv1 = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],
                             xy0=xy0,
                             xy1=pdict_m3m4[iclkgbuf.name]['CLKCAL'+str(i)+'<'+str(j)+'>'][0],
                             track_y=xy0[1]-10*i-2*j+40,
-                            gridname=rg_m3m4)
+                            gridname0=rg_m3m4)
     for i in range(num_slices):
         for j in range(5):
             xy0=pdict_m3m4[iclkgbuf.name]['clkgcal'+str(i)+'<'+str(j)+'>'][0]
@@ -190,10 +190,10 @@ def generate_tisaradc_top(laygen, objectname_pfix, tisar_libname, bias_libname,
         rclk_m3m4.append([])
         for j in range(5):
             xy0=laygen.get_rect_xy(rclk_m2m3[i][j].name, gridname=rg_m3m4, sort=True)[1]
-            rv0, rh0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], 
+            rv0, rh0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4],
                             xy0=xy0,
                             xy1=xy0+np.array([10*num_slices+32, -10*i-2*j+40]),
-                            gridname=rg_m3m4)
+                            gridname0=rg_m3m4)
             rclk_m3m4[i].append(rh0)
     for i in range(num_slices):
         for j in range(5):
@@ -201,15 +201,15 @@ def generate_tisaradc_top(laygen, objectname_pfix, tisar_libname, bias_libname,
             r=laygen.route(None, layer=laygen.layers['metal'][3], xy0=xy0, xy1=np.array([xy0[0], 0]), gridname0=rg_m3m4, addvia0=True)
             laygen.boundary_pin_from_rect(r, rg_m3m4, 'clkgcal'+str(i)+'<'+str(j)+'>', laygen.layers['pin'][3], size=6, direction='bottom')
     '''
-            
+
     #other pins - duplicate
     pin_prefix_list=['RSTP', 'RSTN', 'CLKIP', 'CLKIN', 'VREF']
     for pn, p in tisar_pins.items():
         for pfix in pin_prefix_list:
             if pn.startswith(pfix):
                 laygen.add_pin(pn, tisar_pins[pn]['netname'], tisar_xy+tisar_pins[pn]['xy'], tisar_pins[pn]['layer'])
-        
-        
+
+
     '''
     #pins - code
     pinmap_code=[]

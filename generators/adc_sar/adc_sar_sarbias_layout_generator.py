@@ -265,7 +265,7 @@ def generate_rdacarray_core(laygen, objectname_pfix, rdac_libname, cap_1x_libnam
     #analog out
     rdac_size_m5m6_basic_thick=laygen.get_template_size(name=irdac[0].cellname, gridname=rg_m5m6_basic_thick, libname=irdac[0].libname)
     x0=rdac_size_m5m6_basic_thick[0]*num_rdac-1
-    y0=rdac_size_m5m6_basic_thick[1]+2
+    y0=rdac_size_m5m6_basic_thick[1]-1
     for i in range(num_rdac):
         #make virtual grids and route on the grids (assuming drc clearance of each block)
         rg_route='route_M4_M5_temp_sig'
@@ -315,7 +315,7 @@ def generate_sfarray_wopcm_core(laygen, objectname_pfix, sf_libname, cap_1x_libn
                       gridname=pg, xy=sf_xy, shape=np.array([num_bias, num_stack]), template_libname=sf_libname)
     sf_template = laygen.templates.get_template(sf_name, sf_libname)
     sf_pins=sf_template.pins
-    sf_xy=isf.xy[0]
+    sf_xy=isf.xy
     left_space_phy = laygen.get_grid(pg).width*left_space
     right_space_phy = laygen.get_grid(pg).width*right_space
     sf_size = laygen.templates.get_template(sf_name, libname=sf_libname).size
@@ -964,7 +964,7 @@ def generate_sfarray(laygen, objectname_pfix, sf_core_libname, biascap_libname, 
     #pins        
     sf_template = laygen.templates.get_template(sf_core_name, sf_core_libname)
     sf_pins=sf_template.pins
-    sf_xy=isf.xy[0]
+    sf_xy=isf.xy
     sf_size = sf_template.size
     for pn in sf_pins:
         if pn.startswith('ADCBIAS'):

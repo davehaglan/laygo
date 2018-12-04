@@ -387,10 +387,16 @@ def generate_adc_retimer(laygen, objectname_pfix, ret_libname, sar_libname, clkd
                                                                    origin=np.array([0, 0]))
 
     # Define clock phases
-    ck_phase_2 = num_slices - 1
-    ck_phase_1 = int(num_slices / 2) - 1
-    ck_phase_0_0 = int((int(num_slices / 2) + 1) % num_slices)
-    ck_phase_0_1 = 1
+    if num_slices > 4:
+        ck_phase_2 = num_slices - 1
+        ck_phase_1 = int(num_slices / 2) - 1
+        ck_phase_0_0 = int((int(num_slices / 2) + 1) % num_slices)
+        ck_phase_0_1 = 1
+    elif num_slices == 4:
+        ck_phase_2 = 2
+        ck_phase_1 = 0
+        ck_phase_0_0 = 3
+        ck_phase_0_1 = 1
     ck_phase_out = ck_phase_1
     ck_phase_buf = sorted(set([ck_phase_2, ck_phase_1, ck_phase_0_0, ck_phase_0_1]))
 
@@ -415,12 +421,23 @@ def generate_adc_retimer(laygen, objectname_pfix, ret_libname, sar_libname, clkd
                     + [laygen.get_template_xy(name=ret_name, gridname=pg, libname=workinglib)[0]*slice_order.index(ck_phase_2), 0] \
                     - [laygen.get_template_xy(name=ibuf_name, gridname=pg, libname=templib_logic)[0]*8, 0] \
                     - [tap_width, 0]
-    ckbuf_1_origin = origin + laygen.get_template_xy(name=bnd_bottom[0].cellname, gridname=pg) \
-                    + [0, laygen.get_template_xy(name=ret_name, gridname=pg, libname=workinglib)[1]] \
-                    + [0, laygen.get_template_xy(name=ibuf_name, gridname=pg, libname=templib_logic)[1]] \
-                    + [laygen.get_template_xy(name=ret_name, gridname=pg, libname=workinglib)[0]*slice_order.index(ck_phase_1), 0] \
-                    - [laygen.get_template_xy(name=ibuf_name, gridname=pg, libname=templib_logic)[0]*8, 0] \
-                    - [tap_width, 0]
+    if num_slices > 4:
+        ckbuf_1_origin = origin + laygen.get_template_xy(name=bnd_bottom[0].cellname, gridname=pg) \
+                        + [0, laygen.get_template_xy(name=ret_name, gridname=pg, libname=workinglib)[1]] \
+                        + [0, laygen.get_template_xy(name=ibuf_name, gridname=pg, libname=templib_logic)[1]] \
+                        + [laygen.get_template_xy(name=ret_name, gridname=pg, libname=workinglib)[0]*slice_order.index(ck_phase_1), 0] \
+                        - [laygen.get_template_xy(name=ibuf_name, gridname=pg, libname=templib_logic)[0]*8, 0] \
+                        - [tap_width, 0]
+    elif num_slices == 4:
+        ckbuf_1_origin = origin + laygen.get_template_xy(name=bnd_bottom[0].cellname, gridname=pg) \
+                        + [0, laygen.get_template_xy(name=ret_name, gridname=pg, libname=workinglib)[1]] \
+                        + [0, laygen.get_template_xy(name=ibuf_name, gridname=pg, libname=templib_logic)[1]] \
+                        + [laygen.get_template_xy(name=ret_name, gridname=pg, libname=workinglib)[0]*4, 0] \
+                        - [laygen.get_template_xy(name=ibuf_name, gridname=pg, libname=templib_logic)[0]*8, 0] \
+                         - [laygen.get_template_xy(name=sr_name, gridname=pg, libname=templib_logic)[0], 0] \
+                         - [laygen.get_template_xy(name=obuf_name, gridname=pg, libname=templib_logic)[0] * 2, 0] \
+                         - [laygen.get_template_xy(name=space_name, gridname=pg, libname=templib_logic)[0] * 2, 0] \
+                         - [tap_width, 0]
     ckbuf_0_0_origin = origin + laygen.get_template_xy(name=bnd_bottom[0].cellname, gridname=pg) \
                     + [0, laygen.get_template_xy(name=ret_name, gridname=pg, libname=workinglib)[1]] \
                     + [0, laygen.get_template_xy(name=ibuf_name, gridname=pg, libname=templib_logic)[1]] \
@@ -435,10 +452,11 @@ def generate_adc_retimer(laygen, objectname_pfix, ret_libname, sar_libname, clkd
                     - [tap_width, 0]
     tapsr_origin = laygen.get_inst_xy(name = bnd_right[7].name, gridname = pg) \
                    - [tap_width, 0]
+    print(ckbuf_1_origin, ckbuf_0_0_origin, ckbuf_0_1_origin, tapsr_origin)
 
     # Space calculation
     orig_sorted = sorted(set([slice_order.index(ck_phase_2), slice_order.index(ck_phase_1), slice_order.index(ck_phase_0_0), slice_order.index(ck_phase_0_1)]))
-    print(orig_sorted)
+    print(ck_phase_2, ck_phase_1, ck_phase_0_0, ck_phase_0_1, orig_sorted)
     ret_width = laygen.get_template_xy(name=ret_name, gridname=pg, libname=workinglib)[0]
     blank0_width = ret_width * orig_sorted[0] \
             - laygen.get_template_xy(name=ibuf_name, gridname=pg, libname=templib_logic)[0] * 10 \
@@ -456,11 +474,20 @@ def generate_adc_retimer(laygen, objectname_pfix, ret_libname, sar_libname, clkd
                    - laygen.get_template_xy(name=ibuf_name, gridname=pg, libname=templib_logic)[0] * 10 \
                    - laygen.get_template_xy(name=ibuf_1st_name, gridname=pg, libname=templib_logic)[0] \
                    - tap_width
-    blank4_width = ret_width * (num_slices - orig_sorted[3]) - \
-                    laygen.get_template_xy(name=sr_name, gridname=pg, libname=templib_logic)[0] - \
-                    laygen.get_template_xy(name=obuf_name, gridname=pg, libname=templib_logic)[0] * 2 - \
-                    laygen.get_template_xy(name=space_name, gridname=pg, libname=templib_logic)[0] * 2 - \
-                    tap_width
+    if num_slices > 4:
+        blank4_width = ret_width * (num_slices - orig_sorted[3]) - \
+                       laygen.get_template_xy(name=sr_name, gridname=pg, libname=templib_logic)[0] - \
+                       laygen.get_template_xy(name=obuf_name, gridname=pg, libname=templib_logic)[0] * 2 - \
+                       laygen.get_template_xy(name=space_name, gridname=pg, libname=templib_logic)[0] * 2 - \
+                       tap_width
+    elif num_slices == 4:
+        blank4_width = ret_width * (num_slices - orig_sorted[3]) - \
+                        laygen.get_template_xy(name=sr_name, gridname=pg, libname=templib_logic)[0] - \
+                        laygen.get_template_xy(name=obuf_name, gridname=pg, libname=templib_logic)[0] * 2 - \
+                        laygen.get_template_xy(name=space_name, gridname=pg, libname=templib_logic)[0] * 2 - \
+                       laygen.get_template_xy(name=ibuf_name, gridname=pg, libname=templib_logic)[0]*10 - \
+                       laygen.get_template_xy(name=ibuf_1st_name, gridname=pg, libname=templib_logic)[0] - \
+                       tap_width
 
     space0_xy = origin + laygen.get_template_xy(name=bnd_bottom[0].cellname, gridname=pg) \
                     + [0, laygen.get_template_xy(name=ret_name, gridname=pg, libname=workinglib)[1]] \
@@ -551,8 +578,9 @@ def generate_adc_retimer(laygen, objectname_pfix, ret_libname, sar_libname, clkd
     #                            gridname=pg, refinstname=isrbuf_s.name, template_libname=templib_logic)
     itap2 = laygen.relplace(name="I" + objectname_pfix + 'ITAP2', templatename=tap_name, shape=[1, 1], transform='MX',
                             gridname=pg, refinstname=ickbuf_2.name, direction='right', template_libname=templib_logic)
-    itap1 = laygen.relplace(name="I" + objectname_pfix + 'ITAP1', templatename=tap_name, shape=[1, 1], transform='MX',
-                            gridname=pg, refinstname=ickbuf_1.name, direction='right', template_libname=templib_logic)
+    if num_slices > 4:
+        itap1 = laygen.relplace(name="I" + objectname_pfix + 'ITAP1', templatename=tap_name, shape=[1, 1], transform='MX',
+                                gridname=pg, refinstname=ickbuf_1.name, direction='right', template_libname=templib_logic)
     itap0_0 = laygen.relplace(name="I" + objectname_pfix + 'ITAP0_0', templatename=tap_name, shape=[1, 1], transform='MX',
                             gridname=pg, refinstname=ickbuf_0_0.name, direction='right', template_libname=templib_logic)
     itap0_1 = laygen.relplace(name="I" + objectname_pfix + 'ITAP0_1', templatename=tap_name, shape=[1, 1], transform='MX',
@@ -630,8 +658,9 @@ def generate_adc_retimer(laygen, objectname_pfix, ret_libname, sar_libname, clkd
     #                            gridname=pg, refinstname=isrbuf_r.name, template_libname=templib_logic)
     iitap2 = laygen.relplace(name="I" + objectname_pfix + '2nd_ITAP2', templatename=tap_name, shape=[1, 1], transform='R0',
                             gridname=pg, refinstname=itap2.name, direction='top', template_libname=templib_logic)
-    iitap1 = laygen.relplace(name="I" + objectname_pfix + '2nd_ITAP1', templatename=tap_name, shape=[1, 1], transform='R0',
-                            gridname=pg, refinstname=itap1.name, direction='top', template_libname=templib_logic)
+    if num_slices > 4:
+        iitap1 = laygen.relplace(name="I" + objectname_pfix + '2nd_ITAP1', templatename=tap_name, shape=[1, 1], transform='R0',
+                                gridname=pg, refinstname=itap1.name, direction='top', template_libname=templib_logic)
     iitap0_0 = laygen.relplace(name="I" + objectname_pfix + '2nd_ITAP0_0', templatename=tap_name, shape=[1, 1], transform='R0',
                             gridname=pg, refinstname=itap0_0.name, direction='top', template_libname=templib_logic)
     iitap0_1 = laygen.relplace(name="I" + objectname_pfix + '2nd_ITAP0_1', templatename=tap_name, shape=[1, 1], transform='R0',
@@ -669,7 +698,7 @@ def generate_adc_retimer(laygen, objectname_pfix, ret_libname, sar_libname, clkd
     print(ret_size)
     bnd_size = bnd_bottom[0].size
     space_size = laygen.templates.get_template(space_1x_name, libname=templib_logic).size
-    laygen.add_rect(None, np.array([origin, 2*bnd_size+[ret_size[0]*num_slices, ret_size[1]+space_size[1]]]), laygen.layers['prbnd'])
+    laygen.add_rect(None, np.array([origin, 2*bnd_size+[ret_size[0]*num_slices, ret_size[1]+space_size[1]*2]]), laygen.layers['prbnd'])
 
     # clk buf route
     for i in range(7):
@@ -1060,21 +1089,21 @@ def generate_adc_retimer(laygen, objectname_pfix, ret_libname, sar_libname, clkd
         rvdd_m5 += rvddr_m5
         rvss_m5 += rvssl_m5
         rvss_m5 += rvssr_m5
-    for i in range(len(rvdd_m5)):
-        laygen.add_pin('VDD'+str(i), 'VDD', rvdd_m5[i].xy, laygen.layers['pin'][5])
-    for i in range(len(rvss_m5)):
-        laygen.add_pin('VSS' + str(i), 'VSS', rvss_m5[i].xy, laygen.layers['pin'][5])
-        # rvdd_m6, rvss_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='M6',
-    #                                                                        layer=laygen.layers['pin'][6],
-    #                                                                        gridname=rg_m5m6_thick,
-    #                                                                        netnames=['VDD', 'VSS'], direction='x',
-    #                                                                        input_rails_rect=[rvdd_m5, rvss_m5],
-    #                                                                        generate_pin=True,
-    #                                                                        overwrite_start_coord=0,
-    #                                                                        overwrite_end_coord=None,
-    #                                                                        overwrite_num_routes=None,
-    #                                                                        offset_start_index=0,
-    #                                                                        offset_end_index=0)
+    # for i in range(len(rvdd_m5)):
+    #     laygen.add_pin('VDD'+str(i), 'VDD', rvdd_m5[i].xy, laygen.layers['pin'][5])
+    # for i in range(len(rvss_m5)):
+    #     laygen.add_pin('VSS' + str(i), 'VSS', rvss_m5[i].xy, laygen.layers['pin'][5])
+    rvdd_m6, rvss_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='M6',
+                                                                       layer=laygen.layers['pin'][6],
+                                                                       gridname=rg_m5m6_thick,
+                                                                       netnames=['VDD', 'VSS'], direction='x',
+                                                                       input_rails_rect=[rvdd_m5, rvss_m5],
+                                                                       generate_pin=True,
+                                                                       overwrite_start_coord=0,
+                                                                       overwrite_end_coord=None,
+                                                                       overwrite_num_routes=None,
+                                                                       offset_start_index=track_m*5+1,
+                                                                       offset_end_index=0)
 
 
 if __name__ == '__main__':
