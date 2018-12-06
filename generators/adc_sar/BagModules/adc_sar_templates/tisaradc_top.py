@@ -32,13 +32,12 @@ import pkg_resources
 
 from bag.design import Module
 
-
-yaml_file = pkg_resources.resource_filename(__name__, os.path.join('netlist_info', 'tisaradc_body.yaml'))
+yaml_file = pkg_resources.resource_filename(__name__, os.path.join('netlist_info', 'tisaradc_top.yaml'))
 
 
 # noinspection PyPep8Naming
-class adc_sar_templates__tisaradc_body(Module):
-    """Module for library adc_sar_templates cell tisaradc_body.
+class adc_sar_templates__tisaradc_top(Module):
+    """Module for library adc_sar_templates cell tisaradc_top.
 
     Fill in high level description here.
     """
@@ -177,24 +176,24 @@ class adc_sar_templates__tisaradc_body(Module):
         self.parameters['space_msamp'] = space_msamp
         self.parameters['space_msar'] = space_msar
 
-        #sar_wsamp_array generation
-        term_list=[{
-            ','.join(['OSP%d'%(i) for i in range(num_slices)]):
-                ','.join(['OSP%d'%(i) for i in range(num_slices)]),
-            ','.join(['OSM%d'%(i) for i in range(num_slices)]):
-                ','.join(['OSM%d'%(i) for i in range(num_slices)]),
-            ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]):
-                ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]),
-            ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]):
-                ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]),
-            ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]):
-                ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]),
-            ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]):
-                ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
+        # sar_wsamp_array generation
+        term_list = [{
+            ','.join(['OSP%d' % (i) for i in range(num_slices)]):
+                ','.join(['VOSP%d' % (i) for i in range(num_slices)]),
+            ','.join(['OSM%d' % (i) for i in range(num_slices)]):
+                ','.join(['VOSM%d' % (i) for i in range(num_slices)]),
+            ','.join(['ASCLKD%d<3:0>' % (i) for i in range(num_slices)]):
+                ','.join(['asclkd%d<3:0>' % (i) for i in range(num_slices)]),
+            ','.join(['EXTSEL_CLK%d' % (i) for i in range(num_slices)]):
+                ','.join(['extsel_clk%d' % (i) for i in range(num_slices)]),
+            ','.join(['CLKCAL%d<4:0>' % i for i in range(num_slices)]):
+                ','.join(['CLKCAL%d<4:0>' % i for i in range(num_slices)]),
+            ','.join(['ADCOUT%d<%d:0>' % (i, num_bits - 1) for i in range(num_slices)]):
+                ','.join(['adcout%d<%d:0>' % (i, num_bits - 1) for i in range(num_slices)]),
         }]
-        name_list=(['ICORE0'])
-        self.array_instance('ICORE0', name_list, term_list=term_list)
-        self.instances['ICORE0'][0].design(
+        name_list = (['IBODY0'])
+        self.array_instance('IBODY0', name_list, term_list=term_list)
+        self.instances['IBODY0'][0].design(
             sar_lch,
             sar_pw,
             sar_nw,
@@ -246,17 +245,13 @@ class adc_sar_templates__tisaradc_body(Module):
             ret_m_srbuf,
             ret_m_sr,
             ret_device_intent,
+            space_msamp,
+            space_msar,
         )
-
-        self.instances['IDCAP0'].design(sar_lch, sar_pw, sar_nw, space_msamp, space_msar, device_intent=sar_device_intent)
-        self.instances['IDCAP1'].design(sar_lch, sar_pw, sar_nw, space_msamp, space_msar, device_intent=sar_device_intent)
-    
-        self.rename_pin('CLKCAL', ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]))
-        self.rename_pin('OSP', ','.join(['OSP%d'%(i) for i in range(num_slices)]))
-        self.rename_pin('OSM', ','.join(['OSM%d'%(i) for i in range(num_slices)]))
-        self.rename_pin('ASCLKD<3:0>', ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]))
-        self.rename_pin('EXTSEL_CLK', ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]))
-        self.rename_pin('ADCOUT', ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]))
+        self.instances['IBIAS0'].design()
+        self.rename_pin('asclkd<3:0>', ','.join(['asclkd%d<3:0>' % (i) for i in range(num_slices)]))
+        self.rename_pin('extsel_clk', ','.join(['extsel_clk%d' % (i) for i in range(num_slices)]))
+        self.rename_pin('adcout', ','.join(['adcout%d<%d:0>' % (i, num_bits - 1) for i in range(num_slices)]))
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

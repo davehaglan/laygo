@@ -7,7 +7,7 @@ import numpy as np
 import yaml
 
 lib_name = 'adc_sar_templates'
-cell_name = 'tisaradc_body'
+cell_name = 'tisaradc_top'
 impl_lib = 'adc_sar_generated'
 
 params = dict(
