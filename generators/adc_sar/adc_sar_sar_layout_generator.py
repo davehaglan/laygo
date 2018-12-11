@@ -34,7 +34,7 @@ import os
 
 def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name, 
                  placement_grid,
-                 routing_grid_m3m4, routing_grid_m4m5, routing_grid_m5m6, routing_grid_m5m6_thick, num_bits=8, origin=np.array([0, 0])):
+                 routing_grid_m3m4, routing_grid_m4m5, routing_grid_m5m6, routing_grid_m5m6_thick, mom_layer=6, num_bits=8, origin=np.array([0, 0])):
     """generate sar"""
     pg = placement_grid
 
@@ -180,11 +180,15 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
     #inp/inm
     laygen.pin(name='SAINP', layer=laygen.layers['pin'][4], xy=pdict_m4m5[iafe.name]['SAINP'], gridname=rg_m4m5, netname='INP')
     laygen.pin(name='SAINM', layer=laygen.layers['pin'][4], xy=pdict_m4m5[iafe.name]['SAINM'], gridname=rg_m4m5, netname='INM')
+    if mom_layer == 6:
+        rg_mom = rg_m5m6
+    elif mom_layer == 4:
+        rg_mom = rg_m4m5
     for p, pxy in pdict_m5m6[iafe.name].items():
         if p.startswith('INP'):
-            laygen.pin(name=p, layer=laygen.layers['pin'][6], xy=pxy, gridname=rg_m5m6, netname='INP')
+            laygen.pin(name=p, layer=laygen.layers['pin'][mom_layer], xy=pxy, gridname=rg_mom, netname='INP')
         if p.startswith('INM'):
-            laygen.pin(name=p, layer=laygen.layers['pin'][6], xy=pxy, gridname=rg_m5m6, netname='INM')
+            laygen.pin(name=p, layer=laygen.layers['pin'][mom_layer], xy=pxy, gridname=rg_mom, netname='INM')
     #osp/osm
     laygen.pin(name='OSP', layer=laygen.layers['pin'][3], xy=pdict_m3m4[iafe.name]['OSP'], gridname=rg_m3m4)
     laygen.pin(name='OSM', layer=laygen.layers['pin'][3], xy=pdict_m3m4[iafe.name]['OSM'], gridname=rg_m3m4)
@@ -310,6 +314,8 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']
+        mom_layer = specdict['momcap_layer']
+
     #sar generation
     cellname='sar'
     sarabe_name = 'sarabe_dualdelay'
@@ -322,7 +328,7 @@ if __name__ == '__main__':
     generate_sar(laygen, objectname_pfix='SA0', workinglib=workinglib, sarabe_name=sarabe_name, sarafe_name=sarafe_name,
                  placement_grid=pg, routing_grid_m3m4=rg_m3m4, routing_grid_m4m5=rg_m4m5, routing_grid_m5m6=rg_m5m6,
                  routing_grid_m5m6_thick=rg_m5m6_thick,
-                 num_bits=num_bits, origin=np.array([0, 0]))
+                 mom_layer=mom_layer, num_bits=num_bits, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)
