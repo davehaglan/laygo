@@ -94,11 +94,12 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
     if mom_layer == 6:
         rg_mom = rg_m5m6_thick_basic_temp_sig
     elif mom_layer == 4:
-        rg_mom = rg_m4m5
+        rg_mom = rg_m4m5_basic_thick
     for pn, p in pdict_m5m6_thick_basic_temp_sig[isar.name].items():
         if pn.startswith('INP'):
             inp_y_list.append(p[0][1])
             pv=np.array([pdict_m5m6_thick_basic_temp_sig[isamp.name]['outp'][0][0], p[0][1]])
+            print(pdict_m5m6_thick_basic_temp_sig[isamp.name]['outp'][0][0])
             laygen.via(None,pv, rg_mom)
         if pn.startswith('INM'):
             inm_y_list.append(p[0][1])
@@ -257,6 +258,7 @@ if __name__ == '__main__':
     rg_m2m3 = 'route_M2_M3_cmos'
     rg_m3m4 = 'route_M3_M4_basic'
     rg_m4m5 = 'route_M4_M5_basic'
+    rg_m4m5_basic_thick = 'route_M4_M5_basic_thick'
     rg_m5m6 = 'route_M5_M6_basic'
     rg_m5m6_thick = 'route_M5_M6_thick'
     rg_m5m6_basic_thick = 'route_M5_M6_basic_thick'
