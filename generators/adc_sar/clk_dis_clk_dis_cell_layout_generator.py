@@ -186,12 +186,12 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
                         'ntap_fast_left', 'pmos4_fast_left', 'nmos4_fast_left',
                         'ptap_fast_left', ],
 
-        transform_left=['R0', 'R0', 'R0', 'MX', 'MX', 'MX', 'MX', ],
+        transform_left=['R0', 'R0', 'MX', 'MX', 'R0', 'MX', 'MX', ],
 
         devname_right=['ptap_fast_right', 'nmos4_fast_right', 'pmos4_fast_right',
                        'ntap_fast_right', 'pmos4_fast_right', 'nmos4_fast_right',
                        'ptap_fast_right',],
-        transform_right = ['R0', 'R0', 'R0', 'MX', 'MX', 'MX', 'MX',],
+        transform_right = ['R0', 'R0', 'MX', 'MX', 'R0', 'MX', 'MX',],
         origin=np.array([0, 0]))
 
     #####Placing all the rows
