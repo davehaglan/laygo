@@ -87,7 +87,7 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
     pdict_m5m6_thick_basic_temp_sig = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick_basic_temp_sig)
     #clock
     rg_m5m6_thick_basic_temp_clk = 'route_M5_M6_thick_basic_temp_clk'
-    laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_mom, gridname_output=rg_m5m6_thick_basic_temp_clk,
+    laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m5m6_thick_basic, gridname_output=rg_m5m6_thick_basic_temp_clk,
                                           instname=isamp.name,
                                           inst_pin_prefix=['ckout'], xy_grid_type='xgrid')
     pdict_m5m6_thick_basic_temp_clk = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick_basic_temp_clk)
