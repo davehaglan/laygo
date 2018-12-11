@@ -99,11 +99,12 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
         if pn.startswith('INP'):
             inp_y_list.append(p[0][1])
             pv=np.array([pdict_m5m6_thick_basic_temp_sig[isamp.name]['outp'][0][0], p[0][1]])
-            print(pdict_m5m6_thick_basic_temp_sig[isamp.name]['outp'][0][0])
+            print(pv)
             laygen.via(None,pv, rg_mom)
         if pn.startswith('INM'):
             inm_y_list.append(p[0][1])
             pv=np.array([pdict_m5m6_thick_basic_temp_sig[isamp.name]['outn'][0][0], p[0][1]])
+            print(pv)
             laygen.via(None,pv, rg_mom)
     inp_y=min(inp_y_list)
     inm_y=min(inm_y_list)
