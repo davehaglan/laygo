@@ -76,8 +76,12 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
 
     #signal route (clk/inp/inm)
     #make virtual grids and route on the grids (assuming drc clearance of each block)
+    if mom_layer == 6:
+        rg_mom = rg_m5m6_thick_basic
+    elif mom_layer == 4:
+        rg_mom = rg_m4m5_basic_thick
     rg_m5m6_thick_basic_temp_sig='route_M5_M6_thick_basic_temp_sig'
-    laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m5m6_thick_basic, gridname_output=rg_m5m6_thick_basic_temp_sig,
+    laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_mom, gridname_output=rg_m5m6_thick_basic_temp_sig,
                                           instname=isamp.name, 
                                           inst_pin_prefix=['ckout', 'outp', 'outn'], xy_grid_type='xgrid')
     pdict_m5m6_thick_basic_temp_sig = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick_basic_temp_sig)
@@ -91,21 +95,17 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
     #frontend sig
     inp_y_list=[]
     inm_y_list=[]
-    if mom_layer == 6:
-        rg_mom = rg_m5m6_thick_basic_temp_sig
-    elif mom_layer == 4:
-        rg_mom = rg_m4m5_basic_thick
     for pn, p in pdict_m5m6_thick_basic_temp_sig[isar.name].items():
         if pn.startswith('INP'):
             inp_y_list.append(p[0][1])
             pv=np.array([pdict_m5m6_thick_basic_temp_sig[isamp.name]['outp'][0][0], p[0][1]])
             print(pv)
-            laygen.via(None,pv, rg_mom)
+            laygen.via(None,pv, rg_m5m6_thick_basic_temp_sig)
         if pn.startswith('INM'):
             inm_y_list.append(p[0][1])
             pv=np.array([pdict_m5m6_thick_basic_temp_sig[isamp.name]['outn'][0][0], p[0][1]])
             print(pv)
-            laygen.via(None,pv, rg_mom)
+            laygen.via(None,pv, rg_m5m6_thick_basic_temp_sig)
     inp_y=min(inp_y_list)
     inm_y=min(inm_y_list)
     rinp0 = laygen.route(None, laygen.layers['metal'][5],
