@@ -699,6 +699,7 @@ def generate_adc_retimer(laygen, objectname_pfix, ret_libname, sar_libname, clkd
     bnd_size = bnd_bottom[0].size
     space_size = laygen.templates.get_template(space_1x_name, libname=templib_logic).size
     laygen.add_rect(None, np.array([origin, 2*bnd_size+[ret_size[0]*num_slices, ret_size[1]+space_size[1]*2]]), laygen.layers['prbnd'])
+    print(bnd_size, ret_size[1], space_size[1])
 
     # clk buf route
     for i in range(7):
