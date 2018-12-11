@@ -83,14 +83,19 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
     rg_m5m6_thick_basic_temp_sig='route_M5_M6_thick_basic_temp_sig'
     laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_mom, gridname_output=rg_m5m6_thick_basic_temp_sig,
                                           instname=isamp.name, 
-                                          inst_pin_prefix=['ckout', 'outp', 'outn'], xy_grid_type='xgrid')
+                                          inst_pin_prefix=['outp', 'outn'], xy_grid_type='xgrid')
     pdict_m5m6_thick_basic_temp_sig = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick_basic_temp_sig)
     #clock
+    rg_m5m6_thick_basic_temp_clk = 'route_M5_M6_thick_basic_temp_clk'
+    laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_mom, gridname_output=rg_m5m6_thick_basic_temp_clk,
+                                          instname=isamp.name,
+                                          inst_pin_prefix=['ckout'], xy_grid_type='xgrid')
+    pdict_m5m6_thick_basic_temp_clk = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick_basic_temp_clk)
     rclk0 = laygen.route(None, laygen.layers['metal'][5],
-                         xy0=pdict_m5m6_thick_basic_temp_sig[isamp.name]['ckout'][0],
-                         xy1=pdict_m5m6_thick_basic_temp_sig[isar.name]['CLK0'][1]-np.array([0,1]), gridname0=rg_m5m6_thick_basic_temp_sig)
-    laygen.via(None,pdict_m5m6_thick_basic_temp_sig[isar.name]['CLK0'][1], rg_m5m6_thick_basic_temp_sig)
-    laygen.via(None,pdict_m5m6_thick_basic_temp_sig[isar.name]['CLK1'][1], rg_m5m6_thick_basic_temp_sig)
+                         xy0=pdict_m5m6_thick_basic_temp_clk[isamp.name]['ckout'][0],
+                         xy1=pdict_m5m6_thick_basic_temp_clk[isar.name]['CLK0'][1]-np.array([0,1]), gridname0=rg_m5m6_thick_basic_temp_clk)
+    laygen.via(None,pdict_m5m6_thick_basic_temp_clk[isar.name]['CLK0'][1], rg_m5m6_thick_basic_temp_clk)
+    laygen.via(None,pdict_m5m6_thick_basic_temp_clk[isar.name]['CLK1'][1], rg_m5m6_thick_basic_temp_clk)
 
     #frontend sig
     inp_y_list=[]
