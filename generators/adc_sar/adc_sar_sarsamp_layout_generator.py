@@ -285,8 +285,8 @@ def generate_samp(laygen, objectname_pfix, workinglib,
     if tgate==True:
         devname_bnd_left = ['nmos4_fast_left', 'pmos4_fast_left'] + ['pmos4_fast_left', 'nmos4_fast_left']
         devname_bnd_right = ['nmos4_fast_right', 'pmos4_fast_right'] + ['pmos4_fast_right', 'nmos4_fast_right']
-        transform_bnd_left = ['R0', 'MX'] + ['MX', 'R0']
-        transform_bnd_right = ['R0', 'MX'] + ['MX', 'R0']
+        transform_bnd_left = ['R0', 'MX'] + ['R0', 'MX']
+        transform_bnd_right = ['R0', 'MX'] + ['R0', 'MX']
     else:
         devname_bnd_left = ['nmos4_fast_left', 'nmos4_fast_left'] + ['nmos4_fast_left', 'pmos4_fast_left']
         devname_bnd_right = ['nmos4_fast_right', 'nmos4_fast_right'] + ['nmos4_fast_right', 'pmos4_fast_right']
