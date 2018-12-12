@@ -210,10 +210,14 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     bnd_left_1_y=laygen.get_inst_xy(name=bnd_left[1].name, gridname=pg)[1] #y coodinate
     sw_dmy_xy=np.array([bnd_left_size_x, bnd_left_1_y]) #xy coodinate
     #Place sw_dmy0 and capsw0
-    sw_dmy0= laygen.place(name='I'+objectname_pfix+'SWDM0', templatename='space_1x', gridname=pg, xy=sw_dmy_xy, 
-            template_libname=logictemp_lib, shape=np.array([num_capsw_dmy, 1]))
+    num_capsw_dmy_4x = int(num_capsw_dmy/4)
+    num_capsw_dmy_1x = num_capsw_dmy - 4 * num_capsw_dmy_4x
+    sw_dmy0= laygen.place(name='I'+objectname_pfix+'SWDM0', templatename='space_4x', gridname=pg, xy=sw_dmy_xy,
+            template_libname=logictemp_lib, shape=np.array([num_capsw_dmy_4x, 1]))
+    sw_dmy1= laygen.relplace(name='I'+objectname_pfix+'SWDM1', templatename='space_1x', gridname=pg,
+            refinstname=sw_dmy0.name, template_libname=logictemp_lib, shape=np.array([num_capsw_dmy_1x, 1]))
     capsw0=laygen.relplace(name='I'+objectname_pfix+'SW0', templatename='cap_sw_array', gridname=pg, 
-            refinstname=sw_dmy0.name, template_libname='clk_dis_generated')
+            refinstname=sw_dmy1.name, template_libname='clk_dis_generated')
     #Calculate number of sw_dmy1
     capsw0_size_x = laygen.get_template_xy(name='cap_sw_array', gridname=pg, libname='clk_dis_generated')[0]
     sw_dmy1_m = bnd_m-num_capsw_dmy-capsw0_size_x
