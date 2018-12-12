@@ -248,7 +248,7 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     dff_dmy0 = laygen.place(name='I'+objectname_pfix+'DFFDM0_4x', templatename='space_4x', gridname=pg, xy=dff_dmy0_xy,
             template_libname=logictemp_lib, shape=np.array([num_dff_dmy_4x, 1]), transform='MX')
     dff_dmy1= laygen.relplace(name='I'+objectname_pfix+'DFFDM0_1x', templatename='space_1x', gridname=pg,
-            refinstname=dff_dmy0.name, template_libname=logictemp_lib, shape=np.array([num_dff_dmy_1x, 1]))
+            refinstname=dff_dmy0.name, template_libname=logictemp_lib, shape=np.array([num_dff_dmy_1x, 1]), transform='MX')
     tgated0=laygen.relplace(name='I'+objectname_pfix+'TGD0', templatename='tgate_dn_'+str(m_tgate)+'x', gridname=pg, 
             refinstname=dff_dmy0.name, template_libname=logictemp_lib, transform='R180')
     dff0=laygen.relplace(name='I'+objectname_pfix+'DFF0', templatename='dff_strsth_ckb_'+str(m_dff)+'x', gridname=pg, 
@@ -270,7 +270,7 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     dff_dmy0= laygen.place(name='I'+objectname_pfix+'DFFDM1_4x', templatename='space_4x', gridname=pg, xy=dff_dmy1_xy,
             template_libname=logictemp_lib, shape=np.array([dff_dmy1_m_4x, 1]), transform='MX')
     dff_dmy1= laygen.relplace(name='I'+objectname_pfix+'DFFDM1_1x', templatename='space_1x', gridname=pg,
-            refinstname=dff_dmy0.name, template_libname=logictemp_lib, shape=np.array([dff_dmy1_m_1x, 1]))
+            refinstname=dff_dmy0.name, template_libname=logictemp_lib, shape=np.array([dff_dmy1_m_1x, 1]), transform='MX')
     
     ##Top ptap row
     ptap1_0 = laygen.relplace(name='I'+objectname_pfix+'PTAP1_0', templatename='ptap_fast_space_nf4', 
