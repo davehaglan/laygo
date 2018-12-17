@@ -40,6 +40,7 @@ params = dict(
     samp_nsep=2,
     samp_intent='ulvt',
     samp_use_laygo=False,
+    use_offset=True,
     num_slices=8,
 )
 load_from_file=True
@@ -51,21 +52,28 @@ if load_from_file==True:
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
     params['sar_sa_m']=sizedict['salatch']['m']
+    params['sar_sa_m_d']=sizedict['salatch']['m_d']
     params['sar_sa_m_rst']=sizedict['salatch']['m_rst']
+    params['sar_sa_m_rst_d']=sizedict['salatch']['m_rst_d']
     params['sar_sa_m_rgnn']=sizedict['salatch']['m_rgnn']
+    params['sar_sa_m_rgnp_d']=sizedict['salatch']['m_rgnp_d']
     params['sar_sa_m_buf']=sizedict['salatch']['m_buf']
+    params['doubleSA']=sizedict['salatch']['doubleSA']
     params['sar_drv_m_list']=sizedict['capdrv']['m_list']
     params['sar_logic_m']=sizedict['sarlogic']['m']
+    params['sar_num_inv_bb']=sizedict['sarlogic']['num_inv_bb']
     params['sar_fsm_m']=sizedict['sarfsm']['m']
     params['sar_ret_m']=sizedict['sarret']['m']
     params['sar_ret_fo']=sizedict['sarret']['fo']
     params['sar_ckgen_m']=sizedict['sarclkgen']['m']
     params['sar_ckgen_fo']=sizedict['sarclkgen']['fo']
     params['sar_ckgen_ndelay']=sizedict['sarclkgen']['ndelay']
+    params['sar_ckgen_fast']=sizedict['sarclkgen']['fast']
     params['sar_c_m']=sizedict['capdac']['c_m']
     params['sar_rdx_array']=specdict['rdx_array']
     params['num_bits']=specdict['n_bit']
     params['samp_use_laygo']=specdict['samp_use_laygo']
+    params['samp_tgate']=specdict['samp_with_tgate']
     params['num_slices']=specdict['n_interleave']
     params['sar_lch']=sizedict['lch']
     params['sar_pw']=sizedict['pw']
@@ -75,6 +83,7 @@ if load_from_file==True:
     #params['samp_pw']=sizedict['pw']
     #params['samp_nw']=sizedict['nw']
     params['samp_intent']=sizedict['device_intent']
+    params['use_offset'] = specdict['use_offset']
 
 #sampler sizing
 if params['samp_use_laygo']==True:

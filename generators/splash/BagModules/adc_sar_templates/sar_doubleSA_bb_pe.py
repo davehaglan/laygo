@@ -46,7 +46,7 @@ class adc_sar_templates__sar_doubleSA_bb_pe(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, sa_m, sa_m_d, sa_m_rst, sa_m_rst_d, sa_m_rgnn, sa_m_rgnp_d, sa_m_buf, drv_m_list, ckgen_m, ckgen_fo, ckgen_ndelay, logic_m, logic_m_dl, logic_m_xor, logic_m_buf, fsm_m, ret_m, ret_fo, c_m, rdx_array, num_bits, num_inv_dl, device_intent):
+    def design(self, lch, pw, nw, sa_m, sa_m_d, sa_m_rst, sa_m_rst_d, sa_m_rgnn, sa_m_rgnp_d, sa_m_buf, drv_m_list, ckgen_m, ckgen_fo, ckgen_ndelay, ckgen_fast, logic_m, logic_m_dl, logic_m_xor, logic_m_buf, fsm_m, ret_m, ret_fo, c_m, rdx_array, num_bits, num_inv_dl, device_intent):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -76,6 +76,7 @@ class adc_sar_templates__sar_doubleSA_bb_pe(Module):
         self.parameters['ckgen_m'] = ckgen_m
         self.parameters['ckgen_fo'] = ckgen_fo
         self.parameters['ckgen_ndelay'] = ckgen_ndelay
+        self.parameters['ckgen_fast'] = ckgen_fast
         self.parameters['logic_m'] = logic_m
         self.parameters['logic_m_dl'] = logic_m_dl
         self.parameters['logic_m_xor'] = logic_m_xor
@@ -89,7 +90,7 @@ class adc_sar_templates__sar_doubleSA_bb_pe(Module):
         self.parameters['num_inv_dl'] = num_inv_dl
         self.parameters['device_intent'] = device_intent
         self.instances['IAFE0'].design(lch=lch, pw=pw, nw=nw, sa_m=sa_m, sa_m_d=sa_m_d, sa_m_rst=sa_m_rst, sa_m_rst_d=sa_m_rst_d, sa_m_rgnn=sa_m_rgnn, sa_m_rgnp_d=sa_m_rgnp_d, sa_m_buf=sa_m_buf, drv_m_list=drv_m_list, num_bits=num_bits-1, c_m=c_m, rdx_array=rdx_array, device_intent=device_intent)
-        self.instances['IABE0'].design(lch=lch, pw=pw, nw=nw, ckgen_m=ckgen_m, ckgen_fo=ckgen_fo, ckgen_ndelay=ckgen_ndelay, logic_m=logic_m, logic_m_dl=logic_m_dl, logic_m_xor=logic_m_xor, logic_m_buf=logic_m_buf, fsm_m=fsm_m, ret_m=ret_m, ret_fo=ret_fo, num_bits=num_bits, num_inv_dl=num_inv_dl, device_intent=device_intent)
+        self.instances['IABE0'].design(lch=lch, pw=pw, nw=nw, ckgen_m=ckgen_m, ckgen_fo=ckgen_fo, ckgen_ndelay=ckgen_ndelay, ckgen_fast=ckgen_fast, logic_m=logic_m, logic_m_dl=logic_m_dl, logic_m_xor=logic_m_xor, logic_m_buf=logic_m_buf, fsm_m=fsm_m, ret_m=ret_m, ret_fo=ret_fo, num_bits=num_bits, num_inv_dl=num_inv_dl, device_intent=device_intent)
         #rewiring
         self.reconnect_instance_terminal(inst_name='IAFE0', term_name='VOL<%d:0>'%(num_bits-2), net_name='VOL<%d:0>'%(num_bits-2))
         self.reconnect_instance_terminal(inst_name='IAFE0', term_name='VOR<%d:0>'%(num_bits-2), net_name='VOR<%d:0>'%(num_bits-2))

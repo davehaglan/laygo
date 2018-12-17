@@ -6,6 +6,13 @@ instances:
     lib_name: BAG_prim
     cell_name: nmos4_fast
     instpins:
+<<<<<<< HEAD
+=======
+      B:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+>>>>>>> 8c8590cd8bfb60e26aa8a5a25a147b68f818eb33
       D:
         direction: inputOutput
         net_name: "O"
@@ -38,6 +45,13 @@ instances:
     lib_name: BAG_prim
     cell_name: pmos4_fast
     instpins:
+<<<<<<< HEAD
+=======
+      B:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+>>>>>>> 8c8590cd8bfb60e26aa8a5a25a147b68f818eb33
       D:
         direction: inputOutput
         net_name: "O"

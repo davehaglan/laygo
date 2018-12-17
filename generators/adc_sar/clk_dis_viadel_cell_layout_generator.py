@@ -27,6 +27,7 @@
 import laygo
 import numpy as np
 import os
+import yaml
 #import logging;logging.basicConfig(level=logging.DEBUG)
 
 def generate_clkdis_viadel_cell(laygen, objectname_pfix, logictemp_lib, working_lib, grid, origin=np.array([0, 0]), 
@@ -47,32 +48,39 @@ def generate_clkdis_viadel_cell(laygen, objectname_pfix, logictemp_lib, working_
     rg_m5m6 = grid['rg_m5m6']
     rg_m6m7 = grid['rg_m6m7']  
 
-    ##Placing delay cells 
-    viacell=laygen.place(name='I'+objectname_pfix+'CELL0', templatename='clk_dis_cell', gridname=pg, xy=origin, 
-            template_libname='clk_dis_generated')
-    
-    ofst=np.array([laygen.get_xy(obj=laygen.get_template(name='clk_dis_cell', libname='clk_dis_generated'))[0]/2 \
-                   -laygen.get_xy(obj=laygen.get_template(name='capdac', libname='clk_dis_generated'))[0] \
-                   , 0])
-    ##Placing capdacs 
-    capdac=[]
-    capdac0_0= laygen.place(name='I'+objectname_pfix+'CAPDAC0_0', templatename='capdac', gridname=pg, xy=origin, 
-            template_libname='clk_dis_generated', transform='MX', offset=ofst)
-    capdac0_1=laygen.relplace(name='I'+objectname_pfix+'CAPDAC0_1', templatename='capdac', gridname=pg, 
-            refinstname=capdac0_0.name, template_libname='clk_dis_generated', transform='R180')
+    ##Placing capdacs
+    capdac = []
+    ofst_capdac = np.array([0, laygen.get_template_xy(name='capdac', libname='clk_dis_generated')[1]])
+    capdac0_0 = laygen.place(name='I' + objectname_pfix + 'CAPDAC0_0', templatename='capdac', gridname=pg, xy=origin,
+                             template_libname='clk_dis_generated', transform='MX', offset=ofst_capdac)
+    capdac0_1 = laygen.relplace(name='I' + objectname_pfix + 'CAPDAC0_1', templatename='capdac', gridname=pg,
+                                refinstname=capdac0_0.name, template_libname='clk_dis_generated', transform='R180')
     capdac.append(capdac0_0)
     capdac.append(capdac0_1)
+
+    ##Placing delay cell
+    viacell = laygen.place(name='I' + objectname_pfix + 'CELL0', templatename='clk_dis_cell', gridname=pg, xy=origin,
+                           template_libname='clk_dis_generated', offset=ofst_capdac)
+    viacell_height = laygen.get_template_xy(name='clk_dis_cell', libname='clk_dis_generated')[1]
     
     ##Route, clock connection from TGATE to input
-    clki_y =laygen.grids.get_absgrid_coord_y(gridname=rg_m5m6, y=4)
+    # clki_y =laygen.grids.get_absgrid_coord_y(gridname=rg_m5m6, y=4.13) # y number set by hand, To be fixed
+    # for i in range(m_clki):
+    #     viadel_I_xy = laygen.get_inst_pin_xy(viacell.name, 'CLKI_' + str(i), rg_m5m6)[0]
+    #     clkopx=laygen.route(None, laygen.layers['metal'][5], xy0=viadel_I_xy, xy1=np.array([viadel_I_xy[0],clki_y]), gridname0=rg_m5m6)
+    #     laygen.boundary_pin_from_rect(clkopx, gridname=rg_m5m6, name='CLKI_' + str(i),
+    #                                   layer=laygen.layers['pin'][5], size=2, direction='top', netname='CLKI')
     for i in range(m_clki):
-        viadel_I_xy = laygen.get_inst_pin_xy(viacell.name, 'CLKI_' + str(i), rg_m5m6)[0]
-        clkopx=laygen.route(None, laygen.layers['metal'][5], xy0=viadel_I_xy, xy1=np.array([viadel_I_xy[0],clki_y]), gridname0=rg_m5m6)
-        laygen.boundary_pin_from_rect(clkopx, gridname=rg_m5m6, name='CLKI_' + str(i),
-                                      layer=laygen.layers['pin'][5], size=2, direction='top', netname='CLKI')
+        viadel_I_xy = laygen.get_inst_pin_xy(viacell.name, 'CLKI_'+str(i), rg_m5m6)[0]
+        clkopx = laygen.route(None, laygen.layers['metal'][5], xy0=viadel_I_xy, xy1=viadel_I_xy,
+                              gridname0=rg_m5m6)
+        laygen.boundary_pin_from_rect(clkopx, gridname=rg_m5m6, name='CLKI_'+str(i), layer=laygen.layers['pin'][5],
+                size=2, direction='top', netname='CLKI')
 
     ##Route, clock connection from TGATE to output
-    clko_y =laygen.grids.get_absgrid_coord_y(gridname=rg_m5m6, y=-20)
+    # clko_y =laygen.grids.get_absgrid_coord_y(gridname=rg_m5m6, y=-20)
+    # clko_y = -laygen.get_template_size(name='capdac', gridname=rg_m5m6, libname='clk_dis_generated')[1]
+    clko_y = 0
     clko_xy = []
     for i in range(m_clko):
         viadel_O_xy = laygen.get_inst_pin_xy(viacell.name, 'CLKO_' + str(i), rg_m5m6)[0]
@@ -88,13 +96,22 @@ def generate_clkdis_viadel_cell(laygen, objectname_pfix, logictemp_lib, working_
             laygen.via(None, xy=np.array([clko_xy[j][0],capdac_O_xy0[1]]), gridname=rg_m4m5)
 
     ## Route, for inside connection between capdac and viadel
-    for i in range(0,num_bits):
+    # for i in range(0,num_bits):
+    #     capdac_C_xy0 = laygen.get_inst_pin_xy(capdac[0].name, 'I<' + str(i) + '>', rg_m3m4_dense)[0]
+    #     capdac_C_xy1 = laygen.get_inst_pin_xy(capdac[1].name, 'I<' + str(i) + '>', rg_m3m4_dense)[0]
+    #     laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], capdac_C_xy0, capdac_C_xy1, -1-2*i, rg_m3m4_dense)
+    #     viadel_SW_xy = laygen.get_inst_pin_xy(viacell.name, 'CAPSW<' + str(i) + '>', rg_m3m4)[0]
+    #     laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], capdac_C_xy0, viadel_SW_xy, -1-2*i, rg_m3m4_dense, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4)
+    ofst_grid_34 = laygen.grids.get_absgrid_coord_y(gridname=rg_m3m4, y=ofst_capdac[1])
+    for i in range(0, num_bits):
         capdac_C_xy0 = laygen.get_inst_pin_xy(capdac[0].name, 'I<' + str(i) + '>', rg_m3m4_dense)[0]
         capdac_C_xy1 = laygen.get_inst_pin_xy(capdac[1].name, 'I<' + str(i) + '>', rg_m3m4_dense)[0]
-        laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], capdac_C_xy0, capdac_C_xy1, -1-2*i, rg_m3m4_dense)
+        laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], capdac_C_xy0, capdac_C_xy1,
+                         -2 * i + ofst_grid_34, rg_m3m4_dense)
         viadel_SW_xy = laygen.get_inst_pin_xy(viacell.name, 'CAPSW<' + str(i) + '>', rg_m3m4)[0]
-        laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], capdac_C_xy0, viadel_SW_xy, -1-2*i, rg_m3m4_dense, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4)
-
+        laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], capdac_C_xy0, viadel_SW_xy,
+                         -2 * i + ofst_grid_34, rg_m3m4_dense, layerv1=laygen.layers['metal'][3], gridname1=rg_m3m4)
+        print(-2 * i + ofst_grid_34)
 
     ##Route, for calibration signals
     #Get the right coodinate on grid m3m4
@@ -128,6 +145,12 @@ def generate_clkdis_viadel_cell(laygen, objectname_pfix, logictemp_lib, working_
         vddr_xy = laygen.get_inst_pin_xy(viacell.name, 'VDD1_' + str(i), rg_m3m4_thick2)
         laygen.pin(name='VDD1_'+str(i), layer=laygen.layers['pin'][4], xy=vddr_xy, gridname=rg_m3m4_thick2, netname='VDD')
     
+    # # prboundary
+    # y_grid = laygen.get_template('boundary_bottom', libname=utemplib).size[1]
+    # size_y1 = (int(viacell.size[1]/y_grid+0.99))*y_grid
+    # size_y2 = 0-(int(capdac0_0.size[1]/y_grid+0.99)*y_grid)
+    # size_x = viacell.size[0]
+    # laygen.add_rect(None, np.array([origin + [0, size_y2], origin + np.array([size_x, size_y1])]), laygen.layers['prbnd'])
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
@@ -158,13 +181,26 @@ if __name__ == '__main__':
 
     #params
     params = dict(
-        m_clki = 12,
-        m_clko = 4,
+        m_clki = 24,
+        m_clko = 2,
         num_bits = 5,
         unit_size = 2,
         num_vss_h=4, 
         num_vdd_h=4
     )
+    #load from preset
+    load_from_file=True
+    yamlfile_spec="adc_sar_spec.yaml"
+    yamlfile_size="adc_sar_size.yaml"
+    if load_from_file==True:
+        with open(yamlfile_spec, 'r') as stream:
+            specdict = yaml.load(stream)
+        with open(yamlfile_size, 'r') as stream:
+            sizedict = yaml.load(stream)
+        params['m_clki']=sizedict['clk_dis_htree']['m_track']
+        params['m_clko'] = sizedict['clk_dis_htree']['m_clko']
+        params['num_bits'] = sizedict['clk_dis_cdac']['num_bits']
+        params['unit_size'] = sizedict['clk_dis_cdac']['m']
 
     #grid
     grid = dict(

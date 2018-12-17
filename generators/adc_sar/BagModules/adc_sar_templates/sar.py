@@ -46,7 +46,7 @@ class adc_sar_templates__sar(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, sa_m, sa_m_rst, sa_m_rgnn, sa_m_buf, drv_m_list, ckgen_m, ckgen_fo, ckgen_ndelay, logic_m, fsm_m, ret_m, ret_fo, c_m, rdx_array, num_bits, device_intent):
+    def design(self, lch, pw, nw, sa_m, sa_m_d, sa_m_rst, sa_m_rst_d, sa_m_rgnn, sa_m_rgnp_d, sa_m_buf, doubleSA, drv_m_list, ckgen_m, ckgen_fo, ckgen_ndelay, ckgen_fast, logic_m, fsm_m, ret_m, ret_fo, c_m, rdx_array, num_bits, num_inv_bb, device_intent):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -66,14 +66,20 @@ class adc_sar_templates__sar(Module):
         self.parameters['pw'] = pw
         self.parameters['nw'] = nw
         self.parameters['sa_m'] = sa_m
+        self.parameters['sa_m_d'] = sa_m_d
         self.parameters['sa_m_rst'] = sa_m_rst
+        self.parameters['sa_m_rst_d'] = sa_m_rst_d
         self.parameters['sa_m_rgnn'] = sa_m_rgnn
+        self.parameters['sa_m_rgnp_d'] = sa_m_rgnp_d
         self.parameters['sa_m_buf'] = sa_m_buf
+        self.parameters['doubleSA'] = doubleSA
         self.parameters['drv_m_list'] = drv_m_list
         self.parameters['ckgen_m'] = ckgen_m
         self.parameters['ckgen_fo'] = ckgen_fo
         self.parameters['ckgen_ndelay'] = ckgen_ndelay
+        self.parameters['ckgen_fast'] = ckgen_fast
         self.parameters['logic_m'] = logic_m
+        self.parameters['num_inv_bb'] = num_inv_bb
         self.parameters['fsm_m'] = fsm_m
         self.parameters['ret_m'] = ret_m
         self.parameters['ret_fo'] = ret_fo
@@ -81,8 +87,8 @@ class adc_sar_templates__sar(Module):
         self.parameters['rdx_array'] = rdx_array
         self.parameters['num_bits'] = num_bits
         self.parameters['device_intent'] = device_intent
-        self.instances['IAFE0'].design(lch=lch, pw=pw, nw=nw, sa_m=sa_m, sa_m_rst=sa_m_rst, sa_m_rgnn=sa_m_rgnn, sa_m_buf=sa_m_buf, drv_m_list=drv_m_list, num_bits=num_bits-1, c_m=c_m, rdx_array=rdx_array, device_intent=device_intent)
-        self.instances['IABE0'].design(lch=lch, pw=pw, nw=nw, ckgen_m=ckgen_m, ckgen_fo=ckgen_fo, ckgen_ndelay=ckgen_ndelay, logic_m=logic_m, fsm_m=fsm_m, ret_m=ret_m, ret_fo=ret_fo, num_bits=num_bits, device_intent=device_intent)
+        self.instances['IAFE0'].design(lch=lch, pw=pw, nw=nw, sa_m=sa_m, sa_m_d=sa_m_d, sa_m_rst=sa_m_rst, sa_m_rst_d=sa_m_rst_d, sa_m_rgnn=sa_m_rgnn, sa_m_rgnp_d=sa_m_rgnp_d, sa_m_buf=sa_m_buf, doubleSA=doubleSA, drv_m_list=drv_m_list, num_bits=num_bits-1, c_m=c_m, rdx_array=rdx_array, device_intent=device_intent)
+        self.instances['IABE0'].design(lch=lch, pw=pw, nw=nw, ckgen_m=ckgen_m, ckgen_fo=ckgen_fo, ckgen_ndelay=ckgen_ndelay, ckgen_fast=ckgen_fast, logic_m=logic_m, num_inv_bb=num_inv_bb, fsm_m=fsm_m, ret_m=ret_m, ret_fo=ret_fo, num_bits=num_bits, device_intent=device_intent)
         #rewiring
         self.reconnect_instance_terminal(inst_name='IAFE0', term_name='VOL<%d:0>'%(num_bits-2), net_name='VOL<%d:0>'%(num_bits-2))
         self.reconnect_instance_terminal(inst_name='IAFE0', term_name='VOR<%d:0>'%(num_bits-2), net_name='VOR<%d:0>'%(num_bits-2))

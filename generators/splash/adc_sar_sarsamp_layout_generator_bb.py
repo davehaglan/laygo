@@ -258,7 +258,7 @@ def generate_samp_buffer(laygen, objectname_pfix, templib_logic,
         laygen.pin_from_rect(name=p, layer=laygen.layers['pin'][4], rect=r, gridname=rg34)
 
     # power routes
-    num_pwr=int(laygen.get_template_size(name=itap[0].cellname, gridname=rg23, libname=itap[0].libname)[0]/2)*min(tap_m_list)
+    num_pwr=int(laygen.get_template_size(name=itap[0].cellname, gridname=rg23, libname=itap[0].libname)[0]*min(tap_m_list)/2)
     rvdd=[]
     rvss=[]
     for _itap, pfix in zip(itap, ['L', 'R']):
@@ -420,14 +420,23 @@ def generate_samp(laygen, objectname_pfix, workinglib,
     rvdd_m5=[None, None]
     input_rails_rect = [rvdd_m4[0], rvss_m4[0]]
     rvdd_m5[0], rvss_m5[0] = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='L_M5_', 
-                layer=laygen.layers['metal'][5], gridname=pg45t, netnames=['VDD', 'VSS'], direction='y', 
+                layer=laygen.layers['metal'][5], gridname=pg45t, netnames=['VDD', 'VSS'], direction='y',
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=None, overwrite_end_coord=None,
                 offset_start_index=0, offset_end_index=0)
     input_rails_rect = [rvdd_m4[1], rvss_m4[1]]
     rvdd_m5[1], rvss_m5[1] = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='R_M5_', 
-                layer=laygen.layers['metal'][5], gridname=pg45t, netnames=['VDD', 'VSS'], direction='y', 
+                layer=laygen.layers['metal'][5], gridname=pg45t, netnames=['VDD', 'VSS'], direction='y',
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=None, overwrite_end_coord=None,
                 offset_start_index=0, offset_end_index=0)
+    for r in rvdd_m5[0]:
+        p=laygen.pin_from_rect(name='LVDD_M5_'+r.name, layer=laygen.layers['pin'][5], rect=r, gridname=pg45t, netname='VDD')
+    for r in rvdd_m5[1]:
+        p=laygen.pin_from_rect(name='RVDD_M5_'+r.name, layer=laygen.layers['pin'][5], rect=r, gridname=pg45t, netname='VDD')
+    for r in rvss_m5[0]:
+        p=laygen.pin_from_rect(name='LVSS_M5_'+r.name, layer=laygen.layers['pin'][5], rect=r, gridname=pg45t, netname='VSS')
+    for r in rvss_m5[1]:
+        p=laygen.pin_from_rect(name='RVSS_M5_'+r.name, layer=laygen.layers['pin'][5], rect=r, gridname=pg45t, netname='VSS')
+
     #m5 samp
     rvss_samp_m5=[None, None]
     input_rails_rect = [rvss_samp_m4[0], rvss_samp_m4[0]]
@@ -452,7 +461,7 @@ def generate_samp(laygen, objectname_pfix, workinglib,
     x1 = laygen.get_inst_bbox(name=ibuf.name, gridname=pg56t)[1][0] + laygen.get_template_size('nmos4_fast_left', gridname=pg56t)[0]
     rvss_samp_m6, rvss_samp_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_', 
                 layer=laygen.layers['metal'][6], gridname=pg56t, netnames=['samp_body', 'samp_body'], direction='x', 
-                input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=x1,
+                input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0+1, overwrite_end_coord=x1-1,
                 offset_start_index=0, offset_end_index=0)
     #trimming and pinning
     x1_phy = laygen.get_inst_bbox(name=ibuf.name)[1][0] + laygen.get_template_size('nmos4_fast_left')[0]

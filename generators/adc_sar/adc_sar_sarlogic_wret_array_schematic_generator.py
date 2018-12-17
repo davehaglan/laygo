@@ -17,6 +17,7 @@ params = dict(
     pw=4,
     nw=4,
     m=1,
+    num_inv_bb=0,
     num_bits=9,
     device_intent='fast',
     )
@@ -31,6 +32,7 @@ if load_from_file==True:
         sizedict = yaml.load(stream)
     cell_name='sarlogic_wret_v2_array'
     params['m']=sizedict['sarlogic']['m']
+    params['num_inv_bb']=sizedict['sarlogic']['num_inv_bb']
     params['num_bits']=sysdict_i['n_bit']
     params['lch']=sizedict['lch']
     params['pw']=sizedict['pw']

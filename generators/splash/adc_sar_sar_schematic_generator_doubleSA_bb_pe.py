@@ -22,6 +22,7 @@ params = dict(
     ckgen_m=2, 
     ckgen_fo=2, 
     ckgen_ndelay=1, 
+    ckgen_fast=True, 
     logic_m=1, 
     logic_m_dl=1, 
     logic_m_xor=2, 
@@ -66,6 +67,7 @@ if load_from_file==True:
     params['ckgen_m']=sizedict['sarclkgen']['m']
     params['ckgen_fo']=sizedict['sarclkgen']['fo']
     params['ckgen_ndelay']=sizedict['sarclkgen']['ndelay']
+    params['ckgen_fast']=sizedict['sarclkgen']['fast']
     params['c_m']=sizedict['capdac']['c_m']
     params['rdx_array']=specdict['rdx_array']
     params['num_bits']=specdict['n_bit']

@@ -26,9 +26,9 @@
 module dac_9bit_ideal (vd8, vd7, vd6, vd5, vd4, vd3, vd2, vd1, vd0, vout, dout);
 electrical vd8, vd7, vd6, vd5, vd4, vd3, vd2, vd1, vd0, vout, dout;
 parameter real vref  = 1 from [0:inf);
-parameter real trise = 0 from [0:inf);
-parameter real tfall = 0 from [0:inf);
-parameter real tdel  = 0 from [0:inf);
+parameter real trise = 20p from [0:inf);
+parameter real tfall = 20p from [0:inf);
+parameter real tdel  = 10p from [0:inf);
 parameter real vtrans  = 0.45;
 
     real out_scaled; // output scaled as fraction of 256

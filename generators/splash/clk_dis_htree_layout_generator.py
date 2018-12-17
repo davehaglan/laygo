@@ -257,7 +257,7 @@ if __name__ == '__main__':
             #stage
             level = lvl,
             #track number
-            trackm = 12,
+            trackm = 24,
             #divide ratio
             ratio = [ratio]*lvl,
             #metal layer
@@ -274,6 +274,16 @@ if __name__ == '__main__':
             #offset
             offset = [0]*lvl,        #um
         )
+    #load from preset
+    load_from_file=True
+    yamlfile_spec="adc_sar_spec.yaml"
+    yamlfile_size="adc_sar_size.yaml"
+    if load_from_file==True:
+        with open(yamlfile_spec, 'r') as stream:
+            specdict = yaml.load(stream)
+        with open(yamlfile_size, 'r') as stream:
+            sizedict = yaml.load(stream)
+        params['trackm']=sizedict['clk_dis_htree']['m_track']
 
     print(workinglib)
 

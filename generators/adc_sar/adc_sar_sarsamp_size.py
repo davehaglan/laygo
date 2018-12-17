@@ -85,7 +85,7 @@ m_outbuf_list_list=m_outbuf_list_list[-1]
 # sw transistor
 vbs = vincm
 vgs = vdd-vincm
-vds = vincm
+vds = 0
 msw = nmos_db.query(w=pw, vbs=vbs, vgs=vgs, vds=vds)
 
 #sweep and calculate

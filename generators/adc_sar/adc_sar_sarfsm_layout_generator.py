@@ -86,6 +86,8 @@ def generate_sarfsm(laygen, objectname_pfix, templib_logic, placement_grid,
     refi = iinv0.name
     #fill insertion
     fill_tie_x = laygen.get_xy(obj=laygen.get_template(name = tie_name, libname=templib_logic), gridname = pg)[0]
+    m_fill_tie_4x=int(fill_tie_x/4)
+    m_fill_tie_x=fill_tie_x-m_fill_tie_4x*4
     fill_x = (laygen.get_xy(obj=laygen.get_template(name = dff_name, libname = templib_logic), gridname = pg) * np.array([num_bits_row - 1, 1]) \
               - laygen.get_xy(obj=laygen.get_template(name = inv_name, libname = templib_logic), gridname = pg))[0]
     m_fill_4x=int(fill_x/4)
@@ -138,8 +140,13 @@ def generate_sarfsm(laygen, objectname_pfix, templib_logic, placement_grid,
                                    shape = np.array([m_space_left_4x, 1]), gridname=pg, transform=tf,
                                    refinstname=refi, template_libname=templib_logic)
             refi = ispl4x.name
+        if not m_fill_tie_4x == 0:
+            ifilltie_4x = laygen.relplace(name="I" + objectname_pfix + 'FT4x' + str(i), templatename=space_4x_name,
+                                       shape=np.array([m_fill_tie_4x, 1]), gridname=pg, transform=tf,
+                                       refinstname=refi, template_libname=templib_logic)
+            refi = ifilltie_4x.name
         ifilltie=laygen.relplace(name="I" + objectname_pfix + 'FT'+str(i), templatename=space_1x_name,
-                     shape=np.array([fill_tie_x, 1]), gridname=pg, transform=tf,
+                     shape=np.array([m_fill_tie_x, 1]), gridname=pg, transform=tf,
                      refinstname=refi, template_libname=templib_logic)
         refi = ifilltie.name
         for j in range(num_bits_row):

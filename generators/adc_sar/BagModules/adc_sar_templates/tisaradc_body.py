@@ -46,57 +46,61 @@ class adc_sar_templates__tisaradc_body(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, 
-            sar_lch, 
-            sar_pw, 
-            sar_nw, 
-            sar_sa_m, 
-            sar_sa_m_rst, 
-            sar_sa_m_rgnn, 
-            sar_sa_m_buf, 
-            sar_drv_m_list,sar_ckgen_m,sar_ckgen_fo, 
-            sar_ckgen_ndelay, 
-            sar_logic_m, 
-            sar_fsm_m, 
-            sar_ret_m, 
-            sar_ret_fo, 
-            sar_device_intent, 
-            sar_c_m, 
-            sar_rdx_array, 
-            samp_lch, 
-            samp_wp, 
-            samp_wn, 
-            samp_fgn, 
-            samp_fg_inbuf_list, 
-            samp_fg_outbuf_list, 
-            samp_nduml, 
-            samp_ndumr, 
-            samp_nsep, 
-            samp_intent, 
-            num_bits, 
-            samp_use_laygo, 
-            num_slices,
-            clk_lch, 
-            clk_pw, 
-            clk_nw, 
-            clk_m_dff, 
-            clk_m_inv1, 
-            clk_m_inv2, 
-            clk_m_tgate, 
-            clk_n_pd, 
-            clk_m_capsw, 
-            clk_unit_cell, 
-            clk_device_intent,
-            ret_lch,
-            ret_pw,
-            ret_nw,
-            ret_m_ibuf,
-            ret_m_obuf,
-            ret_m_latch,
-            ret_device_intent,
-            space_msar,
-            space_msamp,
-        ):
+    def design(self,
+               sar_lch,
+               sar_pw,
+               sar_nw,
+               sar_sa_m, sar_sa_m_d,
+               sar_sa_m_rst, sar_sa_m_rst_d,
+               sar_sa_m_rgnn, sar_sa_m_rgnp_d,
+               sar_sa_m_buf, doubleSA,
+               sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo,
+               sar_ckgen_ndelay, sar_ckgen_fast,
+               sar_logic_m,
+               sar_fsm_m,
+               sar_ret_m,
+               sar_ret_fo,
+               sar_device_intent,
+               sar_c_m,
+               sar_rdx_array, sar_num_inv_bb,
+               samp_lch,
+               samp_wp,
+               samp_wn,
+               samp_fgn,
+               samp_fg_inbuf_list,
+               samp_fg_outbuf_list,
+               samp_nduml,
+               samp_ndumr,
+               samp_nsep,
+               samp_intent,
+               num_bits,
+               samp_use_laygo, samp_tgate,
+               use_offset, num_slices,
+               clk_lch,
+               clk_pw,
+               clk_nw,
+               clk_cdac_bits,
+               clk_m_dff,
+               clk_m_inv1,
+               clk_m_inv2,
+               clk_m_tgate,
+               clk_n_pd,
+               clk_m_capsw,
+               clk_unit_cell,
+               clk_device_intent,
+               clk_pulse,
+               ret_lch,
+               ret_pw,
+               ret_nw,
+               ret_m_ibuf,
+               ret_m_obuf,
+               ret_m_latch,
+               ret_m_srbuf,
+               ret_m_sr,
+               ret_device_intent,
+               space_msamp,
+               space_msar,
+               ):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -116,17 +120,23 @@ class adc_sar_templates__tisaradc_body(Module):
         self.parameters['sar_pw'] = sar_pw
         self.parameters['sar_nw'] = sar_nw
         self.parameters['sar_sa_m'] = sar_sa_m
+        self.parameters['sar_sa_m_d'] = sar_sa_m_d
         self.parameters['sar_sa_m_rst'] = sar_sa_m_rst
+        self.parameters['sar_sa_m_rst_d'] = sar_sa_m_rst
         self.parameters['sar_sa_m_rgnn'] = sar_sa_m_rgnn
+        self.parameters['sar_sa_m_rgnp_d'] = sar_sa_m_rgnp_d
         self.parameters['sar_sa_m_buf'] = sar_sa_m_buf
+        self.parameters['doubleSA'] = doubleSA
         self.parameters['sar_drv_m_list'] = sar_drv_m_list
         self.parameters['sar_ckgen_m'] = sar_ckgen_m
         self.parameters['sar_ckgen_fo'] = sar_ckgen_fo
         self.parameters['sar_ckgen_ndelay'] = sar_ckgen_ndelay
+        self.parameters['sar_ckgen_fast'] = sar_ckgen_fast
         self.parameters['sar_logic_m'] = sar_logic_m
         self.parameters['sar_fsm_m'] = sar_fsm_m
         self.parameters['sar_ret_m'] = sar_ret_m
         self.parameters['sar_ret_fo'] = sar_ret_fo
+        self.parameters['sar_num_inv_bb'] = sar_num_inv_bb
         self.parameters['sar_device_intent'] = sar_device_intent
         self.parameters['sar_c_m'] = sar_c_m
         self.parameters['sar_rdx_array'] = sar_rdx_array
@@ -141,18 +151,21 @@ class adc_sar_templates__tisaradc_body(Module):
         self.parameters['samp_nsep'] = samp_nsep
         self.parameters['samp_intent'] = samp_intent
         self.parameters['num_bits'] = num_bits
-        self.parameters['samp_use_laygo'] = samp_use_laygo #if true, use laygo for sampler generation
+        self.parameters['samp_tgate'] = samp_tgate
+        self.parameters['samp_use_laygo'] = samp_use_laygo  # if true, use laygo for sampler generation
+        self.parameters['use_offset'] = use_offset
         self.parameters['num_slices'] = num_slices
-        self.parameters['clk_lch'] = clk_lch 
-        self.parameters['clk_pw'] = clk_pw 
-        self.parameters['clk_nw'] = clk_nw 
-        self.parameters['clk_m_dff'] = clk_m_dff 
-        self.parameters['clk_m_inv1'] = clk_m_inv1 
-        self.parameters['clk_m_inv2'] = clk_m_inv2 
-        self.parameters['clk_m_tgate'] = clk_m_tgate 
-        self.parameters['clk_n_pd'] = clk_n_pd 
-        self.parameters['clk_m_capsw'] = clk_m_capsw 
-        self.parameters['clk_unit_cell'] = clk_unit_cell 
+        self.parameters['clk_lch'] = clk_lch
+        self.parameters['clk_pw'] = clk_pw
+        self.parameters['clk_nw'] = clk_nw
+        self.parameters['clk_cdac_bits'] = clk_cdac_bits
+        self.parameters['clk_m_dff'] = clk_m_dff
+        self.parameters['clk_m_inv1'] = clk_m_inv1
+        self.parameters['clk_m_inv2'] = clk_m_inv2
+        self.parameters['clk_m_tgate'] = clk_m_tgate
+        self.parameters['clk_n_pd'] = clk_n_pd
+        self.parameters['clk_m_capsw'] = clk_m_capsw
+        self.parameters['clk_unit_cell'] = clk_unit_cell
         self.parameters['clk_device_intent'] = clk_device_intent
         self.parameters['ret_lch'] = ret_lch
         self.parameters['ret_pw'] = ret_pw
@@ -161,8 +174,8 @@ class adc_sar_templates__tisaradc_body(Module):
         self.parameters['ret_m_obuf'] = ret_m_obuf
         self.parameters['ret_m_latch'] = ret_m_latch
         self.parameters['ret_device_intent'] = ret_device_intent
-        self.parameters['space_msar'] = space_msar
         self.parameters['space_msamp'] = space_msamp
+        self.parameters['space_msar'] = space_msar
 
         #sar_wsamp_array generation
         term_list=[{
@@ -182,52 +195,56 @@ class adc_sar_templates__tisaradc_body(Module):
         name_list=(['ICORE0'])
         self.array_instance('ICORE0', name_list, term_list=term_list)
         self.instances['ICORE0'][0].design(
-            sar_lch, 
-            sar_pw, 
-            sar_nw, 
-            sar_sa_m, 
-            sar_sa_m_rst, 
-            sar_sa_m_rgnn, 
-            sar_sa_m_buf, 
-            sar_drv_m_list,sar_ckgen_m,sar_ckgen_fo, 
-            sar_ckgen_ndelay, 
-            sar_logic_m, 
-            sar_fsm_m, 
-            sar_ret_m, 
-            sar_ret_fo, 
-            sar_device_intent, 
-            sar_c_m, 
-            sar_rdx_array, 
-            samp_lch, 
-            samp_wp, 
-            samp_wn, 
-            samp_fgn, 
-            samp_fg_inbuf_list, 
-            samp_fg_outbuf_list, 
-            samp_nduml, 
-            samp_ndumr, 
-            samp_nsep, 
-            samp_intent, 
-            num_bits, 
-            samp_use_laygo, 
-            num_slices,
-            clk_lch, 
-            clk_pw, 
-            clk_nw, 
-            clk_m_dff, 
-            clk_m_inv1, 
-            clk_m_inv2, 
-            clk_m_tgate, 
-            clk_n_pd, 
-            clk_m_capsw, 
-            clk_unit_cell, 
+            sar_lch,
+            sar_pw,
+            sar_nw,
+            sar_sa_m, sar_sa_m_d,
+            sar_sa_m_rst, sar_sa_m_rst_d,
+            sar_sa_m_rgnn, sar_sa_m_rgnp_d,
+            sar_sa_m_buf, doubleSA,
+            sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo,
+            sar_ckgen_ndelay, sar_ckgen_fast,
+            sar_logic_m,
+            sar_fsm_m,
+            sar_ret_m,
+            sar_ret_fo,
+            sar_device_intent,
+            sar_c_m,
+            sar_rdx_array, sar_num_inv_bb,
+            samp_lch,
+            samp_wp,
+            samp_wn,
+            samp_fgn,
+            samp_fg_inbuf_list,
+            samp_fg_outbuf_list,
+            samp_nduml,
+            samp_ndumr,
+            samp_nsep,
+            samp_intent,
+            num_bits,
+            samp_use_laygo, samp_tgate,
+            use_offset, num_slices,
+            clk_lch,
+            clk_pw,
+            clk_nw,
+            clk_cdac_bits,
+            clk_m_dff,
+            clk_m_inv1,
+            clk_m_inv2,
+            clk_m_tgate,
+            clk_n_pd,
+            clk_m_capsw,
+            clk_unit_cell,
             clk_device_intent,
+            clk_pulse,
             ret_lch,
             ret_pw,
             ret_nw,
             ret_m_ibuf,
             ret_m_obuf,
             ret_m_latch,
+            ret_m_srbuf,
+            ret_m_sr,
             ret_device_intent,
         )
 

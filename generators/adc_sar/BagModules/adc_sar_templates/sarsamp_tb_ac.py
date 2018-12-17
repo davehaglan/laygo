@@ -46,7 +46,7 @@ class adc_sar_templates__sarsamp_tb_ac(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, m_sw, m_sw_arr, m_inbuf_list, m_outbuf_list, device_intent='fast'):
+    def design(self, lch, pw, nw, m_sw, m_sw_arr, m_inbuf_list, m_outbuf_list, tgate, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -70,7 +70,8 @@ class adc_sar_templates__sarsamp_tb_ac(Module):
         self.parameters['m_inbuf_list'] = m_inbuf_list
         self.parameters['m_outbuf_list'] = m_outbuf_list
         self.parameters['device_intent'] = device_intent
-        self.instances['XDUT0'].design(lch=lch, pw=pw, nw=nw, m_sw=m_sw, m_sw_arr=m_sw_arr, m_inbuf_list=m_inbuf_list, m_outbuf_list=m_outbuf_list, device_intent=device_intent)
+        self.parameters['tgate'] = tgate
+        self.instances['XDUT0'].design(lch=lch, pw=pw, nw=nw, m_sw=m_sw, m_sw_arr=m_sw_arr, m_inbuf_list=m_inbuf_list, m_outbuf_list=m_outbuf_list, tgate=tgate, device_intent=device_intent)
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

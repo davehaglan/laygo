@@ -135,32 +135,32 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m3m4,
     for dev in devname_list_overlay_boundary_left:
         dev0_list=[ibndl0]
         for dev0 in dev0_list:
-            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
+            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_boundary_bottom:
         dev0_list=[ibndbl0] + ibndb + [ibndbr0] 
         for dev0 in dev0_list:
-            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
+            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_boundary_right:
         dev0_list=[ibndr0]
         for dev0 in dev0_list:
-            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
+            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_boundary_top:
         dev0_list=[ibndtl0] + ibndt + [ibndtr0] 
         for dev0 in dev0_list:
-            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
+            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_body:
         dev0_list=ivdac+[ic0]+ihdac 
         for dev0 in dev0_list:
-            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
+            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
     for dev in devname_list_overlay_dmy:
         dev0_list=idmydac
         for dev0 in dev0_list:
-            xy0 = laygen.get_xy(obj = dev0, gridname = pg)
+            xy0 = laygen.get_inst_xy(name = dev0.name, gridname = pg)
             laygen.place(name = None, templatename = dev, gridname = pg, xy=xy0, shape=dev0.shape)
 
         ##Added at 03/29/2017
@@ -216,7 +216,13 @@ def generate_capdac(laygen, objectname_pfix, placement_grid, routing_grid_m3m4,
             laygen.boundary_pin_from_rect(rtop, rg_m3m4, "O" + str(cnt), laygen.layers['pin'][4], size=4,
                                           direction='left', netname="O")
             cnt+=1
-    
+
+    # prboundary
+    y_grid = laygen.get_template('boundary_bottom', libname=utemplib).size[1]
+    [size_x, size_y] = laygen.get_inst(ibndtr0.name).xy + laygen.get_inst(ibndtr0.name).size*np.array([num_space_right, num_space_top])
+    size_y = int(size_y/y_grid+0.99)*y_grid
+    print('prb:', size_x, size_y)
+    laygen.add_rect(None, np.array([origin, origin + np.array([size_x, size_y])]), laygen.layers['prbnd'])
 
 if __name__ == '__main__':
     """testbench - generating a capdac array"""
@@ -265,12 +271,23 @@ if __name__ == '__main__':
 
     mycell_list = []
     #cap dac generation
-    m_unit=2
-    num_bits_vertical=5
+    load_from_file = True
+    yamlfile_spec = "adc_sar_spec.yaml"
+    yamlfile_size = "adc_sar_size.yaml"
+    if load_from_file == True:
+        # load parameters
+        with open(yamlfile_spec, 'r') as stream:
+            specdict = yaml.load(stream)
+        with open(yamlfile_size, 'r') as stream:
+            sizedict = yaml.load(stream)
+        m_unit=sizedict['clk_dis_cdac']['m']
+        num_bits_vertical=sizedict['clk_dis_cdac']['num_bits']
     num_bits_horizontal=0
     num_space_top = 5
     num_space_bottom = 6
-    num_space_left = 5
+    sar_width=laygen.get_template_size('clk_dis_cell', gridname=pg, libname=workinglib)[0]
+    mom_width=laygen.get_template_size('momcap_m4_center_1x', gridname=pg, libname=utemplib)[0]
+    num_space_left = int((sar_width/2 - mom_width*2)/mom_width)
     num_space_right = 1
     print(cell_name+" generating")
     mycell_list.append(cell_name)

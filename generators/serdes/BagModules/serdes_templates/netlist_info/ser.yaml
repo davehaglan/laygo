@@ -1,6 +1,6 @@
 lib_name: serdes_templates
 cell_name: ser
-pins: [ "clk_in", "in<0>", "p1buf", "VDD", "VSS", "out", "RST" ]
+pins: [ "clk_in", "in<0>", "div", "VDD", "VSS", "out", "RST" ]
 instances:
   ITINV1:
     lib_name: logic_templates
@@ -20,7 +20,7 @@ instances:
         num_bits: 1
       EN:
         direction: input
-        net_name: "p1buf"
+        net_name: "div"
         num_bits: 1
       ENB:
         direction: input
@@ -57,6 +57,42 @@ instances:
       I:
         direction: input
         net_name: "samp_p0"
+        num_bits: 1
+  ISR:
+    lib_name: logic_templates
+    cell_name: ndsr
+    instpins:
+      VSS:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      VDD:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      Q:
+        direction: output
+        net_name: "div"
+        num_bits: 1
+      QB:
+        direction: output
+        net_name: "net10"
+        num_bits: 1
+      R:
+        direction: input
+        net_name: "p1bufb"
+        num_bits: 1
+      S:
+        direction: input
+        net_name: "p0bufb"
+        num_bits: 1
+  I19:
+    lib_name: basic
+    cell_name: noConn
+    instpins:
+      noConn:
+        direction: inputOutput
+        net_name: "net10"
         num_bits: 1
   PIN5:
     lib_name: basic
@@ -280,7 +316,7 @@ instances:
         num_bits: 1
       O:
         direction: output
-        net_name: "p1buf"
+        net_name: "div"
         num_bits: 1
   IP1BUF3:
     lib_name: logic_templates
@@ -288,7 +324,7 @@ instances:
     instpins:
       I:
         direction: input
-        net_name: "p1buf"
+        net_name: "div"
         num_bits: 1
       VSS:
         direction: inputOutput

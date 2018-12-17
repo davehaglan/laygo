@@ -86,7 +86,7 @@ def generate_boundary(laygen, objectname_pfix, placement_grid,
     return [dev_bottom, dev_top, dev_left, dev_right]
 
 def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, routing_grid_m2m3,
-                          routing_grid_m4m5, m_dff=1, m_cbuf1=2, m_cbuf2=8, m_pbuf1=2, m_pbuf2=8, m_mux=2, m_out=2, num_ser=8, m_ser=1, origin=np.array([0, 0])):
+                          routing_grid_m4m5, m_dff=1, m_latch=1, m_cbuf1=2, m_cbuf2=8, m_pbuf1=2, m_pbuf2=8, m_mux=2, m_out=2, num_ser=8, m_ser=1, origin=np.array([0, 0])):
     pg = placement_grid
 
     rg_m2m3 = routing_grid_m2m3
@@ -95,7 +95,9 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
     tap_name='tap'
     ff_name = 'dff_'+str(int(m_dff))+'x'
     ff_rst_name = 'dff_strsth_'+str(int(m_dff))+'x'
-    latch_name = 'latch_2ck_1x'
+    latch_name = 'latch_2ck_'+str(int(m_latch))+'x'
+    #latch_name = 'latch_2ck_1x'
+    ndsr_name = 'ndsr_2x'
     inv1_name = 'inv_'+str(int(m_cbuf1))+'x'
     inv2_name = 'inv_'+str(int(m_cbuf2))+'x'
     tinv_name = 'tinv_'+str(int(m_mux))+'x'
@@ -106,6 +108,7 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
     ff_size=laygen.get_xy(obj=laygen.get_template(name = ff_name, libname = templib_logic), gridname = pg)
     ff_rst_size=laygen.get_xy(obj=laygen.get_template(name = ff_rst_name, libname = templib_logic), gridname = pg)
     latch_size=laygen.get_xy(obj=laygen.get_template(name = latch_name, libname = templib_logic), gridname = pg)
+    ndsr_size=laygen.get_xy(obj=laygen.get_template(name = ndsr_name, libname = templib_logic), gridname = pg)
     inv1_size=laygen.get_xy(obj=laygen.get_template(name = inv1_name, libname = templib_logic), gridname = pg)
     inv2_size=laygen.get_xy(obj=laygen.get_template(name = inv2_name, libname = templib_logic), gridname = pg)
     tinv_size=laygen.get_xy(obj=laygen.get_template(name = tinv_name, libname = templib_logic), gridname = pg)
@@ -207,6 +210,9 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
                 iclkbuf2=laygen.relplace(name = "I" + objectname_pfix + 'CLKBUF2', templatename = inv2_name,
                                    gridname = pg, refinstname = iclkbuf1.name, transform=tf, shape=np.array([1,1]),
                                    template_libname=templib_logic)
+                indsr=laygen.relplace(name = "I" + objectname_pfix + 'NDSR', templatename = ndsr_name,
+                                   gridname = pg, refinstname = iclkbuf2.name, transform=tf, shape=np.array([1,1]),
+                                   template_libname=templib_logic)
                 ilatch=laygen.relplace(name = "I" + objectname_pfix + 'LATCH0', templatename = latch_name,
                                    gridname = pg, refinstname = iffin[-1].name, transform=tf, shape=np.array([1,1]),
                                    xy=np.array([(ff_size[0]-latch_size[0])/2,0]), direction = 'top', template_libname=templib_logic)
@@ -256,7 +262,7 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
     space4x_name = 'space_4x'
     space_width = laygen.get_xy(obj=laygen.get_template(name = space_name, libname = templib_logic), gridname = pg)[0]
     space4_width = laygen.get_xy(obj=laygen.get_template(name = space4x_name, libname = templib_logic), gridname = pg)[0]
-    blank1_width = x0 - (2*tap_size + inv1_size + inv2_size + tinv_size + latch_size)[0]
+    blank1_width = x0 - (2*tap_size + inv1_size + inv2_size + tinv_size + latch_size + ndsr_size)[0]
     blank2_width = (tinv_size - inv1_size)[0]
     m_space4 = int(blank1_width / space4_width)
     m_space1 = int((blank1_width-m_space4*space4_width)/space_width)
@@ -265,7 +271,7 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
     if num_row%2==0: tf_s='MX'
     else: tf_s='R0'
     ispace4=laygen.relplace(name = "I" + objectname_pfix + 'SPACE4', templatename = space4x_name,
-                           gridname = pg, refinstname = iclkbuf2.name, transform=tf_s, shape=np.array([m_space4-1,1]),
+                           gridname = pg, refinstname = indsr.name, transform=tf_s, shape=np.array([m_space4-1,1]),
                            template_libname=templib_logic)
     ispace1=laygen.relplace(name = "I" + objectname_pfix + 'SPACE1', templatename = space_name,
                            gridname = pg, refinstname = ispace4.name, transform=tf_s, shape=np.array([m_space1+4,1]),
@@ -325,6 +331,9 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
         tinv_out_xy.append(laygen.get_inst_pin_xy(itinv[i].name, 'O', rg_m3m4))
         tinv_en_xy.append(laygen.get_inst_pin_xy(itinv[i].name, 'EN', rg_m3m4))
         tinv_enb_xy.append(laygen.get_inst_pin_xy(itinv[i].name, 'ENB', rg_m3m4))
+    ndsr_s_xy=laygen.get_inst_pin_xy(indsr.name, 'S', rg_m3m4)
+    ndsr_r_xy=laygen.get_inst_pin_xy(indsr.name, 'R', rg_m3m4)
+    ndsr_q_xy=laygen.get_inst_pin_xy(indsr.name, 'Q', rg_m3m4)
 
     # Route
     y_ref_m3m4=[]
@@ -413,6 +422,17 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],
                                        laygen.get_inst_pin_xy(iclkbuf1.name, 'O', rg_m3m4)[0], laygen.get_inst_pin_xy(iclkbuf2.name, 'I', rg_m3m4)[0],
                                        laygen.get_inst_pin_xy(iclkbuf1.name, 'O', rg_m3m4)[0][1], rg_m3m4)
+    #NDSR
+    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],
+                                       pbuf3_out_xy[0][1]-[2,0], ndsr_s_xy[0],
+                                       ndsr_s_xy[0][1]-2, rg_m3m4)
+    laygen.route(None, laygen.layers['metal'][4], xy0=pbuf3_out_xy[0][1], xy1=pbuf3_out_xy[0][1]-[2,0], via0=[0,0], via1=[0,0], gridname0=rg_m3m4)
+    laygen.route(None, laygen.layers['metal'][4], xy0=pbuf3_out_xy[0][1]+[2,0], xy1=pbuf3_out_xy[0][1]-[2,0], gridname0=rg_m3m4)
+    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],
+                                       pbuf3_out_xy[int(sub_ser/2)][1]+[2,0], ndsr_r_xy[0],
+                                       ndsr_r_xy[0][1]-0, rg_m3m4)
+    laygen.route(None, laygen.layers['metal'][4], xy0=pbuf3_out_xy[int(sub_ser/2)][1], xy1=pbuf3_out_xy[int(sub_ser/2)][1]+[2,0], via0=[0,0], via1=[0,0], gridname0=rg_m3m4)
+    laygen.route(None, laygen.layers['metal'][4], xy0=pbuf3_out_xy[int(sub_ser/2)][1]-[2,0], xy1=pbuf3_out_xy[int(sub_ser/2)][1]+[2,0], gridname0=rg_m3m4)
 
     #Pin
     clkin_xy=laygen.get_inst_pin_xy(iclkbuf1.name, 'I', rg_m3m4)[1]
@@ -436,7 +456,8 @@ def generate_serializer(laygen, objectname_pfix, templib_logic, placement_grid, 
     #[rv0, rdatao] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], 
     #        datao_xy[0], datao_xy+np.array([5,0]), rg_m3m4)
     #laygen.boundary_pin_from_rect(rdatao, rg_m3m4, "out", laygen.layers['pin'][4], size=4, direction='right')
-    laygen.pin(name='p1buf', layer=laygen.layers['pin'][3], xy=pbuf2_out_xy[0], gridname=rg_m3m4)
+    #laygen.pin(name='p1buf', layer=laygen.layers['pin'][3], xy=pbuf2_out_xy[0], gridname=rg_m3m4)
+    laygen.pin(name='div', layer=laygen.layers['pin'][3], xy=ndsr_q_xy, gridname=rg_m3m4)
     rrst=laygen.route(None, laygen.layers['metal'][3], xy0=ffdiv_rst_xy[0][0], xy1=np.array([ffdiv_rst_xy[0][0][0],0]), gridname0=rg_m3m4)
     laygen.boundary_pin_from_rect(rrst, rg_m3m4, "RST", laygen.layers['pin'][3], size=4, direction='bottom')
 
@@ -538,6 +559,7 @@ if __name__ == '__main__':
         cell_name='ser_'+str(int(specdict['num_ser']/2))+'to1'
         num_ser=specdict['num_ser']
         m_dff=sizedict['m_dff']
+        m_latch=sizedict['m_latch']
         m_cbuf1=sizedict['m_cbuf1']
         m_cbuf2=sizedict['m_cbuf2']
         m_pbuf1=sizedict['m_pbuf1']
@@ -552,7 +574,7 @@ if __name__ == '__main__':
     laygen.sel_cell(cell_name)
     generate_serializer(laygen, objectname_pfix='SER', templib_logic=logictemplib, 
                           placement_grid=pg, routing_grid_m2m3=rg_m2m3, routing_grid_m4m5=rg_m4m5, num_ser=num_ser,
-                          m_dff=m_dff, m_cbuf1=m_cbuf1, m_cbuf2=m_cbuf2, m_pbuf1=m_pbuf1, m_pbuf2=m_pbuf2, m_mux=m_mux, m_out=m_out, m_ser=m_ser, origin=np.array([0, 0]))
+                          m_dff=m_dff, m_latch=m_latch, m_cbuf1=m_cbuf1, m_cbuf2=m_cbuf2, m_pbuf1=m_pbuf1, m_pbuf2=m_pbuf2, m_mux=m_mux, m_out=m_out, m_ser=m_ser, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)

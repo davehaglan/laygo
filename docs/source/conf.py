@@ -40,7 +40,7 @@ needs_sphinx = '1.2'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinxcontrib.napoleon',
+    #'sphinxcontrib.napoleon',
     'sphinx.ext.imgmath',
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
@@ -151,7 +151,7 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+# html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

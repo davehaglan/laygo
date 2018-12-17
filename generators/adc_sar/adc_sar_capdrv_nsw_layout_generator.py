@@ -102,19 +102,19 @@ def generate_capdrv_nsw(laygen, objectname_pfix, templib_logic, placement_grid, 
     x1 = laygen.get_xy(obj =i5, gridname=rg_m3m4)[0]\
          +laygen.get_xy(obj =i5.template, gridname=rg_m3m4)[0] - 1
     #en
-    rv0, ren0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i3_en_xy[0], np.array([x0, y0 - 4]), rg_m3m4)
-    rv0, ren1 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i4_en_xy[0], np.array([x0, y0 - 3]), rg_m3m4)
-    rv0, ren2 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i5_en_xy[0], np.array([x0, y0 - 2]), rg_m3m4)
+    rv0, ren0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i3_en_xy[0], np.array([x0, y0+1 - 4]), rg_m3m4)
+    rv0, ren1 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i4_en_xy[0], np.array([x0, y0+1 - 3]), rg_m3m4)
+    rv0, ren2 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i5_en_xy[0], np.array([x0, y0+1 - 2]), rg_m3m4)
 
     #shield
-    rv0, rh0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], it0_vdd_xy[0], np.array([x0, y0 - 1]), rg_m3m4)
-    rv0, rh0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], it0_vdd_xy[0], np.array([x1, y0 - 1]), rg_m3m4)
+    rv0, rh0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], it0_vdd_xy[0], np.array([x0, y0+1 - 1]), rg_m3m4)
+    rv0, rh0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], it0_vdd_xy[0], np.array([x1, y0+1 - 1]), rg_m3m4)
     rv0, rh0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], it0_vdd_xy[0], np.array([x0, y0 + 7]), rg_m3m4)
     rv0, rh0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], it0_vdd_xy[0], np.array([x1, y0 + 7]), rg_m3m4)
 
     #vref
     for i in range(int(m/2)):
-        rv0, rvref0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i3_i_xy[0]+np.array([2*i, 0]), np.array([x0, y0 + 0]), rg_m3m4)
+        rv0, rvref0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i3_i_xy[0]+np.array([2*i, 0]), np.array([x0, y0+1 + 0]), rg_m3m4)
         rv0, rvref1 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i4_i_xy[0]+np.array([2*i, 0]), np.array([x0, y0 + 2]), rg_m3m4)
         rv0, rvref2 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], i5_i_xy[0]+np.array([2*i, 0]), np.array([x0, y0 + 4]), rg_m3m4)
 
@@ -212,7 +212,7 @@ if __name__ == '__main__':
         laygen.add_cell(cellname)
         laygen.sel_cell(cellname)
         generate_capdrv_nsw(laygen, objectname_pfix='CD0', templib_logic=logictemplib,
-                            placement_grid=pg, routing_grid_m3m4=rg_m3m4, m=m, m_space=max(0, num_bits-9)*2+3*(m_space_ref-m)+m_space_offset, origin=np.array([0, 0])) 
+                            placement_grid=pg, routing_grid_m3m4=rg_m3m4, m=m, m_space=max(0, num_bits-8)*2+3*(m_space_ref-m)+m_space_offset, origin=np.array([0, 0]))
                             #m_space multiplied by 3 because of 3 references
         laygen.add_template_from_cell()
 

@@ -42,7 +42,7 @@ instances:
     lib_name: serdes_templates
     cell_name: ser
     instpins:
-      p1buf:
+      div:
         direction: output
         net_name: "p1buf"
         num_bits: 1

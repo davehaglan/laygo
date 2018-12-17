@@ -46,7 +46,7 @@ class clk_dis_templates__clk_dis_cell(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, m_dff=2, m_inv1=4, m_inv2=8, m_tgate=4, n_pd=4, m_capsw=2, num_bits=5, device_intent='fast'):
+    def design(self, lch, pw, nw, m_dff=2, m_inv1=4, m_inv2=8, m_tgate=4, n_pd=4, m_capsw=2, num_bits=5, clock_pulse=False, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -72,6 +72,7 @@ class clk_dis_templates__clk_dis_cell(Module):
         self.parameters['n_pd'] = n_pd
         self.parameters['m_capsw'] = m_capsw
         self.parameters['num_bits'] = num_bits
+        self.parameters['clock_pulse'] = clock_pulse
         self.parameters['device_intent'] = device_intent
 
         self.instances['I0'].design(lch=lch, pw=pw, nw=nw, m=m_dff, device_intent=device_intent)    #dff
@@ -85,7 +86,8 @@ class clk_dis_templates__clk_dis_cell(Module):
         self.rename_pin('CAL','CAL<%d:0>'%(num_bits-1))
         self.rename_pin('CAPSW','CAPSW<%d:0>'%(num_bits-1))
 
-        
+        if clock_pulse==True:
+            self.reconnect_instance_terminal('I3', 'I', 'O')
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

@@ -26,10 +26,10 @@ params = dict(
     rdx_array = [1, 2, 4, 8, 16, 32, 64, 128],
     )
 
-extracted_calibre = False
-extracted_pvs = True
-verify_tran = False
-verify_noise = True
+extracted_calibre = True
+extracted_pvs = False
+verify_tran = True
+verify_noise = False
 
 load_from_file=True
 save_to_file=True

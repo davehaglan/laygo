@@ -23,7 +23,11 @@ instances:
         net_name: "O"
         num_bits: 1
       B:
+<<<<<<< HEAD
         direction: 
+=======
+        direction: inputOutput
+>>>>>>> 8c8590cd8bfb60e26aa8a5a25a147b68f818eb33
         net_name: "VSS"
         num_bits: 1
       G:
@@ -43,7 +47,11 @@ instances:
         net_name: "N0"
         num_bits: 1
       B:
+<<<<<<< HEAD
         direction: 
+=======
+        direction: inputOutput
+>>>>>>> 8c8590cd8bfb60e26aa8a5a25a147b68f818eb33
         net_name: "VSS"
         num_bits: 1
       G:
@@ -63,7 +71,11 @@ instances:
         net_name: "O"
         num_bits: 1
       B:
+<<<<<<< HEAD
         direction: 
+=======
+        direction: inputOutput
+>>>>>>> 8c8590cd8bfb60e26aa8a5a25a147b68f818eb33
         net_name: "VSS"
         num_bits: 1
       G:
@@ -83,7 +95,11 @@ instances:
         net_name: "N0"
         num_bits: 1
       B:
+<<<<<<< HEAD
         direction: 
+=======
+        direction: inputOutput
+>>>>>>> 8c8590cd8bfb60e26aa8a5a25a147b68f818eb33
         net_name: "VSS"
         num_bits: 1
       G:
@@ -123,7 +139,11 @@ instances:
         net_name: "N3"
         num_bits: 1
       B:
+<<<<<<< HEAD
         direction: 
+=======
+        direction: inputOutput
+>>>>>>> 8c8590cd8bfb60e26aa8a5a25a147b68f818eb33
         net_name: "VDD"
         num_bits: 1
       G:
@@ -143,7 +163,11 @@ instances:
         net_name: "O"
         num_bits: 1
       B:
+<<<<<<< HEAD
         direction: 
+=======
+        direction: inputOutput
+>>>>>>> 8c8590cd8bfb60e26aa8a5a25a147b68f818eb33
         net_name: "VDD"
         num_bits: 1
       G:
@@ -163,7 +187,11 @@ instances:
         net_name: "O"
         num_bits: 1
       B:
+<<<<<<< HEAD
         direction: 
+=======
+        direction: inputOutput
+>>>>>>> 8c8590cd8bfb60e26aa8a5a25a147b68f818eb33
         net_name: "VDD"
         num_bits: 1
       G:
@@ -183,7 +211,11 @@ instances:
         net_name: "N2"
         num_bits: 1
       B:
+<<<<<<< HEAD
         direction: 
+=======
+        direction: inputOutput
+>>>>>>> 8c8590cd8bfb60e26aa8a5a25a147b68f818eb33
         net_name: "VDD"
         num_bits: 1
       G:
@@ -203,7 +235,11 @@ instances:
         net_name: "N1"
         num_bits: 1
       B:
+<<<<<<< HEAD
         direction: 
+=======
+        direction: inputOutput
+>>>>>>> 8c8590cd8bfb60e26aa8a5a25a147b68f818eb33
         net_name: "VDD"
         num_bits: 1
       G:
@@ -223,7 +259,11 @@ instances:
         net_name: "O"
         num_bits: 1
       B:
+<<<<<<< HEAD
         direction: 
+=======
+        direction: inputOutput
+>>>>>>> 8c8590cd8bfb60e26aa8a5a25a147b68f818eb33
         net_name: "VDD"
         num_bits: 1
       G:

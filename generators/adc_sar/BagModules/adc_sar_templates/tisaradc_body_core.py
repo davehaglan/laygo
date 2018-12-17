@@ -50,19 +50,19 @@ class adc_sar_templates__tisaradc_body_core(Module):
             sar_lch, 
             sar_pw, 
             sar_nw, 
-            sar_sa_m, 
-            sar_sa_m_rst, 
-            sar_sa_m_rgnn, 
-            sar_sa_m_buf, 
+            sar_sa_m, sar_sa_m_d,
+            sar_sa_m_rst, sar_sa_m_rst_d,
+            sar_sa_m_rgnn, sar_sa_m_rgnp_d,
+            sar_sa_m_buf, doubleSA,
             sar_drv_m_list,sar_ckgen_m,sar_ckgen_fo, 
-            sar_ckgen_ndelay, 
+            sar_ckgen_ndelay, sar_ckgen_fast,
             sar_logic_m, 
             sar_fsm_m, 
             sar_ret_m, 
             sar_ret_fo, 
             sar_device_intent, 
             sar_c_m, 
-            sar_rdx_array, 
+            sar_rdx_array, sar_num_inv_bb,
             samp_lch, 
             samp_wp, 
             samp_wn, 
@@ -74,11 +74,12 @@ class adc_sar_templates__tisaradc_body_core(Module):
             samp_nsep, 
             samp_intent, 
             num_bits, 
-            samp_use_laygo, 
-            num_slices,
-            clk_lch, 
+            samp_use_laygo, samp_tgate,
+            use_offset, num_slices,
+            clk_lch,
             clk_pw, 
-            clk_nw, 
+            clk_nw,
+            clk_cdac_bits,
             clk_m_dff, 
             clk_m_inv1, 
             clk_m_inv2, 
@@ -87,12 +88,15 @@ class adc_sar_templates__tisaradc_body_core(Module):
             clk_m_capsw, 
             clk_unit_cell, 
             clk_device_intent,
+            clk_pulse,
             ret_lch,
             ret_pw,
             ret_nw,
             ret_m_ibuf,
             ret_m_obuf,
             ret_m_latch,
+            ret_m_srbuf,
+            ret_m_sr,
             ret_device_intent,
         ):
         """To be overridden by subclasses to design this module.
@@ -114,17 +118,23 @@ class adc_sar_templates__tisaradc_body_core(Module):
         self.parameters['sar_pw'] = sar_pw
         self.parameters['sar_nw'] = sar_nw
         self.parameters['sar_sa_m'] = sar_sa_m
+        self.parameters['sar_sa_m_d'] = sar_sa_m_d
         self.parameters['sar_sa_m_rst'] = sar_sa_m_rst
+        self.parameters['sar_sa_m_rst_d'] = sar_sa_m_rst
         self.parameters['sar_sa_m_rgnn'] = sar_sa_m_rgnn
+        self.parameters['sar_sa_m_rgnp_d'] = sar_sa_m_rgnp_d
         self.parameters['sar_sa_m_buf'] = sar_sa_m_buf
+        self.parameters['doubleSA'] = doubleSA
         self.parameters['sar_drv_m_list'] = sar_drv_m_list
         self.parameters['sar_ckgen_m'] = sar_ckgen_m
         self.parameters['sar_ckgen_fo'] = sar_ckgen_fo
         self.parameters['sar_ckgen_ndelay'] = sar_ckgen_ndelay
+        self.parameters['sar_ckgen_fast'] = sar_ckgen_fast
         self.parameters['sar_logic_m'] = sar_logic_m
         self.parameters['sar_fsm_m'] = sar_fsm_m
         self.parameters['sar_ret_m'] = sar_ret_m
         self.parameters['sar_ret_fo'] = sar_ret_fo
+        self.parameters['sar_num_inv_bb'] = sar_num_inv_bb
         self.parameters['sar_device_intent'] = sar_device_intent
         self.parameters['sar_c_m'] = sar_c_m
         self.parameters['sar_rdx_array'] = sar_rdx_array
@@ -139,12 +149,15 @@ class adc_sar_templates__tisaradc_body_core(Module):
         self.parameters['samp_nsep'] = samp_nsep
         self.parameters['samp_intent'] = samp_intent
         self.parameters['num_bits'] = num_bits
-        self.parameters['samp_use_laygo'] = samp_use_laygo #if true, use laygo for sampler generation
+        self.parameters['samp_tgate'] = samp_tgate
+        self.parameters['samp_use_laygo'] = samp_use_laygo  # if true, use laygo for sampler generation
+        self.parameters['use_offset'] = use_offset
         self.parameters['num_slices'] = num_slices
         self.parameters['clk_lch'] = clk_lch 
         self.parameters['clk_pw'] = clk_pw 
         self.parameters['clk_nw'] = clk_nw 
-        self.parameters['clk_m_dff'] = clk_m_dff 
+        self.parameters['clk_cdac_bits'] = clk_cdac_bits
+        self.parameters['clk_m_dff'] = clk_m_dff
         self.parameters['clk_m_inv1'] = clk_m_inv1 
         self.parameters['clk_m_inv2'] = clk_m_inv2 
         self.parameters['clk_m_tgate'] = clk_m_tgate 
@@ -161,6 +174,7 @@ class adc_sar_templates__tisaradc_body_core(Module):
         self.parameters['ret_device_intent'] = ret_device_intent
 
         #sar_wsamp_array generation
+        # if clk_pulse == False:
         term_list=[{
             ','.join(['INP%d'%(i) for i in range(num_slices)]): 'INP',
             ','.join(['INM%d'%(i) for i in range(num_slices)]): 'INM',
@@ -174,50 +188,44 @@ class adc_sar_templates__tisaradc_body_core(Module):
                 ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]),
             ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]):
                 ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]),
-            ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]): 
+            ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]):
                 ','.join(['ADCO%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
             ','.join(['CLKO%d'%(i) for i in range(num_slices)]):
                 ','.join(['CLKO%d'%(i) for i in range(num_slices)]),
         }]
+        # else:
+        #     term_list=[{
+        #         ','.join(['INP%d'%(i) for i in range(num_slices)]): 'INP',
+        #         ','.join(['INM%d'%(i) for i in range(num_slices)]): 'INM',
+        #         ','.join(['CLK%d'%(i) for i in range(num_slices)]): 'DATAO<0:%d>'%(num_slices-1),
+        #         ','.join(['OSP%d'%(i) for i in range(num_slices)]):
+        #             ','.join(['OSP%d'%(i) for i in range(num_slices)]),
+        #         ','.join(['OSM%d'%(i) for i in range(num_slices)]):
+        #             ','.join(['OSM%d'%(i) for i in range(num_slices)]),
+        #         ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]):
+        #             ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]),
+        #         ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]):
+        #             ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]),
+        #         ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]):
+        #             ','.join(['ADCO%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
+        #         ','.join(['CLKO%d'%(i) for i in range(num_slices)]):
+        #             ','.join(['CLKO%d'%(i) for i in range(num_slices)]),
+        #     }]
         name_list=(['ISAR0'])
         self.array_instance('ISAR0', name_list, term_list=term_list)
         self.instances['ISAR0'][0].design(
-            sar_lch,
-            sar_pw,
-            sar_nw,
-            sar_sa_m,
-            sar_sa_m_rst,
-            sar_sa_m_rgnn,
-            sar_sa_m_buf,
-            sar_drv_m_list,
-            sar_ckgen_m,
-            sar_ckgen_fo,
-            sar_ckgen_ndelay,
-            sar_logic_m,
-            sar_fsm_m,
-            sar_ret_m,
-            sar_ret_fo,
-            sar_device_intent,
-            sar_c_m,
-            sar_rdx_array,
-            samp_lch,
-            samp_wp,
-            samp_wn,
-            samp_fgn,
-            samp_fg_inbuf_list,
-            samp_fg_outbuf_list,
-            samp_nduml,
-            samp_ndumr,
-            samp_nsep,
-            samp_intent,
-            num_bits,
-            samp_use_laygo,
-            num_slices,
+            sar_lch, sar_pw, sar_nw, sar_sa_m, sar_sa_m_d, sar_sa_m_rst, sar_sa_m_rst_d,
+            sar_sa_m_rgnn, sar_sa_m_rgnp_d, sar_sa_m_buf, doubleSA,
+            sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay, sar_ckgen_fast,
+            sar_logic_m, sar_fsm_m, sar_ret_m, sar_ret_fo, sar_num_inv_bb,
+            sar_device_intent, sar_c_m, sar_rdx_array,
+            samp_lch, samp_wp, samp_wn, samp_fgn, samp_fg_inbuf_list, samp_fg_outbuf_list,
+            samp_nduml, samp_ndumr, samp_nsep, samp_intent, samp_tgate, num_bits, samp_use_laygo, use_offset, num_slices
         )
     
         #clock generation
         term_list=[{
-            ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]): ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]),
+            ','.join(['CLKCAL%d<%d:0>'%(i, clk_cdac_bits-1) for i in range(num_slices)]): ','.join(['CLKCAL%d<%d:0>'%(i, clk_cdac_bits-1) for i in range(num_slices)]),
             'CLKO<%d:0>'%(num_slices-1): ','.join(['ICLK%d'%(num_slices-1-i) for i in range(num_slices)]),
             'DATAO<%d:0>'%(num_slices-1): 'DATAO<%d:0>'%(num_slices-1)
         }]
@@ -233,9 +241,10 @@ class adc_sar_templates__tisaradc_body_core(Module):
             m_tgate=clk_m_tgate, 
             n_pd=clk_n_pd, 
             m_capsw=clk_m_capsw, 
-            num_bits=5, 
+            num_bits=clk_cdac_bits,
             num_ways=num_slices, 
-            unit_cell=clk_unit_cell, 
+            unit_cell=clk_unit_cell,
+            clock_pulse=clk_pulse,
             device_intent=clk_device_intent,
         )
 
@@ -247,10 +256,16 @@ class adc_sar_templates__tisaradc_body_core(Module):
         # 3) the first half of first stage latches: int((int(num_slices/2)+1)%num_slices)
         # 4) the second half of first stage latches: 1
         # 5) the output phase = the second last latch phase
-        ck_phase_2=num_slices-1
-        ck_phase_1=int(num_slices/2)-1
-        ck_phase_0_0=int((int(num_slices/2)+1)%num_slices)
-        ck_phase_0_1=1
+        if num_slices > 4:
+            ck_phase_2 = num_slices - 1
+            ck_phase_1 = int(num_slices / 2) - 1
+            ck_phase_0_0 = int((int(num_slices / 2) + 1) % num_slices)
+            ck_phase_0_1 = 1
+        elif num_slices == 4:
+            ck_phase_2 = 0
+            ck_phase_1 = 2
+            ck_phase_0_0 = 3
+            ck_phase_0_1 = 1
         ck_phase_out=ck_phase_1
         ck_phase_buf=sorted(set([ck_phase_2, ck_phase_1, ck_phase_0_0, ck_phase_0_1]))
 
@@ -271,6 +286,8 @@ class adc_sar_templates__tisaradc_body_core(Module):
             m_ibuf = ret_m_ibuf,
             m_obuf = ret_m_obuf,
             m_latch = ret_m_latch,
+            m_srbuf=ret_m_srbuf,
+            m_sr=ret_m_sr,
             num_slices = num_slices,
             num_bits = num_bits,
             device_intent = ret_device_intent,
@@ -281,6 +298,10 @@ class adc_sar_templates__tisaradc_body_core(Module):
         self.rename_pin('ASCLKD<3:0>', ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]))
         self.rename_pin('EXTSEL_CLK', ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]))
         self.rename_pin('ADCOUT', ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]))
+
+        if use_offset == False:
+            self.remove_pin(','.join(['OSP%d'%(i) for i in range(num_slices)]))
+            self.remove_pin(','.join(['OSM%d'%(i) for i in range(num_slices)]))
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

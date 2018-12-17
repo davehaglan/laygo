@@ -86,3 +86,123 @@ instances:
     lib_name: basic
     cell_name: opin
     instpins: {}
+  IBUFN2:
+    lib_name: BAG_prim
+    cell_name: nmos4_fast
+    instpins:
+      S:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      D:
+        direction: inputOutput
+        net_name: "ZM<0>"
+        num_bits: 1
+      B:
+        direction: inputOutput
+        net_name: "VBB"
+        num_bits: 1
+      G:
+        direction: inputOutput
+        net_name: "ZM0<0>"
+        num_bits: 1
+  IBUFN1:
+    lib_name: BAG_prim
+    cell_name: nmos4_fast
+    instpins:
+      S:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      D:
+        direction: inputOutput
+        net_name: "ZMID<0>"
+        num_bits: 1
+      B:
+        direction: inputOutput
+        net_name: "VBB"
+        num_bits: 1
+      G:
+        direction: inputOutput
+        net_name: "ZMID0<0>"
+        num_bits: 1
+  IBUFN0:
+    lib_name: BAG_prim
+    cell_name: nmos4_fast
+    instpins:
+      S:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      D:
+        direction: inputOutput
+        net_name: "ZP<0>"
+        num_bits: 1
+      B:
+        direction: inputOutput
+        net_name: "VBB"
+        num_bits: 1
+      G:
+        direction: inputOutput
+        net_name: "ZP0<0>"
+        num_bits: 1
+  IBUFP2:
+    lib_name: BAG_prim
+    cell_name: pmos4_fast
+    instpins:
+      S:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      D:
+        direction: inputOutput
+        net_name: "ZM<0>"
+        num_bits: 1
+      B:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      G:
+        direction: inputOutput
+        net_name: "ZM0<0>"
+        num_bits: 1
+  IBUFP1:
+    lib_name: BAG_prim
+    cell_name: pmos4_fast
+    instpins:
+      S:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      D:
+        direction: inputOutput
+        net_name: "ZMID<0>"
+        num_bits: 1
+      B:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      G:
+        direction: inputOutput
+        net_name: "ZMID0<0>"
+        num_bits: 1
+  IBUFP0:
+    lib_name: BAG_prim
+    cell_name: pmos4_fast
+    instpins:
+      S:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      D:
+        direction: inputOutput
+        net_name: "ZP<0>"
+        num_bits: 1
+      B:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      G:
+        direction: inputOutput
+        net_name: "ZP0<0>"
+        num_bits: 1

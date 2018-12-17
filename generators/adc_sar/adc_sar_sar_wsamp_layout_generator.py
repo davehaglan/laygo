@@ -35,7 +35,7 @@ import laygo.GridLayoutGeneratorHelper as laygenhelper #utility functions
 def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_lib, sar_name, samp_name, space_1x_name,
                        placement_grid, routing_grid_m5m6,
                        routing_grid_m5m6_thick, routing_grid_m5m6_thick_basic,
-                       num_bits=9, origin=np.array([0, 0])):
+                       mom_layer=6, num_bits=9, origin=np.array([0, 0])):
     """generate sar with sampling frontend """
     pg = placement_grid
 
@@ -76,17 +76,26 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
 
     #signal route (clk/inp/inm)
     #make virtual grids and route on the grids (assuming drc clearance of each block)
+    if mom_layer == 6:
+        rg_mom = rg_m5m6_thick_basic
+    elif mom_layer == 4:
+        rg_mom = rg_m4m5_basic_thick
     rg_m5m6_thick_basic_temp_sig='route_M5_M6_thick_basic_temp_sig'
-    laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m5m6_thick_basic, gridname_output=rg_m5m6_thick_basic_temp_sig,
+    laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_mom, gridname_output=rg_m5m6_thick_basic_temp_sig,
                                           instname=isamp.name, 
-                                          inst_pin_prefix=['ckout', 'outp', 'outn'], xy_grid_type='xgrid')
+                                          inst_pin_prefix=['outp', 'outn'], xy_grid_type='xgrid')
     pdict_m5m6_thick_basic_temp_sig = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick_basic_temp_sig)
     #clock
+    rg_m5m6_thick_basic_temp_clk = 'route_M5_M6_thick_basic_temp_clk'
+    laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m5m6_thick_basic, gridname_output=rg_m5m6_thick_basic_temp_clk,
+                                          instname=isamp.name,
+                                          inst_pin_prefix=['ckout'], xy_grid_type='xgrid')
+    pdict_m5m6_thick_basic_temp_clk = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick_basic_temp_clk)
     rclk0 = laygen.route(None, laygen.layers['metal'][5],
-                         xy0=pdict_m5m6_thick_basic_temp_sig[isamp.name]['ckout'][0],
-                         xy1=pdict_m5m6_thick_basic_temp_sig[isar.name]['CLK0'][1]-np.array([0,1]), gridname0=rg_m5m6_thick_basic_temp_sig)
-    laygen.via(None,pdict_m5m6_thick_basic_temp_sig[isar.name]['CLK0'][1], rg_m5m6_thick_basic_temp_sig)
-    laygen.via(None,pdict_m5m6_thick_basic_temp_sig[isar.name]['CLK1'][1], rg_m5m6_thick_basic_temp_sig)
+                         xy0=pdict_m5m6_thick_basic_temp_clk[isamp.name]['ckout'][0],
+                         xy1=pdict_m5m6_thick_basic_temp_clk[isar.name]['CLK0'][1]-np.array([0,1]), gridname0=rg_m5m6_thick_basic_temp_clk)
+    laygen.via(None,pdict_m5m6_thick_basic_temp_clk[isar.name]['CLK0'][1], rg_m5m6_thick_basic_temp_clk)
+    laygen.via(None,pdict_m5m6_thick_basic_temp_clk[isar.name]['CLK1'][1], rg_m5m6_thick_basic_temp_clk)
 
     #frontend sig
     inp_y_list=[]
@@ -95,10 +104,12 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
         if pn.startswith('INP'):
             inp_y_list.append(p[0][1])
             pv=np.array([pdict_m5m6_thick_basic_temp_sig[isamp.name]['outp'][0][0], p[0][1]])
+            print(pv)
             laygen.via(None,pv, rg_m5m6_thick_basic_temp_sig)
         if pn.startswith('INM'):
             inm_y_list.append(p[0][1])
             pv=np.array([pdict_m5m6_thick_basic_temp_sig[isamp.name]['outn'][0][0], p[0][1]])
+            print(pv)
             laygen.via(None,pv, rg_m5m6_thick_basic_temp_sig)
     inp_y=min(inp_y_list)
     inm_y=min(inm_y_list)
@@ -253,6 +264,7 @@ if __name__ == '__main__':
     rg_m2m3 = 'route_M2_M3_cmos'
     rg_m3m4 = 'route_M3_M4_basic'
     rg_m4m5 = 'route_M4_M5_basic'
+    rg_m4m5_basic_thick = 'route_M4_M5_basic_thick'
     rg_m5m6 = 'route_M5_M6_basic'
     rg_m5m6_thick = 'route_M5_M6_thick'
     rg_m5m6_basic_thick = 'route_M5_M6_basic_thick'
@@ -272,6 +284,7 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']
+        mom_layer = specdict['momcap_layer']
         if specdict['samp_use_laygo'] is True:
             samp_lib = 'adc_sar_generated'
             samp_name = 'sarsamp'
@@ -292,8 +305,8 @@ if __name__ == '__main__':
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
     generate_sar_wsamp(laygen, objectname_pfix='SA0', workinglib=workinglib, samp_lib=samp_lib, space_1x_lib=logictemplib, sar_name=sar_name, samp_name=samp_name, space_1x_name=space_1x_name,
-                       placement_grid=pg, routing_grid_m5m6=rg_m5m6, routing_grid_m5m6_thick=rg_m5m6_thick, routing_grid_m5m6_thick_basic=rg_m5m6_thick_basic, 
-                       num_bits=num_bits, origin=np.array([0, 0]))
+                       placement_grid=pg, routing_grid_m5m6=rg_m5m6, routing_grid_m5m6_thick=rg_m5m6_thick, routing_grid_m5m6_thick_basic=rg_m5m6_thick_basic,
+                       mom_layer=mom_layer, num_bits=num_bits, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
     
 

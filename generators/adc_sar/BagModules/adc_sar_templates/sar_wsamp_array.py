@@ -46,7 +46,14 @@ class adc_sar_templates__sar_wsamp_array(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, sar_lch, sar_pw, sar_nw, sar_sa_m, sar_sa_m_rst, sar_sa_m_rgnn, sar_sa_m_buf, sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay, sar_logic_m, sar_fsm_m, sar_ret_m, sar_ret_fo, sar_device_intent, sar_c_m, sar_rdx_array, samp_lch, samp_wp, samp_wn, samp_fgn, samp_fg_inbuf_list, samp_fg_outbuf_list, samp_nduml, samp_ndumr, samp_nsep, samp_intent, num_bits, samp_use_laygo, num_slices):
+    def design(self, sar_lch, sar_pw, sar_nw, sar_sa_m, sar_sa_m_d, sar_sa_m_rst, sar_sa_m_rst_d, sar_sa_m_rgnn,
+               sar_sa_m_rgnp_d,
+               sar_sa_m_buf, doubleSA, sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay, sar_ckgen_fast,
+               sar_logic_m, sar_fsm_m, sar_ret_m, sar_ret_fo, sar_num_inv_bb, sar_device_intent, sar_c_m,
+               sar_rdx_array,
+               samp_lch, samp_wp, samp_wn, samp_fgn, samp_fg_inbuf_list, samp_fg_outbuf_list, samp_nduml,
+               samp_ndumr, samp_nsep, samp_intent,
+               samp_tgate, num_bits, samp_use_laygo, use_offset, num_slices):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -66,17 +73,23 @@ class adc_sar_templates__sar_wsamp_array(Module):
         self.parameters['sar_pw'] = sar_pw
         self.parameters['sar_nw'] = sar_nw
         self.parameters['sar_sa_m'] = sar_sa_m
+        self.parameters['sar_sa_m_d'] = sar_sa_m_d
         self.parameters['sar_sa_m_rst'] = sar_sa_m_rst
+        self.parameters['sar_sa_m_rst_d'] = sar_sa_m_rst
         self.parameters['sar_sa_m_rgnn'] = sar_sa_m_rgnn
+        self.parameters['sar_sa_m_rgnp_d'] = sar_sa_m_rgnp_d
         self.parameters['sar_sa_m_buf'] = sar_sa_m_buf
+        self.parameters['doubleSA'] = doubleSA
         self.parameters['sar_drv_m_list'] = sar_drv_m_list
         self.parameters['sar_ckgen_m'] = sar_ckgen_m
         self.parameters['sar_ckgen_fo'] = sar_ckgen_fo
         self.parameters['sar_ckgen_ndelay'] = sar_ckgen_ndelay
+        self.parameters['sar_ckgen_fast'] = sar_ckgen_fast
         self.parameters['sar_logic_m'] = sar_logic_m
         self.parameters['sar_fsm_m'] = sar_fsm_m
         self.parameters['sar_ret_m'] = sar_ret_m
         self.parameters['sar_ret_fo'] = sar_ret_fo
+        self.parameters['sar_num_inv_bb'] = sar_num_inv_bb
         self.parameters['sar_device_intent'] = sar_device_intent
         self.parameters['sar_c_m'] = sar_c_m
         self.parameters['sar_rdx_array'] = sar_rdx_array
@@ -91,49 +104,96 @@ class adc_sar_templates__sar_wsamp_array(Module):
         self.parameters['samp_nsep'] = samp_nsep
         self.parameters['samp_intent'] = samp_intent
         self.parameters['num_bits'] = num_bits
+        self.parameters['samp_tgate'] = samp_tgate
         self.parameters['samp_use_laygo'] = samp_use_laygo #if true, use laygo for sampler generation
+        self.parameters['use_offset'] = use_offset
         self.parameters['num_slices'] = num_slices
 
         #array generation
         name_list=[]
         term_list=[]
         for i in range(num_slices):
-            term_list.append({
-                'INP': 'INP%d'%(i), 
-                'INM': 'INM%d'%(i), 
-                'CLK': 'CLK%d'%(i), 
-                'OSP': 'OSP%d'%(i), 
-                'OSM': 'OSM%d'%(i), 
-                'VREF<2:0>': 'VREF<2:0>',
-                'CKDSEL0<1:0>': 'ASCLKD%d<1:0>'%(i), 
-                'CKDSEL1<1:0>': 'ASCLKD%d<3:2>'%(i), 
-                'EXTSEL_CLK' : 'EXTSEL_CLK%d'%(i),
-                'ADCOUT<%d:0>'%(num_bits-1) : 'ADCOUT%d<%d:0>'%(i, num_bits-1),
-                'CLKO' : 'CLKO%d'%(i),
-                'SAMPP' : 'SAMPP%d'%(i),
-                'SAMPM' : 'SAMPM%d'%(i),
-                'VOL<%d:0>'%(num_bits-2) : 'VOL%d<%d:0>'%(i, num_bits-2),
-                'VOR<%d:0>'%(num_bits-2) : 'VOR%d<%d:0>'%(i, num_bits-2),
-                'ZP<%d:0>'%(num_bits-1) : 'ZP%d<%d:0>'%(i, num_bits-1),
-                'ZMID<%d:0>'%(num_bits-1) : 'ZMID%d<%d:0>'%(i, num_bits-1),
-                'ZM<%d:0>'%(num_bits-1) : 'ZM%d<%d:0>'%(i, num_bits-1),
-                'SARCLK' : 'SARCLK%d'%(i),
-                'SARCLKB' : 'SARCLKB%d'%(i),
-                'CLKPRB_SAMP' : 'CLKPRB_SAMP%d'%(i),
-                'ICLK' : 'ICLK%d'%(i),
-                'DONE' : 'DONE%d'%(i),
-                'SB<%d:0>'%(num_bits-1) : 'SB%d<%d:0>'%(i, num_bits-1),
-                'UP' : 'UP%d'%(i),
-                'PHI0' : 'PHI0_%d'%(i),
-                'SAOP' : 'SAOP%d'%(i),
-                'SAOM' : 'SAOM%d'%(i),
-            })
+            if use_offset == True:
+                term_list.append({
+                    'INP': 'INP%d'%(i),
+                    'INM': 'INM%d'%(i),
+                    'CLK': 'CLK%d'%(i),
+                    'OSP': 'OSP%d'%(i),
+                    'OSM': 'OSM%d'%(i),
+                    'VREF<2:0>': 'VREF<2:0>',
+                    'CKDSEL0<1:0>': 'ASCLKD%d<1:0>'%(i),
+                    'CKDSEL1<1:0>': 'ASCLKD%d<3:2>'%(i),
+                    'EXTSEL_CLK' : 'EXTSEL_CLK%d'%(i),
+                    'ADCOUT<%d:0>'%(num_bits-1) : 'ADCOUT%d<%d:0>'%(i, num_bits-1),
+                    'CLKO' : 'CLKO%d'%(i),
+                    'SAMPP' : 'SAMPP%d'%(i),
+                    'SAMPM' : 'SAMPM%d'%(i),
+                    'VOL<%d:0>'%(num_bits-2) : 'VOL%d<%d:0>'%(i, num_bits-2),
+                    'VOR<%d:0>'%(num_bits-2) : 'VOR%d<%d:0>'%(i, num_bits-2),
+                    'ZP<%d:0>'%(num_bits-1) : 'ZP%d<%d:0>'%(i, num_bits-1),
+                    'ZMID<%d:0>'%(num_bits-1) : 'ZMID%d<%d:0>'%(i, num_bits-1),
+                    'ZM<%d:0>'%(num_bits-1) : 'ZM%d<%d:0>'%(i, num_bits-1),
+                    'SARCLK' : 'SARCLK%d'%(i),
+                    'SARCLKB' : 'SARCLKB%d'%(i),
+                    'CLKPRB_SAMP' : 'CLKPRB_SAMP%d'%(i),
+                    'ICLK' : 'ICLK%d'%(i),
+                    'DONE' : 'DONE%d'%(i),
+                    'SB<%d:0>'%(num_bits-1) : 'SB%d<%d:0>'%(i, num_bits-1),
+                    'UP' : 'UP%d'%(i),
+                    'PHI0' : 'PHI0_%d'%(i),
+                    'SAOP' : 'SAOP%d'%(i),
+                    'SAOM' : 'SAOM%d'%(i),
+                })
+            else:
+                term_list.append({
+                    'INP': 'INP%d'%(i),
+                    'INM': 'INM%d'%(i),
+                    'CLK': 'CLK%d'%(i),
+                    'VREF<2:0>': 'VREF<2:0>',
+                    'CKDSEL0<1:0>': 'ASCLKD%d<1:0>'%(i),
+                    'CKDSEL1<1:0>': 'ASCLKD%d<3:2>'%(i),
+                    'EXTSEL_CLK' : 'EXTSEL_CLK%d'%(i),
+                    'ADCOUT<%d:0>'%(num_bits-1) : 'ADCOUT%d<%d:0>'%(i, num_bits-1),
+                    'CLKO' : 'CLKO%d'%(i),
+                    'SAMPP' : 'SAMPP%d'%(i),
+                    'SAMPM' : 'SAMPM%d'%(i),
+                    'VOL<%d:0>'%(num_bits-2) : 'VOL%d<%d:0>'%(i, num_bits-2),
+                    'VOR<%d:0>'%(num_bits-2) : 'VOR%d<%d:0>'%(i, num_bits-2),
+                    'ZP<%d:0>'%(num_bits-1) : 'ZP%d<%d:0>'%(i, num_bits-1),
+                    'ZMID<%d:0>'%(num_bits-1) : 'ZMID%d<%d:0>'%(i, num_bits-1),
+                    'ZM<%d:0>'%(num_bits-1) : 'ZM%d<%d:0>'%(i, num_bits-1),
+                    'SARCLK' : 'SARCLK%d'%(i),
+                    'SARCLKB' : 'SARCLKB%d'%(i),
+                    'CLKPRB_SAMP' : 'CLKPRB_SAMP%d'%(i),
+                    'ICLK' : 'ICLK%d'%(i),
+                    'DONE' : 'DONE%d'%(i),
+                    'SB<%d:0>'%(num_bits-1) : 'SB%d<%d:0>'%(i, num_bits-1),
+                    'UP' : 'UP%d'%(i),
+                    'PHI0' : 'PHI0_%d'%(i),
+                    'SAOP' : 'SAOP%d'%(i),
+                    'SAOM' : 'SAOM%d'%(i),
+                    'samp_body' : 'samp_body%d'%(i),
+                    'bottom_body' : 'bottom_body%d'%(i),
+                    'OSP': 'VDDSAR',
+                    'OSM': 'VDDSAR',
+                })
             name_list.append('ISLICE%d'%(i))
         self.array_instance('ISLICE0', name_list, term_list=term_list)
         for i in range(num_slices):
-            self.instances['ISLICE0'][i].design(sar_lch, sar_pw, sar_nw, sar_sa_m, sar_sa_m_rst, sar_sa_m_rgnn, sar_sa_m_buf, sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay, sar_logic_m, sar_fsm_m, sar_ret_m, sar_ret_fo, sar_device_intent, sar_c_m, sar_rdx_array, samp_lch, samp_wp, samp_wn, samp_fgn, samp_fg_inbuf_list, samp_fg_outbuf_list, samp_nduml, samp_ndumr, samp_nsep, samp_intent, num_bits, samp_use_laygo)
+            self.instances['ISLICE0'][i].design(sar_lch, sar_pw, sar_nw, sar_sa_m, sar_sa_m_d, sar_sa_m_rst, sar_sa_m_rst_d,
+                                                sar_sa_m_rgnn, sar_sa_m_rgnp_d, sar_sa_m_buf, doubleSA,
+                                                sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay, sar_ckgen_fast,
+                                                sar_logic_m, sar_fsm_m, sar_ret_m, sar_ret_fo, sar_num_inv_bb,
+                                                sar_device_intent, sar_c_m, sar_rdx_array,
+                                                samp_lch, samp_wp, samp_wn, samp_fgn, samp_fg_inbuf_list, samp_fg_outbuf_list,
+                                                samp_nduml, samp_ndumr, samp_nsep, samp_intent, samp_tgate, num_bits, samp_use_laygo)
         #rename pins
-        pin_enum=['INP', 'INM', 'CLK', 'OSP', 'OSM', 'EXTSEL_CLK', 'CLKO']
+        if use_offset == True:
+            pin_enum=['INP', 'INM', 'CLK', 'OSP', 'OSM', 'EXTSEL_CLK', 'CLKO']
+        else:
+            pin_enum = ['INP', 'INM', 'CLK', 'EXTSEL_CLK', 'CLKO']
+            self.remove_pin('OSP0')
+            self.remove_pin('OSM0')
         for pn in pin_enum:
             pn_new=''
             for i in range(num_slices):

@@ -46,7 +46,7 @@ class adc_sar_templates__sarabe_dualdelay_bb(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, ckgen_m, ckgen_fo, ckgen_ndelay, logic_m, fsm_m, ret_m, ret_fo, num_bits, num_inv_bb, device_intent='fast'):
+    def design(self, lch, pw, nw, ckgen_m, ckgen_fo, ckgen_ndelay, ckgen_fast, logic_m, fsm_m, ret_m, ret_fo, num_bits, num_inv_bb, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -70,12 +70,13 @@ class adc_sar_templates__sarabe_dualdelay_bb(Module):
         self.parameters['ckgen_m'] = ckgen_m
         self.parameters['ckgen_fo'] = ckgen_fo
         self.parameters['ckgen_ndelay'] = ckgen_ndelay
+        self.parameters['ckgen_fast'] = True
         self.parameters['logic_m'] = logic_m
         self.parameters['fsm_m'] = fsm_m
         self.parameters['ret_m'] = ret_m
         self.parameters['ret_fo'] = ret_fo
         self.parameters['device_intent'] = device_intent
-        self.instances['ICKGEN0'].design(lch=lch, pw=pw, nw=nw, m=ckgen_m, fo=ckgen_fo, ndelay=ckgen_ndelay, device_intent=device_intent)
+        self.instances['ICKGEN0'].design(lch=lch, pw=pw, nw=nw, m=ckgen_m, fo=ckgen_fo, ndelay=ckgen_ndelay, fast=ckgen_fast, device_intent=device_intent)
         self.instances['ISARLOGIC0'].design(lch=lch, pw=pw, nw=nw, m=logic_m, num_bits=num_bits, num_inv_bb=num_inv_bb, device_intent=device_intent)
         self.instances['ISARFSM0'].design(lch=lch, pw=pw, nw=nw, m=fsm_m, num_bits=num_bits,device_intent=device_intent)
         self.instances['IRET0'].design(lch=lch, pw=pw, nw=nw, m=ret_m, fo=ret_fo, num_bits=num_bits, device_intent=device_intent)

@@ -12,7 +12,7 @@ def execfile(filepath, globals=None, locals=None):
 files=[
     'laygo/generators/splash/adc_sar_dsn_system.py',
     'laygo/generators/splash/adc_sar_capdac_layout_generator.py',
-    #'laygo/generators/splash/adc_sar_salatch_pmos_layout_generator_lvt.py',
+    'laygo/generators/splash/adc_sar_salatch_pmos_layout_generator_lvt.py',
     'laygo/generators/splash/adc_sar_doubleSA_pmos_1st_layout_generator_lvt.py',
     'laygo/generators/splash/adc_sar_doubleSA_pmos_2nd_layout_generator_lvt.py',
     'laygo/generators/splash/adc_sar_doubleSA_pmos_layout_generator_lvt.py',

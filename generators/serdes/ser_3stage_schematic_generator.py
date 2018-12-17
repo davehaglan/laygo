@@ -63,5 +63,5 @@ dsn.design(**params)
 
 # implement the design
 print('implementing design with library %s' % impl_lib)
-dsn.implement_design(impl_lib, top_cell_name=cell_name, suffix=suffix_name, erase=True)
+dsn.implement_design(impl_lib, top_cell_name=cell_name+suffix_name, erase=True)
 

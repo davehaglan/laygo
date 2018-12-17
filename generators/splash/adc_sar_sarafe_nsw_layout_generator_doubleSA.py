@@ -39,7 +39,7 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
                     routing_grid_m4m5_thick, 
                     routing_grid_m5m6, routing_grid_m5m6_thick, routing_grid_m5m6_basic_thick,
                     routing_grid_m6m7,
-                    num_bits=8, num_bits_vertical=6, num_cdrv_output_routes=2, m_sa=8, origin=np.array([0, 0])):
+                    num_bits=8, num_bits_vertical=6, num_cdrv_output_routes=2, m_sa=8, double_sa=False, origin=np.array([0, 0])):
     """generate sar analog frontend """
     pg = placement_grid
 
@@ -51,8 +51,10 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     cdrv_name='capdrv_nsw_array'
     #cdac_name='capdac_'+str(num_bits)+'b'
     cdac_name='capdac'
-    sa_name='doubleSA_pmos'
-
+    if double_sa == False:
+        sa_name='salatch_pmos'
+    elif double_sa == True:
+        sa_name='doubleSA_pmos'
     # placement
     xy0 = origin + (laygen.get_template_size(cdrv_name, gridname=pg, libname=workinglib)*np.array([1, 0]) )
     icdrvl = laygen.place(name="I" + objectname_pfix + 'CDRVL0', templatename=cdrv_name, gridname=pg,
@@ -165,12 +167,13 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     #rosm=laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, 0]), xy1=np.array([0, 0]),
     #                  refinstname0=isa.name, refpinname0='OSM', gridname0=rg_m2m3, direction='y')
     pdict_m3m4 = laygen.get_inst_pin_xy(None, None, rg_m3m4)
+    laygen.get_inst_xy(icdacr.name, rg_m3m4)
     yos=laygen.get_inst_xy(isa.name, rg_m3m4)[1] \
         - laygen.get_template_size(name=isa.cellname, gridname=rg_m3m4, libname=workinglib)[1]
     [rv0, rh0, rosp] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict_m3m4[isa.name]['OSP'][0],
-                                       np.array([pdict_m3m4[isa.name]['OSP'][0][0]+m_sa, 0]), yos, rg_m3m4)
+                                       np.array([laygen.get_inst_xy(icdacr.name, rg_m3m4)[0]-2, 0]), yos, rg_m3m4)
     [rv0, rh0, rosm] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict_m3m4[isa.name]['OSM'][0],
-                                       np.array([pdict_m3m4[isa.name]['OSM'][0][0]-m_sa, 0]), yos, rg_m3m4)
+                                       np.array([laygen.get_inst_xy(icdacr.name, rg_m3m4)[0]+2, 0]), yos, rg_m3m4)
     renl0 = []
     renl1 = []
     renl2 = []
@@ -320,9 +323,9 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     rvdd_sar_m5, rvss_sar_m5 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAR_M5_', 
                 layer=laygen.layers['metal'][5], gridname=rg_m4m5_thick, netnames=['VDD', 'VSS'], direction='y', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=None,
-                offset_start_index=8, offset_end_index=0)
+                offset_start_index=7, offset_end_index=0)
     #sa_m6
-    num_vref_routes_m6=4
+    num_vref_routes_m6=5
     x1 = laygen.get_inst_xy(name=isa.name, gridname=rg_m5m6_thick)[0]\
          +laygen.get_template_size(name=isa.cellname, gridname=rg_m5m6_thick, libname=workinglib)[0]
     x1_phy = laygen.get_inst_xy(name=isa.name)[0]\
@@ -507,6 +510,7 @@ if __name__ == '__main__':
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']-1
         m_sa=sizedict['salatch']['m']
+        doubleSA=sizedict['salatch']['doubleSA']
         num_bits_vertical=sizedict['capdac']['num_bits_vertical']
     #sarafe generation
     cellname='sarafe_nsw_doubleSA'
@@ -519,7 +523,7 @@ if __name__ == '__main__':
                     routing_grid_m4m5_thick=rg_m4m5_thick, routing_grid_m5m6=rg_m5m6, 
                     routing_grid_m5m6_basic_thick=rg_m5m6_basic_thick, routing_grid_m5m6_thick=rg_m5m6_thick,
                     routing_grid_m6m7=rg_m6m7, num_bits=num_bits, num_bits_vertical=num_bits_vertical,
-                    num_cdrv_output_routes=1, m_sa=m_sa,
+                    num_cdrv_output_routes=1, m_sa=m_sa, double_sa=doubleSA,
                     origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 

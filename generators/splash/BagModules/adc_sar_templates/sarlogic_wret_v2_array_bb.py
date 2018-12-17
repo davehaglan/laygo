@@ -73,12 +73,20 @@ class adc_sar_templates__sarlogic_wret_v2_array_bb(Module):
         name_list=[]
         term_list=[]
         for i in range(num_bits):
-            term_list.append({'SB': 'SB<%d>'%(i), 
-                              'ZP': 'ZP0<%d>'%(i),
-                              'ZMID': 'ZMID0<%d>'%(i),
-                              'ZM': 'ZM0<%d>'%(i),
-                              'RETO': 'RETO<%d>'%(i),
-                             })
+            if not num_inv_bb==0:
+                term_list.append({'SB': 'SB<%d>'%(i),
+                                  'ZP': 'ZP0<%d>'%(i),
+                                  'ZMID': 'ZMID0<%d>'%(i),
+                                  'ZM': 'ZM0<%d>'%(i),
+                                  'RETO': 'RETO<%d>'%(i),
+                                 })
+            else:
+                term_list.append({'SB': 'SB<%d>' % (i),
+                                  'ZP': 'ZP<%d>' % (i),
+                                  'ZMID': 'ZMID<%d>' % (i),
+                                  'ZM': 'ZM<%d>' % (i),
+                                  'RETO': 'RETO<%d>' % (i),
+                                  })
             name_list.append('ISL%d'%(i))
         self.array_instance('ISL0', name_list, term_list=term_list)
         for i in range(num_bits):

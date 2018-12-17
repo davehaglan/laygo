@@ -6,7 +6,7 @@ instances:
     lib_name: serdes_templates
     cell_name: ser
     instpins:
-      p1buf:
+      div:
         direction: output
         net_name: "divclk"
         num_bits: 1
@@ -38,7 +38,7 @@ instances:
     lib_name: serdes_templates
     cell_name: ser
     instpins:
-      p1buf:
+      div:
         direction: output
         net_name: "net2"
         num_bits: 1

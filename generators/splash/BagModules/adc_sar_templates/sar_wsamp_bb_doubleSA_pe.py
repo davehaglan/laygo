@@ -46,7 +46,7 @@ class adc_sar_templates__sar_wsamp_bb_doubleSA_pe(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, sar_lch, sar_pw, sar_nw, sar_sa_m, sar_sa_m_d, sar_sa_m_rst, sar_sa_m_rst_d, sar_sa_m_rgnn, sar_sa_m_rgnp_d, sar_sa_m_buf, sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay, sar_logic_m, sar_logic_m_dl, sar_logic_m_xor, sar_logic_m_buf, sar_fsm_m, sar_ret_m, sar_ret_fo, sar_device_intent, sar_c_m, sar_rdx_array, samp_lch, samp_wp, samp_wn, samp_fgn, samp_fg_inbuf_list, samp_fg_outbuf_list, samp_nduml, samp_ndumr, samp_nsep, samp_intent, num_bits, num_inv_dl, samp_use_laygo=False):
+    def design(self, sar_lch, sar_pw, sar_nw, sar_sa_m, sar_sa_m_d, sar_sa_m_rst, sar_sa_m_rst_d, sar_sa_m_rgnn, sar_sa_m_rgnp_d, sar_sa_m_buf, sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay, sar_ckgen_fast, sar_logic_m, sar_logic_m_dl, sar_logic_m_xor, sar_logic_m_buf, sar_fsm_m, sar_ret_m, sar_ret_fo, sar_device_intent, sar_c_m, sar_rdx_array, samp_lch, samp_wp, samp_wn, samp_fgn, samp_fg_inbuf_list, samp_fg_outbuf_list, samp_nduml, samp_ndumr, samp_nsep, samp_intent, num_bits, num_inv_dl, samp_use_laygo=False):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -76,6 +76,7 @@ class adc_sar_templates__sar_wsamp_bb_doubleSA_pe(Module):
         self.parameters['sar_ckgen_m'] = sar_ckgen_m
         self.parameters['sar_ckgen_fo'] = sar_ckgen_fo
         self.parameters['sar_ckgen_ndelay'] = sar_ckgen_ndelay
+        self.parameters['sar_ckgen_fast'] = sar_ckgen_fast
         self.parameters['sar_logic_m'] = sar_logic_m
         self.parameters['sar_logic_m_dl'] = sar_logic_m_dl
         self.parameters['sar_logic_m_xor'] = sar_logic_m_xor
@@ -101,7 +102,7 @@ class adc_sar_templates__sar_wsamp_bb_doubleSA_pe(Module):
         self.parameters['samp_use_laygo'] = samp_use_laygo #if true, use laygo for sampler generation
 
         self.instances['ISAR0'].design(lch=sar_lch, pw=sar_pw, nw=sar_nw, sa_m=sar_sa_m, sa_m_d=sar_sa_m_d, sa_m_rst=sar_sa_m_rst, sa_m_rst_d=sar_sa_m_rst_d, sa_m_rgnn=sar_sa_m_rgnn, sa_m_rgnp_d=sar_sa_m_rgnp_d, sa_m_buf=sar_sa_m_buf, 
-                                       drv_m_list=sar_drv_m_list, ckgen_m=sar_ckgen_m, ckgen_fo=sar_ckgen_fo, ckgen_ndelay=sar_ckgen_ndelay, logic_m=sar_logic_m, logic_m_dl=sar_logic_m_dl, logic_m_xor=sar_logic_m_xor, logic_m_buf=sar_logic_m_buf, 
+                                       drv_m_list=sar_drv_m_list, ckgen_m=sar_ckgen_m, ckgen_fo=sar_ckgen_fo, ckgen_ndelay=sar_ckgen_ndelay, ckgen_fast=sar_ckgen_fast, logic_m=sar_logic_m, logic_m_dl=sar_logic_m_dl, logic_m_xor=sar_logic_m_xor, logic_m_buf=sar_logic_m_buf, 
                                        fsm_m=sar_fsm_m, ret_m=sar_ret_m, ret_fo=sar_ret_fo, c_m=sar_c_m, rdx_array=sar_rdx_array, num_bits=num_bits, num_inv_dl=num_inv_dl,
                                        device_intent=sar_device_intent)
         if samp_use_laygo==True:

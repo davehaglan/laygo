@@ -22,6 +22,7 @@ params = dict(
     sar_ckgen_m=2, 
     sar_ckgen_fo=2, 
     sar_ckgen_ndelay=1, 
+    sar_ckgen_fast=True, 
     sar_logic_m=1, 
     sar_fsm_m=1, 
     sar_ret_m=2, 
@@ -57,6 +58,7 @@ if load_from_file==True:
     params['sar_sa_m_rgnn']=sizedict['salatch']['m_rgnn']
     params['sar_sa_m_rgnp_d']=sizedict['salatch']['m_rgnp_d']
     params['sar_sa_m_buf']=sizedict['salatch']['m_buf']
+    params['doubleSA']=sizedict['salatch']['doubleSA']
     params['sar_drv_m_list']=sizedict['capdrv']['m_list']
     params['sar_logic_m']=sizedict['sarlogic']['m']
     params['num_inv_bb']=sizedict['sarlogic']['num_inv_bb']
@@ -66,6 +68,7 @@ if load_from_file==True:
     params['sar_ckgen_m']=sizedict['sarclkgen']['m']
     params['sar_ckgen_fo']=sizedict['sarclkgen']['fo']
     params['sar_ckgen_ndelay']=sizedict['sarclkgen']['ndelay']
+    params['sar_ckgen_fast']=sizedict['sarclkgen']['fast']
     params['sar_c_m']=sizedict['capdac']['c_m']
     params['sar_rdx_array']=specdict['rdx_array']
     params['num_bits']=specdict['n_bit']
@@ -78,6 +81,19 @@ if load_from_file==True:
     #params['samp_pw']=sizedict['pw']
     #params['samp_nw']=sizedict['nw']
     params['samp_intent']=sizedict['device_intent']
+    params['sf_lch'] = sizedict['lch']
+    params['sf_nw'] = sizedict['nw']
+    params['sf_m_mirror'] = sizedict['sourceFollower']['m_mirror']
+    params['sf_m_bias'] = sizedict['sourceFollower']['m_bias']
+    params['sf_m_in'] = sizedict['sourceFollower']['m_in']
+    params['sf_m_off'] = sizedict['sourceFollower']['m_off']
+    params['sf_m_bias_dum'] = sizedict['sourceFollower']['m_bias_dum']
+    params['sf_m_in_dum'] = sizedict['sourceFollower']['m_in_dum']
+    params['sf_m_byp'] = sizedict['sourceFollower']['m_byp']
+    params['sf_m_byp_bias'] = sizedict['sourceFollower']['m_byp_bias']
+    params['sf_intent'] = sizedict['device_intent']
+    params['use_sf'] = specdict['use_sf']
+
 #sampler sizing
 if params['samp_use_laygo']==True:
     params['samp_wp']=params['sar_pw']

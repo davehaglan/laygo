@@ -14,26 +14,6 @@ instances:
     lib_name: basic
     cell_name: iopin
     instpins: {}
-  OUTN:
-    lib_name: BAG_prim
-    cell_name: nmos4_ulvt
-    instpins:
-      S:
-        direction: inputOutput
-        net_name: "VSS"
-        num_bits: 1
-      D:
-        direction: inputOutput
-        net_name: "O"
-        num_bits: 1
-      B:
-        direction: inputOutput
-        net_name: "VBB"
-        num_bits: 1
-      G:
-        direction: inputOutput
-        net_name: "nand"
-        num_bits: 1
   IBUFN0:
     lib_name: BAG_prim
     cell_name: nmos4_ulvt
@@ -134,6 +114,26 @@ instances:
         direction: inputOutput
         net_name: "A"
         num_bits: 1
+  OUTN:
+    lib_name: BAG_prim
+    cell_name: nmos4_ulvt
+    instpins:
+      S:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      D:
+        direction: inputOutput
+        net_name: "O"
+        num_bits: 1
+      B:
+        direction: inputOutput
+        net_name: "VBB"
+        num_bits: 1
+      G:
+        direction: inputOutput
+        net_name: "nand"
+        num_bits: 1
   PIN4:
     lib_name: basic
     cell_name: ipin
@@ -146,26 +146,6 @@ instances:
     lib_name: basic
     cell_name: opin
     instpins: {}
-  OUTP:
-    lib_name: BAG_prim
-    cell_name: pmos4_ulvt
-    instpins:
-      S:
-        direction: inputOutput
-        net_name: "VDD"
-        num_bits: 1
-      D:
-        direction: inputOutput
-        net_name: "O"
-        num_bits: 1
-      B:
-        direction: inputOutput
-        net_name: "VSS"
-        num_bits: 1
-      G:
-        direction: inputOutput
-        net_name: "nand"
-        num_bits: 1
   IDLP0:
     lib_name: BAG_prim
     cell_name: pmos4_ulvt
@@ -245,6 +225,26 @@ instances:
       G:
         direction: inputOutput
         net_name: "Ad"
+        num_bits: 1
+  OUTP:
+    lib_name: BAG_prim
+    cell_name: pmos4_ulvt
+    instpins:
+      S:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      D:
+        direction: inputOutput
+        net_name: "O"
+        num_bits: 1
+      B:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      G:
+        direction: inputOutput
+        net_name: "nand"
         num_bits: 1
   NANDPA:
     lib_name: BAG_prim

@@ -87,7 +87,7 @@ def generate_boundary(laygen, objectname_pfix, placement_grid,
 
 def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_grid, routing_grid_m2m3, 
                               routing_grid_m3m4_thick, routing_grid_m4m5_thick, routing_grid_m5m6_thick,
-                              routing_grid_m4m5, num_bits=9, origin=np.array([0, 0])):
+                              routing_grid_m4m5, num_bits=9, sarabe_supply_rail_mode=0, origin=np.array([0, 0])):
     """generate sar backend """
     pg = placement_grid
 
@@ -106,6 +106,8 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     sarret_name = 'sarret_wckbuf'#_'+str(num_bits)+'b'
     #space_name = 'space_dcap_nmos'
     space_name = 'space'
+
+    pin_bot_locx = []
 
     xy0=laygen.get_xy(obj=laygen.get_template(name=space_name, libname=workinglib), gridname=pg)
     xsp=xy0[0]
@@ -252,7 +254,47 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
         devname_bnd_right += ['pmos4_fast_right', 'nmos4_fast_right']
         transform_bnd_left += ['R0', 'MX']
         transform_bnd_right += ['R0', 'MX']
-    
+
+    #space insertion for routing area, if number of bits exceeds 8
+    isp_r=[]
+    m4_end_idx = -8
+    if num_bits > 6:
+        isp_r.append(laygen.relplace(name="I" + objectname_pfix + 'SP_route0', templatename=space_name,
+                                   gridname=pg, refinstname=refi, direction='top', transform='R0',
+                                   template_libname=workinglib))
+        refi = isp_r[-1].name
+        devname_bnd_left += ['nmos4_fast_left', 'pmos4_fast_left']
+        devname_bnd_right += ['nmos4_fast_right', 'pmos4_fast_right']
+        transform_bnd_left += ['R0', 'MX']
+        transform_bnd_right += ['R0', 'MX']
+        isp_r.append(laygen.relplace(name="I" + objectname_pfix + 'SP_route1', templatename=space_name,
+                                   gridname=pg, refinstname=refi, direction='top', transform='MX',
+                                   template_libname=workinglib))
+        refi = isp_r[-1].name
+        devname_bnd_left += ['pmos4_fast_left', 'nmos4_fast_left']
+        devname_bnd_right += ['pmos4_fast_right', 'nmos4_fast_right']
+        transform_bnd_left += ['R0', 'MX']
+        transform_bnd_right += ['R0', 'MX']
+        m4_end_idx += -8
+    if num_bits > 8:
+        isp_r.append(laygen.relplace(name="I" + objectname_pfix + 'SP_route2', templatename=space_name,
+                                   gridname=pg, refinstname=refi, direction='top', transform='R0',
+                                   template_libname=workinglib))
+        refi = isp_r[-1].name
+        devname_bnd_left += ['nmos4_fast_left', 'pmos4_fast_left']
+        devname_bnd_right += ['nmos4_fast_right', 'pmos4_fast_right']
+        transform_bnd_left += ['R0', 'MX']
+        transform_bnd_right += ['R0', 'MX']
+        isp_r.append(laygen.relplace(name="I" + objectname_pfix + 'SP_route3', templatename=space_name,
+                                   gridname=pg, refinstname=refi, direction='top', transform='MX',
+                                   template_libname=workinglib))
+        refi = isp_r[-1].name
+        devname_bnd_left += ['pmos4_fast_left', 'nmos4_fast_left']
+        devname_bnd_right += ['pmos4_fast_right', 'nmos4_fast_right']
+        transform_bnd_left += ['R0', 'MX']
+        transform_bnd_right += ['R0', 'MX']
+        m4_end_idx += -8
+
     # boundaries
     m_bnd = int(xsp / laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottom'), gridname=pg)[0])
     [bnd_bottom, bnd_top, bnd_left, bnd_right] \
@@ -326,11 +368,15 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                             xy1=np.array([pdict_m5m6[iret.name]['CLKO0'][0][0], 0]), gridname0=rg_m5m6)
     laygen.boundary_pin_from_rect(rrstout0, rg_m4m5, 'RSTOUT0', laygen.layers['pin'][5], size=6,
                                   direction='bottom', netname='RSTOUT')
+    xy = laygen.get_rect_xy(rrstout0.name, rg_m4m5)
+    pin_bot_locx.append(float(laygen._route_generate_box_from_abscoord(xy0=xy[0, :], xy1=xy[1, :], gridname0=rg_m4m5)[1][0][0]))
     rrstout1 = laygen.route(None, laygen.layers['metal'][5],
                             xy0=pdict_m5m6[iret.name]['CLKO1'][0],
                             xy1=np.array([pdict_m5m6[iret.name]['CLKO1'][0][0], 0]), gridname0=rg_m5m6)
     laygen.boundary_pin_from_rect(rrstout1, rg_m4m5, 'RSTOUT1', laygen.layers['pin'][5], size=6,
                                   direction='bottom', netname='RSTOUT')
+    xy = laygen.get_rect_xy(rrstout1.name, rg_m4m5)
+    pin_bot_locx.append(float(laygen._route_generate_box_from_abscoord(xy0=xy[0, :], xy1=xy[1, :], gridname0=rg_m4m5)[1][0][0]))
 
     # clk input 
     laygen.boundary_pin_from_rect(rrst0, rg_m5m6, 'RST0', laygen.layers['pin'][5], size=6, direction='top',
@@ -341,13 +387,14 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
 
     # sarclk signal route
     # ckgen to fsm
+    ref_x_sarclk = laygen.get_inst_pin_xy(isl.name, 'ZP<'+str(int(num_bits/2)*2-1)+'>', rg_m4m5)[0][0]-5
     rh0, rv0, rh1 = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                      pdict_m4m5[ickg.name]['CLKO'][0], pdict_m4m5[ifsm.name]['CLK'][0], 
-                                     pdict_m4m5[ickg.name]['CLKO'][1][0], rg_m4m5)
+                                     ref_x_sarclk, rg_m4m5)
     # ckgen to fsm #2 (to reduce route resistance)
     rh0, rv0, rh1 = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                      pdict_m4m5[ickg.name]['CLKO'][0], pdict_m4m5[ifsm.name]['CLK'][0], 
-                                     pdict_m4m5[ickg.name]['CLKO'][1][0]+2, rg_m4m5)
+                                     ref_x_sarclk+2, rg_m4m5)
     ## ckgen to fsm
     #rh0, rv0, rh1 = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
     #                                 pdict_m4m5[ickg.name]['CLKO'][0], pdict_m4m5[ifsm.name]['CLK'][0], 
@@ -405,22 +452,29 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                                      pdict_m4m5[ickg.name]['SHORTB'][0],
                                      pdict_m4m5[isl.name]['ZMID<'+str(max(0, num_bits-3))+'>'][0], rg_m4m5)
     # ckdsel
+    x_ref_ckdsel = laygen.get_inst_bbox(ickg.name, rg_m4m5)[1][0]
     for i in range(2):
         rh0, rclkdsel0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                          pdict_m4m5[ickg.name]['SEL<' + str(i) + '>'][0],
-                                         np.array([pdict_m4m5[ickg.name]['SEL<'+str(i)+'>'][1][0]+1+i+2+2, 0]), rg_m4m5)
+                                         np.array([x_ref_ckdsel-11+i, 0]), rg_m4m5)
         laygen.boundary_pin_from_rect(rclkdsel0, rg_m4m5, 'CKDSEL0<' + str(i) + '>', laygen.layers['pin'][5],
                                       size=6, direction='bottom')
+        xy = laygen.get_rect_xy(rclkdsel0.name, rg_m4m5)
+        pin_bot_locx.append(float(laygen._route_generate_box_from_abscoord(xy0=xy[0, :], xy1=xy[1, :], gridname0=rg_m4m5)[1][0][0]))
     rh0, rclkdsel1 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                      pdict_m4m5[ickg.name]['SEL<2>'][0],
-                                     np.array([pdict_m4m5[ickg.name]['SEL<2>'][1][0]+1+3+2+2, 0]), rg_m4m5)
+                                     np.array([x_ref_ckdsel-8, 0]), rg_m4m5)
     laygen.boundary_pin_from_rect(rclkdsel1, rg_m4m5, 'CKDSEL1<0>', laygen.layers['pin'][5], size=6,
                                   direction='bottom')
+    xy = laygen.get_rect_xy(rclkdsel1.name, rg_m4m5)
+    pin_bot_locx.append(float(laygen._route_generate_box_from_abscoord(xy0=xy[0, :], xy1=xy[1, :], gridname0=rg_m4m5)[1][0][0]))
     #ckdsel dummy
     xy0 = laygen.get_xy(obj =rclkdsel0, gridname=rg_m4m5, sort=True)
     rclkdsel1 = laygen.route(None, laygen.layers['metal'][5], xy0=xy0[0]+np.array([3,0]), xy1=xy0[0]+np.array([3,4]), gridname0=rg_m4m5)
     laygen.boundary_pin_from_rect(rclkdsel1, rg_m4m5, 'CKDSEL1<1>', laygen.layers['pin'][5], size=6,
                                   direction='bottom')
+    xy = laygen.get_rect_xy(rclkdsel1.name, rg_m4m5)
+    pin_bot_locx.append(float(laygen._route_generate_box_from_abscoord(xy0=xy[0, :], xy1=xy[1, :], gridname0=rg_m4m5)[1][0][0]))
 
     # SAOP/SAOM
     laygen.boundary_pin_from_rect(rsaop0, rg_m4m5, 'SAOP', laygen.layers['pin'][5], size=6, direction='top')
@@ -432,6 +486,8 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                                     #np.array([x0+13+3, 0]), rg_m4m5)
     laygen.boundary_pin_from_rect(rextsel_clk0, rg_m4m5, 'EXTSEL_CLK', laygen.layers['pin'][5], size=6,
                                   direction='bottom')
+    xy = laygen.get_rect_xy(rextsel_clk0.name, rg_m4m5)
+    pin_bot_locx.append(float(laygen._route_generate_box_from_abscoord(xy0=xy[0,:], xy1=xy[1,:], gridname0=rg_m4m5)[1][0][0]))
     # fsm to ret (data)
     for i in range(num_bits):
         if i%2==0: #even channel
@@ -449,6 +505,8 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                              xy1=np.array([pdict_m4m5[iret.name]['OUT<'+str(i)+'>'][0][0], 0]), gridname0=rg_m5m6)
         laygen.boundary_pin_from_rect(radco0, rg_m4m5, 'ADCOUT<' + str(i) + '>', laygen.layers['pin'][5], size=6,
                                       direction='bottom')
+        xy = laygen.get_rect_xy(radco0.name, rg_m4m5)
+        pin_bot_locx.append(float(laygen._route_generate_box_from_abscoord(xy0=xy[0, :], xy1=xy[1, :], gridname0=rg_m4m5)[1][0][0]))
     # probe outputs
     laygen.pin(name='PHI0', layer=laygen.layers['pin'][4], xy=pdict_m4m5[ickg.name]['PHI0'], gridname=rg_m4m5)
     laygen.pin(name='UP', layer=laygen.layers['pin'][4], xy=pdict_m4m5[ickg.name]['UP'], gridname=rg_m4m5)
@@ -486,16 +544,19 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     rvddl_m4, rvssl_m4 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='L_M4_', 
                 layer=laygen.layers['metal'][4], gridname=rg_m3m4_thick, netnames=['VDD', 'VSS'], direction='x', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=None,
-                offset_start_index=2, offset_end_index=-8)
+                offset_start_index=2, offset_end_index=m4_end_idx)
     x1 = laygen.get_xy(obj =bnd_right[0], gridname=rg_m3m4_thick)[0]\
          +laygen.get_xy(obj =bnd_right[0].template, gridname=rg_m3m4_thick)[0]
     input_rails_rect = [rvddr_m3, rvssr_m3]
     rvddr_m4, rvssr_m4 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='R_M4_', 
                 layer=laygen.layers['metal'][4], gridname=rg_m3m4_thick, netnames=['VDD', 'VSS'], direction='x', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=None, overwrite_end_coord=x1,
-                offset_start_index=2, offset_end_index=-8) 
+                offset_start_index=2, offset_end_index=m4_end_idx)
     #additional m4 routes
-    inst_exclude=[isp[0], isp[1], iret,ifsm,isl,ickg,isp[-1],isp[-2]]
+    inst_exclude=[isp[0], isp[1], iret,ifsm,isl,ickg,isp[-1],isp[-2], isp_r[-1], isp_r[-2]]
+    # if not len(isp_r)==0:
+    #     for i in range (len(isp_r)):
+    #         inst_exclude.append(isp_r[i])
     x0 = laygen.get_xy(obj =bnd_left[0], gridname=rg_m3m4_thick)[0]
     y0 = laygen.get_xy(obj =bnd_left[0], gridname=rg_m3m4_thick)[1]
     x1 = laygen.get_xy(obj =bnd_right[0], gridname=rg_m3m4_thick)[0]\
@@ -526,21 +587,34 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                 layer=laygen.layers['metal'][5], gridname=rg_m4m5_thick, netnames=['VDD', 'VSS'], direction='y', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=y1,
                 offset_start_index=1, offset_end_index=0) 
-    input_rails_rect = [rvddr_m4, rvssr_m4]
-    rvddr_m5, rvssr_m5 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='R_M5_', 
-                layer=laygen.layers['metal'][5], gridname=rg_m4m5_thick, netnames=['VDD', 'VSS'], direction='y', 
-                input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=y1,
-                offset_start_index=0, offset_end_index=0)
+    if sarabe_supply_rail_mode == 0:
+        input_rails_rect = [rvddr_m4, rvssr_m4]
+        rvddr_m5, rvssr_m5 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='R_M5_',
+                    layer=laygen.layers['metal'][5], gridname=rg_m4m5_thick, netnames=['VDD', 'VSS'], direction='y',
+                    input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=y1,
+                    offset_start_index=0, offset_end_index=0)
+    else:
+        input_rails_rect = [rvssr_m4, rvddr_m4]
+        rvssr_m5, rvddr_m5 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='R_M5_',
+                    layer=laygen.layers['metal'][5], gridname=rg_m4m5_thick, netnames=['VSS', 'VDD'], direction='y',
+                    input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=y1,
+                    offset_start_index=0, offset_end_index=0)
     #m6
     input_rails_rect = [rvddl_m5, rvssl_m5]
     rvddl_m6, rvssl_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='L_M6_', 
                 layer=laygen.layers['metal'][6], gridname=rg_m5m6_thick, netnames=['VDD', 'VSS'], direction='x', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=0, overwrite_end_coord=None,
                 offset_start_index=1, offset_end_index=-1)
-    x1 = laygen.get_xy(obj =bnd_right[0], gridname=rg_m5m6_thick)[0]\
-         +laygen.get_xy(obj =bnd_right[0].template, gridname=rg_m5m6_thick)[0]
+    # if laygen.grids.get_phygrid_x(rg_m5m6_thick, 1)==laygen.grids.get_phygrid_x(rg_m1m2, 1)*3:
+    #     x1 = laygen.get_xy(obj =bnd_right[0], gridname=rg_m5m6_thick)[0]\
+    #          +laygen.get_xy(obj =bnd_right[0].template, gridname=rg_m5m6_thick)[0] - 1
+    # else:
+    #     x1 = laygen.get_xy(obj=bnd_right[0], gridname=rg_m5m6_thick)[0] \
+    #          + laygen.get_xy(obj=bnd_right[0].template, gridname=rg_m5m6_thick)[0] - 0
     x1_phy = laygen.get_xy(obj =bnd_right[0])[0]\
          +laygen.get_xy(obj =bnd_right[0].template)[0]
+    x1 = laygen.grids.get_absgrid_x(rg_m5m6_thick, x1_phy)
+    print(x1_phy, x1)
     input_rails_rect = [rvddr_m5, rvssr_m5]
     rvddr_m6, rvssr_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='R_M6_', 
                 layer=laygen.layers['metal'][6], gridname=rg_m5m6_thick, netnames=['VDD', 'VSS'], direction='x', 
@@ -563,8 +637,6 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     for i, inst in enumerate(inst_reference):
         num_route.append(laygen.get_xy(obj =inst.template, gridname=rg_m5m6_thick)[1] - 2)
     x0 = laygen.get_xy(obj =bnd_left[0], gridname=rg_m5m6_thick)[0]
-    x1 = laygen.get_xy(obj =bnd_right[0], gridname=rg_m5m6_thick)[0]\
-         +laygen.get_xy(obj =bnd_right[0].template, gridname=rg_m5m6_thick)[0]
     n_vdd_m6=0 #number for m6 wires
     n_vss_m6=0 #number for m6 wires
     for i, inst in enumerate(inst_reference):
@@ -583,6 +655,8 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                 xy0 = laygen.get_xy(obj =r0, gridname=rg_m5m6_thick)
                 laygen.pin(name='VSS_M6' + str(n_vss_m6), layer=laygen.layers['pin'][6], xy=xy0, gridname=rg_m5m6_thick, netname='VSS')
                 n_vss_m6+=1
+
+    return sorted(pin_bot_locx)
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
@@ -637,16 +711,17 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']
+        sarabe_supply_rail_mode=sizedict['sarabe_supply_rail_mode']
     #sarabe generation
     cellname='sarabe_dualdelay' #_'+str(num_bits)+'b'
     print(cellname+" generating")
     mycell_list.append(cellname)
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
-    generate_sarabe_dualdelay(laygen, objectname_pfix='CA0', workinglib=workinglib,
+    pin_bot_locx = generate_sarabe_dualdelay(laygen, objectname_pfix='CA0', workinglib=workinglib,
                     placement_grid=pg, routing_grid_m2m3=rg_m2m3, 
                     routing_grid_m3m4_thick=rg_m3m4_thick, routing_grid_m4m5_thick=rg_m4m5_thick, routing_grid_m5m6_thick=rg_m5m6_thick, 
-                    routing_grid_m4m5=rg_m4m5, num_bits=num_bits, origin=np.array([0, 0]))
+                    routing_grid_m4m5=rg_m4m5, num_bits=num_bits, sarabe_supply_rail_mode=sarabe_supply_rail_mode, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)
@@ -661,3 +736,9 @@ if __name__ == '__main__':
             laygen.export_BAG(prj, array_delimiter=['[', ']'])
     except ImportError:
         laygen.export_GDS('output.gds', cellname=mycell_list, layermapfile=tech+".layermap")  # change layermapfile
+
+    sizedict['adc_width'] = int(laygen.get_template_xy(cellname, libname=workinglib, gridname=rg_m1m2)[0])
+    # save x -co-ordinate of bottom pin locations for reserving tracks in power fill of retimer
+    sizedict['reserve_tracks'] = pin_bot_locx
+    with open(yamlfile_size, 'w') as stream:
+        yaml.dump(sizedict, stream)

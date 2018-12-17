@@ -265,12 +265,21 @@ if __name__ == '__main__':
 
     mycell_list = []
     #cap dac generation
-    m_unit=2
-    num_bits_vertical=5
+    load_from_file = True
+    yamlfile_spec = "adc_sar_spec.yaml"
+    yamlfile_size = "adc_sar_size.yaml"
+    if load_from_file == True:
+        # load parameters
+        with open(yamlfile_spec, 'r') as stream:
+            specdict = yaml.load(stream)
+        with open(yamlfile_size, 'r') as stream:
+            sizedict = yaml.load(stream)
+        m_unit=sizedict['clk_dis_cdac']['m']
+        num_bits_vertical=sizedict['clk_dis_cdac']['num_bits']
     num_bits_horizontal=0
     num_space_top = 5
     num_space_bottom = 6
-    num_space_left = 5
+    num_space_left = 4
     num_space_right = 1
     print(cell_name+" generating")
     mycell_list.append(cell_name)

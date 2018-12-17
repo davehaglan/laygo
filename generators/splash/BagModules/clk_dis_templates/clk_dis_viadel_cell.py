@@ -46,7 +46,7 @@ class clk_dis_templates__clk_dis_viadel_cell(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, m_dff=2, m_inv1=4, m_inv2=8, m_tgate=4, n_pd=2, m_capsw=2, num_bits=5, unit_cell=1, device_intent='fast'):
+    def design(self, lch, pw, nw, m_dff=2, m_inv1=4, m_inv2=8, m_tgate=4, n_pd=2, m_capsw=2, num_bits=5, unit_cell=1, clock_pulse='False', device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -73,11 +73,12 @@ class clk_dis_templates__clk_dis_viadel_cell(Module):
         self.parameters['m_capsw'] = m_capsw
         self.parameters['num_bits'] = num_bits
         self.parameters['unit_cell'] = unit_cell
+        self.parameters['clock_pulse'] = clock_pulse
         self.parameters['device_intent'] = device_intent
 
 
         self.instances['I0'].design(lch=lch, pw=pw, nw=nw, m_dff=m_dff, m_inv1=m_inv1, m_inv2=m_inv2,
-            m_tgate=m_tgate, n_pd=n_pd, num_bits=num_bits, m_capsw=m_capsw, device_intent=device_intent)    #viadel
+            m_tgate=m_tgate, n_pd=n_pd, num_bits=num_bits, m_capsw=m_capsw, clock_pulse=clock_pulse, device_intent=device_intent)    #viadel
         self.instances['I1'].design(num_bits=num_bits, unit_cell=unit_cell)
         self.instances['I2'].design(num_bits=num_bits, unit_cell=unit_cell)
         #self.instances['I1'].design(num_bits=num_bits)

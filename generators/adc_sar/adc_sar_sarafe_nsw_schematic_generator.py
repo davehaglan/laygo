@@ -39,9 +39,13 @@ if load_from_file==True:
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
     params['sa_m']=sizedict['salatch']['m']
+    params['sa_m_d']=sizedict['salatch']['m_d']
     params['sa_m_rst']=sizedict['salatch']['m_rst']
+    params['sa_m_rst_d']=sizedict['salatch']['m_rst_d']
     params['sa_m_rgnn']=sizedict['salatch']['m_rgnn']
+    params['sa_m_rgnp_d']=sizedict['salatch']['m_rgnp_d']
     params['sa_m_buf']=sizedict['salatch']['m_buf']
+    params['doubleSA']=sizedict['salatch']['doubleSA']
     params['num_bits']=specdict['n_bit']-1
     params['c_m']=sizedict['capdac']['c_m']
     params['rdx_array']=specdict['rdx_array']
@@ -50,6 +54,7 @@ if load_from_file==True:
     params['pw']=sizedict['pw']
     params['nw']=sizedict['nw']
     params['device_intent']=sizedict['device_intent']
+    params['pmos_body']=specdict['pmos_body']
 
 print('creating BAG project')
 prj = bag.BagProject()
