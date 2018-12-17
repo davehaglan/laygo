@@ -7,7 +7,7 @@ instances:
     cell_name: nmos4_fast
     instpins:
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       D:

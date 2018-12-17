@@ -1,12 +1,12 @@
 lib_name: logic_templates
-cell_name: nsw
-pins: [ "VSS", "I", "EN", "O" ]
+cell_name: cap_sw
+pins: [ "VSS", "VO", "EN", "VDD" ]
 instances:
   PIN1:
     lib_name: basic
     cell_name: iopin
     instpins: {}
-  PIN5:
+  PIN0:
     lib_name: basic
     cell_name: iopin
     instpins: {}
@@ -24,11 +24,11 @@ instances:
     instpins:
       S:
         direction: inputOutput
-        net_name: "O"
+        net_name: "VSS"
         num_bits: 1
       D:
         direction: inputOutput
-        net_name: "I"
+        net_name: "VO"
         num_bits: 1
       B:
         direction: 
@@ -37,4 +37,12 @@ instances:
       G:
         direction: inputOutput
         net_name: "EN"
+        num_bits: 1
+  I0:
+    lib_name: basic
+    cell_name: noConn
+    instpins:
+      noConn:
+        direction: inputOutput
+        net_name: "VDD"
         num_bits: 1

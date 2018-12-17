@@ -1,5 +1,5 @@
 lib_name: logic_templates
-cell_name: oai22
+cell_name: oai22_skewed
 pins: [ "VSS", "C", "D", "VDD", "A", "B", "O" ]
 instances:
   PIN2:
@@ -110,6 +110,46 @@ instances:
     lib_name: basic
     cell_name: opin
     instpins: {}
+  IP4:
+    lib_name: BAG_prim
+    cell_name: pmos4_fast
+    instpins:
+      S:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      D:
+        direction: inputOutput
+        net_name: "N3"
+        num_bits: 1
+      B:
+        direction: 
+        net_name: "VDD"
+        num_bits: 1
+      G:
+        direction: inputOutput
+        net_name: "C"
+        num_bits: 1
+  IP5:
+    lib_name: BAG_prim
+    cell_name: pmos4_fast
+    instpins:
+      S:
+        direction: inputOutput
+        net_name: "N3"
+        num_bits: 1
+      D:
+        direction: inputOutput
+        net_name: "O"
+        num_bits: 1
+      B:
+        direction: 
+        net_name: "VDD"
+        num_bits: 1
+      G:
+        direction: inputOutput
+        net_name: "D"
+        num_bits: 1
   IP3:
     lib_name: BAG_prim
     cell_name: pmos4_fast

@@ -1,5 +1,5 @@
 lib_name: logic_templates
-cell_name: nand_demo
+cell_name: nand
 pins: [ "VSS", "VDD", "A", "B", "O" ]
 instances:
   PIN2:
@@ -24,7 +24,7 @@ instances:
         num_bits: 1
       B:
         direction: 
-        net_name: "NW"
+        net_name: "VDD"
         num_bits: 1
       G:
         direction: inputOutput
@@ -44,7 +44,7 @@ instances:
         num_bits: 1
       B:
         direction: 
-        net_name: "NW"
+        net_name: "VDD"
         num_bits: 1
       G:
         direction: inputOutput
@@ -76,7 +76,7 @@ instances:
         num_bits: 1
       B:
         direction: 
-        net_name: "BULK"
+        net_name: "VSS"
         num_bits: 1
       G:
         direction: inputOutput
@@ -96,7 +96,7 @@ instances:
         num_bits: 1
       B:
         direction: 
-        net_name: "BULK"
+        net_name: "VSS"
         num_bits: 1
       G:
         direction: inputOutput

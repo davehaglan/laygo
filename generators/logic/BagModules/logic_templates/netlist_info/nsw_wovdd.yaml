@@ -1,5 +1,5 @@
 lib_name: logic_templates
-cell_name: nsw
+cell_name: nsw_wovdd
 pins: [ "VSS", "I", "EN", "O" ]
 instances:
   PIN1:
@@ -18,6 +18,26 @@ instances:
     lib_name: basic
     cell_name: ipin
     instpins: {}
+  IN1:
+    lib_name: BAG_prim
+    cell_name: nmos4_fast
+    instpins:
+      S:
+        direction: inputOutput
+        net_name: "O"
+        num_bits: 1
+      D:
+        direction: inputOutput
+        net_name: "I"
+        num_bits: 1
+      B:
+        direction: 
+        net_name: "VSS"
+        num_bits: 1
+      G:
+        direction: inputOutput
+        net_name: "EN"
+        num_bits: 1
   IN0:
     lib_name: BAG_prim
     cell_name: nmos4_fast

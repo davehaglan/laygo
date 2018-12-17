@@ -1,7 +1,31 @@
 lib_name: logic_templates
-cell_name: bcap2
-pins: [ "I", "VDD", "VSS" ]
+cell_name: tie
+pins: [ "VSS", "VDD" ]
 instances:
+  PIN2:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
+  PIN3:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
+  I5:
+    lib_name: basic
+    cell_name: noConn
+    instpins:
+      noConn:
+        direction: inputOutput
+        net_name: "net6"
+        num_bits: 1
+  I4:
+    lib_name: basic
+    cell_name: noConn
+    instpins:
+      noConn:
+        direction: inputOutput
+        net_name: "net5"
+        num_bits: 1
   IN0:
     lib_name: BAG_prim
     cell_name: nmos4_fast
@@ -12,7 +36,7 @@ instances:
         num_bits: 1
       D:
         direction: inputOutput
-        net_name: "VSS"
+        net_name: "net6"
         num_bits: 1
       B:
         direction: 
@@ -20,7 +44,7 @@ instances:
         num_bits: 1
       G:
         direction: inputOutput
-        net_name: "I"
+        net_name: "net6"
         num_bits: 1
   IP0:
     lib_name: BAG_prim
@@ -28,7 +52,7 @@ instances:
     instpins:
       S:
         direction: inputOutput
-        net_name: "VDD"
+        net_name: "net5"
         num_bits: 1
       D:
         direction: inputOutput
@@ -40,17 +64,5 @@ instances:
         num_bits: 1
       G:
         direction: inputOutput
-        net_name: "I"
+        net_name: "net5"
         num_bits: 1
-  PIN7:
-    lib_name: basic
-    cell_name: iopin
-    instpins: {}
-  PIN6:
-    lib_name: basic
-    cell_name: iopin
-    instpins: {}
-  PIN5:
-    lib_name: basic
-    cell_name: iopin
-    instpins: {}

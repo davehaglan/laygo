@@ -1,35 +1,7 @@
 lib_name: logic_templates
-cell_name: nand_demo
-pins: [ "VSS", "VDD", "A", "B", "O" ]
+cell_name: tinv_small
+pins: [ "I", "O", "VDD", "VSS", "EN", "ENB" ]
 instances:
-  PIN2:
-    lib_name: basic
-    cell_name: iopin
-    instpins: {}
-  PIN3:
-    lib_name: basic
-    cell_name: iopin
-    instpins: {}
-  IP1:
-    lib_name: BAG_prim
-    cell_name: pmos4_fast
-    instpins:
-      S:
-        direction: inputOutput
-        net_name: "VDD"
-        num_bits: 1
-      D:
-        direction: inputOutput
-        net_name: "O"
-        num_bits: 1
-      B:
-        direction: 
-        net_name: "NW"
-        num_bits: 1
-      G:
-        direction: inputOutput
-        net_name: "B"
-        num_bits: 1
   IP0:
     lib_name: BAG_prim
     cell_name: pmos4_fast
@@ -40,15 +12,35 @@ instances:
         num_bits: 1
       D:
         direction: inputOutput
+        net_name: "N1"
+        num_bits: 1
+      B:
+        direction: 
+        net_name: "VDD"
+        num_bits: 1
+      G:
+        direction: inputOutput
+        net_name: "I"
+        num_bits: 1
+  IP1:
+    lib_name: BAG_prim
+    cell_name: pmos4_fast
+    instpins:
+      S:
+        direction: inputOutput
+        net_name: "N1"
+        num_bits: 1
+      D:
+        direction: inputOutput
         net_name: "O"
         num_bits: 1
       B:
         direction: 
-        net_name: "NW"
+        net_name: "VDD"
         num_bits: 1
       G:
         direction: inputOutput
-        net_name: "A"
+        net_name: "ENB"
         num_bits: 1
   PIN5:
     lib_name: basic
@@ -58,9 +50,9 @@ instances:
     lib_name: basic
     cell_name: ipin
     instpins: {}
-  PIN1:
+  PIN0:
     lib_name: basic
-    cell_name: opin
+    cell_name: ipin
     instpins: {}
   IN0:
     lib_name: BAG_prim
@@ -76,11 +68,11 @@ instances:
         num_bits: 1
       B:
         direction: 
-        net_name: "BULK"
+        net_name: "VSS"
         num_bits: 1
       G:
         direction: inputOutput
-        net_name: "A"
+        net_name: "EN"
         num_bits: 1
   IN1:
     lib_name: BAG_prim
@@ -96,9 +88,21 @@ instances:
         num_bits: 1
       B:
         direction: 
-        net_name: "BULK"
+        net_name: "VSS"
         num_bits: 1
       G:
         direction: inputOutput
-        net_name: "B"
+        net_name: "I"
         num_bits: 1
+  PIN6:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
+  PIN3:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
+  PIN2:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
