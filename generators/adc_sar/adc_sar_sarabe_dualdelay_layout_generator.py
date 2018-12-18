@@ -431,18 +431,18 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     for i in range(num_bits):
         rzp0 = laygen.route(None, laygen.layers['metal'][5],
                             xy0=pdict_m4m5[isl.name]['ZP<'+str(i)+'>'][0],
-                            xy1=pdict_m4m5[isl.name]['ZP<'+str(i)+'>'][0]+np.array([0, 4]), gridname0=rg_m5m6)
-        laygen.boundary_pin_from_rect(rzp0, rg_m5m6, 'ZP<' + str(i) + '>', laygen.layers['pin'][5], size=6,
+                            xy1=pdict_m4m5[isl.name]['ZP<'+str(i)+'>'][0]+np.array([0, 4]), gridname0=rg_m4m5)
+        laygen.boundary_pin_from_rect(rzp0, rg_m4m5, 'ZP<' + str(i) + '>', laygen.layers['pin'][5], size=6,
                                       direction='top')
         rzm0 = laygen.route(None, laygen.layers['metal'][5],
                             xy0=pdict_m4m5[isl.name]['ZM<'+str(i)+'>'][0],
-                            xy1=pdict_m4m5[isl.name]['ZM<'+str(i)+'>'][0]+np.array([0, 4]), gridname0=rg_m5m6)
-        laygen.boundary_pin_from_rect(rzm0, rg_m5m6, 'ZM<' + str(i) + '>', laygen.layers['pin'][5], size=6,
+                            xy1=pdict_m4m5[isl.name]['ZM<'+str(i)+'>'][0]+np.array([0, 4]), gridname0=rg_m4m5)
+        laygen.boundary_pin_from_rect(rzm0, rg_m4m5, 'ZM<' + str(i) + '>', laygen.layers['pin'][5], size=6,
                                       direction='top')
         rzmid0 = laygen.route(None, laygen.layers['metal'][5],
                             xy0=pdict_m4m5[isl.name]['ZMID<'+str(i)+'>'][0],
-                            xy1=pdict_m4m5[isl.name]['ZMID<'+str(i)+'>'][0]+np.array([0, 4]), gridname0=rg_m5m6)
-        laygen.boundary_pin_from_rect(rzmid0, rg_m5m6, 'ZMID<' + str(i) + '>', laygen.layers['pin'][5], size=6,
+                            xy1=pdict_m4m5[isl.name]['ZMID<'+str(i)+'>'][0]+np.array([0, 4]), gridname0=rg_m4m5)
+        laygen.boundary_pin_from_rect(rzmid0, rg_m4m5, 'ZMID<' + str(i) + '>', laygen.layers['pin'][5], size=6,
                                       direction='top')
     # zmid to short
     #rh0, rv0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
