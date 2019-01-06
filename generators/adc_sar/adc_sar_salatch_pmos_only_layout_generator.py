@@ -1010,6 +1010,7 @@ def generate_salatch_pmos_wbnd(laygen, objectname_pfix, placement_grid, routing_
             elif m_space_1x==0 and not m_space_2x==0:
                 ispl2x.append(laygen.relplace(name="ISA0SPL2X0", templatename=devname_space_2x[i], gridname=pg,
                                               shape=np.array([m_space_2x, 1]), xy=spl_origin, transform=transform_space[i]))
+                refi = ispl2x[-1].name
             if m_space_1x==0 and m_space_2x==0:
                 ispl4x.append(laygen.place(name="ISA0SPL4X0", templatename=d, gridname=pg, xy=spl_origin,
                                           shape=np.array([m_space_4x, 1]), transform=transform_space[i]))
