@@ -79,6 +79,14 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
 
     # pin informations
     pdict_m3m4_thick=laygen.get_inst_pin_xy(None, None, rg_m3m4_thick)
+    if mom_layer == 6:
+        rg0 = rg_m5m6
+        rg1 = rg_m5m6
+        rg2 = rg_m4m5
+    elif mom_layer == 4:
+        rg0 = rg_m4m5
+        rg1 = rg_m4m5
+        rg2 = rg_m4m5
 
     # internal pins
     icdrvl_vo_xy = []
@@ -88,33 +96,25 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     icdacr_i_xy = []
     icdacr_i2_xy = []
 
-    icdrvl_vo_c0_xy = laygen.get_inst_pin_xy(icdrvl.name, 'VO_C0', rg_m5m6)
-    icdacl_i_c0_xy = laygen.get_inst_pin_xy(icdacl.name, 'I_C0', rg_m5m6)
-    icdrvr_vo_c0_xy = laygen.get_inst_pin_xy(icdrvr.name, 'VO_C0', rg_m5m6)
-    icdacr_i_c0_xy = laygen.get_inst_pin_xy(icdacr.name, 'I_C0', rg_m5m6)
+    icdrvl_vo_c0_xy = laygen.get_inst_pin_xy(icdrvl.name, 'VO_C0', rg0)
+    icdacl_i_c0_xy = laygen.get_inst_pin_xy(icdacl.name, 'I_C0', rg0)
+    icdrvr_vo_c0_xy = laygen.get_inst_pin_xy(icdrvr.name, 'VO_C0', rg0)
+    icdacr_i_c0_xy = laygen.get_inst_pin_xy(icdacr.name, 'I_C0', rg0)
     for i in range(num_bits):
-        icdacl_i_xy.append(laygen.get_inst_pin_xy(icdacl.name, 'I<' + str(i) + '>', rg_m5m6))
-        icdacr_i_xy.append(laygen.get_inst_pin_xy(icdacr.name, 'I<' + str(i) + '>', rg_m5m6))
+        icdacl_i_xy.append(laygen.get_inst_pin_xy(icdacl.name, 'I<' + str(i) + '>', rg0))
+        icdacr_i_xy.append(laygen.get_inst_pin_xy(icdacr.name, 'I<' + str(i) + '>', rg0))
         if i>=num_bits_vertical:
-            icdacl_i2_xy.append(laygen.get_inst_pin_xy(icdacl.name, 'I2<' + str(i) + '>', rg_m5m6))
-            icdacr_i2_xy.append(laygen.get_inst_pin_xy(icdacr.name, 'I2<' + str(i) + '>', rg_m5m6))
+            icdacl_i2_xy.append(laygen.get_inst_pin_xy(icdacl.name, 'I2<' + str(i) + '>', rg0))
+            icdacr_i2_xy.append(laygen.get_inst_pin_xy(icdacr.name, 'I2<' + str(i) + '>', rg0))
 
     for j in range(num_cdrv_output_routes):
         for i in range(num_bits):
-            icdrvl_vo_xy.append(laygen.get_inst_pin_xy(icdrvl.name, 'VO' + str(j) + '<' + str(i) + '>', rg_m5m6))
-            icdrvr_vo_xy.append(laygen.get_inst_pin_xy(icdrvr.name, 'VO' + str(j) + '<' + str(i) + '>', rg_m5m6))
+            icdrvl_vo_xy.append(laygen.get_inst_pin_xy(icdrvl.name, 'VO' + str(j) + '<' + str(i) + '>', rg0))
+            icdrvr_vo_xy.append(laygen.get_inst_pin_xy(icdrvr.name, 'VO' + str(j) + '<' + str(i) + '>', rg0))
 
     #route
     #capdrv to capdac
     #y0 = origin[1] + laygen.get_xy(obj=laygen.get_template(name = cdrv_name, libname=workinglib), gridname=rg_m5m6)[1]-2 #refer to capdrv
-    if mom_layer == 6:
-        rg0 = rg_m5m6
-        rg1 = rg_m5m6
-        rg2 = rg_m4m5
-    elif mom_layer == 4:
-        rg0 = rg_m4m5
-        rg1 = rg_m4m5
-        rg2 = rg_m4m5
     y0 = origin[1] + laygen.get_xy(obj=laygen.get_template(name = cdrv_name, libname=workinglib), gridname=rg0)[1] \
          + laygen.get_xy(obj=laygen.get_template(name = sa_name, libname=workinglib), gridname=rg0)[1] - 4 #refer to sa
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][5], laygen.layers['metal'][mom_layer], icdrvl_vo_c0_xy[0],
