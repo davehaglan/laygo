@@ -184,7 +184,8 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
         rg_mom = rg_m5m6
     elif mom_layer == 4:
         rg_mom = rg_m4m5
-    for p, pxy in pdict_m5m6[iafe.name].items():
+    pdict_mom = laygen.get_inst_pin_xy(None, None, rg_mom)
+    for p, pxy in pdict_mom[iafe.name].items():
         if p.startswith('INP'):
             laygen.pin(name=p, layer=laygen.layers['pin'][mom_layer], xy=pxy, gridname=rg_mom, netname='INP')
         if p.startswith('INM'):
