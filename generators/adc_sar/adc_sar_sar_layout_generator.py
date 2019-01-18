@@ -59,7 +59,8 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
     pdict_m5m6_thick = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick)
 
     #zp/zm/zmid route
-    x0 = laygen.get_inst_pin_xy(iabe.name, 'ZP<' + str(int(num_bits / 2) * 2 - 1) + '>', rg_m4m5)[0][0] - 6
+    # x0 = laygen.get_inst_pin_xy(iabe.name, 'ZP<' + str(int(num_bits / 2) * 2 - 1) + '>', rg_m4m5)[0][0] - 6
+    x0 = int(laygen.get_template_size(sarabe_name, gridname=rg_m5m6, libname=workinglib)[0]/2) + 3*num_bits
     # x0=pdict_m5m6[iafe.name]['ENR0<0>'][0][0]-4
     y0=pdict_m5m6[iabe.name]['ZP<0>'][0][1]-5
     for i in range(1, num_bits):
