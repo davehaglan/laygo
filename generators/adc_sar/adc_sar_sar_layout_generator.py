@@ -143,7 +143,10 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
     #                                   pdict_m5m6[iabe.name]['SARCLKB'][0], rg_m4m5)
     [rh0, rv0, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
                                       pdict_m4m5[iafe.name]['CLKB'][0]+[0,3], pdict_m4m5[iabe.name]['SARCLKB'][0],
-                                       pdict_m4m5[iafe.name]['ENR1<0>'][0][0]+int(num_bits/2+1)*3, rg_m4m5)
+                                       pdict_m4m5[iafe.name]['ENR1<0>'][0][0]-3, rg_m4m5)
+    # [rh0, rv0, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
+    #                                   pdict_m4m5[iafe.name]['CLKB'][0]+[0,3], pdict_m4m5[iabe.name]['SARCLKB'][0],
+    #                                    pdict_m4m5[iafe.name]['ENR1<0>'][0][0]+int(num_bits/2+1)*3, rg_m4m5)
     laygen.via(None, pdict_m4m5[iafe.name]['CLKB'][0]+[0,3], rg_m4m5)
     #clk
     x0=int(laygen.get_xy(obj=laygen.get_template(name=sarabe_name, libname=workinglib), gridname=rg_m5m6)[0] / 2)
