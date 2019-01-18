@@ -325,43 +325,43 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     # very important because it sets the timing margin
     # ckg to sl
     [rh0, rrst0, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['RST'][0],
-                                           pdict_m5m6[isl.name]['RST'][0],
-                                           pdict_m5m6[ickg.name]['RST'][0][0]+2, rg_m4m5)
+                                           pdict_m4m5[ickg.name]['RST'][0],
+                                           pdict_m4m5[isl.name]['RST'][0],
+                                           pdict_m4m5[ickg.name]['RST'][0][0]+2, rg_m4m5)
     [rh0, rrst1, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['RST'][0],
-                                           pdict_m5m6[isl.name]['RST'][0],
-                                           pdict_m5m6[ickg.name]['RST'][0][0]+4, rg_m4m5)
+                                           pdict_m4m5[ickg.name]['RST'][0],
+                                           pdict_m4m5[isl.name]['RST'][0],
+                                           pdict_m4m5[ickg.name]['RST'][0][0]+4, rg_m4m5)
     #[rh0, rrst2, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-    #                                       pdict_m5m6[ickg.name]['RST'][0],
-    #                                       pdict_m5m6[isl.name]['RST'][0],
-    #                                       pdict_m5m6[ickg.name]['RST'][0][0]+6, rg_m4m5)
+    #                                       pdict_m4m5[ickg.name]['RST'][0],
+    #                                       pdict_m4m5[isl.name]['RST'][0],
+    #                                       pdict_m4m5[ickg.name]['RST'][0][0]+6, rg_m4m5)
     # ckg to fsm
     [rh0, rrst0, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['RST'][0],
-                                           pdict_m5m6[ifsm.name]['RST'][0],
-                                           pdict_m5m6[ickg.name]['RST'][0][0]+2, rg_m4m5)
+                                           pdict_m4m5[ickg.name]['RST'][0],
+                                           pdict_m4m5[ifsm.name]['RST'][0],
+                                           pdict_m4m5[ickg.name]['RST'][0][0]+2, rg_m4m5)
     [rh0, rrst1, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['RST'][0],
-                                           pdict_m5m6[ifsm.name]['RST'][0],
-                                           pdict_m5m6[ickg.name]['RST'][0][0]+4, rg_m4m5)
+                                           pdict_m4m5[ickg.name]['RST'][0],
+                                           pdict_m4m5[ifsm.name]['RST'][0],
+                                           pdict_m4m5[ickg.name]['RST'][0][0]+4, rg_m4m5)
     #[rh0, rrst2, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-    #                                       pdict_m5m6[ickg.name]['RST'][0],
-    #                                       pdict_m5m6[ifsm.name]['RST'][0],
-    #                                       pdict_m5m6[ickg.name]['RST'][0][0]+6, rg_m4m5)
+    #                                       pdict_m4m5[ickg.name]['RST'][0],
+    #                                       pdict_m4m5[ifsm.name]['RST'][0],
+    #                                       pdict_m4m5[ickg.name]['RST'][0][0]+6, rg_m4m5)
     # ckg to ret
     [rh0, rrst0, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['RST'][0],
-                                           pdict_m5m6[iret.name]['CLK'][0],
-                                           pdict_m5m6[ickg.name]['RST'][0][0]+2, rg_m4m5)
+                                           pdict_m4m5[ickg.name]['RST'][0],
+                                           pdict_m4m5[iret.name]['CLK'][0],
+                                           pdict_m4m5[ickg.name]['RST'][0][0]+2, rg_m4m5)
     [rh0, rrst1, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['RST'][0],
-                                           pdict_m5m6[iret.name]['CLK'][0],
-                                           pdict_m5m6[ickg.name]['RST'][0][0]+4, rg_m4m5)
+                                           pdict_m4m5[ickg.name]['RST'][0],
+                                           pdict_m4m5[iret.name]['CLK'][0],
+                                           pdict_m4m5[ickg.name]['RST'][0][0]+4, rg_m4m5)
     #[rh0, rrst2, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-    #                                       pdict_m5m6[ickg.name]['RST'][0],
-    #                                       pdict_m5m6[iret.name]['CLK'][0],
-    #                                       pdict_m5m6[ickg.name]['RST'][0][0]+6, rg_m4m5)
+    #                                       pdict_m4m5[ickg.name]['RST'][0],
+    #                                       pdict_m4m5[iret.name]['CLK'][0],
+    #                                       pdict_m4m5[ickg.name]['RST'][0][0]+6, rg_m4m5)
     # rst output to final retimer
     rrstout0 = laygen.route(None, laygen.layers['metal'][5],
                             xy0=pdict_m5m6[iret.name]['CLKO0'][0],
