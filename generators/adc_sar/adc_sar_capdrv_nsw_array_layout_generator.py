@@ -248,7 +248,7 @@ def generate_capdrv_array(laygen, objectname_pfix, templib_logic, cdrv_name_list
                 icdrv_vo_xy.append(laygen.get_inst_pin_xy(icdrv[i * num_bits_row + j].name, 'VO', rg_m4m5))
 
     # reference route coordinate
-    x0 = icdrv_en0_xy[0][0][0]
+    x0 = icdrv_en0_xy[0][0][0]+4
     y0 = laygen.get_xy(obj =icdrv[0], gridname=rg_m4m5)[1]
     y1 = laygen.get_xy(obj =icdrv[-1], gridname=rg_m4m5)[1]
     if num_row%2==1:

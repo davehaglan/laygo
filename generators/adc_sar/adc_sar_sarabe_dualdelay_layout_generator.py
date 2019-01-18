@@ -258,8 +258,8 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     #space insertion for routing area, if number of bits exceeds 8
     isp_r=[]
     m4_end_idx = -8
-    if num_bits > 6:
-        for i in range(int((num_bits-5)/2)):
+    if num_bits > 4:
+        for i in range(int((num_bits-3)/2)):
             isp_r.append(laygen.relplace(name="I" + objectname_pfix + 'SP_route'+str(2*i), templatename=space_name,
                                        gridname=pg, refinstname=refi, direction='top', transform='R0',
                                        template_libname=workinglib))

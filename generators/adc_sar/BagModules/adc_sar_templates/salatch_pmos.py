@@ -95,8 +95,8 @@ class adc_sar_templates__salatch_pmos(Module):
 
         self.instances['IRGNP0'].design(w=pw, l=lch, nf=m_rgnp*2, intent=device_intent)
         self.instances['IRGNP1'].design(w=pw, l=lch, nf=m_rgnp*2, intent=device_intent)
-        self.instances['IRGNN0'].design(w=nw, l=lch, nf=m_rgnn*2, intent=device_intent)
-        self.instances['IRGNN1'].design(w=nw, l=lch, nf=m_rgnn*2, intent=device_intent)
+        self.instances['IRGNN0'].design(w=nw, l=lch, nf=m_rgnn*2+m_rgnn_dmy*2, intent=device_intent)
+        self.instances['IRGNN1'].design(w=nw, l=lch, nf=m_rgnn*2+m_rgnn_dmy*2, intent=device_intent)
 
         self.instances['IRST0'].design(w=nw, l=lch, nf=m_rstn*2, intent=device_intent)
         self.instances['IRST1'].design(w=nw, l=lch, nf=m_rstn*2, intent=device_intent)
@@ -117,7 +117,12 @@ class adc_sar_templates__salatch_pmos(Module):
         self.instances['IOSMB0'].design(w=pw, l=lch, nf=m_in_dmy*2-4, intent=device_intent)
         self.instances['IINDM0'].design(w=pw, l=lch, nf=6, intent=device_intent)
         self.instances['IINDM1'].design(w=pw, l=lch, nf=2, intent=device_intent)
-        self.instances['ICKPDM0'].design(w=pw, l=lch, nf=m_clkh_dmy*4, intent=device_intent)
+        self.instances['ICKPDM0'].design(w=pw, l=lch, nf=m_clkh_dmy*4+6+m_rgnp_dmy*4-2+2, intent=device_intent)
+
+        self.delete_instance('IRGNNDM0')
+        self.delete_instance('IRGNNDM1')
+        self.delete_instance('IRGNPDM0')
+        self.delete_instance('IINDM0')
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

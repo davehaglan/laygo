@@ -370,7 +370,7 @@ def generate_sarlogic_wret_v2_array(laygen, objectname_pfix, templib_logic, plac
         for j in range(num_bits_row):
             if i*num_bits_row+j < num_bits:
                 rv0, rsb0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], pdict_m4m5[islogic[i*num_bits_row+j].name]['SB'][0],
-                                            np.array([pdict_m4m5[islogic[i*num_bits_row+j].name]['SB'][0][0]+1+i+6, 0]), rg_m4m5)
+                                            np.array([pdict_m4m5[islogic[i*num_bits_row+j].name]['SB'][0][0]+1+i+11, 0]), rg_m4m5)
 
                 rv0, rreto0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], pdict_m4m5[islogic[i*num_bits_row+j].name]['RETO'][0],
                                             np.array([pdict_m4m5[islogic[i*num_bits_row+j].name]['RETO'][0][0]+1+i+2, 0]), rg_m4m5)

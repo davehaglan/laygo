@@ -792,7 +792,7 @@ def generate_salatch_pmos(laygen, objectname_pfix, placement_grid,
     laygen.route(None, laygen.layers['metal'][4], xy0=xy0[1]+np.array([-1*l_clkb_m4, 0]), xy1=xy0[1]+np.array([0, 0]), gridname0=rg_m3m4, via1=[[0, 0]])
     rclk2 = laygen.route(None, laygen.layers['metal'][4], xy0=xy0[1]+np.array([0, 0]), xy1=xy0[1]+np.array([l_clkb_m4, 0]), gridname0=rg_m3m4)
     xy0=laygen.get_xy(obj = rclk2, gridname = rg_m4m5, sort=True)
-    rclk3 = laygen.route(None, laygen.layers['metal'][5], xy0=xy0[0]+np.array([l_clkb_m4, 0]), xy1=xy0[0]+np.array([l_clkb_m4, 5]), gridname0=rg_m4m5, via0=[[0, 0]])
+    rclk3 = laygen.route(None, laygen.layers['metal'][5], xy0=xy0[0]+np.array([l_clkb_m4-2, 0]), xy1=xy0[0]+np.array([l_clkb_m4-2, 5]), gridname0=rg_m4m5, via0=[[0, 0]])
     laygen.boundary_pin_from_rect(rclk3, gridname=rg_m4m5, name='CLKB', layer=laygen.layers['pin'][5], size=4,
                                   direction='top')
     laygen.via(None, np.array([1, 0]), refinstname=imainck0.name, refpinname='G0', refinstindex=np.array([m_clkh-1, 0]), gridname=rg_m2m3)
