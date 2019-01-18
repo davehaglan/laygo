@@ -407,13 +407,13 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     # ckgen to sl route
     # saopb/saomb
     [rh0, rsaop0, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['SAOP'][0],
-                                           pdict_m5m6[isl.name]['SAOP'][0],
-                                           pdict_m5m6[ickg.name]['SAOP'][0][0]+0, rg_m4m5)
+                                           pdict_m4m5[ickg.name]['SAOP'][0],
+                                           pdict_m4m5[isl.name]['SAOP'][0],
+                                           pdict_m4m5[ickg.name]['SAOP'][0][0]+0, rg_m4m5)
     [rh0, rsaom0, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['SAOM'][0],
-                                           pdict_m5m6[isl.name]['SAOM'][0],
-                                           pdict_m5m6[ickg.name]['SAOM'][0][0]+1, rg_m4m5)
+                                           pdict_m4m5[ickg.name]['SAOM'][0],
+                                           pdict_m4m5[isl.name]['SAOM'][0],
+                                           pdict_m4m5[ickg.name]['SAOM'][0][0]+1, rg_m4m5)
     #equalize vertical route for pin generation
     rsaop0_xy=laygen.get_xy(obj = rsaop0, gridname = rg_m4m5, sort=True)
     rsaom0_xy=laygen.get_xy(obj = rsaom0, gridname = rg_m4m5, sort=True)
