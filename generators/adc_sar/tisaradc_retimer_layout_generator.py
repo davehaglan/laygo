@@ -893,12 +893,15 @@ def generate_adc_retimer(laygen, objectname_pfix, ret_libname, sar_libname, clkd
                        gridname=rg_m5m6_basic_thick)
 
     #DCC
-    sr_s_in_m3m4 = laygen.route(None, laygen.layers['metal'][4], xy0=laygen.get_inst_pin_xy(isr.name, 'S', rg_m3m4)[0],
-                                xy1=laygen.get_inst_pin_xy(isr.name, 'S', rg_m3m4)[0]+[-3, 0],
-                                via0=[0, 0], gridname0=rg_m3m4)
-    sr_r_in_m3m4 = laygen.route(None, laygen.layers['metal'][4], xy0=laygen.get_inst_pin_xy(isr.name, 'R', rg_m3m4)[0],
-                                xy1=laygen.get_inst_pin_xy(isr.name, 'R', rg_m3m4)[0]+[-3, 0],
-                                via0=[0, 0], gridname0=rg_m3m4)
+    sr_s_in_m3m4 = laygen.route(None, laygen.layers['metal'][4], xy0=laygen.get_inst_pin_xy(isr.name, 'S', rg_m4m5)[0],
+                                xy1=laygen.get_inst_pin_xy(isr.name, 'S', rg_m4m5)[0]+[-3, 0],
+                                gridname0=rg_m4m5)
+    laygen.via(None, xy=laygen.get_inst_pin_xy(isr.name, 'S', rg_m3m4)[0], gridname=rg_m3m4)
+    sr_r_in_m3m4 = laygen.route(None, laygen.layers['metal'][4], xy0=laygen.get_inst_pin_xy(isr.name, 'R', rg_m4m5)[0],
+                                xy1=laygen.get_inst_pin_xy(isr.name, 'R', rg_m4m5)[0]+[-3, 0],
+                                gridname0=rg_m4m5)
+    laygen.via(None, xy=laygen.get_inst_pin_xy(isr.name, 'R', rg_m3m4)[0], gridname=rg_m3m4)
+
     for i in range(track_m):
         srbuf_s_in_m5 = laygen.route(None, laygen.layers['metal'][5], xy0=laygen.get_inst_pin_xy(isr.name, 'S', rg_m4m5)[0]+[-3, 0],
                                    xy1=[laygen.get_inst_pin_xy(isr.name, 'S', rg_m4m5)[0][0]-3,
