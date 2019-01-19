@@ -83,14 +83,14 @@ def generate_clkdis_viadel_cell(laygen, objectname_pfix, logictemp_lib, working_
     clko_y = 0
     clko_xy = []
     for i in range(m_clko):
-        viadel_O_xy = laygen.get_inst_pin_xy(viacell.name, 'CLKO_' + str(i), rg_m5m6)[0]
+        viadel_O_xy = laygen.get_inst_pin_xy(viacell.name, 'CLKO_' + str(i), rg_m4m5)[0]
         clko_xy.append(viadel_O_xy)
-        clkopx=laygen.route(None, laygen.layers['metal'][5], xy0=viadel_O_xy, xy1=np.array([viadel_O_xy[0],clko_y]), gridname0=rg_m5m6)
-        laygen.boundary_pin_from_rect(clkopx, gridname=rg_m5m6, name='CLKO_' + str(i),
+        clkopx=laygen.route(None, laygen.layers['metal'][5], xy0=viadel_O_xy, xy1=np.array([viadel_O_xy[0],clko_y]), gridname0=rg_m4m5)
+        laygen.boundary_pin_from_rect(clkopx, gridname=rg_m4m5, name='CLKO_' + str(i),
                                       layer=laygen.layers['pin'][5], size=2, direction='bottom', netname='CLKO')
     for i in range(0,2**(num_bits+unit_size-1)-2,4):
-        capdac_O_xy0 = laygen.get_inst_pin_xy(capdac[0].name, 'O' + str(i), rg_m5m6)[0]
-        capdac_O_xy1 = laygen.get_inst_pin_xy(capdac[1].name, 'O' + str(i), rg_m5m6)[0]
+        capdac_O_xy0 = laygen.get_inst_pin_xy(capdac[0].name, 'O' + str(i), rg_m4m5)[0]
+        capdac_O_xy1 = laygen.get_inst_pin_xy(capdac[1].name, 'O' + str(i), rg_m4m5)[0]
         laygen.route(None, laygen.layers['metal'][4], xy0=capdac_O_xy0, xy1=capdac_O_xy1, gridname0=rg_m4m5)
         for j in range(m_clko):
             laygen.via(None, xy=np.array([clko_xy[j][0],capdac_O_xy0[1]]), gridname=rg_m4m5)
