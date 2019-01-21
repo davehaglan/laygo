@@ -256,10 +256,16 @@ class adc_sar_templates__tisaradc_body_core(Module):
         # 3) the first half of first stage latches: int((int(num_slices/2)+1)%num_slices)
         # 4) the second half of first stage latches: 1
         # 5) the output phase = the second last latch phase
-        ck_phase_2=num_slices-1
-        ck_phase_1=int(num_slices/2)-1
-        ck_phase_0_0=int((int(num_slices/2)+1)%num_slices)
-        ck_phase_0_1=1
+        if num_slices > 4:
+            ck_phase_2 = num_slices - 1
+            ck_phase_1 = int(num_slices / 2) - 1
+            ck_phase_0_0 = int((int(num_slices / 2) + 1) % num_slices)
+            ck_phase_0_1 = 1
+        elif num_slices == 4:
+            ck_phase_2 = 0
+            ck_phase_1 = 2
+            ck_phase_0_0 = 3
+            ck_phase_0_1 = 1
         ck_phase_out=ck_phase_1
         ck_phase_buf=sorted(set([ck_phase_2, ck_phase_1, ck_phase_0_0, ck_phase_0_1]))
 

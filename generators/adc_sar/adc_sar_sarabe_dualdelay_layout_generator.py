@@ -259,41 +259,60 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     isp_r=[]
     m4_end_idx = -8
     if num_bits > 6:
-        isp_r.append(laygen.relplace(name="I" + objectname_pfix + 'SP_route0', templatename=space_name,
-                                   gridname=pg, refinstname=refi, direction='top', transform='R0',
-                                   template_libname=workinglib))
-        refi = isp_r[-1].name
-        devname_bnd_left += ['nmos4_fast_left', 'pmos4_fast_left']
-        devname_bnd_right += ['nmos4_fast_right', 'pmos4_fast_right']
-        transform_bnd_left += ['R0', 'MX']
-        transform_bnd_right += ['R0', 'MX']
-        isp_r.append(laygen.relplace(name="I" + objectname_pfix + 'SP_route1', templatename=space_name,
-                                   gridname=pg, refinstname=refi, direction='top', transform='MX',
-                                   template_libname=workinglib))
-        refi = isp_r[-1].name
-        devname_bnd_left += ['pmos4_fast_left', 'nmos4_fast_left']
-        devname_bnd_right += ['pmos4_fast_right', 'nmos4_fast_right']
-        transform_bnd_left += ['R0', 'MX']
-        transform_bnd_right += ['R0', 'MX']
-        m4_end_idx += -8
-    if num_bits > 8:
-        isp_r.append(laygen.relplace(name="I" + objectname_pfix + 'SP_route2', templatename=space_name,
-                                   gridname=pg, refinstname=refi, direction='top', transform='R0',
-                                   template_libname=workinglib))
-        refi = isp_r[-1].name
-        devname_bnd_left += ['nmos4_fast_left', 'pmos4_fast_left']
-        devname_bnd_right += ['nmos4_fast_right', 'pmos4_fast_right']
-        transform_bnd_left += ['R0', 'MX']
-        transform_bnd_right += ['R0', 'MX']
-        isp_r.append(laygen.relplace(name="I" + objectname_pfix + 'SP_route3', templatename=space_name,
-                                   gridname=pg, refinstname=refi, direction='top', transform='MX',
-                                   template_libname=workinglib))
-        refi = isp_r[-1].name
-        devname_bnd_left += ['pmos4_fast_left', 'nmos4_fast_left']
-        devname_bnd_right += ['pmos4_fast_right', 'nmos4_fast_right']
-        transform_bnd_left += ['R0', 'MX']
-        transform_bnd_right += ['R0', 'MX']
-        m4_end_idx += -8
+        for i in range(int((num_bits-5)/2)):
+            isp_r.append(laygen.relplace(name="I" + objectname_pfix + 'SP_route'+str(2*i), templatename=space_name,
+                                       gridname=pg, refinstname=refi, direction='top', transform='R0',
+                                       template_libname=workinglib))
+            refi = isp_r[-1].name
+            devname_bnd_left += ['nmos4_fast_left', 'pmos4_fast_left']
+            devname_bnd_right += ['nmos4_fast_right', 'pmos4_fast_right']
+            transform_bnd_left += ['R0', 'MX']
+            transform_bnd_right += ['R0', 'MX']
+            isp_r.append(laygen.relplace(name="I" + objectname_pfix + 'SP_route'+str(2*i+1), templatename=space_name,
+                                       gridname=pg, refinstname=refi, direction='top', transform='MX',
+                                       template_libname=workinglib))
+            refi = isp_r[-1].name
+            devname_bnd_left += ['pmos4_fast_left', 'nmos4_fast_left']
+            devname_bnd_right += ['pmos4_fast_right', 'nmos4_fast_right']
+            transform_bnd_left += ['R0', 'MX']
+            transform_bnd_right += ['R0', 'MX']
+            m4_end_idx += -8
+    # if num_bits > 6:
+    #     isp_r.append(laygen.relplace(name="I" + objectname_pfix + 'SP_route0', templatename=space_name,
+    #                                gridname=pg, refinstname=refi, direction='top', transform='R0',
+    #                                template_libname=workinglib))
+    #     refi = isp_r[-1].name
+    #     devname_bnd_left += ['nmos4_fast_left', 'pmos4_fast_left']
+    #     devname_bnd_right += ['nmos4_fast_right', 'pmos4_fast_right']
+    #     transform_bnd_left += ['R0', 'MX']
+    #     transform_bnd_right += ['R0', 'MX']
+    #     isp_r.append(laygen.relplace(name="I" + objectname_pfix + 'SP_route1', templatename=space_name,
+    #                                gridname=pg, refinstname=refi, direction='top', transform='MX',
+    #                                template_libname=workinglib))
+    #     refi = isp_r[-1].name
+    #     devname_bnd_left += ['pmos4_fast_left', 'nmos4_fast_left']
+    #     devname_bnd_right += ['pmos4_fast_right', 'nmos4_fast_right']
+    #     transform_bnd_left += ['R0', 'MX']
+    #     transform_bnd_right += ['R0', 'MX']
+    #     m4_end_idx += -8
+    # if num_bits > 8:
+    #     isp_r.append(laygen.relplace(name="I" + objectname_pfix + 'SP_route2', templatename=space_name,
+    #                                gridname=pg, refinstname=refi, direction='top', transform='R0',
+    #                                template_libname=workinglib))
+    #     refi = isp_r[-1].name
+    #     devname_bnd_left += ['nmos4_fast_left', 'pmos4_fast_left']
+    #     devname_bnd_right += ['nmos4_fast_right', 'pmos4_fast_right']
+    #     transform_bnd_left += ['R0', 'MX']
+    #     transform_bnd_right += ['R0', 'MX']
+    #     isp_r.append(laygen.relplace(name="I" + objectname_pfix + 'SP_route3', templatename=space_name,
+    #                                gridname=pg, refinstname=refi, direction='top', transform='MX',
+    #                                template_libname=workinglib))
+    #     refi = isp_r[-1].name
+    #     devname_bnd_left += ['pmos4_fast_left', 'nmos4_fast_left']
+    #     devname_bnd_right += ['pmos4_fast_right', 'nmos4_fast_right']
+    #     transform_bnd_left += ['R0', 'MX']
+    #     transform_bnd_right += ['R0', 'MX']
+    #     m4_end_idx += -8
 
     # boundaries
     m_bnd = int(xsp / laygen.get_xy(obj=laygen.get_template(name = 'boundary_bottom'), gridname=pg)[0])
@@ -325,43 +344,43 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     # very important because it sets the timing margin
     # ckg to sl
     [rh0, rrst0, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['RST'][0],
-                                           pdict_m5m6[isl.name]['RST'][0],
-                                           pdict_m5m6[ickg.name]['RST'][0][0]+2, rg_m4m5)
+                                           pdict_m4m5[ickg.name]['RST'][0],
+                                           pdict_m4m5[isl.name]['RST'][0],
+                                           pdict_m4m5[ickg.name]['RST'][0][0]+2, rg_m4m5)
     [rh0, rrst1, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['RST'][0],
-                                           pdict_m5m6[isl.name]['RST'][0],
-                                           pdict_m5m6[ickg.name]['RST'][0][0]+4, rg_m4m5)
+                                           pdict_m4m5[ickg.name]['RST'][0],
+                                           pdict_m4m5[isl.name]['RST'][0],
+                                           pdict_m4m5[ickg.name]['RST'][0][0]+4, rg_m4m5)
     #[rh0, rrst2, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-    #                                       pdict_m5m6[ickg.name]['RST'][0],
-    #                                       pdict_m5m6[isl.name]['RST'][0],
-    #                                       pdict_m5m6[ickg.name]['RST'][0][0]+6, rg_m4m5)
+    #                                       pdict_m4m5[ickg.name]['RST'][0],
+    #                                       pdict_m4m5[isl.name]['RST'][0],
+    #                                       pdict_m4m5[ickg.name]['RST'][0][0]+6, rg_m4m5)
     # ckg to fsm
     [rh0, rrst0, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['RST'][0],
-                                           pdict_m5m6[ifsm.name]['RST'][0],
-                                           pdict_m5m6[ickg.name]['RST'][0][0]+2, rg_m4m5)
+                                           pdict_m4m5[ickg.name]['RST'][0],
+                                           pdict_m4m5[ifsm.name]['RST'][0],
+                                           pdict_m4m5[ickg.name]['RST'][0][0]+2, rg_m4m5)
     [rh0, rrst1, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['RST'][0],
-                                           pdict_m5m6[ifsm.name]['RST'][0],
-                                           pdict_m5m6[ickg.name]['RST'][0][0]+4, rg_m4m5)
+                                           pdict_m4m5[ickg.name]['RST'][0],
+                                           pdict_m4m5[ifsm.name]['RST'][0],
+                                           pdict_m4m5[ickg.name]['RST'][0][0]+4, rg_m4m5)
     #[rh0, rrst2, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-    #                                       pdict_m5m6[ickg.name]['RST'][0],
-    #                                       pdict_m5m6[ifsm.name]['RST'][0],
-    #                                       pdict_m5m6[ickg.name]['RST'][0][0]+6, rg_m4m5)
+    #                                       pdict_m4m5[ickg.name]['RST'][0],
+    #                                       pdict_m4m5[ifsm.name]['RST'][0],
+    #                                       pdict_m4m5[ickg.name]['RST'][0][0]+6, rg_m4m5)
     # ckg to ret
     [rh0, rrst0, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['RST'][0],
-                                           pdict_m5m6[iret.name]['CLK'][0],
-                                           pdict_m5m6[ickg.name]['RST'][0][0]+2, rg_m4m5)
+                                           pdict_m4m5[ickg.name]['RST'][0],
+                                           pdict_m4m5[iret.name]['CLK'][0],
+                                           pdict_m4m5[ickg.name]['RST'][0][0]+2, rg_m4m5)
     [rh0, rrst1, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['RST'][0],
-                                           pdict_m5m6[iret.name]['CLK'][0],
-                                           pdict_m5m6[ickg.name]['RST'][0][0]+4, rg_m4m5)
+                                           pdict_m4m5[ickg.name]['RST'][0],
+                                           pdict_m4m5[iret.name]['CLK'][0],
+                                           pdict_m4m5[ickg.name]['RST'][0][0]+4, rg_m4m5)
     #[rh0, rrst2, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-    #                                       pdict_m5m6[ickg.name]['RST'][0],
-    #                                       pdict_m5m6[iret.name]['CLK'][0],
-    #                                       pdict_m5m6[ickg.name]['RST'][0][0]+6, rg_m4m5)
+    #                                       pdict_m4m5[ickg.name]['RST'][0],
+    #                                       pdict_m4m5[iret.name]['CLK'][0],
+    #                                       pdict_m4m5[ickg.name]['RST'][0][0]+6, rg_m4m5)
     # rst output to final retimer
     rrstout0 = laygen.route(None, laygen.layers['metal'][5],
                             xy0=pdict_m5m6[iret.name]['CLKO0'][0],
@@ -407,13 +426,13 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     # ckgen to sl route
     # saopb/saomb
     [rh0, rsaop0, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['SAOP'][0],
-                                           pdict_m5m6[isl.name]['SAOP'][0],
-                                           pdict_m5m6[ickg.name]['SAOP'][0][0]+0, rg_m4m5)
+                                           pdict_m4m5[ickg.name]['SAOP'][0],
+                                           pdict_m4m5[isl.name]['SAOP'][0],
+                                           pdict_m4m5[ickg.name]['SAOP'][0][0]+0, rg_m4m5)
     [rh0, rsaom0, rh1] = laygen.route_hvh(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                                           pdict_m5m6[ickg.name]['SAOM'][0],
-                                           pdict_m5m6[isl.name]['SAOM'][0],
-                                           pdict_m5m6[ickg.name]['SAOM'][0][0]+1, rg_m4m5)
+                                           pdict_m4m5[ickg.name]['SAOM'][0],
+                                           pdict_m4m5[isl.name]['SAOM'][0],
+                                           pdict_m4m5[ickg.name]['SAOM'][0][0]+1, rg_m4m5)
     #equalize vertical route for pin generation
     rsaop0_xy=laygen.get_xy(obj = rsaop0, gridname = rg_m4m5, sort=True)
     rsaom0_xy=laygen.get_xy(obj = rsaom0, gridname = rg_m4m5, sort=True)
@@ -431,18 +450,18 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     for i in range(num_bits):
         rzp0 = laygen.route(None, laygen.layers['metal'][5],
                             xy0=pdict_m4m5[isl.name]['ZP<'+str(i)+'>'][0],
-                            xy1=pdict_m4m5[isl.name]['ZP<'+str(i)+'>'][0]+np.array([0, 4]), gridname0=rg_m5m6)
-        laygen.boundary_pin_from_rect(rzp0, rg_m5m6, 'ZP<' + str(i) + '>', laygen.layers['pin'][5], size=6,
+                            xy1=pdict_m4m5[isl.name]['ZP<'+str(i)+'>'][0]+np.array([0, 4]), gridname0=rg_m4m5)
+        laygen.boundary_pin_from_rect(rzp0, rg_m4m5, 'ZP<' + str(i) + '>', laygen.layers['pin'][5], size=6,
                                       direction='top')
         rzm0 = laygen.route(None, laygen.layers['metal'][5],
                             xy0=pdict_m4m5[isl.name]['ZM<'+str(i)+'>'][0],
-                            xy1=pdict_m4m5[isl.name]['ZM<'+str(i)+'>'][0]+np.array([0, 4]), gridname0=rg_m5m6)
-        laygen.boundary_pin_from_rect(rzm0, rg_m5m6, 'ZM<' + str(i) + '>', laygen.layers['pin'][5], size=6,
+                            xy1=pdict_m4m5[isl.name]['ZM<'+str(i)+'>'][0]+np.array([0, 4]), gridname0=rg_m4m5)
+        laygen.boundary_pin_from_rect(rzm0, rg_m4m5, 'ZM<' + str(i) + '>', laygen.layers['pin'][5], size=6,
                                       direction='top')
         rzmid0 = laygen.route(None, laygen.layers['metal'][5],
                             xy0=pdict_m4m5[isl.name]['ZMID<'+str(i)+'>'][0],
-                            xy1=pdict_m4m5[isl.name]['ZMID<'+str(i)+'>'][0]+np.array([0, 4]), gridname0=rg_m5m6)
-        laygen.boundary_pin_from_rect(rzmid0, rg_m5m6, 'ZMID<' + str(i) + '>', laygen.layers['pin'][5], size=6,
+                            xy1=pdict_m4m5[isl.name]['ZMID<'+str(i)+'>'][0]+np.array([0, 4]), gridname0=rg_m4m5)
+        laygen.boundary_pin_from_rect(rzmid0, rg_m4m5, 'ZMID<' + str(i) + '>', laygen.layers['pin'][5], size=6,
                                       direction='top')
     # zmid to short
     #rh0, rv0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],

@@ -186,12 +186,12 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
                         'ntap_fast_left', 'pmos4_fast_left', 'nmos4_fast_left',
                         'ptap_fast_left', ],
 
-        transform_left=['R0', 'R0', 'R0', 'MX', 'MX', 'MX', 'MX', ],
+        transform_left=['R0', 'R0', 'MX', 'MX', 'R0', 'MX', 'MX', ],
 
         devname_right=['ptap_fast_right', 'nmos4_fast_right', 'pmos4_fast_right',
                        'ntap_fast_right', 'pmos4_fast_right', 'nmos4_fast_right',
                        'ptap_fast_right',],
-        transform_right = ['R0', 'R0', 'R0', 'MX', 'MX', 'MX', 'MX',],
+        transform_right = ['R0', 'R0', 'MX', 'MX', 'R0', 'MX', 'MX',],
         origin=np.array([0, 0]))
 
     #####Placing all the rows
@@ -210,16 +210,25 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     bnd_left_1_y=laygen.get_inst_xy(name=bnd_left[1].name, gridname=pg)[1] #y coodinate
     sw_dmy_xy=np.array([bnd_left_size_x, bnd_left_1_y]) #xy coodinate
     #Place sw_dmy0 and capsw0
-    sw_dmy0= laygen.place(name='I'+objectname_pfix+'SWDM0', templatename='space_1x', gridname=pg, xy=sw_dmy_xy, 
-            template_libname=logictemp_lib, shape=np.array([num_capsw_dmy, 1]))
+    num_capsw_dmy_4x = int(num_capsw_dmy/4)
+    num_capsw_dmy_1x = num_capsw_dmy - 4 * num_capsw_dmy_4x
+    print(num_capsw_dmy_4x, num_capsw_dmy_1x)
+    sw_dmy0= laygen.place(name='I'+objectname_pfix+'SWDM0_4x', templatename='space_4x', gridname=pg, xy=sw_dmy_xy,
+            template_libname=logictemp_lib, shape=np.array([num_capsw_dmy_4x, 1]))
+    sw_dmy1= laygen.relplace(name='I'+objectname_pfix+'SWDM0_1x', templatename='space_1x', gridname=pg,
+            refinstname=sw_dmy0.name, template_libname=logictemp_lib, shape=np.array([num_capsw_dmy_1x, 1]))
     capsw0=laygen.relplace(name='I'+objectname_pfix+'SW0', templatename='cap_sw_array', gridname=pg, 
-            refinstname=sw_dmy0.name, template_libname='clk_dis_generated')
+            refinstname=sw_dmy1.name, template_libname='clk_dis_generated')
     #Calculate number of sw_dmy1
     capsw0_size_x = laygen.get_template_xy(name='cap_sw_array', gridname=pg, libname='clk_dis_generated')[0]
     sw_dmy1_m = bnd_m-num_capsw_dmy-capsw0_size_x
     #Place sw_dmy1
-    sw_dmy1= laygen.relplace(name='I'+objectname_pfix+'SWDM1', templatename='space_1x', gridname=pg, 
-            refinstname=capsw0.name, template_libname=logictemp_lib, shape=np.array([sw_dmy1_m, 1]))
+    sw_dmy1_m_4x = int(sw_dmy1_m / 4)
+    sw_dmy1_m_1x = sw_dmy1_m - 4 * sw_dmy1_m_4x
+    sw_dmy0= laygen.relplace(name='I'+objectname_pfix+'SWDM1_4x', templatename='space_4x', gridname=pg,
+            refinstname=capsw0.name, template_libname=logictemp_lib, shape=np.array([sw_dmy1_m_4x, 1]))
+    sw_dmy1= laygen.relplace(name='I'+objectname_pfix+'SWDM1_1x', templatename='space_1x', gridname=pg,
+            refinstname=sw_dmy0.name, template_libname=logictemp_lib, shape=np.array([sw_dmy1_m_1x, 1]))
 
     ##Mitddle ntap row
     ntap0_0= laygen.relplace(name='I'+objectname_pfix+'NTAP0_0', templatename='ntap_fast_space_nf4', gridname=pg, 
@@ -234,8 +243,12 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     bnd_left_5_y = laygen.get_inst_xy(name=bnd_left[5].name, gridname=pg)[1] #y coodinate
     dff_dmy0_xy = np.array([bnd_left_size_x, bnd_left_5_y]) #xy coodinate
     #Place dff_dmy0, tgated0, dff0, inv0, and inv1 
-    dff_dmy0 = laygen.place(name='I'+objectname_pfix+'DFFDM0', templatename='space_1x', gridname=pg, xy=dff_dmy0_xy, 
-            template_libname=logictemp_lib, shape=np.array([num_dff_dmy, 1]), transform='MX')
+    num_dff_dmy_4x = int(num_dff_dmy / 4)
+    num_dff_dmy_1x = num_dff_dmy - 4 * num_dff_dmy_4x
+    dff_dmy0 = laygen.place(name='I'+objectname_pfix+'DFFDM0_4x', templatename='space_4x', gridname=pg, xy=dff_dmy0_xy,
+            template_libname=logictemp_lib, shape=np.array([num_dff_dmy_4x, 1]), transform='MX')
+    dff_dmy1= laygen.relplace(name='I'+objectname_pfix+'DFFDM0_1x', templatename='space_1x', gridname=pg,
+            refinstname=dff_dmy0.name, template_libname=logictemp_lib, shape=np.array([num_dff_dmy_1x, 1]), transform='MX')
     tgated0=laygen.relplace(name='I'+objectname_pfix+'TGD0', templatename='tgate_dn_'+str(m_tgate)+'x', gridname=pg, 
             refinstname=dff_dmy0.name, template_libname=logictemp_lib, transform='R180')
     dff0=laygen.relplace(name='I'+objectname_pfix+'DFF0', templatename='dff_strsth_ckb_'+str(m_dff)+'x', gridname=pg, 
@@ -252,8 +265,12 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     ##Calculate coodinate of dff_dmy1
     dff_dmy1_x = inv1_x+m_inv1_x
     dff_dmy1_xy = np.array([dff_dmy1_x, bnd_left_5_y])
-    dff_dmy1= laygen.place(name='I'+objectname_pfix+'DFFDM1', templatename='space_1x', gridname=pg, xy=dff_dmy1_xy, 
-            template_libname=logictemp_lib, shape=np.array([dff_dmy1_m, 1]), transform='MX')
+    dff_dmy1_m_4x = int(dff_dmy1_m / 4)
+    dff_dmy1_m_1x = dff_dmy1_m - 4 * dff_dmy1_m_4x
+    dff_dmy0= laygen.place(name='I'+objectname_pfix+'DFFDM1_4x', templatename='space_4x', gridname=pg, xy=dff_dmy1_xy,
+            template_libname=logictemp_lib, shape=np.array([dff_dmy1_m_4x, 1]), transform='MX')
+    dff_dmy1= laygen.relplace(name='I'+objectname_pfix+'DFFDM1_1x', templatename='space_1x', gridname=pg,
+            refinstname=dff_dmy0.name, template_libname=logictemp_lib, shape=np.array([dff_dmy1_m_1x, 1]), transform='MX')
     
     ##Top ptap row
     ptap1_0 = laygen.relplace(name='I'+objectname_pfix+'PTAP1_0', templatename='ptap_fast_space_nf4', 
