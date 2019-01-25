@@ -1,0 +1,42 @@
+params:
+  design_params:
+    fg_inbuf_list:
+    - [8, 8]
+    - [14, 14]
+    fg_outbuf_list:
+    - [4, 4]
+    - [24, 24]
+    fgn: 12
+    nduml: 4
+    ndumr: 4
+    nsep: 2
+    wn: 8
+    wp: 8
+    lch: 14.0e-9
+    intent: lvt
+  layout_params:
+    ptap_w: 8
+    ntap_w: 8
+    pgr_w: 6
+    ngr_w: 6
+    num_track_sep: 2
+    io_width: 2
+    guard_ring_nf: 2
+    tot_width: 252
+    double_guard_ring: True
+    double_guard_ring_params:
+      w: 4
+      fg_side: 1
+      threshold: ''
+      show_pins: False
+      dnw_mode: ''
+      half_blk_x: False
+
+routing_grid:
+  layers: [1, 2, 3, 4, 5, 6, 7]
+  spaces: [0.052, 0.064, 0.052, 0.056, 0.044, 0.080, 0.104]
+  widths: [0.032, 0.032, 0.032, 0.040, 0.040, 0.064, 0.064]
+  bot_dir: 'y'
+  width_override:
+    4: {2: 0.120}
+    5: {2: 0.120}
