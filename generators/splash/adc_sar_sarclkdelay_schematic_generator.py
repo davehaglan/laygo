@@ -34,6 +34,7 @@ if load_from_file==True:
     params['lch']=sizedict['lch']
     params['pw']=sizedict['pw']
     params['nw']=sizedict['nw']
+    params['fastest']=sizedict['sarclkgen']['fastest']
     params['device_intent']=sizedict['device_intent']
 
 print('creating BAG project')

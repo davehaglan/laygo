@@ -1,11 +1,35 @@
 lib_name: adc_sar_templates
 cell_name: sar_wsamp_bb_doubleSA_array
-pins: [ "OSM0", "OSP0", "INM0", "CLK0", "INP0", "VREF<2:0>", "VSS", "EXTSEL_CLK0", "ASCLKD0<3:0>", "ADCOUT0<0>", "CLKO0", "VDDSAMP", "VDDSAR", "bottom_body0", "samp_body0" ]
+pins: [ "OSM0", "OSP0", "INM0", "CLK0", "INP0", "VREF<2:0>", "VSS", "EXTSEL_CLK0", "ASCLKD0<3:0>", "ADCOUT0<0>", "CLKO0", "VDDSAMP", "VDDSAR", "bottom_body0", "SF_Voffn0", "samp_body0", "VREF_SF_BIAS0", "SF_bypass", "SF_BIAS0", "VREF_SF_bypass", "SF_Voffp0" ]
 instances:
   ISLICE0:
     lib_name: adc_sar_templates
     cell_name: sar_wsamp_bb_doubleSA
     instpins:
+      VREF_SF_bypass:
+        direction: input
+        net_name: "VREF_SF_bypass"
+        num_bits: 1
+      VREF_SF_BIAS:
+        direction: inputOutput
+        net_name: "VREF_SF_BIAS0"
+        num_bits: 1
+      SF_BIAS:
+        direction: inputOutput
+        net_name: "SF_BIAS0"
+        num_bits: 1
+      SF_Voffn:
+        direction: input
+        net_name: "SF_Voffn0"
+        num_bits: 1
+      SF_Voffp:
+        direction: input
+        net_name: "SF_Voffp0"
+        num_bits: 1
+      SF_bypass:
+        direction: input
+        net_name: "SF_bypass"
+        num_bits: 1
       bottom_body:
         direction: inputOutput
         net_name: "bottom_body0"
@@ -138,6 +162,30 @@ instances:
         direction: input
         net_name: "VREF<2:0>"
         num_bits: 3
+  PIN89:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN88:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN86:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN85:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN84:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN83:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
   PIN57:
     lib_name: basic
     cell_name: ipin

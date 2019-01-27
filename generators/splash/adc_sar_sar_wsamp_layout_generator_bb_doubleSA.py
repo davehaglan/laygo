@@ -35,7 +35,7 @@ import laygo.GridLayoutGeneratorHelper as laygenhelper #utility functions
 def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_lib, sar_name, samp_name, space_1x_name,
                        placement_grid, routing_grid_m5m6, routing_grid_m3m4_basic_thick,
                        routing_grid_m5m6_thick, routing_grid_m5m6_thick_basic,
-                       num_bits=9, use_sf=False, origin=np.array([0, 0])):
+                       num_inv_bb=0, num_bits=9, use_sf=False, vref_sf=False, origin=np.array([0, 0])):
     """generate sar with sampling frontend """
     pg = placement_grid
 
@@ -191,12 +191,16 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
             if pn.startswith('bypass'):
                 pxy = sf_xy + sf_pins[pn]['xy']
                 laygen.add_pin('SF_'+pn, 'SF_bypass', pxy, sf_pins[pn]['layer'])
-            if pn.startswith('VBIASp'):
+            if pn.startswith('VBIAS'):
                 pxy = sf_xy + sf_pins[pn]['xy']
-                laygen.add_pin('SF_'+pn, 'SF_BIASp', pxy, sf_pins[pn]['layer'])
-            if pn.startswith('VBIASn'):
-                pxy = sf_xy + sf_pins[pn]['xy']
-                laygen.add_pin('SF_'+pn, 'SF_BIASn', pxy, sf_pins[pn]['layer'])
+                laygen.add_pin('SF_BIAS', 'SF_BIAS', pxy, sf_pins[pn]['layer'])
+            # if pn.startswith('VBIASn'):
+            #     pxy = sf_xy + sf_pins[pn]['xy']
+            #     laygen.add_pin('SF_BIASn', 'SF_BIASn', pxy, sf_pins[pn]['layer'])
+
+    if vref_sf == True:
+        laygen.add_pin('VREF_SF_BIAS', 'VREF_SF_BIAS', sar_xy+sar_pins['SF_VBIAS']['xy'], sar_pins['SF_VBIAS']['layer'])
+        laygen.add_pin('VREF_SF_bypass', 'VREF_SF_bypass', sar_xy+sar_pins['SF_bypass']['xy'], sar_pins['SF_bypass']['layer'])
 
     laygen.add_pin('OSP', 'OSP', sar_xy+sar_pins['OSP']['xy'], sar_pins['OSP']['layer'])
     laygen.add_pin('OSM', 'OSM', sar_xy+sar_pins['OSM']['xy'], sar_pins['OSM']['layer'])
@@ -299,48 +303,49 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
             bodycnt+=1
     # VBB
     pdict_m3m4 = laygen.get_inst_pin_xy(None, None, rg_m3m4_basic_thick)
-    rvbb_m3=[]
-    for p in pdict_m3m4[isar.name]:
-        if p.startswith('VBB') and p.endswith('0'):
-            rvbb_m3.append(pdict_m3m4[isar.name][p])
-            # laygen.pin(name='bottom_body'+str(p), layer=laygen.layers['pin'][3], xy=pdict_m3m4[isar.name][p], gridname=rg_m3m4, netname='bottom_body')
-    rvbb_m4 = laygenhelper.generate_power_rails_from_rails_xy(laygen, routename_tag='_M4_',
-                                                                layer=laygen.layers['metal'][4],
-                                                                gridname=rg_m3m4_basic_thick, netnames=['bottom_body'],
-                                                                direction='x',
-                                                                input_rails_xy=[rvbb_m3],
-                                                                generate_pin=False, overwrite_start_coord=None,
-                                                                overwrite_end_coord=None,
-                                                                offset_start_index=0, offset_end_index=0)
-    rvbb_m5 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M5_',
-                                                                layer=laygen.layers['metal'][5],
-                                                                gridname=rg_m4m5_thick, netnames=['bottom_body'],
-                                                                direction='y',
-                                                                input_rails_rect=rvbb_m4,
-                                                                generate_pin=False, overwrite_start_coord=None,
-                                                                overwrite_end_coord=None,
-                                                                offset_start_index=0, offset_end_index=-2)
-    rvbb_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
-                                                                layer=laygen.layers['metal'][6],
-                                                                gridname=rg_m5m6_thick, netnames=['bottom_body'],
-                                                                direction='x',
-                                                                input_rails_rect=rvbb_m5,
-                                                                generate_pin=False, overwrite_start_coord=None,
-                                                                overwrite_end_coord=None,
-                                                                offset_start_index=0, offset_end_index=0)
-    num_m6 = len(rvbb_m6[0])
-    for i in range(num_m6):
-        if i%2==1:
-            rvbb_m6[0].remove(rvbb_m6[0][num_m6-i-1])
-        print(rvbb_m6[0])
-    rvbb_m7 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M7_',
-                                                                layer=laygen.layers['pin'][7],
-                                                                gridname=rg_m6m7_thick, netnames=['bottom_body'],
-                                                                direction='y',
-                                                                input_rails_rect=rvbb_m6,
-                                                                generate_pin=True, overwrite_start_coord=None,
-                                                                overwrite_end_coord=None,
-                                                                offset_start_index=0, offset_end_index=0)
+    if not num_inv_bb==0:
+        rvbb_m3=[]
+        for p in pdict_m3m4[isar.name]:
+            if p.startswith('VBB') and p.endswith('0'):
+                rvbb_m3.append(pdict_m3m4[isar.name][p])
+                # laygen.pin(name='bottom_body'+str(p), layer=laygen.layers['pin'][3], xy=pdict_m3m4[isar.name][p], gridname=rg_m3m4, netname='bottom_body')
+        rvbb_m4 = laygenhelper.generate_power_rails_from_rails_xy(laygen, routename_tag='_M4_',
+                                                                    layer=laygen.layers['metal'][4],
+                                                                    gridname=rg_m3m4_basic_thick, netnames=['bottom_body'],
+                                                                    direction='x',
+                                                                    input_rails_xy=[rvbb_m3],
+                                                                    generate_pin=False, overwrite_start_coord=None,
+                                                                    overwrite_end_coord=None,
+                                                                    offset_start_index=0, offset_end_index=0)
+        rvbb_m5 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M5_',
+                                                                    layer=laygen.layers['metal'][5],
+                                                                    gridname=rg_m4m5_thick, netnames=['bottom_body'],
+                                                                    direction='y',
+                                                                    input_rails_rect=rvbb_m4,
+                                                                    generate_pin=False, overwrite_start_coord=None,
+                                                                    overwrite_end_coord=None,
+                                                                    offset_start_index=0, offset_end_index=-2)
+        rvbb_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
+                                                                    layer=laygen.layers['metal'][6],
+                                                                    gridname=rg_m5m6_thick, netnames=['bottom_body'],
+                                                                    direction='x',
+                                                                    input_rails_rect=rvbb_m5,
+                                                                    generate_pin=False, overwrite_start_coord=None,
+                                                                    overwrite_end_coord=None,
+                                                                    offset_start_index=0, offset_end_index=0)
+        num_m6 = len(rvbb_m6[0])
+        for i in range(num_m6):
+            if i%2==1:
+                rvbb_m6[0].remove(rvbb_m6[0][num_m6-i-1])
+            print(rvbb_m6[0])
+        rvbb_m7 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M7_',
+                                                                    layer=laygen.layers['pin'][7],
+                                                                    gridname=rg_m6m7_thick, netnames=['bottom_body'],
+                                                                    direction='y',
+                                                                    input_rails_rect=rvbb_m6,
+                                                                    generate_pin=True, overwrite_start_coord=None,
+                                                                    overwrite_end_coord=None,
+                                                                    offset_start_index=0, offset_end_index=0)
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
 
@@ -401,6 +406,8 @@ if __name__ == '__main__':
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']
         use_sf=specdict['use_sf']
+        vref_sf=specdict['use_vref_sf']
+        num_inv_bb=sizedict['sarlogic']['num_inv_bb']
         if specdict['samp_use_laygo'] is True:
             samp_lib = 'adc_sar_generated'
             samp_name = 'sarsamp_bb'
@@ -424,7 +431,7 @@ if __name__ == '__main__':
                        sar_name=sar_name, samp_name=samp_name, space_1x_name=space_1x_name,
                        placement_grid=pg, routing_grid_m5m6=rg_m5m6, routing_grid_m5m6_thick=rg_m5m6_thick,
                        routing_grid_m5m6_thick_basic=rg_m5m6_thick_basic, routing_grid_m3m4_basic_thick=rg_m3m4_basic_thick,
-                       num_bits=num_bits, use_sf=use_sf, origin=np.array([0, 0]))
+                       num_inv_bb=num_inv_bb, num_bits=num_bits, use_sf=use_sf, vref_sf=vref_sf, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
     
 

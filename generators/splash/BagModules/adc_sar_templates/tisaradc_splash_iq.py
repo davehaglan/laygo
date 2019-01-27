@@ -56,42 +56,48 @@ class adc_sar_templates__tisaradc_splash_iq(Module):
             sar_sa_m_rst_d, 
             sar_sa_m_rgnn, 
             sar_sa_m_rgnp_d, 
-            sar_sa_m_buf, 
-            sar_drv_m_list,sar_ckgen_m,sar_ckgen_fo, 
-            sar_ckgen_ndelay, 
-            sar_ckgen_fast, 
-            sar_logic_m, 
-            sar_fsm_m, 
-            sar_ret_m, 
-            sar_ret_fo, 
-            sar_device_intent, 
-            sar_c_m, 
-            sar_rdx_array, 
-            samp_lch, 
-            samp_wp, 
-            samp_wn, 
-            samp_fgn, 
-            samp_fg_inbuf_list, 
-            samp_fg_outbuf_list, 
-            samp_nduml, 
-            samp_ndumr, 
-            samp_nsep, 
-            samp_intent, 
-            num_bits, 
-            num_inv_bb, 
-            samp_use_laygo, 
-            use_offset, 
+            sar_sa_m_buf,
+            doubleSA,
+            vref_sf_m_mirror, vref_sf_m_bias, vref_sf_m_off, vref_sf_m_in, vref_sf_m_bias_dum, vref_sf_m_in_dum,
+            vref_sf_m_byp, vref_sf_m_byp_bias, vref_sf_bias_current, vref_sf,
+            sar_drv_m_list,sar_ckgen_m,sar_ckgen_fo,
+            sar_ckgen_ndelay,
+            sar_ckgen_fast, sar_ckgen_fastest,
+            sar_logic_m,
+            sar_fsm_m,
+            sar_ret_m,
+            sar_ret_fo,
+            sar_device_intent,
+            sar_c_m,
+            sar_rdx_array,
+            samp_lch,
+            samp_wp,
+            samp_wn,
+            samp_fgn,
+            samp_fg_inbuf_list,
+            samp_fg_outbuf_list,
+            samp_nduml,
+            samp_ndumr,
+            samp_nsep,
+            samp_intent,
+            num_bits,
+            num_inv_bb,
+            samp_use_laygo,
+               sf_lch, sf_nw, sf_m_mirror, sf_m_bias, sf_m_off, sf_m_in, sf_m_bias_dum, sf_m_in_dum, sf_m_byp,
+               sf_m_byp_bias, sf_intent, bias_current, use_sf,
+               use_offset,
             num_slices,
-            clk_lch, 
-            clk_pw, 
-            clk_nw, 
-            clk_m_dff, 
-            clk_m_inv1, 
-            clk_m_inv2, 
-            clk_m_tgate, 
-            clk_n_pd, 
-            clk_m_capsw, 
-            clk_unit_cell, 
+            clk_lch,
+            clk_pw,
+            clk_nw,
+            clk_m_dff,
+            clk_m_inv1,
+            clk_m_inv2,
+            clk_m_tgate,
+            clk_n_pd,
+            clk_m_capsw,
+            clk_unit_cell,
+            clk_clock_pulse,
             clk_device_intent,
             clkcal_order,
             ret_lch,
@@ -103,6 +109,7 @@ class adc_sar_templates__tisaradc_splash_iq(Module):
             ret_m_srbuf,
             ret_m_sr,
             ret_device_intent,
+               rdac_lch, rdac_pw, rdac_nw, rdac_m, rdac_num_series, rdac_num_bits, rdac_num_dacs, rdac_device_intent
         ):
         """To be overridden by subclasses to design this module.
 
@@ -130,11 +137,23 @@ class adc_sar_templates__tisaradc_splash_iq(Module):
         self.parameters['sar_sa_m_rgnn'] = sar_sa_m_rgnn
         self.parameters['sar_sa_m_rgnp_d'] = sar_sa_m_rgnp_d
         self.parameters['sar_sa_m_buf'] = sar_sa_m_buf
+        self.parameters['doubleSA'] = doubleSA
+        self.parameters['vref_sf_m_mirror'] = vref_sf_m_mirror
+        self.parameters['vref_sf_m_bias'] = vref_sf_m_bias
+        self.parameters['vref_sf_m_in'] = vref_sf_m_in
+        self.parameters['vref_sf_m_off'] = vref_sf_m_off
+        self.parameters['vref_sf_m_bias_dum'] = vref_sf_m_bias_dum
+        self.parameters['vref_sf_m_in_dum'] = vref_sf_m_in_dum
+        self.parameters['vref_sf_m_byp'] = vref_sf_m_byp
+        self.parameters['vref_sf_m_byp_bias'] = vref_sf_m_byp_bias
+        self.parameters['vref_sf_bias_current'] = vref_sf_bias_current
+        self.parameters['vref_sf'] = vref_sf
         self.parameters['sar_drv_m_list'] = sar_drv_m_list
         self.parameters['sar_ckgen_m'] = sar_ckgen_m
         self.parameters['sar_ckgen_fo'] = sar_ckgen_fo
         self.parameters['sar_ckgen_ndelay'] = sar_ckgen_ndelay
         self.parameters['sar_ckgen_fast'] = sar_ckgen_fast
+        self.parameters['sar_ckgen_fastest'] = sar_ckgen_fastest
         self.parameters['sar_logic_m'] = sar_logic_m
         self.parameters['sar_fsm_m'] = sar_fsm_m
         self.parameters['sar_ret_m'] = sar_ret_m
@@ -154,19 +173,33 @@ class adc_sar_templates__tisaradc_splash_iq(Module):
         self.parameters['samp_intent'] = samp_intent
         self.parameters['num_bits'] = num_bits
         self.parameters['num_inv_bb'] = num_inv_bb
-        self.parameters['samp_use_laygo'] = samp_use_laygo #if true, use laygo for sampler generation
+        self.parameters['samp_use_laygo'] = samp_use_laygo  # if true, use laygo for sampler generation
+        self.parameters['sf_lch'] = sf_lch
+        self.parameters['sf_nw'] = sf_nw
+        self.parameters['sf_m_mirror'] = sf_m_mirror
+        self.parameters['sf_m_bias'] = sf_m_bias
+        self.parameters['sf_m_in'] = sf_m_in
+        self.parameters['sf_m_off'] = sf_m_off
+        self.parameters['sf_m_bias_dum'] = sf_m_bias_dum
+        self.parameters['sf_m_in_dum'] = sf_m_in_dum
+        self.parameters['sf_m_byp'] = sf_m_byp
+        self.parameters['sf_m_byp_bias'] = sf_m_byp_bias
+        self.parameters['sf_intent'] = sf_intent
+        self.parameters['bias_current'] = bias_current
+        self.parameters['use_sf'] = use_sf  # if true, source follower is used before the sampler
         self.parameters['use_offset'] = use_offset
         self.parameters['num_slices'] = num_slices
-        self.parameters['clk_lch'] = clk_lch 
-        self.parameters['clk_pw'] = clk_pw 
-        self.parameters['clk_nw'] = clk_nw 
-        self.parameters['clk_m_dff'] = clk_m_dff 
-        self.parameters['clk_m_inv1'] = clk_m_inv1 
-        self.parameters['clk_m_inv2'] = clk_m_inv2 
-        self.parameters['clk_m_tgate'] = clk_m_tgate 
-        self.parameters['clk_n_pd'] = clk_n_pd 
-        self.parameters['clk_m_capsw'] = clk_m_capsw 
-        self.parameters['clk_unit_cell'] = clk_unit_cell 
+        self.parameters['clk_lch'] = clk_lch
+        self.parameters['clk_pw'] = clk_pw
+        self.parameters['clk_nw'] = clk_nw
+        self.parameters['clk_m_dff'] = clk_m_dff
+        self.parameters['clk_m_inv1'] = clk_m_inv1
+        self.parameters['clk_m_inv2'] = clk_m_inv2
+        self.parameters['clk_m_tgate'] = clk_m_tgate
+        self.parameters['clk_n_pd'] = clk_n_pd
+        self.parameters['clk_m_capsw'] = clk_m_capsw
+        self.parameters['clk_unit_cell'] = clk_unit_cell
+        self.parameters['clk_clock_pulse'] = clk_clock_pulse
         self.parameters['clk_device_intent'] = clk_device_intent
         self.parameters['clkcal_order'] = clkcal_order
         self.parameters['ret_lch'] = ret_lch
@@ -178,6 +211,14 @@ class adc_sar_templates__tisaradc_splash_iq(Module):
         self.parameters['ret_m_srbuf'] = ret_m_srbuf
         self.parameters['ret_m_sr'] = ret_m_sr
         self.parameters['ret_device_intent'] = ret_device_intent
+        self.parameters['rdac_lch'] = rdac_lch
+        self.parameters['rdac_pw'] = rdac_pw
+        self.parameters['rdac_nw'] = rdac_nw
+        self.parameters['rdac_m'] = rdac_m
+        self.parameters['rdac_num_series'] = rdac_num_series
+        self.parameters['rdac_num_bits'] = rdac_num_bits
+        self.parameters['rdac_num_dacs'] = rdac_num_dacs
+        self.parameters['rdac_device_intent'] = rdac_device_intent
 
         term_list = [{
             ','.join(['ASCLKD%d<3:0>' % (i) for i in range(num_slices)]):
@@ -198,6 +239,7 @@ class adc_sar_templates__tisaradc_splash_iq(Module):
             'ADCO_CAL1<%d:0>'%(num_bits - 1): 'I_ADCO_CAL1<%d:0>'%(num_bits - 1),
             ','.join(['CLKCAL%d<4:0>' % i for i in range(num_slices)]):
                 ','.join(['I_CLKCAL%d<4:0>' % i for i in range(num_slices)]),
+            'RDAC_SEL<%d:0>'%(rdac_num_dacs*rdac_num_bits-1): 'I_RDAC_SEL<%d:0>'%(rdac_num_dacs*rdac_num_bits-1),
         }]
         name_list = (['ADCI'])
         self.array_instance('ADCI', name_list, term_list=term_list)
@@ -212,9 +254,12 @@ class adc_sar_templates__tisaradc_splash_iq(Module):
             sar_sa_m_rgnn,
             sar_sa_m_rgnp_d,
             sar_sa_m_buf,
-            sar_drv_m_list,sar_ckgen_m,sar_ckgen_fo,
+            doubleSA,
+            vref_sf_m_mirror, vref_sf_m_bias, vref_sf_m_off, vref_sf_m_in, vref_sf_m_bias_dum, vref_sf_m_in_dum,
+            vref_sf_m_byp, vref_sf_m_byp_bias, vref_sf_bias_current, vref_sf,
+            sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo,
             sar_ckgen_ndelay,
-            sar_ckgen_fast,
+            sar_ckgen_fast, sar_ckgen_fastest,
             sar_logic_m,
             sar_fsm_m,
             sar_ret_m,
@@ -235,6 +280,8 @@ class adc_sar_templates__tisaradc_splash_iq(Module):
             num_bits,
             num_inv_bb,
             samp_use_laygo,
+            sf_lch, sf_nw, sf_m_mirror, sf_m_bias, sf_m_off, sf_m_in, sf_m_bias_dum, sf_m_in_dum, sf_m_byp,
+            sf_m_byp_bias, sf_intent, bias_current, use_sf,
             use_offset,
             num_slices,
             clk_lch,
@@ -247,6 +294,7 @@ class adc_sar_templates__tisaradc_splash_iq(Module):
             clk_n_pd,
             clk_m_capsw,
             clk_unit_cell,
+            clk_clock_pulse,
             clk_device_intent,
             clkcal_order,
             ret_lch,
@@ -258,6 +306,7 @@ class adc_sar_templates__tisaradc_splash_iq(Module):
             ret_m_srbuf,
             ret_m_sr,
             ret_device_intent,
+            rdac_lch, rdac_pw, rdac_nw, rdac_m, rdac_num_series, rdac_num_bits, rdac_num_dacs, rdac_device_intent,
         )
 
         term_list = [{
@@ -279,6 +328,8 @@ class adc_sar_templates__tisaradc_splash_iq(Module):
             'ADCO_CAL1<%d:0>'%(num_bits - 1): 'Q_ADCO_CAL1<%d:0>'%(num_bits - 1),
             ','.join(['CLKCAL%d<4:0>' % i for i in range(num_slices)]):
                 ','.join(['Q_CLKCAL%d<4:0>' % i for i in range(num_slices)]),
+            'RDAC_SEL<%d:0>' % (rdac_num_dacs * rdac_num_bits - 1): 'Q_RDAC_SEL<%d:0>' % (
+            rdac_num_dacs * rdac_num_bits - 1),
         }]
         name_list = (['ADCQ'])
         self.array_instance('ADCQ', name_list, term_list=term_list)
@@ -293,9 +344,12 @@ class adc_sar_templates__tisaradc_splash_iq(Module):
             sar_sa_m_rgnn,
             sar_sa_m_rgnp_d,
             sar_sa_m_buf,
-            sar_drv_m_list,sar_ckgen_m,sar_ckgen_fo,
+            doubleSA,
+            vref_sf_m_mirror, vref_sf_m_bias, vref_sf_m_off, vref_sf_m_in, vref_sf_m_bias_dum, vref_sf_m_in_dum,
+            vref_sf_m_byp, vref_sf_m_byp_bias, vref_sf_bias_current, vref_sf,
+            sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo,
             sar_ckgen_ndelay,
-            sar_ckgen_fast,
+            sar_ckgen_fast, sar_ckgen_fastest,
             sar_logic_m,
             sar_fsm_m,
             sar_ret_m,
@@ -316,6 +370,8 @@ class adc_sar_templates__tisaradc_splash_iq(Module):
             num_bits,
             num_inv_bb,
             samp_use_laygo,
+            sf_lch, sf_nw, sf_m_mirror, sf_m_bias, sf_m_off, sf_m_in, sf_m_bias_dum, sf_m_in_dum, sf_m_byp,
+            sf_m_byp_bias, sf_intent, bias_current, use_sf,
             use_offset,
             num_slices,
             clk_lch,
@@ -328,6 +384,7 @@ class adc_sar_templates__tisaradc_splash_iq(Module):
             clk_n_pd,
             clk_m_capsw,
             clk_unit_cell,
+            clk_clock_pulse,
             clk_device_intent,
             clkcal_order,
             ret_lch,
@@ -339,6 +396,7 @@ class adc_sar_templates__tisaradc_splash_iq(Module):
             ret_m_srbuf,
             ret_m_sr,
             ret_device_intent,
+            rdac_lch, rdac_pw, rdac_nw, rdac_m, rdac_num_series, rdac_num_bits, rdac_num_dacs, rdac_device_intent,
         )
 
         self.rename_pin('I_CLKCAL', ','.join(['I_CLKCAL%d<4:0>'%i for i in range(num_slices)]))
@@ -353,6 +411,7 @@ class adc_sar_templates__tisaradc_splash_iq(Module):
         self.rename_pin('I_ADCO_CAL1', 'I_ADCO_CAL1<%d:0>'%(num_bits-1))
         self.rename_pin('I_samp_body', ','.join(['I_samp_body%d'%(i) for i in range(num_slices+2)]))
         self.rename_pin('I_bottom_body', ','.join(['I_bottom_body%d'%(i) for i in range(num_slices+2)]))
+        self.rename_pin('I_RDAC_SEL', 'I_RDAC_SEL<%d:0>'%(rdac_num_dacs*rdac_num_bits-1))
 
         self.rename_pin('Q_CLKCAL', ','.join(['Q_CLKCAL%d<4:0>'%i for i in range(num_slices)]))
         self.rename_pin('Q_OSP', ','.join(['Q_OSP%d'%(i) for i in range(num_slices)]))
@@ -366,12 +425,24 @@ class adc_sar_templates__tisaradc_splash_iq(Module):
         self.rename_pin('Q_ADCO_CAL1', 'Q_ADCO_CAL1<%d:0>'%(num_bits-1))
         self.rename_pin('Q_samp_body', ','.join(['Q_samp_body%d'%(i) for i in range(num_slices+2)]))
         self.rename_pin('Q_bottom_body', ','.join(['Q_bottom_body%d'%(i) for i in range(num_slices+2)]))
+        self.rename_pin('Q_RDAC_SEL', 'Q_RDAC_SEL<%d:0>'%(rdac_num_dacs*rdac_num_bits-1))
 
         if use_offset == False:
             self.remove_pin(','.join(['I_OSP%d'%(i) for i in range(num_slices)]))
             self.remove_pin(','.join(['I_OSM%d'%(i) for i in range(num_slices)]))
             self.remove_pin(','.join(['Q_OSP%d'%(i) for i in range(num_slices)]))
             self.remove_pin(','.join(['Q_OSM%d'%(i) for i in range(num_slices)]))
+        if num_inv_bb == 0:
+            self.remove_pin(','.join(['I_bottom_body%d'%(i) for i in range(num_slices+2)]))
+            self.remove_pin(','.join(['Q_bottom_body%d'%(i) for i in range(num_slices+2)]))
+        if vref_sf == False:
+            self.remove_pin('I_VREF_SF_bypass')
+            self.remove_pin('Q_VREF_SF_bypass')
+        if use_sf == False:
+            self.remove_pin('I_SF_bypass')
+            self.remove_pin('Q_SF_bypass')
+        self.remove_pin(','.join(['I_samp_body%d'%(i) for i in range(num_slices+2)]))
+        self.remove_pin(','.join(['Q_samp_body%d'%(i) for i in range(num_slices+2)]))
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

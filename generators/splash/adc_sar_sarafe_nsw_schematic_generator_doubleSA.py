@@ -54,6 +54,16 @@ if load_from_file==True:
     params['pw']=sizedict['pw']
     params['nw']=sizedict['nw']
     params['device_intent']=sizedict['device_intent']
+    params['m_mirror'] = sizedict['sourceFollower_vref']['m_mirror']
+    params['m_bias'] = sizedict['sourceFollower_vref']['m_bias']
+    params['m_off'] = sizedict['sourceFollower_vref']['m_off']
+    params['m_in'] = sizedict['sourceFollower_vref']['m_in']
+    params['m_bias_dum'] = sizedict['sourceFollower_vref']['m_bias_dum']
+    params['m_in_dum'] = sizedict['sourceFollower_vref']['m_in_dum']
+    params['m_byp'] = sizedict['sourceFollower_vref']['m_byp']
+    params['m_byp_bias'] = sizedict['sourceFollower_vref']['m_byp_bias']
+    params['bias_current'] = sizedict['sourceFollower_vref']['bias_current']
+    params['vref_sf']=specdict['use_vref_sf']
 
 print('creating BAG project')
 prj = bag.BagProject()

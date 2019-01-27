@@ -34,7 +34,7 @@ import os
 
 def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name, 
                  placement_grid,
-                 routing_grid_m3m4, routing_grid_m4m5, routing_grid_m5m6, routing_grid_m5m6_thick, num_bits=8, origin=np.array([0, 0])):
+                 routing_grid_m3m4, routing_grid_m4m5, routing_grid_m5m6, routing_grid_m5m6_thick, num_bits=8, vref_sf=False, origin=np.array([0, 0])):
     """generate sar"""
     pg = placement_grid
 
@@ -240,8 +240,8 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
     abe_template = laygen.templates.get_template(sarabe_name, workinglib)
     afe_pins=afe_template.pins
     abe_pins=abe_template.pins
-    afe_xy=iafe.xy[0]
-    abe_xy=iabe.xy[0]
+    afe_xy=iafe.xy
+    abe_xy=iabe.xy
     for i in range(num_bits):
         pn='ZP'+'<'+str(i)+'>'
         laygen.add_pin(pn, pn, abe_xy+abe_pins[pn]['xy'], abe_pins[pn]['layer'])
@@ -261,6 +261,10 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
     for p in pdict_m3m4[iabe.name]:
         if p.startswith('VBB'):
             laygen.pin(name=str(p), layer=laygen.layers['pin'][3], xy=pdict_m3m4[iabe.name][p], gridname=rg_m3m4, netname='VBB')
+
+    if vref_sf == True:
+        laygen.add_pin('SF_VBIAS', 'SF_VBIAS', afe_xy+afe_pins['SF_VBIAS']['xy'], afe_pins['SF_VBIAS']['layer'])
+        laygen.add_pin('SF_bypass', 'SF_bypass', afe_xy+afe_pins['SF_bypass']['xy'], afe_pins['SF_bypass']['layer'])
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
@@ -312,6 +316,7 @@ if __name__ == '__main__':
             specdict = yaml.load(stream)
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
+        vref_sf=specdict['use_vref_sf']
         num_bits=specdict['n_bit']
     #sar generation
     cellname='sar_doubleSA_bb'
@@ -325,7 +330,7 @@ if __name__ == '__main__':
     generate_sar(laygen, objectname_pfix='SA0', workinglib=workinglib, sarabe_name=sarabe_name, sarafe_name=sarafe_name,
                  placement_grid=pg, routing_grid_m3m4=rg_m3m4, routing_grid_m4m5=rg_m4m5, routing_grid_m5m6=rg_m5m6,
                  routing_grid_m5m6_thick=rg_m5m6_thick,
-                 num_bits=num_bits, origin=np.array([0, 0]))
+                 num_bits=num_bits, vref_sf=vref_sf, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)

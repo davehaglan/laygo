@@ -46,7 +46,7 @@ class adc_sar_templates__sarabe_dualdelay_bb(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, ckgen_m, ckgen_fo, ckgen_ndelay, ckgen_fast, logic_m, fsm_m, ret_m, ret_fo, num_bits, num_inv_bb, device_intent='fast'):
+    def design(self, lch, pw, nw, ckgen_m, ckgen_fo, ckgen_ndelay, ckgen_fast, ckgen_fastest, logic_m, fsm_m, ret_m, ret_fo, num_bits, num_inv_bb, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -70,13 +70,14 @@ class adc_sar_templates__sarabe_dualdelay_bb(Module):
         self.parameters['ckgen_m'] = ckgen_m
         self.parameters['ckgen_fo'] = ckgen_fo
         self.parameters['ckgen_ndelay'] = ckgen_ndelay
-        self.parameters['ckgen_fast'] = True
+        self.parameters['ckgen_fast'] = ckgen_fast
+        self.parameters['ckgen_fastest'] = ckgen_fastest
         self.parameters['logic_m'] = logic_m
         self.parameters['fsm_m'] = fsm_m
         self.parameters['ret_m'] = ret_m
         self.parameters['ret_fo'] = ret_fo
         self.parameters['device_intent'] = device_intent
-        self.instances['ICKGEN0'].design(lch=lch, pw=pw, nw=nw, m=ckgen_m, fo=ckgen_fo, ndelay=ckgen_ndelay, fast=ckgen_fast, device_intent=device_intent)
+        self.instances['ICKGEN0'].design(lch=lch, pw=pw, nw=nw, m=ckgen_m, fo=ckgen_fo, ndelay=ckgen_ndelay, fast=ckgen_fast, fastest=ckgen_fastest, device_intent=device_intent)
         self.instances['ISARLOGIC0'].design(lch=lch, pw=pw, nw=nw, m=logic_m, num_bits=num_bits, num_inv_bb=num_inv_bb, device_intent=device_intent)
         self.instances['ISARFSM0'].design(lch=lch, pw=pw, nw=nw, m=fsm_m, num_bits=num_bits,device_intent=device_intent)
         self.instances['IRET0'].design(lch=lch, pw=pw, nw=nw, m=ret_m, fo=ret_fo, num_bits=num_bits, device_intent=device_intent)
@@ -95,6 +96,9 @@ class adc_sar_templates__sarabe_dualdelay_bb(Module):
         self.rename_pin('ZM<0>','ZM<%d:0>'%(num_bits-1))
         self.rename_pin('ADCOUT<0>','ADCOUT<%d:0>'%(num_bits-1))
         self.rename_pin('SB<0>','SB<%d:0>'%(num_bits-1))
+
+        if num_inv_bb==0:
+            self.remove_pin('VBB')
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

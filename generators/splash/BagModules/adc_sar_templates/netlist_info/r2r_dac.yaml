@@ -102,26 +102,6 @@ instances:
     lib_name: basic
     cell_name: iopin
     instpins: {}
-  IINV1:
-    lib_name: logic_templates
-    cell_name: inv
-    instpins:
-      I:
-        direction: input
-        net_name: "ENB"
-        num_bits: 1
-      VSS:
-        direction: inputOutput
-        net_name: "VSS"
-        num_bits: 1
-      VDD:
-        direction: inputOutput
-        net_name: "VDD"
-        num_bits: 1
-      O:
-        direction: output
-        net_name: "EN"
-        num_bits: 1
   IINV0:
     lib_name: logic_templates
     cell_name: inv
@@ -141,4 +121,24 @@ instances:
       O:
         direction: output
         net_name: "ENB"
+        num_bits: 1
+  IINV1:
+    lib_name: logic_templates
+    cell_name: inv
+    instpins:
+      I:
+        direction: input
+        net_name: "ENB"
+        num_bits: 1
+      VSS:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      VDD:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      O:
+        direction: output
+        net_name: "EN"
         num_bits: 1

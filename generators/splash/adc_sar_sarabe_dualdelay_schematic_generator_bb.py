@@ -42,6 +42,7 @@ if load_from_file==True:
     params['ckgen_fo']=sizedict['sarclkgen']['fo']
     params['ckgen_ndelay']=sizedict['sarclkgen']['ndelay']
     params['ckgen_fast']=sizedict['sarclkgen']['fast']
+    params['ckgen_fastest']=sizedict['sarclkgen']['fastest']
     params['logic_m']=sizedict['sarlogic']['m']
     params['num_inv_bb']=sizedict['sarlogic']['num_inv_bb']
     params['fsm_m']=sizedict['sarfsm']['m']

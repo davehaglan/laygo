@@ -46,7 +46,7 @@ class clk_dis_templates__clk_dis_viadel_cal(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, m_dff, m_inv1, m_inv2, m_tgate, m_capsw=2, n_pd=4, num_bits=5, unit_cell=2, num_ways=33, device_intent='fast'):
+    def design(self, lch, pw, nw, m_dff, m_inv1, m_inv2, m_tgate, m_capsw=2, n_pd=4, num_bits=5, unit_cell=2, clock_pulse=False, num_ways=33, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -72,6 +72,7 @@ class clk_dis_templates__clk_dis_viadel_cal(Module):
         self.parameters['m_capsw'] = m_capsw
         self.parameters['n_pd'] = n_pd
         self.parameters['unit_cell'] = unit_cell
+        self.parameters['clock_pulse'] = clock_pulse
         self.parameters['num_bits'] = num_bits
         self.parameters['num_ways'] = num_ways
         self.parameters['device_intent'] = device_intent
@@ -132,7 +133,7 @@ class clk_dis_templates__clk_dis_viadel_cal(Module):
 
         for inst in self.instances['I0']:
             inst.design(lch=lch, pw=pw, nw=nw, m_dff=m_dff, m_inv1=m_inv1, m_inv2=m_inv2, n_pd=n_pd,
-                m_tgate=m_tgate, num_bits=num_bits, m_capsw=m_capsw, device_intent=device_intent)
+                m_tgate=m_tgate, num_bits=num_bits, unit_cell=unit_cell, clock_pulse=clock_pulse, m_capsw=m_capsw, device_intent=device_intent)
 
         self.reconnect_instance_terminal('I0', 'CAL<%d:0>'%(num_bits-1), 'VSS')
         

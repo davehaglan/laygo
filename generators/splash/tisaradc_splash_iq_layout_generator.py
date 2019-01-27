@@ -56,7 +56,9 @@ def generate_tisaradc_splash(laygen, objectname_pfix, ret_libname, sar_libname, 
     iadci = laygen.relplace(name="I" + objectname_pfix + 'ADCI', templatename=sar_name,
                       gridname=pg, xy=origin, template_libname=workinglib)
     iadcq = laygen.relplace(name="I" + objectname_pfix + 'ADCQ', templatename=sar_name,
-                       gridname=pg, refinstname=iadci.name, direction='right', transform='R0', template_libname=workinglib)
+                       gridname=pg, refinstname=iadci.name, direction='right', transform='MY',
+                            offset=np.array([laygen.templates.get_template(sar_name, libname=workinglib).xy[0][0]*2,0]), template_libname=workinglib)
+
 
     # ADCI pins
     # pin_prefix_list=['VDD', 'VSS', 'VREF', 'RSTP', 'RSTN', 'CLKIP', 'CLKIN']
@@ -64,28 +66,47 @@ def generate_tisaradc_splash(laygen, objectname_pfix, ret_libname, sar_libname, 
     adc_template = laygen.templates.get_template(sar_name, workinglib)
     adc_pins = adc_template.pins
     for pn, p in adc_pins.items():
-        # if pn.startswith('VDD') or pn.startswith('VSS') or pn.startswith('VREF') or pn.startswith('RST') or pn.startswith('CLKI'):
-        #     laygen.add_pin('I_'+pn, adci_pins[pn]['netname'], iadci.xy + adci_pins[pn]['xy'], adci_pins[pn]['layer'])
-        #     laygen.add_pin('Q_'+pn, adci_pins[pn]['netname'], iadcq.xy + adci_pins[pn]['xy'], adci_pins[pn]['layer'])
-        if pn.startswith('RST'):
-            # rst = laygen.route(None, adc_pins[pn]['layer'], xy0=iadci.xy + adc_pins[pn]['xy'],
-            #                     xy1=iadcq.xy + adc_pins[pn]['xy'], gridname0=rg_m2m3_pin)
-            rout = laygen.add_rect(None, xy=[(iadci.xy + adc_pins[pn]['xy'])[0], (iadcq.xy + adc_pins[pn]['xy'])[1]],
-                                  layer=laygen.layers['metal'][2])
-            laygen.add_pin(pn, adc_pins[pn]['netname'], [(iadci.xy + adc_pins[pn]['xy'])[0], (iadcq.xy + adc_pins[pn]['xy'])[1]],
-                           adc_pins[pn]['layer'])
-        elif pn.startswith('CLKI') or pn.startswith('VREF'):
-            rout = laygen.add_rect(None, xy=[(iadci.xy + adc_pins[pn]['xy'])[0], (iadcq.xy + adc_pins[pn]['xy'])[1]],
-                                  layer=laygen.layers['metal'][6])
-            laygen.add_pin(pn, adc_pins[pn]['netname'],
-                           [(iadci.xy + adc_pins[pn]['xy'])[0], (iadcq.xy + adc_pins[pn]['xy'])[1]],
-                           adc_pins[pn]['layer'])
+        # # if pn.startswith('VDD') or pn.startswith('VSS') or pn.startswith('VREF') or pn.startswith('RST') or pn.startswith('CLKI'):
+        # #     laygen.add_pin('I_'+pn, adci_pins[pn]['netname'], iadci.xy + adci_pins[pn]['xy'], adci_pins[pn]['layer'])
+        # #     laygen.add_pin('Q_'+pn, adci_pins[pn]['netname'], iadcq.xy + adci_pins[pn]['xy'], adci_pins[pn]['layer'])
+        # if pn.startswith('RST'):
+        #     # rst = laygen.route(None, adc_pins[pn]['layer'], xy0=iadci.xy + adc_pins[pn]['xy'],
+        #     #                     xy1=iadcq.xy + adc_pins[pn]['xy'], gridname0=rg_m2m3_pin)
+        #     rout = laygen.add_rect(None, xy=[(iadci.xy + adc_pins[pn]['xy'])[0], (iadcq.xy + adc_pins[pn]['xy'])[1]],
+        #                           layer=laygen.layers['metal'][2])
+        #     laygen.add_pin(pn, adc_pins[pn]['netname'], [(iadci.xy + adc_pins[pn]['xy'])[0], (iadcq.xy + adc_pins[pn]['xy'])[1]],
+        #                    adc_pins[pn]['layer'])
+        # elif pn.startswith('CLKI') or pn.startswith('VREF'):
+        #     rout = laygen.add_rect(None, xy=[(iadci.xy + adc_pins[pn]['xy'])[0], (iadcq.xy + adc_pins[pn]['xy'])[1]],
+        #                           layer=laygen.layers['metal'][6])
+        #     laygen.add_pin(pn, adc_pins[pn]['netname'],
+        #                    [(iadci.xy + adc_pins[pn]['xy'])[0], (iadcq.xy + adc_pins[pn]['xy'])[1]],
+        #                    adc_pins[pn]['layer'])
+        # elif pn.startswith('VDD') or pn.startswith('VSS'):
+        #     laygen.add_pin('I_'+pn, adc_pins[pn]['netname'], iadci.xy + adc_pins[pn]['xy'], adc_pins[pn]['layer'])
+        #     laygen.add_pin('Q_'+pn, adc_pins[pn]['netname'], iadcq.xy + adc_pins[pn]['xy'], adc_pins[pn]['layer'])
+        # else:
+        #     laygen.add_pin('I_'+pn, 'I_'+adc_pins[pn]['netname'], iadci.xy + adc_pins[pn]['xy'], adc_pins[pn]['layer'])
+        #     laygen.add_pin('Q_'+pn, 'Q_'+adc_pins[pn]['netname'], iadcq.xy + adc_pins[pn]['xy'], adc_pins[pn]['layer'])
+
+        if pn.startswith('CLKI') or pn.startswith('VREF<'):
+            # rout = laygen.add_rect(None, xy=[(iadci.xy + adc_pins[pn]['xy'][0]), (iadcq.xy - [adc_pins[pn]['xy'][0][0], 0] + [0, adc_pins[pn]['xy'][0][1]])],
+            #                        layer=laygen.layers['metal'][6])
+            # laygen.add_pin(pn, adc_pins[pn]['netname'],
+            #                [(iadci.xy + adc_pins[pn]['xy'])[0], (iadcq.xy - [adc_pins[pn]['xy'][0][0], 0] + [0, adc_pins[pn]['xy'][0][1]])],
+            #                adc_pins[pn]['layer'])
+            rout = laygen.route(None, laygen.layers['metal'][6], xy0=laygen.get_inst_pin_xy(iadci.name, pn, rg_m6m7_thick)[0],
+                          xy1=laygen.get_inst_pin_xy(iadcq.name, pn, rg_m6m7_thick)[0], gridname0=rg_m6m7_thick)
+            laygen.pin_from_rect(pn, adc_pins[pn]['layer'], rout, rg_m6m7_thick, adc_pins[pn]['netname'])
+        elif pn.startswith('VREF_SF_bypass'):
+            laygen.add_pin(pn, adc_pins[pn]['netname'], iadci.xy + adc_pins[pn]['xy'], adc_pins[pn]['layer'])
         elif pn.startswith('VDD') or pn.startswith('VSS'):
-            laygen.add_pin('I_'+pn, adc_pins[pn]['netname'], iadci.xy + adc_pins[pn]['xy'], adc_pins[pn]['layer'])
-            laygen.add_pin('Q_'+pn, adc_pins[pn]['netname'], iadcq.xy + adc_pins[pn]['xy'], adc_pins[pn]['layer'])
+            laygen.add_pin('I_' + pn, adc_pins[pn]['netname'], iadci.xy + adc_pins[pn]['xy'], adc_pins[pn]['layer'])
+            # laygen.add_pin('Q_' + pn, adc_pins[pn]['netname'], iadcq.xy + adc_pins[pn]['xy'], adc_pins[pn]['layer'])
+            laygen.add_pin('Q_' + pn, adc_pins[pn]['netname'], iadcq.xy - [[adc_pins[pn]['xy'][0][0], 0], [adc_pins[pn]['xy'][1][0], 0]] + [[0, adc_pins[pn]['xy'][0][1]], [0, adc_pins[pn]['xy'][1][1]]], adc_pins[pn]['layer'])
         else:
-            laygen.add_pin('I_'+pn, 'I_'+adc_pins[pn]['netname'], iadci.xy + adc_pins[pn]['xy'], adc_pins[pn]['layer'])
-            laygen.add_pin('Q_'+pn, 'Q_'+adc_pins[pn]['netname'], iadcq.xy + adc_pins[pn]['xy'], adc_pins[pn]['layer'])
+            laygen.add_pin('I_' + pn, 'I_' + adc_pins[pn]['netname'], iadci.xy + adc_pins[pn]['xy'], adc_pins[pn]['layer'])
+            laygen.add_pin('Q_' + pn, 'Q_' + adc_pins[pn]['netname'], iadcq.xy - [[adc_pins[pn]['xy'][0][0], 0], [adc_pins[pn]['xy'][1][0], 0]] + [[0, adc_pins[pn]['xy'][0][1]], [0, adc_pins[pn]['xy'][1][1]]], adc_pins[pn]['layer'])
 
     # adcq_template = laygen.templates.get_template(sar_name, workinglib)
     # adcq_pins = adcq_template.pins

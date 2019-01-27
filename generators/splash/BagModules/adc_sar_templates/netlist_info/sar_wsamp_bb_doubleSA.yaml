@@ -1,22 +1,18 @@
 lib_name: adc_sar_templates
 cell_name: sar_wsamp_bb_doubleSA
-pins: [ "VDDSAMP", "CLKO", "VREF<2:0>", "OSM", "OSP", "INM", "INP", "EXTSEL_CLK", "CKDSEL0<1:0>", "CKDSEL1<1:0>", "CLK", "VOR<0>", "VOL<0>", "samp_body", "bottom_body", "SF_bypass", "SF_Voffn", "SF_Voffp", "SF_BIASp", "SF_BIASn", "ADCOUT<0>", "ICLK", "CLKPRB_SAMP", "SAOP", "UP", "SB<0>", "SARCLKB", "ZM<0>", "SARCLK", "ZMID<0>", "DONE", "ZP<0>", "PHI0", "SAMPP", "SAMPM", "VDDSAR", "VSS", "SAOM" ]
+pins: [ "VDDSAMP", "CLKO", "VREF<2:0>", "OSM", "OSP", "INM", "INP", "EXTSEL_CLK", "CKDSEL0<1:0>", "CKDSEL1<1:0>", "CLK", "VOR<0>", "VOL<0>", "samp_body", "bottom_body", "SF_bypass", "SF_Voffn", "SF_Voffp", "VREF_SF_bypass", "SF_BIAS", "VREF_SF_BIAS", "ADCOUT<0>", "ICLK", "CLKPRB_SAMP", "SAOP", "UP", "SB<0>", "SARCLKB", "ZM<0>", "SARCLK", "ZMID<0>", "DONE", "ZP<0>", "PHI0", "SAMPP", "SAMPM", "VDDSAR", "VSS", "SAOM" ]
 instances:
   ISF:
     lib_name: adc_sar_templates
     cell_name: sourceFollower_diff
     instpins:
+      VBIAS:
+        direction: inputOutput
+        net_name: "SF_BIAS"
+        num_bits: 1
       VSS:
         direction: inputOutput
         net_name: "VSS"
-        num_bits: 1
-      VBIASn:
-        direction: inputOutput
-        net_name: "SF_BIASn"
-        num_bits: 1
-      VBIASp:
-        direction: inputOutput
-        net_name: "SF_BIASp"
         num_bits: 1
       VDD:
         direction: inputOutput
@@ -94,7 +90,7 @@ instances:
         direction: inputOutput
         net_name: "SAMP_INN"
         num_bits: 1
-  PIN38:
+  PIN39:
     lib_name: basic
     cell_name: iopin
     instpins: {}
@@ -121,6 +117,10 @@ instances:
   PIN15:
     lib_name: basic
     cell_name: iopin
+    instpins: {}
+  PIN38:
+    lib_name: basic
+    cell_name: ipin
     instpins: {}
   PIN19:
     lib_name: basic
@@ -250,6 +250,14 @@ instances:
     lib_name: adc_sar_templates
     cell_name: sar_doubleSA_bb
     instpins:
+      SF_VBIAS:
+        direction: input
+        net_name: "VREF_SF_BIAS"
+        num_bits: 1
+      SF_bypass:
+        direction: input
+        net_name: "VREF_SF_bypass"
+        num_bits: 1
       VBB:
         direction: inputOutput
         net_name: "bottom_body"

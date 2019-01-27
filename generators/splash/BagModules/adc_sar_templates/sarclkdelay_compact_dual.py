@@ -46,7 +46,7 @@ class adc_sar_templates__sarclkdelay_compact_dual(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, m, ndelay, device_intent='fast'):
+    def design(self, lch, pw, nw, m, ndelay, fastest, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -67,6 +67,7 @@ class adc_sar_templates__sarclkdelay_compact_dual(Module):
         self.parameters['pw'] = pw
         self.parameters['nw'] = nw
         self.parameters['m'] = m
+        self.parameters['fastest'] = fastest
         self.parameters['device_intent'] = device_intent
         self.instances['I0'].design(lch=lch, pw=pw, nw=nw, m=1, ndelay=ndelay, device_intent=device_intent)
         self.instances['I1'].design(lch=lch, pw=pw, nw=nw, m=1, ndelay=ndelay, device_intent=device_intent)
@@ -74,7 +75,11 @@ class adc_sar_templates__sarclkdelay_compact_dual(Module):
         self.instances['INR0'].design(lch=lch, pw=pw, nw=nw, m=2, device_intent=device_intent)
         self.instances['IINV0'].design(lch=lch, pw=pw, nw=nw, m=m, device_intent=device_intent)
 
-
+        if fastest == True:
+            self.reconnect_instance_terminal('I0', 'I', 'VSS')
+            self.reconnect_instance_terminal('I0', 'O', 'dum')
+            self.reconnect_instance_terminal('I1', 'I', 'I')
+            self.reconnect_instance_terminal('IMUX0', 'I0', 'I')
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

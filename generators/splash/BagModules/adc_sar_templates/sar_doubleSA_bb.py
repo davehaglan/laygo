@@ -46,7 +46,11 @@ class adc_sar_templates__sar_doubleSA_bb(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, sa_m, sa_m_d, sa_m_rst, sa_m_rst_d, sa_m_rgnn, sa_m_rgnp_d, sa_m_buf, doubleSA, drv_m_list, ckgen_m, ckgen_fo, ckgen_ndelay, ckgen_fast, logic_m, fsm_m, ret_m, ret_fo, c_m, rdx_array, num_bits, num_inv_bb, device_intent):
+    def design(self, lch, pw, nw, sa_m, sa_m_d, sa_m_rst, sa_m_rst_d, sa_m_rgnn, sa_m_rgnp_d, sa_m_buf, doubleSA,
+               vref_sf_m_mirror, vref_sf_m_bias, vref_sf_m_off, vref_sf_m_in, vref_sf_m_bias_dum, vref_sf_m_in_dum,
+               vref_sf_m_byp, vref_sf_m_byp_bias, vref_sf_bias_current, vref_sf,
+               drv_m_list, ckgen_m, ckgen_fo, ckgen_ndelay, ckgen_fast, ckgen_fastest, logic_m, fsm_m, ret_m, ret_fo, c_m,
+               rdx_array, num_bits, num_inv_bb, device_intent):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -73,11 +77,22 @@ class adc_sar_templates__sar_doubleSA_bb(Module):
         self.parameters['sa_m_rgnp_d'] = sa_m_rgnp_d
         self.parameters['sa_m_buf'] = sa_m_buf
         self.parameters['doubleSA'] = doubleSA
+        self.parameters['vref_sf_m_mirror'] = vref_sf_m_mirror
+        self.parameters['vref_sf_m_bias'] = vref_sf_m_bias
+        self.parameters['vref_sf_m_in'] = vref_sf_m_in
+        self.parameters['vref_sf_m_off'] = vref_sf_m_off
+        self.parameters['vref_sf_m_bias_dum'] = vref_sf_m_bias_dum
+        self.parameters['vref_sf_m_in_dum'] = vref_sf_m_in_dum
+        self.parameters['vref_sf_m_byp'] = vref_sf_m_byp
+        self.parameters['vref_sf_m_byp_bias'] = vref_sf_m_byp_bias
+        self.parameters['vref_sf_bias_current'] = vref_sf_bias_current
+        self.parameters['vref_sf'] = vref_sf
         self.parameters['drv_m_list'] = drv_m_list
         self.parameters['ckgen_m'] = ckgen_m
         self.parameters['ckgen_fo'] = ckgen_fo
         self.parameters['ckgen_ndelay'] = ckgen_ndelay
         self.parameters['ckgen_fast'] = ckgen_fast
+        self.parameters['ckgen_fastest'] = ckgen_fast
         self.parameters['logic_m'] = logic_m
         self.parameters['fsm_m'] = fsm_m
         self.parameters['ret_m'] = ret_m
@@ -87,8 +102,15 @@ class adc_sar_templates__sar_doubleSA_bb(Module):
         self.parameters['num_bits'] = num_bits
         self.parameters['num_inv_bb'] = num_inv_bb
         self.parameters['device_intent'] = device_intent
-        self.instances['IAFE0'].design(lch=lch, pw=pw, nw=nw, sa_m=sa_m, sa_m_d=sa_m_d, sa_m_rst=sa_m_rst, sa_m_rst_d=sa_m_rst_d, sa_m_rgnn=sa_m_rgnn, sa_m_rgnp_d=sa_m_rgnp_d, sa_m_buf=sa_m_buf, doubleSA=doubleSA, drv_m_list=drv_m_list, num_bits=num_bits-1, c_m=c_m, rdx_array=rdx_array, device_intent=device_intent)
-        self.instances['IABE0'].design(lch=lch, pw=pw, nw=nw, ckgen_m=ckgen_m, ckgen_fo=ckgen_fo, ckgen_ndelay=ckgen_ndelay, ckgen_fast=ckgen_fast, logic_m=logic_m, fsm_m=fsm_m, ret_m=ret_m, ret_fo=ret_fo, num_bits=num_bits, num_inv_bb=num_inv_bb, device_intent=device_intent)
+        self.instances['IAFE0'].design(lch=lch, pw=pw, nw=nw, sa_m=sa_m, sa_m_d=sa_m_d, sa_m_rst=sa_m_rst, sa_m_rst_d=sa_m_rst_d,
+                                       sa_m_rgnn=sa_m_rgnn, sa_m_rgnp_d=sa_m_rgnp_d, sa_m_buf=sa_m_buf, doubleSA=doubleSA,
+                                       drv_m_list=drv_m_list, num_bits=num_bits-1, c_m=c_m,
+                                       m_mirror=vref_sf_m_mirror, m_bias=vref_sf_m_bias, m_off=vref_sf_m_off,
+                                       m_in=vref_sf_m_in, m_bias_dum=vref_sf_m_bias_dum,
+                                       m_in_dum=vref_sf_m_in_dum, m_byp=vref_sf_m_byp, m_byp_bias=vref_sf_m_byp_bias,
+                                       bias_current=vref_sf_bias_current, vref_sf=vref_sf,
+                                       rdx_array=rdx_array, device_intent=device_intent)
+        self.instances['IABE0'].design(lch=lch, pw=pw, nw=nw, ckgen_m=ckgen_m, ckgen_fo=ckgen_fo, ckgen_ndelay=ckgen_ndelay, ckgen_fast=ckgen_fast, ckgen_fastest=ckgen_fastest, logic_m=logic_m, fsm_m=fsm_m, ret_m=ret_m, ret_fo=ret_fo, num_bits=num_bits, num_inv_bb=num_inv_bb, device_intent=device_intent)
         #rewiring
         self.reconnect_instance_terminal(inst_name='IAFE0', term_name='VOL<%d:0>'%(num_bits-2), net_name='VOL<%d:0>'%(num_bits-2))
         self.reconnect_instance_terminal(inst_name='IAFE0', term_name='VOR<%d:0>'%(num_bits-2), net_name='VOR<%d:0>'%(num_bits-2))
@@ -111,6 +133,12 @@ class adc_sar_templates__sar_doubleSA_bb(Module):
         self.rename_pin('ZP<0>', 'ZP<%d:0>'%(num_bits-1))
         self.rename_pin('SB<0>', 'SB<%d:0>'%(num_bits-1))
         self.rename_pin('ADCOUT<0>', 'ADCOUT<%d:0>'%(num_bits-1))
+
+        if num_inv_bb==0:
+            self.remove_pin('VBB')
+        if vref_sf == False:
+            self.remove_pin('SF_bypass')
+            self.remove_pin('SF_VBIAS')
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

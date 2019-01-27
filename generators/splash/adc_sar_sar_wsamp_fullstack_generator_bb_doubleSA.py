@@ -18,6 +18,7 @@ files=[
     'laygo/generators/splash/adc_sar_doubleSA_pmos_layout_generator_lvt.py',
     'laygo/generators/splash/adc_sar_capdrv_nsw_layout_generator.py',
     'laygo/generators/splash/adc_sar_capdrv_nsw_array_layout_generator.py',
+    'laygo/generators/splash/adc_sar_sf_vref_layout_generator.py',
     'laygo/generators/splash/adc_sar_sarafe_nsw_layout_generator_doubleSA.py',
     'laygo/generators/splash/adc_sar_sarfsm_layout_generator.py',
     'laygo/generators/splash/adc_sar_sarlogic_wret_layout_generator.py',
@@ -34,6 +35,8 @@ files=[
     'laygo/generators/splash/adc_sar_sar_layout_generator_doubleSA_bb.py',
     #'laygo/generators/splash/sampler_nmos_layout_generator.py', #for AnalogBase sampler
     'laygo/generators/splash/adc_sar_sarsamp_layout_generator_bb.py',
+    'laygo/generators/splash/adc_sar_sf_layout_generator.py',
+    'laygo/generators/splash/adc_sar_sf_diff_layout_generator.py',
     'laygo/generators/splash/adc_sar_sar_wsamp_schematic_generator_bb_doubleSA.py',
     'laygo/generators/splash/adc_sar_sar_wsamp_layout_generator_bb_doubleSA.py',
     #'laygo/generators/splash/adc_sar_sar_wsamp_lvs.py',

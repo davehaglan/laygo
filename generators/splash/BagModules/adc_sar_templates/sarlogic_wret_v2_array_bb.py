@@ -66,98 +66,101 @@ class adc_sar_templates__sarlogic_wret_v2_array_bb(Module):
         self.parameters['pw'] = pw
         self.parameters['nw'] = nw
         self.parameters['m'] = m
+        self.parameters['num_inv_bb'] = num_inv_bb
         self.parameters['num_bits'] = num_bits
-        self.parameters['num_inv_bb'] = num_bits
         self.parameters['device_intent'] = device_intent
-        #array generation
-        name_list=[]
-        term_list=[]
+        # array generation
+        name_list = []
+        term_list = []
         for i in range(num_bits):
-            if not num_inv_bb==0:
-                term_list.append({'SB': 'SB<%d>'%(i),
-                                  'ZP': 'ZP0<%d>'%(i),
-                                  'ZMID': 'ZMID0<%d>'%(i),
-                                  'ZM': 'ZM0<%d>'%(i),
-                                  'RETO': 'RETO<%d>'%(i),
-                                 })
-            else:
-                term_list.append({'SB': 'SB<%d>' % (i),
-                                  'ZP': 'ZP<%d>' % (i),
-                                  'ZMID': 'ZMID<%d>' % (i),
-                                  'ZM': 'ZM<%d>' % (i),
-                                  'RETO': 'RETO<%d>' % (i),
-                                  })
-            name_list.append('ISL%d'%(i))
+            term_list.append({'SB': 'SB<%d>' % (i),
+                              'ZP': 'ZP<%d>' % (i),
+                              'ZMID': 'ZMID<%d>' % (i),
+                              'ZM': 'ZM<%d>' % (i),
+                              'RETO': 'RETO<%d>' % (i),
+                              })
+            name_list.append('ISL%d' % (i))
         self.array_instance('ISL0', name_list, term_list=term_list)
         for i in range(num_bits):
             self.instances['ISL0'][i].design(lch=lch, pw=pw, nw=nw, m=m, device_intent=device_intent)
 
-        self.rename_pin('SB<0>','SB<%d:0>'%(num_bits-1))
-        self.rename_pin('ZP<0>','ZP<%d:0>'%(num_bits-1))
-        self.rename_pin('ZMID<0>','ZMID<%d:0>'%(num_bits-1))
-        self.rename_pin('ZM<0>','ZM<%d:0>'%(num_bits-1))
-        self.rename_pin('RETO<0>','RETO<%d:0>'%(num_bits-1))
+        self.rename_pin('SB<0>', 'SB<%d:0>' % (num_bits - 1))
+        self.rename_pin('ZP<0>', 'ZP<%d:0>' % (num_bits - 1))
+        self.rename_pin('ZMID<0>', 'ZMID<%d:0>' % (num_bits - 1))
+        self.rename_pin('ZM<0>', 'ZM<%d:0>' % (num_bits - 1))
+        self.rename_pin('RETO<0>', 'RETO<%d:0>' % (num_bits - 1))
 
-        name_list_p=[]
-        name_list_n=[]
-        term_list=[]
-        for i in range(num_bits):
-            for j in range(num_inv_bb):
-                if j==(num_inv_bb-1):
-                    term_list.append({'G': 'ZP%d'%(j)+'<%d>'%(i), 
-                              'D': 'ZP<%d>'%(i),
-                             })
-                else:
-                    term_list.append({'G': 'ZP%d'%(j)+'<%d>'%(i), 
-                              'D': 'ZP%d'%(j+1)+'<%d>'%(i),
-                             })
-                name_list_p.append('IBUFP0%d'%(j)+'<%d>'%(i))
-                name_list_n.append('IBUFN0%d'%(j)+'<%d>'%(i))
-        self.array_instance('IBUFP0', name_list_p, term_list=term_list)
-        self.array_instance('IBUFN0', name_list_n, term_list=term_list)
-        for i in range(num_bits*num_inv_bb):
-            self.instances['IBUFP0'][i].design(w=pw, l=lch, nf=m, intent=device_intent)
-            self.instances['IBUFN0'][i].design(w=pw, l=lch, nf=m, intent=device_intent)
-        name_list_p=[]
-        name_list_n=[]
-        term_list=[]
-        for i in range(num_bits):
-            for j in range(num_inv_bb):
-                if j==(num_inv_bb-1):
-                    term_list.append({'G': 'ZMID%d'%(j)+'<%d>'%(i), 
-                              'D': 'ZMID<%d>'%(i),
-                             })
-                else:
-                    term_list.append({'G': 'ZMID%d'%(j)+'<%d>'%(i), 
-                              'D': 'ZMID%d'%(j+1)+'<%d>'%(i),
-                             })
-                name_list_p.append('IBUFP1%d'%(j)+'<%d>'%(i))
-                name_list_n.append('IBUFN1%d'%(j)+'<%d>'%(i))
-        self.array_instance('IBUFP1', name_list_p, term_list=term_list)
-        self.array_instance('IBUFN1', name_list_n, term_list=term_list)
-        for i in range(num_bits*num_inv_bb):
-            self.instances['IBUFP1'][i].design(w=pw, l=lch, nf=m, intent=device_intent)
-            self.instances['IBUFN1'][i].design(w=pw, l=lch, nf=m, intent=device_intent)
-        name_list_p=[]
-        name_list_n=[]
-        term_list=[]
-        for i in range(num_bits):
-            for j in range(num_inv_bb):
-                if j==(num_inv_bb-1):
-                    term_list.append({'G': 'ZM%d'%(j)+'<%d>'%(i), 
-                              'D': 'ZM<%d>'%(i),
-                             })
-                else:
-                    term_list.append({'G': 'ZM%d'%(j)+'<%d>'%(i), 
-                              'D': 'ZM%d'%(j+1)+'<%d>'%(i),
-                             })
-                name_list_p.append('IBUFP2%d'%(j)+'<%d>'%(i))
-                name_list_n.append('IBUFN2%d'%(j)+'<%d>'%(i))
-        self.array_instance('IBUFP2', name_list_p, term_list=term_list)
-        self.array_instance('IBUFN2', name_list_n, term_list=term_list)
-        for i in range(num_bits*num_inv_bb):
-            self.instances['IBUFP2'][i].design(w=pw, l=lch, nf=m, intent=device_intent)
-            self.instances['IBUFN2'][i].design(w=pw, l=lch, nf=m, intent=device_intent)
+        if num_inv_bb == 0:
+            self.delete_instance('IBUFP0')
+            self.delete_instance('IBUFN0')
+            self.delete_instance('IBUFP1')
+            self.delete_instance('IBUFN1')
+            self.delete_instance('IBUFP2')
+            self.delete_instance('IBUFN2')
+            self.remove_pin('VBB')
+
+        else:
+            name_list_p = []
+            name_list_n = []
+            term_list = []
+            for i in range(num_bits):
+                for j in range(num_inv_bb):
+                    if j == (num_inv_bb - 1):
+                        term_list.append({'G': 'ZP%d' % (j) + '<%d>' % (i),
+                                          'D': 'ZP<%d>' % (i),
+                                          })
+                    else:
+                        term_list.append({'G': 'ZP%d' % (j) + '<%d>' % (i),
+                                          'D': 'ZP%d' % (j + 1) + '<%d>' % (i),
+                                          })
+                    name_list_p.append('IBUFP0%d' % (j) + '<%d>' % (i))
+                    name_list_n.append('IBUFN0%d' % (j) + '<%d>' % (i))
+            self.array_instance('IBUFP0', name_list_p, term_list=term_list)
+            self.array_instance('IBUFN0', name_list_n, term_list=term_list)
+            for i in range(num_bits * num_inv_bb):
+                self.instances['IBUFP0'][i].design(w=pw, l=lch, nf=m, intent=device_intent)
+                self.instances['IBUFN0'][i].design(w=pw, l=lch, nf=m, intent=device_intent)
+            name_list_p = []
+            name_list_n = []
+            term_list = []
+            for i in range(num_bits):
+                for j in range(num_inv_bb):
+                    if j == (num_inv_bb - 1):
+                        term_list.append({'G': 'ZMID%d' % (j) + '<%d>' % (i),
+                                          'D': 'ZMID<%d>' % (i),
+                                          })
+                    else:
+                        term_list.append({'G': 'ZMID%d' % (j) + '<%d>' % (i),
+                                          'D': 'ZMID%d' % (j + 1) + '<%d>' % (i),
+                                          })
+                    name_list_p.append('IBUFP1%d' % (j) + '<%d>' % (i))
+                    name_list_n.append('IBUFN1%d' % (j) + '<%d>' % (i))
+            self.array_instance('IBUFP1', name_list_p, term_list=term_list)
+            self.array_instance('IBUFN1', name_list_n, term_list=term_list)
+            for i in range(num_bits * num_inv_bb):
+                self.instances['IBUFP1'][i].design(w=pw, l=lch, nf=m, intent=device_intent)
+                self.instances['IBUFN1'][i].design(w=pw, l=lch, nf=m, intent=device_intent)
+            name_list_p = []
+            name_list_n = []
+            term_list = []
+            for i in range(num_bits):
+                for j in range(num_inv_bb):
+                    if j == (num_inv_bb - 1):
+                        term_list.append({'G': 'ZM%d' % (j) + '<%d>' % (i),
+                                          'D': 'ZM<%d>' % (i),
+                                          })
+                    else:
+                        term_list.append({'G': 'ZM%d' % (j) + '<%d>' % (i),
+                                          'D': 'ZM%d' % (j + 1) + '<%d>' % (i),
+                                          })
+                    name_list_p.append('IBUFP2%d' % (j) + '<%d>' % (i))
+                    name_list_n.append('IBUFN2%d' % (j) + '<%d>' % (i))
+            self.array_instance('IBUFP2', name_list_p, term_list=term_list)
+            self.array_instance('IBUFN2', name_list_n, term_list=term_list)
+            for i in range(num_bits * num_inv_bb):
+                self.instances['IBUFP2'][i].design(w=pw, l=lch, nf=m, intent=device_intent)
+                self.instances['IBUFN2'][i].design(w=pw, l=lch, nf=m, intent=device_intent)
+            # self.add_pin('VBB', 'inputOutput')
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.
