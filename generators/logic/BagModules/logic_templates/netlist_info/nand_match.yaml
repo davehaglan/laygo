@@ -30,26 +30,6 @@ instances:
         direction: inputOutput
         net_name: "VDD"
         num_bits: 1
-  IPDM0:
-    lib_name: BAG_prim
-    cell_name: pmos4_fast
-    instpins:
-      S:
-        direction: inputOutput
-        net_name: "VDD"
-        num_bits: 1
-      D:
-        direction: inputOutput
-        net_name: "VDD"
-        num_bits: 1
-      B:
-        direction: inputOutput
-        net_name: "VDD"
-        num_bits: 1
-      G:
-        direction: inputOutput
-        net_name: "VDD"
-        num_bits: 1
   IP1:
     lib_name: BAG_prim
     cell_name: pmos4_fast
@@ -89,6 +69,26 @@ instances:
       G:
         direction: inputOutput
         net_name: "A"
+        num_bits: 1
+  IPDM0:
+    lib_name: BAG_prim
+    cell_name: pmos4_fast
+    instpins:
+      S:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      D:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      B:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      G:
+        direction: inputOutput
+        net_name: "VDD"
         num_bits: 1
   PIN5:
     lib_name: basic
