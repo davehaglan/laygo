@@ -360,7 +360,7 @@ def generate_r2r_dac(laygen, objectname_pfix, templib_logic, placement_grid, rou
                                 laygen.get_inst_pin_xy(ir[i].name, 'I', rg_m4m5)[0]+[2,0],
                                 laygen.get_inst_pin_xy(ir[i].name, 'EN', rg_m3m4)[0][1] - 6, rg_m3m4,
                                 layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5)
-        laygen.route(None, laygen.layers['metal'][4], xy0=laygen.get_inst_pin_xy(ir[i].name, 'I', rg_m4m5)[0]+[0,2],
+        laygen.route(None, laygen.layers['metal'][4], xy0=laygen.get_inst_pin_xy(ir[i].name, 'I', rg_m3m4)[0]+[0,2],
                      xy1=laygen.get_inst_pin_xy(ir[i].name, 'I', rg_m4m5)[0]+[2,2], gridname0=rg_m3m4, gridname1=rg_m4m5,via0=[0,0], via1=[0,0])
         y1 = laygen.get_inst_pin_xy(ir[i].name, 'VDD', rg_m3m4)[0][1]+2
         # R path routing
@@ -369,11 +369,6 @@ def generate_r2r_dac(laygen, objectname_pfix, templib_logic, placement_grid, rou
                                                laygen.get_inst_pin_xy(ir[i].name, 'O', rg_m3m4)[0],
                                                laygen.get_inst_pin_xy(ir[i-1].name, 'I', rg_m4m5)[0]-[2,-6],
                                                y1, rg_m3m4, layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5)
-            rv0, rh0, rv1 = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],
-                                               laygen.get_inst_pin_xy(ir[i-1].name, 'I', rg_m3m4)[0],
-                                               laygen.get_inst_pin_xy(ir[i-1].name, 'I', rg_m4m5)[0]-[2,-6],
-                                             laygen.get_inst_pin_xy(ir[i - 1].name, 'I', rg_m3m4)[0][1]+2, rg_m3m4,
-                                             layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5)
         else:
             # rh0, rv0 = laygen.route_hv(laygen.layers['metal'][2], laygen.layers['metal'][3],
             #                            xy0=laygen.get_inst_pin_xy(ir[i].name, 'VSS', rg_m2m3)[0],
@@ -382,7 +377,15 @@ def generate_r2r_dac(laygen, objectname_pfix, templib_logic, placement_grid, rou
                                                laygen.get_inst_pin_xy(ir[i].name, 'O', rg_m3m4)[0],
                                                laygen.get_inst_pin_xy(ir[i].name, 'VSS', rg_m3m4)[1],
                                                laygen.get_inst_pin_xy(ir[i].name, 'O', rg_m3m4)[0][1]-1, rg_m3m4)
+            laygen.route(None, laygen.layers['metal'][4], xy0=laygen.get_inst_pin_xy(ir[i].name, 'O', rg_m3m4)[0]+np.array([0,-1]),
+                         xy1=laygen.get_inst_pin_xy(ir[i].name, 'O', rg_m3m4)[0]+np.array([4,-1]), gridname0=rg_m3m4)
             laygen.via(None, xy=laygen.get_inst_pin_xy(ir[i].name, 'VSS', rg_m2m3)[1], gridname=rg_m2m3)
+        rv0, rh0, rv1 = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],
+                                         laygen.get_inst_pin_xy(ir[i - 1].name, 'I', rg_m3m4)[0],
+                                         laygen.get_inst_pin_xy(ir[i - 1].name, 'I', rg_m4m5)[0] - [2, -6],
+                                         laygen.get_inst_pin_xy(ir[i - 1].name, 'I', rg_m3m4)[0][1] + 2, rg_m3m4,
+                                         layerv1=laygen.layers['metal'][5], gridname1=rg_m4m5)
+
         # R EN/ENB
         rv0, rh0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2],
                                    xy0=laygen.get_inst_pin_xy(ir[i].name, 'EN', rg_m2m3)[1],
@@ -392,8 +395,8 @@ def generate_r2r_dac(laygen, objectname_pfix, templib_logic, placement_grid, rou
                                xy1=laygen.get_inst_pin_xy(ir[i].name, 'VSS', rg_m2m3)[0], gridname0=rg_m2m3)
 
         # 2R EN/ENB
-        x_en = laygen.get_inst_pin_xy(ibuf1[i].name, 'O', rg_m3m4)[0][0]+4
-        x_enb = laygen.get_inst_pin_xy(ibuf1[i].name, 'O', rg_m3m4)[0][0]+2
+        x_en = laygen.get_inst_pin_xy(ibuf1[i].name, 'O', rg_m3m4)[0][0]+6
+        x_enb = laygen.get_inst_pin_xy(ibuf1[i].name, 'O', rg_m3m4)[0][0]+4
         rv0, rh0, rv1 = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4],
                                          laygen.get_inst_pin_xy(ibuf1[i].name, 'O', rg_m3m4)[0],
                                          np.array([x_en, laygen.get_inst_pin_xy(i2rvdd[i].name, 'EN', rg_m4m5)[0][1]]),
@@ -443,26 +446,26 @@ def generate_r2r_dac(laygen, objectname_pfix, templib_logic, placement_grid, rou
     rvddr_m3 = []
     rvssr_m3 = []
     for i in range(0, int(pwr_dim[0]/2)):
-        rvddl_m3.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+1, 0]), xy1=np.array([2*i+1, 0]), gridname0=rg_m2m3,
+        rvddl_m3.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+0, 0]), xy1=np.array([2*i+0, 0]), gridname0=rg_m2m3,
                      refinstname0=itapl[0].name, refpinname0='VSS', refinstindex0=np.array([0, 0]),
                      refinstname1=itapl[num_row-1].name, refpinname1='VSS', refinstindex1=np.array([0, 0])))
-        rvssl_m3.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+2, 0]), xy1=np.array([2*i+2, 0]), gridname0=rg_m2m3,
+        rvssl_m3.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+1, 0]), xy1=np.array([2*i+1, 0]), gridname0=rg_m2m3,
                      refinstname0=itapl[0].name, refpinname0='VSS', refinstindex0=np.array([0, 0]),
                      refinstname1=itapl[num_row-1].name, refpinname1='VSS', refinstindex1=np.array([0, 0])))
         for j in range(num_row):
-            laygen.via(None, xy=np.array([2*i+1, 0]), gridname=rg_m2m3, refinstname=itapl[j].name, refpinname='VDD')
-            laygen.via(None, xy=np.array([2 * i + 2, 0]), gridname=rg_m2m3, refinstname=itapl[j].name, refpinname='VSS')
+            laygen.via(None, xy=np.array([2*i+0, 0]), gridname=rg_m2m3, refinstname=itapl[j].name, refpinname='VDD')
+            laygen.via(None, xy=np.array([2 * i + 1, 0]), gridname=rg_m2m3, refinstname=itapl[j].name, refpinname='VSS')
         # laygen.pin(name = 'VDDL'+str(i), layer = laygen.layers['pin'][3], refobj = rvddl_m3[-1], gridname=rg_m2m3, netname='VDD')
         # laygen.pin(name = 'VSSL'+str(i), layer = laygen.layers['pin'][3], refobj = rvssl_m3[-1], gridname=rg_m2m3, netname='VSS')
-        rvddr_m3.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+1, 0]), xy1=np.array([2*i+1, 0]), gridname0=rg_m2m3,
+        rvddr_m3.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+0, 0]), xy1=np.array([2*i+0, 0]), gridname0=rg_m2m3,
                      refinstname0=itapr[0].name, refpinname0='VSS', refinstindex0=np.array([0, 0]),
                      refinstname1=itapr[num_row-1].name, refpinname1='VSS', refinstindex1=np.array([0, 0])))
-        rvssr_m3.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+2, 0]), xy1=np.array([2*i+2, 0]), gridname0=rg_m2m3,
+        rvssr_m3.append(laygen.route(None, laygen.layers['metal'][3], xy0=np.array([2*i+1, 0]), xy1=np.array([2*i+1, 0]), gridname0=rg_m2m3,
                      refinstname0=itapr[0].name, refpinname0='VSS', refinstindex0=np.array([0, 0]),
                      refinstname1=itapr[num_row-1].name, refpinname1='VSS', refinstindex1=np.array([0, 0])))
         for j in range(num_row):
-            laygen.via(None, xy=np.array([2*i+1, 0]), gridname=rg_m2m3, refinstname=itapr[j].name, refpinname='VDD')
-            laygen.via(None, xy=np.array([2 * i + 2, 0]), gridname=rg_m2m3, refinstname=itapr[j].name, refpinname='VSS')
+            laygen.via(None, xy=np.array([2*i+0, 0]), gridname=rg_m2m3, refinstname=itapr[j].name, refpinname='VDD')
+            laygen.via(None, xy=np.array([2 * i + 1, 0]), gridname=rg_m2m3, refinstname=itapr[j].name, refpinname='VSS')
         # laygen.pin(name = 'VDDR'+str(i), layer = laygen.layers['pin'][3], refobj = rvddr_m3[-1], gridname=rg_m2m3, netname='VDD')
         # laygen.pin(name = 'VSSR'+str(i), layer = laygen.layers['pin'][3], refobj = rvssr_m3[-1], gridname=rg_m2m3, netname='VSS')
 
