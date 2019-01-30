@@ -489,11 +489,16 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
             laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
                          refinstname0=idmy_in_list[j].name, refpinname0='G0', refinstindex0=np.array([i, 0]),
                          refinstname1=idmy_in_list[j].name, refpinname1='D0', refinstindex1=np.array([i, 0]))
-        laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], xy0=np.array([0, 0]),
-                       xy1=np.array([0, 0]), gridname0=rg_m2m3, gridname1=rg_m2m3_thick,
-                        refinstname0=idmy_in_list[j].name, refpinname0='G0',
-                       refinstindex0=np.array([0, 0]), refinstname1=itap1.name, refpinname1='TAP0',
-                       refinstindex1=np.array([0, 0]), via0=[0, 0]) #gate to VSS
+        # laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], xy0=np.array([0, 0]),
+        #                xy1=np.array([0, 0]), gridname0=rg_m2m3, gridname1=rg_m2m3_thick,
+        #                 refinstname0=idmy_in_list[j].name, refpinname0='G0',
+        #                refinstindex0=np.array([0, 0]), refinstname1=itap1.name, refpinname1='TAP0',
+        #                refinstindex1=np.array([0, 0]), via0=[0, 0]) #gate to VSS
+        laygen.route_hv(laygen.layers['metal'][2], laygen.layers['metal'][3], xy0=np.array([0, 0]),
+                       xy1=np.array([0, 0]), gridname0=rg_m2m3_thick, gridname1=rg_m2m3,
+                        refinstname0=itap1.name, refpinname0='TAP0', refinstindex0=np.array([0, 0]),
+                        refinstname1=idmy_in_list[j].name, refpinname1='G0', refinstindex1=np.array([0, 0]), via1=[0, 0]
+                        ) #gate to VSS
     for i in range(m_in_dum_r-1):
         laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
                      refinstname0=imdmyr_in0.name, refpinname0='G0', refinstindex0=np.array([i, 0]), via0=[0,0],
