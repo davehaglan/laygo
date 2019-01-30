@@ -473,10 +473,14 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
     laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 1]), xy1=np.array([0, 1]), gridname0=rg_m1m2,
                  refinstname0=imbyp.name, refpinname0='D0', refinstindex0=np.array([0, 0]),
                  refinstname1=imin0.name, refpinname1='D0', refinstindex1=np.array([0, 0]))
-    laygen.route_hv(laygen.layers['metal'][2], laygen.layers['metal'][3], xy0=np.array([0, 0]),
-                    xy1=np.array([1, 0]), gridname0=rg_m2m3,
-                    refinstname0=imbyp.name, refpinname0='S0', refinstindex0=np.array([0, 0]),
-                    refinstname1=imin0.name, refpinname1='G0', refinstindex1=np.array([0, 0]))
+    # laygen.route_hv(laygen.layers['metal'][2], laygen.layers['metal'][3], xy0=np.array([0, 0]),
+    #                 xy1=np.array([1, 0]), gridname0=rg_m2m3,
+    #                 refinstname0=imbyp.name, refpinname0='S0', refinstindex0=np.array([0, 0]),
+    #                 refinstname1=imin0.name, refpinname1='G0', refinstindex1=np.array([0, 0]))
+    laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], xy1=np.array([0, 0]),
+                    xy0=np.array([1, 0]), gridname0=rg_m2m3,
+                    refinstname1=imbyp.name, refpinname1='S0', refinstindex1=np.array([0, 0]),
+                    refinstname0=imin0.name, refpinname0='G0', refinstindex0=np.array([0, 0]))
 
     # Input dummy
     idmy_in_list = [imdmyl_in0, imdmyr_in0_0]
