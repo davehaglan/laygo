@@ -561,7 +561,7 @@ def generate_r2r_dac_bcap(laygen, objectname_pfix, templib_logic, placement_grid
     #boundaries
     x0=laygen.templates.get_template('r2r_dac_bcap_unit', workinglib).xy[1][0] + \
            laygen.templates.get_template('tap', templib_logic).xy[1][0]*2
-    m_bnd_float = x0 / laygen.templates.get_template('boundary_bottom').xy[1][0]
+    m_bnd_float = round(x0 / laygen.templates.get_template('boundary_bottom').xy[1][0])
     m_bnd = int(m_bnd_float)
     if not m_bnd_float == m_bnd:
         m_bnd += 1
