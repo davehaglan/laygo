@@ -319,10 +319,10 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
                               shape=[m_sp1x, 1])
     isp4_4x = laygen.relplace("I" + objectname_pfix + 'sp4_4x', devname_mos_space_4x, pg, imbr_in0.name,
                               shape=[m_sp4x, 1], transform='MX')
-    isp4_1x = laygen.relplace("I" + objectname_pfix + 'sp4_1x', devname_mos_space_1x, pg, isp2_4x.name,
+    isp4_1x = laygen.relplace("I" + objectname_pfix + 'sp4_1x', devname_mos_space_1x, pg, isp4_4x.name,
                               shape=[m_sp1x, 1], transform='MX')
     isp5_4x = laygen.relplace("I" + objectname_pfix + 'sp5_4x', devname_tap_space_4x, pg, itapbr1.name, shape=[m_sp4x,1])
-    isp5_1x = laygen.relplace("I" + objectname_pfix + 'sp5_1x', devname_tap_space_1x, pg, isp3_4x.name, shape=[m_sp1x,1])
+    isp5_1x = laygen.relplace("I" + objectname_pfix + 'sp5_1x', devname_tap_space_1x, pg, isp5_4x.name, shape=[m_sp1x,1])
 
     # route
     # VBIAS
@@ -510,11 +510,16 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
         # laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
         #              refinstname0=imdmyr_in0.name, refpinname0='S0', refinstindex0=np.array([i, 0]), via0=[0,0],
         #              refinstname1=imdmyr_in0.name, refpinname1='S0', refinstindex1=np.array([i+1, 0]), via1=[0,0])
-    laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], xy0=np.array([0, 0]),
-                   xy1=np.array([0, 0]), gridname0=rg_m2m3, gridname1=rg_m2m3_thick,
-                    refinstname0=imdmyr_in0.name, refpinname0='G0',
-                   refinstindex0=np.array([1, 0]), refinstname1=itap1.name, refpinname1='TAP0',
-                   refinstindex1=np.array([0, 0]), via0=[0, 0]) #gate to VSS
+    # laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], xy0=np.array([0, 0]),
+    #                xy1=np.array([0, 0]), gridname0=rg_m2m3, gridname1=rg_m2m3_thick,
+    #                 refinstname0=imdmyr_in0.name, refpinname0='G0',
+    #                refinstindex0=np.array([1, 0]), refinstname1=itap1.name, refpinname1='TAP0',
+    #                refinstindex1=np.array([0, 0]), via0=[0, 0]) #gate to VSS
+    laygen.route_hv(laygen.layers['metal'][2], laygen.layers['metal'][3], xy0=np.array([0, 0]),
+                    xy1=np.array([0, 0]), gridname0=rg_m2m3_thick, gridname1=rg_m2m3,
+                    refinstname0=itap1.name, refpinname0='TAP0', refinstindex0=np.array([0, 0]),
+                    refinstname1=imdmyr_in0.name, refpinname1='G0', refinstindex1=np.array([0, 0]), via1=[0, 0]
+                    )  # gate to VSS
 
     # Voff
     for i in range(m_ofst):
