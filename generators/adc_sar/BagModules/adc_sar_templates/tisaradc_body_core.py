@@ -54,6 +54,8 @@ class adc_sar_templates__tisaradc_body_core(Module):
             sar_sa_m_rst, sar_sa_m_rst_d,
             sar_sa_m_rgnn, sar_sa_m_rgnp_d,
             sar_sa_m_buf, doubleSA,
+               vref_sf_m_mirror, vref_sf_m_bias, vref_sf_m_off, vref_sf_m_in, vref_sf_m_bias_dum, vref_sf_m_in_dum,
+               vref_sf_m_byp, vref_sf_m_byp_bias, vref_sf_bias_current, vref_sf,
             sar_drv_m_list,sar_ckgen_m,sar_ckgen_fo, 
             sar_ckgen_ndelay, sar_ckgen_fast,
             sar_logic_m, 
@@ -75,6 +77,8 @@ class adc_sar_templates__tisaradc_body_core(Module):
             samp_intent, 
             num_bits, 
             samp_use_laygo, samp_tgate,
+               sf_lch, sf_nw, sf_m_mirror, sf_m_bias, sf_m_off, sf_m_in, sf_m_bias_dum, sf_m_in_dum, sf_m_byp,
+               sf_m_byp_bias, sf_intent, bias_current, use_sf,
             use_offset, num_slices,
             clk_lch,
             clk_pw, 
@@ -125,6 +129,16 @@ class adc_sar_templates__tisaradc_body_core(Module):
         self.parameters['sar_sa_m_rgnp_d'] = sar_sa_m_rgnp_d
         self.parameters['sar_sa_m_buf'] = sar_sa_m_buf
         self.parameters['doubleSA'] = doubleSA
+        self.parameters['vref_sf_m_mirror'] = vref_sf_m_mirror
+        self.parameters['vref_sf_m_bias'] = vref_sf_m_bias
+        self.parameters['vref_sf_m_in'] = vref_sf_m_in
+        self.parameters['vref_sf_m_off'] = vref_sf_m_off
+        self.parameters['vref_sf_m_bias_dum'] = vref_sf_m_bias_dum
+        self.parameters['vref_sf_m_in_dum'] = vref_sf_m_in_dum
+        self.parameters['vref_sf_m_byp'] = vref_sf_m_byp
+        self.parameters['vref_sf_m_byp_bias'] = vref_sf_m_byp_bias
+        self.parameters['vref_sf_bias_current'] = vref_sf_bias_current
+        self.parameters['vref_sf'] = vref_sf
         self.parameters['sar_drv_m_list'] = sar_drv_m_list
         self.parameters['sar_ckgen_m'] = sar_ckgen_m
         self.parameters['sar_ckgen_fo'] = sar_ckgen_fo
@@ -151,6 +165,19 @@ class adc_sar_templates__tisaradc_body_core(Module):
         self.parameters['num_bits'] = num_bits
         self.parameters['samp_tgate'] = samp_tgate
         self.parameters['samp_use_laygo'] = samp_use_laygo  # if true, use laygo for sampler generation
+        self.parameters['sf_lch'] = sf_lch
+        self.parameters['sf_nw'] = sf_nw
+        self.parameters['sf_m_mirror'] = sf_m_mirror
+        self.parameters['sf_m_bias'] = sf_m_bias
+        self.parameters['sf_m_in'] = sf_m_in
+        self.parameters['sf_m_off'] = sf_m_off
+        self.parameters['sf_m_bias_dum'] = sf_m_bias_dum
+        self.parameters['sf_m_in_dum'] = sf_m_in_dum
+        self.parameters['sf_m_byp'] = sf_m_byp
+        self.parameters['sf_m_byp_bias'] = sf_m_byp_bias
+        self.parameters['sf_intent'] = sf_intent
+        self.parameters['bias_current'] = bias_current
+        self.parameters['use_sf'] = use_sf  # if true, source follower is used before the sampler
         self.parameters['use_offset'] = use_offset
         self.parameters['num_slices'] = num_slices
         self.parameters['clk_lch'] = clk_lch 
@@ -192,6 +219,14 @@ class adc_sar_templates__tisaradc_body_core(Module):
                 ','.join(['ADCO%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
             ','.join(['CLKO%d'%(i) for i in range(num_slices)]):
                 ','.join(['CLKO%d'%(i) for i in range(num_slices)]),
+            ','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]):
+                ','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]),
+            ','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]):
+                ','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]),
+            ','.join(['SF_Voffp%d' % (i) for i in range(num_slices)]):
+                ','.join(['SF_Voffp%d' % (i) for i in range(num_slices)]),
+            ','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]):
+                ','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]),
         }]
         # else:
         #     term_list=[{
@@ -216,11 +251,16 @@ class adc_sar_templates__tisaradc_body_core(Module):
         self.instances['ISAR0'][0].design(
             sar_lch, sar_pw, sar_nw, sar_sa_m, sar_sa_m_d, sar_sa_m_rst, sar_sa_m_rst_d,
             sar_sa_m_rgnn, sar_sa_m_rgnp_d, sar_sa_m_buf, doubleSA,
+            vref_sf_m_mirror, vref_sf_m_bias, vref_sf_m_off, vref_sf_m_in, vref_sf_m_bias_dum, vref_sf_m_in_dum,
+            vref_sf_m_byp, vref_sf_m_byp_bias, vref_sf_bias_current, vref_sf,
             sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay, sar_ckgen_fast,
             sar_logic_m, sar_fsm_m, sar_ret_m, sar_ret_fo, sar_num_inv_bb,
             sar_device_intent, sar_c_m, sar_rdx_array,
             samp_lch, samp_wp, samp_wn, samp_fgn, samp_fg_inbuf_list, samp_fg_outbuf_list,
-            samp_nduml, samp_ndumr, samp_nsep, samp_intent, samp_tgate, num_bits, samp_use_laygo, use_offset, num_slices
+            samp_nduml, samp_ndumr, samp_nsep, samp_intent, samp_tgate, num_bits, samp_use_laygo, use_offset,
+            sf_lch, sf_nw, sf_m_mirror, sf_m_bias, sf_m_off, sf_m_in, sf_m_bias_dum, sf_m_in_dum, sf_m_byp,
+            sf_m_byp_bias, sf_intent, bias_current, use_sf,
+            num_slices
         )
     
         #clock generation
@@ -298,10 +338,54 @@ class adc_sar_templates__tisaradc_body_core(Module):
         self.rename_pin('ASCLKD<3:0>', ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]))
         self.rename_pin('EXTSEL_CLK', ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]))
         self.rename_pin('ADCOUT', ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]))
+        self.rename_pin('SF_Voffp0', ','.join(['SF_Voffp%d'%(i) for i in range(num_slices)]))
+        self.rename_pin('SF_Voffn0', ','.join(['SF_Voffn%d'%(i) for i in range(num_slices)]))
+        self.rename_pin('SF_BIAS', ','.join(['SF_BIAS%d'%(i) for i in range(num_slices)]))
+        self.rename_pin('VREF_SF_BIAS', ','.join(['VREF_SF_BIAS%d'%(i) for i in range(num_slices)]))
 
         if use_offset == False:
             self.remove_pin(','.join(['OSP%d'%(i) for i in range(num_slices)]))
             self.remove_pin(','.join(['OSM%d'%(i) for i in range(num_slices)]))
+        if vref_sf == False:
+            self.remove_pin('VREF_SF_bypass')
+            self.remove_pin(','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]))
+        if use_sf == False:
+            self.remove_pin('SF_bypass')
+            self.remove_pin(','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]))
+            self.remove_pin(','.join(['SF_Voffp%d' % (i) for i in range(num_slices)]))
+            self.remove_pin(','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]))
+
+        # #rename pins
+        # if use_offset == True:
+        #     pin_enum=[','.join(['SF_Voffp%d'%(i) for i in range(num_slices)]),
+        #               ','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]),
+        #               ','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]),
+        #               ','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)])
+        #               ]
+        #     if vref_sf == False:
+        #         pin_enum.remove('VREF_SF_bypass')
+        #         self.remove_pin('VREF_SF_bypass')
+        #         pin_enum.remove(','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]))
+        #         self.remove_pin(','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]))
+        # else:
+        #     pin_enum=[','.join(['SF_Voffp%d'%(i) for i in range(num_slices)]),
+        #               ','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]),
+        #               ','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]),
+        #               ','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)])
+        #               ]
+        #     if vref_sf == False:
+        #         pin_enum.remove('VREF_SF_bypass')
+        #         self.remove_pin('VREF_SF_bypass')
+        #         pin_enum.remove(','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]))
+        #         self.remove_pin(','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]))
+        #     self.remove_pin(','.join(['OSP%d'%(i) for i in range(num_slices)]))
+        #     self.remove_pin(','.join(['OSM%d'%(i) for i in range(num_slices)]))
+        # for pn in pin_enum:
+        #     pn_new=''
+        #     for i in range(num_slices):
+        #         pn_new=pn_new+pn+str(i)+','
+        #     pn_new=pn_new[:-1] #remove the last comma
+        #     self.rename_pin(pn+'0', pn_new)
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

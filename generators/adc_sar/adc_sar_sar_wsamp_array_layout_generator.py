@@ -37,7 +37,7 @@ def generate_sar_wsamp_array(laygen, objectname_pfix, workinglib, sar_name,
                        placement_grid,
                        routing_grid_m3m4, routing_grid_m4m5, routing_grid_m4m5_basic_thick, routing_grid_m5m6,
                        routing_grid_m5m6_thick, routing_grid_m5m6_basic_thick,
-                       num_bits=9, num_slices=8, slice_order=[0,7,1,6,2,5,3,4], use_offset=True, origin=np.array([0, 0])):
+                       num_bits=9, num_slices=8, slice_order=[0,7,1,6,2,5,3,4], use_offset=True, use_sf=False, vref_sf=False, origin=np.array([0, 0])):
     """generate sar array """
     pg = placement_grid
 
@@ -136,7 +136,7 @@ def generate_sar_wsamp_array(laygen, objectname_pfix, workinglib, sar_name,
             rv, rh = laygen.route_vh(layerv=laygen.layers['metal'][3], layerh=laygen.layers['metal'][4],
                                      xy0=pdict_m3m4[i][isar.name]['OSP'][0],
                                      xy1=np.array([0, pdict_m3m4[i][isar.name]['OSP'][0][1]+0-(num_slices*3)+3*slice_order[i]]),
-                                     gridname=rg_m3m4)
+                                     gridname0=rg_m3m4)
             '''
             rv, rh = laygen.route_vh(layerv=laygen.layers['metal'][3], layerh=laygen.layers['metal'][4],
                                      xy0=pdict_m3m4[i][isar.name]['OSP'][0]+np.array([2, 0]),
@@ -153,7 +153,7 @@ def generate_sar_wsamp_array(laygen, objectname_pfix, workinglib, sar_name,
             rv, rh = laygen.route_vh(layerv=laygen.layers['metal'][3], layerh=laygen.layers['metal'][4],
                                      xy0=pdict_m3m4[i][isar.name]['OSM'][0],
                                      xy1=np.array([0, pdict_m3m4[i][isar.name]['OSM'][0][1]+0-(num_slices*3)+3*slice_order[i]+1]),
-                                     gridname=rg_m3m4)
+                                     gridname0=rg_m3m4)
             '''
             rv, rh = laygen.route_vh(layerv=laygen.layers['metal'][3], layerh=laygen.layers['metal'][4],
                                      xy0=pdict_m3m4[i][isar.name]['OSM'][0]+np.array([-2, 0]),
@@ -172,24 +172,36 @@ def generate_sar_wsamp_array(laygen, objectname_pfix, workinglib, sar_name,
                                      xy0=pdict_m3m4[i][isar.name]['OSP'][0],
                                      xy1=np.array(
                                          [0, pdict_m3m4[i][isar.name]['OSP'][0][1] + 0 - (num_slices * 0)]),
-                                     gridname=rg_m3m4)
+                                     gridname0=rg_m3m4)
             rv, rh = laygen.route_vh(layerv=laygen.layers['metal'][3], layerh=laygen.layers['metal'][4],
                                      xy0=pdict_m3m4[i][isar.name]['OSM'][0],
                                      xy1=np.array(
                                          [0, pdict_m3m4[i][isar.name]['OSM'][0][1] + 0 - (num_slices * 0)]),
-                                     gridname=rg_m3m4)
+                                     gridname0=rg_m3m4)
             rv0, rh1 = laygen.route_vh(layerv=laygen.layers['metal'][5], layerh=laygen.layers['metal'][4],
                                        xy0=pdict_m4m5_basic_thick[i][isar.name]['VDDSAR0'][0] + [1, 0],
                                        xy1=np.array([0, pdict_m4m5_basic_thick[i][isar.name]['OSM'][0][1] + 0 - (
                                        num_slices * 0)]),
-                                       gridname=rg_m4m5_basic_thick)
+                                       gridname0=rg_m4m5_basic_thick)
+    # SF_bypass routing
+    if use_sf == True:
+        x0 = laygen.get_template_xy(sar_name, gridname=rg_m3m4, libname=workinglib)[0] * num_slices
+        rbyp = laygen.route(None, laygen.layers['metal'][4],
+                            xy0=np.array([0, pdict_m3m4[0][isar.name]['SF_bypass'][0][1]]),
+                            xy1=np.array([x0, pdict_m3m4[0][isar.name]['SF_bypass'][0][1]]),
+                            gridname0=rg_m3m4)
+        laygen.boundary_pin_from_rect(rbyp, rg_m3m4, 'SF_bypass', laygen.layers['pin'][4], size=8, direction='left')
     #pins
     sar_template = laygen.templates.get_template(sar_name, workinglib)
     sar_pins=sar_template.pins
     sar_xy=deepcopy(isar.xy[0])
     for i in range(num_slices):
-        pin_prefix_list=['INP', 'INM', 'CLK', 'CLKO0', 'CLKO1', 'EXTSEL_CLK']
-        netname_prefix_list=['INP', 'INM', 'CLK', 'CLKO', 'CLKO', 'EXTSEL_CLK']
+        if use_sf == True:
+            pin_prefix_list=['INP', 'INM', 'CLK', 'CLKO0', 'CLKO1', 'EXTSEL_CLK', 'SF_Voffp', 'SF_Voffn', 'SF_BIAS']
+            netname_prefix_list=['INP', 'INM', 'CLK', 'CLKO', 'CLKO', 'EXTSEL_CLK', 'SF_Voffp', 'SF_Voffn', 'SF_BIAS']
+        else:
+            pin_prefix_list=['INP', 'INM', 'CLK', 'CLKO0', 'CLKO1', 'EXTSEL_CLK']
+            netname_prefix_list=['INP', 'INM', 'CLK', 'CLKO', 'CLKO', 'EXTSEL_CLK']
         for j, pfix in enumerate(pin_prefix_list):
             pn=pfix + str(slice_order[i])
             nn=netname_prefix_list[j] + str(slice_order[i])
@@ -202,7 +214,7 @@ def generate_sar_wsamp_array(laygen, objectname_pfix, workinglib, sar_name,
             laygen.add_pin('ADCOUT' + str(slice_order[i]) + '<'+str(j)+'>', 'ADCOUT' + str(slice_order[i]) + '<'+str(j)+'>', sar_xy+sar_pins['ADCOUT<'+str(j)+'>']['xy'], sar_pins['ADCOUT<'+str(j)+'>']['layer'])
         sar_xy+=sar_template.xy[1]*np.array([1, 0])
     #VREF pins
-    sar_xy=deepcopy(isar.xy[0])
+    sar_xy=deepcopy(isar.xy)
     for pn, p in sar_pins.items():
         if pn.startswith('VREF<0>'):
             pxy=sar_xy+sar_pins[pn]['xy']
@@ -216,6 +228,19 @@ def generate_sar_wsamp_array(laygen, objectname_pfix, workinglib, sar_name,
             pxy=sar_xy+sar_pins[pn]['xy']
             pxy[1][0]=pxy[1][0]*num_slices
             laygen.add_pin(pn, 'VREF<2>', pxy, sar_pins[pn]['layer'])
+
+    if vref_sf == True:
+        for pn, p in sar_pins.items():
+            if pn.startswith('VREF_SF_BIAS'):
+                for i in range(num_slices):
+                    pxy = sar_xy + sar_pins[pn]['xy']
+                    laygen.add_pin(pn + str(slice_order[i]), 'VREF_SF_BIAS%d' % (slice_order[i]), pxy,
+                                   sar_pins[pn]['layer'])
+                    sar_xy[0] = sar_xy[0] + isar.size[0]
+        sar_xy = deepcopy(isar.xy)
+        laygen.add_pin('VREF_SF_bypass', 'VREF_SF_bypass', sar_xy + sar_pins['VREF_SF_bypass']['xy'],
+                       sar_pins['VREF_SF_bypass']['layer'])
+
     #VDD/VSS pins (just duplicate from lower hierarchy cells)
     sar_xy=deepcopy(isar.xy[0])
     vddsampcnt=0
@@ -304,6 +329,8 @@ if __name__ == '__main__':
         num_slices=specdict['n_interleave']
         slice_order=sizedict['slice_order']
         use_offset = specdict['use_offset']
+        use_sf = specdict['use_sf']
+        vref_sf = specdict['use_vref_sf']
 
     #sar generation
     cellname='sar_wsamp_array'
@@ -318,7 +345,7 @@ if __name__ == '__main__':
                              routing_grid_m4m5_basic_thick=rg_m4m5_basic_thick, routing_grid_m5m6=rg_m5m6,
                              routing_grid_m5m6_thick=rg_m5m6_thick, routing_grid_m5m6_basic_thick=rg_m5m6_basic_thick,
                              num_bits=num_bits, num_slices=num_slices, slice_order=slice_order,
-                             use_offset=use_offset, origin=np.array([0, 0]))
+                             use_offset=use_offset, vref_sf=vref_sf, use_sf=use_sf, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
     
 

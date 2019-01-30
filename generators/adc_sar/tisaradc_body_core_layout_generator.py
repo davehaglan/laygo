@@ -37,7 +37,7 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
                                 routing_grid_m3m4, routing_grid_m4m5, routing_grid_m4m5_basic_thick, routing_grid_m5m6, routing_grid_m5m6_thick, 
                                 routing_grid_m5m6_thick_basic, routing_grid_m6m7_thick,
                                 num_bits=9, num_slices=8, use_offset=True, clkin_trackm=12, clk_cdac_bits=5, clk_pulse=False,
-                                clkdist_offset=2, ret_use_laygo=True, origin=np.array([0, 0])):
+                                clkdist_offset=2, ret_use_laygo=True, use_sf=False, vref_sf=False, origin=np.array([0, 0])):
     """generate sar array """
     pg = placement_grid
 
@@ -57,13 +57,20 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
     sar_xy = origin + (laygen.get_xy(obj=laygen.get_template(name = ret_name, libname=ret_libname), gridname=pg) * np.array([0, 1]))
     isar = laygen.relplace(name="I" + objectname_pfix + 'SAR0', templatename=sar_name,
                       gridname=pg, refinstname=iret.name, direction='top', template_libname=sar_libname)
-    clkdist_offset_pg=int(clkdist_offset*space_size[1]/laygen.get_grid(pg).height)
-    clkdist_xy = laygen.get_xy(obj =isar, gridname=pg) \
-                 + (laygen.get_xy(obj=laygen.get_template(name = sar_name, libname=sar_libname), gridname=pg) * np.array([0, 1])) \
-                 + np.array([0, clkdist_offset_pg])
+    # clkdist_offset_pg=int(clkdist_offset*space_size[1]/laygen.get_grid(pg).height)
+    # clkdist_xy = laygen.get_xy(obj =isar, gridname=pg) \
+    #              + (laygen.get_xy(obj=laygen.get_template(name = sar_name, libname=sar_libname), gridname=pg) * np.array([0, 1])) \
+    #              + np.array([0, clkdist_offset_pg])
+    clkdist_xy = laygen.templates.get_template(clkdist_name, libname=clkdist_libname).xy
+    clkdist_off_y = laygen.grids.get_absgrid_y(pg, clkdist_xy[0][1])
+    clkdist_off_y_voff_route_phy = int(laygen.grids.get_phygrid_y(rg_m5m6, num_hori * num_vert+4) / \
+                                       laygen.get_template_size('space_1x', gridname=None, libname=logictemplib)[1]+1) * \
+                                   laygen.get_template_size('space_1x', gridname=None, libname=logictemplib)[1]
+    clkdist_off_y_voff_route = laygen.grids.get_absgrid_y(pg, clkdist_off_y_voff_route_phy)
 
-    iclkdist = laygen.place(name="I" + objectname_pfix + 'CLKDIST0', templatename=clkdist_name,
-                      gridname=pg, xy=clkdist_xy, template_libname=clkdist_libname)
+    iclkdist = laygen.relplace(name="I" + objectname_pfix + 'CLKDIST0', templatename=clkdist_name,
+                        gridname=pg, refinstname=isar.name, direction='top',
+                        xy=[0, -clkdist_off_y+clkdist_off_y_voff_route], template_libname=clkdist_libname)
 
 
     sar_template = laygen.templates.get_template(sar_name, sar_libname)
@@ -249,6 +256,21 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
     laygen.add_pin('RSTP', 'RSTP', clkdist_xy+clkdist_pins['RSTP']['xy'], clkdist_pins['RSTP']['layer'])
     laygen.add_pin('RSTN', 'RSTN', clkdist_xy+clkdist_pins['RSTN']['xy'], clkdist_pins['RSTN']['layer'])
 
+    # VREF SF pins
+    if vref_sf == True:
+        for pn, p in sar_pins.items():
+            if pn.startswith('VREF_SF_'):
+                for i in range(num_slices):
+                    pxy = sar_xy + sar_pins[pn]['xy']
+                    laygen.add_pin(pn, pn, pxy, sar_pins[pn]['layer'])
+    # SF pins
+    if use_sf == True:
+        for pn, p in sar_pins.items():
+            if pn.startswith('SF_'):
+                for i in range(num_slices):
+                    pxy = sar_xy + sar_pins[pn]['xy']
+                    laygen.add_pin(pn, pn, pxy, sar_pins[pn]['layer'])
+
     #clkdist-sar routes (clock)
     #make virtual grids and route on the grids (assuming drc clearance of each block)
     # 1x pulsewidth
@@ -391,6 +413,10 @@ if __name__ == '__main__':
         clkin_trackm=sizedict['clk_dis_htree']['m_track']
         clk_cdac_bits = sizedict['clk_dis_cdac']['num_bits']
         clk_pulse=specdict['clk_pulse_overlap']
+        use_sf = specdict['use_sf']
+        vref_sf = specdict['use_vref_sf']
+        num_hori=sizedict['r2rdac_array']['num_hori']
+        num_vert=sizedict['r2rdac_array']['num_vert']
 
     tech=laygen.tech
     utemplib = tech+'_microtemplates_dense'
@@ -459,7 +485,7 @@ if __name__ == '__main__':
                  routing_grid_m5m6_thick_basic=rg_m5m6_thick_basic, 
                  routing_grid_m6m7_thick=rg_m6m7_thick,
                  num_bits=num_bits, num_slices=num_slices, use_offset=use_offset, clkin_trackm=clkin_trackm, clk_cdac_bits=clk_cdac_bits,
-                 clk_pulse=clk_pulse, clkdist_offset=2, ret_use_laygo=ret_use_laygo, origin=np.array([0, 0]))
+                 clk_pulse=clk_pulse, clkdist_offset=2, ret_use_laygo=ret_use_laygo, vref_sf=vref_sf, use_sf=use_sf, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
     
 
