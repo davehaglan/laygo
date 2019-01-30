@@ -705,7 +705,7 @@ def generate_source_follower_vref(laygen, objectname_pfix, placement_grid, routi
         #              xy1=pdict_m4m5_thick[isf_list[i].name]['VBIAS0'][0]+np.array([0, 4]),
         #              gridname0=rg_m4m5_thick, via0=[0, 0])
         rvb = laygen.route(None, laygen.layers['metal'][4],
-                           xy0=pdict_m4m5_thick[isf_list[i].name]['VBIAS0'][0],
+                           xy0=pdict_m4m5_thick[isf_list[i].name]['VBIAS0'][0]+np.array([1,0]),
                            xy1=np.array([pdict_m4m5_thick[isf_list[i].name]['in'][0][0] + 1,
                                          pdict_m4m5_thick[isf_list[i].name]['VBIAS0'][0][1]]),
                            gridname0=rg_m4m5_thick, via1=[0,0])
