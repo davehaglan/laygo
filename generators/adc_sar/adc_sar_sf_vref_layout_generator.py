@@ -225,7 +225,7 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
         origin=np.array([0, 0]))
 
     # generate the first tap row
-    m_tap = max((m_bias_dum*6+m_ofst+int(m_mir/2)*2+m_bias+m_byp_bias), (m_in_dum*3+m_in+m_byp+1))+4
+    m_tap = max((m_bias_dum*6+m_ofst+int(m_mir/2)*2+m_bias+m_byp_bias), (m_in_dum*3+m_in+m_byp+2))+4
     tap_origin = laygen.get_inst_xy(bnd_left[0].name, pg) + laygen.get_template_size('ptap_fast_left', pg)[0]*np.array([1,0])
     [itapbl0, itap0, itapbr0] = generate_tap(laygen, objectname_pfix=objectname_pfix+'PTAP0', placement_grid=pg,
                                              routing_grid_m1m2_thick=rg_m1m2_thick,
@@ -233,10 +233,10 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
                                              m=m_tap, double_rail=False, origin=tap_origin, transform='MX')
 
     # generate the second current mirror & bias devices row
-    if m_bias_dum * 6 + m_ofst + int(m_mir / 2) * 2 + m_bias + m_byp_bias > m_in_dum * 3 + m_in + m_byp + 1:
+    if m_bias_dum * 6 + m_ofst + int(m_mir / 2) * 2 + m_bias + m_byp_bias > m_in_dum * 3 + m_in + m_byp + 2:
         m_bias_dum_r = m_bias_dum
     else:
-        m_bias_dum_r = (m_in_dum*3+m_in+m_byp+1) - (m_bias_dum*5+m_ofst+int(m_mir/2)*2+m_bias+m_byp_bias)
+        m_bias_dum_r = (m_in_dum*3+m_in+m_byp+2) - (m_bias_dum*5+m_ofst+int(m_mir/2)*2+m_bias+m_byp_bias)
     imspl0 = laygen.relplace("I" + objectname_pfix + 'SPL0', devname_mos_space_4x, pg, bnd_left[1].name, shape=np.array([2, 1]))
     imbl0 = laygen.relplace("I" + objectname_pfix + 'BL0', devname_mos_boundary, pg, imspl0.name)
     imdmyl0 = laygen.relplace("I" + objectname_pfix + 'DMYL0', devname_mos_dmy, pg, imbl0.name, shape=np.array([m_bias_dum, 1]))
@@ -275,7 +275,7 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
                                              m=m_tap, double_rail=False, origin=tap_origin, transform='R0')
 
     # generate the fifth input device row
-    if m_bias_dum * 6 + m_ofst + int(m_mir / 2) * 2 + m_bias + m_byp_bias < m_in_dum * 3 + m_in + m_byp + 1:
+    if m_bias_dum * 6 + m_ofst + int(m_mir / 2) * 2 + m_bias + m_byp_bias < m_in_dum * 3 + m_in + m_byp + 2:
         m_in_dum_r = m_in_dum
     else:
         m_in_dum_r = (m_bias_dum * 6 + m_ofst + int(m_mir / 2) * 2 + m_bias) - (m_in_dum * 2 + m_in)
