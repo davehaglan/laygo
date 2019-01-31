@@ -253,7 +253,7 @@ def generate_r2r_dac_array(laygen, objectname_pfix, templib_logic, placement_gri
                                         0] - np.array([j, 0]), gridname=rg_m4m5)
                 laygen.boundary_pin_from_rect(rh1, rg_m5m6_thick, 'out<' + str(num_hori * j + i) + '>',
                                               laygen.layers['pin'][6], size=4, direction='right')
-            elif num_hori * j + i == num_slices*3: # SF_BIAS routing with thick wire
+            elif num_hori * j + i == num_slices*2: # SF_BIAS routing with thick wire
                 rv1, rh1 = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6],
                                            xy0=laygen.get_inst_pin_xy(irdac[j].name, 'out', rg_m5m6_basic_thick,
                                                                       index=np.array([i, 0]))[0] - np.array([j, -1]),
