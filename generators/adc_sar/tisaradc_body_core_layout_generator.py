@@ -96,6 +96,7 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
     pdict_m3m4=laygen.get_inst_pin_xy(None, None, rg_m3m4)
     pdict_m4m5=laygen.get_inst_pin_xy(None, None, rg_m4m5)
     pdict_m4m5_basic_thick=laygen.get_inst_pin_xy(None, None, rg_m4m5_basic_thick)
+    pdict_m4m5_thick=laygen.get_inst_pin_xy(None, None, rg_m4m5_thick)
     pdict_m5m6=laygen.get_inst_pin_xy(None, None, rg_m5m6)
     pdict_m5m6_thick=laygen.get_inst_pin_xy(None, None, rg_m5m6_thick)
     pdict_m5m6_thick_basic=laygen.get_inst_pin_xy(None, None, rg_m5m6_thick_basic)
@@ -157,43 +158,50 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
     #                                      offset_start_index=0, offset_end_index=0)
 
     #input pins
-    #make virtual grids and route on the grids (assuming drc clearance of each block)
-    rg_m5m6_thick_temp_sig='route_M5_M6_thick_temp_sig'
-    laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m5m6_thick, gridname_output=rg_m5m6_thick_temp_sig,
-                                          instname=isar.name, 
-                                          inst_pin_prefix=['INP', 'INM'], xy_grid_type='xgrid')
-    pdict_m5m6_thick_temp_sig = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick_temp_sig)
-    inp_x_list=[]
-    inm_x_list=[]
-    num_input_track=4
-    in_x0 = pdict_m5m6_thick_temp_sig[isar.name]['INP0'][0][0]
-    in_x1 = pdict_m5m6_thick_temp_sig[isar.name]['INM0'][0][0]
-    in_y0 = pdict_m5m6_thick_temp_sig[isar.name]['INP0'][1][1]
-    in_y1 = in_y0+6
-    in_y2 = in_y1+2*num_input_track
-    for i in range(num_slices):
-        in_x0 = min(in_x0, pdict_m5m6_thick_temp_sig[isar.name]['INP'+str(i)][0][0])
-        in_x1 = max(in_x1, pdict_m5m6_thick_temp_sig[isar.name]['INM'+str(i)][0][0])
-        laygen.route(None, laygen.layers['metal'][5],
-                     xy0=np.array([pdict_m5m6_thick_temp_sig[isar.name]['INP'+str(i)][0][0], in_y0]),
-                     xy1=np.array([pdict_m5m6_thick_temp_sig[isar.name]['INP'+str(i)][0][0], in_y2]), 
-                     gridname0=rg_m5m6_thick_temp_sig)
-        laygen.route(None, laygen.layers['metal'][5],
-                     xy0=np.array([pdict_m5m6_thick_temp_sig[isar.name]['INM'+str(i)][0][0], in_y0]),
-                     xy1=np.array([pdict_m5m6_thick_temp_sig[isar.name]['INM'+str(i)][0][0], in_y2]), 
-                     gridname0=rg_m5m6_thick_temp_sig)
-        for j in range(num_input_track):
-            laygen.via(None,np.array([pdict_m5m6_thick_temp_sig[isar.name]['INP'+str(i)][0][0], in_y1+2*j]), rg_m5m6_thick_temp_sig)
-            laygen.via(None,np.array([pdict_m5m6_thick_temp_sig[isar.name]['INM'+str(i)][0][0], in_y1+2*j+1]), rg_m5m6_thick_temp_sig)
-    #in_x0 -= 2
-    #in_x1 += 2
-    rinp=[]
-    rinm=[]
-    for i in range(num_input_track):
-        rinp.append(laygen.route(None, laygen.layers['metal'][6], xy0=np.array([in_x0, in_y1+2*i]), xy1=np.array([in_x1, in_y1+2*i]), gridname0=rg_m5m6_thick_temp_sig))
-        rinm.append(laygen.route(None, laygen.layers['metal'][6], xy0=np.array([in_x0, in_y1+2*i+1]), xy1=np.array([in_x1, in_y1+2*i+1]), gridname0=rg_m5m6_thick_temp_sig))
-        laygen.add_pin('INP' + str(i), 'INP', rinp[-1].xy, laygen.layers['pin'][6])
-        laygen.add_pin('INM' + str(i), 'INM', rinm[-1].xy, laygen.layers['pin'][6])
+    if input_htree == False:
+        #make virtual grids and route on the grids (assuming drc clearance of each block)
+        rg_m5m6_thick_temp_sig='route_M5_M6_thick_temp_sig'
+        laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m5m6_thick, gridname_output=rg_m5m6_thick_temp_sig,
+                                              instname=isar.name,
+                                              inst_pin_prefix=['INP', 'INM'], xy_grid_type='xgrid')
+        pdict_m5m6_thick_temp_sig = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick_temp_sig)
+        inp_x_list=[]
+        inm_x_list=[]
+        num_input_track=4
+        in_x0 = pdict_m5m6_thick_temp_sig[isar.name]['INP0'][0][0]
+        in_x1 = pdict_m5m6_thick_temp_sig[isar.name]['INM0'][0][0]
+        in_y0 = pdict_m5m6_thick_temp_sig[isar.name]['INP0'][1][1]
+        in_y1 = in_y0+6
+        in_y2 = in_y1+2*num_input_track
+        for i in range(num_slices):
+            in_x0 = min(in_x0, pdict_m5m6_thick_temp_sig[isar.name]['INP'+str(i)][0][0])
+            in_x1 = max(in_x1, pdict_m5m6_thick_temp_sig[isar.name]['INM'+str(i)][0][0])
+            laygen.route(None, laygen.layers['metal'][5],
+                         xy0=np.array([pdict_m5m6_thick_temp_sig[isar.name]['INP'+str(i)][0][0], in_y0]),
+                         xy1=np.array([pdict_m5m6_thick_temp_sig[isar.name]['INP'+str(i)][0][0], in_y2]),
+                         gridname0=rg_m5m6_thick_temp_sig)
+            laygen.route(None, laygen.layers['metal'][5],
+                         xy0=np.array([pdict_m5m6_thick_temp_sig[isar.name]['INM'+str(i)][0][0], in_y0]),
+                         xy1=np.array([pdict_m5m6_thick_temp_sig[isar.name]['INM'+str(i)][0][0], in_y2]),
+                         gridname0=rg_m5m6_thick_temp_sig)
+            for j in range(num_input_track):
+                laygen.via(None,np.array([pdict_m5m6_thick_temp_sig[isar.name]['INP'+str(i)][0][0], in_y1+2*j]), rg_m5m6_thick_temp_sig)
+                laygen.via(None,np.array([pdict_m5m6_thick_temp_sig[isar.name]['INM'+str(i)][0][0], in_y1+2*j+1]), rg_m5m6_thick_temp_sig)
+        #in_x0 -= 2
+        #in_x1 += 2
+        rinp=[]
+        rinm=[]
+        for i in range(num_input_track):
+            rinp.append(laygen.route(None, laygen.layers['metal'][6], xy0=np.array([in_x0, in_y1+2*i]), xy1=np.array([in_x1, in_y1+2*i]), gridname0=rg_m5m6_thick_temp_sig))
+            rinm.append(laygen.route(None, laygen.layers['metal'][6], xy0=np.array([in_x0, in_y1+2*i+1]), xy1=np.array([in_x1, in_y1+2*i+1]), gridname0=rg_m5m6_thick_temp_sig))
+            laygen.add_pin('INP' + str(i), 'INP', rinp[-1].xy, laygen.layers['pin'][6])
+            laygen.add_pin('INM' + str(i), 'INM', rinm[-1].xy, laygen.layers['pin'][6])
+    else:
+        for i in range(num_slices):
+            pn = 'INP' + str(i)
+            laygen.pin(name=pn, layer=laygen.layers['pin'][5], xy=pdict_m4m5_thick[isar.name][pn], gridname=rg_m4m5_thick)
+            pn = 'INM' + str(i)
+            laygen.pin(name=pn, layer=laygen.layers['pin'][5], xy=pdict_m4m5_thick[isar.name][pn], gridname=rg_m4m5_thick)
 
     #clk output pins
     #laygen.add_pin('CLKBOUT_NC', 'CLKBOUT_NC', np.array([sar_xy, sar_xy])+sar_pins['CLKO07']['xy'], sar_pins['CLKO07']['layer'])
@@ -415,6 +423,7 @@ if __name__ == '__main__':
         clk_pulse=specdict['clk_pulse_overlap']
         use_sf = specdict['use_sf']
         vref_sf = specdict['use_vref_sf']
+        input_htree = specdict['input_htree']
         num_hori=sizedict['r2rdac_array']['num_hori']
         num_vert=sizedict['r2rdac_array']['num_vert']
 

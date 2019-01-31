@@ -319,7 +319,7 @@ if __name__ == '__main__':
             #stage
             level = lvl,
             #track number
-            trackm = 2,
+            trackm = 1,
             shieldm = 1,
             #divide ratio
             ratio = [ratio]*lvl,

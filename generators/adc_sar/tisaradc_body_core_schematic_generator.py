@@ -122,6 +122,7 @@ if load_from_file==True:
     params['sar_device_intent']=sizedict['device_intent']
     params['samp_lch']=sizedict['lch']
     params['samp_intent']=sizedict['device_intent']
+    params['input_htree']=specdict['input_htree']
     #CLKDIS sizing
     params['clk_lch'] = sizedict['lch']
     params['clk_pw'] = sizedict['pw']
@@ -145,6 +146,7 @@ if load_from_file==True:
     params['ret_m_latch']=sizedict['retimer']['ret_m_latch']
     params['ret_m_srbuf']=sizedict['retimer']['ret_m_srbuf']
     params['ret_m_sr']=sizedict['retimer']['ret_m_sr']
+
 #sampler sizing
 if params['samp_use_laygo']==True:
     params['samp_wp']=params['sar_pw']
