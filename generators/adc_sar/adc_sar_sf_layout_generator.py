@@ -117,7 +117,7 @@ def generate_tap(laygen, objectname_pfix, placement_grid, routing_grid_m1m2_thic
         for i in range(0, m, 1):
             laygen.via(name=None, xy=[0, 1], refobj=itap0.elements[i, 0].pins['TAP0'], gridname=rg12t)
         if m % 2 == 0:
-            laygen.via(name=None, xy=[0, 1], refobj=itap0.elements[m - 1, 0].pins['TAP1'], gridname=rg12t)
+            laygen.via(name=None, xy=[0, 1], refobj=itap0.elements[m - 1, 0].pins['TAP2'], gridname=rg12t)
     if double_rail==True: #location of track
         laygen.route(name=None, xy0=[0, -1], xy1=[0, -1], gridname0=rg12t,
                      refobj0=itap0.elements[0, 0].pins['TAP0'], refobj1=itap0.elements[m-1, 0].pins['TAP1'])
