@@ -303,36 +303,41 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
                 offset_start_index=1, offset_end_index=0)
 
     #osp/osm route
-    pdict_os_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5_basic_thick)
-    rosp_m5=[]
-    rosm_m5=[]
-    for i in range(num_slices):
-        rh0, rv0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], 
-                        pdict_os_m4m5[isar.name]['OSP'+str(i)][0], pdict_os_m4m5[isar.name]['OSP'+str(i)][0]+np.array([-i-2, -10]), gridname=rg_m4m5_basic_thick)
-        rosp_m5.append(rv0)
-        rh0, rv0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], 
-                        pdict_os_m4m5[isar.name]['OSM'+str(i)][0], pdict_os_m4m5[isar.name]['OSM'+str(i)][0]+np.array([-num_slices-i-2, -10]), gridname=rg_m4m5_basic_thick)
-        rosm_m5.append(rv0)
-    pdict_os_m5m6 = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick)
-    x0=pdict_os_m5m6[isar.name]['VREF0<0>'][0][0]-4*num_slices
-    y0=pdict_os_m5m6[isar.name]['VREF0<0>'][0][1]-8
-    rosp_m6=[]
-    rosm_m6=[]
-    for i in range(num_slices):
-        xy0=laygen.get_xy(obj = rosp_m5[i], gridname=rg_m5m6_thick, sort=True)[0]
-        rv0, rh0 = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6], xy0, np.array([x0, y0-2*i]), gridname=rg_m5m6_thick)
-        laygen.boundary_pin_from_rect(rh0, rg_m5m6_thick, 'OSP' + str(i), laygen.layers['pin'][6], size=6,
-                                      direction='left')
-        rosp_m6.append(rh0)
-        xy0=laygen.get_xy(obj = rosm_m5[i], gridname=rg_m5m6_thick, sort=True)[0]
-        rv0, rh0 = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6], xy0, np.array([x0, y0-2*i-1]), gridname=rg_m5m6_thick)
-        laygen.boundary_pin_from_rect(rh0, rg_m5m6_thick, 'OSM' + str(i), laygen.layers['pin'][6], size=6,
-                                      direction='left')
-        rosm_m6.append(rh0)
+    if use_offset == True:
+        pdict_os_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5_basic_thick)
+        rosp_m5=[]
+        rosm_m5=[]
+        for i in range(num_slices):
+            rh0, rv0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
+                            pdict_os_m4m5[isar.name]['OSP'+str(i)][0], pdict_os_m4m5[isar.name]['OSP'+str(i)][0]+np.array([-i-2, -10]), gridname=rg_m4m5_basic_thick)
+            rosp_m5.append(rv0)
+            rh0, rv0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
+                            pdict_os_m4m5[isar.name]['OSM'+str(i)][0], pdict_os_m4m5[isar.name]['OSM'+str(i)][0]+np.array([-num_slices-i-2, -10]), gridname=rg_m4m5_basic_thick)
+            rosm_m5.append(rv0)
+        pdict_os_m5m6 = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick)
+        x0=pdict_os_m5m6[isar.name]['VREF0<0>'][0][0]-4*num_slices
+        y0=pdict_os_m5m6[isar.name]['VREF0<0>'][0][1]-8
+        rosp_m6=[]
+        rosm_m6=[]
+        for i in range(num_slices):
+            xy0=laygen.get_xy(obj = rosp_m5[i], gridname=rg_m5m6_thick, sort=True)[0]
+            rv0, rh0 = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6], xy0, np.array([x0, y0-2*i]), gridname=rg_m5m6_thick)
+            laygen.boundary_pin_from_rect(rh0, rg_m5m6_thick, 'OSP' + str(i), laygen.layers['pin'][6], size=6,
+                                          direction='left')
+            rosp_m6.append(rh0)
+            xy0=laygen.get_xy(obj = rosm_m5[i], gridname=rg_m5m6_thick, sort=True)[0]
+            rv0, rh0 = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6], xy0, np.array([x0, y0-2*i-1]), gridname=rg_m5m6_thick)
+            laygen.boundary_pin_from_rect(rh0, rg_m5m6_thick, 'OSM' + str(i), laygen.layers['pin'][6], size=6,
+                                          direction='left')
+            rosm_m6.append(rh0)
     
             
     #other pins - duplicate
-    pin_prefix_list=['INP', 'INM', 'VREF', 'ASCLKD', 'EXTSEL_CLK', 'ADCOUT', 'CLKOUT_DES', 'CLKBOUT_NC', 'CLKCAL', 'RSTP', 'RSTN', 'CLKIP', 'CLKIN']
+    pin_prefix_list=['INP', 'INM', 'VREF', 'ASCLKD', 'EXTSEL_CLK', 'ADCOUT', 'CLKOUT_DES', 'CLKCAL', 'RSTP', 'RSTN', 'CLKIP', 'CLKIN', 'SF_', 'VREF_SF_']
+    if use_sf == False:
+        pin_prefix_list.remove('SF_')
+    if vref_sf == False:
+        pin_prefix_list.remove('VREF_SF_')
     for pn, p in sar_pins.items():
         for pfix in pin_prefix_list:
             if pn.startswith(pfix):
@@ -398,6 +403,9 @@ if __name__ == '__main__':
             specdict = yaml.load(stream)
         num_bits=specdict['n_bit']
         num_slices=specdict['n_interleave']
+        use_offset=specdict['use_offset']
+        use_sf = specdict['use_sf']
+        vref_sf = specdict['use_vref_sf']
 
     cellname = 'tisaradc_body'
     tisar_core_name = 'tisaradc_body_core'
