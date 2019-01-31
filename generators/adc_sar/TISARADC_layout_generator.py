@@ -67,16 +67,17 @@ def generate_TISARADC(laygen, objectname_pfix, sar_libname, rdac_libname, space_
     elif num_input_shield_track == 1:
         htree_off_x = laygen.get_template_pin_xy(htree_name, 'VSS_0_0', rg_m7m8_thick, libname=workinglib)[0][0] - \
                       int(laygen.get_template_size(sar_slice_name, rg_m7m8_thick, libname=workinglib)[0]/2+0.5)
-
-    sar_xy = origin + (laygen.get_template_size(rdac_name, gridname=pg, libname=rdac_libname)*np.array([1,0]) )
+    # sar_xy = origin + (laygen.get_template_size(rdac_name, gridname=pg, libname=rdac_libname)*np.array([1,0]) )
+    sar_xy = origin
     isar = laygen.relplace(name="I" + objectname_pfix + 'SAR0', templatename=sar_name,
                       gridname=pg, xy=sar_xy, template_libname=sar_libname)
     irdac = laygen.relplace(name="I" + objectname_pfix + 'RDAC0', templatename=rdac_name,
                       gridname=pg, transform='R0', xy=[-rdac_off_x, 0],
                       template_libname=rdac_libname)
-    ihtree_in = laygen.relplace(name="I" + objectname_pfix + 'HTREE0', templatename=htree_name,
-                      gridname=rg_m7m8_thick, transform='MX', xy=[-htree_off_x, htree_off_y],
-                      template_libname=workinglib)
+    if input_htree == True:
+        ihtree_in = laygen.relplace(name="I" + objectname_pfix + 'HTREE0', templatename=htree_name,
+                          gridname=rg_m7m8_thick, transform='MX', xy=[-htree_off_x, htree_off_y],
+                          template_libname=workinglib)
 
     sar_template = laygen.templates.get_template(sar_name, sar_libname)
     sar_pins=sar_template.pins
@@ -100,33 +101,34 @@ def generate_TISARADC(laygen, objectname_pfix, sar_libname, rdac_libname, space_
     pdict_m5m6_thick_basic=laygen.get_inst_pin_xy(None, None, rg_m5m6_thick_basic)
 
     # ADC input route
-    rinp_m7=[]
-    rinm_m7=[]
-    num_input_track = 2 # defined in tisar_htree_diff_m7m8, to be parameterized
-    for i in range(num_slices):
-        inp_xy_m5 = pdict_m5m6_thick[isar.name]['INP%d' % i][1]
-        inm_xy_m5 = pdict_m5m6_thick[isar.name]['INM%d' % i][1]
-        for j in range(num_input_track):
-            inp_xy_m7 = laygen.get_inst_pin_xy(ihtree_in.name, 'WPO_' + str(slice_order.index(i)) + '_' + str(j), rg_m6m7_thick)[1]
-            inm_xy_m7 = laygen.get_inst_pin_xy(ihtree_in.name, 'WNO_' + str(slice_order.index(i)) + '_' + str(j), rg_m6m7_thick)[1]
-            laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][6],
-                         xy0=inp_xy_m5, xy1=inp_xy_m7, track_y=inp_xy_m5[1]-3,
-                         gridname0=rg_m5m6_thick, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7_thick)
-            laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][6],
-                             xy0=inm_xy_m5, xy1=inm_xy_m7, track_y=inm_xy_m5[1]-2,
+    if input_htree == True:
+        rinp_m7=[]
+        rinm_m7=[]
+        num_input_track = 1 # defined in tisar_htree_diff_m7m8, to be parameterized
+        for i in range(num_slices):
+            inp_xy_m5 = pdict_m5m6_thick[isar.name]['INP%d' % i][1]
+            inm_xy_m5 = pdict_m5m6_thick[isar.name]['INM%d' % i][1]
+            for j in range(num_input_track):
+                inp_xy_m7 = laygen.get_inst_pin_xy(ihtree_in.name, 'WPO_' + str(slice_order.index(i)) + '_' + str(j), rg_m6m7_thick)[1]
+                inm_xy_m7 = laygen.get_inst_pin_xy(ihtree_in.name, 'WNO_' + str(slice_order.index(i)) + '_' + str(j), rg_m6m7_thick)[1]
+                laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][6],
+                             xy0=inp_xy_m5, xy1=inp_xy_m7, track_y=inp_xy_m5[1]-3,
                              gridname0=rg_m5m6_thick, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7_thick)
-        # for j in range(num_input_shield_track):
-        #     for k in range(2):
-        #         laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][6],
-        #                      xy0=laygen.get_inst_pin_xy(iret.name, 'VSS' + str(2*i+k), rg_m5m6_thick)[1],
-        #                      xy1=laygen.get_inst_pin_xy(ihtree_in.name, 'VSS_' + str(i) + '_' + str(j), rg_m6m7_thick)[1],
-        #                      track_y=laygen.get_inst_pin_xy(ihtree_in.name, 'VSS_' + str(i) + '_' + str(j), rg_m6m7_thick)[0][1],
-        #                      gridname0=rg_m5m6_thick, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7_thick)
-    for j in range(num_input_track):
-        inp_xy_m7 = laygen.get_inst_pin_xy(ihtree_in.name, 'WPI_' + str(j), rg_m6m7_thick)
-        inm_xy_m7 = laygen.get_inst_pin_xy(ihtree_in.name, 'WNI_' + str(num_input_shield_track+num_input_track+j), rg_m6m7_thick)
-        laygen.pin('INP_'+str(j), xy=inp_xy_m7, layer=laygen.layers['pin'][7], gridname=rg_m6m7_thick, netname='INP')
-        laygen.pin('INM_' + str(j), xy=inm_xy_m7, layer=laygen.layers['pin'][7], gridname=rg_m6m7_thick, netname='INM')
+                laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][6],
+                                 xy0=inm_xy_m5, xy1=inm_xy_m7, track_y=inm_xy_m5[1]-2,
+                                 gridname0=rg_m5m6_thick, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7_thick)
+            # for j in range(num_input_shield_track):
+            #     for k in range(2):
+            #         laygen.route_vhv(layerv0=laygen.layers['metal'][5], layerh=laygen.layers['metal'][6],
+            #                      xy0=laygen.get_inst_pin_xy(iret.name, 'VSS' + str(2*i+k), rg_m5m6_thick)[1],
+            #                      xy1=laygen.get_inst_pin_xy(ihtree_in.name, 'VSS_' + str(i) + '_' + str(j), rg_m6m7_thick)[1],
+            #                      track_y=laygen.get_inst_pin_xy(ihtree_in.name, 'VSS_' + str(i) + '_' + str(j), rg_m6m7_thick)[0][1],
+            #                      gridname0=rg_m5m6_thick, layerv1=laygen.layers['metal'][7], gridname1=rg_m6m7_thick)
+        for j in range(num_input_track):
+            inp_xy_m7 = laygen.get_inst_pin_xy(ihtree_in.name, 'WPI_' + str(j), rg_m6m7_thick)
+            inm_xy_m7 = laygen.get_inst_pin_xy(ihtree_in.name, 'WNI_' + str(num_input_shield_track+num_input_track+j), rg_m6m7_thick)
+            laygen.pin('INP_'+str(j), xy=inp_xy_m7, layer=laygen.layers['pin'][7], gridname=rg_m6m7_thick, netname='INP')
+            laygen.pin('INM_' + str(j), xy=inm_xy_m7, layer=laygen.layers['pin'][7], gridname=rg_m6m7_thick, netname='INM')
 
     # SF_bypass route
     bypass_sar = pdict_m4m5[isar.name]['SF_bypass'][0]
@@ -155,28 +157,33 @@ def generate_TISARADC(laygen, objectname_pfix, sar_libname, rdac_libname, space_
                             xy0=laygen.get_inst_pin_xy(irdac.name, 'out<' + str(num_slices+i) + '>', rg_m5m6_thick_basic)[0],
                             xy1=laygen.get_inst_pin_xy(isar.name, 'SF_Voffn' + str(i), rg_m5m6_thick_basic)[0],
                             gridname0=rg_m5m6_thick_basic)
-            laygen.route_hv(laygen.layers['metal'][6], laygen.layers['metal'][5],
-                            xy0=laygen.get_inst_pin_xy(irdac.name, 'out<' + str(num_slices*2+i) + '>', rg_m5m6_thick_basic)[0],
-                            xy1=np.array([laygen.get_inst_pin_xy(isar.name, 'SF_Voffp' + str(i), rg_m5m6_thick_basic)[0][0]-1,
-                                          laygen.get_inst_pin_xy(isar.name, 'samp_body' + str(i)+'_M6', rg_m5m6_thick_basic)[0][1]]),
-                            gridname0=rg_m5m6_thick_basic, gridname1=rg_m5m6_thick_basic)
-            laygen.via(None,np.array([laygen.get_inst_pin_xy(isar.name, 'SF_Voffp' + str(i), rg_m5m6_thick)[0][0]-1,
-                                      laygen.get_inst_pin_xy(isar.name, 'samp_body' + str(i)+'_M6', rg_m5m6_thick)[0][1]]), rg_m5m6_thick)
+            # laygen.route_hv(laygen.layers['metal'][6], laygen.layers['metal'][5],
+            #                 xy0=laygen.get_inst_pin_xy(irdac.name, 'out<' + str(num_slices*2+i) + '>', rg_m5m6_thick_basic)[0],
+            #                 xy1=np.array([laygen.get_inst_pin_xy(isar.name, 'SF_Voffp' + str(i), rg_m5m6_thick_basic)[0][0]-1,
+            #                               laygen.get_inst_pin_xy(isar.name, 'samp_body' + str(i)+'_M6', rg_m5m6_thick_basic)[0][1]]),
+            #                 gridname0=rg_m5m6_thick_basic, gridname1=rg_m5m6_thick_basic)
+            # laygen.via(None,np.array([laygen.get_inst_pin_xy(isar.name, 'SF_Voffp' + str(i), rg_m5m6_thick)[0][0]-1,
+            #                           laygen.get_inst_pin_xy(isar.name, 'samp_body' + str(i)+'_M6', rg_m5m6_thick)[0][1]]), rg_m5m6_thick)
             laygen.route_hv(laygen.layers['metal'][6], laygen.layers['metal'][5],
                             xy0=laygen.get_inst_pin_xy(irdac.name, 'out<' + str(num_vert*num_hori-1) + '>', rg_m5m6_thick)[0],
                             xy1=laygen.get_inst_pin_xy(isar.name, 'VREF_SF_BIAS' + str(i), rg_m5m6_thick)[0],
                             gridname0=rg_m5m6_thick)
+            laygen.route(None, laygen.layers['metal'][6],
+                         xy0=laygen.get_inst_pin_xy(irdac.name, 'out<' + str(num_slices * 2) + '>', rg_m5m6_thick)[0],
+                         xy1=laygen.get_inst_pin_xy(isar.name, 'SF_BIAS' + str(i), rg_m5m6_thick)[0],
+                         gridname0=rg_m5m6_thick)  # connect all SF_BIAS
 
     # Input pins
-    htree_template = laygen.templates.get_template(htree_name, sar_libname)
-    htree_pins = htree_template.pins
-    htree_xy=ihtree_in.xy
-    for pn, p in htree_pins.items():
-        pin_prefix_list = ['INP', 'INM']
+    if input_htree == True:
+        htree_template = laygen.templates.get_template(htree_name, sar_libname)
+        htree_pins = htree_template.pins
+        htree_xy=ihtree_in.xy
         for pn, p in htree_pins.items():
-            for pfix in pin_prefix_list:
-                if pn.startswith(pfix):
-                    laygen.add_pin(pn, htree_pins[pn]['netname'], htree_xy + htree_pins[pn]['xy'], htree_pins[pn]['layer'])
+            pin_prefix_list = ['INP', 'INM']
+            for pn, p in htree_pins.items():
+                for pfix in pin_prefix_list:
+                    if pn.startswith(pfix):
+                        laygen.add_pin(pn, htree_pins[pn]['netname'], htree_xy + htree_pins[pn]['xy'], htree_pins[pn]['layer'])
 
     # TIADC pins
     sar_template = laygen.templates.get_template(sar_name, sar_libname)
@@ -198,6 +205,9 @@ def generate_TISARADC(laygen, objectname_pfix, sar_libname, rdac_libname, space_
             pin_prefix_list.remove('SF_')
         if vref_sf == False:
             pin_prefix_list.remove('VREF_SF_')
+        if input_htree == True:
+            pin_prefix_list.remove('INP')
+            pin_prefix_list.remove('INM')
         for pn, p in sar_pins.items():
             for pfix in pin_prefix_list:
                 if pn.startswith(pfix):
@@ -308,9 +318,10 @@ if __name__ == '__main__':
         clk_pulse=specdict['clk_pulse_overlap']
         use_sf = specdict['use_sf']
         vref_sf = specdict['use_vref_sf']
+        input_htree = specdict['input_htree']
 
     cellname = 'TISARADC'
-    sar_name = 'tisaradc_body'
+    sar_name = 'tisaradc_body_core'
     sar_slice_name = 'sar_wsamp'
     rdac_name = 'r2r_dac_array'
     htree_name = 'tisar_htree_diff'
