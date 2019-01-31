@@ -225,7 +225,7 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
         origin=np.array([0, 0]))
 
     # generate the first tap row
-    m_tap = max((m_bias_dum*6+m_ofst+int(m_mir/2)*2+m_bias+m_byp_bias), (m_in_dum*3+m_in+m_byp+1))+4
+    m_tap = max((m_bias_dum*6+m_ofst+int(m_mir/2)*2+m_bias+m_byp_bias), (m_in_dum*3+m_in+m_byp+3))+4
     tap_origin = laygen.get_inst_xy(bnd_left[0].name, pg) + laygen.get_template_size('ptap_fast_left', pg)[0]*np.array([1,0])
     [itapbl0, itap0, itapbr0] = generate_tap(laygen, objectname_pfix=objectname_pfix+'PTAP0', placement_grid=pg,
                                              routing_grid_m1m2_thick=rg_m1m2_thick,
@@ -233,10 +233,10 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
                                              m=m_tap, double_rail=False, origin=tap_origin, transform='MX')
 
     # generate the second current mirror & bias devices row
-    if m_bias_dum * 6 + m_ofst + int(m_mir / 2) * 2 + m_bias + m_byp_bias > m_in_dum * 3 + m_in + m_byp + 1:
+    if m_bias_dum * 6 + m_ofst + int(m_mir / 2) * 2 + m_bias + m_byp_bias > m_in_dum * 3 + m_in + m_byp + 3:
         m_bias_dum_r = m_bias_dum
     else:
-        m_bias_dum_r = (m_in_dum*3+m_in+m_byp+1) - (m_bias_dum*5+m_ofst+int(m_mir/2)*2+m_bias+m_byp_bias)
+        m_bias_dum_r = (m_in_dum*3+m_in+m_byp+3) - (m_bias_dum*5+m_ofst+int(m_mir/2)*2+m_bias+m_byp_bias)
     imspl0 = laygen.relplace("I" + objectname_pfix + 'SPL0', devname_mos_space_4x, pg, bnd_left[1].name, shape=np.array([2, 1]))
     imbl0 = laygen.relplace("I" + objectname_pfix + 'BL0', devname_mos_boundary, pg, imspl0.name)
     imdmyl0 = laygen.relplace("I" + objectname_pfix + 'DMYL0', devname_mos_dmy, pg, imbl0.name, shape=np.array([m_bias_dum, 1]))
@@ -275,7 +275,7 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
                                              m=m_tap, double_rail=False, origin=tap_origin, transform='R0')
 
     # generate the fifth input device row
-    if m_bias_dum * 6 + m_ofst + int(m_mir / 2) * 2 + m_bias + m_byp_bias < m_in_dum * 3 + m_in + m_byp + 1:
+    if m_bias_dum * 6 + m_ofst + int(m_mir / 2) * 2 + m_bias + m_byp_bias < m_in_dum * 3 + m_in + m_byp + 3:
         m_in_dum_r = m_in_dum
     else:
         m_in_dum_r = (m_bias_dum * 6 + m_ofst + int(m_mir / 2) * 2 + m_bias) - (m_in_dum * 2 + m_in)
@@ -284,9 +284,9 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
     imdmyl_in0 = laygen.relplace("I" + objectname_pfix + 'DMYLin0', devname_mos_body, pg, imbl_in0.name, shape=np.array([m_in_dum, 1]), transform='MX')
     imin0 = laygen.relplace("I" + objectname_pfix + 'IN0', devname_mos_body, pg, imdmyl_in0.name, shape=np.array([m_in, 1]), transform='MX')
     imdmyr_in0_0 = laygen.relplace("I" + objectname_pfix + 'DMYRin0_0', devname_mos_body, pg, imin0.name, shape=np.array([m_in_dum, 1]), transform='MX')
-    imbyp_bnl = laygen.relplace("I" + objectname_pfix + 'BYP_BNL', devname_mos_boundary, pg, imdmyr_in0_0.name, shape=np.array([1, 1]), transform='MX')
+    imbyp_bnl = laygen.relplace("I" + objectname_pfix + 'BYP_BNL', devname_mos_boundary, pg, imdmyr_in0_0.name, shape=np.array([2, 1]), transform='MX')
     imbyp = laygen.relplace("I" + objectname_pfix + 'BYP', devname_mos_body, pg, imbyp_bnl.name, shape=np.array([m_byp, 1]), transform='MX')
-    imdmyr_bnr = laygen.relplace("I" + objectname_pfix + 'BYP_BNR', devname_mos_boundary, pg, imbyp.name, shape=np.array([1, 1]), transform='R180')
+    imdmyr_bnr = laygen.relplace("I" + objectname_pfix + 'BYP_BNR', devname_mos_boundary, pg, imbyp.name, shape=np.array([2, 1]), transform='R180')
     imdmyr_in0 = laygen.relplace("I" + objectname_pfix + 'DMYRin0', devname_mos_body, pg, imdmyr_bnr.name, shape=np.array([m_in_dum_r, 1]), transform='R180')
     imbr_in0 = laygen.relplace("I" + objectname_pfix + 'BRin0', devname_mos_boundary, pg, imdmyr_in0.name, transform='R180')
 
