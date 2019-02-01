@@ -47,7 +47,8 @@ class adc_sar_templates__sarafe_nsw(Module):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
     def design(self, lch, pw, nw, sa_m, sa_m_d, sa_m_rst, sa_m_rst_d, sa_m_rgnn, sa_m_rgnp_d, sa_m_buf, doubleSA,
-               drv_m_list, num_bits, c_m, rdx_array, device_intent='fast', pmos_body='VDD'):
+               drv_m_list, num_bits, c_m, rdx_array,
+               m_mirror, m_bias, m_off, m_in, m_bias_dum, m_in_dum, m_byp, m_byp_bias, bias_current, vref_sf, device_intent='fast', pmos_body='VDD'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -78,6 +79,16 @@ class adc_sar_templates__sarafe_nsw(Module):
         self.parameters['num_bits'] = num_bits
         self.parameters['c_m'] = c_m
         self.parameters['rdx_array'] = rdx_array
+        self.parameters['m_mirror'] = m_mirror
+        self.parameters['m_bias'] = m_bias
+        self.parameters['m_in'] = m_in
+        self.parameters['m_off'] = m_off
+        self.parameters['m_bias_dum'] = m_bias_dum
+        self.parameters['m_in_dum'] = m_in_dum
+        self.parameters['m_byp'] = m_byp
+        self.parameters['m_byp_bias'] = m_byp_bias
+        self.parameters['bias_current'] = bias_current
+        self.parameters['vref_sf'] = vref_sf
         self.parameters['device_intent'] = device_intent
         self.parameters['pmos_body'] = pmos_body
 
@@ -119,6 +130,23 @@ class adc_sar_templates__sarafe_nsw(Module):
         self.reconnect_instance_terminal(inst_name='ICDRVM0', term_name=pin_en, net_name=pin_enr)
         self.rename_pin('ENL0<2:0>', pin_enl)
         self.rename_pin('ENR0<2:0>', pin_enr)
+
+        if vref_sf == False:
+            self.delete_instance('ISF')
+            self.remove_pin('SF_bypass')
+            self.remove_pin('SF_VBIAS')
+        else:
+            self.instances['ISF'].design(lch=lch, nw=nw, m_mirror=m_mirror, m_bias=m_bias, m_off=m_off, m_in=m_in,
+                                        m_bias_dum=m_bias_dum, m_in_dum=m_in_dum, m_byp=m_byp, m_byp_bias=m_byp_bias,
+                                        bias_current=bias_current, device_intent=device_intent)
+            self.reconnect_instance_terminal(inst_name='ICDRVM0', term_name='VREF<2:0>',
+                                             net_name='SF_VREF<2:0>')
+            self.reconnect_instance_terminal(inst_name='ICDRVP0', term_name='VREF<2:0>',
+                                             net_name='SF_VREF<2:0>')
+            self.reconnect_instance_terminal(inst_name='ICAPM0', term_name='I_C0',
+                                             net_name='SF_VREF<1>')
+            self.reconnect_instance_terminal(inst_name='ICAPP0', term_name='I_C0',
+                                             net_name='SF_VREF<1>')
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

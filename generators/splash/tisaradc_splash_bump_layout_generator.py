@@ -196,11 +196,15 @@ if __name__ == '__main__':
     bump_plug_name = 'bumpplug_bottom'
     route_v_name = 'bumproute_v'
     route_h_name = 'bumproute_h'
-    bump_array = [['VDD', 'VDD', 'VREF0', 'VSS', 'VSS', 'CLKP', 'CLKN', 'VSS', 'VSS', 'VDD', 'VDD'],
-                  ['VDD', 'VDD', 'VREF1', 'VSS', 'VSS', 'VDD', 'VDD', 'VSS', 'VSS', 'VDD', 'VDD'],
-                  ['VDD', 'VDD', 'VREF2', 'VSS', 'VSS', 'VDD', 'VDD', 'VSS', 'VSS', 'VDD', 'VDD'],
-                  ['VDD', 'VDD', 'VSS', 'IINP', 'IINN', 'VSS', 'VSS', 'QINP', 'QINN', 'VDD', 'VDD']]
-    ref_xy = np.array([-16.255, -170])
+    # bump_array = [['VDD', 'VDD', 'VREF0', 'VSS', 'VSS', 'CLKP', 'CLKN', 'VSS', 'VSS', 'VDD', 'VDD'],
+    #               ['VDD', 'VDD', 'VREF1', 'VSS', 'VSS', 'VDD', 'VDD', 'VSS', 'VSS', 'VDD', 'VDD'],
+    #               ['VDD', 'VDD', 'VREF2', 'VSS', 'VSS', 'VDD', 'VDD', 'VSS', 'VSS', 'VDD', 'VDD'],
+    #               ['VDD', 'VDD', 'VSS', 'IINP', 'IINN', 'VSS', 'VSS', 'QINP', 'QINN', 'VDD', 'VDD']]
+    bump_array = [['VDD', 'VDD', 'VREF2', 'VREF1', 'VREF0', 'VSS', 'VSS', 'VSS', 'VSS', 'VSS', 'VDD', 'VDD', 'VDD', 'VDD'],
+                  ['VDD', 'VDD', 'VSS', 'VSS', 'VSS', 'VSS', 'VSS', 'VSS', 'VSS', 'VSS', 'VDD', 'VDD', 'VDD', 'VDD'],
+                  ['VDD', 'VDD', 'VSS', 'VSS', 'VSS', 'VSS', 'VSS', 'VSS', 'VSS', 'VSS', 'VDD', 'VDD', 'VDD', 'VDD'],
+                  ['VDD', 'VDD', 'IINP', 'IINM', 'VSS', 'VSS', 'CLKP', 'CLKN', 'VSS', 'VSS', 'QINP', 'QINM', 'VDD', 'VDD']]
+    ref_xy = np.array([-186.43, -170*1.5])
     bump_pitch = 170
 
     #layout generation

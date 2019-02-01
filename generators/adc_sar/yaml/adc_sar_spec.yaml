@@ -48,9 +48,13 @@ momcap_layer: 6
 #True if laygo is used for sampler generation. If false, AnalogBase is used
 samp_use_laygo: True
 #True if tgate is used for sampling switch. If false, NMOS-only sampler is used
-samp_with_tgate: True
+samp_with_tgate: False
+#True if source follower buffer is used.
+use_sf: True
+#True if individual VREF source follower is used for each slice.
+use_vref_sf: True
 #True if laygo is used for retimer generation. If false, AnalogBase is used
 ret_use_laygo: True
 pmos_body: 'VDD' #'VSS' or 'VDD'
-use_offset: true
+use_offset: False # False if use_sf is True, True if you want calibrate comparator offset
 clk_pulse_overlap: True # default: False

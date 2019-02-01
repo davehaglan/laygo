@@ -1,6 +1,6 @@
 lib_name: adc_sar_templates
 cell_name: sar_wsamp
-pins: [ "VDDSAMP", "CLKO", "VREF<2:0>", "OSM", "OSP", "INM", "INP", "EXTSEL_CLK", "CKDSEL0<1:0>", "CKDSEL1<1:0>", "CLK", "VOR<0>", "VOL<0>", "ADCOUT<0>", "ICLK", "CLKPRB_SAMP", "SAOP", "UP", "SB<0>", "SARCLKB", "ZM<0>", "SARCLK", "ZMID<0>", "DONE", "ZP<0>", "PHI0", "SAMPP", "SAMPM", "VDDSAR", "VSS", "SAOM" ]
+pins: [ "VDDSAMP", "CLKO", "VREF<2:0>", "OSM", "OSP", "INM", "INP", "EXTSEL_CLK", "CKDSEL0<1:0>", "CKDSEL1<1:0>", "CLK", "VOR<0>", "VOL<0>", "SF_Voffn", "SF_Voffp", "SF_bypass", "SF_BIAS", "VREF_SF_bypass", "VREF_SF_BIAS", "ADCOUT<0>", "ICLK", "CLKPRB_SAMP", "SAOP", "UP", "SB<0>", "SARCLKB", "ZM<0>", "SARCLK", "ZMID<0>", "DONE", "ZP<0>", "PHI0", "SAMPP", "SAMPM", "VDDSAR", "VSS", "SAOM" ]
 instances:
   XSAMP0:
     lib_name: adc_sar_templates
@@ -36,12 +36,64 @@ instances:
         num_bits: 1
       inp:
         direction: inputOutput
-        net_name: "INP"
+        net_name: "SAMP_INP"
         num_bits: 1
       inn:
         direction: inputOutput
+        net_name: "SAMP_INN"
+        num_bits: 1
+  ISF:
+    lib_name: adc_sar_templates
+    cell_name: sourceFollower_diff
+    instpins:
+      VSS:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      VBIAS:
+        direction: inputOutput
+        net_name: "SF_BIAS"
+        num_bits: 1
+      VDD:
+        direction: inputOutput
+        net_name: "VDDSAMP"
+        num_bits: 1
+      outn:
+        direction: output
+        net_name: "SAMP_INN"
+        num_bits: 1
+      outp:
+        direction: output
+        net_name: "SAMP_INP"
+        num_bits: 1
+      Voffn:
+        direction: input
+        net_name: "SF_Voffn"
+        num_bits: 1
+      Voffp:
+        direction: input
+        net_name: "SF_Voffp"
+        num_bits: 1
+      bypass:
+        direction: input
+        net_name: "SF_bypass"
+        num_bits: 1
+      inn:
+        direction: input
         net_name: "INM"
         num_bits: 1
+      inp:
+        direction: input
+        net_name: "INP"
+        num_bits: 1
+  PIN39:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
+  PIN31:
+    lib_name: basic
+    cell_name: iopin
+    instpins: {}
   PIN1:
     lib_name: basic
     cell_name: iopin
@@ -53,6 +105,30 @@ instances:
   PIN15:
     lib_name: basic
     cell_name: iopin
+    instpins: {}
+  PIN38:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN25:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN24:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN19:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN13:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN11:
+    lib_name: basic
+    cell_name: ipin
     instpins: {}
   PIN7:
     lib_name: basic
@@ -67,14 +143,6 @@ instances:
     cell_name: ipin
     instpins: {}
   PIN10:
-    lib_name: basic
-    cell_name: ipin
-    instpins: {}
-  PIN6:
-    lib_name: basic
-    cell_name: ipin
-    instpins: {}
-  PIN2:
     lib_name: basic
     cell_name: ipin
     instpins: {}
@@ -170,6 +238,14 @@ instances:
     lib_name: adc_sar_templates
     cell_name: sar
     instpins:
+      SF_VBIAS:
+        direction: input
+        net_name: "VREF_SF_BIAS"
+        num_bits: 1
+      SF_bypass:
+        direction: input
+        net_name: "VREF_SF_bypass"
+        num_bits: 1
       ADCOUT<0>:
         direction: output
         net_name: "ADCOUT<0>"

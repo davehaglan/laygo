@@ -1,7 +1,27 @@
 lib_name: adc_sar_templates
 cell_name: tisaradc_splash
-pins: [ "EXTSEL_CLK_CAL0", "EXTSEL_CLK_CAL1", "VSS", "CLKIP", "CLKIN", "RSTP", "RSTN", "CLKCAL", "INP", "INM", "OSP", "OSM", "VREF<2:0>", "ASCLKD<3:0>", "EXTSEL_CLK", "ADCO", "CLKOUT_DES", "samp_body", "bottom_body", "ASCLKD_CAL0<3:0>", "ASCLKD_CAL1<3:0>", "CLKO", "ADCOUT_RET", "ADCO_CAL0", "ADCO_CAL1", "CLKO_CAL0", "CLKO_CAL1", "VDD" ]
+pins: [ "EXTSEL_CLK_CAL0", "EXTSEL_CLK_CAL1", "VSS", "CLKIP", "CLKIN", "RSTP", "RSTN", "CLKCAL", "INP", "INM", "OSP", "OSM", "VREF<2:0>", "ASCLKD<3:0>", "EXTSEL_CLK", "ADCO", "CLKOUT_DES", "samp_body", "bottom_body", "ASCLKD_CAL0<3:0>", "ASCLKD_CAL1<3:0>", "CLKO", "ADCOUT_RET", "ADCO_CAL0", "ADCO_CAL1", "CLKO_CAL0", "CLKO_CAL1", "VDD", "VREF_SF_bypass", "RDAC_SEL", "SF_bypass" ]
 instances:
+  IRDAC:
+    lib_name: adc_sar_templates
+    cell_name: r2r_dac_array
+    instpins:
+      VSS:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      VDD:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      out:
+        direction: output
+        net_name: "RDAC_OUT"
+        num_bits: 1
+      SEL:
+        direction: input
+        net_name: "RDAC_SEL"
+        num_bits: 1
   IRET0:
     lib_name: adc_sar_templates
     cell_name: adc_retimer
@@ -52,7 +72,7 @@ instances:
         num_bits: 1
       CLKO:
         direction: output
-        net_name: "net031"
+        net_name: "ICLK"
         num_bits: 1
       CAL0:
         direction: input
@@ -68,7 +88,7 @@ instances:
         num_bits: 1
       DATAO:
         direction: inputOutput
-        net_name: "ICLK"
+        net_name: "net02"
         num_bits: 1
   PIN18:
     lib_name: basic
@@ -85,6 +105,18 @@ instances:
   PIN1:
     lib_name: basic
     cell_name: iopin
+    instpins: {}
+  PIN33:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN34:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN35:
+    lib_name: basic
+    cell_name: ipin
     instpins: {}
   PIN28:
     lib_name: basic
@@ -186,6 +218,30 @@ instances:
     lib_name: adc_sar_templates
     cell_name: sar_wsamp_bb_doubleSA
     instpins:
+      VREF_SF_bypass:
+        direction: input
+        net_name: "VREF_SF_bypass"
+        num_bits: 1
+      VREF_SF_BIAS:
+        direction: inputOutput
+        net_name: "SF_BIASn"
+        num_bits: 1
+      SF_BIAS:
+        direction: inputOutput
+        net_name: "SF_BIASp"
+        num_bits: 1
+      SF_Voffn:
+        direction: input
+        net_name: "SF_Voffn"
+        num_bits: 1
+      SF_Voffp:
+        direction: input
+        net_name: "SF_Voffp"
+        num_bits: 1
+      SF_bypass:
+        direction: input
+        net_name: "SF_bypass"
+        num_bits: 1
       bottom_body:
         direction: inputOutput
         net_name: "bottom_body"
@@ -322,6 +378,30 @@ instances:
     lib_name: adc_sar_templates
     cell_name: sar_wsamp_bb_doubleSA
     instpins:
+      VREF_SF_bypass:
+        direction: input
+        net_name: "VREF_SF_bypass"
+        num_bits: 1
+      VREF_SF_BIAS:
+        direction: inputOutput
+        net_name: "SF_BIASn"
+        num_bits: 1
+      SF_BIAS:
+        direction: inputOutput
+        net_name: "SF_BIASp"
+        num_bits: 1
+      SF_Voffn:
+        direction: input
+        net_name: "SF_Voffn"
+        num_bits: 1
+      SF_Voffp:
+        direction: input
+        net_name: "SF_Voffp"
+        num_bits: 1
+      SF_bypass:
+        direction: input
+        net_name: "SF_bypass"
+        num_bits: 1
       bottom_body:
         direction: inputOutput
         net_name: "bottom_body"
@@ -460,11 +540,11 @@ instances:
     instpins:
       DATAO:
         direction: inputOutput
-        net_name: "ICLK_CAL"
+        net_name: "net01"
         num_bits: 1
       CLKO:
         direction: output
-        net_name: "net037"
+        net_name: "ICLK_CAL"
         num_bits: 1
       CLKI:
         direction: input
@@ -490,6 +570,30 @@ instances:
     lib_name: adc_sar_templates
     cell_name: sar_wsamp_bb_doubleSA_array
     instpins:
+      VREF_SF_bypass:
+        direction: input
+        net_name: "VREF_SF_bypass"
+        num_bits: 1
+      VREF_SF_BIAS0:
+        direction: input
+        net_name: "VREF_SF_BIAS"
+        num_bits: 1
+      SF_BIAS0:
+        direction: input
+        net_name: "SF_BIAS"
+        num_bits: 1
+      SF_Voffp0:
+        direction: input
+        net_name: "SF_Voffp"
+        num_bits: 1
+      SF_Voffn0:
+        direction: input
+        net_name: "SF_Voffn"
+        num_bits: 1
+      SF_bypass:
+        direction: input
+        net_name: "SF_bypass"
+        num_bits: 1
       bottom_body0:
         direction: inputOutput
         net_name: "bottom_body"

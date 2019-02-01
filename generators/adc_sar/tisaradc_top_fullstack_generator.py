@@ -44,6 +44,7 @@ files=[
     'laygo/generators/adc_sar/tisaradc_body_layout_generator.py',
     'laygo/generators/adc_sar/adc_sar_sarbias_layout_generator.py',
     'laygo/generators/adc_sar/adc_sar_sarbias_top_layout_generator.py',
+    'laygo/generators/adc_sar/adc_sar_clkgcalbuf_layout_generator.py',
     'laygo/generators/adc_sar/tisaradc_top_layout_generator.py',
     'laygo/generators/adc_sar/tisaradc_top_schematic_generator.py',
     # 'laygo/generators/adc_sar/tisaradc_body_core_lvs.py',

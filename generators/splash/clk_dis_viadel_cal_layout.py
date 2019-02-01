@@ -172,7 +172,7 @@ def generate_sfft_clkdis_viadel(laygen, objectname_pfix, logictemp_lib, working_
         laygen.route(None, laygen.layers['metal'][3], xy0=viadel_ST_xy, xy1=np.array([viadel_ST_xy[0],viadel_ST_xy[1]+4]), gridname0=rg_m2m3)
         laygen.via(None, xy=np.array([viadel_ST_xy[0],viadel_ST_xy[1]+4]), gridname=rg_m2m3)
 
-    stp=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, viadel_RST_xy[1]+12]), xy1=np.array([m2m3_x*num_ways, viadel_RST_xy[1]+12]), gridname0=rg_m2m3_basic)    
+    stp=laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, viadel_RST_xy[1]+12]), xy1=np.array([m2m3_x*num_ways-4, viadel_RST_xy[1]+12]), gridname0=rg_m2m3_basic)
     laygen.boundary_pin_from_rect(stp, gridname=rg_m2m3_basic, name='RSTP', layer=laygen.layers['pin'][2], size=2, direction='left')
     
     '''

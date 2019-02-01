@@ -48,11 +48,15 @@ class adc_sar_templates__sar_wsamp_bb_doubleSA(Module):
 
     #def design(self, sar_lch, sar_pw, sar_nw, sar_sa_m, sar_sa_m_d, sar_sa_m_rst, sar_sa_m_rst_d, sar_sa_m_rgnn, sar_sa_m_rgnp_d, sar_sa_m_buf, sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay, sar_logic_m, sar_fsm_m, sar_ret_m, sar_ret_fo, sar_device_intent, sar_c_m, sar_rdx_array, samp_lch, samp_wp, samp_wn, samp_fgn, samp_fg_inbuf_list, samp_fg_outbuf_list, samp_nduml, samp_ndumr, samp_nsep, samp_intent, num_bits, num_inv_bb, samp_use_laygo=False):
     def design(self, sar_lch, sar_pw, sar_nw, sar_sa_m, sar_sa_m_d, sar_sa_m_rst, sar_sa_m_rst_d, sar_sa_m_rgnn,
-               sar_sa_m_rgnp_d, sar_sa_m_buf, doubleSA, sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay,
-               sar_ckgen_fast, sar_logic_m, sar_fsm_m, sar_ret_m, sar_ret_fo, sar_device_intent, sar_c_m, sar_rdx_array,
+               sar_sa_m_rgnp_d, sar_sa_m_buf, doubleSA,
+               vref_sf_m_mirror, vref_sf_m_bias, vref_sf_m_off, vref_sf_m_in, vref_sf_m_bias_dum, vref_sf_m_in_dum,
+               vref_sf_m_byp, vref_sf_m_byp_bias, vref_sf_bias_current, vref_sf,
+               sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay,
+               sar_ckgen_fast, sar_ckgen_fastest, sar_logic_m, sar_fsm_m, sar_ret_m, sar_ret_fo, sar_device_intent, sar_c_m, sar_rdx_array,
                samp_lch, samp_wp, samp_wn, samp_fgn, samp_fg_inbuf_list, samp_fg_outbuf_list, samp_nduml, samp_ndumr,
                samp_nsep, samp_intent, num_bits, num_inv_bb, samp_use_laygo,
-               sf_lch, sf_nw, sf_m_mirror, sf_m_bias, sf_m_off, sf_m_in, sf_m_bias_dum, sf_m_in_dum, sf_m_byp, sf_m_byp_bias, sf_intent, use_sf=False):
+               sf_lch, sf_nw, sf_m_mirror, sf_m_bias, sf_m_off, sf_m_in, sf_m_bias_dum, sf_m_in_dum, sf_m_byp, sf_m_byp_bias,
+               sf_intent, bias_current, use_sf):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -79,11 +83,22 @@ class adc_sar_templates__sar_wsamp_bb_doubleSA(Module):
         self.parameters['sar_sa_m_rgnp_d'] = sar_sa_m_rgnp_d
         self.parameters['sar_sa_m_buf'] = sar_sa_m_buf
         self.parameters['doubleSA'] = doubleSA
+        self.parameters['vref_sf_m_mirror'] = vref_sf_m_mirror
+        self.parameters['vref_sf_m_bias'] = vref_sf_m_bias
+        self.parameters['vref_sf_m_in'] = vref_sf_m_in
+        self.parameters['vref_sf_m_off'] = vref_sf_m_off
+        self.parameters['vref_sf_m_bias_dum'] = vref_sf_m_bias_dum
+        self.parameters['vref_sf_m_in_dum'] = vref_sf_m_in_dum
+        self.parameters['vref_sf_m_byp'] = vref_sf_m_byp
+        self.parameters['vref_sf_m_byp_bias'] = vref_sf_m_byp_bias
+        self.parameters['vref_sf_bias_current'] = vref_sf_bias_current
+        self.parameters['vref_sf'] = vref_sf
         self.parameters['sar_drv_m_list'] = sar_drv_m_list
         self.parameters['sar_ckgen_m'] = sar_ckgen_m
         self.parameters['sar_ckgen_fo'] = sar_ckgen_fo
         self.parameters['sar_ckgen_ndelay'] = sar_ckgen_ndelay
         self.parameters['sar_ckgen_fast'] = sar_ckgen_fast
+        self.parameters['sar_ckgen_fastest'] = sar_ckgen_fastest
         self.parameters['sar_logic_m'] = sar_logic_m
         self.parameters['sar_fsm_m'] = sar_fsm_m
         self.parameters['sar_ret_m'] = sar_ret_m
@@ -115,10 +130,17 @@ class adc_sar_templates__sar_wsamp_bb_doubleSA(Module):
         self.parameters['sf_m_byp'] = sf_m_byp
         self.parameters['sf_m_byp_bias'] = sf_m_byp_bias
         self.parameters['sf_intent'] = sf_intent
+        self.parameters['bias_current'] = bias_current
         self.parameters['use_sf'] = use_sf #if true, source follower is used before the sampler
 
         self.instances['ISAR0'].design(lch=sar_lch, pw=sar_pw, nw=sar_nw, sa_m=sar_sa_m, sa_m_d=sar_sa_m_d, sa_m_rst=sar_sa_m_rst, sa_m_rst_d=sar_sa_m_rst_d, sa_m_rgnn=sar_sa_m_rgnn, sa_m_rgnp_d=sar_sa_m_rgnp_d, sa_m_buf=sar_sa_m_buf, doubleSA=doubleSA,
-                                       drv_m_list=sar_drv_m_list, ckgen_m=sar_ckgen_m, ckgen_fo=sar_ckgen_fo, ckgen_ndelay=sar_ckgen_ndelay, ckgen_fast=sar_ckgen_fast, logic_m=sar_logic_m, 
+                                       vref_sf_m_mirror=vref_sf_m_mirror, vref_sf_m_bias=vref_sf_m_bias,
+                                       vref_sf_m_off=vref_sf_m_off,
+                                       vref_sf_m_in=vref_sf_m_in, vref_sf_m_bias_dum=vref_sf_m_bias_dum,
+                                       vref_sf_m_in_dum=vref_sf_m_in_dum, vref_sf_m_byp=vref_sf_m_byp,
+                                       vref_sf_m_byp_bias=vref_sf_m_byp_bias,
+                                       vref_sf_bias_current=vref_sf_bias_current, vref_sf=vref_sf,
+                                       drv_m_list=sar_drv_m_list, ckgen_m=sar_ckgen_m, ckgen_fo=sar_ckgen_fo, ckgen_ndelay=sar_ckgen_ndelay, ckgen_fast=sar_ckgen_fast, ckgen_fastest=sar_ckgen_fastest, logic_m=sar_logic_m,
                                        fsm_m=sar_fsm_m, ret_m=sar_ret_m, ret_fo=sar_ret_fo, c_m=sar_c_m, rdx_array=sar_rdx_array, num_bits=num_bits, num_inv_bb=num_inv_bb,
                                        device_intent=sar_device_intent)
         if samp_use_laygo==True:
@@ -140,7 +162,7 @@ class adc_sar_templates__sar_wsamp_bb_doubleSA(Module):
         else:
             self.instances['ISF'].design(lch=sf_lch, nw=sf_nw, m_mirror=sf_m_mirror, m_bias=sf_m_bias, m_off=sf_m_off,
                                             m_in=sf_m_in, m_bias_dum=sf_m_bias_dum, m_in_dum=sf_m_in_dum, m_byp=sf_m_byp,
-                                            m_byp_bias=sf_m_byp_bias, device_intent=sf_intent)
+                                            m_byp_bias=sf_m_byp_bias, device_intent=sf_intent, bias_current=bias_current)
 
         #rewiring
         self.reconnect_instance_terminal(inst_name='XSAMP0', term_name='ckout', net_name='ICLK')
@@ -161,6 +183,12 @@ class adc_sar_templates__sar_wsamp_bb_doubleSA(Module):
         self.rename_pin('ZP<0>', 'ZP<%d:0>'%(num_bits-1))
         self.rename_pin('SB<0>', 'SB<%d:0>'%(num_bits-1))
         self.rename_pin('ADCOUT<0>', 'ADCOUT<%d:0>'%(num_bits-1))
+
+        if num_inv_bb==0:
+            self.remove_pin('bottom_body')
+        if vref_sf == False:
+            self.remove_pin('VREF_SF_bypass')
+            self.remove_pin('VREF_SF_BIAS')
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

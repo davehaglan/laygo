@@ -35,6 +35,7 @@ if load_from_file==True:
     params['fo']=sizedict['sarclkgen']['fo']
     params['ndelay']=sizedict['sarclkgen']['ndelay']
     params['fast']=sizedict['sarclkgen']['fast']
+    params['fastest']=sizedict['sarclkgen']['fastest']
     params['lch']=sizedict['lch']
     params['pw']=sizedict['pw']
     params['nw']=sizedict['nw']

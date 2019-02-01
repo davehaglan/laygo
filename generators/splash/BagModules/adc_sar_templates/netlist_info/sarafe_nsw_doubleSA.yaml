@@ -1,6 +1,6 @@
 lib_name: adc_sar_templates
 cell_name: sarafe_nsw_doubleSA
-pins: [ "INM", "OSM", "CLKB", "VDD", "VSS", "VREF<2:0>", "ENL0<2:0>", "ENR0<2:0>", "OUTM", "INP", "OSP", "VOL", "OUTP", "VOR" ]
+pins: [ "INM", "OSM", "CLKB", "VDD", "VSS", "VREF<2:0>", "ENL0<2:0>", "ENR0<2:0>", "OUTM", "INP", "OSP", "VOL", "SF_bypass", "SF_VBIAS", "OUTP", "VOR" ]
 instances:
   PIN3:
     lib_name: basic
@@ -11,6 +11,14 @@ instances:
     cell_name: ipin
     instpins: {}
   PIN23:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN31:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN30:
     lib_name: basic
     cell_name: ipin
     instpins: {}
@@ -114,6 +122,34 @@ instances:
         direction: output
         net_name: "INTP"
         num_bits: 1
+  ISF:
+    lib_name: adc_sar_templates
+    cell_name: sourceFollower_vref
+    instpins:
+      VBIAS:
+        direction: inputOutput
+        net_name: "SF_VBIAS"
+        num_bits: 1
+      VSS:
+        direction: inputOutput
+        net_name: "VSS"
+        num_bits: 1
+      VDD:
+        direction: inputOutput
+        net_name: "VDD"
+        num_bits: 1
+      out<2:0>:
+        direction: output
+        net_name: "SF_VREF<2:0>"
+        num_bits: 3
+      bypass:
+        direction: input
+        net_name: "SF_bypass"
+        num_bits: 1
+      in<2:0>:
+        direction: input
+        net_name: "VREF<2:0>"
+        num_bits: 3
   PIN6:
     lib_name: basic
     cell_name: iopin

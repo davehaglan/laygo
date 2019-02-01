@@ -35,7 +35,7 @@ import laygo.GridLayoutGeneratorHelper as laygenhelper #utility functions
 def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_lib, sar_name, samp_name, space_1x_name,
                        placement_grid, routing_grid_m5m6,
                        routing_grid_m5m6_thick, routing_grid_m5m6_thick_basic,
-                       mom_layer=6, num_bits=9, origin=np.array([0, 0])):
+                       mom_layer=6, num_bits=9, use_sf=False, vref_sf=False, origin=np.array([0, 0])):
     """generate sar with sampling frontend """
     pg = placement_grid
 
@@ -50,18 +50,28 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
     # samp
     isamp = laygen.relplace(name="I" + objectname_pfix + 'SAMP0', templatename=samp_name,
                           gridname=pg, refinstname=isar.name, direction='top', template_libname=samp_lib)
+    # source follower
+    sf_name = 'sourceFollower_diff'
+    if use_sf == True:
+        isf = laygen.relplace(name="I" + objectname_pfix + 'SF0', templatename=sf_name,
+                                gridname=pg, refinstname=isamp.name, direction='top', template_libname=workinglib)
+        sf_xy=isf.xy
 
     #prboundary
     sar_size = laygen.templates.get_template(sar_name, libname=workinglib).size
     samp_size = laygen.templates.get_template(samp_name, libname=samp_lib).size
+    sf_size = laygen.templates.get_template(sf_name, libname=workinglib).size
     space_size = laygen.templates.get_template(space_1x_name, libname=space_1x_lib).size
     size_x=sar_size[0]
     size_y=int((sar_size[1]+samp_size[1])/space_size[1]+1)*space_size[1]
+    if use_sf == True:
+        size_y = int((sar_size[1] + samp_size[1] + sf_size[1]) / space_size[1] + 1) * space_size[1]
     laygen.add_rect(None, np.array([origin, origin+np.array([size_x, size_y])]), laygen.layers['prbnd'])
 
     # template handles
     sar_template = laygen.templates.get_template(sar_name, workinglib)
     samp_template = laygen.templates.get_template(samp_name, samp_lib)
+    sf_template = laygen.templates.get_template(sf_name, workinglib)
 
     #reference coordinates
     pdict_m5m6=laygen.get_inst_pin_xy(None, None, rg_m5m6)
@@ -69,6 +79,7 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
     pdict_m5m6_thick_basic=laygen.get_inst_pin_xy(None, None, rg_m5m6_thick_basic)
     sar_pins=sar_template.pins
     samp_pins=samp_template.pins
+    sf_pins=sf_template.pins
     #sar_xy=isar.xy[0]
     #samp_xy=isamp.xy[0]
     sar_xy=isar.xy
@@ -104,12 +115,10 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
         if pn.startswith('INP'):
             inp_y_list.append(p[0][1])
             pv=np.array([pdict_m5m6_thick_basic_temp_sig[isamp.name]['outp'][0][0], p[0][1]])
-            print(pv)
             laygen.via(None,pv, rg_m5m6_thick_basic_temp_sig)
         if pn.startswith('INM'):
             inm_y_list.append(p[0][1])
             pv=np.array([pdict_m5m6_thick_basic_temp_sig[isamp.name]['outn'][0][0], p[0][1]])
-            print(pv)
             laygen.via(None,pv, rg_m5m6_thick_basic_temp_sig)
     inp_y=min(inp_y_list)
     inm_y=min(inm_y_list)
@@ -130,10 +139,64 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
     #                     xy1=np.array([pdict_m5m6_thick_basic_temp_sig[isar.name]['INM0'][0][0],inm_y-1]), 
     #                     gridname0=rg_m5m6_thick_basic_temp_sig)
 
+    # source follower routing
+    pdict_m4m5_thick=laygen.get_inst_pin_xy(None, None, rg_m4m5_thick)
+    if use_sf == True:
+        [rh0, rv0] = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], pdict_m4m5_thick[isf.name]['outp'][0],
+                                     pdict_m4m5_thick[isamp.name]['inp'][0], rg_m4m5_thick)
+        [rh0, rv0] = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], pdict_m4m5_thick[isf.name]['outn'][0],
+                                     pdict_m4m5_thick[isamp.name]['inn'][0], rg_m4m5_thick)
+        # VDD/VSS for source follower
+        for pn, p in samp_pins.items():
+            if pn.startswith('LVDD'):
+                laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                                pdict_m4m5_thick[isamp.name][pn][0], pdict_m4m5_thick[isf.name]['VDD0'][0], rg_m4m5_thick)
+                laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                            pdict_m4m5_thick[isamp.name][pn][0], pdict_m4m5_thick[isf.name]['VDD1'][0], rg_m4m5_thick)
+            if pn.startswith('RVDD'):
+                laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                                pdict_m4m5_thick[isamp.name][pn][0], pdict_m4m5_thick[isf.name]['VDD0'][0], rg_m4m5_thick)
+                laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                            pdict_m4m5_thick[isamp.name][pn][0], pdict_m4m5_thick[isf.name]['VDD1'][0], rg_m4m5_thick)
+            if pn.startswith('LVSS'):
+                laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                                pdict_m4m5_thick[isamp.name][pn][0], pdict_m4m5_thick[isf.name]['VSS0'][0], rg_m4m5_thick)
+                laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                            pdict_m4m5_thick[isamp.name][pn][0], pdict_m4m5_thick[isf.name]['VSS1'][0], rg_m4m5_thick)
+            if pn.startswith('RVSS'):
+                laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                                pdict_m4m5_thick[isamp.name][pn][0], pdict_m4m5_thick[isf.name]['VSS0'][0], rg_m4m5_thick)
+                laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][4],
+                            pdict_m4m5_thick[isamp.name][pn][0], pdict_m4m5_thick[isf.name]['VSS1'][0], rg_m4m5_thick)
+
     #input pins (just duplicate from lower hierarchy cells)
     laygen.add_pin('CLK', 'CLK', samp_xy+samp_pins['ckin']['xy'], samp_pins['ckin']['layer'])
-    laygen.add_pin('INP', 'INP', samp_xy+samp_pins['inp']['xy'], samp_pins['ckin']['layer'])
-    laygen.add_pin('INM', 'INM', samp_xy+samp_pins['inn']['xy'], samp_pins['ckin']['layer'])
+    if use_sf == False:
+        laygen.add_pin('INP', 'INP', samp_xy+samp_pins['inp']['xy'], samp_pins['inp']['layer'])
+        laygen.add_pin('INM', 'INM', samp_xy+samp_pins['inn']['xy'], samp_pins['inn']['layer'])
+    else:
+        laygen.add_pin('INP', 'INP', sf_xy+sf_pins['inp']['xy'], sf_pins['inp']['layer'])
+        laygen.add_pin('INM', 'INM', sf_xy+sf_pins['inn']['xy'], sf_pins['inn']['layer'])
+        for pn, p in sf_pins.items():
+            if pn.startswith('Voffp'):
+                pxy = sf_xy + sf_pins[pn]['xy']
+                laygen.add_pin('SF_'+pn, 'SF_Voffp', pxy, sf_pins[pn]['layer'])
+            if pn.startswith('Voffn'):
+                pxy = sf_xy + sf_pins[pn]['xy']
+                laygen.add_pin('SF_'+pn, 'SF_Voffn', pxy, sf_pins[pn]['layer'])
+            if pn.startswith('bypass'):
+                pxy = sf_xy + sf_pins[pn]['xy']
+                laygen.add_pin('SF_'+pn, 'SF_bypass', pxy, sf_pins[pn]['layer'])
+            if pn.startswith('VBIAS'):
+                pxy = sf_xy + sf_pins[pn]['xy']
+                laygen.add_pin('SF_BIAS', 'SF_BIAS', pxy, sf_pins[pn]['layer'])
+            # if pn.startswith('VBIASn'):
+            #     pxy = sf_xy + sf_pins[pn]['xy']
+            #     laygen.add_pin('SF_BIASn', 'SF_BIASn', pxy, sf_pins[pn]['layer'])
+
+    if vref_sf == True:
+        laygen.add_pin('VREF_SF_BIAS', 'VREF_SF_BIAS', sar_xy+sar_pins['SF_VBIAS']['xy'], sar_pins['SF_VBIAS']['layer'])
+        laygen.add_pin('VREF_SF_bypass', 'VREF_SF_bypass', sar_xy+sar_pins['SF_bypass']['xy'], sar_pins['SF_bypass']['layer'])
 
     laygen.add_pin('OSP', 'OSP', sar_xy+sar_pins['OSP']['xy'], sar_pins['OSP']['layer'])
     laygen.add_pin('OSM', 'OSM', sar_xy+sar_pins['OSM']['xy'], sar_pins['OSM']['layer'])
@@ -265,6 +328,7 @@ if __name__ == '__main__':
     rg_m3m4 = 'route_M3_M4_basic'
     rg_m4m5 = 'route_M4_M5_basic'
     rg_m4m5_basic_thick = 'route_M4_M5_basic_thick'
+    rg_m4m5_thick = 'route_M4_M5_thick'
     rg_m5m6 = 'route_M5_M6_basic'
     rg_m5m6_thick = 'route_M5_M6_thick'
     rg_m5m6_basic_thick = 'route_M5_M6_basic_thick'
@@ -284,6 +348,8 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']
+        use_sf=specdict['use_sf']
+        vref_sf=specdict['use_vref_sf']
         mom_layer = specdict['momcap_layer']
         if specdict['samp_use_laygo'] is True:
             samp_lib = 'adc_sar_generated'
@@ -306,7 +372,7 @@ if __name__ == '__main__':
     laygen.sel_cell(cellname)
     generate_sar_wsamp(laygen, objectname_pfix='SA0', workinglib=workinglib, samp_lib=samp_lib, space_1x_lib=logictemplib, sar_name=sar_name, samp_name=samp_name, space_1x_name=space_1x_name,
                        placement_grid=pg, routing_grid_m5m6=rg_m5m6, routing_grid_m5m6_thick=rg_m5m6_thick, routing_grid_m5m6_thick_basic=rg_m5m6_thick_basic,
-                       mom_layer=mom_layer, num_bits=num_bits, origin=np.array([0, 0]))
+                       mom_layer=mom_layer, num_bits=num_bits, use_sf=use_sf, vref_sf=vref_sf, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
     
 

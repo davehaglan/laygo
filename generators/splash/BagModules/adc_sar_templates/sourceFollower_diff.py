@@ -21,7 +21,7 @@ class adc_sar_templates__sourceFollower_diff(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, nw, m_mirror, m_bias, m_off, m_in, m_bias_dum, m_in_dum, m_byp, m_byp_bias, device_intent):
+    def design(self, lch, nw, m_mirror, m_bias, m_off, m_in, m_bias_dum, m_in_dum, m_byp, m_byp_bias, bias_current, device_intent):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -47,12 +47,13 @@ class adc_sar_templates__sourceFollower_diff(Module):
         self.parameters['m_in_dum'] = m_in_dum
         self.parameters['m_byp'] = m_byp
         self.parameters['m_byp_bias'] = m_byp_bias
+        self.parameters['bias_current'] = bias_current
         self.parameters['device_intent'] = device_intent
 
         self.instances['I0'].design(lch=lch, nw=nw, m_mirror=m_mirror, m_bias=m_bias, m_off=m_off, m_in=m_in,
-                                    m_bias_dum=m_bias_dum, m_in_dum=m_in_dum, m_byp=m_byp, m_byp_bias=m_byp_bias, device_intent=device_intent)
+                                    m_bias_dum=m_bias_dum, m_in_dum=m_in_dum, m_byp=m_byp, m_byp_bias=m_byp_bias, bias_current=bias_current, device_intent=device_intent)
         self.instances['I1'].design(lch=lch, nw=nw, m_mirror=m_mirror, m_bias=m_bias, m_off=m_off, m_in=m_in,
-                                    m_bias_dum=m_bias_dum, m_in_dum=m_in_dum, m_byp=m_byp, m_byp_bias=m_byp_bias, device_intent=device_intent)
+                                    m_bias_dum=m_bias_dum, m_in_dum=m_in_dum, m_byp=m_byp, m_byp_bias=m_byp_bias, bias_current=bias_current, device_intent=device_intent)
         if m_byp==0 and m_byp_bias==0:
             self.remove_pin('bypass')
 

@@ -151,9 +151,39 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
                 rvsssar.append(laygen.add_rect(None, pxy, laygen.layers['metal'][6]))
     #M7 rails
     rg_route='route_M6_M7_thick_temp_pwr'
-    laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m6m7_thick, gridname_output=rg_route,
-                                          instname=[isar.name],
-                                          inst_pin_prefix=['VDD', 'VSS', 'VREF'], xy_grid_type='ygrid')
+    if input_htree == False:
+        laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m6m7_thick, gridname_output=rg_route,
+                                              instname=[isar.name],
+                                              inst_pin_prefix=['VDD', 'VSS', 'VREF'], xy_grid_type='ygrid')
+    else:
+        x_ref = laygen.templates.get_template('sar_wsamp', libname=workinglib).size[0]
+        x_pitch = laygen.get_grid(rg_m6m7_thick).xy[1][0]
+        xy = np.array([[0, 0], [x_ref, laygen.get_grid(rg_m6m7_thick).xy[1][1]]])
+        ywidth = np.array(laygen.get_grid(rg_m6m7_thick).ywidth)
+        # xgrid = np.array([x_pitch, x_ref])
+        xgrid = np.array([x_pitch, 2*x_pitch, x_ref-1*x_pitch, x_ref-0*x_pitch])
+        ygrid = np.array([0])
+        vianame = list(laygen.get_grid(rg_m6m7_thick).viamap.keys())[0]
+        viamap = {vianame: []}
+        for x in range(len(xgrid)):
+            viamap[vianame].append([x, 0])
+        xwidth=np.repeat(laygen.get_grid(rg_m6m7_thick).xwidth, len(xgrid))
+        viamap[vianame] = np.array(viamap[vianame])
+        laygen.grids.add_route_grid(name=rg_route, xy=xy, xgrid=xgrid, ygrid=ygrid, xwidth=xwidth, ywidth=ywidth, viamap=viamap)
+
+    rg_route_m7m8='route_M7_M8_thick_temp_pwr'
+    xy = np.array([[0, 0], [laygen.get_grid(rg_route).xy[1][0], laygen.get_grid(rg_m7m8_thick).xy[1][1]]])
+    ywidth = np.array(laygen.get_grid(rg_m7m8_thick).ywidth)
+    xgrid = laygen.get_grid(rg_route).xgrid
+    ygrid = laygen.get_grid(rg_route).ygrid
+    vianame = list(laygen.get_grid(rg_m7m8_thick).viamap.keys())[0]
+    viamap = {vianame: []}
+    for x in range(len(xgrid)):
+        viamap[vianame].append([x, 0])
+    xwidth=np.repeat(laygen.get_grid(rg_m7m8_thick).xwidth, len(xgrid))
+    viamap[vianame] = np.array(viamap[vianame])
+    laygen.grids.add_route_grid(name=rg_route_m7m8, xy=xy, xgrid=xgrid, ygrid=ygrid, xwidth=xwidth, ywidth=ywidth, viamap=viamap)
+
     '''
     #M7 rails-clkd
     input_rails_rect = [rvddclkd, rvssclkd]
@@ -167,19 +197,19 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
     rvddsamp_m7_pre, rvsssamp_m7_pre= laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAMP_M7_', 
                 layer=laygen.layers['metal'][7], gridname=rg_route, netnames=['VDDSAMP', 'VSS'], direction='y', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=None, offset_end_coord=None,
-                offset_start_index=2, offset_end_index=-2)
+                offset_start_index=1, offset_end_index=-1)
     #M7 rails-sar_lower
     input_rails_rect = [rvddsar, rvsssar]
     rvddsar_m7, rvsssar_m7= laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAR_M7_', 
                 layer=laygen.layers['metal'][7], gridname=rg_route, netnames=['VDDSAR', 'VSS'], direction='y', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=None, overwrite_end_coord=None,
-                offset_start_index=2, offset_end_index=-2)
+                offset_start_index=1, offset_end_index=-1)
     #M7 rails-sar_upper(+vref)
     input_rails_rect = [rvddsar_upper, rvsssar_upper, rvref0, rvsssar_upper, rvref1, rvsssar_upper, rvref2, rvsssar_upper]
     rvddsar_m7_upper, rvsssar0_m7, rvref0_m7_pre, rvsssar1_m7, rvref1_m7_pre, rvsssar2_m7, rvref2_m7_pre, rvsssar3_m7= laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAR_UPPER_M7_', 
                 layer=laygen.layers['metal'][7], gridname=rg_route, netnames=['VDDSAR', 'VSS', 'VREF<0>', 'VSS', 'VREF<1>', 'VSS', 'VREF<2>', 'VSS'], direction='y', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=None, overwrite_end_coord=None,
-                offset_start_index=2, offset_end_index=-2)
+                offset_start_index=1, offset_end_index=-1)
     rvsssar_m7_upper_pre=rvsssar0_m7+rvsssar1_m7+rvsssar2_m7+rvsssar3_m7
     #extend m7 rails for clkd and samp and vref, rvsssar_m7_upper
     #rvddclkd_m7=[]
@@ -203,55 +233,55 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
         rvssclkd_m7.append(r2)
     '''
     for r in rvddsamp_m7_pre:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_xy(obj = r, gridname=rg_route, sort=True)
         #rxy[0][1]-=1
         rxy[1][1]+=24
-        r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
+        r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_route)
         rvddsamp_m7.append(r2)
     for r in rvsssamp_m7_pre:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_xy(obj = r, gridname=rg_route, sort=True)
         #rxy[0][1]-=1
         rxy[1][1]+=24
-        r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
+        r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_route)
         rvsssamp_m7.append(r2)
         #extend upper vss routes in the space area down to zero (for vss short)
         if r.xy[0][0]<sar_xy[0]:
-            laygen.route(None, laygen.layers['metal'][7], xy0=[rxy[0][0], 0], xy1=rxy[1], gridname0=rg_m6m7_thick)
+            laygen.route(None, laygen.layers['metal'][7], xy0=[rxy[0][0], 0], xy1=rxy[1], gridname0=rg_route)
         if r.xy[0][0]>sar_xy[0]+sar_template.width:
-            laygen.route(None, laygen.layers['metal'][7], xy0=[rxy[0][0], 0], xy1=rxy[1], gridname0=rg_m6m7_thick)
+            laygen.route(None, laygen.layers['metal'][7], xy0=[rxy[0][0], 0], xy1=rxy[1], gridname0=rg_route)
     for r in rvref0_m7_pre:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_xy(obj = r, gridname=rg_route, sort=True)
         rxy[0][1]-=24
         #rxy[1][1]+=24
-        r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
+        r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_route)
         rvref0_m7.append(r2)
     for r in rvref1_m7_pre:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_xy(obj = r, gridname=rg_route, sort=True)
         rxy[0][1]-=24
         #rxy[1][1]+=24
-        r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
+        r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_route)
         rvref1_m7.append(r2)
     for r in rvref2_m7_pre:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_xy(obj = r, gridname=rg_route, sort=True)
         rxy[0][1]-=24
         #rxy[1][1]+=24
-        r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
+        r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_route)
         rvref2_m7.append(r2)
     for r in rvsssar_m7_upper_pre:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_xy(obj = r, gridname=rg_route, sort=True)
         rxy[0][1]-=24
         #rxy[1][1]+=24
-        r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
+        r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_route)
         rvsssar_m7_upper.append(r2)
     #connect VDDSAR/VSS in sar region
     for r in rvddsar_m7_upper:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_xy(obj = r, gridname=rg_route, sort=True)
         rxy[0][1]=1
-        r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
+        r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_route)
     for r in rvsssar_m7_upper:
-        rxy=laygen.get_xy(obj = r, gridname=rg_m6m7_thick, sort=True)
+        rxy=laygen.get_xy(obj = r, gridname=rg_route, sort=True)
         rxy[0][1]=1
-        r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_m6m7_thick)
+        r2=laygen.route(None, laygen.layers['metal'][7], xy0=rxy[0], xy1=rxy[1], gridname0=rg_route)
   
     #connect VSS between sar/samp/clkd in space region
     '''
@@ -265,7 +295,7 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
     for i, r in enumerate(rvsssar_m7):
         pxy=np.array([[r.xy[0][0],0], r.xy[1]])
         laygen.add_rect(None, pxy, laygen.layers['metal'][7])
-        laygen.add_pin('VSS_SAR_M7_'+str(i), 'VSS', pxy, laygen.layers['pin'][7])
+        # laygen.add_pin('VSS_SAR_M7_'+str(i), 'VSS', pxy, laygen.layers['pin'][7])
     '''
     #connect VDDSAMP between samp/clkd in space region
     for r in rvddclkd_m7:
@@ -288,51 +318,56 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
     #M8 routes
     input_rails_rect = [rvsssamp_m7, rvddsamp_m7]
     rvsssamp_m8, rvddsamp_m8= laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAMP_M8_', 
-                layer=laygen.layers['pin'][8], gridname=rg_m7m8_thick, netnames=['VSS', 'VDDSAMP'], direction='x', 
+                layer=laygen.layers['pin'][8], gridname=rg_route_m7m8, netnames=['VSS', 'VDDSAMP'], direction='x',
                 input_rails_rect=input_rails_rect, generate_pin=True, overwrite_start_coord=None, overwrite_end_coord=None,
                 offset_start_index=1, offset_end_index=0)
     input_rails_rect = [rvddsar_m7, rvsssar_m7]
     rvddsar_m8, rvsssar_m8= laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAR_M8_', 
-                layer=laygen.layers['pin'][8], gridname=rg_m7m8_thick, netnames=['VDDSAR', 'VSS'], direction='x', 
+                layer=laygen.layers['pin'][8], gridname=rg_route_m7m8, netnames=['VDDSAR', 'VSS'], direction='x',
                 input_rails_rect=input_rails_rect, generate_pin=True, overwrite_start_coord=None, overwrite_end_coord=None,
                 offset_start_index=0, offset_end_index=0)
     input_rails_rect = [rvref0_m7, rvsssar_m7_upper, rvref1_m7, rvsssar_m7_upper, rvref2_m7, rvsssar_m7_upper]
     laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_VREF_M8_', 
-                layer=laygen.layers['metal'][8], gridname=rg_m7m8_thick, netnames=['VREF<0>', 'VSS', 'VREF<1>', 'VSS', 'VREF<2>', 'VSS'], direction='x', 
+                layer=laygen.layers['metal'][8], gridname=rg_route_m7m8, netnames=['VREF<0>', 'VSS', 'VREF<1>', 'VSS', 'VREF<2>', 'VSS'], direction='x',
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=None, overwrite_end_coord=None,
                 offset_start_index=1, offset_end_index=0)
 
     #osp/osm route
-    pdict_os_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5_basic_thick)
-    rosp_m5=[]
-    rosm_m5=[]
-    for i in range(num_slices):
-        rh0, rv0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], 
-                        pdict_os_m4m5[isar.name]['OSP'+str(i)][0], pdict_os_m4m5[isar.name]['OSP'+str(i)][0]+np.array([-i-2, -10]), gridname=rg_m4m5_basic_thick)
-        rosp_m5.append(rv0)
-        rh0, rv0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5], 
-                        pdict_os_m4m5[isar.name]['OSM'+str(i)][0], pdict_os_m4m5[isar.name]['OSM'+str(i)][0]+np.array([-num_slices-i-2, -10]), gridname=rg_m4m5_basic_thick)
-        rosm_m5.append(rv0)
-    pdict_os_m5m6 = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick)
-    x0=pdict_os_m5m6[isar.name]['VREF0<0>'][0][0]-4*num_slices
-    y0=pdict_os_m5m6[isar.name]['VREF0<0>'][0][1]-8
-    rosp_m6=[]
-    rosm_m6=[]
-    for i in range(num_slices):
-        xy0=laygen.get_xy(obj = rosp_m5[i], gridname=rg_m5m6_thick, sort=True)[0]
-        rv0, rh0 = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6], xy0, np.array([x0, y0-2*i]), gridname=rg_m5m6_thick)
-        laygen.boundary_pin_from_rect(rh0, rg_m5m6_thick, 'OSP' + str(i), laygen.layers['pin'][6], size=6,
-                                      direction='left')
-        rosp_m6.append(rh0)
-        xy0=laygen.get_xy(obj = rosm_m5[i], gridname=rg_m5m6_thick, sort=True)[0]
-        rv0, rh0 = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6], xy0, np.array([x0, y0-2*i-1]), gridname=rg_m5m6_thick)
-        laygen.boundary_pin_from_rect(rh0, rg_m5m6_thick, 'OSM' + str(i), laygen.layers['pin'][6], size=6,
-                                      direction='left')
-        rosm_m6.append(rh0)
+    if use_offset == True:
+        pdict_os_m4m5 = laygen.get_inst_pin_xy(None, None, rg_m4m5_basic_thick)
+        rosp_m5=[]
+        rosm_m5=[]
+        for i in range(num_slices):
+            rh0, rv0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
+                            pdict_os_m4m5[isar.name]['OSP'+str(i)][0], pdict_os_m4m5[isar.name]['OSP'+str(i)][0]+np.array([-i-2, -10]), gridname=rg_m4m5_basic_thick)
+            rosp_m5.append(rv0)
+            rh0, rv0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
+                            pdict_os_m4m5[isar.name]['OSM'+str(i)][0], pdict_os_m4m5[isar.name]['OSM'+str(i)][0]+np.array([-num_slices-i-2, -10]), gridname=rg_m4m5_basic_thick)
+            rosm_m5.append(rv0)
+        pdict_os_m5m6 = laygen.get_inst_pin_xy(None, None, rg_m5m6_thick)
+        x0=pdict_os_m5m6[isar.name]['VREF0<0>'][0][0]-4*num_slices
+        y0=pdict_os_m5m6[isar.name]['VREF0<0>'][0][1]-8
+        rosp_m6=[]
+        rosm_m6=[]
+        for i in range(num_slices):
+            xy0=laygen.get_xy(obj = rosp_m5[i], gridname=rg_m5m6_thick, sort=True)[0]
+            rv0, rh0 = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6], xy0, np.array([x0, y0-2*i]), gridname=rg_m5m6_thick)
+            laygen.boundary_pin_from_rect(rh0, rg_m5m6_thick, 'OSP' + str(i), laygen.layers['pin'][6], size=6,
+                                          direction='left')
+            rosp_m6.append(rh0)
+            xy0=laygen.get_xy(obj = rosm_m5[i], gridname=rg_m5m6_thick, sort=True)[0]
+            rv0, rh0 = laygen.route_vh(laygen.layers['metal'][5], laygen.layers['metal'][6], xy0, np.array([x0, y0-2*i-1]), gridname=rg_m5m6_thick)
+            laygen.boundary_pin_from_rect(rh0, rg_m5m6_thick, 'OSM' + str(i), laygen.layers['pin'][6], size=6,
+                                          direction='left')
+            rosm_m6.append(rh0)
     
             
     #other pins - duplicate
-    pin_prefix_list=['INP', 'INM', 'VREF', 'ASCLKD', 'EXTSEL_CLK', 'ADCOUT', 'CLKOUT_DES', 'CLKBOUT_NC', 'CLKCAL', 'RSTP', 'RSTN', 'CLKIP', 'CLKIN']
+    pin_prefix_list=['INP', 'INM', 'VREF', 'ASCLKD', 'EXTSEL_CLK', 'ADCOUT', 'CLKOUT_DES', 'CLKCAL', 'RSTP', 'RSTN', 'CLKIP', 'CLKIN', 'SF_', 'VREF_SF_']
+    if use_sf == False:
+        pin_prefix_list.remove('SF_')
+    if vref_sf == False:
+        pin_prefix_list.remove('VREF_SF_')
     for pn, p in sar_pins.items():
         for pfix in pin_prefix_list:
             if pn.startswith(pfix):
@@ -398,6 +433,10 @@ if __name__ == '__main__':
             specdict = yaml.load(stream)
         num_bits=specdict['n_bit']
         num_slices=specdict['n_interleave']
+        use_offset=specdict['use_offset']
+        use_sf = specdict['use_sf']
+        vref_sf = specdict['use_vref_sf']
+        input_htree  = specdict['input_htree']
 
     cellname = 'tisaradc_body'
     tisar_core_name = 'tisaradc_body_core'

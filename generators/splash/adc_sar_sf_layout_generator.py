@@ -203,7 +203,7 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
                              devname_mos_dmy, devname_tap_boundary, devname_tap_body,
                              devname_mos_space_4x, devname_mos_space_2x, devname_mos_space_1x,
                              devname_tap_space_4x, devname_tap_space_2x, devname_tap_space_1x,
-                             m_mir=2, m_bias=2, m_in=2, m_ofst=2, m_bias_dum=2, m_in_dum=2, m_byp=2, m_byp_bias=2, origin=np.array([0,0])):
+                             m_mir=2, m_bias=2, m_in=2, m_ofst=2, m_bias_dum=2, m_in_dum=2, m_byp=2, m_byp_bias=2, bias_current=True, origin=np.array([0,0])):
     """generate an analog differential mos structure with dummmies """
     pg = placement_grid
     rg_m1m2 = routing_grid_m1m2
@@ -242,11 +242,17 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
     imdmyl0 = laygen.relplace("I" + objectname_pfix + 'DMYL0', devname_mos_dmy, pg, imbl0.name, shape=np.array([m_bias_dum, 1]))
     imofst0 = laygen.relplace("I" + objectname_pfix + 'OFST0', devname_mos_body, pg, imdmyl0.name, shape=np.array([m_ofst, 1]))
     imdmyl1 = laygen.relplace("I" + objectname_pfix + 'DMYL1', devname_mos_dmy, pg, imofst0.name, shape=np.array([m_bias_dum, 1]))
-    immirl = laygen.relplace("I" + objectname_pfix + 'MIRL0', devname_mos_body, pg, imdmyl1.name, shape=np.array([int(m_mir/2), 1]))
+    if bias_current == True:
+        immirl = laygen.relplace("I" + objectname_pfix + 'MIRL0', devname_mos_body, pg, imdmyl1.name, shape=np.array([int(m_mir/2), 1]))
+    else:
+        immirl = laygen.relplace("I" + objectname_pfix + 'MIRL0', devname_mos_space_2x, pg, imdmyl1.name, shape=np.array([int(m_mir/2), 1]))
     imdmyl2 = laygen.relplace("I" + objectname_pfix + 'DMYL2', devname_mos_dmy, pg, immirl.name, shape=np.array([m_bias_dum, 1]))
     imbias0 = laygen.relplace("I" + objectname_pfix + 'BIAS0', devname_mos_body, pg, imdmyl2.name, shape=np.array([m_bias, 1]))
     imdmyr0 = laygen.relplace("I" + objectname_pfix + 'DMYR0', devname_mos_dmy, pg, imbias0.name, shape=np.array([m_bias_dum, 1]), transform='MY')
-    immirr = laygen.relplace("I" + objectname_pfix + 'MIRR0', devname_mos_body, pg, imdmyr0.name, shape=np.array([int(m_mir/2), 1]), transform='MY')
+    if bias_current == True:
+        immirr = laygen.relplace("I" + objectname_pfix + 'MIRR0', devname_mos_body, pg, imdmyr0.name, shape=np.array([int(m_mir/2), 1]), transform='MY')
+    else:
+        immirr = laygen.relplace("I" + objectname_pfix + 'MIRR0', devname_mos_space_2x, pg, imdmyr0.name, shape=np.array([int(m_mir/2), 1]), transform='MY')
     imdmyr0_1 = laygen.relplace("I" + objectname_pfix + 'DMYR0_1', devname_mos_dmy, pg, immirr.name, shape=np.array([m_bias_dum, 1]), transform='MY')
     imbyp_bias = laygen.relplace("I" + objectname_pfix + 'BYPBIAS', devname_mos_body, pg, imdmyr0_1.name, shape=np.array([m_byp_bias, 1]), transform='MY')
     imdmyr1 = laygen.relplace("I" + objectname_pfix + 'DMYR1', devname_mos_dmy, pg, imbyp_bias.name, shape=np.array([m_bias_dum_r, 1]), transform='MY')
@@ -323,45 +329,46 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
                      refinstname0=imbias0.name, refpinname0='G0', refinstindex0=np.array([i, 0]),
                      refinstname1=imbias0.name, refpinname1='G0', refinstindex1=np.array([i+1, 0]),
                      via0=[0,0], via1=[0,0])
-        rvb = laygen.route(None, laygen.layers['metal'][3], xy0=np.array([1, 0]), xy1=np.array([1, -6]), gridname0=rg_m2m3,
+        rvb = laygen.route(None, laygen.layers['metal'][3], xy0=np.array([1, 0]), xy1=np.array([1, -10]), gridname0=rg_m2m3,
                      refinstname0=imbias0.name, refpinname0='G0', refinstindex0=np.array([i, 0]),
                      refinstname1=imbias0.name, refpinname1='G0', refinstindex1=np.array([i, 0]), via0=[0,0])
         laygen.boundary_pin_from_rect(rvb, rg_m2m3, 'VBIAS'+str(i), laygen.layers['pin'][3], size=4, direction='bottom', netname='VBIAS')
 
-    if int(m_mir/2)-1>0:
-        for i in range(int(m_mir/2)-1):
+    if bias_current == True:
+        if int(m_mir/2)-1>0:
+            for i in range(int(m_mir/2)-1):
+                laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
+                         refinstname0=immirl.name, refpinname0='G0', refinstindex0=np.array([i, 0]),
+                         refinstname1=immirl.name, refpinname1='G0', refinstindex1=np.array([i+1, 0]),
+                         via0=[0,0], via1=[0,0])
+                laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
+                         refinstname0=immirr.name, refpinname0='G0', refinstindex0=np.array([i, 0]),
+                         refinstname1=immirr.name, refpinname1='G0', refinstindex1=np.array([i + 1, 0]),
+                         via0=[0, 0], via1=[0, 0])
+        else:
             laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=immirl.name, refpinname0='G0', refinstindex0=np.array([i, 0]),
-                     refinstname1=immirl.name, refpinname1='G0', refinstindex1=np.array([i+1, 0]),
-                     via0=[0,0], via1=[0,0])
+                         refinstname0=immirl.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
+                         refinstname1=immirl.name, refpinname1='G0', refinstindex1=np.array([1, 0]),
+                         via0=[0, 0])
             laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=immirr.name, refpinname0='G0', refinstindex0=np.array([i, 0]),
-                     refinstname1=immirr.name, refpinname1='G0', refinstindex1=np.array([i + 1, 0]),
-                     via0=[0, 0], via1=[0, 0])
-    else:
-        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=immirl.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
-                     refinstname1=immirl.name, refpinname1='G0', refinstindex1=np.array([1, 0]),
-                     via0=[0, 0])
-        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=immirr.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
-                     refinstname1=immirr.name, refpinname1='G0', refinstindex1=np.array([1, 0]),
-                     via0=[0, 0])
+                         refinstname0=immirr.name, refpinname0='G0', refinstindex0=np.array([0, 0]),
+                         refinstname1=immirr.name, refpinname1='G0', refinstindex1=np.array([1, 0]),
+                         via0=[0, 0])
 
-    for i in range(int(m_mir / 2)): #diode connected
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=immirl.name, refpinname0='G0', refinstindex0=np.array([i, 0]),
-                     refinstname1=immirl.name, refpinname1='D0', refinstindex1=np.array([i, 0]))
-        laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                     refinstname0=immirr.name, refpinname0='G0', refinstindex0=np.array([i, 0]),
-                     refinstname1=immirr.name, refpinname1='D0', refinstindex1=np.array([i, 0]))
+        for i in range(int(m_mir / 2)): #diode connected
+            laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
+                         refinstname0=immirl.name, refpinname0='G0', refinstindex0=np.array([i, 0]),
+                         refinstname1=immirl.name, refpinname1='D0', refinstindex1=np.array([i, 0]))
+            laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
+                         refinstname0=immirr.name, refpinname0='G0', refinstindex0=np.array([i, 0]),
+                         refinstname1=immirr.name, refpinname1='D0', refinstindex1=np.array([i, 0]))
 
-    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                 refinstname0=imbias0.name, refpinname0='G0', refinstindex0=np.array([m_bias-1, 0]),
-                 refinstname1=immirr.name, refpinname1='G0', refinstindex1=np.array([0, 0]))
-    laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
-                 refinstname0=immirl.name, refpinname0='G0', refinstindex0=np.array([int(m_mir/2)-1, 0]),
-                 refinstname1=imbias0.name, refpinname1='G0', refinstindex1=np.array([0, 0]))
+        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
+                     refinstname0=imbias0.name, refpinname0='G0', refinstindex0=np.array([m_bias-1, 0]),
+                     refinstname1=immirr.name, refpinname1='G0', refinstindex1=np.array([0, 0]))
+        laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
+                     refinstname0=immirl.name, refpinname0='G0', refinstindex0=np.array([int(m_mir/2)-1, 0]),
+                     refinstname1=imbias0.name, refpinname1='G0', refinstindex1=np.array([0, 0]))
 
     # IBYP_BIAS routing
     for i in range(m_byp_bias-1):
@@ -438,7 +445,7 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
                  refinstname0=imin0.name, refpinname0='G0', refinstindex0=np.array([0, 0]), via0=[0, 0],
                  refinstname1=imin0.name, refpinname1='G0', refinstindex1=np.array([0, 0]))
     rin_m4 = laygen.route(None, laygen.layers['metal'][4], xy0=laygen.get_rect_xy(rin_m3.name, rg_m3m4)[0],
-                          xy1=laygen.get_rect_xy(rin_m3.name, rg_m3m4)[0]-np.array([3, 0]), gridname0=rg_m3m4,
+                          xy1=laygen.get_rect_xy(rin_m3.name, rg_m3m4)[0]-np.array([5, 0]), gridname0=rg_m3m4,
                           via0=[0, 0])
     rin = laygen.route(None, laygen.layers['metal'][5], xy0=laygen.get_rect_xy(rin_m4.name, rg_m4m5_thick)[1],
                           xy1=laygen.get_rect_xy(rin_m4.name, rg_m4m5_thick)[1]+np.array([0, 6]), gridname0=rg_m4m5_thick,
@@ -507,7 +514,7 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
         laygen.route(None, laygen.layers['metal'][2], xy0=np.array([0, 0]), xy1=np.array([0, 0]), gridname0=rg_m1m2,
                      refinstname0=imofst0.name, refpinname0='G0', refinstindex0=np.array([i, 0]), via0=[0,0],
                      refinstname1=imofst0.name, refpinname1='G0', refinstindex1=np.array([i+1, 0]))
-    roff = laygen.route(None, laygen.layers['metal'][3], xy0=np.array([1, 0]), xy1=np.array([1, -6]), gridname0=rg_m2m3,
+    roff = laygen.route(None, laygen.layers['metal'][3], xy0=np.array([1, 0]), xy1=np.array([1, -10]), gridname0=rg_m2m3,
                  refinstname0=imofst0.name, refpinname0='G0', refinstindex0=np.array([0, 0]), via0=[0, 0],
                  refinstname1=imofst0.name, refpinname1='G0', refinstindex1=np.array([0, 0]))
     laygen.boundary_pin_from_rect(roff, rg_m2m3, 'Voff', laygen.layers['pin'][3], size=4, direction='bottom')
@@ -703,6 +710,7 @@ if __name__ == '__main__':
         m_bias_dum=sizedict['sourceFollower']['m_bias_dum']
         m_byp=sizedict['sourceFollower']['m_byp']
         m_byp_bias=sizedict['sourceFollower']['m_byp_bias']
+        bias_current=sizedict['sourceFollower']['bias_current']
 
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
@@ -717,7 +725,7 @@ if __name__ == '__main__':
                              devname_tap_space_4x='ptap_fast_space_nf4', devname_tap_space_2x='ptap_fast_space_nf2', devname_tap_space_1x='ptap_fast_space',
                              m_mir=m_mir, m_bias=m_bias, m_in=m_in,
                              m_ofst=m_ofst, m_bias_dum=m_bias_dum, m_in_dum=m_in_dum, m_byp=m_byp, m_byp_bias=m_byp_bias,
-                             origin=sf_origin)
+                             bias_current=bias_current, origin=sf_origin)
     laygen.add_template_from_cell()
 
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)

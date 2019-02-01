@@ -64,7 +64,7 @@ def generate_clkdis_hcell(laygen, objectname_pfix, logictemp_lib, working_lib, g
     #print(rg2)
 
     # print(pitch_h)
-    # print(rg1, rg2, len_v1, len_h, len_v2)
+    print(rg1, rg2, len_v1, len_h, len_v2)
 
     ## vertical tracks 1 and vias
     for i in range(trackm):
@@ -94,11 +94,14 @@ def generate_clkdis_hcell(laygen, objectname_pfix, logictemp_lib, working_lib, g
     
     ## horizental tracks  
     for i in range(trackm):
-        laygen.route(None, laygen.layers['metal'][metal_h], xy0=np.array([origin[0]-int(len_h/2)+offset, origin[1]-len_v1-2*i]), xy1=np.array([origin[0]+len_h/2+4*trackm+(shieldm-1)*2+offset, origin[1]-len_v1-2*i]), gridname0=rg1)
+        laygen.route(None, laygen.layers['metal'][metal_h], xy0=np.array([origin[0]-int(len_h/2)+offset, origin[1]-len_v1-2*i]),
+                     xy1=np.array([origin[0]+len_h/2+4*trackm+(shieldm-1)*2+offset+1, origin[1]-len_v1-2*i]), gridname0=rg1)
     for i in range(trackm+shieldm, 2*trackm+shieldm):
-        laygen.route(None, laygen.layers['metal'][metal_h], xy0=np.array([origin[0]-int(len_h/2)+offset, origin[1]-len_v1-2*i]), xy1=np.array([origin[0]+len_h/2+4*trackm+(shieldm-1)*2+offset, origin[1]-len_v1-2*i]), gridname0=rg1)
+        laygen.route(None, laygen.layers['metal'][metal_h], xy0=np.array([origin[0]-int(len_h/2)+offset, origin[1]-len_v1-2*i]),
+                     xy1=np.array([origin[0]+len_h/2+4*trackm+(shieldm-1)*2+offset+1, origin[1]-len_v1-2*i]), gridname0=rg1)
     for i in range(trackm, trackm+shieldm):
-        laygen.route(None, laygen.layers['metal'][metal_h], xy0=np.array([origin[0]-int(len_h/2)+offset, origin[1]-len_v1-2*i]), xy1=np.array([origin[0]+len_h/2+4*trackm+(shieldm-1)*2+offset, origin[1]-len_v1-2*i]), gridname0=rg1)
+        laygen.route(None, laygen.layers['metal'][metal_h], xy0=np.array([origin[0]-int(len_h/2)+offset, origin[1]-len_v1-2*i]),
+                     xy1=np.array([origin[0]+len_h/2+4*trackm+(shieldm-1)*2+offset+1, origin[1]-len_v1-2*i]), gridname0=rg1)
 
     ## vertical tracks 2
     out_xy = []
@@ -106,21 +109,20 @@ def generate_clkdis_hcell(laygen, objectname_pfix, logictemp_lib, working_lib, g
         for i in range(trackm):
             vp2x=laygen.route(None, laygen.layers['metal'][metal_v2], xy0=np.array([origin[0]+2*i-int((ratio-1)/2*len_h)+k*len_h+offset, origin[1]-len_v1]),
                 xy1=np.array([origin[0]+2*i-int((ratio-1)/2*len_h)+k*len_h+offset, origin[1]-len_v1-4*trackm-(shieldm-1)*2-len_v2]), gridname0=rg2)
-            if out_pin==1:    
+            if out_pin==1:
                 laygen.boundary_pin_from_rect(vp2x, gridname=rg1,
-                                              name='WPO' + str(out_label) + '_' + str(k) + '_' + str(i),
+                                              name='WPO' + '_' + str(int(out_label)*2+k) + '_' + str(i),
                                               layer=laygen.layers['pin'][metal_v1], size=2, direction='bottom',
                                               netname='WP')
                 #print('WO'+str(out_label)+'_'+str(k)+'_'+str(i))
             for j in range(trackm):
-                print(np.array([origin[0]+2*i-int((ratio-1)/2*len_h)+k*len_h+offset,origin[1]-len_v1-2*j]))
                 laygen.via(None, xy=np.array([origin[0]+2*i-int((ratio-1)/2*len_h)+k*len_h+offset,origin[1]-len_v1-2*j]), gridname=rg1)
         for i in range(trackm+shieldm, 2*trackm+shieldm):
             vp2x=laygen.route(None, laygen.layers['metal'][metal_v2], xy0=np.array([origin[0]+2*i-int((ratio-1)/2*len_h)+k*len_h+offset, origin[1]-len_v1]),
                 xy1=np.array([origin[0]+2*i-int((ratio-1)/2*len_h)+k*len_h+offset, origin[1]-len_v1-4*trackm-(shieldm-1)*2-len_v2]), gridname0=rg2)
             if out_pin==1:    
                 laygen.boundary_pin_from_rect(vp2x, gridname=rg1,
-                                              name='WNO' + str(out_label) + '_' + str(k) + '_' + str(i),
+                                              name='WNO' + '_' + str(int(out_label)*2+k) + '_' + str(i-trackm-shieldm),
                                               layer=laygen.layers['pin'][metal_v1], size=2, direction='bottom',
                                               netname='WN')
                 #print('WO'+str(out_label)+'_'+str(k)+'_'+str(i))
@@ -131,7 +133,7 @@ def generate_clkdis_hcell(laygen, objectname_pfix, logictemp_lib, working_lib, g
                 xy1=np.array([origin[0]+2*i-int((ratio-1)/2*len_h)+k*len_h+offset, origin[1]-len_v1-4*trackm-(shieldm-1)*2-len_v2]), gridname0=rg2)
             if out_pin==1:    
                 laygen.boundary_pin_from_rect(vp2x, gridname=rg1,
-                                              name='VSS' + str(out_label) + '_' + str(k) + '_' + str(i),
+                                              name='VSS' + '_' + str(int(out_label)*2+k) + '_' + str(i-trackm),
                                               layer=laygen.layers['pin'][metal_v1], size=2, direction='bottom',
                                               netname='VSS')
                 #print('WO'+str(out_label)+'_'+str(k)+'_'+str(i))
@@ -318,7 +320,7 @@ if __name__ == '__main__':
             level = lvl,
             #track number
             trackm = 2,
-            shieldm = 2,
+            shieldm = 1,
             #divide ratio
             ratio = [ratio]*lvl,
             #metal layer
@@ -329,9 +331,9 @@ if __name__ == '__main__':
             #pitch_h = [100, 50],    #um
             pitch_h = [pitch_x*int(2**(lvl-i-1)) for i in range(lvl)],
             #length
-            len_v1 = [1]*lvl,        #um 
+            len_v1 = [3]*lvl,
             len_h = [None]*lvl,   #um
-            len_v2 = [1]*lvl,        #um
+            len_v2 = [3]*lvl,
             #offset
             offset = [0]*lvl,        #um
         )

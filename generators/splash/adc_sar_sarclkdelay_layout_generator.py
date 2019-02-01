@@ -85,8 +85,12 @@ def generate_sarclkdelayslice_compact2(laygen, objectname_pfix, templib_logic, p
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[isel0.name]['O'][0],
                                        pdict[imux0.name]['EN0'][0], y0+1, rg_m3m4)
     #route-input
-    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[iinvda[0].name]['I'][0],
-                                       pdict[imux0.name]['I0'][0], y0+2, rg_m3m4)
+    [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][2],
+                                       laygen.get_inst_pin_xy(iinvda[0].name, 'I', rg_m2m3)[0],
+                                       laygen.get_inst_pin_xy(imux0.name, 'I0', rg_m2m3)[0],
+                                       laygen.get_inst_pin_xy(imux0.name, 'I0', rg_m2m3)[0][1]+1, rg_m2m3)
+    # [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[iinvda[0].name]['I'][0],
+    #                                    pdict[imux0.name]['I0'][0], y0+2, rg_m3m4)
     #route-path1
     for i in range(ndelay):
         [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[iinvda[i].name]['O'][0],
@@ -107,7 +111,7 @@ def generate_sarclkdelayslice_compact2(laygen, objectname_pfix, templib_logic, p
 
 
 def generate_sarclkdelay_compact_dual(laygen, objectname_pfix, templib_logic, workinglib, placement_grid, routing_grid_m3m4,
-                                      m_space_4x=0, m_space_2x=0, m_space_1x=0, origin=np.array([0, 0])):
+                                      m_space_4x=0, m_space_2x=0, m_space_1x=0, fastest=False, origin=np.array([0, 0])):
     """generate clock delay """
     pg = placement_grid
     rg_m3m4 = routing_grid_m3m4
@@ -166,20 +170,18 @@ def generate_sarclkdelay_compact_dual(laygen, objectname_pfix, templib_logic, wo
     y0 = pdict[islice0.name]['I'][0][1] + 2
 
     #route-backtoback
-    rv0, rh0, rv1 = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[islice0.name]['O'][0],
+    if fastest == False:
+        rv0, rh0, rv1 = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[islice0.name]['O'][0],
                                pdict[islice1.name]['I'][0], y0, rg_m3m4)
-    #rv0, rh0, rv1 = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[islice1.name]['O'][0],
-    #                           pdict[islice2.name]['I'][0], y0, rg_m3m4)
-    #rv0, rh0, rv1 = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[islice2.name]['O'][0],
-    #                           pdict[imux0.name]['I1'][0], y0-1, rg_m3m4)
-    #rv0, rh0, rv1 = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[islice2.name]['I'][0],
-    #                           pdict[imux0.name]['I0'][0], y0+4, rg_m3m4)
+    else:
+        rv0, rh0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2],
+                                   laygen.get_inst_pin_xy(islice0.name, 'I', rg_m2m3)[0],
+                                   laygen.get_inst_pin_xy(islice0.name, 'VSS', rg_m2m3)[0], rg_m2m3)
     rv0, rh0, rv1 = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[islice1.name]['O'][0],
                                pdict[imux0.name]['I1'][0], y0-1, rg_m3m4)
     rv0, rh0, rv1 = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[islice1.name]['I'][0],
                                pdict[imux0.name]['I0'][0], y0+4-8, rg_m3m4)
-    #rv0, rh0, rv1 = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[islice0.name]['I'][0],
-    #                           pdict[imux0.name]['I0'][0], y0+4, rg_m3m4)
+
     #nor-inv
     rv0, rh0, rv1 = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[inor0.name]['O'][0],
                                pdict[iinv0.name]['I'][0], y0+1, rg_m3m4)
@@ -201,7 +203,10 @@ def generate_sarclkdelay_compact_dual(laygen, objectname_pfix, templib_logic, wo
     #rv0, ren0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[inor0.name]['B'][0],
     #                               np.array([x1, y0]), rg_m3m4)
     #pins
-    laygen.pin(name='I', layer=laygen.layers['pin'][3], xy=pdict[islice0.name]['I'], gridname=rg_m3m4)
+    if fastest==False:
+        laygen.pin(name='I', layer=laygen.layers['pin'][3], xy=pdict[islice0.name]['I'], gridname=rg_m3m4)
+    else:
+        laygen.pin(name='I', layer=laygen.layers['pin'][3], xy=pdict[islice1.name]['I'], gridname=rg_m3m4)
     laygen.pin(name='O', layer=laygen.layers['pin'][3], xy=pdict[imux0.name]['O'], gridname=rg_m3m4)
     laygen.boundary_pin_from_rect(rsel0, rg_m3m4, "SEL<0>", laygen.layers['pin'][4], size=6, direction='right')
     laygen.boundary_pin_from_rect(rsel1, rg_m3m4, "SEL<1>", laygen.layers['pin'][4], size=6, direction='right')
@@ -269,6 +274,7 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         ndelay=sizedict['sarclkgen']['ndelay']
+        fastest = sizedict['sarclkgen']['fastest']
 
     #cell generation (slice_compact)
     cellname='sarclkdelayslice_compact'
@@ -287,7 +293,7 @@ if __name__ == '__main__':
     laygen.add_cell(cellname)
     laygen.sel_cell(cellname)
     generate_sarclkdelay_compact_dual(laygen, objectname_pfix='CKD0', templib_logic=logictemplib, workinglib=workinglib,
-                         placement_grid=pg, routing_grid_m3m4=rg_m3m4, m_space_4x=0, m_space_2x=0, m_space_1x=0,
+                         placement_grid=pg, routing_grid_m3m4=rg_m3m4, m_space_4x=0, m_space_2x=0, m_space_1x=0, fastest=fastest,
                          origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 

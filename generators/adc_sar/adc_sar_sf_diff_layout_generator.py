@@ -52,6 +52,8 @@ def generate_source_follower_diff(laygen, objectname_pfix, placement_grid, routi
     sfl_xy=isfl.xy
     sfr_xy=isfr.xy
     pdict_m3m4=laygen.get_inst_pin_xy(None, None, rg_m3m4)
+    pdict_m3m4_thick=laygen.get_inst_pin_xy(None, None, rg_m3m4_basic_thick)
+    pdict_m4m5_thick=laygen.get_inst_pin_xy(None, None, rg_m4m5_thick)
 
     outcnt = [0, 0]
     incnt = [0, 0]
@@ -62,9 +64,9 @@ def generate_source_follower_diff(laygen, objectname_pfix, placement_grid, routi
         if pn.startswith('out'):
             for i in range(len(isf_list)):
                 # pn='out'
-                pn_out='out'+isf_suffix_list[i]+str(outcnt[i])
+                pn_out='out'+isf_suffix_list[i]
                 laygen.pin(name=pn_out, layer=sf_pins[pn]['layer'], netname='out'+isf_suffix_list[i],
-                           xy=pdict_m3m4[isf_list[i].name][pn], gridname=rg_m3m4)
+                           xy=pdict_m3m4_thick[isf_list[i].name][pn], gridname=rg_m3m4_basic_thick)
                 outcnt[i]+=1
     # # input pins
     # for pn, p in sf_pins.items():
@@ -76,17 +78,48 @@ def generate_source_follower_diff(laygen, objectname_pfix, placement_grid, routi
     #             incnt[i] += 1
     pn = 'in'
     for i in range(len(isf_list)):
-        pn_out = 'in' + isf_suffix_list[i] + str(incnt[i])
+        pn_out = 'in' + isf_suffix_list[i]
         laygen.pin(name=pn_out, layer=sf_pins[pn]['layer'], netname='in' + isf_suffix_list[i],
-                   xy=pdict_m3m4[isf_list[i].name][pn], gridname=rg_m3m4)
+                   xy=pdict_m4m5_thick[isf_list[i].name][pn], gridname=rg_m4m5_thick)
     # vbias pins
-    for pn, p in sf_pins.items():
-        if pn.startswith('VBIAS'):
-            for i in range(len(isf_list)):
-                pn_out = 'VBIAS' + isf_suffix_list[i] + str(vbiascnt[i])
-                laygen.pin(name=pn_out, layer=sf_pins[pn]['layer'], netname='VBIAS' + isf_suffix_list[i],
-                           xy=pdict_m3m4[isf_list[i].name][pn], gridname=rg_m3m4)
-                vbiascnt[i] += 1
+    rvb_list = []
+    for i in range(len(isf_list)):
+        vbias_xy = []
+        for pn, p in sf_pins.items():
+            if pn.startswith('VBIAS'):
+                vbias_xy.append(pdict_m3m4_thick[isf_list[i].name][pn][0])
+                # laygen.pin(name=pn_out, layer=sf_pins[pn]['layer'], netname='VBIAS' + isf_suffix_list[i],
+                #            xy=pdict_m3m4[isf_list[i].name][pn], gridname=rg_m3m4)
+                # vbiascnt[i] += 1
+        for j in range(len(vbias_xy)-1):
+            laygen.route(None, laygen.layers['metal'][4], xy0=vbias_xy[j], xy1=vbias_xy[j+1], gridname0=rg_m3m4_basic_thick,
+                         via0=[0, 0], via1=[0, 0])
+        rvb = laygen.route(None, laygen.layers['metal'][5], xy0=pdict_m4m5_thick[isf_list[i].name]['VBIAS0'][0],
+                     xy1=pdict_m4m5_thick[isf_list[i].name]['VBIAS0'][0]+np.array([0, 4]),
+                     gridname0=rg_m4m5_thick, via0=[0, 0])
+        rvb_list.append(rvb)
+        rh0 = laygen.route(None, laygen.layers['metal'][4], xy0=pdict_m3m4_thick[isf_list[i].name]['Voff'][0]+np.array([0, 1]),
+                     xy1=pdict_m3m4_thick[isf_list[i].name]['Voff'][0]+np.array([3*(-1)**i, 1]),
+                     gridname0=rg_m3m4_basic_thick, via0=[0, 0])
+        rvoff = laygen.route(None, laygen.layers['metal'][5], xy0=pdict_m4m5_thick[isf_list[i].name]['Voff'][0]+np.array([0, 0]),
+                     xy1=pdict_m4m5_thick[isf_list[i].name]['Voff'][0]+np.array([0, 4]),
+                     gridname0=rg_m4m5_thick, via0=[0, 1])
+        # pn_out = 'VBIAS' + isf_suffix_list[i]
+        # laygen.boundary_pin_from_rect(rvb, rg_m4m5_thick, pn_out, laygen.layers['pin'][5], size=4, direction='top')
+        pn_out = 'Voff' + isf_suffix_list[i]
+        laygen.boundary_pin_from_rect(rvoff, rg_m4m5_thick, pn_out, laygen.layers['pin'][5], size=4, direction='top')
+    rvb = laygen.route(None, laygen.layers['metal'][6], xy0=laygen.get_rect_xy(rvb_list[0].name, rg_m5m6_thick)[0],
+                       xy1=laygen.get_rect_xy(rvb_list[1].name, rg_m5m6_thick)[0],
+                       gridname0=rg_m5m6_thick, via0=[0, 0], via1=[0, 0])
+    laygen.pin_from_rect('VBIAS', laygen.layers['pin'][6], rvb, rg_m5m6_thick)
+
+    # for pn, p in sf_pins.items():
+    #     if pn.startswith('VBIAS'):
+    #         for i in range(len(isf_list)):
+    #             pn_out = 'VBIAS' + isf_suffix_list[i] + str(vbiascnt[i])
+    #             laygen.pin(name=pn_out, layer=sf_pins[pn]['layer'], netname='VBIAS' + isf_suffix_list[i],
+    #                        xy=pdict_m3m4[isf_list[i].name][pn], gridname=rg_m3m4)
+    #             vbiascnt[i] += 1
     # pn = 'VBIAS'
     # for i in range(len(isf_list)):
     #     pn_out = 'VBIAS' + isf_suffix_list[i] + str(incnt[i])
@@ -101,11 +134,11 @@ def generate_source_follower_diff(laygen, objectname_pfix, placement_grid, routi
     #             laygen.pin(name=pn_out, layer=sf_pins[pn]['layer'], netname='Voff' + isf_suffix_list[i],
     #                        xy=pdict_m3m4[isf_list[i].name][pn], gridname=rg_m3m4)
     #             voffcnt[i] += 1
-    pn = 'Voff'
-    for i in range(len(isf_list)):
-        pn_out = 'Voff' + isf_suffix_list[i] + str(incnt[i])
-        laygen.pin(name=pn_out, layer=sf_pins[pn]['layer'], netname='Voff' + isf_suffix_list[i],
-                   xy=pdict_m3m4[isf_list[i].name][pn], gridname=rg_m3m4)
+    # pn = 'Voff'
+    # for i in range(len(isf_list)):
+    #     pn_out = 'Voff' + isf_suffix_list[i] + str(incnt[i])
+    #     laygen.pin(name=pn_out, layer=sf_pins[pn]['layer'], netname='Voff' + isf_suffix_list[i],
+    #                xy=pdict_m3m4[isf_list[i].name][pn], gridname=rg_m3m4)
 
     # #VDD/VSS pins
     # vddcnt=0
@@ -208,7 +241,9 @@ if __name__ == '__main__':
     rg_m3m4 = 'route_M3_M4_basic'
     rg_m3m4_basic_thick = 'route_M3_M4_basic_thick'
     rg_m4m5 = 'route_M4_M5_basic'
+    rg_m4m5_thick = 'route_M4_M5_thick'
     rg_m5m6 = 'route_M5_M6_basic'
+    rg_m5m6_thick = 'route_M5_M6_thick'
     rg_m1m2_pin = 'route_M1_M2_basic'
     rg_m2m3_pin = 'route_M2_M3_basic'
 
