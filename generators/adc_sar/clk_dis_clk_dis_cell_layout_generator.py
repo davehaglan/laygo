@@ -245,12 +245,12 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     #Place dff_dmy0, tgated0, dff0, inv0, and inv1 
     num_dff_dmy_4x = int(num_dff_dmy / 4)
     num_dff_dmy_1x = num_dff_dmy - 4 * num_dff_dmy_4x
-    dff_dmy0 = laygen.place(name='I'+objectname_pfix+'DFFDM0_4x', templatename='space_4x', gridname=pg, xy=dff_dmy0_xy,
+    dff_dmy0_0 = laygen.place(name='I'+objectname_pfix+'DFFDM0_4x', templatename='space_4x', gridname=pg, xy=dff_dmy0_xy,
             template_libname=logictemp_lib, shape=np.array([num_dff_dmy_4x, 1]), transform='MX')
     dff_dmy1= laygen.relplace(name='I'+objectname_pfix+'DFFDM0_1x', templatename='space_1x', gridname=pg,
-            refinstname=dff_dmy0.name, template_libname=logictemp_lib, shape=np.array([num_dff_dmy_1x, 1]), transform='MX')
+            refinstname=dff_dmy0_0.name, template_libname=logictemp_lib, shape=np.array([num_dff_dmy_1x, 1]), transform='MX')
     tgated0=laygen.relplace(name='I'+objectname_pfix+'TGD0', templatename='tgate_dn_'+str(m_tgate)+'x', gridname=pg, 
-            refinstname=dff_dmy0.name, template_libname=logictemp_lib, transform='R180')
+            refinstname=dff_dmy0_0.name, template_libname=logictemp_lib, transform='R180')
     dff0=laygen.relplace(name='I'+objectname_pfix+'DFF0', templatename='dff_strsth_ckb_'+str(m_dff)+'x', gridname=pg, 
             refinstname=tgated0.name, template_libname=tech+'_logic_templates', transform='MX')
     inv0=laygen.relplace(name='I'+objectname_pfix+'INV0', templatename='inv_'+str(m_inv1)+'x', gridname=pg, 
@@ -417,15 +417,21 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     for i in range(0, bnd_m-2, 2):
         laygen.via(None, np.array([0, 0]), refinstname=ptap0_1.name, refpinname='TAP0', refinstindex=np.array([i-tap4_size_x+1, 0]), gridname=rg_m1m2_thick)
     #Generate left cotacts and metals
-    for i in range(0, num_capsw_dmy, 2): 
-        laygen.via(None, np.array([0, 3]), refinstname=ptap0_1.name, refpinname='TAP0', refinstindex=np.array([i-tap4_size_x+1, 0]), gridname=rg_m1m2)
+    for i in range(0, num_capsw_dmy, 2):
+        v_x = laygen.get_inst_pin_xy(ptap0_1.name, 'TAP0', rg_m1m2, index=np.array([i-tap4_size_x+1, 0]))[0][0]
+        v_y = laygen.get_inst_pin_xy(sw_dmy0.name, 'VSS', rg_m1m2)[0][1]
+        laygen.via(None, np.array([v_x, v_y]), gridname=rg_m1m2)
+        # laygen.via(None, np.array([0, 3]), refinstname=ptap0_1.name, refpinname='TAP0', refinstindex=np.array([i-tap4_size_x+1, 0]), gridname=rg_m1m2)
         laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 3]), gridname0=rg_m1m2,
                         refinstname0=ptap0_1.name, refpinname0='TAP0', refinstindex0=np.array([i-tap4_size_x+1, 0]),
                         refinstname1=ptap0_1.name, refpinname1='TAP0', refinstindex1=np.array([i-tap4_size_x+1, 0]))
     laygen.via(None, np.array([0, 0]), refinstname=ptap0_1.name, refpinname='TAP1', refinstindex=np.array([bnd_m-2*tap4_size_x+2, 0]), gridname=rg_m1m2_thick)
     #Generate right contacts and metals
     for i in range(num_capsw_dmy+capsw0_size_x, bnd_m, 2):
-        laygen.via(None, np.array([0, 3]), refinstname=ptap0_1.name, refpinname='TAP0', refinstindex=np.array([i-3, 0]), gridname=rg_m1m2)
+        v_x = laygen.get_inst_pin_xy(ptap0_1.name, 'TAP0', rg_m1m2, index=np.array([i-3, 0]))[0][0]
+        v_y = laygen.get_inst_pin_xy(sw_dmy0.name, 'VSS', rg_m1m2)[0][1]
+        laygen.via(None, np.array([v_x, v_y]), gridname=rg_m1m2)
+        # laygen.via(None, np.array([0, 3]), refinstname=ptap0_1.name, refpinname='TAP0', refinstindex=np.array([i-3, 0]), gridname=rg_m1m2)
         laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 3]), gridname0=rg_m1m2,
                         refinstname0=ptap0_1.name, refpinname0='TAP0', refinstindex0=np.array([i-tap4_size_x+1, 0]),
                         refinstname1=ptap0_1.name, refpinname1='TAP0', refinstindex1=np.array([i-tap4_size_x+1, 0]))
@@ -448,8 +454,11 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     #Generate left contacts and metals
     for i in range(0, num_dff_dmy, 2):
         if pmos_body=='VDD':
+            v_x = laygen.get_inst_pin_xy(ntap0_1.name, 'TAP0', rg_m1m2, index=np.array([i-tap4_size_x+1, 0]))[0][0]
+            v_y = laygen.get_inst_pin_xy(sw_dmy0.name, 'VDD', rg_m1m2)[0][1]
+            laygen.via(None, np.array([v_x, v_y]), gridname=rg_m1m2)
+            # laygen.via(None, np.array([0, 3]), refinstname=ntap0_1.name, refpinname='TAP0', refinstindex=np.array([i-tap4_size_x+1, 0]), gridname=rg_m1m2)
             laygen.via(None, np.array([0, -1]), refinstname=ntap0_1.name, refpinname='TAP0', refinstindex=np.array([i-tap4_size_x+1, 0]), gridname=rg_m1m2)
-            laygen.via(None, np.array([0, 3]), refinstname=ntap0_1.name, refpinname='TAP0', refinstindex=np.array([i-tap4_size_x+1, 0]), gridname=rg_m1m2)
         else:
             if i < 10:
                 laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 0]),
@@ -465,7 +474,10 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     #Generate right contacts and metals
     for i in range(dff_dmy1_x-tap4_size_x-bnd_left_size_x+1, bnd_m-tap4_size_x, 2):
         if pmos_body=='VDD':
-            laygen.via(None, np.array([0, 3]), refinstname=ntap0_1.name, refpinname='TAP0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
+            v_x = laygen.get_inst_pin_xy(ntap0_1.name, 'TAP0', rg_m1m2, index=np.array([i, 0]))[0][0]
+            v_y = laygen.get_inst_pin_xy(sw_dmy0.name, 'VDD', rg_m1m2)[0][1]
+            laygen.via(None, np.array([v_x, v_y]), gridname=rg_m1m2)
+            # laygen.via(None, np.array([0, 3]), refinstname=ntap0_1.name, refpinname='TAP0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
             laygen.via(None, np.array([0, -1]), refinstname=ntap0_1.name, refpinname='TAP0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
         else:
             if i > bnd_m - tap4_size_x - 10:
@@ -494,13 +506,15 @@ def generate_clkdis_cell(laygen, objectname_pfix, logictemp_lib, working_lib, gr
     laygen.via(None, np.array([0, 0]), refinstname=ptap1_1.name, refpinname='TAP1', refinstindex=np.array([bnd_m-2*tap4_size_x+2, 0]), gridname=rg_m1m2_thick) 
     #Generate left contacts and metals
     for i in range(0, num_dff_dmy, 2):
-        laygen.via(None, np.array([0, 3]), refinstname=ptap1_1.name, refpinname='TAP0', refinstindex=np.array([i-tap4_size_x+1, 0]), gridname=rg_m1m2)
+        laygen.via(None, np.array([i+1, 0]), refinstname=dff_dmy0_0.name, refpinname='VSS', refinstindex=np.array([0, 0]), gridname=rg_m1m2)
+        # laygen.via(None, np.array([0, 3]), refinstname=ptap1_1.name, refpinname='TAP0', refinstindex=np.array([i-tap4_size_x+1, 0]), gridname=rg_m1m2)
         laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 3]), gridname0=rg_m1m2,
                         refinstname0=ptap1_1.name, refpinname0='TAP0', refinstindex0=np.array([i-tap4_size_x+1, 0]),
                         refinstname1=ptap1_1.name, refpinname1='TAP0', refinstindex1=np.array([i-tap4_size_x+1, 0]))
     #Generate right contacts and metals
     for i in range(dff_dmy1_x-tap4_size_x-bnd_left_size_x+1, bnd_m-tap4_size_x, 2):
-        laygen.via(None, np.array([0, 3]), refinstname=ptap1_1.name, refpinname='TAP0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
+        laygen.via(None, np.array([i+1-(dff_dmy1_x-tap4_size_x-bnd_left_size_x+1), 0]), refinstname=dff_dmy0.name, refpinname='VSS', refinstindex=np.array([0, 0]), gridname=rg_m1m2)
+        # laygen.via(None, np.array([0, 3]), refinstname=ptap1_1.name, refpinname='TAP0', refinstindex=np.array([i, 0]), gridname=rg_m1m2)
         laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, 3]), gridname0=rg_m1m2,
                         refinstname0=ptap1_1.name, refpinname0='TAP0', refinstindex0=np.array([i, 0]),
                         refinstname1=ptap1_1.name, refpinname1='TAP0', refinstindex1=np.array([i, 0]))
