@@ -130,20 +130,61 @@ def generate_tisaradc_space(laygen, objectname_pfix, tisar_libname, space_libnam
     laygenhelper.generate_grids_from_template(laygen, gridname_input=rg_m5m6_thick, gridname_output=rg_m5m6_thick_temp_tisar, 
                                               template_name=tisar_name, template_libname=tisar_libname,
                                               template_pin_prefix=['VDD'], xy_grid_type='ygrid')
+    pin_origin_y0_thick = origin[1] + \
+                          laygen.get_template_pin_xy(sar_name, 'VREF_SF_BIAS', rg_m5m6_thick_temp_tisar, libname=workinglib)[0][1] \
+                          + laygen.get_template_xy(name=ret_name, gridname=rg_m5m6_thick_temp_tisar, libname=workinglib)[1]
     input_rails_rect = [rvdd_m5]
-    rvdd_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_', 
-                layer=laygen.layers['pin'][6], gridname=rg_m5m6_thick_temp_tisar, netnames=['VDD'], direction='x', 
+    # if vref_sf == False:
+    rvdd_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
+                layer=laygen.layers['pin'][6], gridname=rg_m5m6_thick_temp_tisar, netnames=['VDD'], direction='x',
                 input_rails_rect=input_rails_rect, generate_pin=True, overwrite_start_coord=None, overwrite_end_coord=None,
                 offset_start_index=0, offset_end_index=-1)
+    # else:
+    #     rvdd_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
+    #             layer=laygen.layers['pin'][6], gridname=rg_m5m6_thick_temp_tisar, netnames=['VDD'], direction='x',
+    #             input_rails_rect=input_rails_rect, generate_pin=True, overwrite_start_coord=None, overwrite_end_coord=None,
+    #             offset_start_index=0, offset_end_index=pin_origin_y0_thick-2)
+    #     rvdd_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
+    #                                                                 layer=laygen.layers['pin'][6],
+    #                                                                 gridname=rg_m5m6_thick_temp_tisar, netnames=['VDD'],
+    #                                                                 direction='x',
+    #                                                                 input_rails_rect=input_rails_rect,
+    #                                                                 generate_pin=True, overwrite_start_coord=None,
+    #                                                                 overwrite_end_coord=None,
+    #                                                                 offset_start_index=pin_origin_y0_thick + 2,
+    #                                                                 offset_end_index=-1)
     rg_m5m6_thick_temp_tisar='route_M5_M6_thick_temp_tisar_VSS'
-    laygenhelper.generate_grids_from_template(laygen, gridname_input=rg_m5m6_thick, gridname_output=rg_m5m6_thick_temp_tisar, 
+    laygenhelper.generate_grids_from_template(laygen, gridname_input=rg_m5m6_thick, gridname_output=rg_m5m6_thick_temp_tisar,
                                               template_name=tisar_name, template_libname=tisar_libname,
                                               template_pin_prefix=['VSS'], xy_grid_type='ygrid')
+    pin_origin_y0_thick = origin[1] + \
+                          laygen.get_template_pin_xy(sar_name, 'VREF_SF_BIAS', rg_m5m6_thick_temp_tisar, libname=workinglib)[0][1] \
+                          + laygen.get_template_xy(name=ret_name, gridname=rg_m5m6_thick_temp_tisar, libname=workinglib)[1]
     input_rails_rect = [rvss_m5]
+    # if vref_sf == False:
     rvss_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
                 layer=laygen.layers['pin'][6], gridname=rg_m5m6_thick_temp_tisar, netnames=['VSS'], direction='x',
                 input_rails_rect=input_rails_rect, generate_pin=True, overwrite_start_coord=None, overwrite_end_coord=None,
                 offset_start_index=0, offset_end_index=-2)
+    # else:
+    #     rvss_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
+    #                                                                 layer=laygen.layers['pin'][6],
+    #                                                                 gridname=rg_m5m6_thick_temp_tisar, netnames=['VSS'],
+    #                                                                 direction='x',
+    #                                                                 input_rails_rect=input_rails_rect,
+    #                                                                 generate_pin=True, overwrite_start_coord=None,
+    #                                                                 overwrite_end_coord=None,
+    #                                                                 offset_start_index=0,
+    #                                                                 offset_end_index=pin_origin_y0_thick - 2)
+    #     rvss_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
+    #                                                                 layer=laygen.layers['pin'][6],
+    #                                                                 gridname=rg_m5m6_thick_temp_tisar, netnames=['VSS'],
+    #                                                                 direction='x',
+    #                                                                 input_rails_rect=input_rails_rect,
+    #                                                                 generate_pin=True, overwrite_start_coord=None,
+    #                                                                 overwrite_end_coord=None,
+    #                                                                 offset_start_index=pin_origin_y0_thick + 2,
+    #                                                                 offset_end_index=-1)
 
 def generate_tisaradc_space2(laygen, objectname_pfix, 
                             tisar_libname, space_libname,
@@ -402,19 +443,62 @@ def generate_tisaradc_space2(laygen, objectname_pfix,
     #m6 (extract VDD/VSS grid from tisar and make power pins)
     rg_m5m6_sar_vdd='route_M5_M6_thick_temp_tisar_sar_vdd'
     laygenhelper.generate_grids_from_xy(laygen, gridname_input=rg_m5m6_thick, gridname_output=rg_m5m6_sar_vdd, xy=vddsar_xy, xy_grid_type='ygrid')
+    pin_origin_y0_thick = origin[1] + laygen.get_template_pin_xy(sar_name, 'VREF_SF_BIAS', rg_m5m6_sar_vdd, libname=workinglib)[0][1] \
+                          + laygen.get_template_xy(name=ret_name, gridname=rg_m5m6_sar_vdd, libname=workinglib)[1]
+    print(pin_origin_y0_thick)
     input_rails_rect = [rvdd_sar_m5]
-    [rvdd_sar_m6] = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_SAR_', 
+    if vref_sf == False:
+        [rvdd_sar_m6] = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_SAR_',
                             layer=laygen.layers['pin'][6], gridname=rg_m5m6_sar_vdd, netnames=['VDDSAR'], direction='x', 
                             input_rails_rect=input_rails_rect, generate_pin=True, overwrite_start_coord=None, overwrite_end_coord=None,
                             offset_start_index=0, offset_end_index=0)
+    else:
+        [rvdd_sar_m6] = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_SAR_',
+                                                                          layer=laygen.layers['pin'][6],
+                                                                          gridname=rg_m5m6_sar_vdd, netnames=['VDDSAR'],
+                                                                          direction='x',
+                                                                          input_rails_rect=input_rails_rect,
+                                                                          generate_pin=True, overwrite_start_coord=None,
+                                                                          overwrite_end_coord=None,
+                                                                          offset_start_index=0, offset_end_index=pin_origin_y0_thick - 2)
+        [rvdd_sar_m6] = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_SAR_',
+                                                                          layer=laygen.layers['pin'][6],
+                                                                          gridname=rg_m5m6_sar_vdd, netnames=['VDDSAR'],
+                                                                          direction='x',
+                                                                          input_rails_rect=input_rails_rect,
+                                                                          generate_pin=True, overwrite_start_coord=None,
+                                                                          overwrite_end_coord=None,
+                                                                          offset_start_index=pin_origin_y0_thick + 2,
+                                                                          offset_end_index=0)
     
     rg_m5m6_sar_vss='route_M5_M6_thick_temp_tisar_sar_vss'
     laygenhelper.generate_grids_from_xy(laygen, gridname_input=rg_m5m6_thick, gridname_output=rg_m5m6_sar_vss, xy=vsssar_xy, xy_grid_type='ygrid')
+    pin_origin_y0_thick = origin[1] + laygen.get_template_pin_xy(sar_name, 'VREF_SF_BIAS', rg_m5m6_sar_vss, libname=workinglib)[0][1] \
+                          + laygen.get_template_xy(name=ret_name, gridname=rg_m5m6_sar_vss, libname=workinglib)[1]
     input_rails_rect = [rvss_sar_m5]
-    [rvss_sar_m6] = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_SAR_', 
+    if vref_sf == False:
+        [rvss_sar_m6] = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_SAR_',
                             layer=laygen.layers['pin'][6], gridname=rg_m5m6_sar_vss, netnames=['VSS:'], direction='x', 
                             input_rails_rect=input_rails_rect, generate_pin=True, overwrite_start_coord=None, overwrite_end_coord=None,
                             offset_start_index=0, offset_end_index=0)
+    else:
+        [rvss_sar_m6] = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_SAR_',
+                                                                          layer=laygen.layers['pin'][6],
+                                                                          gridname=rg_m5m6_sar_vss, netnames=['VSS:'],
+                                                                          direction='x',
+                                                                          input_rails_rect=input_rails_rect,
+                                                                          generate_pin=True, overwrite_start_coord=None,
+                                                                          overwrite_end_coord=None,
+                                                                          offset_start_index=0, offset_end_index=pin_origin_y0_thick - 2)
+        [rvss_sar_m6] = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_SAR_',
+                                                                          layer=laygen.layers['pin'][6],
+                                                                          gridname=rg_m5m6_sar_vss, netnames=['VSS:'],
+                                                                          direction='x',
+                                                                          input_rails_rect=input_rails_rect,
+                                                                          generate_pin=True, overwrite_start_coord=None,
+                                                                          overwrite_end_coord=None,
+                                                                          offset_start_index=pin_origin_y0_thick + 2, offset_end_index=0)
+
 
     rg_m5m6_samp='route_M5_M6_thick_temp_tisar_samp_vdd'
     laygenhelper.generate_grids_from_xy(laygen, gridname_input=rg_m5m6_thick, gridname_output=rg_m5m6_samp, xy=vddsamp_xy, xy_grid_type='ygrid')
@@ -507,10 +591,12 @@ if __name__ == '__main__':
             specdict = yaml.load(stream)
         num_bits=specdict['n_bit']
         num_slices=specdict['n_interleave']
+        vref_sf=specdict['use_vref_sf']
 
     cellname = 'tisaradc_body_space'
     tisar_name = 'tisaradc_body_core'
     sar_name = 'sar_wsamp'
+    ret_name = 'adc_retimer'
     #sh_name = 'adc_frontend_sampler_array'
     
     #space_name = 'space'

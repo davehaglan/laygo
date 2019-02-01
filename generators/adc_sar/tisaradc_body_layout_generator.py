@@ -295,7 +295,7 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
     for i, r in enumerate(rvsssar_m7):
         pxy=np.array([[r.xy[0][0],0], r.xy[1]])
         laygen.add_rect(None, pxy, laygen.layers['metal'][7])
-        laygen.add_pin('VSS_SAR_M7_'+str(i), 'VSS', pxy, laygen.layers['pin'][7])
+        # laygen.add_pin('VSS_SAR_M7_'+str(i), 'VSS', pxy, laygen.layers['pin'][7])
     '''
     #connect VDDSAMP between samp/clkd in space region
     for r in rvddclkd_m7:

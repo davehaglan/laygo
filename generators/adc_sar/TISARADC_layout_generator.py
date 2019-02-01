@@ -200,7 +200,7 @@ def generate_TISARADC(laygen, objectname_pfix, sar_libname, rdac_libname, space_
     #     laygen.boundary_pin_from_rect(rout, rg_m4m5, 'CLKO%d' % (i), layer=laygen.layers['pin'][5], direction='bottom', size=4)
     for pn, p in sar_pins.items():
         pin_prefix_list = ['INP', 'INM', 'VREF', 'ASCLKD', 'EXTSEL_CLK', 'ADCOUT', 'CLKOUT_DES', 'CLKCAL', 'RSTP',
-                           'RSTN', 'CLKIP', 'CLKIN', 'SF_', 'VREF_SF_']
+                           'RSTN', 'CLKIP', 'CLKIN', 'SF_', 'VREF_SF_', 'VDD', 'VSS']
         if use_sf == False:
             pin_prefix_list.remove('SF_')
         if vref_sf == False:
