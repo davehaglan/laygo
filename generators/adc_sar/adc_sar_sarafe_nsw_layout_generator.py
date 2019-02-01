@@ -390,20 +390,93 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
         for r in rvss_sa_m6[0]:
             r.xy1[0]=x1_phy
     #sa_m6_top_main_route
-    rvdd_sa_m6, rvss_sa_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_', 
-                layer=laygen.layers['metal'][6], gridname=rg_m5m6_thick, netnames=['VDD', 'VSS'], direction='x', 
-                input_rails_rect=input_rails_rect, generate_pin=False, 
-                overwrite_start_coord=0, overwrite_end_coord=x1,
-                offset_start_index=4+(1+num_vref_routes_m6)*3, offset_end_index=-2)
-    #trimming and pinning
-    for r in rvdd_sa_m6:
-        r.xy1[0]=x1_phy
-        p=laygen.pin(name='VDD_M6_'+r.name, layer=laygen.layers['pin'][6], refobj=r, gridname=rg_m5m6_thick, netname='VDD')
-        p.xy1[0]=x1_phy
-    for r in rvss_sa_m6:
-        r.xy1[0]=x1_phy
-        p=laygen.pin(name='VSS_M6_'+r.name, layer=laygen.layers['pin'][6], refobj=r, gridname=rg_m5m6_thick, netname='VSS')
-        p.xy1[0]=x1_phy
+    if vref_sf == False:
+        rvdd_sa_m6, rvss_sa_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
+                                                                                   layer=laygen.layers['metal'][6],
+                                                                                   gridname=rg_m5m6_thick,
+                                                                                   netnames=['VDD', 'VSS'],
+                                                                                   direction='x',
+                                                                                   input_rails_rect=input_rails_rect,
+                                                                                   generate_pin=False,
+                                                                                   overwrite_start_coord=0,
+                                                                                   overwrite_end_coord=x1,
+                                                                                   offset_start_index=4 + (
+                                                                                                          1 + num_vref_routes_m6) * 3,
+                                                                                   offset_end_index=-2)
+        # trimming and pinning
+        for r in rvdd_sa_m6:
+            r.xy1[0] = x1_phy
+            p = laygen.pin(name='VDD_M6_' + r.name, layer=laygen.layers['pin'][6], refobj=r, gridname=rg_m5m6_thick,
+                           netname='VDD')
+            p.xy1[0] = x1_phy
+        for r in rvss_sa_m6:
+            r.xy1[0] = x1_phy
+            p = laygen.pin(name='VSS_M6_' + r.name, layer=laygen.layers['pin'][6], refobj=r, gridname=rg_m5m6_thick,
+                           netname='VSS')
+            p.xy1[0] = x1_phy
+    else:
+        vbias_xy = laygen.get_inst_pin_xy(isf.name, 'VBIAS', rg_m5m6_thick)
+        rvdd_sa_m6_b, rvss_sa_m6_b = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_B_',
+                                                                                       layer=laygen.layers['metal'][6],
+                                                                                       gridname=rg_m5m6_thick,
+                                                                                       netnames=['VDD', 'VSS'],
+                                                                                       direction='x',
+                                                                                       input_rails_rect=input_rails_rect,
+                                                                                       generate_pin=False,
+                                                                                       overwrite_start_coord=0,
+                                                                                       overwrite_end_coord=x1,
+                                                                                       offset_start_index=4 + (
+                                                                                                              1 + num_vref_routes_m6) * 3,
+                                                                                       overwrite_end_index=vbias_xy[0][
+                                                                                                               1] - 1)
+        rvdd_sa_m6_t, rvss_sa_m6_t = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_T_',
+                                                                                       layer=laygen.layers['metal'][6],
+                                                                                       gridname=rg_m5m6_thick,
+                                                                                       netnames=['VDD', 'VSS'],
+                                                                                       direction='x',
+                                                                                       input_rails_rect=input_rails_rect,
+                                                                                       generate_pin=False,
+                                                                                       overwrite_start_coord=0,
+                                                                                       overwrite_end_coord=x1,
+                                                                                       overwrite_start_index=
+                                                                                       vbias_xy[1][1] + 1,
+                                                                                       offset_end_index=0)
+        # trimming and pinning
+        for r in rvdd_sa_m6_b:
+            r.xy1[0] = x1_phy
+            p = laygen.pin_from_rect(name='VDD_M6_' + r.name, layer=laygen.layers['pin'][6], rect=r,
+                                     gridname=rg_m5m6_thick, netname='VDD')
+            p.xy1[0] = x1_phy
+        for r in rvss_sa_m6_b:
+            r.xy1[0] = x1_phy
+            p = laygen.pin_from_rect(name='VSS_M6_' + r.name, layer=laygen.layers['pin'][6], rect=r,
+                                     gridname=rg_m5m6_thick, netname='VSS')
+            p.xy1[0] = x1_phy
+        for r in rvdd_sa_m6_t:
+            r.xy1[0] = x1_phy
+            p = laygen.pin_from_rect(name='VDD_M6_' + r.name, layer=laygen.layers['pin'][6], rect=r,
+                                     gridname=rg_m5m6_thick, netname='VDD')
+            p.xy1[0] = x1_phy
+        for r in rvss_sa_m6_t:
+            r.xy1[0] = x1_phy
+            p = laygen.pin_from_rect(name='VSS_M6_' + r.name, layer=laygen.layers['pin'][6], rect=r,
+                                     gridname=rg_m5m6_thick, netname='VSS')
+            p.xy1[0] = x1_phy
+
+    # rvdd_sa_m6, rvss_sa_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
+    #             layer=laygen.layers['metal'][6], gridname=rg_m5m6_thick, netnames=['VDD', 'VSS'], direction='x',
+    #             input_rails_rect=input_rails_rect, generate_pin=False,
+    #             overwrite_start_coord=0, overwrite_end_coord=x1,
+    #             offset_start_index=4+(1+num_vref_routes_m6)*3, offset_end_index=-2)
+    # #trimming and pinning
+    # for r in rvdd_sa_m6:
+    #     r.xy1[0]=x1_phy
+    #     p=laygen.pin(name='VDD_M6_'+r.name, layer=laygen.layers['pin'][6], refobj=r, gridname=rg_m5m6_thick, netname='VDD')
+    #     p.xy1[0]=x1_phy
+    # for r in rvss_sa_m6:
+    #     r.xy1[0]=x1_phy
+    #     p=laygen.pin(name='VSS_M6_'+r.name, layer=laygen.layers['pin'][6], refobj=r, gridname=rg_m5m6_thick, netname='VSS')
+    #     p.xy1[0]=x1_phy
     #sf_left_m4_m5
     if vref_sf == True:
         rvdd_sf_m4=[]
