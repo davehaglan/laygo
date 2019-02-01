@@ -134,7 +134,8 @@ def generate_TISARADC(laygen, objectname_pfix, sar_libname, rdac_libname, space_
     bypass_sar = pdict_m4m5[isar.name]['SF_bypass'][0]
     rh0, rbyp = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
                     xy0=bypass_sar,
-                    xy1=np.array([laygen.get_inst_pin_xy(irdac.name, 'SEL<'+str(num_hori*num_vert*rdac_num_bits-1)+'>', rg_m4m5)[0][0]+4, 0]),
+                    xy1=np.array([bypass_sar[0]-2, 0]),
+                    # xy1=np.array([laygen.get_inst_pin_xy(irdac.name, 'SEL<'+str(num_hori*num_vert*rdac_num_bits-1)+'>', rg_m4m5)[0][0]+4, 0]),
                     gridname0=rg_m4m5)
     laygen.boundary_pin_from_rect(rbyp, rg_m4m5, 'SF_bypass', layer=laygen.layers['pin'][5], direction='bottom', size=4)
 
@@ -200,18 +201,19 @@ def generate_TISARADC(laygen, objectname_pfix, sar_libname, rdac_libname, space_
     #     laygen.boundary_pin_from_rect(rout, rg_m4m5, 'CLKO%d' % (i), layer=laygen.layers['pin'][5], direction='bottom', size=4)
     for pn, p in sar_pins.items():
         pin_prefix_list = ['INP', 'INM', 'VREF', 'ASCLKD', 'EXTSEL_CLK', 'ADCOUT', 'CLKOUT_DES', 'CLKCAL', 'RSTP',
-                           'RSTN', 'CLKIP', 'CLKIN', 'SF_', 'VREF_SF_', 'VDD', 'VSS']
-        if use_sf == False:
-            pin_prefix_list.remove('SF_')
-        if vref_sf == False:
-            pin_prefix_list.remove('VREF_SF_')
+                           'RSTN', 'CLKIP', 'CLKIN', 'VDD', 'VSS']
+        # if use_sf == False:
+        #     pin_prefix_list.remove('SF_bypass')
+        # if vref_sf == False:
+        #     pin_prefix_list.remove('VREF_SF_bypass')
         if input_htree == True:
             pin_prefix_list.remove('INP')
             pin_prefix_list.remove('INM')
         for pn, p in sar_pins.items():
             for pfix in pin_prefix_list:
                 if pn.startswith(pfix):
-                    laygen.add_pin(pn, sar_pins[pn]['netname'], sar_xy + sar_pins[pn]['xy'], sar_pins[pn]['layer'])
+                    if not pn.startswith('VREF_'):
+                        laygen.add_pin(pn, sar_pins[pn]['netname'], sar_xy + sar_pins[pn]['xy'], sar_pins[pn]['layer'])
         # if pn.startswith('ADCOUT'):
         #     pxy = laygen.get_inst_pin_xy(isar.name, pn, rg_m3m4)
         #     rout = laygen.route(None, laygen.layers['metal'][3], pxy[0], [pxy[0][0], 0], rg_m3m4)
