@@ -63,10 +63,10 @@ def generate_TISARADC(laygen, objectname_pfix, sar_libname, rdac_libname, space_
     if num_input_shield_track == 2:
         htree_off_x = laygen.get_template_pin_xy(htree_name, 'VSS_0_0', rg_m7m8_thick, libname=workinglib)[0][0]/2 + \
                       laygen.get_template_pin_xy(htree_name, 'VSS_0_1', rg_m7m8_thick, libname=workinglib)[0][0]/2 - \
-                      int(laygen.get_template_size(sar_slice_name, rg_m7m8_thick, libname=workinglib)[0]/2)
+                      int(laygen.get_template_size(sar_slice_name, rg_m7m8_thick, libname=workinglib)[0]/2*5)
     elif num_input_shield_track == 1:
         htree_off_x = laygen.get_template_pin_xy(htree_name, 'VSS_0_0', rg_m7m8_thick, libname=workinglib)[0][0] - \
-                      int(laygen.get_template_size(sar_slice_name, rg_m7m8_thick, libname=workinglib)[0]/2+0.5)
+                      int(laygen.get_template_size(sar_slice_name, rg_m7m8_thick, libname=workinglib)[0]/2*5+0.5)
     # sar_xy = origin + (laygen.get_template_size(rdac_name, gridname=pg, libname=rdac_libname)*np.array([1,0]) )
     sar_xy = origin
     isar = laygen.relplace(name="I" + objectname_pfix + 'SAR0', templatename=sar_name,
@@ -321,7 +321,7 @@ if __name__ == '__main__':
         input_htree = specdict['input_htree']
 
     cellname = 'TISARADC'
-    sar_name = 'tisaradc_body_core'
+    sar_name = 'tisaradc_body'
     sar_slice_name = 'sar_wsamp'
     rdac_name = 'r2r_dac_array'
     htree_name = 'tisar_htree_diff'

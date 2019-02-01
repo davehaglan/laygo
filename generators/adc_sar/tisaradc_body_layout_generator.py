@@ -151,9 +151,33 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
                 rvsssar.append(laygen.add_rect(None, pxy, laygen.layers['metal'][6]))
     #M7 rails
     rg_route='route_M6_M7_thick_temp_pwr'
-    laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m6m7_thick, gridname_output=rg_route,
-                                          instname=[isar.name],
-                                          inst_pin_prefix=['VDD', 'VSS', 'VREF'], xy_grid_type='ygrid')
+    if input_htree == False:
+        laygenhelper.generate_grids_from_inst(laygen, gridname_input=rg_m6m7_thick, gridname_output=rg_route,
+                                              instname=[isar.name],
+                                              inst_pin_prefix=['VDD', 'VSS', 'VREF'], xy_grid_type='ygrid')
+    else:
+        x_ref = laygen.templates.get_template('sar_wsamp', libname=workinglib).size[0]
+        x_pitch = laygen.get_grid(rg_m6m7_thick).xy[1][0]
+        xy = np.array([[0, 0], [x_ref, laygen.get_grid(rg_m6m7_thick).xy[1][1]]])
+        ywidth = np.array(laygen.get_grid(rg_m6m7_thick).ywidth)
+        # xgrid = np.array([x_pitch, x_ref])
+        xgrid = np.array([x_pitch, 2*x_pitch, x_ref-1*x_pitch, x_ref-0*x_pitch])
+        ygrid = np.array([0])
+        vianame = list(laygen.get_grid(rg_m6m7_thick).viamap.keys())[0]
+        viamap = {vianame: []}
+        for x in range(len(xgrid)):
+            viamap[vianame].append([x, 0])
+        # xwidth=np.array(laygen.get_grid(rg_m6m7_thick).xwidth*2)
+        xwidth=np.repeat(laygen.get_grid(rg_m6m7_thick).xwidth, len(xgrid))
+        viamap[vianame] = np.array(viamap[vianame])
+        laygen.grids.add_route_grid(name=rg_route,
+                                    xy=xy,
+                                    xgrid=xgrid,
+                                    ygrid=ygrid,
+                                    xwidth=xwidth,
+                                    ywidth=ywidth,
+                                    viamap=viamap)
+
     '''
     #M7 rails-clkd
     input_rails_rect = [rvddclkd, rvssclkd]
@@ -167,19 +191,19 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
     rvddsamp_m7_pre, rvsssamp_m7_pre= laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAMP_M7_', 
                 layer=laygen.layers['metal'][7], gridname=rg_route, netnames=['VDDSAMP', 'VSS'], direction='y', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=None, offset_end_coord=None,
-                offset_start_index=2, offset_end_index=-2)
+                offset_start_index=1, offset_end_index=-1)
     #M7 rails-sar_lower
     input_rails_rect = [rvddsar, rvsssar]
     rvddsar_m7, rvsssar_m7= laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAR_M7_', 
                 layer=laygen.layers['metal'][7], gridname=rg_route, netnames=['VDDSAR', 'VSS'], direction='y', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=None, overwrite_end_coord=None,
-                offset_start_index=2, offset_end_index=-2)
+                offset_start_index=1, offset_end_index=-1)
     #M7 rails-sar_upper(+vref)
     input_rails_rect = [rvddsar_upper, rvsssar_upper, rvref0, rvsssar_upper, rvref1, rvsssar_upper, rvref2, rvsssar_upper]
     rvddsar_m7_upper, rvsssar0_m7, rvref0_m7_pre, rvsssar1_m7, rvref1_m7_pre, rvsssar2_m7, rvref2_m7_pre, rvsssar3_m7= laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_SAR_UPPER_M7_', 
                 layer=laygen.layers['metal'][7], gridname=rg_route, netnames=['VDDSAR', 'VSS', 'VREF<0>', 'VSS', 'VREF<1>', 'VSS', 'VREF<2>', 'VSS'], direction='y', 
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=None, overwrite_end_coord=None,
-                offset_start_index=2, offset_end_index=-2)
+                offset_start_index=1, offset_end_index=-1)
     rvsssar_m7_upper_pre=rvsssar0_m7+rvsssar1_m7+rvsssar2_m7+rvsssar3_m7
     #extend m7 rails for clkd and samp and vref, rvsssar_m7_upper
     #rvddclkd_m7=[]
@@ -406,6 +430,7 @@ if __name__ == '__main__':
         use_offset=specdict['use_offset']
         use_sf = specdict['use_sf']
         vref_sf = specdict['use_vref_sf']
+        input_htree  = specdict['input_htree']
 
     cellname = 'tisaradc_body'
     tisar_core_name = 'tisaradc_body_core'
