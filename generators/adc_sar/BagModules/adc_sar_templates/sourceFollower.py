@@ -50,14 +50,14 @@ class adc_sar_templates__sourceFollower(Module):
         self.parameters['bias_current'] = bias_current
         self.parameters['device_intent'] = device_intent
 
-        if m_bias_dum * 6 + m_off + int(m_mirror / 2) * 2 + m_bias + m_byp_bias > m_in_dum * 3 + m_in + m_byp + 1:
+        if m_bias_dum * 6 + m_off + int(m_mirror / 2) * 2 + m_bias + m_byp_bias > m_in_dum * 3 + m_in + m_byp + 2:
             m_bias_dum_tot = m_bias_dum * 6
         else:
-            m_bias_dum_tot = (m_in_dum * 3 + m_in + m_byp + 1) - (m_bias_dum * 0 + m_off + int(m_mirror / 2) * 2 + m_bias + m_byp_bias)
-        if m_bias_dum * 6 + m_off + int(m_mirror / 2) * 2 + m_bias  + m_byp_bias < m_in_dum * 3 + m_in + m_byp + 1:
+            m_bias_dum_tot = (m_in_dum * 3 + m_in + m_byp + 2) - (m_bias_dum * 0 + m_off + int(m_mirror / 2) * 2 + m_bias + m_byp_bias)
+        if m_bias_dum * 6 + m_off + int(m_mirror / 2) * 2 + m_bias  + m_byp_bias < m_in_dum * 3 + m_in + m_byp + 2:
             m_in_dum_tot = m_in_dum * 3
         else:
-            m_in_dum_tot = (m_bias_dum * 6 + m_off + int(m_mirror / 2) * 2 + m_bias + m_byp_bias) - (m_in_dum * 0 + m_in + m_byp + 1)
+            m_in_dum_tot = (m_bias_dum * 6 + m_off + int(m_mirror / 2) * 2 + m_bias + m_byp_bias) - (m_in_dum * 0 + m_in + m_byp + 2)
 
         self.instances['IMIR0'].design(w=nw, l=lch, nf=m_mirror, intent=device_intent)
         self.instances['IMIR1'].design(w=nw, l=lch, nf=m_mirror, intent=device_intent)
