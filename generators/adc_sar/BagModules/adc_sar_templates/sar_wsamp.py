@@ -47,10 +47,10 @@ class adc_sar_templates__sar_wsamp(Module):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
     def design(self, sar_lch, sar_pw, sar_nw, sar_sa_m, sar_sa_m_d, sar_sa_m_rst, sar_sa_m_rst_d, sar_sa_m_rgnn, sar_sa_m_rgnp_d,
-               sar_sa_m_buf, doubleSA,
+               sar_sa_m_buf, doubleSA, sar_sa_m_smallrgnp,
                vref_sf_m_mirror, vref_sf_m_bias, vref_sf_m_off, vref_sf_m_in, vref_sf_m_bias_dum, vref_sf_m_in_dum,
                vref_sf_m_byp, vref_sf_m_byp_bias, vref_sf_bias_current, vref_sf,
-               sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay, sar_ckgen_fast,
+               sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo, sar_ckgen_ndelay, sar_ckgen_fast, sar_ckgen_muxfast,
                sar_logic_m, sar_fsm_m, sar_ret_m, sar_ret_fo, sar_num_inv_bb, sar_device_intent, sar_c_m, sar_rdx_array,
                samp_lch, samp_wp, samp_wn, samp_fgn, samp_fg_inbuf_list, samp_fg_outbuf_list, samp_nduml, samp_ndumr, samp_nsep, samp_intent,
                samp_tgate, num_bits, samp_use_laygo,
@@ -81,6 +81,7 @@ class adc_sar_templates__sar_wsamp(Module):
         self.parameters['sar_sa_m_rgnn'] = sar_sa_m_rgnn
         self.parameters['sar_sa_m_rgnp_d'] = sar_sa_m_rgnp_d
         self.parameters['sar_sa_m_buf'] = sar_sa_m_buf
+        self.parameters['sar_sa_m_smallrgnp'] = sar_sa_m_smallrgnp
         self.parameters['doubleSA'] = doubleSA
         self.parameters['vref_sf_m_mirror'] = vref_sf_m_mirror
         self.parameters['vref_sf_m_bias'] = vref_sf_m_bias
@@ -97,6 +98,7 @@ class adc_sar_templates__sar_wsamp(Module):
         self.parameters['sar_ckgen_fo'] = sar_ckgen_fo
         self.parameters['sar_ckgen_ndelay'] = sar_ckgen_ndelay
         self.parameters['sar_ckgen_fast'] = sar_ckgen_fast
+        self.parameters['sar_ckgen_muxfast'] = sar_ckgen_muxfast
         self.parameters['sar_logic_m'] = sar_logic_m
         self.parameters['sar_fsm_m'] = sar_fsm_m
         self.parameters['sar_ret_m'] = sar_ret_m
@@ -132,14 +134,16 @@ class adc_sar_templates__sar_wsamp(Module):
         self.parameters['bias_current'] = bias_current
         self.parameters['use_sf'] = use_sf #if true, source follower is used before the sampler
 
-        self.instances['ISAR0'].design(lch=sar_lch, pw=sar_pw, nw=sar_nw, sa_m=sar_sa_m, sa_m_d=sar_sa_m_d, sa_m_rst=sar_sa_m_rst, sa_m_rst_d=sar_sa_m_rst_d, sa_m_rgnn=sar_sa_m_rgnn, sa_m_rgnp_d=sar_sa_m_rgnp_d, sa_m_buf=sar_sa_m_buf, doubleSA=doubleSA,
+        self.instances['ISAR0'].design(lch=sar_lch, pw=sar_pw, nw=sar_nw, sa_m=sar_sa_m, sa_m_d=sar_sa_m_d, sa_m_rst=sar_sa_m_rst, sa_m_rst_d=sar_sa_m_rst_d, sa_m_rgnn=sar_sa_m_rgnn, sa_m_rgnp_d=sar_sa_m_rgnp_d, sa_m_buf=sar_sa_m_buf, sa_smallrgnp=sar_sa_m_smallrgnp, doubleSA=doubleSA,
                                        vref_sf_m_mirror=vref_sf_m_mirror, vref_sf_m_bias=vref_sf_m_bias,
                                        vref_sf_m_off=vref_sf_m_off,
                                        vref_sf_m_in=vref_sf_m_in, vref_sf_m_bias_dum=vref_sf_m_bias_dum,
                                        vref_sf_m_in_dum=vref_sf_m_in_dum, vref_sf_m_byp=vref_sf_m_byp,
                                        vref_sf_m_byp_bias=vref_sf_m_byp_bias,
                                        vref_sf_bias_current=vref_sf_bias_current, vref_sf=vref_sf,
-                                       drv_m_list=sar_drv_m_list, ckgen_m=sar_ckgen_m, ckgen_fo=sar_ckgen_fo, ckgen_ndelay=sar_ckgen_ndelay, ckgen_fast=sar_ckgen_fast, logic_m=sar_logic_m,
+                                       drv_m_list=sar_drv_m_list, ckgen_m=sar_ckgen_m, ckgen_fo=sar_ckgen_fo,
+                                       ckgen_ndelay=sar_ckgen_ndelay, ckgen_fast=sar_ckgen_fast, ckgen_muxfast = sar_ckgen_muxfast,
+                                       logic_m=sar_logic_m,
                                        fsm_m=sar_fsm_m, ret_m=sar_ret_m, ret_fo=sar_ret_fo, c_m=sar_c_m, rdx_array=sar_rdx_array, num_bits=num_bits, num_inv_bb=sar_num_inv_bb,
                                        device_intent=sar_device_intent)
         if samp_use_laygo==True:
@@ -162,7 +166,8 @@ class adc_sar_templates__sar_wsamp(Module):
             self.instances['ISF'].design(lch=sf_lch, nw=sf_nw, m_mirror=sf_m_mirror, m_bias=sf_m_bias, m_off=sf_m_off,
                                             m_in=sf_m_in, m_bias_dum=sf_m_bias_dum, m_in_dum=sf_m_in_dum, m_byp=sf_m_byp,
                                             m_byp_bias=sf_m_byp_bias, device_intent=sf_intent, bias_current=bias_current)
-
+        if sar_ckgen_muxfast is False:
+            self.remove_pin('MODESEL')
         #rewiring
         self.reconnect_instance_terminal(inst_name='XSAMP0', term_name='ckout', net_name='ICLK')
         self.reconnect_instance_terminal(inst_name='XSAMP0', term_name='outp', net_name='SAMPP')

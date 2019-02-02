@@ -46,7 +46,7 @@ class adc_sar_templates__salatch_pmos(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, m, m_rst, m_rgnn, m_buf, device_intent='fast'):
+    def design(self, lch, pw, nw, m, m_rst, m_rgnn, m_buf, smallrgnp, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -79,12 +79,18 @@ class adc_sar_templates__salatch_pmos(Module):
         m_rstn = int(m_rst/2)
         m_buf = int(m_buf/2)
         m_rgnn = int(m_rgnn/2)
-        m_rgnp = m_rgnn+2*m_rstn-1
-        m_tot=max(m_in, m_clkh, m_rgnn+m_rstn*2+m_buf)+1 #+1 #at least one dummy 
+        m_tot=max(m_in, m_clkh, m_rgnn+m_rstn*2+m_buf)+1 #+1 #at least one dummy
         m_in_dmy = m_tot - m_in - m_ofst
         m_clkh_dmy = m_tot - m_clkh
         m_rgnn_dmy = m_tot - m_rgnn - m_rstn*2 - m_buf
-        m_rgnp_dmy = m_rgnn_dmy
+
+
+        if smallrgnp is False:
+            m_rgnp = m_rgnn + 2 * m_rstn - 1
+            m_rgnp_dmy = m_rgnn_dmy
+        else:
+            m_rgnp = 2 * m_rstn - 1
+            m_rgnp_dmy = m_rgnn_dmy + m_rgnn
 
         self.instances['IINP0'].design(w=pw, l=lch, nf=m_in*2, intent=device_intent)
         self.instances['IINM0'].design(w=pw, l=lch, nf=m_in*2, intent=device_intent)

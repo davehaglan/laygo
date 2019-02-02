@@ -130,14 +130,6 @@ instances:
         direction: input
         net_name: "VREF<2:0>"
         num_bits: 3
-  PIN18:
-    lib_name: basic
-    cell_name: ipin
-    instpins: {}
-  PIN19:
-    lib_name: basic
-    cell_name: ipin
-    instpins: {}
   PIN3:
     lib_name: basic
     cell_name: ipin
@@ -179,6 +171,14 @@ instances:
     cell_name: ipin
     instpins: {}
   PIN17:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN18:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN19:
     lib_name: basic
     cell_name: ipin
     instpins: {}

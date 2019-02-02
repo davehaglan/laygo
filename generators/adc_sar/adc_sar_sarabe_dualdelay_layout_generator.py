@@ -87,7 +87,8 @@ def generate_boundary(laygen, objectname_pfix, placement_grid,
 
 def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_grid, routing_grid_m2m3, 
                               routing_grid_m3m4_thick, routing_grid_m4m5_thick, routing_grid_m5m6_thick,
-                              routing_grid_m4m5, num_bits=9, sarabe_supply_rail_mode=0, origin=np.array([0, 0])):
+                              routing_grid_m4m5, num_bits=9, sarabe_supply_rail_mode=0, clkgen_mode=False,
+                              origin=np.array([0, 0])):
     """generate sar backend """
     pg = placement_grid
 
@@ -505,6 +506,13 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
                                     #np.array([x0+13+3, 0]), rg_m4m5)
     laygen.boundary_pin_from_rect(rextsel_clk0, rg_m4m5, 'EXTSEL_CLK', laygen.layers['pin'][5], size=6,
                                   direction='bottom')
+    if clkgen_mode:
+        rh0, rextsel_clk0 = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
+                                            pdict_m4m5[ickg.name]['MODESEL'][0],
+                                            np.array([x0 - 1, 0]), rg_m4m5)
+        laygen.boundary_pin_from_rect(rextsel_clk0, rg_m4m5, 'MODESEL', laygen.layers['pin'][5], size=6,
+                                      direction='bottom')
+
     xy = laygen.get_rect_xy(rextsel_clk0.name, rg_m4m5)
     pin_bot_locx.append(float(laygen._route_generate_box_from_abscoord(xy0=xy[0,:], xy1=xy[1,:], gridname0=rg_m4m5)[1][0][0]))
     # fsm to ret (data)
@@ -731,6 +739,7 @@ if __name__ == '__main__':
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']
         sarabe_supply_rail_mode=sizedict['sarabe_supply_rail_mode']
+        clkgen_mode=sizedict['sarclkgen']['mux_fast']
     #sarabe generation
     cellname='sarabe_dualdelay' #_'+str(num_bits)+'b'
     print(cellname+" generating")
@@ -740,7 +749,8 @@ if __name__ == '__main__':
     pin_bot_locx = generate_sarabe_dualdelay(laygen, objectname_pfix='CA0', workinglib=workinglib,
                     placement_grid=pg, routing_grid_m2m3=rg_m2m3, 
                     routing_grid_m3m4_thick=rg_m3m4_thick, routing_grid_m4m5_thick=rg_m4m5_thick, routing_grid_m5m6_thick=rg_m5m6_thick, 
-                    routing_grid_m4m5=rg_m4m5, num_bits=num_bits, sarabe_supply_rail_mode=sarabe_supply_rail_mode, origin=np.array([0, 0]))
+                    routing_grid_m4m5=rg_m4m5, num_bits=num_bits, sarabe_supply_rail_mode=sarabe_supply_rail_mode,
+                                             clkgen_mode=clkgen_mode, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)

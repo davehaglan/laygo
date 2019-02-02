@@ -1,6 +1,6 @@
 lib_name: adc_sar_templates
 cell_name: sarabe_dualdelay
-pins: [ "SAOM", "PHI0", "RST", "EXTSEL_CLK", "CKDSEL1<1:0>", "CKDSEL0<1:0>", "SARCLKB", "SAOP", "RSTOUT", "SB<0>", "UP", "DONE", "SARCLK", "ZM<0>", "ZMID<0>", "ZP<0>", "ADCOUT<0>", "VDD", "VSS" ]
+pins: [ "SAOM", "PHI0", "RST", "EXTSEL_CLK", "CKDSEL1<1:0>", "MODESEL", "CKDSEL0<1:0>", "SARCLKB", "SAOP", "RSTOUT", "SB<0>", "UP", "DONE", "SARCLK", "ZM<0>", "ZMID<0>", "ZP<0>", "ADCOUT<0>", "VDD", "VSS" ]
 instances:
   ISARFSM0:
     lib_name: adc_sar_templates
@@ -58,6 +58,10 @@ instances:
     lib_name: adc_sar_templates
     cell_name: sarclkgen_static
     instpins:
+      MODESEL:
+        direction: input
+        net_name: "MODESEL"
+        num_bits: 1
       SHORTB:
         direction: input
         net_name: "ZMID<6>"
@@ -182,6 +186,10 @@ instances:
         direction: input
         net_name: "RST"
         num_bits: 1
+  PIN23:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
   PIN21:
     lib_name: basic
     cell_name: ipin
