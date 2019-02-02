@@ -795,8 +795,9 @@ def generate_salatch_regen(laygen, objectname_pfix, placement_grid, routing_grid
         laygen.route(None, laygen.layers['metal'][3], xy0=np.array([0, -1]), xy1=np.array([0, 0]), gridname0=rg23,
                      refinstname0=imdmyln0.name, refpinname0='D0', refinstindex0=np.array([i, 0]),
                      refinstname1=itapn0.name, refpinname1='TAP0', refinstindex1=np.array([i, 0]),
-                     direction='y', gridname1=rg23tb, via1=[[0, 0]],
-                     )
+                     direction='y', gridname1=rg23tb)
+        laygen.via(None, np.array([0, 0]), refinstname=itapn0.name, refpinname='TAP1',
+                       refinstindex=np.array([m_buf + i, 0]), gridname=rg23tb)
         laygen.route(None, laygen.layers['metal'][1], xy0=np.array([0, 0]), xy1=np.array([0, -1]), gridname0=rg12,
                      refinstname0=imdmyln0.name, refpinname0='D0', refinstindex0=np.array([i, 0]),
                      refinstname1=imdmyln0.name, refpinname1='D0', refinstindex1=np.array([i, 0]),
