@@ -222,6 +222,7 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
     laygen.add_pin('CKDSEL1<0>', 'CKDSEL1<0>', sar_xy+sar_pins['CKDSEL1<0>']['xy'], sar_pins['CKDSEL1<0>']['layer'])
     #laygen.add_pin('EXTCLK', 'EXTCLK', sar_xy+sar_pins['EXTCLK']['xy'], sar_pins['EXTCLK']['layer'])
     laygen.add_pin('EXTSEL_CLK', 'EXTSEL_CLK', sar_xy+sar_pins['EXTSEL_CLK']['xy'], sar_pins['EXTSEL_CLK']['layer'])
+    laygen.add_pin('MODESEL', 'MODESEL', sar_xy+sar_pins['MODESEL']['xy'], sar_pins['MODESEL']['layer'])
     #output pins (just duplicate from lower hierarchy cells)
     for i in range(num_bits):
         pn='ADCOUT'+'<'+str(i)+'>'
