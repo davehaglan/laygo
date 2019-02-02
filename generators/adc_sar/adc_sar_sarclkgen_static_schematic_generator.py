@@ -38,6 +38,7 @@ if load_from_file==True:
     params['pw']=sizedict['pw']
     params['nw']=sizedict['nw']
     params['device_intent']=sizedict['device_intent']
+    params['mux_fast']=sizedict['sarclkgen']['mux_fast']
 
 print('creating BAG project')
 prj = bag.BagProject()
