@@ -238,7 +238,7 @@ class adc_sar_templates__sar_wsamp_array(Module):
                 pin_enum.remove('VREF_SF_BIAS')
                 self.remove_pin('VREF_SF_BIAS0')
             if sar_ckgen_muxfast == False:
-                self.remove_pin('MODESEL')
+                self.remove_pin('MODESEL0')
                 pin_enum.remove('MODESEL')
         else:
             pin_enum = ['INP', 'INM', 'CLK', 'EXTSEL_CLK', 'CLKO', 'SF_Voffp', 'SF_Voffn', 'SF_BIAS', 'VREF_SF_BIAS', 'MODESEL']
@@ -248,7 +248,7 @@ class adc_sar_templates__sar_wsamp_array(Module):
                 pin_enum.remove('VREF_SF_BIAS')
                 self.remove_pin('VREF_SF_BIAS0')
             if sar_ckgen_muxfast == False:
-                self.remove_pin('MODESEL')
+                self.remove_pin('MODESEL0')
                 pin_enum.remove('MODESEL')
             self.remove_pin('OSP0')
             self.remove_pin('OSM0')

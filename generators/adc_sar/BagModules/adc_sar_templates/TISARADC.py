@@ -336,9 +336,12 @@ class adc_sar_templates__TISARADC(Module):
         self.rename_pin('CLKCAL', ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]))
         self.rename_pin('ASCLKD<3:0>', ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]))
         self.rename_pin('EXTSEL_CLK', ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]))
-        self.rename_pin('MODESEL', ','.join(['MODESEL%d'%(i) for i in range(num_slices)]))
         self.rename_pin('ADCOUT', ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]))
         self.rename_pin('RDAC_SEL', 'RDAC_SEL<%d:0>'%(rdac_num_dacs*rdac_num_bits-1))
+        if sar_ckgen_muxfast == True:
+            self.rename_pin('MODESEL', ','.join(['MODESEL%d'%(i) for i in range(num_slices)]))
+        else:
+            self.remove_pin('MODESEL')
 
         if vref_sf == False:
             self.remove_pin('VREF_SF_bypass')

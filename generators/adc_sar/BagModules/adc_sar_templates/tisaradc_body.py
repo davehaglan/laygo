@@ -328,12 +328,15 @@ class adc_sar_templates__tisaradc_body(Module):
         self.rename_pin('OSM', ','.join(['OSM%d'%(i) for i in range(num_slices)]))
         self.rename_pin('ASCLKD<3:0>', ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]))
         self.rename_pin('EXTSEL_CLK', ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]))
-        self.rename_pin('MODESEL', ','.join(['MODESEL%d'%(i) for i in range(num_slices)]))
         self.rename_pin('ADCOUT', ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]))
         self.rename_pin('SF_Voffp0', ','.join(['SF_Voffp%d'%(i) for i in range(num_slices)]))
         self.rename_pin('SF_Voffn0', ','.join(['SF_Voffn%d'%(i) for i in range(num_slices)]))
         self.rename_pin('SF_BIAS', ','.join(['SF_BIAS%d'%(i) for i in range(num_slices)]))
         self.rename_pin('VREF_SF_BIAS', ','.join(['VREF_SF_BIAS%d'%(i) for i in range(num_slices)]))
+        if sar_ckgen_muxfast == True:
+            self.rename_pin('MODESEL', ','.join(['MODESEL%d'%(i) for i in range(num_slices)]))
+        else:
+            self.remove_pin('MODESEL')
 
         if use_offset == False:
             self.remove_pin(','.join(['OSP%d'%(i) for i in range(num_slices)]))
