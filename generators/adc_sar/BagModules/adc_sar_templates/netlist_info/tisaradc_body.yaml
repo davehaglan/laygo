@@ -1,11 +1,35 @@
 lib_name: adc_sar_templates
 cell_name: tisaradc_body
-pins: [ "CLKCAL", "RSTN", "CLKOUT_DES", "RSTP", "ADCOUT", "CLKIN", "CLKIP", "EXTSEL_CLK", "ASCLKD<3:0>", "VREF<2:0>", "OSM", "VSS", "OSP", "VDDSAR", "INM", "VDDSAMP", "INP" ]
+pins: [ "CLKCAL", "RSTN", "CLKOUT_DES", "RSTP", "ADCOUT", "CLKIN", "CLKIP", "EXTSEL_CLK", "ASCLKD<3:0>", "VREF<2:0>", "OSM", "VSS", "OSP", "VDDSAR", "INM", "VDDSAMP", "INP", "VREF_SF_BIAS", "SF_Voffp0", "SF_Voffn0", "SF_BIAS", "VREF_SF_bypass", "SF_bypass" ]
 instances:
   ICORE0:
     lib_name: adc_sar_templates
     cell_name: tisaradc_body_core
     instpins:
+      SF_BIAS:
+        direction: input
+        net_name: "SF_BIAS"
+        num_bits: 1
+      SF_Voffn0:
+        direction: input
+        net_name: "SF_Voffn0"
+        num_bits: 1
+      SF_Voffp0:
+        direction: input
+        net_name: "SF_Voffp0"
+        num_bits: 1
+      SF_bypass:
+        direction: input
+        net_name: "SF_bypass"
+        num_bits: 1
+      VREF_SF_BIAS:
+        direction: input
+        net_name: "VREF_SF_BIAS"
+        num_bits: 1
+      VREF_SF_bypass:
+        direction: input
+        net_name: "VREF_SF_bypass"
+        num_bits: 1
       VSS:
         direction: inputOutput
         net_name: "VSS"
@@ -106,6 +130,30 @@ instances:
         direction: inputOutput
         net_name: "VDDSAR"
         num_bits: 1
+  PIN17:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN18:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN19:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN20:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN21:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN22:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
   PIN8:
     lib_name: basic
     cell_name: ipin

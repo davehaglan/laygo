@@ -1,6 +1,6 @@
 lib_name: adc_sar_templates
 cell_name: sar_wsamp
-pins: [ "VDDSAMP", "CLKO", "VREF<2:0>", "OSM", "OSP", "INM", "INP", "EXTSEL_CLK", "CKDSEL0<1:0>", "CKDSEL1<1:0>", "CLK", "VOR<0>", "VOL<0>", "SF_Voffn", "SF_Voffp", "SF_bypass", "SF_BIAS", "VREF_SF_bypass", "VREF_SF_BIAS", "ADCOUT<0>", "ICLK", "CLKPRB_SAMP", "SAOP", "UP", "SB<0>", "SARCLKB", "ZM<0>", "SARCLK", "ZMID<0>", "DONE", "ZP<0>", "PHI0", "SAMPP", "SAMPM", "VDDSAR", "VSS", "SAOM" ]
+pins: [ "VDDSAMP", "CLKO", "VREF<2:0>", "OSM", "OSP", "INM", "INP", "EXTSEL_CLK", "CKDSEL0<1:0>", "CKDSEL1<1:0>", "CLK", "VOR<0>", "VOL<0>", "SF_Voffn", "SF_Voffp", "SF_bypass", "SF_BIAS", "VREF_SF_bypass", "VREF_SF_BIAS", "MODESEL", "ADCOUT<0>", "ICLK", "CLKPRB_SAMP", "SAOP", "UP", "SB<0>", "SARCLKB", "ZM<0>", "SARCLK", "ZMID<0>", "DONE", "ZP<0>", "PHI0", "SAMPP", "SAMPM", "VDDSAR", "VSS", "SAOM" ]
 instances:
   XSAMP0:
     lib_name: adc_sar_templates
@@ -146,6 +146,10 @@ instances:
     lib_name: basic
     cell_name: ipin
     instpins: {}
+  PIN40:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
   PIN5:
     lib_name: basic
     cell_name: ipin
@@ -238,6 +242,10 @@ instances:
     lib_name: adc_sar_templates
     cell_name: sar
     instpins:
+      MODESEL:
+        direction: input
+        net_name: "MODESEL"
+        num_bits: 1
       SF_VBIAS:
         direction: input
         net_name: "VREF_SF_BIAS"

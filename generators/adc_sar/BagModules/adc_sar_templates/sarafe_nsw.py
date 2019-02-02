@@ -46,7 +46,7 @@ class adc_sar_templates__sarafe_nsw(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, sa_m, sa_m_d, sa_m_rst, sa_m_rst_d, sa_m_rgnn, sa_m_rgnp_d, sa_m_buf, doubleSA,
+    def design(self, lch, pw, nw, sa_m, sa_m_d, sa_m_rst, sa_m_rst_d, sa_m_rgnn, sa_m_rgnp_d, sa_m_buf, sa_smallrgnp, doubleSA,
                drv_m_list, num_bits, c_m, rdx_array,
                m_mirror, m_bias, m_off, m_in, m_bias_dum, m_in_dum, m_byp, m_byp_bias, bias_current, vref_sf, device_intent='fast', pmos_body='VDD'):
         """To be overridden by subclasses to design this module.
@@ -74,6 +74,7 @@ class adc_sar_templates__sarafe_nsw(Module):
         self.parameters['sa_m_rgnn'] = sa_m_rgnn
         self.parameters['sa_m_rgnp'] = sa_m_rgnp_d
         self.parameters['sa_m_buf'] = sa_m_buf
+        self.parameters['sa_smallrgnp'] = sa_smallrgnp
         self.parameters['doubleSA'] = doubleSA
         self.parameters['drv_m_list'] = drv_m_list
         self.parameters['num_bits'] = num_bits
@@ -94,7 +95,7 @@ class adc_sar_templates__sarafe_nsw(Module):
 
         if doubleSA==False:
             self.instances['ISA0'].design(lch=lch, pw=pw, nw=nw, m=sa_m, m_rst=sa_m_rst, m_rgnn=sa_m_rgnn,
-                                          m_buf=sa_m_buf, device_intent=device_intent)
+                                          m_buf=sa_m_buf, device_intent=device_intent, smallrgnp=sa_smallrgnp)
         if doubleSA==True:
             self.replace_instance_master('ISA0', 'adc_sar_templates', 'doubleSA_pmos')
             self.instances['ISA0'].design(lch=lch, pw=pw, nw=nw, m=sa_m, m_rst=sa_m_rst, m_rgnn=sa_m_rgnn,
