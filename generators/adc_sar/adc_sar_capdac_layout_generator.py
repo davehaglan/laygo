@@ -472,7 +472,7 @@ if __name__ == '__main__':
                                                             'momcap_dmyptn_m2_1x',
                                                             # 'momcap_dmyptn_m5_1x',
                                                             'momcap_dmyptn_m6_1x',
-                                                            'momcap_dmyptn_m7_1x',
+                                                            # 'momcap_dmyptn_m7_1x',
                                                             'momcap_dmyptn_m8_1x',
                                                             'momcap_dmyptn_m9_1x',
                                                             ],

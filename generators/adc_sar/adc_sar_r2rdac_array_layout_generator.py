@@ -149,41 +149,63 @@ def generate_r2r_dac_bcap_array(laygen, objectname_pfix, templib_logic, placemen
                 rvss_m5.append(r0)
 
     # m6
-    print(pin_origin_y0_thick, pin_origin_y1_thick, pin_origin_y2_thick)
-    input_rails_rect = [rvdd_m5, rvss_m5]
-    rvdd_m6_0, rvss_m6_0 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_0_',
-                                                                             layer=laygen.layers['pin'][6],
-                                                                             gridname=rg_m5m6_thick,
-                                                                             netnames=['VDD', 'VSS'],
-                                                                             direction='x',
-                                                                             input_rails_rect=input_rails_rect,
-                                                                             generate_pin=True,
-                                                                             overwrite_start_coord=None,
-                                                                             overwrite_end_coord=None,
-                                                                             offset_start_index=0,
-                                                                             overwrite_end_index=pin_origin_y0_thick - 2)
-    rvdd_m6_1, rvss_m6_1 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_1_',
-                                                                             layer=laygen.layers['pin'][6],
-                                                                             gridname=rg_m5m6_thick,
-                                                                             netnames=['VDD', 'VSS'],
-                                                                             direction='x',
-                                                                             input_rails_rect=input_rails_rect,
-                                                                             generate_pin=True,
-                                                                             overwrite_start_coord=None,
-                                                                             overwrite_end_coord=None,
-                                                                             overwrite_start_index=pin_origin_y0_thick + 2,
-                                                                             overwrite_end_index=pin_origin_y1_thick - 2)
-    rvdd_m6_2, rvss_m6_2 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_2_',
-                                                                             layer=laygen.layers['pin'][6],
-                                                                             gridname=rg_m5m6_thick,
-                                                                             netnames=['VDD', 'VSS'],
-                                                                             direction='x',
-                                                                             input_rails_rect=input_rails_rect,
-                                                                             generate_pin=True,
-                                                                             overwrite_start_coord=None,
-                                                                             overwrite_end_coord=None,
-                                                                             overwrite_start_index=pin_origin_y2_thick + 2,
-                                                                             offset_end_index=0)
+    # print(pin_origin_y0_thick, pin_origin_y1_thick, pin_origin_y2_thick)
+    # input_rails_rect = [rvdd_m5, rvss_m5]
+    # rvdd_m6_0, rvss_m6_0 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_0_',
+    #                                                                          layer=laygen.layers['pin'][6],
+    #                                                                          gridname=rg_m5m6_thick,
+    #                                                                          netnames=['VDD', 'VSS'],
+    #                                                                          direction='x',
+    #                                                                          input_rails_rect=input_rails_rect,
+    #                                                                          generate_pin=True,
+    #                                                                          overwrite_start_coord=None,
+    #                                                                          overwrite_end_coord=None,
+    #                                                                          offset_start_index=0,
+    #                                                                          overwrite_end_index=pin_origin_y0_thick - 2)
+    # rvdd_m6_1, rvss_m6_1 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_1_',
+    #                                                                          layer=laygen.layers['pin'][6],
+    #                                                                          gridname=rg_m5m6_thick,
+    #                                                                          netnames=['VDD', 'VSS'],
+    #                                                                          direction='x',
+    #                                                                          input_rails_rect=input_rails_rect,
+    #                                                                          generate_pin=True,
+    #                                                                          overwrite_start_coord=None,
+    #                                                                          overwrite_end_coord=None,
+    #                                                                          overwrite_start_index=pin_origin_y0_thick + 2,
+    #                                                                          overwrite_end_index=pin_origin_y1_thick - 2)
+    # rvdd_m6_2, rvss_m6_2 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_2_',
+    #                                                                          layer=laygen.layers['pin'][6],
+    #                                                                          gridname=rg_m5m6_thick,
+    #                                                                          netnames=['VDD', 'VSS'],
+    #                                                                          direction='x',
+    #                                                                          input_rails_rect=input_rails_rect,
+    #                                                                          generate_pin=True,
+    #                                                                          overwrite_start_coord=None,
+    #                                                                          overwrite_end_coord=None,
+    #                                                                          overwrite_start_index=pin_origin_y2_thick + 2,
+    #                                                                          offset_end_index=0)
+
+    #m6 (extract VDD/VSS grid from tisar and make power pins)
+    tisar_name = 'tisaradc_body_core'
+    tisar_libname = 'adc_sar_generated'
+    rg_m5m6_thick_temp_tisar='route_M5_M6_thick_temp_tisar_VDD'
+    laygenhelper.generate_grids_from_template(laygen, gridname_input=rg_m5m6_thick, gridname_output=rg_m5m6_thick_temp_tisar,
+                                              template_name=tisar_name, template_libname=tisar_libname,
+                                              template_pin_prefix=['VDD'], xy_grid_type='ygrid')
+    input_rails_rect = [rvdd_m5]
+    rvdd_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
+                layer=laygen.layers['pin'][6], gridname=rg_m5m6_thick_temp_tisar, netnames=['VDD'], direction='x',
+                input_rails_rect=input_rails_rect, generate_pin=True, overwrite_start_coord=None, overwrite_end_coord=None,
+                offset_start_index=0, offset_end_index=-1)
+    rg_m5m6_thick_temp_tisar='route_M5_M6_thick_temp_tisar_VSS'
+    laygenhelper.generate_grids_from_template(laygen, gridname_input=rg_m5m6_thick, gridname_output=rg_m5m6_thick_temp_tisar,
+                                              template_name=tisar_name, template_libname=tisar_libname,
+                                              template_pin_prefix=['VSS'], xy_grid_type='ygrid')
+    input_rails_rect = [rvss_m5]
+    rvss_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
+                layer=laygen.layers['pin'][6], gridname=rg_m5m6_thick_temp_tisar, netnames=['VSS'], direction='x',
+                input_rails_rect=input_rails_rect, generate_pin=True, overwrite_start_coord=None, overwrite_end_coord=None,
+                offset_start_index=0, offset_end_index=-2)
 
 def generate_r2r_dac_array(laygen, objectname_pfix, templib_logic, placement_grid, routing_grid_m4m5, routing_grid_m5m6,
                            rg_m3m4_basic_thick, rg_m5m6_thick, m, num_bits, num_hori, num_vert, origin=np.array([0, 0])):
@@ -304,41 +326,73 @@ def generate_r2r_dac_array(laygen, objectname_pfix, templib_logic, placement_gri
                 rvss_m5.append(r0)
 
     # m6
-    print(pin_origin_y0_thick, pin_origin_y1_thick, pin_origin_y2_thick)
-    input_rails_rect = [rvdd_m5, rvss_m5]
-    rvdd_m6_0, rvss_m6_0 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_0_',
-                                                                           layer=laygen.layers['pin'][6],
-                                                                           gridname=rg_m5m6_thick,
-                                                                           netnames=['VDD', 'VSS'],
-                                                                           direction='x',
-                                                                           input_rails_rect=input_rails_rect,
-                                                                           generate_pin=True,
-                                                                           overwrite_start_coord=None,
-                                                                           overwrite_end_coord=pin_origin_x_thick-2,
-                                                                           offset_start_index=0,
-                                                                           overwrite_end_index=pin_origin_y0_thick-2)
-    rvdd_m6_1, rvss_m6_1 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_1_',
-                                                                           layer=laygen.layers['pin'][6],
-                                                                           gridname=rg_m5m6_thick,
-                                                                           netnames=['VDD', 'VSS'],
-                                                                           direction='x',
-                                                                           input_rails_rect=input_rails_rect,
-                                                                           generate_pin=True,
-                                                                           overwrite_start_coord=None,
-                                                                           overwrite_end_coord=pin_origin_x_thick-2,
-                                                                           overwrite_start_index=pin_origin_y0_thick+2,
-                                                                           overwrite_end_index=pin_origin_y1_thick-2)
-    rvdd_m6_2, rvss_m6_2 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_2_',
-                                                                           layer=laygen.layers['pin'][6],
-                                                                           gridname=rg_m5m6_thick,
-                                                                           netnames=['VDD', 'VSS'],
-                                                                           direction='x',
-                                                                           input_rails_rect=input_rails_rect,
-                                                                           generate_pin=True,
-                                                                           overwrite_start_coord=None,
-                                                                           overwrite_end_coord=pin_origin_x_thick-2,
-                                                                           overwrite_start_index=pin_origin_y2_thick+2,
-                                                                           offset_end_index=0)
+    # print(pin_origin_y0_thick, pin_origin_y1_thick, pin_origin_y2_thick)
+    # input_rails_rect = [rvdd_m5, rvss_m5]
+    # rvdd_m6_0, rvss_m6_0 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_0_',
+    #                                                                        layer=laygen.layers['pin'][6],
+    #                                                                        gridname=rg_m5m6_thick,
+    #                                                                        netnames=['VDD', 'VSS'],
+    #                                                                        direction='x',
+    #                                                                        input_rails_rect=input_rails_rect,
+    #                                                                        generate_pin=True,
+    #                                                                        overwrite_start_coord=None,
+    #                                                                        overwrite_end_coord=pin_origin_x_thick-2,
+    #                                                                        offset_start_index=0,
+    #                                                                        overwrite_end_index=pin_origin_y0_thick-2)
+    # rvdd_m6_1, rvss_m6_1 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_1_',
+    #                                                                        layer=laygen.layers['pin'][6],
+    #                                                                        gridname=rg_m5m6_thick,
+    #                                                                        netnames=['VDD', 'VSS'],
+    #                                                                        direction='x',
+    #                                                                        input_rails_rect=input_rails_rect,
+    #                                                                        generate_pin=True,
+    #                                                                        overwrite_start_coord=None,
+    #                                                                        overwrite_end_coord=pin_origin_x_thick-2,
+    #                                                                        overwrite_start_index=pin_origin_y0_thick+2,
+    #                                                                        overwrite_end_index=pin_origin_y1_thick-2)
+    # rvdd_m6_2, rvss_m6_2 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_2_',
+    #                                                                        layer=laygen.layers['pin'][6],
+    #                                                                        gridname=rg_m5m6_thick,
+    #                                                                        netnames=['VDD', 'VSS'],
+    #                                                                        direction='x',
+    #                                                                        input_rails_rect=input_rails_rect,
+    #                                                                        generate_pin=True,
+    #                                                                        overwrite_start_coord=None,
+    #                                                                        overwrite_end_coord=pin_origin_x_thick-2,
+    #                                                                        overwrite_start_index=pin_origin_y2_thick+2,
+    #                                                                        offset_end_index=0)
+
+    # m6 (extract VDD/VSS grid from tisar and make power pins)
+    tisar_name = 'tisaradc_body_core'
+    tisar_libname = 'adc_sar_generated'
+    rg_m5m6_thick_temp_tisar = 'route_M5_M6_thick_temp_tisar_VDD'
+    # x_end = laygen.get_template_xy(r2r_name, gridname=rg_m5m6_thick_temp_tisar, libname=workinglib)[0] + \
+    #         laygen.get_template_xy(bcap_name, gridname=rg_m5m6_thick_temp_tisar, libname=workinglib)[0]
+    laygenhelper.generate_grids_from_template(laygen, gridname_input=rg_m5m6_thick,
+                                              gridname_output=rg_m5m6_thick_temp_tisar,
+                                              template_name=tisar_name, template_libname=tisar_libname,
+                                              template_pin_prefix=['VDDSAR'], xy_grid_type='ygrid')
+    input_rails_rect = [rvdd_m5]
+    rvdd_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
+                                                                layer=laygen.layers['pin'][6],
+                                                                gridname=rg_m5m6_thick_temp_tisar, netnames=['VDD'],
+                                                                direction='x',
+                                                                input_rails_rect=input_rails_rect, generate_pin=True,
+                                                                overwrite_start_coord=None, overwrite_end_coord=pin_origin_x_thick,
+                                                                offset_start_index=0, offset_end_index=-1)
+    rg_m5m6_thick_temp_tisar = 'route_M5_M6_thick_temp_tisar_VSS'
+    laygenhelper.generate_grids_from_template(laygen, gridname_input=rg_m5m6_thick,
+                                              gridname_output=rg_m5m6_thick_temp_tisar,
+                                              template_name=tisar_name, template_libname=tisar_libname,
+                                              template_pin_prefix=['VSS'], xy_grid_type='ygrid')
+    input_rails_rect = [rvss_m5]
+    rvss_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
+                                                                layer=laygen.layers['pin'][6],
+                                                                gridname=rg_m5m6_thick_temp_tisar, netnames=['VSS'],
+                                                                direction='x',
+                                                                input_rails_rect=input_rails_rect, generate_pin=True,
+                                                                overwrite_start_coord=None, overwrite_end_coord=pin_origin_x_thick,
+                                                                offset_start_index=0, offset_end_index=-2)
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")

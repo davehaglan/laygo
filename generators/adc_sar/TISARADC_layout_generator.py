@@ -58,15 +58,22 @@ def generate_TISARADC(laygen, objectname_pfix, sar_libname, rdac_libname, space_
     sar_slice_size = laygen.get_template_size(sar_slice_name, pg, libname=sar_libname)
     rdac_xy = laygen.templates.get_template(rdac_name, libname=rdac_libname).xy
     rdac_off_x = laygen.grids.get_absgrid_x(pg, rdac_xy[1][0])
-    htree_off_y = laygen.get_template_pin_xy(htree_name, 'VSS_0_0', rg_m7m8_thick, libname=workinglib)[0][1]-2
-    num_input_shield_track = 1 # defined in tisar_htree_diff_m7m8, to be parameterized
-    if num_input_shield_track == 2:
-        htree_off_x = laygen.get_template_pin_xy(htree_name, 'VSS_0_0', rg_m7m8_thick, libname=workinglib)[0][0]/2 + \
-                      laygen.get_template_pin_xy(htree_name, 'VSS_0_1', rg_m7m8_thick, libname=workinglib)[0][0]/2 - \
-                      int(laygen.get_template_size(sar_slice_name, rg_m7m8_thick, libname=workinglib)[0]/2*5)
-    elif num_input_shield_track == 1:
-        htree_off_x = laygen.get_template_pin_xy(htree_name, 'VSS_0_0', rg_m7m8_thick, libname=workinglib)[0][0] - \
-                      int(laygen.get_template_size(sar_slice_name, rg_m7m8_thick, libname=workinglib)[0]/2*5+0.5)
+    num_input_shield_track = 0 # defined in tisar_htree_diff_m7m8, to be parameterized
+    if not num_input_shield_track == 0:
+        htree_off_y = laygen.get_template_pin_xy(htree_name, 'VSS_0_0', rg_m7m8_thick, libname=workinglib)[0][1]-2
+        if num_input_shield_track == 2:
+            htree_off_x = laygen.get_template_pin_xy(htree_name, 'VSS_0_0', rg_m7m8_thick, libname=workinglib)[0][0]/2 + \
+                          laygen.get_template_pin_xy(htree_name, 'VSS_0_1', rg_m7m8_thick, libname=workinglib)[0][0]/2 - \
+                          int(laygen.get_template_size(sar_slice_name, rg_m7m8_thick, libname=workinglib)[0]/2*5)
+        elif num_input_shield_track == 1:
+            htree_off_x = laygen.get_template_pin_xy(htree_name, 'VSS_0_0', rg_m7m8_thick, libname=workinglib)[0][0] - \
+                          int(laygen.get_template_size(sar_slice_name, rg_m7m8_thick, libname=workinglib)[0]/2*5+0.5)
+    else:
+        htree_off_y = laygen.get_template_pin_xy(htree_name, 'WNO_0_0', rg_m7m8_thick, libname=workinglib)[0][1]-2
+        htree_off_x = int(laygen.get_template_pin_xy(htree_name, 'WNO_0_0', rg_m7m8_thick, libname=workinglib)[0][0] / 2 + \
+                      laygen.get_template_pin_xy(htree_name, 'WPO_0_0', rg_m7m8_thick, libname=workinglib)[0][0] / 2 - \
+                      laygen.get_template_size(sar_slice_name, rg_m7m8_thick, libname=workinglib)[0] / 2 * 5)-1
+
     # sar_xy = origin + (laygen.get_template_size(rdac_name, gridname=pg, libname=rdac_libname)*np.array([1,0]) )
     sar_xy = origin
     isar = laygen.relplace(name="I" + objectname_pfix + 'SAR0', templatename=sar_name,

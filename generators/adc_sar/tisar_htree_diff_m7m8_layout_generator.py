@@ -320,7 +320,7 @@ if __name__ == '__main__':
             level = lvl,
             #track number
             trackm = 1,
-            shieldm = 1,
+            shieldm = 0,
             #divide ratio
             ratio = [ratio]*lvl,
             #metal layer
