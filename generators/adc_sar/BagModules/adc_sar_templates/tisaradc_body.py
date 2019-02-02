@@ -53,11 +53,11 @@ class adc_sar_templates__tisaradc_body(Module):
                sar_sa_m, sar_sa_m_d,
                sar_sa_m_rst, sar_sa_m_rst_d,
                sar_sa_m_rgnn, sar_sa_m_rgnp_d,
-               sar_sa_m_buf, doubleSA,
+               sar_sa_m_buf, doubleSA, sar_sa_m_smallrgnp,
                vref_sf_m_mirror, vref_sf_m_bias, vref_sf_m_off, vref_sf_m_in, vref_sf_m_bias_dum, vref_sf_m_in_dum,
                vref_sf_m_byp, vref_sf_m_byp_bias, vref_sf_bias_current, vref_sf,
                sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo,
-               sar_ckgen_ndelay, sar_ckgen_fast,
+               sar_ckgen_ndelay, sar_ckgen_fast, sar_ckgen_muxfast,
                sar_logic_m,
                sar_fsm_m,
                sar_ret_m,
@@ -132,6 +132,7 @@ class adc_sar_templates__tisaradc_body(Module):
         self.parameters['sar_sa_m_rgnp_d'] = sar_sa_m_rgnp_d
         self.parameters['sar_sa_m_buf'] = sar_sa_m_buf
         self.parameters['doubleSA'] = doubleSA
+        self.parameters['sar_sa_m_smallrgnp'] = sar_sa_m_smallrgnp
         self.parameters['vref_sf_m_mirror'] = vref_sf_m_mirror
         self.parameters['vref_sf_m_bias'] = vref_sf_m_bias
         self.parameters['vref_sf_m_in'] = vref_sf_m_in
@@ -147,6 +148,7 @@ class adc_sar_templates__tisaradc_body(Module):
         self.parameters['sar_ckgen_fo'] = sar_ckgen_fo
         self.parameters['sar_ckgen_ndelay'] = sar_ckgen_ndelay
         self.parameters['sar_ckgen_fast'] = sar_ckgen_fast
+        self.parameters['sar_ckgen_muxfast'] = sar_ckgen_muxfast
         self.parameters['sar_logic_m'] = sar_logic_m
         self.parameters['sar_fsm_m'] = sar_fsm_m
         self.parameters['sar_ret_m'] = sar_ret_m
@@ -215,6 +217,8 @@ class adc_sar_templates__tisaradc_body(Module):
                     ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]),
                 ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]):
                     ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]),
+                ','.join(['MODESEL%d' % (i) for i in range(num_slices)]):
+                    ','.join(['MODESEL%d' % (i) for i in range(num_slices)]),
                 ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]):
                     ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]),
                 ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]):
@@ -240,6 +244,8 @@ class adc_sar_templates__tisaradc_body(Module):
                     ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]),
                 ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]):
                     ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]),
+                ','.join(['MODESEL%d' % (i) for i in range(num_slices)]):
+                    ','.join(['MODESEL%d' % (i) for i in range(num_slices)]),
                 ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]):
                     ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
                 ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]):
@@ -262,11 +268,11 @@ class adc_sar_templates__tisaradc_body(Module):
             sar_sa_m, sar_sa_m_d,
             sar_sa_m_rst, sar_sa_m_rst_d,
             sar_sa_m_rgnn, sar_sa_m_rgnp_d,
-            sar_sa_m_buf, doubleSA,
+            sar_sa_m_buf, doubleSA, sar_sa_m_smallrgnp,
             vref_sf_m_mirror, vref_sf_m_bias, vref_sf_m_off, vref_sf_m_in, vref_sf_m_bias_dum, vref_sf_m_in_dum,
             vref_sf_m_byp, vref_sf_m_byp_bias, vref_sf_bias_current, vref_sf,
             sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo,
-            sar_ckgen_ndelay, sar_ckgen_fast,
+            sar_ckgen_ndelay, sar_ckgen_fast, sar_ckgen_muxfast,
             sar_logic_m,
             sar_fsm_m,
             sar_ret_m,
@@ -322,6 +328,7 @@ class adc_sar_templates__tisaradc_body(Module):
         self.rename_pin('OSM', ','.join(['OSM%d'%(i) for i in range(num_slices)]))
         self.rename_pin('ASCLKD<3:0>', ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]))
         self.rename_pin('EXTSEL_CLK', ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]))
+        self.rename_pin('MODESEL', ','.join(['MODESEL%d'%(i) for i in range(num_slices)]))
         self.rename_pin('ADCOUT', ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]))
         self.rename_pin('SF_Voffp0', ','.join(['SF_Voffp%d'%(i) for i in range(num_slices)]))
         self.rename_pin('SF_Voffn0', ','.join(['SF_Voffn%d'%(i) for i in range(num_slices)]))

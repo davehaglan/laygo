@@ -197,11 +197,19 @@ def generate_sar_wsamp_array(laygen, objectname_pfix, workinglib, sar_name,
     sar_xy=deepcopy(isar.xy[0])
     for i in range(num_slices):
         if use_sf == True:
-            pin_prefix_list=['INP', 'INM', 'CLK', 'CLKO0', 'CLKO1', 'EXTSEL_CLK', 'SF_Voffp', 'SF_Voffn', 'SF_BIAS']
-            netname_prefix_list=['INP', 'INM', 'CLK', 'CLKO', 'CLKO', 'EXTSEL_CLK', 'SF_Voffp', 'SF_Voffn', 'SF_BIAS']
+            if clkgen_mode == True:
+                pin_prefix_list=['INP', 'INM', 'CLK', 'CLKO0', 'CLKO1', 'EXTSEL_CLK', 'SF_Voffp', 'SF_Voffn', 'SF_BIAS', 'MODESEL']
+                netname_prefix_list=['INP', 'INM', 'CLK', 'CLKO', 'CLKO', 'EXTSEL_CLK', 'SF_Voffp', 'SF_Voffn', 'SF_BIAS', 'MODESEL']
+            else:
+                pin_prefix_list=['INP', 'INM', 'CLK', 'CLKO0', 'CLKO1', 'EXTSEL_CLK', 'SF_Voffp', 'SF_Voffn', 'SF_BIAS']
+                netname_prefix_list=['INP', 'INM', 'CLK', 'CLKO', 'CLKO', 'EXTSEL_CLK', 'SF_Voffp', 'SF_Voffn', 'SF_BIAS']
         else:
-            pin_prefix_list=['INP', 'INM', 'CLK', 'CLKO0', 'CLKO1', 'EXTSEL_CLK']
-            netname_prefix_list=['INP', 'INM', 'CLK', 'CLKO', 'CLKO', 'EXTSEL_CLK']
+            if clkgen_mode == True:
+                pin_prefix_list = ['INP', 'INM', 'CLK', 'CLKO0', 'CLKO1', 'EXTSEL_CLK', 'MODESEL']
+                netname_prefix_list = ['INP', 'INM', 'CLK', 'CLKO', 'CLKO', 'EXTSEL_CLK', 'MODESEL']
+            else:
+                pin_prefix_list=['INP', 'INM', 'CLK', 'CLKO0', 'CLKO1', 'EXTSEL_CLK']
+                netname_prefix_list=['INP', 'INM', 'CLK', 'CLKO', 'CLKO', 'EXTSEL_CLK']
         for j, pfix in enumerate(pin_prefix_list):
             pn=pfix + str(slice_order[i])
             nn=netname_prefix_list[j] + str(slice_order[i])
@@ -331,6 +339,7 @@ if __name__ == '__main__':
         use_offset = specdict['use_offset']
         use_sf = specdict['use_sf']
         vref_sf = specdict['use_vref_sf']
+        clkgen_mode = sizedict['sarclkgen']['mux_fast']
 
     #sar generation
     cellname='sar_wsamp_array'

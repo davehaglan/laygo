@@ -363,11 +363,13 @@ def generate_tisaradc_body(laygen, objectname_pfix, libname, tisar_core_name, ti
     
             
     #other pins - duplicate
-    pin_prefix_list=['INP', 'INM', 'VREF', 'ASCLKD', 'EXTSEL_CLK', 'ADCOUT', 'CLKOUT_DES', 'CLKCAL', 'RSTP', 'RSTN', 'CLKIP', 'CLKIN', 'SF_', 'VREF_SF_']
+    pin_prefix_list=['INP', 'INM', 'VREF', 'ASCLKD', 'EXTSEL_CLK', 'ADCOUT', 'CLKOUT_DES', 'CLKCAL', 'RSTP', 'RSTN', 'CLKIP', 'CLKIN', 'SF_', 'VREF_SF_', 'MODESEL']
     if use_sf == False:
         pin_prefix_list.remove('SF_')
     if vref_sf == False:
         pin_prefix_list.remove('VREF_SF_')
+    if clkgen_mode == False:
+        pin_prefix_list.remove('MODESEL')
     for pn, p in sar_pins.items():
         for pfix in pin_prefix_list:
             if pn.startswith(pfix):
@@ -428,15 +430,19 @@ if __name__ == '__main__':
     #load from preset
     load_from_file=True
     yamlfile_spec="adc_sar_spec.yaml"
+    yamlfile_size="adc_sar_size.yaml"
     if load_from_file==True:
         with open(yamlfile_spec, 'r') as stream:
             specdict = yaml.load(stream)
+        with open(yamlfile_size, 'r') as stream:
+            sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']
         num_slices=specdict['n_interleave']
         use_offset=specdict['use_offset']
         use_sf = specdict['use_sf']
         vref_sf = specdict['use_vref_sf']
         input_htree  = specdict['input_htree']
+        clkgen_mode = sizedict['sarclkgen']['mux_fast']
 
     cellname = 'tisaradc_body'
     tisar_core_name = 'tisaradc_body_core'

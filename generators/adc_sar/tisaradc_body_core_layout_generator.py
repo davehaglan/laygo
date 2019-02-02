@@ -236,6 +236,17 @@ def generate_tisaradc_body_core(laygen, objectname_pfix, ret_libname, sar_libnam
             r=laygen.route(None, layer=laygen.layers['metal'][5], xy0=xy[0], xy1=xy[1], gridname0=rg_m5m6)
             laygen.boundary_pin_from_rect(r, rg_m5m6, pn_out, laygen.layers['pin'][5], size=4,
                                           direction='bottom')
+
+    # MODESEL pins
+    if clkgen_mode == True:
+        for i in range(num_slices):
+            pn = 'MODESEL' + str(i)
+            pn_out = 'MODESEL' + str(i)
+            xy = pdict_m5m6[isar.name][pn]
+            xy[0][1] = 0
+            r = laygen.route(None, layer=laygen.layers['metal'][5], xy0=xy[0], xy1=xy[1], gridname0=rg_m5m6)
+            laygen.boundary_pin_from_rect(r, rg_m5m6, pn_out, laygen.layers['pin'][5], size=4,
+                                          direction='bottom')
     #osp/osm pins
     if use_offset == True:
         for i in range(num_slices):
@@ -426,6 +437,7 @@ if __name__ == '__main__':
         input_htree = specdict['input_htree']
         num_hori=sizedict['r2rdac_array']['num_hori']
         num_vert=sizedict['r2rdac_array']['num_vert']
+        clkgen_mode = sizedict['sarclkgen']['mux_fast']
 
     tech=laygen.tech
     utemplib = tech+'_microtemplates_dense'

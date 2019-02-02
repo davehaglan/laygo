@@ -1,6 +1,6 @@
 lib_name: adc_sar_templates
 cell_name: TISARADC
-pins: [ "VSS", "VDDSAR", "VDDSAMP", "CLKOUT_DES", "ADCOUT", "VREF_SF_bypass", "SF_bypass", "CLKCAL", "EXTSEL_CLK", "ASCLKD<3:0>", "VREF<2:0>", "INM", "INP", "RSTN", "RSTP", "CLKIN", "CLKIP", "RDAC_SEL" ]
+pins: [ "VSS", "VDDSAR", "VDDSAMP", "CLKOUT_DES", "ADCOUT", "VREF_SF_bypass", "SF_bypass", "CLKCAL", "EXTSEL_CLK", "ASCLKD<3:0>", "VREF<2:0>", "MODESEL", "INM", "INP", "RSTN", "RSTP", "CLKIN", "CLKIP", "RDAC_SEL" ]
 instances:
   IRDAC:
     lib_name: adc_sar_templates
@@ -38,6 +38,10 @@ instances:
     lib_name: adc_sar_templates
     cell_name: tisaradc_body
     instpins:
+      MODESEL:
+        direction: input
+        net_name: "MODESEL"
+        num_bits: 1
       SF_BIAS:
         direction: input
         net_name: "RDAC_OUT"
@@ -151,6 +155,10 @@ instances:
     cell_name: ipin
     instpins: {}
   PIN9:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN10:
     lib_name: basic
     cell_name: ipin
     instpins: {}

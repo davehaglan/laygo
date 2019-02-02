@@ -138,6 +138,14 @@ instances:
     lib_name: adc_sar_templates
     cell_name: sarafe_nsw
     instpins:
+      SF_VBIAS:
+        direction: input
+        net_name: "SF_VBIAS"
+        num_bits: 1
+      SF_bypass:
+        direction: input
+        net_name: "SF_bypass"
+        num_bits: 1
       VOL:
         direction: output
         net_name: "VOL<0>"

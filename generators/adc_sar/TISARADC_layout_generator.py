@@ -208,11 +208,11 @@ def generate_TISARADC(laygen, objectname_pfix, sar_libname, rdac_libname, space_
     #     laygen.boundary_pin_from_rect(rout, rg_m4m5, 'CLKO%d' % (i), layer=laygen.layers['pin'][5], direction='bottom', size=4)
     for pn, p in sar_pins.items():
         pin_prefix_list = ['INP', 'INM', 'VREF', 'ASCLKD', 'EXTSEL_CLK', 'ADCOUT', 'CLKOUT_DES', 'CLKCAL', 'RSTP',
-                           'RSTN', 'CLKIP', 'CLKIN', 'VDD', 'VSS']
+                           'RSTN', 'CLKIP', 'CLKIN', 'VDD', 'VSS', 'MODESEL']
         # if use_sf == False:
         #     pin_prefix_list.remove('SF_bypass')
-        # if vref_sf == False:
-        #     pin_prefix_list.remove('VREF_SF_bypass')
+        if clkgen_mode == False:
+            pin_prefix_list.remove('MODESEL')
         if input_htree == True:
             pin_prefix_list.remove('INP')
             pin_prefix_list.remove('INM')
@@ -328,6 +328,7 @@ if __name__ == '__main__':
         use_sf = specdict['use_sf']
         vref_sf = specdict['use_vref_sf']
         input_htree = specdict['input_htree']
+        clkgen_mode = sizedict['sarclkgen']['mux_fast']
 
     cellname = 'TISARADC'
     sar_name = 'tisaradc_body'

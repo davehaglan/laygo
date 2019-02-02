@@ -238,7 +238,8 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
     #extclk/extclksel
     #laygen.pin(name='EXTCLK', layer=laygen.layers['pin'][5], xy=pdict_m4m5[iabe.name]['EXTCLK'], gridname=rg_m4m5)
     laygen.pin(name='EXTSEL_CLK', layer=laygen.layers['pin'][5], xy=pdict_m4m5[iabe.name]['EXTSEL_CLK'], gridname=rg_m4m5)
-    laygen.pin(name='MODESEL', layer=laygen.layers['pin'][5], xy=pdict_m4m5[iabe.name]['MODESEL'], gridname=rg_m4m5)
+    if clkgen_mode == True:
+        laygen.pin(name='MODESEL', layer=laygen.layers['pin'][5], xy=pdict_m4m5[iabe.name]['MODESEL'], gridname=rg_m4m5)
     laygen.pin(name='SAOP', layer=laygen.layers['pin'][5], xy=pdict_m5m6[iabe.name]['SAOP'], gridname=rg_m4m5)
     laygen.pin(name='SAOM', layer=laygen.layers['pin'][5], xy=pdict_m5m6[iabe.name]['SAOM'], gridname=rg_m4m5)
     #ckdsel
@@ -326,6 +327,7 @@ if __name__ == '__main__':
         vref_sf=specdict['use_vref_sf']
         num_bits=specdict['n_bit']
         mom_layer = specdict['momcap_layer']
+        clkgen_mode = sizedict['sarclkgen']['mux_fast']
 
     #sar generation
     cellname='sar'
