@@ -89,6 +89,9 @@ class adc_sar_templates__sarclkgen_static(Module):
         self.instances['ICORE0'].design(lch=lch, pw=pw, nw=nw, m=m*2, device_intent=device_intent)
         if fast == False:
             self.reconnect_instance_terminal('ICORE0', 'UPB', 'VDD')
+            self.delete_instance('IMUX')
+            self.delete_instance('IMUXINV')
+            self.remove_pin('MODESEL')
         elif mux_fast == False:
             self.delete_instance('IMUX')
             self.delete_instance('IMUXINV')
