@@ -20,26 +20,25 @@ params = dict(
     m_outbuf_list=[8, 32],
     device_intent='fast',
     tgate=False,
-    )
+)
 
-load_from_file=True
-yamlfile_spec="adc_sar_spec.yaml"
-yamlfile_size="adc_sar_size.yaml"
-if load_from_file==True:
+load_from_file = True
+yamlfile_spec = "adc_sar_spec.yaml"
+yamlfile_size = "adc_sar_size.yaml"
+if load_from_file == True:
     with open(yamlfile_spec, 'r') as stream:
         specdict = yaml.load(stream)
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
-    params['m_sw']=sizedict['sarsamp']['m_sw']
-    params['m_sw_arr']=sizedict['sarsamp']['m_sw_arr']
-    params['m_inbuf_list']=sizedict['sarsamp']['m_inbuf_list']
-    params['m_outbuf_list']=sizedict['sarsamp']['m_outbuf_list']
-    params['lch']=sizedict['lch']
-    params['pw']=sizedict['pw']
-    params['nw']=sizedict['nw']
-    params['device_intent']=sizedict['device_intent']
-    params['tgate']=specdict['samp_with_tgate']
-
+    params['m_sw'] = sizedict['sarsamp']['m_sw']
+    params['m_sw_arr'] = sizedict['sarsamp']['m_sw_arr']
+    params['m_inbuf_list'] = sizedict['sarsamp']['m_inbuf_list']
+    params['m_outbuf_list'] = sizedict['sarsamp']['m_outbuf_list']
+    params['lch'] = sizedict['lch']
+    params['pw'] = sizedict['pw']
+    params['nw'] = sizedict['nw']
+    params['device_intent'] = sizedict['device_intent']
+    params['tgate'] = specdict['samp_with_tgate']
 
 print('creating BAG project')
 prj = bag.BagProject()
@@ -53,4 +52,3 @@ dsn.design(**params)
 # implement the design
 print('implementing design with library %s' % impl_lib)
 dsn.implement_design(impl_lib, top_cell_name=cell_name, erase=True)
-

@@ -243,18 +243,20 @@ if __name__ == '__main__':
     logictemplib = tech+'_logic_templates'
     samp_lib = 'adc_sampler_ec'
     samp_name = 'sampler_nmos'
-    laygen.load_template(filename=tech+'_microtemplates_dense_templates.yaml', libname=utemplib)
-    laygen.load_grid(filename=tech+'_microtemplates_dense_grids.yaml', libname=utemplib)
-    laygen.load_template(filename=logictemplib+'.yaml', libname=logictemplib)
+    laygen.load_template(filename='GF45RFSOI/'+tech+'_microtemplates_dense_templates.yaml', libname=utemplib)
+    laygen.load_grid(filename='GF45RFSOI/'+tech+'_microtemplates_dense_grids.yaml', libname=utemplib)
+    laygen.load_template(filename='GF45RFSOI/'+logictemplib+'.yaml', libname=logictemplib)
     laygen.templates.sel_library(utemplib)
     laygen.grids.sel_library(utemplib)
 
+
     #library load or generation
     workinglib = 'adc_sar_generated'
+    workinglib_file = 'isg_common/circuits/adc_gen/specs/' + workinglib+'.yaml'
     laygen.add_library(workinglib)
     laygen.sel_library(workinglib)
-    if os.path.exists(workinglib+'.yaml'): #generated layout file exists
-        laygen.load_template(filename=workinglib+'.yaml', libname=workinglib)
+    if os.path.exists(workinglib_file): #generated layout file exists
+        laygen.load_template(filename=workinglib_file, libname=workinglib)
         laygen.templates.sel_library(utemplib)
 
     #grid
@@ -276,8 +278,8 @@ if __name__ == '__main__':
     num_bits=9
     #load from preset
     load_from_file=True
-    yamlfile_spec="adc_sar_spec.yaml"
-    yamlfile_size="adc_sar_size.yaml"
+    yamlfile_spec="isg_common/circuits/adc_gen/specs/adc_sar_spec.yaml"
+    yamlfile_size="isg_common/circuits/adc_gen/specs/adc_sar_size.yaml"
     if load_from_file==True:
         with open(yamlfile_spec, 'r') as stream:
             specdict = yaml.load(stream)

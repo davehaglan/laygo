@@ -43,8 +43,8 @@ params = dict(
     samp_use_laygo=False,
 )
 load_from_file=True
-yamlfile_spec="adc_sar_spec.yaml"
-yamlfile_size="adc_sar_size.yaml"
+yamlfile_spec="isg_common/circuits/adc_gen/specs/adc_sar_spec.yaml"
+yamlfile_size="isg_common/circuits/adc_gen/specs/adc_sar_size.yaml"
 if load_from_file==True:
     with open(yamlfile_spec, 'r') as stream:
         specdict = yaml.load(stream)
