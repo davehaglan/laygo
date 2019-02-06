@@ -139,6 +139,8 @@ class adc_sar_templates__sar_wsamp_array(Module):
         self.parameters['num_slices'] = num_slices
 
         #array generation
+        if use_offset is True and use_sf is True:
+            raise Exception("set use_offset in adc_sar_spec.yaml to false when use_sf is True")
         name_list=[]
         term_list=[]
         for i in range(num_slices):
