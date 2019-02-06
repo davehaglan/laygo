@@ -50,6 +50,7 @@ files=[
     'laygo/generators/adc_sar/adc_sar_r2rdac_array_layout_generator.py',
     'laygo/generators/adc_sar/TISARADC_layout_generator.py',
     'laygo/generators/adc_sar/TISARADC_schematic_generator.py',
+    # 'laygo/generators/adc_sar/TISARADC_lvs.py',
     ]
 
 for f in files:
