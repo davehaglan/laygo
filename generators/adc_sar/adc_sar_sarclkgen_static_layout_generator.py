@@ -56,7 +56,7 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
     nand2_name = 'nand_' + str(fo*m) + 'x'
     nor_name = 'nor_' + str(m) + 'x'
     sr_name = 'ndsr_2x'
-    mux_name = 'mux2to1_' + '1x'  # static signal, doesn't need fast?
+    mux_name = 'mux2to1_' +  str(2*m) + 'x'  # static signal, doesn't need fast?
     core_name = 'sarclkgen_core_static2'
     #core2_name = 'sarclkgen_core2'
     delay_name = 'sarclkdelay_compact_dual'

@@ -97,7 +97,7 @@ class adc_sar_templates__sarclkgen_static(Module):
             self.delete_instance('IMUXINV')
             self.remove_pin('MODESEL')
         else:
-            self.instances['IMUX'].design(lch=lch, pw=pw, nw=nw, m=1, device_intent=device_intent)
+            self.instances['IMUX'].design(lch=lch, pw=pw, nw=nw, m=2*m, device_intent=device_intent)
             self.instances['IMUXINV'].design(lch=lch, pw=pw, nw=nw, m=m, device_intent=device_intent)
             self.reconnect_instance_terminal('IINV5','O','MUXIN')
             self.reconnect_instance_terminal('IMUX','I0','MUXIN')
