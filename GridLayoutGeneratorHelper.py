@@ -280,7 +280,7 @@ def generate_grids_from_xy(laygen, gridname_input, gridname_output, xy, xy_grid_
         xgrid.sort()
         xgrid = np.array(xgrid)
         xwidth = np.array(xwidth)
-        bnd[1][0] = max(xgrid)+min(ygrid)
+        bnd[1][0] = max(xgrid)+min(xgrid)
     if xy_grid_type== 'ygrid':
         ygrid=[]
         ywidth=[]

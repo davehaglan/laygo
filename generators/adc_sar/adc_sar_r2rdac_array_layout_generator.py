@@ -196,7 +196,7 @@ def generate_r2r_dac_bcap_array(laygen, objectname_pfix, templib_logic, placemen
     rvdd_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
                 layer=laygen.layers['pin'][6], gridname=rg_m5m6_thick_temp_tisar, netnames=['VDD'], direction='x',
                 input_rails_rect=input_rails_rect, generate_pin=True, overwrite_start_coord=None, overwrite_end_coord=None,
-                offset_start_index=0, offset_end_index=-1)
+                offset_start_index=0, offset_end_index=0)
     rg_m5m6_thick_temp_tisar='route_M5_M6_thick_temp_tisar_VSS'
     laygenhelper.generate_grids_from_template(laygen, gridname_input=rg_m5m6_thick, gridname_output=rg_m5m6_thick_temp_tisar,
                                               template_name=tisar_name, template_libname=tisar_libname,
@@ -205,7 +205,7 @@ def generate_r2r_dac_bcap_array(laygen, objectname_pfix, templib_logic, placemen
     rvss_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
                 layer=laygen.layers['pin'][6], gridname=rg_m5m6_thick_temp_tisar, netnames=['VSS'], direction='x',
                 input_rails_rect=input_rails_rect, generate_pin=True, overwrite_start_coord=None, overwrite_end_coord=None,
-                offset_start_index=0, offset_end_index=-2)
+                offset_start_index=0, offset_end_index=0)
 
 def generate_r2r_dac_array(laygen, objectname_pfix, templib_logic, placement_grid, routing_grid_m4m5, routing_grid_m5m6,
                            rg_m3m4_basic_thick, rg_m5m6_thick, m, num_bits, num_hori, num_vert, origin=np.array([0, 0])):
@@ -372,6 +372,8 @@ def generate_r2r_dac_array(laygen, objectname_pfix, templib_logic, placement_gri
                                               gridname_output=rg_m5m6_thick_temp_tisar,
                                               template_name=tisar_name, template_libname=tisar_libname,
                                               template_pin_prefix=['VDDSAR'], xy_grid_type='ygrid')
+
+    laygen.grids.display(libname=None, gridname=rg_m5m6_thick_temp_tisar)
     input_rails_rect = [rvdd_m5]
     rvdd_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
                                                                 layer=laygen.layers['pin'][6],
@@ -379,12 +381,13 @@ def generate_r2r_dac_array(laygen, objectname_pfix, templib_logic, placement_gri
                                                                 direction='x',
                                                                 input_rails_rect=input_rails_rect, generate_pin=True,
                                                                 overwrite_start_coord=None, overwrite_end_coord=pin_origin_x_thick,
-                                                                offset_start_index=0, offset_end_index=-1)
+                                                                offset_start_index=0, offset_end_index=-6)
     rg_m5m6_thick_temp_tisar = 'route_M5_M6_thick_temp_tisar_VSS'
     laygenhelper.generate_grids_from_template(laygen, gridname_input=rg_m5m6_thick,
                                               gridname_output=rg_m5m6_thick_temp_tisar,
                                               template_name=tisar_name, template_libname=tisar_libname,
                                               template_pin_prefix=['VSS'], xy_grid_type='ygrid')
+    laygen.grids.display(libname=None, gridname=rg_m5m6_thick_temp_tisar)
     input_rails_rect = [rvss_m5]
     rvss_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
                                                                 layer=laygen.layers['pin'][6],
@@ -392,7 +395,7 @@ def generate_r2r_dac_array(laygen, objectname_pfix, templib_logic, placement_gri
                                                                 direction='x',
                                                                 input_rails_rect=input_rails_rect, generate_pin=True,
                                                                 overwrite_start_coord=None, overwrite_end_coord=pin_origin_x_thick,
-                                                                offset_start_index=0, offset_end_index=-2)
+                                                                offset_start_index=0, offset_end_index=0)
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
