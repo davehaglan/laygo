@@ -122,7 +122,7 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     for j in range(num_cdrv_output_routes):
         for i in range(num_bits):
             icdrvl_vo_xy.append(laygen.get_inst_pin_xy(icdrvl.name, 'VO' + str(j) + '<' + str(i) + '>', rg0))
-            icdrvr_vo_xy.append(laygen.get_inst_pin_xy(icdrvr.name, 'VO' + str(j) + '<' + str(i) + '>', rg_m5m6))
+            icdrvr_vo_xy.append(laygen.get_inst_pin_xy(icdrvr.name, 'VO' + str(j) + '<' + str(i) + '>', rg0))
 
     #route
     #capdrv to capdac
