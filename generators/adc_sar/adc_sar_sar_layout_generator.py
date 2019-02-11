@@ -34,7 +34,7 @@ import os
 
 def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name, 
                  placement_grid,
-                 routing_grid_m3m4, routing_grid_m4m5, routing_grid_m5m6, routing_grid_m5m6_thick, mom_layer=6, num_bits=8, origin=np.array([0, 0])):
+                 routing_grid_m3m4, routing_grid_m4m5, routing_grid_m5m6, routing_grid_m5m6_thick, mom_layer=6, num_bits=8, vref_sf=False, origin=np.array([0, 0])):
     """generate sar"""
     pg = placement_grid
 
@@ -238,6 +238,8 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
     #extclk/extclksel
     #laygen.pin(name='EXTCLK', layer=laygen.layers['pin'][5], xy=pdict_m4m5[iabe.name]['EXTCLK'], gridname=rg_m4m5)
     laygen.pin(name='EXTSEL_CLK', layer=laygen.layers['pin'][5], xy=pdict_m4m5[iabe.name]['EXTSEL_CLK'], gridname=rg_m4m5)
+    if clkgen_mode == True:
+        laygen.pin(name='MODESEL', layer=laygen.layers['pin'][5], xy=pdict_m4m5[iabe.name]['MODESEL'], gridname=rg_m4m5)
     laygen.pin(name='SAOP', layer=laygen.layers['pin'][5], xy=pdict_m5m6[iabe.name]['SAOP'], gridname=rg_m4m5)
     laygen.pin(name='SAOM', layer=laygen.layers['pin'][5], xy=pdict_m5m6[iabe.name]['SAOM'], gridname=rg_m4m5)
     #ckdsel
@@ -251,8 +253,8 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
     abe_template = laygen.templates.get_template(sarabe_name, workinglib)
     afe_pins=afe_template.pins
     abe_pins=abe_template.pins
-    afe_xy=iafe.xy[0]
-    abe_xy=iabe.xy[0]
+    afe_xy=iafe.xy
+    abe_xy=iabe.xy
     for i in range(num_bits):
         pn='ZP'+'<'+str(i)+'>'
         laygen.add_pin(pn, pn, abe_xy+abe_pins[pn]['xy'], abe_pins[pn]['layer'])
@@ -267,6 +269,10 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
     laygen.add_pin('UP', 'UP', abe_xy+abe_pins['UP']['xy'], abe_pins['UP']['layer'])
     laygen.add_pin('PHI0', 'PHI0', abe_xy+abe_pins['PHI0']['xy'], abe_pins['PHI0']['layer'])
     laygen.add_pin('DONE', 'DONE', abe_xy+abe_pins['DONE']['xy'], abe_pins['DONE']['layer'])
+
+    if vref_sf == True:
+        laygen.add_pin('SF_VBIAS', 'SF_VBIAS', afe_xy+afe_pins['SF_VBIAS']['xy'], afe_pins['SF_VBIAS']['layer'])
+        laygen.add_pin('SF_bypass', 'SF_bypass', afe_xy+afe_pins['SF_bypass']['xy'], afe_pins['SF_bypass']['layer'])
 
 if __name__ == '__main__':
     laygen = laygo.GridLayoutGenerator(config_file="laygo_config.yaml")
@@ -318,8 +324,10 @@ if __name__ == '__main__':
             specdict = yaml.load(stream)
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
+        vref_sf=specdict['use_vref_sf']
         num_bits=specdict['n_bit']
         mom_layer = specdict['momcap_layer']
+        clkgen_mode = sizedict['sarclkgen']['mux_fast']
 
     #sar generation
     cellname='sar'
@@ -333,7 +341,7 @@ if __name__ == '__main__':
     generate_sar(laygen, objectname_pfix='SA0', workinglib=workinglib, sarabe_name=sarabe_name, sarafe_name=sarafe_name,
                  placement_grid=pg, routing_grid_m3m4=rg_m3m4, routing_grid_m4m5=rg_m4m5, routing_grid_m5m6=rg_m5m6,
                  routing_grid_m5m6_thick=rg_m5m6_thick,
-                 mom_layer=mom_layer, num_bits=num_bits, origin=np.array([0, 0]))
+                 mom_layer=mom_layer, num_bits=num_bits, vref_sf=vref_sf, origin=np.array([0, 0]))
     laygen.add_template_from_cell()
 
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)

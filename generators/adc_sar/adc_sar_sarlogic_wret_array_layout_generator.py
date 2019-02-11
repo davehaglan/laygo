@@ -358,8 +358,8 @@ def generate_sarlogic_wret_v2_array(laygen, objectname_pfix, templib_logic, plac
     ref_offset = laygen.get_template_size('pmos4_fast_left', gridname=rg_m4m5, libname=utemplib)[0]
     # refl_m4m5 = laygen.get_template_pin_xy('sarafe_nsw', 'ENL6<2>', rg_m4m5, libname=workinglib)[0][0]-ref_offset
     # refr_m4m5 = laygen.get_template_pin_xy('sarafe_nsw', 'ENR0<0>', rg_m4m5, libname=workinglib)[0][0]-ref_offset
-    retol_x = pdict_m4m5[islogic[0].name]['RETO'][0][0]-4
-    retor_x = pdict_m4m5[islogic[1].name]['RETO'][0][0]-4
+    retol_x = pdict_m4m5[islogic[0].name]['RETO'][0][0]-5
+    retor_x = pdict_m4m5[islogic[1].name]['RETO'][0][0]-5
     # if refl_m4m5 > retol_x: refl_m4m5=retol_x
     # if refr_m4m5 > retor_x: refr_m4m5=retor_x
     # print("after:", refl_m4m5, refr_m4m5)

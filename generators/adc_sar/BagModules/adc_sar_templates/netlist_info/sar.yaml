@@ -1,11 +1,15 @@
 lib_name: adc_sar_templates
 cell_name: sar
-pins: [ "INP", "INM", "CLK", "VREF<2:0>", "OSP", "OSM", "CLKOUT", "ADCOUT<0>", "VDD", "VSS", "CKDSEL1<1:0>", "PHI0", "DONE", "EXTSEL_CLK", "UP", "SB<0>", "CKDSEL0<1:0>", "SARCLK", "VOL<0>", "ZP<0>", "VOR<0>", "ZMID<0>", "ZM<0>", "SARCLKB", "SAOP", "SAOM" ]
+pins: [ "INP", "INM", "CLK", "VREF<2:0>", "OSP", "OSM", "CLKOUT", "ADCOUT<0>", "VDD", "VSS", "CKDSEL1<1:0>", "PHI0", "DONE", "EXTSEL_CLK", "UP", "SF_bypass", "MODESEL", "SB<0>", "CKDSEL0<1:0>", "SARCLK", "SF_VBIAS", "VOL<0>", "ZP<0>", "VOR<0>", "ZMID<0>", "ZM<0>", "SARCLKB", "SAOP", "SAOM" ]
 instances:
   IABE0:
     lib_name: adc_sar_templates
     cell_name: sarabe_dualdelay
     instpins:
+      MODESEL:
+        direction: input
+        net_name: "MODESEL"
+        num_bits: 1
       ADCOUT<0>:
         direction: output
         net_name: "ADCOUT<0>"
@@ -82,6 +86,18 @@ instances:
         direction: input
         net_name: "CLK"
         num_bits: 1
+  PIN20:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN24:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
+  PIN19:
+    lib_name: basic
+    cell_name: ipin
+    instpins: {}
   PIN10:
     lib_name: basic
     cell_name: ipin
@@ -122,6 +138,14 @@ instances:
     lib_name: adc_sar_templates
     cell_name: sarafe_nsw
     instpins:
+      SF_VBIAS:
+        direction: input
+        net_name: "SF_VBIAS"
+        num_bits: 1
+      SF_bypass:
+        direction: input
+        net_name: "SF_bypass"
+        num_bits: 1
       VOL:
         direction: output
         net_name: "VOL<0>"

@@ -406,14 +406,23 @@ def generate_samp(laygen, objectname_pfix, workinglib,
     rvdd_m5=[None, None]
     input_rails_rect = [rvdd_m4[0], rvss_m4[0]]
     rvdd_m5[0], rvss_m5[0] = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='L_M5_', 
-                layer=laygen.layers['metal'][5], gridname=pg45t, netnames=['VDD', 'VSS'], direction='y', 
+                layer=laygen.layers['metal'][5], gridname=pg45t, netnames=['VDD', 'VSS'], direction='y',
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=None, overwrite_end_coord=None,
                 offset_start_index=0, offset_end_index=0)
     input_rails_rect = [rvdd_m4[1], rvss_m4[1]]
-    rvdd_m5[1], rvss_m5[1] = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='R_M5_', 
-                layer=laygen.layers['metal'][5], gridname=pg45t, netnames=['VDD', 'VSS'], direction='y', 
+    rvdd_m5[1], rvss_m5[1] = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='R_M5_',
+                layer=laygen.layers['metal'][5], gridname=pg45t, netnames=['VDD', 'VSS'], direction='y',
                 input_rails_rect=input_rails_rect, generate_pin=False, overwrite_start_coord=None, overwrite_end_coord=None,
                 offset_start_index=0, offset_end_index=0)
+    for r in rvdd_m5[0]:
+        p=laygen.pin_from_rect(name='LVDD_M5_'+r.name, layer=laygen.layers['pin'][5], rect=r, gridname=pg45t, netname='VDD')
+    for r in rvdd_m5[1]:
+        p=laygen.pin_from_rect(name='RVDD_M5_'+r.name, layer=laygen.layers['pin'][5], rect=r, gridname=pg45t, netname='VDD')
+    for r in rvss_m5[0]:
+        p=laygen.pin_from_rect(name='LVSS_M5_'+r.name, layer=laygen.layers['pin'][5], rect=r, gridname=pg45t, netname='VSS')
+    for r in rvss_m5[1]:
+        p=laygen.pin_from_rect(name='RVSS_M5_'+r.name, layer=laygen.layers['pin'][5], rect=r, gridname=pg45t, netname='VSS')
+
     #m6
     input_rails_rect = [rvdd_m5[0]+rvdd_m5[1], rvss_m5[0]+rvss_m5[1]]
     x1 = laygen.get_inst_bbox(name=ibuf.name, gridname=pg56t)[1][0] + laygen.get_xy(obj=laygen.get_template(name = 'nmos4_fast_left'), gridname=pg56t)[0]

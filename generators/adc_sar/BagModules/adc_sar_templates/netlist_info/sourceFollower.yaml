@@ -39,7 +39,7 @@ instances:
         net_name: "in"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -59,7 +59,7 @@ instances:
         net_name: "VBIAS"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -79,7 +79,7 @@ instances:
         net_name: "out"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -99,7 +99,7 @@ instances:
         net_name: "VBIAS"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -119,7 +119,7 @@ instances:
         net_name: "VBIAS"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -139,7 +139,7 @@ instances:
         net_name: "VSS"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -159,7 +159,7 @@ instances:
         net_name: "VDD"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -179,7 +179,7 @@ instances:
         net_name: "out"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -199,7 +199,7 @@ instances:
         net_name: "VDD"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:

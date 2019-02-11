@@ -46,6 +46,7 @@ if load_from_file==True:
     params['m_in_dum']=sizedict['sourceFollower']['m_in_dum']
     params['m_byp']=sizedict['sourceFollower']['m_byp']
     params['m_byp_bias']=sizedict['sourceFollower']['m_byp_bias']
+    params['bias_current']=sizedict['sourceFollower']['bias_current']
     params['lch']=sizedict['lch']
     params['nw']=sizedict['nw']
     params['device_intent']=sizedict['device_intent']

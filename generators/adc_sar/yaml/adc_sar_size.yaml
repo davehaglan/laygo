@@ -1,25 +1,30 @@
-adc_retimer: {m: 2}
+adc_width: 336
 capdac: {c_m: 1, num_bits_horizontal: 2, num_bits_vertical: 6}
 capdrv:
   m_list: [2, 2, 2, 2, 2, 2, 4, 8]
-  space_offset: 0
-clk_dis_capsw: {m: 1}
+  space_offset: 24
+clk_dis_capsw: {m: 2}
 clk_dis_cdac: {m: 1, num_bits: 5}
 clk_dis_cell: {m_dff: 4, m_inv1: 6, m_inv2: 16, m_tgate: 16}
-clk_dis_htree: {m_clko: 1, m_track: 28}
+clk_dis_htree: {m_clko: 1, m_track: 8}
 clkcal_order: [0, 32, 1, 31, 2, 30, 3, 29, 4, 28, 5, 27, 6, 26, 7, 25, 8, 24, 9, 23,
   10, 22, 11, 21, 12, 20, 13, 19, 14, 18, 15, 17, 16]
 dcap2_m: 19
-device_intent: ulvt
-lch: 1.6e-08
-m_dcap2: 19
-num_space_samp: 38
-num_space_sar: 52
-nw: 4
-pw: 4
-retimer: {ret_m_ibuf: 16, ret_m_latch: 2, ret_m_obuf: 2, ret_m_sr: 2, ret_m_srbuf: 4}
+device_intent: fast
+lch: 4.0e-08
+m_dcap2: 31
+num_space_samp: 43
+num_space_sar: 59
+nw: 2.5e-07
+pw: 5.0e-07
+r2rdac: {m: 2, m_bcap: 5, num_bits: 5, num_series: 12}
+r2rdac_array: {num_hori: 9, num_vert: 4}
+reserve_tracks: [2.28, 4.2749999999999995, 4.845, 9.69, 10.26, 10.829999999999998,
+  15.104999999999999, 15.674999999999999, 20.52, 21.09, 25.65, 26.22, 59.565, 59.849999999999994,
+  60.419999999999995, 60.705]
+retimer: {ret_m_ibuf: 8, ret_m_latch: 2, ret_m_obuf: 2, ret_m_sr: 2, ret_m_srbuf: 4}
 salatch: {doubleSA: false, m: 12, m_buf: 12, m_d: 12, m_rgnn: 12, m_rgnp_d: 12, m_rst: 6,
-  m_rst_d: 6, num_row_ptap: 2}
+  m_rst_d: 6, num_row_ptap: 2, smallrgnp: false}
 salatch_preset:
   m: [4, 8, 12, 16]
   m_buf: [4, 8, 12, 16]
@@ -40,9 +45,9 @@ sampler_nmos:
   wp: 8
 sarabe_m_space_left_4x: 0
 sarabe_supply_rail_mode: 0
-sarclkgen: {fast: true, fo: 4, m: 2, ndelay: 1}
+sarclkgen: {fast: true, fo: 4, m: 2, mux_fast: false, ndelay: 1}
 sarfsm: {m: 2}
-sarlogic: {m: 4, m_buf: 8, m_dl: 2, m_xor: 4, num_inv_bb: 0, num_inv_dl: 3}
+sarlogic: {m: 4, m_buf: 8, num_inv_bb: 0}
 sarret: {fo: 2, m: 1}
 sarsamp:
   m_inbuf_list: [16, 24]
@@ -65,3 +70,7 @@ sarsamp_preset:
   m_sw: [4, 4, 4, 4, 4]
   m_sw_arr: [2, 4, 8, 12, 16]
 slice_order: [0, 6, 2, 4, 1, 7, 3, 5]
+sourceFollower: {bias_current: false, m_bias: 12, m_bias_dum: 2, m_byp: 8, m_byp_bias: 4,
+  m_in: 20, m_in_dum: 2, m_mirror: 2, m_off: 1}
+sourceFollower_vref: {bias_current: false, m_bias: 12, m_bias_dum: 2, m_byp: 8, m_byp_bias: 4,
+  m_in: 20, m_in_dum: 2, m_mirror: 2, m_off: 1}

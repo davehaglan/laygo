@@ -45,6 +45,7 @@ if load_from_file==True:
     params['sa_m_rgnn']=sizedict['salatch']['m_rgnn']
     params['sa_m_rgnp_d']=sizedict['salatch']['m_rgnp_d']
     params['sa_m_buf']=sizedict['salatch']['m_buf']
+    params['sa_smallrgnp']=sizedict['salatch']['smallrgnp']
     params['doubleSA']=sizedict['salatch']['doubleSA']
     params['num_bits']=specdict['n_bit']-1
     params['c_m']=sizedict['capdac']['c_m']
@@ -55,6 +56,16 @@ if load_from_file==True:
     params['nw']=sizedict['nw']
     params['device_intent']=sizedict['device_intent']
     params['pmos_body']=specdict['pmos_body']
+    params['m_mirror'] = sizedict['sourceFollower_vref']['m_mirror']
+    params['m_bias'] = sizedict['sourceFollower_vref']['m_bias']
+    params['m_off'] = sizedict['sourceFollower_vref']['m_off']
+    params['m_in'] = sizedict['sourceFollower_vref']['m_in']
+    params['m_bias_dum'] = sizedict['sourceFollower_vref']['m_bias_dum']
+    params['m_in_dum'] = sizedict['sourceFollower_vref']['m_in_dum']
+    params['m_byp'] = sizedict['sourceFollower_vref']['m_byp']
+    params['m_byp_bias'] = sizedict['sourceFollower_vref']['m_byp_bias']
+    params['bias_current'] = sizedict['sourceFollower_vref']['bias_current']
+    params['vref_sf']=specdict['use_vref_sf']
 
 print('creating BAG project')
 prj = bag.BagProject()

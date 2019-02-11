@@ -51,7 +51,7 @@ instances:
         net_name: "INTP"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -71,7 +71,7 @@ instances:
         net_name: "INTM"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -91,7 +91,7 @@ instances:
         net_name: "VSS"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -111,7 +111,7 @@ instances:
         net_name: "OUTP"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -131,7 +131,7 @@ instances:
         net_name: "OUTM"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -151,7 +151,7 @@ instances:
         net_name: "TAIL"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -171,7 +171,7 @@ instances:
         net_name: "VSS"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -191,7 +191,7 @@ instances:
         net_name: "INTP"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -211,7 +211,7 @@ instances:
         net_name: "INTM"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -231,7 +231,7 @@ instances:
         net_name: "VSS"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -251,7 +251,7 @@ instances:
         net_name: "TAIL"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -271,7 +271,7 @@ instances:
         net_name: "OUTP"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VDD"
         num_bits: 1
       G:
@@ -291,7 +291,7 @@ instances:
         net_name: "OUTM"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VDD"
         num_bits: 1
       G:
@@ -311,7 +311,7 @@ instances:
         net_name: "VDD"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VDD"
         num_bits: 1
       G:
@@ -331,7 +331,7 @@ instances:
         net_name: "OUTM"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VDD"
         num_bits: 1
       G:
@@ -351,7 +351,7 @@ instances:
         net_name: "OUTP"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VDD"
         num_bits: 1
       G:
@@ -371,7 +371,7 @@ instances:
         net_name: "INTP"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VDD"
         num_bits: 1
       G:
@@ -391,7 +391,7 @@ instances:
         net_name: "INTM"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VDD"
         num_bits: 1
       G:

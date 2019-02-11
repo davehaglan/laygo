@@ -99,7 +99,7 @@ instances:
         net_name: "ZM<0>"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VBB"
         num_bits: 1
       G:
@@ -119,7 +119,7 @@ instances:
         net_name: "ZMID<0>"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VBB"
         num_bits: 1
       G:
@@ -139,7 +139,7 @@ instances:
         net_name: "ZP<0>"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VBB"
         num_bits: 1
       G:
@@ -159,7 +159,7 @@ instances:
         net_name: "ZM<0>"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -179,7 +179,7 @@ instances:
         net_name: "ZMID<0>"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -199,7 +199,7 @@ instances:
         net_name: "ZP<0>"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:

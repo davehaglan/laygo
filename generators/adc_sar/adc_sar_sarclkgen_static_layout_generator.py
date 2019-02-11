@@ -41,7 +41,8 @@ def create_power_pin_from_inst(laygen, layer, gridname, inst_left, inst_right):
     laygen.pin(name='VSS', layer=layer, xy=np.vstack((rvss0_pin_xy[0],rvss1_pin_xy[1])), gridname=gridname)
 
 def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_grid, routing_grid_m3m4,
-        m=2, fo=2, m_space_left_4x=0, m_space_4x=0, m_space_2x=0, m_space_1x=0, fast=True, origin=np.array([0, 0])):
+        m=2, fo=2, m_space_left_4x=0, m_space_4x=0, m_space_2x=0, m_space_1x=0, fast=True, origin=np.array([0, 0]),
+                              mux_fast=False):
     """generate a static sar clock generator """
     pg = placement_grid
     rg_m3m4 = routing_grid_m3m4
@@ -55,7 +56,7 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
     nand2_name = 'nand_' + str(fo*m) + 'x'
     nor_name = 'nor_' + str(m) + 'x'
     sr_name = 'ndsr_2x'
-    mux_name = 'mux2to1_' + str(fo*m) + 'x'
+    mux_name = 'mux2to1_' +  str(2*m) + 'x'  # static signal, doesn't need fast?
     core_name = 'sarclkgen_core_static2'
     #core2_name = 'sarclkgen_core2'
     delay_name = 'sarclkdelay_compact_dual'
@@ -83,8 +84,16 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
                             gridname=pg, refinstname=inand0.name, template_libname=workinglib)
     iinv5 = laygen.relplace(name="I" + objectname_pfix + 'INV5', templatename=inv_name,
                             gridname=pg, refinstname=idly0.name, template_libname=templib_logic)
-    icore0 = laygen.relplace(name="I" + objectname_pfix + 'CORE0', templatename=core_name,
-                            gridname=pg, refinstname=iinv5.name, template_libname=workinglib)
+    if mux_fast is False:
+        icore0 = laygen.relplace(name="I" + objectname_pfix + 'CORE0', templatename=core_name,
+                                gridname=pg, refinstname=iinv5.name, template_libname=workinglib)
+    else:
+        imuxinv = laygen.relplace(name='I'+objectname_pfix+'MUXINV0', templatename=inv_name,
+                                  gridname=pg, refinstname=iinv5.name, template_libname=templib_logic)
+        imux0 = laygen.relplace(name="I" + objectname_pfix + 'MUX0', templatename=mux_name,
+                                gridname=pg, refinstname=imuxinv.name, template_libname=templib_logic)
+        icore0 = laygen.relplace(name="I" + objectname_pfix +'CORE0', templatename=core_name,
+                                 gridname=pg, refinstname=imux0.name, template_libname=workinglib)
     iinv8 = laygen.relplace(name="I" + objectname_pfix + 'INV8', templatename=iobuf_name,
                             gridname=pg, refinstname=icore0.name, template_libname=templib_logic)
     iinv8b = laygen.relplace(name="I" + objectname_pfix + 'INV8B', templatename=iobuf2_name,
@@ -147,12 +156,24 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
     # internal routes - phi0 logic
     [rv0, rup0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[idly0.name]['O'][0],
                                        pdict[iinv5.name]['I'][0], y0 + 0, rg_m3m4)  # up
-    if fast==True:
+    if fast==True and mux_fast==False:
         [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[icore0.name]['UPB'][0],
                                        pdict[iinv5.name]['O'][0], y0 + 2-1+1, rg_m3m4)  # upb
     elif fast==False:
         [rv0, rh0] = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], pdict23[icore0.name]['UPB'][0],
                                        pdict23[icore0.name]['VDD'][0], rg_m2m3)  # upb
+    else:
+        laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[imux0.name]['EN0'][0],
+                         pdict[imuxinv.name]['O'][0], y0+2-1, rg_m3m4)
+        laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[imux0.name]['EN1'][0],
+                         pdict[imuxinv.name]['I'][0], y0, rg_m3m4)
+        laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[imux0.name]['I0'][0],
+                         pdict[iinv5.name]['O'][0], y0+2-1+1, rg_m3m4)
+        laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2], pdict23[imux0.name]['I1'][0],
+                                       pdict23[imux0.name]['VDD'][0], rg_m2m3)  # upb
+        laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[icore0.name]['UPB'][0],
+                         pdict[imux0.name]['O'][0], y0+2-1+1, rg_m3m4)
+
     [rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[icore0.name]['DONE'][0],
                                        pdict[inand0.name]['O'][0], y0 + 0+4, rg_m3m4) #DONE-pre
     # internal routes - outputbuf
@@ -196,6 +217,10 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
     rv0, rshort0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[idly0.name]['SHORTB'][0],
                                  np.array([pdict[idly0.name]['SHORTB'][0][0]+6, y0-9]), rg_m3m4)
 
+    if mux_fast is True:
+        _, rmodesel0 = laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[imuxinv.name]['I'][0],
+                                      np.array([pdict[imuxinv.name]['I'][0][0]+6, y0-8]), rg_m3m4)
+
     #output routes
     #[rv0, rh0, rv1] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict[icore2.name]['CLKB'][0],
     #                                   pdict[iinv8c.name]['O'][0], y0 + 8-13, rg_m3m4)  
@@ -214,7 +239,8 @@ def generate_sarclkgen_static(laygen, objectname_pfix, templib_logic, placement_
                                   direction='left')
     laygen.boundary_pin_from_rect(rshort0, rg_m3m4, "SHORTB", laygen.layers['pin'][4], size=6, direction='left')
     #laygen.boundary_pin_from_rect(rextclk0, rg_m3m4, "EXTCLK", laygen.layers['pin'][4], size=6, direction='left')
-
+    if mux_fast is True:
+        laygen.boundary_pin_from_rect(rmodesel0, rg_m3m4, "MODESEL", laygen.layers['pin'][4], size=6, direction='left')
     laygen.boundary_pin_from_rect(rdone0, rg_m3m4, "DONE", laygen.layers['pin'][4], size=4, direction='right')
     laygen.boundary_pin_from_rect(rclkob0, rg_m3m4, "CLKOB", laygen.layers['pin'][4], size=6, direction='right')
     laygen.boundary_pin_from_rect(rclko0, rg_m3m4, "CLKO", laygen.layers['pin'][4], size=6, direction='right')
@@ -327,6 +353,7 @@ if __name__ == '__main__':
         fo=sizedict['sarclkgen']['fo']
         ndelay=sizedict['sarclkgen']['ndelay']
         fast=sizedict['sarclkgen']['fast']
+        mux_fast=sizedict['sarclkgen']['mux_fast']
         m_space_left_4x=sizedict['sarabe_m_space_left_4x']
     #generation (2 step)
     cellname='sarclkgen_static'
@@ -338,7 +365,7 @@ if __name__ == '__main__':
     generate_sarclkgen_static(laygen, objectname_pfix='CKG0', templib_logic=logictemplib, placement_grid=pg,
                        routing_grid_m3m4=rg_m3m4,
                        m=m, fo=fo, m_space_left_4x=m_space_left_4x, m_space_4x=0, m_space_2x=0, m_space_1x=0, fast=fast,
-                       origin=np.array([0, 0]))
+                       origin=np.array([0, 0]),mux_fast=mux_fast)
     laygen.add_template_from_cell()
     #2. calculate spacing param and regenerate
     x0 = laygen.templates.get_template('sarafe_nsw', libname=workinglib).xy[1][0] \
@@ -353,7 +380,8 @@ if __name__ == '__main__':
     generate_sarclkgen_static(laygen, objectname_pfix='CKG0', templib_logic=logictemplib, placement_grid=pg,
                        routing_grid_m3m4=rg_m3m4,
                        m=m, fo=fo, m_space_left_4x=m_space_left_4x, 
-                       m_space_4x=m_space_4x, m_space_2x=m_space_2x, m_space_1x=m_space_1x, fast=fast, origin=np.array([0, 0]))
+                       m_space_4x=m_space_4x, m_space_2x=m_space_2x, m_space_1x=m_space_1x, fast=fast, origin=np.array([0, 0]),
+                       mux_fast=mux_fast)
     laygen.add_template_from_cell()
 
     laygen.save_template(filename=workinglib+'.yaml', libname=workinglib)

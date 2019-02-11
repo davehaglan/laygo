@@ -15,7 +15,7 @@ instances:
         net_name: "net017"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -35,7 +35,7 @@ instances:
         net_name: "PHI0"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -55,7 +55,7 @@ instances:
         net_name: "PHI0"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VSS"
         num_bits: 1
       G:
@@ -75,7 +75,7 @@ instances:
         net_name: "PHI0"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VDD"
         num_bits: 1
       G:
@@ -95,7 +95,7 @@ instances:
         net_name: "net03"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VDD"
         num_bits: 1
       G:
@@ -115,7 +115,7 @@ instances:
         net_name: "PHI0"
         num_bits: 1
       B:
-        direction: inputOutput
+        direction: 
         net_name: "VDD"
         num_bits: 1
       G:
