@@ -195,8 +195,9 @@ def generate_sar(laygen, objectname_pfix, workinglib, sarabe_name, sarafe_name,
         if p.startswith('INM'):
             laygen.pin(name=p, layer=laygen.layers['pin'][mom_layer], xy=pxy, gridname=rg_mom, netname='INM')
     #osp/osm
-    laygen.pin(name='OSP', layer=laygen.layers['pin'][3], xy=pdict_m3m4[iafe.name]['OSP'], gridname=rg_m3m4)
-    laygen.pin(name='OSM', layer=laygen.layers['pin'][3], xy=pdict_m3m4[iafe.name]['OSM'], gridname=rg_m3m4)
+    if use_offset == True:
+        laygen.pin(name='OSP', layer=laygen.layers['pin'][3], xy=pdict_m3m4[iafe.name]['OSP'], gridname=rg_m3m4)
+        laygen.pin(name='OSM', layer=laygen.layers['pin'][3], xy=pdict_m3m4[iafe.name]['OSM'], gridname=rg_m3m4)
     #vref
     #laygen.pin(name='VREF<0>', layer=laygen.layers['pin'][4], xy=pdict_m3m4[iafe.name]['VREF<0>'], gridname=rg_m3m4)
     #laygen.pin(name='VREF<1>', layer=laygen.layers['pin'][4], xy=pdict_m3m4[iafe.name]['VREF<1>'], gridname=rg_m3m4)
@@ -325,6 +326,7 @@ if __name__ == '__main__':
         with open(yamlfile_size, 'r') as stream:
             sizedict = yaml.load(stream)
         vref_sf=specdict['use_vref_sf']
+        use_offset=specdict['use_offset']
         num_bits=specdict['n_bit']
         mom_layer = specdict['momcap_layer']
         clkgen_mode = sizedict['sarclkgen']['mux_fast']

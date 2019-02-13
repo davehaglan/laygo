@@ -198,8 +198,9 @@ def generate_sar_wsamp(laygen, objectname_pfix, workinglib, samp_lib, space_1x_l
         laygen.add_pin('VREF_SF_BIAS', 'VREF_SF_BIAS', sar_xy+sar_pins['SF_VBIAS']['xy'], sar_pins['SF_VBIAS']['layer'])
         laygen.add_pin('VREF_SF_bypass', 'VREF_SF_bypass', sar_xy+sar_pins['SF_bypass']['xy'], sar_pins['SF_bypass']['layer'])
 
-    laygen.add_pin('OSP', 'OSP', sar_xy+sar_pins['OSP']['xy'], sar_pins['OSP']['layer'])
-    laygen.add_pin('OSM', 'OSM', sar_xy+sar_pins['OSM']['xy'], sar_pins['OSM']['layer'])
+    if use_offset == True:
+        laygen.add_pin('OSP', 'OSP', sar_xy+sar_pins['OSP']['xy'], sar_pins['OSP']['layer'])
+        laygen.add_pin('OSM', 'OSM', sar_xy+sar_pins['OSM']['xy'], sar_pins['OSM']['layer'])
     for pn, p in sar_pins.items():
         if pn.startswith('VREF<0>'):
             pxy=sar_xy+sar_pins[pn]['xy']
@@ -352,6 +353,7 @@ if __name__ == '__main__':
         num_bits=specdict['n_bit']
         use_sf=specdict['use_sf']
         vref_sf=specdict['use_vref_sf']
+        use_offset=specdict['use_offset']
         mom_layer = specdict['momcap_layer']
         clkgen_mode = sizedict['sarclkgen']['mux_fast']
         if specdict['samp_use_laygo'] is True:

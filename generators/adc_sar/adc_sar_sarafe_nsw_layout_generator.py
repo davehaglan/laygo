@@ -205,10 +205,11 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     pdict_m3m4 = laygen.get_inst_pin_xy(None, None, rg_m3m4)
     yos=laygen.get_xy(obj = isa, gridname = rg_m3m4)[1] \
         - laygen.get_xy(obj =isa.template, gridname=rg_m3m4)[1]
-    [rv0, rh0, rosp] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict_m3m4[isa.name]['OSP'][0],
-                                       np.array([pdict_m3m4[isa.name]['OSP'][0][0]+m_sa, 0]), yos, rg_m3m4)
-    [rv0, rh0, rosm] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict_m3m4[isa.name]['OSM'][0],
-                                       np.array([pdict_m3m4[isa.name]['OSM'][0][0]-m_sa, 0]), yos, rg_m3m4)
+    if use_offset == True:
+        [rv0, rh0, rosp] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict_m3m4[isa.name]['OSP'][0],
+                                           np.array([pdict_m3m4[isa.name]['OSP'][0][0]+m_sa, 0]), yos, rg_m3m4)
+        [rv0, rh0, rosm] = laygen.route_vhv(laygen.layers['metal'][3], laygen.layers['metal'][4], pdict_m3m4[isa.name]['OSM'][0],
+                                           np.array([pdict_m3m4[isa.name]['OSM'][0][0]-m_sa, 0]), yos, rg_m3m4)
     renl0 = []
     renl1 = []
     renl2 = []
@@ -555,8 +556,9 @@ def generate_sarafe_nsw(laygen, objectname_pfix, workinglib, placement_grid,
     laygen.boundary_pin_from_rect(rclkb, rg_m4m5, "CLKB", laygen.layers['pin'][5], size=4, direction='bottom')
     laygen.boundary_pin_from_rect(routp, rg_m4m5, "OUTP", laygen.layers['pin'][5], size=4, direction='bottom')
     laygen.boundary_pin_from_rect(routm, rg_m4m5, "OUTM", laygen.layers['pin'][5], size=4, direction='bottom')
-    laygen.boundary_pin_from_rect(rosp, rg_m2m3, "OSP", laygen.layers['pin'][3], size=4, direction='bottom')
-    laygen.boundary_pin_from_rect(rosm, rg_m2m3, "OSM", laygen.layers['pin'][3], size=4, direction='bottom')
+    if use_offset == True:
+        laygen.boundary_pin_from_rect(rosp, rg_m2m3, "OSP", laygen.layers['pin'][3], size=4, direction='bottom')
+        laygen.boundary_pin_from_rect(rosm, rg_m2m3, "OSM", laygen.layers['pin'][3], size=4, direction='bottom')
     for i in range(num_bits):
         laygen.boundary_pin_from_rect(renl0[i], rg_m5m6, "ENL" + str(i) + "<0>", laygen.layers['pin'][5], size=4,
                                       direction='bottom')
@@ -643,6 +645,7 @@ if __name__ == '__main__':
         num_bits_vertical=sizedict['capdac']['num_bits_vertical']
         doubleSA=sizedict['salatch']['doubleSA']
         mom_layer=specdict['momcap_layer']
+        use_offset=specdict['use_offset']
 
     if mom_layer == 6:
         rg_cdac = rg_m6m7
