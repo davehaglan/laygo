@@ -189,9 +189,10 @@ def generate_r2r_dac_bcap_array(laygen, objectname_pfix, templib_logic, placemen
     tisar_name = 'tisaradc_body_core'
     tisar_libname = 'adc_sar_generated'
     rg_m5m6_thick_temp_tisar='route_M5_M6_thick_temp_tisar_VDD'
+    # bnd = laygen.get_template(tisar_name, libname=tisar_libname).xy
     laygenhelper.generate_grids_from_template(laygen, gridname_input=rg_m5m6_thick, gridname_output=rg_m5m6_thick_temp_tisar,
                                               template_name=tisar_name, template_libname=tisar_libname,
-                                              template_pin_prefix=['VDD'], xy_grid_type='ygrid')
+                                              template_pin_prefix=['VDD'], bnd=None, xy_grid_type='ygrid')
     input_rails_rect = [rvdd_m5]
     rvdd_m6 = laygenhelper.generate_power_rails_from_rails_rect(laygen, routename_tag='_M6_',
                 layer=laygen.layers['pin'][6], gridname=rg_m5m6_thick_temp_tisar, netnames=['VDD'], direction='x',
@@ -368,10 +369,11 @@ def generate_r2r_dac_array(laygen, objectname_pfix, templib_logic, placement_gri
     rg_m5m6_thick_temp_tisar = 'route_M5_M6_thick_temp_tisar_VDD'
     # x_end = laygen.get_template_xy(r2r_name, gridname=rg_m5m6_thick_temp_tisar, libname=workinglib)[0] + \
     #         laygen.get_template_xy(bcap_name, gridname=rg_m5m6_thick_temp_tisar, libname=workinglib)[0]
+    bnd = laygen.get_template(tisar_name, libname=tisar_libname).xy
     laygenhelper.generate_grids_from_template(laygen, gridname_input=rg_m5m6_thick,
                                               gridname_output=rg_m5m6_thick_temp_tisar,
                                               template_name=tisar_name, template_libname=tisar_libname,
-                                              template_pin_prefix=['VDDSAR'], xy_grid_type='ygrid')
+                                              template_pin_prefix=['VDDSAR'], bnd=bnd, xy_grid_type='ygrid')
 
     laygen.grids.display(libname=None, gridname=rg_m5m6_thick_temp_tisar)
     input_rails_rect = [rvdd_m5]
@@ -381,7 +383,7 @@ def generate_r2r_dac_array(laygen, objectname_pfix, templib_logic, placement_gri
                                                                 direction='x',
                                                                 input_rails_rect=input_rails_rect, generate_pin=True,
                                                                 overwrite_start_coord=None, overwrite_end_coord=pin_origin_x_thick,
-                                                                offset_start_index=0, offset_end_index=-6)
+                                                                offset_start_index=0, offset_end_index=0)
     rg_m5m6_thick_temp_tisar = 'route_M5_M6_thick_temp_tisar_VSS'
     laygenhelper.generate_grids_from_template(laygen, gridname_input=rg_m5m6_thick,
                                               gridname_output=rg_m5m6_thick_temp_tisar,

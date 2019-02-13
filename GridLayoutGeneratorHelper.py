@@ -307,7 +307,75 @@ def generate_grids_from_xy(laygen, gridname_input, gridname_output, xy, xy_grid_
                                 ywidth=ywidth, viamap=viamap)
     #laygen.grids.display()
 
-def generate_grids_from_inst(laygen, gridname_input, gridname_output, instname, 
+def generate_grids_from_xy_bnd(laygen, gridname_input, gridname_output, xy, xy_grid_type=None, bnd=None):
+    """generate route grids combining a pre-existing grid and xy-array
+    it will create a new array by copying the given grid and update part of entries from xy-lists
+    """
+    #copy original database
+    gi=laygen.get_grid(gridname_input)
+    if bnd is None:
+        _bnd=deepcopy(gi.xy)
+    xgrid = deepcopy(gi.xgrid)
+    ygrid = deepcopy(gi.ygrid)
+    xwidth = deepcopy(gi.xwidth)
+    ywidth = deepcopy(gi.ywidth)
+    _viamap = gi.viamap
+    vianame = list(_viamap.keys())[0] #just pickig one via; should be fixed
+    #figure out routing direction
+    if xy_grid_type==None:
+        if abs(xy[0][0][0]-xy[0][1][0]) > abs(xy[0][0][1]-xy[0][1][1]): #aspect ratio
+            xy_grid_type = 'ygrid'
+        else:
+            xy_grid_type = 'xgrid'
+    #extract grid information from xy list
+    if xy_grid_type== 'xgrid':
+        xgrid=[]
+        xwidth=[]
+        for xy0 in xy:
+            #xgrid.append(0.5 * (xy0[0][0] + xy0[1][0]))
+            xgrid_new=0.5 * (xy0[0][0] + xy0[1][0])
+            if xgrid_new not in xgrid:
+                xgrid.append(xgrid_new)
+                xwidth.append(abs(xy0[0][0] - xy0[1][0]))
+        #sort
+        xwidth = [x for (y, x) in sorted(zip(xgrid, xwidth))]
+        xgrid.sort()
+        xgrid = np.array(xgrid)
+        xwidth = np.array(xwidth)
+        if bnd is None:
+            _bnd[1][0] = max(xgrid)+min(xgrid)
+        else:
+            bnd[1][1] = deepcopy(gi.xy)[1][1]
+    if xy_grid_type== 'ygrid':
+        ygrid=[]
+        ywidth=[]
+        for xy0 in xy:
+            #ygrid.append(0.5 * (xy0[0][1] + xy0[1][1]))
+            ygrid_new=0.5 * (xy0[0][1] + xy0[1][1])
+            if ygrid_new not in ygrid:
+                ygrid.append(ygrid_new)
+                ywidth.append(abs(xy0[0][1] - xy0[1][1]))
+        #sort
+        ywidth = [x for (y, x) in sorted(zip(ygrid, ywidth))]
+        ygrid.sort()
+        ygrid=np.array(ygrid)
+        ywidth=np.array(ywidth)
+        if bnd is None:
+            _bnd[1][1]=max(ygrid)+min(ygrid)
+            bnd=_bnd
+        else:
+            bnd[1][0] = deepcopy(gi.xy)[1][0]
+    # viamap
+    viamap = {vianame: []}
+    for x in range(len(xgrid)):
+        for y in range(len(ygrid)):
+            viamap[vianame].append([x, y])
+    viamap[vianame] = np.array(viamap[vianame])
+    # add grid information
+    laygen.grids.add_route_grid(name=gridname_output, libname=None, xy=bnd, xgrid=xgrid, ygrid=ygrid, xwidth=xwidth,
+                                ywidth=ywidth, viamap=viamap)
+
+def generate_grids_from_inst(laygen, gridname_input, gridname_output, instname,
                            inst_pin_prefix=['VDD', 'VSS'], xy_grid_type=None):
     """generate route grids combining a pre-existing grid and inst pins
         it will create a new array by copying the given grid and update part of entries from xy coordinates of pins
@@ -338,7 +406,7 @@ def generate_grids_from_inst(laygen, gridname_input, gridname_output, instname,
     #generate_grids_from_xy(laygen, gridname_input, gridname_output, xy, xy_grid_type=xy_grid_type)
 
 def generate_grids_from_template(laygen, gridname_input, gridname_output, template_name, template_libname,
-                                 template_pin_prefix=['VDD', 'VSS'], xy_grid_type=None, offset=np.array([0, 0])):
+                                 template_pin_prefix=['VDD', 'VSS'], xy_grid_type=None, bnd=None, offset=np.array([0, 0])):
     """generate route grids combining a pre-existing grid and template pins
         it will create a new array by copying the given grid and update part of entries from xy coordinates of pins
     """
@@ -348,4 +416,5 @@ def generate_grids_from_template(laygen, gridname_input, gridname_output, templa
         for pfix in template_pin_prefix:
             if p.startswith(pfix):
                 xy.append(offset+t.pins[p]['xy'])
-    generate_grids_from_xy(laygen, gridname_input, gridname_output, xy, xy_grid_type=xy_grid_type)
+    generate_grids_from_xy_bnd(laygen, gridname_input, gridname_output, xy, xy_grid_type=xy_grid_type, bnd=bnd)
+    # generate_grids_from_xy(laygen, gridname_input, gridname_output, xy, xy_grid_type=xy_grid_type)
