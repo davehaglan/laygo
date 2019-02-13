@@ -639,7 +639,7 @@ if __name__ == '__main__':
             sizedict = yaml.load(stream)
         num_bits=specdict['n_bit']-1
         vref_sf=specdict['use_vref_sf']
-        m_sa=sizedict['salatch']['m']*2
+        m_sa=sizedict['salatch']['m']
         num_bits_vertical=sizedict['capdac']['num_bits_vertical']
         doubleSA=sizedict['salatch']['doubleSA']
         mom_layer=specdict['momcap_layer']
