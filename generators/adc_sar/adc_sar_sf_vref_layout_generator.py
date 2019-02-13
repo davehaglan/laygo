@@ -209,7 +209,7 @@ def generate_source_follower(laygen, objectname_pfix, placement_grid, routing_gr
     rg_m1m2 = routing_grid_m1m2
     # placement
     # generate boundary
-    x0=laygen.get_template_size('sar', gridname=pg, libname=workinglib)[0]
+    x0=laygen.get_template_size('capdac', gridname=pg, libname=workinglib)[0]*2
     x1=laygen.get_template_size('boundary_bottomleft', gridname=pg, libname=utemplib)[0]
     m_bnd=int((x0-x1*2)/laygen.get_template_size('boundary_bottom', gridname=pg, libname=utemplib)[0])
     [bnd_bottom, bnd_top, bnd_left, bnd_right]=generate_boundary(laygen, objectname_pfix='BND0',
