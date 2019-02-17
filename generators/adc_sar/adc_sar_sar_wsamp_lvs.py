@@ -24,7 +24,8 @@ if load_from_file==True:
     with open(yamlfile_size, 'r') as stream:
         sizedict = yaml.load(stream)
 
-verify_lvs = True
+verify_lvs = False
+verify_rcx = True
 
 print('creating BAG project')
 prj = bag.BagProject()
@@ -37,4 +38,10 @@ if verify_lvs==True:
     if not lvs_passed:
         raise Exception('oops lvs died.  See LVS log file %s' % lvs_log)
     print('lvs passed')
+if verify_rcx is True:
+    print('running rcx')
+    rcx_passed, rcx_log = prj.run_rcx(impl_lib, cell_name)
+    if not rcx_passed:
+        raise Exception('oops rcx died.  See RCX log file %s' % rcx_log)
+    print('rcx passed')
 
