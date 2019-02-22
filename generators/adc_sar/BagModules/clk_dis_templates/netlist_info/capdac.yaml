@@ -11,8 +11,8 @@ instances:
     cell_name: iopin
     instpins: {}
   CDAC:
-    lib_name: tsmcN16_microtemplates_dense
-    cell_name: momcap_center_1x
+    lib_name: intel22tech_microtemplates_dense
+    cell_name: momcap_m4_center_1x
     instpins:
       BOTTOM:
         direction: inputOutput
