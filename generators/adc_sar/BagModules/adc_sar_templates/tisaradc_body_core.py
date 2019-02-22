@@ -32,7 +32,6 @@ import pkg_resources
 
 from bag.design import Module
 
-
 yaml_file = pkg_resources.resource_filename(__name__, os.path.join('netlist_info', 'tisaradc_body_core.yaml'))
 
 
@@ -46,64 +45,64 @@ class adc_sar_templates__tisaradc_body_core(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, 
-            sar_lch, 
-            sar_pw, 
-            sar_nw, 
-            sar_sa_m, sar_sa_m_d,
-            sar_sa_m_rst, sar_sa_m_rst_d,
-            sar_sa_m_rgnn, sar_sa_m_rgnp_d,
-            sar_sa_m_buf, doubleSA, sar_sa_m_smallrgnp,
+    def design(self,
+               sar_lch,
+               sar_pw,
+               sar_nw,
+               sar_sa_m, sar_sa_m_d,
+               sar_sa_m_rst, sar_sa_m_rst_d,
+               sar_sa_m_rgnn, sar_sa_m_rgnp_d,
+               sar_sa_m_buf, doubleSA, sar_sa_m_smallrgnp,
                vref_sf_m_mirror, vref_sf_m_bias, vref_sf_m_off, vref_sf_m_in, vref_sf_m_bias_dum, vref_sf_m_in_dum,
                vref_sf_m_byp, vref_sf_m_byp_bias, vref_sf_bias_current, vref_sf,
-            sar_drv_m_list,sar_ckgen_m,sar_ckgen_fo, 
-            sar_ckgen_ndelay, sar_ckgen_fast, sar_ckgen_muxfast,
-            sar_logic_m, 
-            sar_fsm_m, 
-            sar_ret_m, 
-            sar_ret_fo, 
-            sar_device_intent, 
-            sar_c_m, 
-            sar_rdx_array, sar_num_inv_bb,
-            samp_lch, 
-            samp_wp, 
-            samp_wn, 
-            samp_fgn, 
-            samp_fg_inbuf_list, 
-            samp_fg_outbuf_list, 
-            samp_nduml, 
-            samp_ndumr, 
-            samp_nsep, 
-            samp_intent, 
-            num_bits, 
-            samp_use_laygo, samp_tgate,
+               sar_drv_m_list, sar_ckgen_m, sar_ckgen_fo,
+               sar_ckgen_ndelay, sar_ckgen_fast, sar_ckgen_muxfast,
+               sar_logic_m,
+               sar_fsm_m,
+               sar_ret_m,
+               sar_ret_fo,
+               sar_device_intent,
+               sar_c_m,
+               sar_rdx_array, sar_num_inv_bb,
+               samp_lch,
+               samp_wp,
+               samp_wn,
+               samp_fgn,
+               samp_fg_inbuf_list,
+               samp_fg_outbuf_list,
+               samp_nduml,
+               samp_ndumr,
+               samp_nsep,
+               samp_intent,
+               num_bits,
+               samp_use_laygo, samp_tgate,
                sf_lch, sf_nw, sf_m_mirror, sf_m_bias, sf_m_off, sf_m_in, sf_m_bias_dum, sf_m_in_dum, sf_m_byp,
                sf_m_byp_bias, sf_intent, bias_current, use_sf,
-            use_offset, num_slices,
-            clk_lch,
-            clk_pw, 
-            clk_nw,
-            clk_cdac_bits,
-            clk_m_dff, 
-            clk_m_inv1, 
-            clk_m_inv2, 
-            clk_m_tgate, 
-            clk_n_pd, 
-            clk_m_capsw, 
-            clk_unit_cell, 
-            clk_device_intent,
-            clk_pulse,
-            ret_lch,
-            ret_pw,
-            ret_nw,
-            ret_m_ibuf,
-            ret_m_obuf,
-            ret_m_latch,
-            ret_m_srbuf,
-            ret_m_sr,
-            ret_device_intent,
+               use_offset, num_slices,
+               clk_lch,
+               clk_pw,
+               clk_nw,
+               clk_cdac_bits,
+               clk_m_dff,
+               clk_m_inv1,
+               clk_m_inv2,
+               clk_m_tgate,
+               clk_n_pd,
+               clk_m_capsw,
+               clk_unit_cell,
+               clk_device_intent,
+               clk_pulse,
+               ret_lch,
+               ret_pw,
+               ret_nw,
+               ret_m_ibuf,
+               ret_m_obuf,
+               ret_m_latch,
+               ret_m_srbuf,
+               ret_m_sr,
+               ret_device_intent,
                input_htree,
-        ):
+               ):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -183,17 +182,17 @@ class adc_sar_templates__tisaradc_body_core(Module):
         self.parameters['use_sf'] = use_sf  # if true, source follower is used before the sampler
         self.parameters['use_offset'] = use_offset
         self.parameters['num_slices'] = num_slices
-        self.parameters['clk_lch'] = clk_lch 
-        self.parameters['clk_pw'] = clk_pw 
-        self.parameters['clk_nw'] = clk_nw 
+        self.parameters['clk_lch'] = clk_lch
+        self.parameters['clk_pw'] = clk_pw
+        self.parameters['clk_nw'] = clk_nw
         self.parameters['clk_cdac_bits'] = clk_cdac_bits
         self.parameters['clk_m_dff'] = clk_m_dff
-        self.parameters['clk_m_inv1'] = clk_m_inv1 
-        self.parameters['clk_m_inv2'] = clk_m_inv2 
-        self.parameters['clk_m_tgate'] = clk_m_tgate 
-        self.parameters['clk_n_pd'] = clk_n_pd 
-        self.parameters['clk_m_capsw'] = clk_m_capsw 
-        self.parameters['clk_unit_cell'] = clk_unit_cell 
+        self.parameters['clk_m_inv1'] = clk_m_inv1
+        self.parameters['clk_m_inv2'] = clk_m_inv2
+        self.parameters['clk_m_tgate'] = clk_m_tgate
+        self.parameters['clk_n_pd'] = clk_n_pd
+        self.parameters['clk_m_capsw'] = clk_m_capsw
+        self.parameters['clk_unit_cell'] = clk_unit_cell
         self.parameters['clk_device_intent'] = clk_device_intent
         self.parameters['ret_lch'] = ret_lch
         self.parameters['ret_pw'] = ret_pw
@@ -204,65 +203,113 @@ class adc_sar_templates__tisaradc_body_core(Module):
         self.parameters['ret_device_intent'] = ret_device_intent
         self.parameters['input_htree'] = input_htree
 
-        #sar_wsamp_array generation
+        # sar_wsamp_array generation
         if input_htree == False:
-            term_list=[{
-                ','.join(['INP%d'%(i) for i in range(num_slices)]): 'INP',
-                ','.join(['INM%d'%(i) for i in range(num_slices)]): 'INM',
-                ','.join(['CLK%d'%(i) for i in range(num_slices)]):
-                    ','.join(['ICLK%d'%(i) for i in range(num_slices)]),
-                ','.join(['OSP%d'%(i) for i in range(num_slices)]):
-                    ','.join(['OSP%d'%(i) for i in range(num_slices)]),
-                ','.join(['OSM%d'%(i) for i in range(num_slices)]):
-                    ','.join(['OSM%d'%(i) for i in range(num_slices)]),
-                ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]):
-                    ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]),
-                ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]):
-                    ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]),
-                ','.join(['MODESEL%d' % (i) for i in range(num_slices)]):
-                    ','.join(['MODESEL%d' % (i) for i in range(num_slices)]),
-                ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]):
-                    ','.join(['ADCO%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
-                ','.join(['CLKO%d'%(i) for i in range(num_slices)]):
-                    ','.join(['CLKO%d'%(i) for i in range(num_slices)]),
-                ','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]):
-                    ','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]),
-                ','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]):
-                    ','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]),
-                ','.join(['SF_Voffp%d' % (i) for i in range(num_slices)]):
-                    ','.join(['SF_Voffp%d' % (i) for i in range(num_slices)]),
-                ','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]):
-                    ','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]),
-            }]
+            if use_sf is True:
+                term_list = [{
+                    ','.join(['INP%d' % (i) for i in range(num_slices)]): 'INP',
+                    ','.join(['INM%d' % (i) for i in range(num_slices)]): 'INM',
+                    ','.join(['CLK%d' % (i) for i in range(num_slices)]):
+                        ','.join(['ICLK%d' % (i) for i in range(num_slices)]),
+                    ','.join(['OSP%d' % (i) for i in range(num_slices)]):
+                        ','.join(['OSP%d' % (i) for i in range(num_slices)]),
+                    ','.join(['OSM%d' % (i) for i in range(num_slices)]):
+                        ','.join(['OSM%d' % (i) for i in range(num_slices)]),
+                    ','.join(['ASCLKD%d<3:0>' % (i) for i in range(num_slices)]):
+                        ','.join(['ASCLKD%d<3:0>' % (i) for i in range(num_slices)]),
+                    ','.join(['EXTSEL_CLK%d' % (i) for i in range(num_slices)]):
+                        ','.join(['EXTSEL_CLK%d' % (i) for i in range(num_slices)]),
+                    ','.join(['MODESEL%d' % (i) for i in range(num_slices)]):
+                        ','.join(['MODESEL%d' % (i) for i in range(num_slices)]),
+                    ','.join(['ADCOUT%d<%d:0>' % (i, num_bits - 1) for i in range(num_slices)]):
+                        ','.join(['ADCO%d<%d:0>' % (i, num_bits - 1) for i in range(num_slices)]),
+                    ','.join(['CLKO%d' % (i) for i in range(num_slices)]):
+                        ','.join(['CLKO%d' % (i) for i in range(num_slices)]),
+                    ','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]):
+                        ','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]),
+                    ','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]):
+                        ','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]),
+                    ','.join(['SF_Voffp%d' % (i) for i in range(num_slices)]):
+                        ','.join(['SF_Voffp%d' % (i) for i in range(num_slices)]),
+                    ','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]):
+                        ','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]),
+                }]
+            else:
+                term_list = [{
+                    ','.join(['INP%d' % (i) for i in range(num_slices)]): 'INP',
+                    ','.join(['INM%d' % (i) for i in range(num_slices)]): 'INM',
+                    ','.join(['CLK%d' % (i) for i in range(num_slices)]):
+                        ','.join(['ICLK%d' % (i) for i in range(num_slices)]),
+                    ','.join(['OSP%d' % (i) for i in range(num_slices)]):
+                        ','.join(['OSP%d' % (i) for i in range(num_slices)]),
+                    ','.join(['OSM%d' % (i) for i in range(num_slices)]):
+                        ','.join(['OSM%d' % (i) for i in range(num_slices)]),
+                    ','.join(['ASCLKD%d<3:0>' % (i) for i in range(num_slices)]):
+                        ','.join(['ASCLKD%d<3:0>' % (i) for i in range(num_slices)]),
+                    ','.join(['EXTSEL_CLK%d' % (i) for i in range(num_slices)]):
+                        ','.join(['EXTSEL_CLK%d' % (i) for i in range(num_slices)]),
+                    ','.join(['MODESEL%d' % (i) for i in range(num_slices)]):
+                        ','.join(['MODESEL%d' % (i) for i in range(num_slices)]),
+                    ','.join(['ADCOUT%d<%d:0>' % (i, num_bits - 1) for i in range(num_slices)]):
+                        ','.join(['ADCO%d<%d:0>' % (i, num_bits - 1) for i in range(num_slices)]),
+                    ','.join(['CLKO%d' % (i) for i in range(num_slices)]):
+                        ','.join(['CLKO%d' % (i) for i in range(num_slices)]),
+                }]
         else:
-            term_list=[{
-                ','.join(['INP%d'%(i) for i in range(num_slices)]): ','.join(['INP%d'%(i) for i in range(num_slices)]),
-                ','.join(['INM%d'%(i) for i in range(num_slices)]): ','.join(['INM%d'%(i) for i in range(num_slices)]),
-                ','.join(['CLK%d'%(i) for i in range(num_slices)]):
-                    ','.join(['ICLK%d'%(i) for i in range(num_slices)]),
-                ','.join(['OSP%d'%(i) for i in range(num_slices)]):
-                    ','.join(['OSP%d'%(i) for i in range(num_slices)]),
-                ','.join(['OSM%d'%(i) for i in range(num_slices)]):
-                    ','.join(['OSM%d'%(i) for i in range(num_slices)]),
-                ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]):
-                    ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]),
-                ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]):
-                    ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]),
-                ','.join(['MODESEL%d' % (i) for i in range(num_slices)]):
-                    ','.join(['MODESEL%d' % (i) for i in range(num_slices)]),
-                ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]):
-                    ','.join(['ADCO%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
-                ','.join(['CLKO%d'%(i) for i in range(num_slices)]):
-                    ','.join(['CLKO%d'%(i) for i in range(num_slices)]),
-                ','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]):
-                    ','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]),
-                ','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]):
-                    ','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]),
-                ','.join(['SF_Voffp%d' % (i) for i in range(num_slices)]):
-                    ','.join(['SF_Voffp%d' % (i) for i in range(num_slices)]),
-                ','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]):
-                    ','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]),
-            }]
+            if use_sf is True:
+                term_list = [{
+                    ','.join(['INP%d' % (i) for i in range(num_slices)]): ','.join(
+                        ['INP%d' % (i) for i in range(num_slices)]),
+                    ','.join(['INM%d' % (i) for i in range(num_slices)]): ','.join(
+                        ['INM%d' % (i) for i in range(num_slices)]),
+                    ','.join(['CLK%d' % (i) for i in range(num_slices)]):
+                        ','.join(['ICLK%d' % (i) for i in range(num_slices)]),
+                    ','.join(['OSP%d' % (i) for i in range(num_slices)]):
+                        ','.join(['OSP%d' % (i) for i in range(num_slices)]),
+                    ','.join(['OSM%d' % (i) for i in range(num_slices)]):
+                        ','.join(['OSM%d' % (i) for i in range(num_slices)]),
+                    ','.join(['ASCLKD%d<3:0>' % (i) for i in range(num_slices)]):
+                        ','.join(['ASCLKD%d<3:0>' % (i) for i in range(num_slices)]),
+                    ','.join(['EXTSEL_CLK%d' % (i) for i in range(num_slices)]):
+                        ','.join(['EXTSEL_CLK%d' % (i) for i in range(num_slices)]),
+                    ','.join(['MODESEL%d' % (i) for i in range(num_slices)]):
+                        ','.join(['MODESEL%d' % (i) for i in range(num_slices)]),
+                    ','.join(['ADCOUT%d<%d:0>' % (i, num_bits - 1) for i in range(num_slices)]):
+                        ','.join(['ADCO%d<%d:0>' % (i, num_bits - 1) for i in range(num_slices)]),
+                    ','.join(['CLKO%d' % (i) for i in range(num_slices)]):
+                        ','.join(['CLKO%d' % (i) for i in range(num_slices)]),
+                    ','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]):
+                        ','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]),
+                    ','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]):
+                        ','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]),
+                    ','.join(['SF_Voffp%d' % (i) for i in range(num_slices)]):
+                        ','.join(['SF_Voffp%d' % (i) for i in range(num_slices)]),
+                    ','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]):
+                        ','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]),
+                }]
+            else:
+                term_list = [{
+                    ','.join(['INP%d' % (i) for i in range(num_slices)]): ','.join(
+                        ['INP%d' % (i) for i in range(num_slices)]),
+                    ','.join(['INM%d' % (i) for i in range(num_slices)]): ','.join(
+                        ['INM%d' % (i) for i in range(num_slices)]),
+                    ','.join(['CLK%d' % (i) for i in range(num_slices)]):
+                        ','.join(['ICLK%d' % (i) for i in range(num_slices)]),
+                    ','.join(['OSP%d' % (i) for i in range(num_slices)]):
+                        ','.join(['OSP%d' % (i) for i in range(num_slices)]),
+                    ','.join(['OSM%d' % (i) for i in range(num_slices)]):
+                        ','.join(['OSM%d' % (i) for i in range(num_slices)]),
+                    ','.join(['ASCLKD%d<3:0>' % (i) for i in range(num_slices)]):
+                        ','.join(['ASCLKD%d<3:0>' % (i) for i in range(num_slices)]),
+                    ','.join(['EXTSEL_CLK%d' % (i) for i in range(num_slices)]):
+                        ','.join(['EXTSEL_CLK%d' % (i) for i in range(num_slices)]),
+                    ','.join(['MODESEL%d' % (i) for i in range(num_slices)]):
+                        ','.join(['MODESEL%d' % (i) for i in range(num_slices)]),
+                    ','.join(['ADCOUT%d<%d:0>' % (i, num_bits - 1) for i in range(num_slices)]):
+                        ','.join(['ADCO%d<%d:0>' % (i, num_bits - 1) for i in range(num_slices)]),
+                    ','.join(['CLKO%d' % (i) for i in range(num_slices)]):
+                        ','.join(['CLKO%d' % (i) for i in range(num_slices)]),
+                }]
         # else:
         #     term_list=[{
         #         ','.join(['INP%d'%(i) for i in range(num_slices)]): 'INP',
@@ -281,7 +328,7 @@ class adc_sar_templates__tisaradc_body_core(Module):
         #         ','.join(['CLKO%d'%(i) for i in range(num_slices)]):
         #             ','.join(['CLKO%d'%(i) for i in range(num_slices)]),
         #     }]
-        name_list=(['ISAR0'])
+        name_list = (['ISAR0'])
         self.array_instance('ISAR0', name_list, term_list=term_list)
         self.instances['ISAR0'][0].design(
             sar_lch, sar_pw, sar_nw, sar_sa_m, sar_sa_m_d, sar_sa_m_rst, sar_sa_m_rst_d,
@@ -297,35 +344,36 @@ class adc_sar_templates__tisaradc_body_core(Module):
             sf_m_byp_bias, sf_intent, bias_current, use_sf,
             num_slices
         )
-    
-        #clock generation
-        term_list=[{
-            ','.join(['CLKCAL%d<%d:0>'%(i, clk_cdac_bits-1) for i in range(num_slices)]): ','.join(['CLKCAL%d<%d:0>'%(i, clk_cdac_bits-1) for i in range(num_slices)]),
-            'CLKO<%d:0>'%(num_slices-1): ','.join(['ICLK%d'%(num_slices-1-i) for i in range(num_slices)]),
-            'DATAO<%d:0>'%(num_slices-1): 'DATAO<%d:0>'%(num_slices-1)
+
+        # clock generation
+        term_list = [{
+            ','.join(['CLKCAL%d<%d:0>' % (i, clk_cdac_bits - 1) for i in range(num_slices)]): ','.join(
+                ['CLKCAL%d<%d:0>' % (i, clk_cdac_bits - 1) for i in range(num_slices)]),
+            'CLKO<%d:0>' % (num_slices - 1): ','.join(['ICLK%d' % (num_slices - 1 - i) for i in range(num_slices)]),
+            'DATAO<%d:0>' % (num_slices - 1): 'DATAO<%d:0>' % (num_slices - 1)
         }]
-        name_list=(['ICLKDIS0'])
+        name_list = (['ICLKDIS0'])
         self.array_instance('ICLKDIS0', name_list, term_list=term_list)
         self.instances['ICLKDIS0'][0].design(
-            lch=clk_lch, 
-            pw=clk_pw, 
-            nw=clk_nw, 
-            m_dff=clk_m_dff, 
-            m_inv1=clk_m_inv1, 
-            m_inv2=clk_m_inv2, 
-            m_tgate=clk_m_tgate, 
-            n_pd=clk_n_pd, 
-            m_capsw=clk_m_capsw, 
+            lch=clk_lch,
+            pw=clk_pw,
+            nw=clk_nw,
+            m_dff=clk_m_dff,
+            m_inv1=clk_m_inv1,
+            m_inv2=clk_m_inv2,
+            m_tgate=clk_m_tgate,
+            n_pd=clk_n_pd,
+            m_capsw=clk_m_capsw,
             num_bits=clk_cdac_bits,
-            num_ways=num_slices, 
+            num_ways=num_slices,
             unit_cell=clk_unit_cell,
             clock_pulse=clk_pulse,
             device_intent=clk_device_intent,
         )
 
-        #retimer generation
-        #clk_bar phases
-        #rules:
+        # retimer generation
+        # clk_bar phases
+        # rules:
         # 1) last stage latches: num_slices-1
         # 2) second last stage latches: int(num_slices/2)-1
         # 3) the first half of first stage latches: int((int(num_slices/2)+1)%num_slices)
@@ -341,50 +389,50 @@ class adc_sar_templates__tisaradc_body_core(Module):
             ck_phase_1 = 2
             ck_phase_0_0 = 3
             ck_phase_0_1 = 1
-        ck_phase_out=ck_phase_1
-        ck_phase_buf=sorted(set([ck_phase_2, ck_phase_1, ck_phase_0_0, ck_phase_0_1]))
+        ck_phase_out = ck_phase_1
+        ck_phase_buf = sorted(set([ck_phase_2, ck_phase_1, ck_phase_0_0, ck_phase_0_1]))
 
-        term_list=[{
-            ','.join(['in_%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]):
-                ','.join(['ADCO%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
-            ','.join(['out_%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]):
-                ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]),
-            ','.join(['clk%d'%(i) for i in ck_phase_buf]):
-                ','.join(['CLKO%d'%(i) for i in ck_phase_buf]),
+        term_list = [{
+            ','.join(['in_%d<%d:0>' % (i, num_bits - 1) for i in range(num_slices)]):
+                ','.join(['ADCO%d<%d:0>' % (i, num_bits - 1) for i in range(num_slices)]),
+            ','.join(['out_%d<%d:0>' % (i, num_bits - 1) for i in range(num_slices)]):
+                ','.join(['ADCOUT%d<%d:0>' % (i, num_bits - 1) for i in range(num_slices)]),
+            ','.join(['clk%d' % (i) for i in ck_phase_buf]):
+                ','.join(['CLKO%d' % (i) for i in ck_phase_buf]),
         }]
-        name_list=(['IRET0'])
+        name_list = (['IRET0'])
         self.array_instance('IRET0', name_list, term_list=term_list)
         self.instances['IRET0'][0].design(
-            lch = ret_lch,            
-            pw = ret_pw,
-            nw = ret_nw,
-            m_ibuf = ret_m_ibuf,
-            m_obuf = ret_m_obuf,
-            m_latch = ret_m_latch,
+            lch=ret_lch,
+            pw=ret_pw,
+            nw=ret_nw,
+            m_ibuf=ret_m_ibuf,
+            m_obuf=ret_m_obuf,
+            m_latch=ret_m_latch,
             m_srbuf=ret_m_srbuf,
             m_sr=ret_m_sr,
-            num_slices = num_slices,
-            num_bits = num_bits,
-            device_intent = ret_device_intent,
+            num_slices=num_slices,
+            num_bits=num_bits,
+            device_intent=ret_device_intent,
         )
-        self.rename_pin('CLKCAL', ','.join(['CLKCAL%d<4:0>'%i for i in range(num_slices)]))
-        self.rename_pin('OSP', ','.join(['OSP%d'%(i) for i in range(num_slices)]))
-        self.rename_pin('OSM', ','.join(['OSM%d'%(i) for i in range(num_slices)]))
-        self.rename_pin('ASCLKD<3:0>', ','.join(['ASCLKD%d<3:0>'%(i) for i in range(num_slices)]))
-        self.rename_pin('EXTSEL_CLK', ','.join(['EXTSEL_CLK%d'%(i) for i in range(num_slices)]))
-        self.rename_pin('ADCOUT', ','.join(['ADCOUT%d<%d:0>'%(i, num_bits-1) for i in range(num_slices)]))
-        self.rename_pin('SF_Voffp0', ','.join(['SF_Voffp%d'%(i) for i in range(num_slices)]))
-        self.rename_pin('SF_Voffn0', ','.join(['SF_Voffn%d'%(i) for i in range(num_slices)]))
-        self.rename_pin('SF_BIAS', ','.join(['SF_BIAS%d'%(i) for i in range(num_slices)]))
-        self.rename_pin('VREF_SF_BIAS', ','.join(['VREF_SF_BIAS%d'%(i) for i in range(num_slices)]))
+        self.rename_pin('CLKCAL', ','.join(['CLKCAL%d<4:0>' % i for i in range(num_slices)]))
+        self.rename_pin('OSP', ','.join(['OSP%d' % (i) for i in range(num_slices)]))
+        self.rename_pin('OSM', ','.join(['OSM%d' % (i) for i in range(num_slices)]))
+        self.rename_pin('ASCLKD<3:0>', ','.join(['ASCLKD%d<3:0>' % (i) for i in range(num_slices)]))
+        self.rename_pin('EXTSEL_CLK', ','.join(['EXTSEL_CLK%d' % (i) for i in range(num_slices)]))
+        self.rename_pin('ADCOUT', ','.join(['ADCOUT%d<%d:0>' % (i, num_bits - 1) for i in range(num_slices)]))
+        self.rename_pin('SF_Voffp0', ','.join(['SF_Voffp%d' % (i) for i in range(num_slices)]))
+        self.rename_pin('SF_Voffn0', ','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]))
+        self.rename_pin('SF_BIAS', ','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]))
+        self.rename_pin('VREF_SF_BIAS', ','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]))
         if sar_ckgen_muxfast == True:
-            self.rename_pin('MODESEL', ','.join(['MODESEL%d'%(i) for i in range(num_slices)]))
+            self.rename_pin('MODESEL', ','.join(['MODESEL%d' % (i) for i in range(num_slices)]))
         else:
             self.remove_pin('MODESEL')
 
         if use_offset == False:
-            self.remove_pin(','.join(['OSP%d'%(i) for i in range(num_slices)]))
-            self.remove_pin(','.join(['OSM%d'%(i) for i in range(num_slices)]))
+            self.remove_pin(','.join(['OSP%d' % (i) for i in range(num_slices)]))
+            self.remove_pin(','.join(['OSM%d' % (i) for i in range(num_slices)]))
         if vref_sf == False:
             self.remove_pin('VREF_SF_bypass')
             self.remove_pin(','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]))
@@ -394,40 +442,40 @@ class adc_sar_templates__tisaradc_body_core(Module):
             self.remove_pin(','.join(['SF_Voffp%d' % (i) for i in range(num_slices)]))
             self.remove_pin(','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]))
         if input_htree == True:
-            self.rename_pin('INP', ','.join(['INP%d'%(i) for i in range(num_slices)]))
-            self.rename_pin('INM', ','.join(['INM%d'%(i) for i in range(num_slices)]))
+            self.rename_pin('INP', ','.join(['INP%d' % (i) for i in range(num_slices)]))
+            self.rename_pin('INM', ','.join(['INM%d' % (i) for i in range(num_slices)]))
 
-        # #rename pins
-        # if use_offset == True:
-        #     pin_enum=[','.join(['SF_Voffp%d'%(i) for i in range(num_slices)]),
-        #               ','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]),
-        #               ','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]),
-        #               ','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)])
-        #               ]
-        #     if vref_sf == False:
-        #         pin_enum.remove('VREF_SF_bypass')
-        #         self.remove_pin('VREF_SF_bypass')
-        #         pin_enum.remove(','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]))
-        #         self.remove_pin(','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]))
-        # else:
-        #     pin_enum=[','.join(['SF_Voffp%d'%(i) for i in range(num_slices)]),
-        #               ','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]),
-        #               ','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]),
-        #               ','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)])
-        #               ]
-        #     if vref_sf == False:
-        #         pin_enum.remove('VREF_SF_bypass')
-        #         self.remove_pin('VREF_SF_bypass')
-        #         pin_enum.remove(','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]))
-        #         self.remove_pin(','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]))
-        #     self.remove_pin(','.join(['OSP%d'%(i) for i in range(num_slices)]))
-        #     self.remove_pin(','.join(['OSM%d'%(i) for i in range(num_slices)]))
-        # for pn in pin_enum:
-        #     pn_new=''
-        #     for i in range(num_slices):
-        #         pn_new=pn_new+pn+str(i)+','
-        #     pn_new=pn_new[:-1] #remove the last comma
-        #     self.rename_pin(pn+'0', pn_new)
+            # #rename pins
+            # if use_offset == True:
+            #     pin_enum=[','.join(['SF_Voffp%d'%(i) for i in range(num_slices)]),
+            #               ','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]),
+            #               ','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]),
+            #               ','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)])
+            #               ]
+            #     if vref_sf == False:
+            #         pin_enum.remove('VREF_SF_bypass')
+            #         self.remove_pin('VREF_SF_bypass')
+            #         pin_enum.remove(','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]))
+            #         self.remove_pin(','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]))
+            # else:
+            #     pin_enum=[','.join(['SF_Voffp%d'%(i) for i in range(num_slices)]),
+            #               ','.join(['SF_Voffn%d' % (i) for i in range(num_slices)]),
+            #               ','.join(['SF_BIAS%d' % (i) for i in range(num_slices)]),
+            #               ','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)])
+            #               ]
+            #     if vref_sf == False:
+            #         pin_enum.remove('VREF_SF_bypass')
+            #         self.remove_pin('VREF_SF_bypass')
+            #         pin_enum.remove(','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]))
+            #         self.remove_pin(','.join(['VREF_SF_BIAS%d' % (i) for i in range(num_slices)]))
+            #     self.remove_pin(','.join(['OSP%d'%(i) for i in range(num_slices)]))
+            #     self.remove_pin(','.join(['OSM%d'%(i) for i in range(num_slices)]))
+            # for pn in pin_enum:
+            #     pn_new=''
+            #     for i in range(num_slices):
+            #         pn_new=pn_new+pn+str(i)+','
+            #     pn_new=pn_new[:-1] #remove the last comma
+            #     self.rename_pin(pn+'0', pn_new)
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

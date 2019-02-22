@@ -105,6 +105,7 @@ class adc_sar_templates__TISARADC(Module):
                input_htree,
                space_msamp,
                space_msar,
+               space_mdecap,
                rdac_lch, rdac_pw, rdac_nw, rdac_m, rdac_m_bcap, rdac_num_series, rdac_num_bits, rdac_num_dacs, rdac_device_intent
         ):
         """To be overridden by subclasses to design this module.
@@ -206,6 +207,7 @@ class adc_sar_templates__TISARADC(Module):
         self.parameters['input_htree'] = input_htree
         self.parameters['space_msamp'] = space_msamp
         self.parameters['space_msar'] = space_msar
+        self.parameters['space_mdecap'] = space_mdecap
         self.parameters['rdac_lch'] = rdac_lch
         self.parameters['rdac_pw'] = rdac_pw
         self.parameters['rdac_nw'] = rdac_nw
@@ -324,6 +326,7 @@ class adc_sar_templates__TISARADC(Module):
             input_htree,
             space_msamp,
             space_msar,
+            space_mdecap,
         )
     
         # RDAC generation

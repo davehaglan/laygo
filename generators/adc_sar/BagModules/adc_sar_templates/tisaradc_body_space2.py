@@ -46,7 +46,7 @@ class adc_sar_templates__tisaradc_body_space2(Module):
     def __init__(self, bag_config, parent=None, prj=None, **kwargs):
         Module.__init__(self, bag_config, yaml_file, parent=parent, prj=prj, **kwargs)
 
-    def design(self, lch, pw, nw, msamp, msar, device_intent='fast'):
+    def design(self, lch, pw, nw, msamp, msar, mdecap, device_intent='fast'):
         """To be overridden by subclasses to design this module.
 
         This method should fill in values for all parameters in
@@ -67,9 +67,12 @@ class adc_sar_templates__tisaradc_body_space2(Module):
         self.parameters['nw'] = nw
         self.parameters['msamp'] = msamp
         self.parameters['msar'] = msar
+        self.parameters['mdecap'] = mdecap
         self.parameters['device_intent'] = device_intent
-        self.instances['IDCAPSAR0'].design(lch=lch, pw=pw, nw=nw, m=msar, device_intent=device_intent)
-        self.instances['IDCAPSAMP0'].design(lch=lch, pw=pw, nw=nw, m=msamp, device_intent=device_intent)
+        self.instances['IDCAPSAR0'].design(lch=lch, pw=pw, nw=nw, m=mdecap*8, device_intent=device_intent)
+        self.instances['IDCAPSAMP0'].design(lch=lch, pw=pw, nw=nw, m=mdecap*8, device_intent=device_intent)
+        self.instances['IDCAPSAR0']._name = 'IDCAPSAR0<0:%d>' % (msar - 1)
+        self.instances['IDCAPSAMP0']._name = 'IDCAPSAMP0<0:%d>' % (msamp - 1)
 
     def get_layout_params(self, **kwargs):
         """Returns a dictionary with layout parameters.

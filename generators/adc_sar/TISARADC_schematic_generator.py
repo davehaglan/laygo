@@ -159,8 +159,9 @@ if load_from_file==True:
     params['ret_m_latch'] = sizedict['retimer']['ret_m_latch']
     params['ret_m_srbuf'] = sizedict['retimer']['ret_m_srbuf']
     params['ret_m_sr'] = sizedict['retimer']['ret_m_sr']
-    params['space_msar'] = sizedict['m_dcap2'] * 8 * sizedict['num_space_sar']
-    params['space_msamp'] = sizedict['m_dcap2'] * 8 * sizedict['num_space_samp']
+    params['space_msar'] = sizedict['num_space_sar']
+    params['space_msamp'] = sizedict['num_space_samp']
+    params['space_mdecap'] = sizedict['m_dcap2']
 # sampler sizing
 if params['samp_use_laygo'] == True:
     params['samp_wp'] = params['sar_pw']
