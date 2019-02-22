@@ -69,12 +69,20 @@ def generate_r2r_dac_bcap_array(laygen, objectname_pfix, templib_logic, placemen
     y1_phy = origin[1] + laygen.get_template_xy(name=sar_name, gridname=None, libname=workinglib)[1] \
              + laygen.get_template_xy(name=ret_name, gridname=None, libname=workinglib)[1]
     pin_origin_y = laygen.grids.get_absgrid_y(rg_m5m6, y1_phy)
-    pin_origin_y1_thick = origin[1] + \
-                          laygen.get_template_pin_xy(sar_name, 'SF_BIAS', rg_m5m6_thick, libname=workinglib)[0][1] \
-                          + laygen.get_template_xy(name=ret_name, gridname=rg_m5m6_thick, libname=workinglib)[1]
-    pin_origin_y0_thick = origin[1] + \
-                          laygen.get_template_pin_xy(sar_name, 'VREF_SF_BIAS', rg_m5m6_thick, libname=workinglib)[0][1] \
-                          + laygen.get_template_xy(name=ret_name, gridname=rg_m5m6_thick, libname=workinglib)[1]
+    if use_sf == True:
+        pin_origin_y1_thick = origin[1] + \
+                              laygen.get_template_pin_xy(sar_name, 'SF_BIAS', rg_m5m6_thick, libname=workinglib)[0][1] \
+                              + laygen.get_template_xy(name=ret_name, gridname=rg_m5m6_thick, libname=workinglib)[1]
+    else:
+        pin_origin_y1_thick = origin[1] + 0 \
+                              + laygen.get_template_xy(name=ret_name, gridname=rg_m5m6_thick, libname=workinglib)[1]
+    if vref_sf == True:
+        pin_origin_y0_thick = origin[1] + \
+                              laygen.get_template_pin_xy(sar_name, 'VREF_SF_BIAS', rg_m5m6_thick, libname=workinglib)[0][1] \
+                              + laygen.get_template_xy(name=ret_name, gridname=rg_m5m6_thick, libname=workinglib)[1]
+    else:
+        pin_origin_y0_thick = origin[1] + 2 \
+                              + laygen.get_template_xy(name=ret_name, gridname=rg_m5m6_thick, libname=workinglib)[1]
     # pin_origin_y0_thick = laygen.grids.get_absgrid_y(rg_m5m6_thick, y0_phy)
 
     # placement
@@ -468,6 +476,8 @@ if __name__ == '__main__':
         num_bits=sizedict['r2rdac']['num_bits']
         num_slices=specdict['n_interleave']
         slice_order=sizedict['slice_order']
+        use_sf=specdict['use_sf']
+        vref_sf=specdict['vref_sf']
         m=sizedict['r2rdac']['m']
         num_series=sizedict['r2rdac']['num_series']
         num_hori=sizedict['r2rdac_array']['num_hori']
