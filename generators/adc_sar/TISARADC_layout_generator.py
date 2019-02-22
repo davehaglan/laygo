@@ -137,22 +137,24 @@ def generate_TISARADC(laygen, objectname_pfix, sar_libname, rdac_libname, space_
             laygen.pin('INP_'+str(j), xy=inp_xy_m7, layer=laygen.layers['pin'][7], gridname=rg_m6m7_thick, netname='INP')
             laygen.pin('INM_' + str(j), xy=inm_xy_m7, layer=laygen.layers['pin'][7], gridname=rg_m6m7_thick, netname='INM')
 
-    # SF_bypass route
-    bypass_sar = pdict_m4m5[isar.name]['SF_bypass'][0]
-    rh0, rbyp = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                    xy0=bypass_sar,
-                    xy1=np.array([bypass_sar[0]-2, 0]),
-                    # xy1=np.array([laygen.get_inst_pin_xy(irdac.name, 'SEL<'+str(num_hori*num_vert*rdac_num_bits-1)+'>', rg_m4m5)[0][0]+4, 0]),
-                    gridname0=rg_m4m5)
-    laygen.boundary_pin_from_rect(rbyp, rg_m4m5, 'SF_bypass', layer=laygen.layers['pin'][5], direction='bottom', size=4)
+    if use_sf == True:
+        # SF_bypass route
+        bypass_sar = pdict_m4m5[isar.name]['SF_bypass'][0]
+        rh0, rbyp = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
+                        xy0=bypass_sar,
+                        xy1=np.array([bypass_sar[0]-2, 0]),
+                        # xy1=np.array([laygen.get_inst_pin_xy(irdac.name, 'SEL<'+str(num_hori*num_vert*rdac_num_bits-1)+'>', rg_m4m5)[0][0]+4, 0]),
+                        gridname0=rg_m4m5)
+        laygen.boundary_pin_from_rect(rbyp, rg_m4m5, 'SF_bypass', layer=laygen.layers['pin'][5], direction='bottom', size=4)
 
-    # VREF_SF_bypass route
-    bypass_sar = pdict_m4m5[isar.name]['VREF_SF_bypass'][0]
-    rh0, rbyp = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
-                    xy0=bypass_sar,
-                    xy1=np.array([bypass_sar[0], 0]),
-                    gridname0=rg_m4m5)
-    laygen.boundary_pin_from_rect(rbyp, rg_m4m5, 'VREF_SF_bypass', layer=laygen.layers['pin'][5], direction='bottom', size=4)
+    if vref_sf == True:
+        # VREF_SF_bypass route
+        bypass_sar = pdict_m4m5[isar.name]['VREF_SF_bypass'][0]
+        rh0, rbyp = laygen.route_hv(laygen.layers['metal'][4], laygen.layers['metal'][5],
+                        xy0=bypass_sar,
+                        xy1=np.array([bypass_sar[0], 0]),
+                        gridname0=rg_m4m5)
+        laygen.boundary_pin_from_rect(rbyp, rg_m4m5, 'VREF_SF_bypass', layer=laygen.layers['pin'][5], direction='bottom', size=4)
 
     # RDAC routing
     if use_sf == True and vref_sf == True:
@@ -180,6 +182,17 @@ def generate_TISARADC(laygen, objectname_pfix, sar_libname, rdac_libname, space_
                          xy0=laygen.get_inst_pin_xy(irdac.name, 'out<' + str(num_slices * 2) + '>', rg_m5m6_thick)[0],
                          xy1=laygen.get_inst_pin_xy(isar.name, 'SF_BIAS' + str(i), rg_m5m6_thick)[0],
                          gridname0=rg_m5m6_thick)  # connect all SF_BIAS
+
+    # CLKCAL routing extend
+    x_clkcal_m4 = laygen.get_template_size('tisaradc_body_space', gridname=rg_m2m3_pin, libname=workinglib)[0] + \
+                  laygen.get_inst_pin_xy(isar.name, 'CLKCAL0<0>', rg_m2m3_pin)[0][0]
+    y_ref_m4 = laygen.get_template_size('tisaradc_body_space', gridname=rg_m2m3_pin, libname=workinglib)[1]
+    for i in range(num_slices):
+        for j in range(5):
+            laygen.route_vh(laygen.layers['metal'][3], laygen.layers['metal'][2],
+                            xy0=laygen.get_inst_pin_xy(isar.name, 'CLKCAL' + str(i) + '<' + str(j) + '>', rg_m2m3_pin)[0] - np.array([i*5+j, 0]),
+                            xy1=np.array([x_clkcal_m4, y_ref_m4 + i*5+j]),
+                            gridname0=rg_m2m3_pin, gridname1=rg_m2m3_pin, via0=[0,0])
 
     # Input pins
     if input_htree == True:
