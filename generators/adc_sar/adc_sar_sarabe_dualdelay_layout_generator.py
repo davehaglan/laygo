@@ -591,7 +591,7 @@ def generate_sarabe_dualdelay(laygen, objectname_pfix, workinglib, placement_gri
     y1 = laygen.get_xy(obj =bnd_left[-1], gridname=rg_m3m4_thick)[1]
     for i in range(y1-y0):
         #check if y is not in the exclude area
-        trig=1
+        trig=0
         for iex in inst_exclude:
             if iex.transform=='MX':
                 yex0 = laygen.get_xy(obj =iex, gridname=rg_m3m4_thick)[1]-1\
