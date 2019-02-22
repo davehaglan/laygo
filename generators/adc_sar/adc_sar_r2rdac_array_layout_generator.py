@@ -477,7 +477,7 @@ if __name__ == '__main__':
         num_slices=specdict['n_interleave']
         slice_order=sizedict['slice_order']
         use_sf=specdict['use_sf']
-        vref_sf=specdict['vref_sf']
+        vref_sf=specdict['use_vref_sf']
         m=sizedict['r2rdac']['m']
         num_series=sizedict['r2rdac']['num_series']
         num_hori=sizedict['r2rdac_array']['num_hori']
